@@ -18,6 +18,7 @@
 import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
+import { PANELREKKEFOLGE } from '../faginnhold/paneler'
 import { AGENTHANDLINGER } from '../kuratering/handlinger'
 import { faginnholdskall, feilFra, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
@@ -234,6 +235,26 @@ describe('isolasjonen', () => {
       (await skriv([{ ny: 'referanse', innhold: { tittel: 'Dobbel', forfattere: 'A', aar: '2020', lenke: `https://example.org/gren/${lopenummer - 1}` } }]))
         ?.message,
     ).toContain('Bruk den')
+    // En ny referanse i grenen kontrolleres på nytt når den endres.
+    const ny = crypto.randomUUID()
+    const nyRef = (lenke: string) => ({ tittel: 'Ny', forfattere: 'A', aar: '2026', lenke })
+    expect((await skriv([{ ny: 'referanse', id: ny, innhold: nyRef('https://example.org/egen') }, { sett: ny, innhold: nyRef('') }]))?.message).toContain(
+      'må ha en lenke',
+    )
+    expect(
+      (await skriv([{ ny: 'referanse', id: ny, innhold: nyRef('https://example.org/egen') }, { sett: ny, innhold: nyRef(`https://example.org/gren/${lopenummer}`) }]))
+        ?.message,
+    ).toContain('Bruk den')
+    expect(
+      (
+        await skriv([
+          { ny: 'referanse', innhold: nyRef('https://example.org/a') },
+          { ny: 'referanse', id: ny, innhold: nyRef('https://example.org/b') },
+          { sett: ny, innhold: nyRef('https://example.org/a') },
+        ])
+      )?.message,
+    ).toContain('alt en ny referanse med lenken')
+    expect(await skriv([{ ny: 'referanse', id: ny, innhold: nyRef('https://example.org/egen') }, { sett: ny, innhold: nyRef('https://example.org/egen') }])).toBeNull()
     expect((await feilFra(() => agent(chatgpt, 'skriv', { gren: g.id, forventet_revisjon: 0, endringer: [{ rapport: null }] })))?.code).toBe('42501')
     expect((await feilFra(() => agent(claude, 'skriv', { gren: g.id, forventet_revisjon: 3, endringer: [{ rapport: null }] })))?.code).toBe('PT409')
   })
@@ -363,6 +384,10 @@ describe('publiseringen', () => {
     const k = await kuratertGren()
     expect((await feilFra(() => agent(chatgpt, 'publiser', { gren: k.gren, revisjon: 1 })))?.code).toBe('42501')
     await tilGodkjent(k.gren)
+    // Dokumentene kontrolløren vurderte, kan ikke byttes ut etter godkjenningen.
+    expect((await feilFra(() => agent(claude, 'dokument', { gren: k.gren, art: 'evidensjournal', innhold: { annen: true } })))?.message).toContain(
+      'få nye dokumenter',
+    )
     expect((await agent<{ ok: boolean }>(claude, 'publiser', { gren: k.gren, revisjon: 1 })).ok).toBe(true)
     expect(JSON.stringify(await publisert(k.slug))).toContain('Ny kinetikk')
   })
@@ -418,6 +443,9 @@ describe('publiseringen', () => {
     expect((await antall()).kilder).toBe(telt.kilder)
     const lest = await agent<{ grenrevisjon: { forhandsvisning: { bivirkninger: { kilder: unknown[] } } } }>(chatgpt, 'les', { gren: g.id })
     expect(lest.grenrevisjon.forhandsvisning.bivirkninger.kilder).toHaveLength(1)
+    // En tråd kan festes til preparatomtalen i grenen, men ikke til en som ikke finnes.
+    await agent(chatgpt, 'kommenter', { gren: g.id, anker: { kilde: imp.kilde.nokkel }, tekst: 'Kontroller frekvensene.' })
+    expect((await feilFra(() => agent(chatgpt, 'kommenter', { gren: g.id, anker: { kilde: 'oppdiktet-spc' }, tekst: 'x' })))?.message).toContain('preparatomtalen')
 
     await tilGodkjent(g.id)
     expect((await adm<{ ok: boolean }>('publiser', { gren: g.id, revisjon: 1 })).ok).toBe(true)
@@ -588,6 +616,8 @@ describe('kommentarene', () => {
     expect((await adm<{ ok: boolean }>('publiser', { gren: k.gren, revisjon: 2 })).ok).toBe(true)
     // Etter publiseringen er grenen avsluttet, og trådene står som historikk.
     expect((await feilFra(() => agent(chatgpt, 'kommenter', { gren: k.gren, tekst: 'For sent' })))?.code).toBe('22023')
+    expect((await feilFra(() => adm('gjenapne_kommentar', { gren: k.gren, kommentar: traad.traad, tekst: 'For sent' })))?.message).toContain('avsluttet')
+    expect((await feilFra(() => adm('lukk_kommentar', { gren: k.gren, kommentar: lest.traader[0]!.id })))?.message).toContain('avsluttet')
     expect((await adm<Traad[]>('kommentarer', { gren: k.gren }))[0]!.kommentarer.map((x) => x.handling)).toEqual([
       'kommentar', 'kommentar', 'lukket', 'gjenapnet', 'lukket',
     ])
@@ -596,6 +626,13 @@ describe('kommentarene', () => {
   it('lar kuratoren skrive merknader og andre ikke lese grenens tråder', async () => {
     const k = await kuratertGren()
     const merknad = await agent<{ traad: string }>(claude, 'kommenter', { gren: k.gren, anker: { seksjon: 'dosering' }, tekst: 'Usikker på barnedosen.' })
+    // Et anker må peke på noe som finnes: et felt i et objekt, og en kjent seksjon.
+    for (const [anker, melding] of [
+      [{ felt: 'Tekst' }, 'høre til et objekt'],
+      [{ seksjon: 'doseringg' }, 'ukjent seksjon'],
+    ] as const) {
+      expect((await feilFra(() => agent(claude, 'kommenter', { gren: k.gren, anker, tekst: 'x' })))?.message).toContain(melding)
+    }
     expect((await adm<Traad[]>('kommentarer', { gren: k.gren, apne: true }))[0]).toMatchObject({ id: merknad.traad, art: 'merknad' })
     expect((await feilFra(() => adm('kommentarer', { gren: k.gren }, leser)))?.code).toBe('42501')
     await agent(claude, 'lukk_kommentar', { gren: k.gren, kommentar: merknad.traad })
@@ -608,10 +645,15 @@ describe('kommentarene', () => {
 describe('statusen og agentene', () => {
   it('gir en liten status uten fagtekst til den som kan lese grenen, med det kuratoren gjør nå', async () => {
     const k = await kuratertGren('Statusstoff')
+    const annen = await kuratertGren('Annet statusstoff')
+    const forAnnen = (await adm<Json>('status', { gren: annen.gren })).kurator_sist_kl
     await agent(claude, 'aktivitet', { gren: k.gren, tekst: 'Kontrollerer doseringen', seksjon: 'dosering', objekt: k.dosering })
     const status = await adm<Json>('status', { gren: k.gren })
+    // Det kuratoren gjør i én gren, gjør ikke en annen av grenene dens aktiv.
+    expect(Date.parse(String(status.kurator_sist_kl))).toBeGreaterThan(Date.parse(String(forAnnen)))
+    expect((await adm<Json>('status', { gren: annen.gren })).kurator_sist_kl).toBe(forAnnen)
     expect(Object.keys(status).sort()).toEqual(
-      ['aktivitet', 'apne_sperrer', 'blindfase', 'id', 'kurator_sist_sett_kl', 'oppdatert_kl', 'revisjon', 'runde', 'status'].sort(),
+      ['aktivitet', 'apne_sperrer', 'blindfase', 'id', 'kurator_sist_kl', 'oppdatert_kl', 'revisjon', 'runde', 'status'].sort(),
     )
     expect(status).toMatchObject({ id: k.gren, status: 'arbeid', revisjon: 1, apne_sperrer: 0, aktivitet: { tekst: 'Kontrollerer doseringen', objekt: k.dosering } })
     expect(JSON.stringify(status)).not.toContain('Ny dosering')
@@ -645,6 +687,13 @@ describe('statusen og agentene', () => {
     const fil = readFileSync(new URL('../../supabase/migrations/20261016070000_kurateringsagenter.sql', import.meta.url), 'utf8')
     expect(fil).toMatch(/nokkel_sha256 = '[0-9a-f]{64}'/)
     expect(fil).not.toMatch(/far_[0-9a-f]{32,}/)
+  })
+})
+
+describe('seksjonene', () => {
+  it('er de samme i databasen som på fagsiden', async () => {
+    const [rad] = await kall.fasit<{ s: string[] }>('select kuratering.seksjoner() as s')
+    expect(rad!.s).toEqual([...PANELREKKEFOLGE])
   })
 })
 

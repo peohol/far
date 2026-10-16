@@ -173,14 +173,19 @@ function Agentene({ apen, klient }: { apen: boolean; klient: Kurateringsklient }
   // `runde` gir en ny henting etter en ny nøkkel.
   const hent = useMemo(() => (runde >= 0 ? () => klient.agenter() : null), [klient, runde])
   const tilstand = useApenHenting<Agentinfo[]>(apen, hent)
-  // Nøkkelen holdes bare her, aldri i det som bevares over en oppdatering.
-  const [ny, setNy] = useState<{ agent: string; nokkel: string } | null>(null)
+  // Nøkkelen holdes bare her, aldri i det som bevares over en oppdatering, og
+  // glemmes når laget lukkes. Den vises utenfor lista, så den står mens lista
+  // hentes på nytt, også om hentingen feiler.
+  const [ny, setNy] = useState<{ agent: string; navn: string; nokkel: string } | null>(null)
   const [feil, setFeil] = useState<string | null>(null)
-  const lagNokkel = (agent: string) => {
+  useEffect(() => {
+    if (!apen) setNy(null)
+  }, [apen])
+  const lagNokkel = (a: Agentinfo) => {
     setFeil(null)
-    klient.nyAgentnokkel(agent).then(
+    klient.nyAgentnokkel(a.agent).then(
       (svar) => {
-        setNy(svar)
+        setNy({ ...svar, navn: a.navn })
         setRunde((r) => r + 1)
       },
       (e: unknown) => setFeil(e instanceof Error ? e.message : String(e)),
@@ -189,6 +194,7 @@ function Agentene({ apen, klient }: { apen: boolean; klient: Kurateringsklient }
   return (
     <>
       <h3 className="historikk__gruppetittel">Agentene</h3>
+      {ny && <Nynokkel navn={ny.navn} nokkel={ny.nokkel} />}
       <Lastestatus tilstand={tilstand} />
       {feil && (
         <p className="utgavebanner__feil" role="alert">
@@ -214,10 +220,9 @@ function Agentene({ apen, klient }: { apen: boolean; klient: Kurateringsklient }
                   tekst={a.har_nokkel ? 'Lag ny nøkkel' : 'Lag nøkkel'}
                   bekreftTekst="Bekreft"
                   bekreftEtikett={`Bekreft ny nøkkel til ${a.navn}. ${a.har_nokkel ? 'Den gamle slutter å virke med en gang.' : ''}`.trim()}
-                  onBekreft={() => lagNokkel(a.agent)}
+                  onBekreft={() => lagNokkel(a)}
                 />
               </span>
-              {ny?.agent === a.agent && <Nynokkel nokkel={ny.nokkel} />}
             </li>
           ))}
         </ul>
@@ -227,7 +232,7 @@ function Agentene({ apen, klient }: { apen: boolean; klient: Kurateringsklient }
 }
 
 /** Den nye nøkkelen og adressene, med kopiering. Vises bare til laget lukkes. */
-function Nynokkel({ nokkel }: { nokkel: string }) {
+function Nynokkel({ navn, nokkel }: { navn: string; nokkel: string }) {
   const kopier = useClipboard()
   const [kopiert, setKopiert] = useState<string | null>(null)
   const { http, mcp } = agentadresser(window.location.origin, nokkel)
@@ -238,7 +243,7 @@ function Nynokkel({ nokkel }: { nokkel: string }) {
   ]
   return (
     <div className="utgavebanner__skjema" role="status">
-      <p className="utgavebanner__linje">Nøkkelen vises bare nå. Kopier det agenten trenger før du lukker.</p>
+      <p className="utgavebanner__linje">Ny nøkkel til {navn}. Den vises bare nå: kopier det agenten trenger før du lukker.</p>
       {felter.map((f) => (
         <div key={f.navn} className="utgavebanner__handlinger">
           <label>

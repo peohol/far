@@ -57,6 +57,18 @@ describe('/api/kuratering', () => {
     expect(svar.status).toBe(500)
     expect(JSON.stringify(await svar.json())).not.toContain('tabellen')
   })
+  it('gir en publisering som feilet og blokkerte grenen, som en feil', async () => {
+    const konflikt = klient({ data: { ok: false, status: 'blokkert', kode: 'PT409', feil: 'Siden er publisert på nytt.' } })
+    const svar = await behandleKuratering(post('https://x/api/kuratering', { handling: 'publiser', data: { gren: 'g', revisjon: 2 } }), {}, konflikt)
+    expect(svar.status).toBe(409)
+    expect(await svar.json()).toEqual({ feil: 'Siden er publisert på nytt.', kode: 'PT409' })
+    const teknisk = klient({ data: { ok: false, status: 'blokkert', kode: 'XX000', feil: 'intern detalj om tabellen' } })
+    const mcp = await (
+      await behandleKurateringMcp(post('https://x/api/kuratering-mcp', { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'publiser', arguments: { gren: 'g', revisjon: 2 } } }), {}, teknisk)
+    ).json()
+    expect(mcp.result.isError).toBe(true)
+    expect(JSON.stringify(mcp)).not.toContain('tabellen')
+  })
 })
 
 describe('/api/kuratering-mcp', () => {

@@ -36,13 +36,21 @@ export async function utforHandling(klient: SupabaseClient, nokkel: string, hand
     return { ok: false, status: 400, kode: '22023', feil: 'Argumentene må være et JSON-objekt.' }
   }
   const { data: svaret, error } = await klient.rpc('kuratering_agent', { nokkel, handling, data: data ?? {} })
-  if (!error) return { ok: true, data: svaret }
-  const status = STATUS_FOR_KODE[error.code ?? '']
-  // Feilene databasen gir med en kjent kode, er skrevet for agenten; andre
-  // feil sier ingenting om databasen utad.
-  return status
-    ? { ok: false, status, kode: error.code, feil: error.message }
-    : { ok: false, status: 500, kode: error.code ?? 'ukjent', feil: 'Databasen svarte med en feil.' }
+  if (error) return feilutfall(error.code, error.message, 'Databasen svarte med en feil.')
+  // En handling som må lagre utfallet av en feil (publiseringen blokkerer
+  // grenen med grunnen), svarer `{ok: false, kode, feil}` i stedet for å kaste den.
+  if (erAvvist(svaret)) return feilutfall(svaret.kode, svaret.feil, 'Publiseringen feilet; grenen er blokkert, og grunnen står i den.')
+  return { ok: true, data: svaret }
+}
+
+const erAvvist = (svaret: unknown): svaret is { ok: false; kode?: string; feil?: string } =>
+  svaret !== null && typeof svaret === 'object' && (svaret as { ok?: unknown }).ok === false
+
+// Feilene databasen gir med en kjent kode, er skrevet for agenten; andre
+// feil sier ingenting om databasen utad.
+function feilutfall(kode: string | undefined, melding: string | undefined, ukjent: string): Utfall {
+  const status = STATUS_FOR_KODE[kode ?? '']
+  return status ? { ok: false, status, kode: kode!, feil: melding ?? ukjent } : { ok: false, status: 500, kode: kode ?? 'ukjent', feil: ukjent }
 }
 
 export interface Avhengigheter {

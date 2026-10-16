@@ -363,7 +363,9 @@ begin
       'endring', intern.sideversjon_endring(versjonen.endring_id)
     )),
     'stoff', (
-      select jsonb_build_object('id', side_id, 'slug', btrim(les_sideversjon.stoff), 'navn', r.innhold ->> 'navn')
+      -- Nøkkelen siden hadde da, ikke den den har nå: revisjonen har den bare
+      -- når den er en annen enn den navnet gir (intern.les_infoside).
+      select jsonb_build_object('id', side_id, 'slug', coalesce(r.innhold ->> 'slug', intern.stoffslug(r.innhold ->> 'navn')), 'navn', r.innhold ->> 'navn')
       from public.objektrevisjoner r
       where r.objekt_id = side_id
         and r.revisjon = (versjonen.manifest -> 'infoside' ->> 'revisjon')::integer

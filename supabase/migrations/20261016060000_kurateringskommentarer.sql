@@ -107,9 +107,26 @@ as $$
   where t ->> 'art' = 'sperrende' and t ->> 'status' = 'apen'
 $$;
 
+-- Seksjonene på en fagside, i sidens rekkefølge: de samme som `PANELER` i
+-- `src/faginnhold/paneler.ts` (testen `kurateringskommentarer.test.ts`
+-- kontrollerer at de stemmer overens).
+create function kuratering.seksjoner()
+returns text[]
+language sql
+immutable
+set search_path = ''
+as $$
+  select array[
+    'identitet', 'viktige_data', 'farmakodynamikk', 'virkninger', 'bivirkninger', 'toksisitet_forgiftning',
+    'indikasjon', 'preparater', 'dosering', 'farmakokinetikk', 'farmakogenetikk', 'interaksjoner', 'tdm',
+    'laboratorieanalyser', 'kjemiske_grunndata', 'serumkonsentrasjoner', 'graviditet_amming', 'avhengighet_toleranse'
+  ]
+$$;
+
 -- Ankeret en tråd festes til, kontrollert mot grenen: et objekt på siden eller
--- i grenen, et felt i det, en seksjon, en referanse, en bivirkningskilde eller
--- et arbeidsdokument.
+-- i grenen og eventuelt et felt i det, en seksjon på fagsiden, en referanse,
+-- en preparatomtale (bivirkningskilden) på siden eller i grenen, eller et
+-- arbeidsdokument.
 create function kuratering.les_anker(p_gren kuratering.grener, p_anker jsonb)
 returns jsonb
 language plpgsql
@@ -140,7 +157,23 @@ begin
     raise exception 'Ankeret: ukjent dokument «%».', p_anker ->> 'dokument' using errcode = '22023';
   end if;
 
+  if p_anker ? 'felt' and not p_anker ? 'objekt' then
+    raise exception 'Ankeret: et felt må høre til et objekt (siden eller et kort).' using errcode = '22023';
+  end if;
+  if p_anker ? 'seksjon' and not (btrim(p_anker ->> 'seksjon') = any (kuratering.seksjoner())) then
+    raise exception 'Ankeret: ukjent seksjon «%».', p_anker ->> 'seksjon' using errcode = '22023';
+  end if;
+
   select v.* into strict grunnlag from public.sideversjoner v where v.id = p_gren.grunnversjon;
+  if p_anker ? 'kilde'
+    and not exists (select 1 from jsonb_array_elements(coalesce(grunnlag.manifest -> 'bivirkninger', '[]')) b where b ->> 'nokkel' = btrim(p_anker ->> 'kilde'))
+    and not exists (
+      select 1 from jsonb_array_elements(coalesce(kuratering.tilstand(p_gren) -> 'bivirkninger' -> 'importer', '[]')) i
+      where i -> 'kilde' ->> 'nokkel' = btrim(p_anker ->> 'kilde')
+    )
+  then
+    raise exception 'Ankeret: preparatomtalen «%» står ikke på fagsiden eller i grenen.', p_anker ->> 'kilde' using errcode = '22023';
+  end if;
   if p_anker ? 'objekt' then
     objekt := (p_anker ->> 'objekt')::uuid;
     if not (kuratering.tilstand(p_gren) -> 'objekter' ? objekt::text) and kuratering.revisjon_i_versjon(grunnlag, objekt) is null then
@@ -202,6 +235,21 @@ begin
 end;
 $$;
 
+-- Trådene i en publisert eller arkivert gren står som de var da den ble
+-- avsluttet.
+create function kuratering.krev_aktiv_traad(p_gren kuratering.grener)
+returns void
+language plpgsql
+immutable
+set search_path = ''
+as $$
+begin
+  if not kuratering.er_aktiv(p_gren.status) then
+    raise exception 'Grenen er avsluttet.' using errcode = '22023';
+  end if;
+end;
+$$;
+
 -- Trådens første kommentar, eller feil.
 create function kuratering.traaden(p_gren kuratering.grener, p_kommentar uuid)
 returns kuratering.kommentarer
@@ -240,9 +288,7 @@ declare
   v_id uuid;
 begin
   perform kuratering.krev_leser(p_aktor, g);
-  if not kuratering.er_aktiv(g.status) then
-    raise exception 'Grenen er avsluttet.' using errcode = '22023';
-  end if;
+  perform kuratering.krev_aktiv_traad(g);
   if p_data ->> 'svar_pa' is not null then
     traad := kuratering.traaden(g, (p_data ->> 'svar_pa')::uuid);
     v_id := kuratering.ny_kommentar(g, p_aktor, traad.id, 'kommentar', null, null, p_data ->> 'tekst');
@@ -271,6 +317,7 @@ declare
   traad kuratering.kommentarer;
 begin
   perform kuratering.krev_leser(p_aktor, g);
+  perform kuratering.krev_aktiv_traad(g);
   traad := kuratering.traaden(g, (p_data ->> 'kommentar')::uuid);
   if traad.art = 'sperrende' and not p_aktor.admin
     and (p_aktor.agent is null or traad.agent is distinct from p_aktor.agent)
@@ -297,6 +344,7 @@ declare
   traad kuratering.kommentarer;
 begin
   perform kuratering.krev_rolle(p_aktor, 'kontrollor');
+  perform kuratering.krev_aktiv_traad(g);
   traad := kuratering.traaden(g, (p_data ->> 'kommentar')::uuid);
   if (select t ->> 'status' from jsonb_array_elements(kuratering.traader(g)) t where (t ->> 'id')::uuid = traad.id) <> 'lukket' then
     raise exception 'Tråden er åpen.' using errcode = '22023';

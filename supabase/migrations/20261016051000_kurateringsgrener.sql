@@ -683,6 +683,37 @@ $$;
 --   {"tilbakestill": "<id>"}             la objektet stå som i grunnversjonen
 --   {"bivirkninger": {"importer": [...], "trekk": [{"nokkel", "begrunnelse"}]}}
 --   {"rapport": {...} | null}            rapporten til endringsloggen
+-- En ny referanse i grenen må ha en lenke ingen annen referanse har, verken
+-- en publisert eller en annen ny i grenen (referansetabellen har ingen unik
+-- indeks for lenken). Gjelder både `ny` og `sett` på en ny referanse.
+create function kuratering.krev_ny_lenke(p_n integer, p_id uuid, p_innhold jsonb, p_tilstand jsonb)
+returns void
+language plpgsql
+stable
+set search_path = ''
+as $$
+declare
+  treff uuid;
+begin
+  if coalesce(btrim(p_innhold ->> 'lenke'), '') = '' then
+    raise exception 'Endring %: en ny referanse må ha en lenke.', p_n using errcode = '22023';
+  end if;
+  select r.objekt_id into treff
+  from public.referanser r
+  where r.lenke = p_innhold ->> 'lenke' and not r.arkivert
+  limit 1;
+  if treff is not null then
+    raise exception 'Endring %: lenken står alt på referansen %. Bruk den.', p_n, treff using errcode = '22023';
+  end if;
+  if exists (
+    select 1 from jsonb_each(p_tilstand -> 'objekter') o
+    where o.key <> p_id::text and o.value ->> 'type' = 'referanse' and o.value -> 'innhold' ->> 'lenke' = p_innhold ->> 'lenke'
+  ) then
+    raise exception 'Endring %: grenen har alt en ny referanse med lenken.', p_n using errcode = '22023';
+  end if;
+end;
+$$;
+
 create function kuratering.anvend(p_gren kuratering.grener, p_tilstand jsonb, p_endringer jsonb)
 returns jsonb
 language plpgsql
@@ -699,7 +730,6 @@ declare
   nye jsonb := '[]'::jsonb;
   imp jsonb;
   feil text[];
-  treff uuid;
   n integer := 0;
 begin
   select v.* into strict grunnlag from public.sideversjoner v where v.id = p_gren.grunnversjon;
@@ -742,6 +772,9 @@ begin
         end if;
       elsif typen = 'innholdselement' and innhold ->> 'infoside' is distinct from p_gren.infoside::text then
         raise exception 'Endring %: kortet må stå på fagsiden grenen gjelder.', n using errcode = '22023';
+      elsif typen = 'referanse' then
+        -- Bare en ny referanse kommer hit (de publiserte avvises over).
+        perform kuratering.krev_ny_lenke(n, v_id, innhold, tilstand);
       end if;
       tilstand := jsonb_set(tilstand, array['objekter', v_id::text], jsonb_build_object(
         'type', typen,
@@ -762,22 +795,7 @@ begin
         raise exception 'Endring %: kortet må stå på fagsiden grenen gjelder.', n using errcode = '22023';
       end if;
       if typen = 'referanse' then
-        if coalesce(btrim(innhold ->> 'lenke'), '') = '' then
-          raise exception 'Endring %: en ny referanse må ha en lenke.', n using errcode = '22023';
-        end if;
-        select r.objekt_id into treff
-        from public.referanser r
-        where r.lenke = innhold ->> 'lenke' and not r.arkivert
-        limit 1;
-        if treff is not null then
-          raise exception 'Endring %: lenken står alt på referansen %. Bruk den.', n, treff using errcode = '22023';
-        end if;
-        if exists (
-          select 1 from jsonb_each(tilstand -> 'objekter') o
-          where o.value ->> 'type' = 'referanse' and o.value -> 'innhold' ->> 'lenke' = innhold ->> 'lenke'
-        ) then
-          raise exception 'Endring %: grenen har alt en ny referanse med lenken.', n using errcode = '22023';
-        end if;
+        perform kuratering.krev_ny_lenke(n, v_id, innhold, tilstand);
       end if;
       tilstand := jsonb_set(tilstand, array['objekter', v_id::text], jsonb_build_object('type', typen, 'ny', true, 'innhold', innhold));
       nye := nye || to_jsonb(v_id);
@@ -1563,7 +1581,8 @@ declare
   versjon integer;
 begin
   perform kuratering.krev_kurator(p_aktor, g);
-  perform kuratering.krev_status(g, array['arbeid', 'retting', 'tilbakemelding', 'godkjent', 'blokkert'], 'få nye dokumenter');
+  -- Ikke etter godkjenningen: dokumentene som publiseres, skal være dem kontrolløren vurderte.
+  perform kuratering.krev_status(g, array['arbeid', 'retting', 'tilbakemelding', 'blokkert'], 'få nye dokumenter');
   if g.art = 'de_novo' and not g.blindfase and p_data ->> 'art' = 'blindprotokoll' then
     raise exception 'Blindprotokollen er avsluttet og kan ikke endres.' using errcode = '22023';
   end if;
