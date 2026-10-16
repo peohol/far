@@ -1,37 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-kariprazin-1",
-  "foresporsel_sha256": "f43dbe8d0f3e448d9fbda62ea63f4be4716dd8cecf373e37e309fcccdcaf1aad",
-  "handling": "forny",
+  "foresporsel_id": "fullfort-kariprazin-1",
+  "foresporsel_sha256": "5c2964e996b6a7f04cd75efc460d49329989baa9f9606747389cc0067f8de589",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "Reservasjonen av kariprazin varer til 2026-10-17T00:27:02.779Z.",
-  "behandlet_kl": "2026-10-16T21:27:02.779Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38969414277",
-  "oppgave": {
-    "oppgave": "kariprazin-0012",
-    "stoff": "kariprazin",
-    "navn": "Kariprazin",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T00:27:02.779Z",
-    "jobbgren": "kuratorjobb/kariprazin-0012",
-    "kurateringsgren": "kuratering/kariprazin-0012",
-    "pr": null,
-    "gren": "e2d4268c-247a-445f-9986-74e32400b738",
-    "gjenoppta": null,
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-16T18:10:24.842Z",
-      "side": true,
-      "elementer": 22,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 6,
-      "referanser": 2,
-      "elementer_uten_kilde": 18
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "melding": "kariprazin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-16T22:03:49.492Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38973395974"
 }
