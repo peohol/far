@@ -1,10 +1,45 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-1",
-  "foresporsel_sha256": "b1621eeeb856003680eb8381a9c212bf2e24ba489f12998bae64b76fc7f71711",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-lurasidon-1",
+  "foresporsel_sha256": "78a5a65e990d5fbdb13862e43b16f8ee025fa9de2b0edaef7c6116dc752c713d",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "citalopram er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-16T14:13:14.569Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38913951723"
+  "melding": "lurasidon er reservert til 2026-10-16T17:14:02.497Z.",
+  "behandlet_kl": "2026-10-16T14:14:02.497Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38914065121",
+  "oppgave": {
+    "oppgave": "lurasidon-0004",
+    "stoff": "lurasidon",
+    "navn": "Lurasidon",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-16T17:14:02.497Z",
+    "jobbgren": "kuratorjobb/lurasidon-0004",
+    "kurateringsgren": "kuratering/lurasidon-0004",
+    "pr": null,
+    "gren": null,
+    "gjenoppta": null,
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-15T21:31:45.692Z",
+      "side": true,
+      "elementer": 23,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 6,
+      "referanser": 2,
+      "elementer_uten_kilde": 20
+    },
+    "prioritet": {
+      "poeng": 800.7,
+      "grunner": [
+        "Står først i innstillingene.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "7 av 13 redaksjonelle seksjoner er tomme.",
+        "20 av 23 elementer har ingen kilde.",
+        "Bare 2 referanser."
+      ]
+    }
+  }
 }
