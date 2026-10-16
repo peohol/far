@@ -6,6 +6,7 @@
  * for skjermlesere. Komponentene settes opp alene, med en syntetisk side —
  * analyttsidene bygges i en senere arbeidspakke.
  */
+import { readFileSync } from 'node:fs'
 import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it } from 'vitest'
@@ -198,6 +199,13 @@ describe('pillen', () => {
     await bruker.tab()
     expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Etter' }))
     expect(inline.getAttribute('aria-expanded')).toBe('false')
+  })
+
+  it('står i et fast feste, så boblen ikke endrer linjebrytingen i avsnittet', () => {
+    // Boblen står i dokumentet inne i festet. Var festet et vanlig spenn, ville
+    // avsnittet brutt annerledes med boblen åpen, og pillen hoppet unna pekeren.
+    const css = readFileSync('src/styles/referanser.css', 'utf8')
+    expect(css).toMatch(/\.referansepille-feste\s*\{[^}]*display:\s*inline-block/)
   })
 
   it('viser ingenting når ingen av referansene er kjent på siden', () => {

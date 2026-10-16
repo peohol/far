@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.99.1',
+    dato: '2026-10-16',
+    sammendrag: 'Referansepillene flimrer ikke lenger når pekeren holdes over dem',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    gjelder: ['hele appen'],
+    punkter: [
+      'Når pekeren ble holdt over en referansepille i teksten, kunne linjene i avsnittet brytes på nytt så pillen hoppet bort fra pekeren, og boblen med referansene blinket av og på. Nå står teksten stille mens boblen er åpen.',
+    ],
+  },
+  {
     versjon: '1.99.0',
     dato: '2026-10-16',
     sammendrag: 'Kurateringskøen starter med en pilot på citalopram, lurasidon og GHB',
