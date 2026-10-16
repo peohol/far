@@ -1,16 +1,16 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-16T18:10:24.195Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-16T18:11:40.597Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 94 · Reservert: 1 · Blokkert: 4 · Utenfor køen: 1
+Klar: 94 · Venter på godkjenning: 1 · Blokkert: 4 · Utenfor køen: 1
 
 ## Pågår
 
-- **ghb** (ghb-0006), frist 2026-10-16T21:10:24.195Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
-Ingen kurateringer venter.
+- **ghb**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 
 ## Blokkert
 

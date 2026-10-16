@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-16T18:10:24.195Z",
+  "oppdatert_kl": "2026-10-16T18:11:40.597Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
     "klar": 94,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 0,
+    "venter_godkjenning": 1,
     "sammenslatt": 0,
     "publisert": 0,
     "blokkert": 4,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "ghb",
-      "oppgave": "ghb-0006",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-16T21:10:24.195Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "neste": [
     {
       "stoff": "lurasidon",
@@ -51,7 +43,14 @@
       "tidligst_kl": null
     }
   ],
-  "til_gjennomgang": [],
+  "til_gjennomgang": [
+    {
+      "stoff": "ghb",
+      "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    }
+  ],
   "blokkert": [
     {
       "stoff": "etanol",
