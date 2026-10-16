@@ -1,10 +1,45 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-lurasidon-1",
-  "foresporsel_sha256": "4b9a10fb49584408f8ffd13f006bed214515c78d5c098452864489ac519985c4",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-ghb-1",
+  "foresporsel_sha256": "68af0e04a7e1c405f2809de8cec2ed96ff1ff68ecc9b5c37b0250c80d76ef4e5",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "lurasidon er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-16T14:53:56.184Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38919449288"
+  "melding": "ghb er reservert til 2026-10-16T17:54:33.657Z.",
+  "behandlet_kl": "2026-10-16T14:54:33.657Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38919550357",
+  "oppgave": {
+    "oppgave": "ghb-0005",
+    "stoff": "ghb",
+    "navn": "GHB",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-16T17:54:33.657Z",
+    "jobbgren": "kuratorjobb/ghb-0005",
+    "kurateringsgren": "kuratering/ghb-0005",
+    "pr": null,
+    "gren": null,
+    "gjenoppta": null,
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-15T21:31:45.692Z",
+      "side": true,
+      "elementer": 3,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 2,
+      "referanser": 3,
+      "elementer_uten_kilde": 1
+    },
+    "prioritet": {
+      "poeng": 637.9,
+      "grunner": [
+        "Står først i innstillingene.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "11 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 3 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ]
+    }
+  }
 }
