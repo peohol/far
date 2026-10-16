@@ -12,6 +12,15 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.93.0',
+    dato: '2026-10-16',
+    sammendrag: 'Hver publisering av en fagside lagres som en hel versjon av siden',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: ['Ingen endring i appen ennå. Hver gang en fagside, et kort på den, en referanse den bruker eller bivirkningene publiseres, lagres siden som en samlet versjon som senere kan vises, sammenlignes og gjenopprettes.'],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.92.8',
     dato: '2026-10-16',
     sammendrag: 'Plan for isolerte kurateringsgrener og fullstendig versjonshistorikk for fagsidene',

@@ -176,6 +176,22 @@ kort per tekst, en referanse som den vises), og bare fritekst ord for ord.
 utkastet står på, så en gammel nettleserøkt får en konflikt i stedet for å
 skrive over noe.
 
+**Sideversjoner.** Revisjonene gjelder ett objekt; en fagside er siden, kortene
+på den, referansene den siterer og bivirkningsimportene. `sideversjoner` har
+én rad per publisert utgave av hele siden: et manifest med de eksakte
+revisjonene av siden, kortene (uten fjernede), referansene den siterer, og
+de gjeldende importene i `bivirkninger.kilder`, med fingeravtrykk og
+innholdsendringen (`endring_id`). En utsatt trigger lager den ved slutten av
+hver transaksjon som publiserer siden, et kort på den (begge sider når et
+kort flyttes), en referanse den siterer, eller en import for den, og bare når
+manifestet er endret, så en publisering i flere steg blir én versjon. Sidene
+som fantes før systemet, fikk én basisversjon (`opphav = 'basis'`); eldre
+versjoner er ikke laget i ettertid. Radene kan ikke endres eller slettes,
+unntatt sammen med siden når den slettes for godt. `les_sideversjoner(stoff)`
+lister versjonene, og `les_sideversjon(stoff, nr)` gir siden slik den var, i
+samme form som `les_stoff`. Kurateringsgrenene bygger på dette
+(`docs/kurateringsgrener-fremdrift.md`).
+
 ## Operasjonene
 
 Alt som endrer noe, går gjennom fire databasefunksjoner, og for referansene
