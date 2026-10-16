@@ -9,7 +9,7 @@ prosjektet, så en ny økt kan fortsette herfra alene.
 
 | Dato | Punkt |
 | --- | --- |
-| 2026-10-16 | B1 (1.93.0, PR #231), B2 (1.94.0, PR #232), C (1.95.0, PR #233), D (1.96.0, PR #234), E1 (1.97.0, PR #235) og E2 (1.98.0, grenen `claude/kurateringsko-grener`) ferdige og testet; PR-ene er stablet og slås sammen i rekkefølge. Neste: F, når stabelen er i produksjonen og ChatGPT er koblet til (se [Avhengigheter](#avhengigheter-som-krever-peder)). |
+| 2026-10-16 | B1 (1.93.0, PR #231), B2 (1.94.0, PR #232), C (1.95.0, PR #233), D (1.96.0, PR #234), E1 (1.97.0, PR #235), E2 (1.98.0, PR #236) og F1 (1.99.0, grenen `claude/kurateringspilot`) ferdige og testet; PR-ene er stablet og slås sammen i rekkefølge. Neste: F2, når stabelen er i produksjonen og ChatGPT er koblet til (se [Avhengigheter](#avhengigheter-som-krever-peder)). |
 
 Neste steg står øverst i [Fasene](#fasene) med status `pågår` eller `neste`.
 
@@ -87,7 +87,9 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 | D | Feltkommentarer, kontrollrunder, godkjenning bundet til revisjon, sperrer (`docs/kurateringsgrener.md`, «Kommentarene») | 1.96.0 | ferdig |
 | E1 | Agentnøklene i appen, Claude-kuratorens nøkkel, `status` og «Følg agenten», handlingslista som tabell (`docs/kurateringsgrener.md`, «Agentene» og «I appen») | 1.97.0 | ferdig |
 | E2 | Kurateringskøen mot grenene (`/api/kuratering-ko` med OIDC, kontrollrundene i køen), kuratorprotokollen for Claude med verktøyene (`docs/kuratorprotokoll.md`, `npm run kurator`, skillen `monografkurator`) og instruksen for ChatGPT som kontrollør (`docs/kontrollorinstruks.md`) | 1.98.0 | ferdig |
-| F | Pilot: citalopram, lurasidon, GHB; deretter køstyrt de novo-runde | – | neste |
+| F1 | Piloten i køen: `forrang` citalopram, lurasidon, GHB med `bare_forrang`, så køen ikke gir ut andre stoffer før piloten er bestått | 1.99.0 | ferdig |
+| F2 | Piloten: Claude kuraterer de tre i grener, ChatGPT kontrollerer; publisering bare etter godkjenning og bestått prøvepublisering | – | neste |
+| F3 | De novo-runden: `bare_forrang` av og `forrang` tom, planlagte kjøringer for kuratoren og kontrolløren, godkjenning per stoff | – | |
 
 ## Hvordan det er bygd (for den som fortsetter)
 
@@ -127,6 +129,24 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 - Den opprinnelige ChatGPT-kuratorskillen ligger ikke i repoet; protokollen er
   bygd fra journalene, malen og dokumentene. Dukker den opp, tas det
   strengeste kravet inn i `docs/kuratorprotokoll.md`.
+
+## Piloten og runden (F2, F3)
+
+1. Når stabelen er i produksjonen: `npm run kurator -- kall oversikt` med
+   Claude-kuratorens nøkkel skal svare (en tom liste er i orden).
+2. Kontrolløren er koblet til når `agenter` (admin) viser at
+   ChatGPT-monografkuratoren har en nøkkel og har vært innom.
+3. Hvert pilotstoff kurateres etter `docs/kurateringsko-instruks.md` med
+   skillen `monografkurator`: reserver, `apne` med `art: "de_novo"`, arbeid etter
+   `docs/kuratorprotokoll.md`, `til_kontroll`, `fullfort` med `gren`.
+   Kontrolløren vurderer; rettingene går i runder til `godkjent`, så
+   publiserer kuratoren og kjører funksjonstesten.
+4. Piloten er bestått når alle tre er publisert etter godkjenning, med
+   bestått prøvepublisering, og funksjonstesten er grønn. Noter funnene i
+   loggen her.
+5. F3: en PR som slår av `bare_forrang` og tømmer `forrang`, og planlagte
+   kjøringer for kuratoren (tidsplanteksten i `docs/kurateringsko-instruks.md`)
+   og kontrolløren (`docs/kontrollorinstruks.md`).
 
 ## Avhengigheter som krever Peder
 
@@ -174,3 +194,7 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
   og den nye instruksen for køen. Tester i `kurateringsko.test.ts`
   («kurateringsgrenene i OUSFAR»), `kuratorprotokoll.test.ts`,
   `kurateringsendepunkt.test.ts` og `kurateringsgrener.test.ts`.
+- 2026-10-16: F1 piloten i køen (1.99.0): innstillingen `bare_forrang`, og
+  `forrang` citalopram, lurasidon, GHB. Tester i `kurateringsko.test.ts`
+  («gir bare ut stoffene i forrang under en pilot»); testene bruker egne
+  innstillinger uten pilot.

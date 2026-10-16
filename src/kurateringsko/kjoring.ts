@@ -194,10 +194,10 @@ export async function kjorKo(v: Kjoringsvalg): Promise<Kjoringsresultat> {
 
     const skrevet = for_ === null || innhold(t) !== for_
     if (skrevet) {
-      const o = oversikt(t, na)
+      const o = oversikt(t, na, innst)
       const ny = git.commit(
         kocommit,
-        { [KOFIL]: json(t), [NESTEFIL]: json(o), [OVERSIKTSFIL]: oversiktMarkdown(t, na) },
+        { [KOFIL]: json(t), [NESTEFIL]: json(o), [OVERSIKTSFIL]: oversiktMarkdown(t, na, innst) },
         `Kurateringskø: ${behandlet.length > 0 ? behandlet.map((b) => `${b.handling ?? 'ugyldig'} ${b.utfall}`).join(', ') : 'oppdatert'}${kjoring ? `\n\n${kjoring}` : ''}`,
       )
       if (!git.skyv(ny, KOGREN)) continue
