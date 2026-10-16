@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-16T20:52:28.301Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-16T20:55:02.710Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 91 · Reservert: 1 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
+Klar: 91 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-- **brekspiprazol** (brekspiprazol-0011), frist 2026-10-16T23:52:28.301Z: Avstemming og skriving
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
@@ -14,6 +14,7 @@ Ingen kurateringer venter.
 
 ## Blokkert
 
+- **brekspiprazol**: Krav 3: beskyttet norsk referanseomraade avviker fra AGNP 2026; et menneske avgjoer. Se merknad i grenen.
 - **etanol**: Stoffet har ingen publisert fagside å kuratere.
 - **kokain**: Stoffet har ingen publisert fagside å kuratere.
 - **mdma**: Stoffet har ingen publisert fagside å kuratere.

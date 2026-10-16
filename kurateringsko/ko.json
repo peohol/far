@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T20:52:28.301Z",
+  "oppdatert_kl": "2026-10-16T20:55:02.710Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 11,
   "stoffer": {
@@ -429,7 +429,7 @@
     "brekspiprazol": {
       "stoff": "brekspiprazol",
       "navn": "Brekspiprazol",
-      "status": "reservert",
+      "status": "blokkert",
       "modus": "de_novo",
       "prioritet": {
         "poeng": 0,
@@ -444,32 +444,37 @@
         "referanser": 1,
         "elementer_uten_kilde": 17
       },
-      "reservasjon": {
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": {
         "oppgave": "brekspiprazol-0011",
         "okt": "kurateringsko/okt/20261016-125910",
-        "modus": "de_novo",
-        "reservert_kl": "2026-10-16T19:50:14.603Z",
-        "fornyet_kl": "2026-10-16T20:52:28.301Z",
-        "frist_kl": "2026-10-16T23:52:28.301Z",
-        "fase": "Avstemming og skriving",
+        "avbrutt_kl": "2026-10-16T20:55:02.710Z",
+        "grunn": "Krav 3: beskyttet norsk referanseomraade avviker fra AGNP 2026; et menneske avgjoer. Se merknad i grenen.",
+        "fase": "retting",
         "jobbgren": "kuratorjobb/brekspiprazol-0011",
         "kurateringsgren": "kuratering/brekspiprazol-0011",
         "pr": null,
         "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
         "kunnskapsgrense": null
       },
-      "forsok": 1,
-      "tidligst_kl": null,
-      "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [],
+      "blokkeringer": [
+        {
+          "kode": "agent",
+          "grunn": "Krav 3: beskyttet norsk referanseomraade avviker fra AGNP 2026; et menneske avgjoer. Se merknad i grenen.",
+          "kl": "2026-10-16T20:55:02.710Z",
+          "kilde": "agent"
+        }
+      ],
       "sist_kuratert": null,
       "siste_kjoring": {
         "oppgave": "brekspiprazol-0011",
         "okt": "kurateringsko/okt/20261016-125910",
         "startet_kl": "2026-10-16T19:50:14.603Z",
-        "avsluttet_kl": null,
-        "utfall": "reservert"
+        "avsluttet_kl": "2026-10-16T20:55:02.710Z",
+        "utfall": "blokkert"
       },
       "aktiv": true,
       "historikk": [
@@ -504,6 +509,13 @@
           "oppgave": "brekspiprazol-0011",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Avstemming og skriving"
+        },
+        {
+          "kl": "2026-10-16T20:55:02.710Z",
+          "hendelse": "blokkert",
+          "oppgave": "brekspiprazol-0011",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Krav 3: beskyttet norsk referanseomraade avviker fra AGNP 2026; et menneske avgjoer. Se merknad i grenen."
         }
       ],
       "appgren": null
@@ -4790,6 +4802,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "blokkert-brekspiprazol-1",
         "forny-brekspiprazol-2051",
         "forny-brekspiprazol-1",
         "reserver-runde-1",
@@ -4821,48 +4834,21 @@
         "reserver-1"
       ],
       "siste": {
-        "id": "forny-brekspiprazol-2051",
-        "sha256": "9759d01dccccef09509a2906c722c0069d694dda191db622be4840d62aec0eff",
+        "id": "blokkert-brekspiprazol-1",
+        "sha256": "d1aad9fcabf4bd902bcbdeb1dfcdf7296c02923312cca8a67609cc69e4674843",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "forny-brekspiprazol-2051",
-          "foresporsel_sha256": "9759d01dccccef09509a2906c722c0069d694dda191db622be4840d62aec0eff",
-          "handling": "forny",
+          "foresporsel_id": "blokkert-brekspiprazol-1",
+          "foresporsel_sha256": "d1aad9fcabf4bd902bcbdeb1dfcdf7296c02923312cca8a67609cc69e4674843",
+          "handling": "blokkert",
           "utfall": "ok",
-          "melding": "Reservasjonen av brekspiprazol varer til 2026-10-16T23:52:28.301Z.",
-          "behandlet_kl": "2026-10-16T20:52:28.301Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38965333010",
-          "oppgave": {
-            "oppgave": "brekspiprazol-0011",
-            "stoff": "brekspiprazol",
-            "navn": "Brekspiprazol",
-            "modus": "de_novo",
-            "forsok": 1,
-            "frist_kl": "2026-10-16T23:52:28.301Z",
-            "jobbgren": "kuratorjobb/brekspiprazol-0011",
-            "kurateringsgren": "kuratering/brekspiprazol-0011",
-            "pr": null,
-            "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
-            "gjenoppta": null,
-            "sist_kuratert": null,
-            "maal": {
-              "kl": "2026-10-16T18:10:24.842Z",
-              "side": true,
-              "elementer": 20,
-              "redaksjonelle_paneler": 13,
-              "paneler_med_innhold": 6,
-              "referanser": 1,
-              "elementer_uten_kilde": 17
-            },
-            "prioritet": {
-              "poeng": 0,
-              "grunner": []
-            }
-          }
+          "melding": "brekspiprazol er blokkert til et menneske har sett på det.",
+          "behandlet_kl": "2026-10-16T20:55:02.710Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38965641127"
         }
       },
       "besvart_commit": "ff854693caaf1d8d8e6cd2633b591cfbc0a241cf",
-      "sist_brukt_kl": "2026-10-16T20:52:28.301Z"
+      "sist_brukt_kl": "2026-10-16T20:55:02.710Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
