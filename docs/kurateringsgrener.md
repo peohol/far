@@ -76,6 +76,13 @@ nøkkelen (`src/kuratering/endepunkt.ts`); nøkkelen kontrolleres i databasen:
   klient som ikke kan sende overskrifter. En nøkkel i adressen kan havne i
   Vercels forespørselslogg; lag en ny med `ny_agentnokkel` hvis den kan ha
   kommet på avveie.
+- `POST /api/kuratering-ko`: grenene uten fagtekst (`public.kuratering_kostatus`),
+  bare for kurateringskøen, med GitHubs OIDC-token for arbeidsflyten på `main`
+  (`docs/kurateringsko.md`), og for administratorene.
+
+Kuratoren (Claude Code) kaller med `npm run kurator -- kall <handling>`
+(`scripts/kurator.ts`, `docs/kuratorprotokoll.md`); kontrolløren (ChatGPT)
+gjennom MCP (`docs/kontrollorinstruks.md`).
 
 ## Endringene
 

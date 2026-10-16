@@ -9,7 +9,7 @@ prosjektet, så en ny økt kan fortsette herfra alene.
 
 | Dato | Punkt |
 | --- | --- |
-| 2026-10-16 | B1 (1.93.0, PR #231), B2 (1.94.0, PR #232), C (1.95.0, PR #233), D (1.96.0, PR #234) og E1 (1.97.0, grenen `claude/kurateringsagenter`) ferdige og testet; PR-ene er stablet og slås sammen i rekkefølge. Neste: E2. |
+| 2026-10-16 | B1 (1.93.0, PR #231), B2 (1.94.0, PR #232), C (1.95.0, PR #233), D (1.96.0, PR #234), E1 (1.97.0, PR #235) og E2 (1.98.0, grenen `claude/kurateringsko-grener`) ferdige og testet; PR-ene er stablet og slås sammen i rekkefølge. Neste: F, når stabelen er i produksjonen og ChatGPT er koblet til (se [Avhengigheter](#avhengigheter-som-krever-peder)). |
 
 Neste steg står øverst i [Fasene](#fasene) med status `pågår` eller `neste`.
 
@@ -86,8 +86,8 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 | C | Forhåndsvisning, banner, sammenligning, versjonsliste og gjenoppretting, arbeidsoversikt (`docs/kurateringsgrener.md`, «Gjenopprettingen» og «I appen») | 1.95.0 | ferdig |
 | D | Feltkommentarer, kontrollrunder, godkjenning bundet til revisjon, sperrer (`docs/kurateringsgrener.md`, «Kommentarene») | 1.96.0 | ferdig |
 | E1 | Agentnøklene i appen, Claude-kuratorens nøkkel, `status` og «Følg agenten», handlingslista som tabell (`docs/kurateringsgrener.md`, «Agentene» og «I appen») | 1.97.0 | ferdig |
-| E2 | Kurateringskøen mot grenene, kuratorprotokollen for Claude og instruksen for ChatGPT som kontrollør | – | neste |
-| F | Pilot: citalopram, lurasidon, GHB; deretter køstyrt de novo-runde | – | |
+| E2 | Kurateringskøen mot grenene (`/api/kuratering-ko` med OIDC, kontrollrundene i køen), kuratorprotokollen for Claude med verktøyene (`docs/kuratorprotokoll.md`, `npm run kurator`, skillen `monografkurator`) og instruksen for ChatGPT som kontrollør (`docs/kontrollorinstruks.md`) | 1.98.0 | ferdig |
+| F | Pilot: citalopram, lurasidon, GHB; deretter køstyrt de novo-runde | – | neste |
 
 ## Hvordan det er bygd (for den som fortsetter)
 
@@ -98,14 +98,14 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
   kjører den med `set constraints all immediate` i en del-transaksjon som
   rulles tilbake, og leser forhåndsvisningen med `les_stoff` og
   `les_bivirkninger` før tilbakerullingen.
-- Handlingene er `kuratering.h_<navn>(aktor, data)`; `kuratering.handlinger`
+- Handlingene er `kuratering.h_<navn>(aktor, data)`; `kuratering.handlingsliste`
   sier hvilke agentene og administratorene har. En ny handling er en ny
-  funksjon og et navn i lista.
+  funksjon og en rad der.
 - Sperrende kommentartråder står i `kuratering.sperrer(gren)`, som
   godkjenningen og publiseringen spør; `til_kontroll` krever at kuratoren har
   svart i hver av dem. Testen «tilbyr agentene nøyaktig de handlingene
   databasen har» holder MCP-verktøyene (`src/kuratering/handlinger.ts`) i takt
-  med `kuratering.handlinger`.
+  med `kuratering.handlingsliste`.
 - Claude-kuratorens nøkkel ligger i prosjektets delte mappe,
   `/mnt/project-files/.hemmelig/claude-monografkurator.nokkel`, og bare
   SHA-256 av den i repoet. Mangler fila, eller virker ikke nøkkelen, lager en
@@ -119,9 +119,23 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
   `utgave`-propen og en kilde der leseren gir utgavens data
   (`Utgavevisning`).
 
+- Køen kobler en gren til reservasjonen i `oppdaterGrener`
+  (`src/kurateringsko/ko.ts`); grenene leses én gang per kjøring
+  (`src/kurateringsko/grener.ts`). Kuratorprotokollens dekningsmatrise har de
+  samme 37 kontrollpunktene som kurateringsjournalene
+  (`src/kuratorprotokoll/dekning.ts`, testet mot `citalopram-dekning.json`).
+- Den opprinnelige ChatGPT-kuratorskillen ligger ikke i repoet; protokollen er
+  bygd fra journalene, malen og dokumentene. Dukker den opp, tas det
+  strengeste kravet inn i `docs/kuratorprotokoll.md`.
+
 ## Avhengigheter som krever Peder
 
-Ingen ennå. Når en oppstår, står den her med nøyaktig hva som trengs.
+1. Slå sammen PR-ene i rekkefølge (#231 først); de neste flyttes til `main`
+   etter hvert og gjøres grønne.
+2. Når stabelen er i produksjonen: lag ChatGPT-kontrollørens nøkkel i appen
+   (Adminmeny → Kurateringer → Agentene → «Lag nøkkel» for
+   ChatGPT-monografkuratoren), og legg adressen inn som en MCP-kobling i
+   ChatGPT, med tidsplanteksten i `docs/kontrollorinstruks.md`.
 
 ## Logg
 
@@ -152,3 +166,12 @@ Ingen ennå. Når en oppstår, står den her med nøyaktig hva som trengs.
   «Kurateringer», «Følg agenten» og markeringen av endrede kort på
   kurateringssiden. Tester i `kurateringsgrener.test.ts` («statusen og
   agentene») og `kurateringsvisning.test.tsx`.
+- 2026-10-16: E2 køen og protokollen (1.98.0): `public.kuratering_kostatus`
+  og `/api/kuratering-ko` (OIDC for «Kurateringskø» på `main`); køen følger
+  grenene (`gren` i `forny` og `fullfort`, kontrollrundene, `annen_gren`,
+  `gren_forkastet`, `gren_stanset`), og bare grener for samme stoff og med
+  arten modusen krever (`gren_feil_kobling`); `docs/kuratorprotokoll.md`,
+  `docs/kontrollorinstruks.md`, skillen `monografkurator`, `npm run kurator`
+  og den nye instruksen for køen. Tester i `kurateringsko.test.ts`
+  («kurateringsgrenene i OUSFAR»), `kuratorprotokoll.test.ts`,
+  `kurateringsendepunkt.test.ts` og `kurateringsgrener.test.ts`.

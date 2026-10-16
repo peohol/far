@@ -13,6 +13,9 @@
  * - `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `OUSFAR_TESTBRUKER`, `OUSFAR_TESTPASSORD`:
  *   testbrukeren stoffene og tallene leses som (`src/kuratorjobb/testbruker.ts`). Uten den
  *   leses de ikke, og køen bruker det den har.
+ * - `OUSFAR_KO_ADRESSE`, `ACTIONS_ID_TOKEN_REQUEST_URL`, `ACTIONS_ID_TOKEN_REQUEST_TOKEN`:
+ *   kurateringsgrenene i OUSFAR leses der med OIDC-tokenet for kjøringen. Uten dem
+ *   står det køen vet om grenene.
  * - `MAAL`: `true` for å lese stoffene og tallene nå.
  * - `KJORING`: lenken til kjøringen i Actions, til svarene.
  * - `GITHUB_STEP_SUMMARY`: sammendraget skrives dit.
@@ -22,6 +25,7 @@ import { join } from 'node:path'
 import { STOFFREGISTERDATA } from '../src/domain/stoffregister'
 import { lagGit } from '../src/kurateringsko/git'
 import { ghApi, lagGithub } from '../src/kurateringsko/github'
+import { lagGrenleser } from '../src/kurateringsko/grener'
 import type { Repofil } from '../src/kurateringsko/historikk'
 import { kjorKo } from '../src/kurateringsko/kjoring'
 import { malRegisteret } from '../src/kurateringsko/maling'
@@ -48,6 +52,7 @@ const resultat = await kjorKo({
   git: lagGit(gitmappe),
   github: repo ? lagGithub(ghApi(repo)) : null,
   maling: klient ? () => malRegisteret(klient, new Date().toISOString()) : null,
+  grener: lagGrenleser(process.env),
   reserveregister: STOFFREGISTERDATA.stoffer.map((s) => ({ stoff: s.slug, navn: s.navn, aktiv: true, maal: null })),
   repo: {
     // Bare kurateringene trengs; de kjennes igjen på kallet i innholdet.

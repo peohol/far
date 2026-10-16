@@ -19,6 +19,8 @@ import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { PANELREKKEFOLGE } from '../faginnhold/paneler'
+import { kontrollerDekning, kontrollpunkter, tomMatrise } from '../kuratorprotokoll/dekning'
+import { SELVTESTKRAV, SELVTESTPORTER, tomSelvtest } from '../kuratorprotokoll/selvtest'
 import { AGENTHANDLINGER } from '../kuratering/handlinger'
 import { faginnholdskall, feilFra, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
@@ -806,6 +808,19 @@ describe('statusen og agentene', () => {
     expect((await feilFra(() => adm('status', { gren: crypto.randomUUID() })))?.code).toBe('PT404')
   })
 
+  it('gir kurateringskøen grenene uten fagtekst, bare gjennom serveren', async () => {
+    const k = await kuratertGren('Køstoff')
+    const ko = await db.transaction(async (tx) => {
+      await tx.query(`select set_config('role', 'service_role', true)`)
+      const { rows } = await tx.query<{ s: Json[] }>('select public.kuratering_kostatus() as s')
+      return rows[0]!.s
+    })
+    const rad = ko.find((g) => g.id === k.gren)!
+    expect(Object.keys(rad).sort()).toEqual(['art', 'id', 'oppdatert_kl', 'publisert_kl', 'revisjon', 'runde', 'status', 'stoff'])
+    expect(rad).toMatchObject({ stoff: k.slug, art: 'kuratering', status: 'arbeid', revisjon: 1 })
+    expect((await feilFra(() => kall.les(admin, 'select public.kuratering_kostatus()')))?.code).toBe('42501')
+  })
+
   it('har hver handling i lista som en funksjon, og gir Claude-kuratoren en nøkkel uten at nøkkelen står i repoet', async () => {
     const mangler = await kall.fasit<{ handling: string }>(
       `select h.handling from kuratering.handlingsliste h
@@ -819,10 +834,40 @@ describe('statusen og agentene', () => {
   })
 })
 
-describe('seksjonene', () => {
-  it('er de samme i databasen som på fagsiden', async () => {
+describe('innholdsmodellen i databasen', () => {
+  it('har de samme seksjonene som fagsiden', async () => {
     const [rad] = await kall.fasit<{ s: string[] }>('select kuratering.seksjoner() as s')
     expect(rad!.s).toEqual([...PANELREKKEFOLGE])
+  })
+
+  it('har de samme kontrollpunktene som dekningsmatrisen, og godtar og avviser de samme matrisene som kuratorverktøyet', async () => {
+    const [rad] = await kall.fasit<{ p: string[] }>('select kuratering.kontrollpunkter() as p')
+    expect(rad!.p).toEqual(kontrollpunkter())
+    const dbFeil = async (m: unknown) =>
+      (await kall.fasit<{ f: string[] }>(`select kuratering.dokumentfeil('dekningsmatrise', $1::jsonb) as f`, [JSON.stringify(m)]))[0]!.f
+    const m = tomMatrise('de_novo')
+    for (const o of m.omrader) Object.assign(o, { begrunnelse: 'Kontrollert.', kilder: ['SPC'], sok: [], bevis: 'Lest.' })
+    expect(kontrollerDekning(m)).toEqual([])
+    expect(await dbFeil(m)).toEqual([])
+    m.omrader[0]!.kilder = ['']
+    expect(kontrollerDekning(m)).toHaveLength(1)
+    expect(await dbFeil(m)).toHaveLength(1)
+  })
+
+  it('har de samme punktene i selvtesten som kuratorverktøyet', async () => {
+    const [rad] = await kall.fasit<{ krav: string[]; ikke_relevant: string[]; porter: string[] }>(
+      'select kuratering.selvtestkrav() as krav, kuratering.selvtestkrav_kan_vaere_ikke_relevant() as ikke_relevant, kuratering.selvtestporter() as porter',
+    )
+    expect(rad!.krav).toEqual(SELVTESTKRAV.map((k) => k.nokkel))
+    expect(rad!.ikke_relevant).toEqual(SELVTESTKRAV.filter((k) => 'kan_vaere_ikke_relevant' in k).map((k) => k.nokkel))
+    expect(rad!.porter).toEqual(SELVTESTPORTER.map((p) => p.nokkel))
+    // Malen fra verktøyet har hvert punkt, men holder ikke før status og bevis er fylt ut.
+    const mal = tomSelvtest()
+    const dbFeil = async (s: unknown) =>
+      (await kall.fasit<{ f: string[] }>(`select kuratering.dokumentfeil('selvtest', $1::jsonb) as f`, [JSON.stringify(s)]))[0]!.f
+    expect(await dbFeil(mal)).toHaveLength(2)
+    for (const o of [...mal.krav, ...mal.porter]) Object.assign(o, { status: 'bestatt', bevis: 'Syntetisk bevis' })
+    expect(await dbFeil(mal)).toEqual([])
   })
 })
 

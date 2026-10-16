@@ -1,6 +1,7 @@
 # Kurateringskøen
 
-Leses av ChatGPT-monografkuratoren og av den som endrer køen. Køen er
+Leses av monografkuratoren (Claude Code, `docs/kuratorprotokoll.md`) og av den
+som endrer køen. Køen er
 arbeidslisten kuratoren henter neste stoff fra når den arbeider seg gjennom
 stoffregisteret på egen hånd. Det kuratoren gjør ved hver planlagte kjøring,
 står kort i `docs/kurateringsko-instruks.md`; her står hvordan køen virker.
@@ -8,11 +9,12 @@ står kort i `docs/kurateringsko-instruks.md`; her står hvordan køen virker.
 Køen gjør ikke noe faglig arbeid. Den holder rede på hvilke stoffer som skal
 kurateres, i hvilken rekkefølge, hvem som arbeider med hvilket, og hvor langt
 hver kuratering har kommet fram til den er publisert. Kurateringen selv gjøres
-av kuratoren med skillen, med kuratorjobbene (`docs/kuratorjobber.md`) og
-arbeidsflyten i `docs/monografkuratering.md`, som før.
+av kuratoren med skillen og kuratorjobbene (`docs/kuratorjobber.md`), i en
+kurateringsgren i OUSFAR (`docs/kurateringsgrener.md`). Den eldre veien, en
+migrasjon i en PR (`docs/monografkuratering.md`), følges fortsatt.
 
 **Repoet er offentlig, og det er køen også.** Køen har bare nøkler, navn,
-tall, statuser, datoer, grener og PR-numre. De to frie tekstene kuratoren kan
+tall, statuser, datoer, grener, grenenes ID-er og PR-numre. De to frie tekstene kuratoren kan
 sende (`fase` og `grunn`, høyst 300 tegn), står på en offentlig gren: skriv
 aldri innhold fra fagsidene eller annet som står bak innloggingen der.
 
@@ -27,9 +29,10 @@ aldri innhold fra fagsidene eller annet som står bak innloggingen der.
   1–5 minutter.
 - En reservasjon gir kuratoren et stoff, en oppgave-ID, en jobbgren og en
   kurateringsgren. Høyst én kuratering er reservert om gangen
-  (`maks_aktive`). PR-er som venter på faglig gjennomgang, teller ikke.
-- Køen følger PR-en til den er slått sammen og rullet ut. Da er kurateringen
-  publisert, og stoffet får den som sin siste kuratering.
+  (`maks_aktive`). Grener og PR-er som venter på faglig kontroll, teller ikke.
+- Køen følger kurateringsgrenen i OUSFAR til den er publisert (eller PR-en til
+  den er slått sammen og rullet ut). Da er kurateringen publisert, og stoffet
+  får den som sin siste kuratering.
 
 ## Filene på køgrenen
 
@@ -49,14 +52,14 @@ lenken til kjøringen i Actions.
 | `klar` | Kan reserveres (når den ikke venter etter en feil, se `tidligst_kl`) |
 | `reservert` | En kurator arbeider med det nå, til `reservasjon.frist_kl` |
 | `fagarbeid_ferdig` | Kuratoren er ferdig, og PR-en er fortsatt et utkast |
-| `venter_godkjenning` | PR-en er merket klar til gjennomgang og venter på å bli godkjent og slått sammen |
+| `venter_godkjenning` | Kurateringsgrenen er sendt til kontroll og venter på kontrolløren (eller PR-en er merket klar til gjennomgang og venter på å bli godkjent og slått sammen) |
 | `sammenslatt` | PR-en er slått sammen, men utrullingen til produksjonen er ikke bekreftet ennå |
 | `publisert` | Kurateringen er rullet ut, og ingen ny er forfalt |
 | `blokkert` | Et menneske må se på det før det kan kurateres (`blokkeringer`) |
 | `utenfor` | Ikke aktivt i stoffregisteret (arkivert, i papirkurven, borte), eller utelatt i innstillingene |
 
-Bare `klar` kan reserveres. Et stoff med en PR køen følger, kan ikke
-reserveres før PR-en er publisert eller lukket, så samme stoff aldri får to
+Bare `klar` kan reserveres. Et stoff med en gren eller PR køen følger, kan
+ikke reserveres før den er publisert, forkastet eller lukket, så samme stoff aldri får to
 kurateringer samtidig.
 
 ## Modiene
@@ -137,6 +140,46 @@ Et stoff som venter etter en feil, står sist til `tidligst_kl`.
   samme svaret uten å endre noe. En forespørsel som sendes på nytt etter et
   avbrudd, gir derfor aldri to reservasjoner.
 
+## Kurateringsgrenene
+
+Ved hver kjøring leser køen alle kurateringsgrenene i OUSFAR, uten fagtekst
+(ID, stoff, art, status, revisjon, runde og tidene), gjennom
+`/api/kuratering-ko`. Arbeidsflyten logger inn med GitHubs OIDC-token, så det
+finnes ingen hemmelighet å lagre; serveren slipper bare inn «Kurateringskø» på
+`main`. Svarer OUSFAR ikke, går kjøringen videre uten grenene og prøver igjen
+neste time.
+
+- **Riktig stoff og art.** En gren hører bare til et stoff når den gjelder
+  det samme stoffet og har arten kurateringen krever: `de_novo` for en de
+  novo-kuratering, `kuratering` for evidensovervåkning og oppdatering. En
+  `gren` i `forny` eller `fullfort` som ikke passer, avvises, og reservasjonen
+  står som før. Kunne køen ikke se grenen da den ble meldt, kontrolleres den
+  når grenene leses: koblingen brytes, oppgaven står i `gjenoppta` uten grenen,
+  og stoffet blokkeres (`gren_feil_kobling`) til riktig gren er koblet. En slik
+  gren føres aldri som stoffets kuratering, heller ikke når den publiseres.
+- **Reservert.** Kuratoren melder grenen med `forny` (`gren`) så snart den er
+  åpnet. Har den ikke gjort det, kobler køen den åpne grenen for stoffet til
+  reservasjonen selv, eller til et avbrutt forsøk som står uten gren.
+- **Til kontroll.** `fullfort` med `gren` avslutter reservasjonen, og køen
+  følger grenen (`venter_godkjenning`). Den teller ikke mot `maks_aktive`.
+- **Kontrollrundene.** Når kontrolløren har bedt om endringer
+  (`tilbakemelding`), godkjent grenen (`godkjent`), eller grenen er tilbake i
+  arbeid, gir køen stoffet til kuratoren igjen, først i køen, med grenen og
+  grunnen i `gjenoppta`. En kontrollrunde teller ikke som et forsøk.
+- **Publisert.** Stoffet får grenen som sin siste kuratering. Det gjelder
+  også en gren som er reservert eller står i `gjenoppta` (f.eks. en godkjent
+  gren kuratoren publiserte før kjøringen stoppet): reservasjonen avsluttes,
+  og kunnskapsgrensen står som ukjent.
+- **Stoppet.** En forkastet gren (også en reservert eller i `gjenoppta`) gir
+  blokkeringen `gren_forkastet`, en stanset
+  gren `gren_stanset`. Finnes det en åpen gren for stoffet som ikke er den køen
+  kjenner, blir stoffet blokkert (`annen_gren`) til et menneske har sett på
+  det, så samme stoff aldri kurateres i to grener samtidig. `tilbakestill`
+  avvises så lenge køen følger en gren.
+
+`neste.json` og `oversikt.md` viser grenen og statusen dens under
+`til_gjennomgang`.
+
 ## Forespørslene
 
 `kurateringsko/foresporsel.json` på øktgrenen. Alle har `versjon` (`1`),
@@ -148,15 +191,15 @@ Et stoff som venter etter en feil, står sist til `tidligst_kl`.
 | `status` | | | Gir oversikten (det samme som `neste.json`) |
 | `forhandsvis` | | `stoff` | Viser hva `reserver` ville gitt, uten å reservere |
 | `reserver` | | `stoff` | Reserverer det første stoffet i køen, eller `stoff` (nøkkel eller navn) |
-| `forny` | `oppgave` | `fase`, `pr`, `jobbgren`, `kurateringsgren` | Forlenger fristen; melder hvor langt kuratoren har kommet, og PR-en så snart den finnes |
-| `fullfort` | `oppgave`, `pr`, `kunnskapsgrense` | `modus`, `fase`, `jobbgren`, `kurateringsgren` | Fagarbeidet er ferdig og utkast-PR-en laget; køen følger PR-en videre |
+| `forny` | `oppgave` | `fase`, `gren`, `pr`, `jobbgren`, `kurateringsgren` | Forlenger fristen; melder hvor langt kuratoren har kommet, og grenen (eller PR-en) så snart den finnes |
+| `fullfort` | `oppgave`, `kunnskapsgrense`, og enten `gren` eller `pr` | `modus`, `fase`, `jobbgren`, `kurateringsgren` | Grenen er sendt til kontroll (eller utkast-PR-en laget); køen følger den videre |
 | `feilet` | `oppgave`, `grunn` | `fase` | Noe gikk galt; stoffet kan prøves igjen etter ventetiden |
 | `blokkert` | `oppgave`, `grunn` | `fase` | Kurateringen kan ikke gjøres før et menneske har sett på noe |
 | `frigi` | `oppgave` | `grunn` | Gir stoffet tilbake uten feil, f.eks. når tiden ikke strekker til |
 | `tilbakestill` | `stoff`, `grunn` | | Fjerner blokkeringene og forsøkene for et stoff som ikke er reservert. For et menneske, eller kuratoren når et menneske har bedt om det |
 
-`kunnskapsgrense` er datoen kildesøket gjelder til (`ÅÅÅÅ-MM-DD`). `pr` er
-nummeret. `jobbgren` må være under `kuratorjobb/`, `kurateringsgren` under
+`kunnskapsgrense` er datoen kildesøket gjelder til (`ÅÅÅÅ-MM-DD`). `gren` er
+kurateringsgrenens ID i OUSFAR. `pr` er nummeret. `jobbgren` må være under `kuratorjobb/`, `kurateringsgren` under
 `kuratering/`.
 
 Eksempler:
@@ -170,7 +213,7 @@ Eksempler:
 ```
 
 ```json
-{ "versjon": 1, "id": "fullfort-1", "handling": "fullfort", "oppgave": "amitriptylin-0001", "pr": 240, "kunnskapsgrense": "2026-10-20" }
+{ "versjon": 1, "id": "fullfort-1", "handling": "fullfort", "oppgave": "amitriptylin-0001", "gren": "0b5f…", "kunnskapsgrense": "2026-10-20" }
 ```
 
 ## Svaret
@@ -182,7 +225,7 @@ Eksempler:
 | `foresporsel_id` | ID-en svaret gjelder. Vent til den er din |
 | `utfall` | `ok`, `ingen_oppgave` (ingenting å reservere nå) eller `avvist` (forespørselen kunne ikke brukes; grunnen står i `melding`) |
 | `melding` | På norsk |
-| `oppgave` | Etter `reserver`, `forhandsvis` og `forny`: `oppgave`, `stoff`, `navn`, `modus`, `forsok`, `frist_kl`, `jobbgren`, `kurateringsgren`, `pr`, `gjenoppta`, `sist_kuratert`, `maal` (tallene) og `prioritet` |
+| `oppgave` | Etter `reserver`, `forhandsvis` og `forny`: `oppgave`, `stoff`, `navn`, `modus`, `forsok`, `frist_kl`, `jobbgren`, `kurateringsgren`, `gren`, `pr`, `gjenoppta`, `sist_kuratert`, `maal` (tallene) og `prioritet` |
 | `ko` | Etter `status` og `ingen_oppgave`: oversikten |
 | `kjoring` | Lenken til kjøringen i Actions |
 
@@ -212,7 +255,7 @@ Arbeidsflyten «Kurateringskø» (`.github/workflows/kurateringsko.yml`) kjører
 
 - når en forespørsel committes på en øktgren (den lille jobben «videresend»
   starter køen på `main`, uten hemmeligheter, som for kuratorjobbene);
-- hver time, for fristene, PR-ene og utrullingene;
+- hver time, for fristene, grenene, PR-ene og utrullingene;
 - for hånd: Actions → Kurateringskø → Run workflow (med `maal` for å måle
   sidene med en gang).
 
@@ -226,15 +269,19 @@ de to, skriver neste kjøring det samme svaret.
 ## Sikkerheten
 
 - Køen kjører bare fra `main`, i miljøet `kuratortest`, med den vanlige
-  testbrukeren. Den endrer ingenting i databasen.
+  testbrukeren. Den endrer ingenting i databasen. Grenene leser den uten
+  fagtekst, gjennom `/api/kuratering-ko`, med et OIDC-token GitHub bare gir
+  arbeidsflyten på `main`.
 - Arbeidsflyten skriver bare køgrenen og `kurateringsko/svar.json` på
   øktgrenene, og sletter gamle øktgrener. Den slår aldri sammen og godkjenner
   aldri noe.
-- Kuratoren lager bare utkast-PR-er. Ingen PR slås sammen automatisk; det
-  gjør et menneske etter faglig gjennomgang, som før.
+- Køen publiserer aldri noe. En gren publiseres bare når kontrolløren har
+  godkjent nøyaktig den siste revisjonen og prøvepubliseringen er bestått
+  (databasen håndhever det). Ingen PR slås sammen automatisk; det gjør et
+  menneske etter faglig gjennomgang, som før.
 - Testene (`src/__tests__/kurateringsko.test.ts`) prøver hele livsløpet mot
   ekte git-grener: samtidige reservasjoner, gjentatte forespørsler, fornying,
-  feil, tidsavbrudd, gjenopptak, PR fram til publisering, en kjøring som
+  feil, tidsavbrudd, gjenopptak, gren og PR fram til publisering, kontrollrunder, en kjøring som
   stopper før svaret er skrevet, og to kjøringer som skriver samtidig.
 
 ## Koden
@@ -251,3 +298,5 @@ de to, skriver neste kjøring det samme svaret.
 | `src/kurateringsko/maling.ts` | Tallene fra de publiserte sidene, med appens lesere |
 | `src/kurateringsko/historikk.ts` | Kurateringene i migrasjonene og journalene |
 | `src/kurateringsko/git.ts`, `github.ts` | Grenene, PR-ene og utrullingen |
+| `src/kurateringsko/grener.ts` | Kurateringsgrenene i OUSFAR, med OIDC-tokenet |
+| `src/kuratering/endepunkt.ts`, `api/kuratering-ko.ts` | `/api/kuratering-ko` og `public.kuratering_kostatus` |

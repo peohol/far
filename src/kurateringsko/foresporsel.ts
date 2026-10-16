@@ -11,6 +11,7 @@ const erObjekt = (v: unknown): v is Record<string, unknown> => typeof v === 'obj
 
 const ID = /^[A-Za-z0-9][A-Za-z0-9._:+-]{0,79}$/
 const DATO = /^\d{4}-\d{2}-\d{2}$/
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 export const KURATERINGSGREN = /^kuratering\/(?!.*\.\.)(?!.*\/\/)[A-Za-z0-9._-][A-Za-z0-9._/-]{0,99}$/
 
 /** Høyst så mange tegn i de frie tekstene (grunn, fase). De står på en offentlig gren. */
@@ -21,8 +22,9 @@ const FELTER: Record<Handling, { krever: readonly string[]; tar: readonly string
   status: { krever: [], tar: [] },
   forhandsvis: { krever: [], tar: ['stoff'] },
   reserver: { krever: [], tar: ['stoff'] },
-  forny: { krever: ['oppgave'], tar: ['fase', 'jobbgren', 'kurateringsgren', 'pr'] },
-  fullfort: { krever: ['oppgave', 'pr', 'kunnskapsgrense'], tar: ['modus', 'fase', 'jobbgren', 'kurateringsgren'] },
+  forny: { krever: ['oppgave'], tar: ['fase', 'jobbgren', 'kurateringsgren', 'pr', 'gren'] },
+  // `pr` (en PR med en kurateringsmigrasjon) eller `gren` (en kurateringsgren i OUSFAR); kontrolleres under.
+  fullfort: { krever: ['oppgave', 'kunnskapsgrense'], tar: ['pr', 'gren', 'modus', 'fase', 'jobbgren', 'kurateringsgren'] },
   feilet: { krever: ['oppgave', 'grunn'], tar: ['fase'] },
   blokkert: { krever: ['oppgave', 'grunn'], tar: ['fase'] },
   frigi: { krever: ['oppgave'], tar: ['grunn'] },
@@ -85,6 +87,13 @@ export function lesForesporsel(tekst: string): Lest {
   if (data.pr !== undefined) {
     if (typeof data.pr !== 'number' || !Number.isInteger(data.pr) || data.pr < 1) feil.push('pr må være nummeret på PR-en, et positivt heltall.')
     else ut.pr = data.pr
+  }
+  if (data.gren !== undefined) {
+    if (typeof data.gren !== 'string' || !UUID.test(data.gren)) feil.push('gren må være ID-en til kurateringsgrenen i OUSFAR.')
+    else ut.gren = data.gren
+  }
+  if (handling === 'fullfort' && (data.pr === undefined) === (data.gren === undefined)) {
+    feil.push('fullfort krever enten pr (en PR med kurateringen) eller gren (kurateringsgrenen i OUSFAR), ikke begge.')
   }
   if (data.kunnskapsgrense !== undefined) {
     if (typeof data.kunnskapsgrense !== 'string' || !gyldigDato(data.kunnskapsgrense)) feil.push('kunnskapsgrense må være en dato, ÅÅÅÅ-MM-DD.')

@@ -1,6 +1,6 @@
 /**
- * Kurateringskøen: arbeidslisten ChatGPT-monografkuratoren henter neste
- * stoff fra, med det køen vet om hvert stoff (`docs/kurateringsko.md`).
+ * Kurateringskøen: arbeidslisten monografkuratoren henter neste stoff fra,
+ * med det køen vet om hvert stoff (`docs/kurateringsko.md`).
  *
  * Køen står på en egen gren som bare arbeidsflyten «Kurateringskø» skriver
  * på. Kuratoren endrer den aldri direkte: den skriver en forespørsel på sin
@@ -89,6 +89,8 @@ export interface Kurateringsspor {
   /** De novo-runden den hørte til, for en de novo-kuratering. */
   runde: number | null
   pr: number | null
+  /** Kurateringsgrenen i OUSFAR den ble publisert fra, når den ble det. */
+  gren?: string | null
   /** `ko` når køen fulgte den, `repo` når den er funnet i migrasjonene og journalene på main. */
   kilde: 'ko' | 'repo'
 }
@@ -103,6 +105,8 @@ export interface Gjenopptak {
   jobbgren: string | null
   kurateringsgren: string | null
   pr: number | null
+  /** Kurateringsgrenen i OUSFAR (ID-en), når kurateringen gjøres der. */
+  gren?: string | null
 }
 
 export interface Reservasjon {
@@ -120,6 +124,49 @@ export interface Reservasjon {
   jobbgren: string
   kurateringsgren: string
   pr: number | null
+  /** Kurateringsgrenen i OUSFAR (ID-en), så snart kuratoren har åpnet den. */
+  gren?: string | null
+}
+
+/** Statusene til en kurateringsgren i OUSFAR, som `kuratering.grener` har dem. */
+export const GRENSTATUSER = ['arbeid', 'klar', 'tilbakemelding', 'retting', 'godkjent', 'publisert', 'stanset', 'blokkert', 'arkivert'] as const
+export type Grenstatus = (typeof GRENSTATUSER)[number]
+
+/** En kurateringsgren i OUSFAR slik køen leser den (`kuratering_kostatus`): ingen fagtekst. */
+export interface Greninfo {
+  id: string
+  stoff: string
+  art: 'kuratering' | 'de_novo' | 'gjenoppretting'
+  status: Grenstatus
+  revisjon: number
+  runde: number
+  oppdatert_kl: string
+  publisert_kl: string | null
+}
+
+/**
+ * Arten en kurateringsgren i OUSFAR må ha for å kunne være kurateringen i
+ * modusen: en de novo-kuratering gjøres i en `de_novo`-gren, de andre i en
+ * `kuratering`-gren. En `gjenoppretting` er aldri en kuratering køen følger.
+ */
+export const grenartFor = (modus: Modus): Greninfo['art'] => (modus === 'de_novo' ? 'de_novo' : 'kuratering')
+
+/**
+ * En ferdig kuratering i en kurateringsgren i OUSFAR, som køen følger til den
+ * er publisert: gjennom den faglige kontrollen, rettingene og publiseringen.
+ */
+export interface Kurateringsappgren {
+  id: string
+  oppgave: string
+  modus: Modus
+  runde: number | null
+  kunnskapsgrense: string
+  jobbgren: string | null
+  registrert_kl: string
+  /** `ukjent` til køen har lest den. */
+  status: Grenstatus | 'ukjent'
+  revisjon: number | null
+  kontrollrunde: number | null
 }
 
 /** PR-en med en ferdig kuratering, slik GitHub sist viste den. */
@@ -147,7 +194,18 @@ export interface Kurateringspr {
  * kommer); de andre fjernes med `tilbakestill`.
  */
 export interface Blokkering {
-  kode: 'uten_fagside' | 'for_mange_forsok' | 'pr_lukket' | 'pr_ukjent' | 'utrulling_feilet' | 'agent'
+  kode:
+    | 'uten_fagside'
+    | 'for_mange_forsok'
+    | 'pr_lukket'
+    | 'pr_ukjent'
+    | 'utrulling_feilet'
+    | 'agent'
+    | 'gren_forkastet'
+    | 'gren_ukjent'
+    | 'gren_stanset'
+    | 'annen_gren'
+    | 'gren_feil_kobling'
   grunn: string
   kl: string
   kilde: 'system' | 'ko' | 'agent'
@@ -176,6 +234,8 @@ export interface Kostoff {
   tidligst_kl: string | null
   gjenoppta: Gjenopptak | null
   pr: Kurateringspr | null
+  /** Kurateringsgrenen i OUSFAR køen følger. Mangler i køer fra før grenene. */
+  appgren?: Kurateringsappgren | null
   blokkeringer: Blokkering[]
   sist_kuratert: Kurateringsspor | null
   /** Det siste forsøket, hvordan det enn endte. */
@@ -224,6 +284,8 @@ export interface Foresporsel {
   jobbgren?: string
   kurateringsgren?: string
   pr?: number
+  /** `forny`, `fullfort`: kurateringsgrenen i OUSFAR (ID-en). */
+  gren?: string
   /** `fullfort`: datoen kildesøket gjelder til (ÅÅÅÅ-MM-DD). */
   kunnskapsgrense?: string
   modus?: Modus
@@ -258,6 +320,8 @@ export interface Oppgavesvar {
   jobbgren: string
   kurateringsgren: string
   pr: number | null
+  /** Kurateringsgrenen i OUSFAR å fortsette i, når det finnes en. */
+  gren: string | null
   gjenoppta: Gjenopptak | null
   sist_kuratert: Kurateringsspor | null
   maal: Sidemaal | null
@@ -272,6 +336,7 @@ export interface Kooversikt {
   aktive: { stoff: string; oppgave: string; okt: string; frist_kl: string; fase: string | null }[]
   /** De neste stoffene køen gir ut, i rekkefølge. */
   neste: { stoff: string; modus: Modus; poeng: number; grunner: string[]; tidligst_kl: string | null }[]
-  til_gjennomgang: { stoff: string; pr: number; status: Kostatus }[]
+  /** Kurateringene som venter på kontroll, godkjenning eller utrulling: PR-en, eller grenen i OUSFAR med statusen der. */
+  til_gjennomgang: { stoff: string; pr?: number; gren?: string; grenstatus?: Grenstatus | 'ukjent'; status: Kostatus }[]
   blokkert: { stoff: string; blokkeringer: Blokkering[] }[]
 }
