@@ -123,6 +123,39 @@ export interface Grenhendelse {
   kl: string
 }
 
+/** Det en kommentartråd er festet til. */
+export interface Anker {
+  objekt?: string
+  felt?: string
+  seksjon?: string
+  referanse?: string
+  kilde?: string
+  dokument?: string
+}
+
+export interface Kommentar {
+  id: string
+  handling: 'kommentar' | 'lukket' | 'gjenapnet'
+  tekst: string
+  revisjon: number
+  av?: string
+  /** Skrevet av kuratoren av grenen. */
+  kurator?: boolean
+  kl: string
+}
+
+/** En kommentartråd i en gren (`kuratering.traader`). */
+export interface Traad {
+  id: string
+  art: 'merknad' | 'sperrende'
+  anker?: Anker
+  revisjon: number
+  status: 'apen' | 'lukket'
+  venter_pa_kurator?: boolean
+  apnet_av?: string
+  kommentarer: Kommentar[]
+}
+
 /** En gren i sin helhet (`kuratering.detaljer`). */
 export interface Grendetaljer extends Grensammendrag {
   grenrevisjon: Grenrevisjon | null
@@ -135,6 +168,8 @@ export interface Grendetaljer extends Grensammendrag {
   manglende_dokumenter: string[]
   /** Bare når grenen nettopp er laget av en gjenoppretting. */
   merknader?: string[]
+  /** Kommentartrådene, sperrende og åpne først. */
+  traader?: Traad[]
 }
 
 /** Hvem som sto for en versjon, slik endringsloggen viser det. */

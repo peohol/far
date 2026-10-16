@@ -63,6 +63,45 @@ export const AGENTHANDLINGER: readonly Agenthandling[] = [
     ),
   },
   {
+    navn: 'kommentarer',
+    beskrivelse:
+      'Kommentartrådene i grenen, sperrende og åpne først: hva hver er festet til (kort, felt, seksjon, referanse, kilde eller dokument), status, om den venter på kuratoren, og kommentarene.',
+    argumenter: objekt({ gren, apne: { type: 'boolean', description: 'Bare de åpne trådene' } }, ['gren']),
+    leser: true,
+  },
+  {
+    navn: 'kommenter',
+    beskrivelse:
+      'En ny tråd festet til noe konkret i grenen, eller et svar i en tråd (svar_pa). En sperrende tråd hindrer godkjenning og publisering til den som åpnet den lukker den; bare kontrolløren åpner sperrende tråder. Kuratoren må svare i hver åpen sperrende tråd før neste kontrollrunde.',
+    argumenter: objekt(
+      {
+        gren,
+        tekst: tekst('Kommentaren', 10000),
+        art: { type: 'string', enum: ['merknad', 'sperrende'], description: 'Bare for en ny tråd; merknad når den ikke oppgis' },
+        anker: objekt({
+          objekt: tekst('ID-en til kortet eller siden'),
+          felt: tekst('Feltet i kortet, som «Tekst» eller «Mål»', 200),
+          seksjon: tekst('Panelet, som «dosering»', 200),
+          referanse: tekst('ID-en til referansen'),
+          kilde: tekst('Bivirkningskilden (nøkkelen) eller en annen kilde', 200),
+          dokument: { type: 'string', enum: ['kildeplan', 'evidensjournal', 'dekningsmatrise', 'blindprotokoll', 'selvtest', 'notat'] },
+        }),
+        svar_pa: tekst('En kommentar i tråden som besvares'),
+      },
+      ['gren', 'tekst'],
+    ),
+  },
+  {
+    navn: 'lukk_kommentar',
+    beskrivelse: 'Lukker en tråd. En sperrende tråd lukkes bare av den som åpnet den, når rettingen er kontrollert.',
+    argumenter: objekt({ gren, kommentar: tekst('En kommentar i tråden'), tekst: tekst('Hva som er kontrollert', 10000) }, ['gren', 'kommentar']),
+  },
+  {
+    navn: 'gjenapne_kommentar',
+    beskrivelse: 'Åpner en lukket tråd igjen. Bare kontrolløren.',
+    argumenter: objekt({ gren, kommentar: tekst('En kommentar i tråden'), tekst: tekst('Hvorfor', 10000) }, ['gren', 'kommentar', 'tekst']),
+  },
+  {
     navn: 'apne',
     beskrivelse: 'Åpner en ny kurateringsgren for en publisert fagside. Bare kuratoren. En de novo-gren starter i blindfasen.',
     argumenter: objekt(

@@ -11,7 +11,7 @@ import { lesBivirkningsdata } from '../bivirkninger/lesing'
 import { tilFeil, type Databasefeil } from '../faginnhold/lagring'
 import { TOM_STOFFSIDE, type Stoffsidedata } from '../faginnhold/lesing'
 import type { Sideutgave } from '../faginnhold/sidesammenligning'
-import type { Grendetaljer, Grensammendrag, Sideversjonsdata, Versjonsinfo } from './modell'
+import type { Anker, Grendetaljer, Grensammendrag, Sideversjonsdata, Versjonsinfo } from './modell'
 
 /** Svaret på en publisering: `ok: false` når den stoppet, og grenen er blokkert med grunnen. */
 export interface Publiseringssvar {
@@ -33,6 +33,10 @@ export interface Kurateringsklient {
   gjenoppta(gren: string): Promise<Grensammendrag>
   forkast(gren: string, grunn?: string): Promise<Grensammendrag>
   gjenopprettVersjon(stoff: string, nr: number, grunn?: string): Promise<Grendetaljer>
+  /** En ny tråd, eller et svar i en (`svarPa`). */
+  kommenter(gren: string, kommentar: { tekst: string; art?: 'merknad' | 'sperrende'; anker?: Anker; svarPa?: string }): Promise<unknown>
+  lukkKommentar(gren: string, kommentar: string, tekst?: string): Promise<unknown>
+  gjenapneKommentar(gren: string, kommentar: string, tekst: string): Promise<unknown>
   /** Versjonene av fagsiden, nyeste først. */
   versjoner(stoff: string): Promise<Versjonsinfo[]>
   /** Én versjon av fagsiden, eller `null` når den ikke finnes. */
@@ -78,6 +82,10 @@ export function lagKurateringsklient(klient: SupabaseClient): Kurateringsklient 
     gjenoppta: (gren) => admin('gjenoppta', { gren }),
     forkast: (gren, grunn) => admin('forkast', { gren, ...(grunn && { grunn }) }),
     gjenopprettVersjon: (stoff, nr, grunn) => admin('gjenopprett_versjon', { stoff, nr, ...(grunn && { grunn }) }),
+    kommenter: (gren, { tekst, art, anker, svarPa }) =>
+      admin('kommenter', { gren, tekst, ...(svarPa ? { svar_pa: svarPa } : { art: art ?? 'merknad', ...(anker && { anker }) }) }),
+    lukkKommentar: (gren, kommentar, tekst) => admin('lukk_kommentar', { gren, kommentar, ...(tekst && { tekst }) }),
+    gjenapneKommentar: (gren, kommentar, tekst) => admin('gjenapne_kommentar', { gren, kommentar, tekst }),
     versjoner: (stoff) => kall<Versjonsinfo[]>('les_sideversjoner', { stoff }).then((r) => r ?? []),
     versjon: async (stoff, nr) => {
       const [data, bivirkninger] = await Promise.all([

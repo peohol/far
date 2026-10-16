@@ -54,6 +54,10 @@ nytt).
 | `forkast` | kurator (egen), admin | `{gren, grunn?}` |
 | `agenter` / `ny_agentnokkel` | admin | `{}` / `{agent}` |
 | `gjenopprett_versjon` | admin | `{stoff, nr, grunn?}` |
+| `kommentarer` | kurator (egen), kontrollør, admin | `{gren, apne?}` |
+| `kommenter` | kurator (egen), kontrollør, admin | `{gren, tekst, art?: "merknad" \| "sperrende", anker?}` eller `{gren, tekst, svar_pa}` |
+| `lukk_kommentar` | se [Kommentarene](#kommentarene) | `{gren, kommentar, tekst?}` |
+| `gjenapne_kommentar` | kontrollør, admin | `{gren, kommentar, tekst}` |
 
 Agentene kaller serveren, som kaller `kuratering_agent` med den hemmelige
 nøkkelen (`src/kuratering/endepunkt.ts`); nøkkelen kontrolleres i databasen:
@@ -114,6 +118,28 @@ sideversjonen, og dokumentene finnes: `evidensjournal`, `dekningsmatrise` og
 er bundet til revisjonen og fingeravtrykket; en ny lagring eller en ny
 grunnversjon opphever den.
 
+## Kommentarene
+
+Den faglige kontrollen skjer i kommentartråder i grenen
+(`kuratering.kommentarer`, uforanderlige rader). En tråd er festet til hele
+grenen eller et `anker`: `objekt` (et kort eller siden, som må stå på siden
+eller i grenen), `felt` (navnet på feltet, som i sammenligningen), `seksjon`,
+`referanse` (en referanse på siden eller i grenen), `kilde` (en
+preparatomtale) eller `dokument` (et av grenens dokumenter). Hver kommentar
+husker revisjonen den ble skrevet på, og hvem som skrev den.
+
+- En tråd er en `merknad` eller `sperrende`. Bare kontrolløren (ikke den som
+  kuraterer grenen) og administratorene åpner en sperrende tråd.
+- En åpen sperrende tråd stopper godkjenningen og publiseringen
+  (`kuratering.sperrer`). Den lukkes av den som åpnet den, eller av en
+  administrator; en merknad lukkes av alle som kan lese grenen.
+- Kontrollrundene: kontrolløren åpner sperrende tråder og ber om endringer,
+  kuratoren retter og svarer i hver tråd (`til_kontroll` stopper mens en
+  sperrende tråd venter på svar fra kuratoren), og kontrolløren lukker trådene
+  som er løst, eller åpner dem igjen, før den godkjenner den nye revisjonen.
+- `les` gir trådene med `traader`: status, om tråden venter på kuratoren, og
+  kommentarene.
+
 ## Publiseringen
 
 `publiser` krever status `godkjent`, en godkjenning av siste revisjon fra
@@ -160,6 +186,10 @@ siden alt i den har vært publisert før. Sideversjonen den gir, har opphavet
   blir publisert (forhåndsvisningen), sammenligningen med versjonen den bygger
   på, kontrollrundene og hindringene, og handlingene (vurdere, publisere,
   stanse, gjenoppta, forkaste). En eldre revisjon kan velges og vises.
+  «Kommentarer» viser trådene festet til kort og felt, og lar
+  administratoren åpne nye (også sperrende), svare, lukke og åpne igjen
+  (`src/components/kuratering/Kommentartrader.tsx`, ankrene i
+  `src/kuratering/anker.ts`).
 - `#/versjon/<stoff>/<nr>`: en versjon av fagsiden for alle innloggede, med
   sammenligningen med den gjeldende og, for administratorene, «Ta tilbake
   denne versjonen».
