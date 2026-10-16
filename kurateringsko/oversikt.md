@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-16T18:36:40.440Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-16T18:49:43.706Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 93 · Venter på godkjenning: 2 · Blokkert: 4 · Utenfor køen: 1
+Klar: 92 · Reservert: 1 · Venter på godkjenning: 2 · Blokkert: 4 · Utenfor køen: 1
 
 ## Pågår
 
-Ingen kurateringer er reservert nå.
+- **citalopram** (citalopram-0008), frist 2026-10-16T21:49:43.706Z
 
 ## Til gjennomgang
 
@@ -24,5 +24,4 @@ Ingen kurateringer er reservert nå.
 
 | # | Stoff | Modus | Poeng | Hvorfor |
 | --- | --- | --- | --- | --- |
-| 1 | citalopram | de_novo | 1552 | Fortsetter den avbrutte kurateringen citalopram-0003. Står først i innstillingene. De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-13. 1 av 43 elementer har ingen kilde. |
 
