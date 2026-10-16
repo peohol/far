@@ -263,7 +263,7 @@ const kjentGren = (s: Kostoff) => s.appgren?.id ?? s.reservasjon?.gren ?? s.gjen
  * - en aktiv gren køen ikke vet om (åpnet utenom køen, eller en
  *   gjenoppretting), holder stoffet ute av køen til den er avsluttet.
  */
-export function oppdaterGrener(t: Kotilstand, grener: readonly Greninfo[] | null, na: string) {
+export function oppdaterGrener(t: Kotilstand, grener: readonly Greninfo[] | null, na: string, innst: Koinnstillinger) {
   if (!grener) return
   const perId = new Map(grener.map((g) => [g.id, g]))
   const aktive = new Map<string, Greninfo>()
@@ -276,6 +276,7 @@ export function oppdaterGrener(t: Kotilstand, grener: readonly Greninfo[] | null
       logg(s, { kl: na, hendelse: 'gren_funnet', oppgave: s.reservasjon.oppgave, melding: `Fant kurateringsgrenen ${aktiv.id}.` })
     }
     if (s.appgren) folgGren(s, s.appgren, perId.get(s.appgren.id) ?? null, na)
+    else avsluttHoldtGren(s, perId.get(s.reservasjon?.gren ?? s.gjenoppta?.gren ?? '') ?? null, na, innst)
 
     if (aktiv && aktiv.id !== kjentGren(s)) {
       blokker(s, {
@@ -305,24 +306,11 @@ function folgGren(s: Kostoff, a: Kurateringsappgren, g: Greninfo | null, na: str
   else fjernBlokkering(s, 'gren_stanset')
 
   if (g.status === 'publisert') {
-    s.sist_kuratert = {
-      kl: g.publisert_kl ?? na,
-      modus: a.modus,
-      kunnskapsgrense: a.kunnskapsgrense,
-      runde: a.runde,
-      pr: null,
-      gren: a.id,
-      kilde: 'ko',
-    }
     s.appgren = null
-    s.forsok = 0
-    s.tidligst_kl = null
-    s.gjenoppta = null
-    logg(s, { kl: na, hendelse: 'publisert', oppgave: a.oppgave, melding: `Kurateringsgrenen er publisert (revisjon ${g.revisjon}).` })
+    grenPublisert(s, g, a, na)
   } else if (g.status === 'arkivert') {
     s.appgren = null
-    blokker(s, { kode: 'gren_forkastet', grunn: 'Kurateringsgrenen ble forkastet uten å bli publisert.', kl: na, kilde: 'ko' })
-    logg(s, { kl: na, hendelse: 'gren_forkastet', oppgave: a.oppgave, melding: 'Kurateringsgrenen ble forkastet.' })
+    grenForkastet(s, a.oppgave, na)
   } else if (KURATORENS_TUR.has(g.status)) {
     const grunn =
       g.status === 'tilbakemelding'
@@ -349,6 +337,57 @@ function folgGren(s: Kostoff, a: Kurateringsappgren, g: Greninfo | null, na: str
     s.tidligst_kl = null
     fjernBlokkering(s, 'for_mange_forsok')
     logg(s, { kl: na, hendelse: 'retting', oppgave: a.oppgave, melding: grunn })
+  }
+}
+
+/** Grenen er publisert: kurateringen er det, og stoffet er ferdig til neste gang det forfaller. */
+function grenPublisert(
+  s: Kostoff,
+  g: Greninfo,
+  spor: Pick<Kurateringsappgren, 'oppgave' | 'modus' | 'runde'> & { kunnskapsgrense: string | null },
+  na: string,
+) {
+  s.sist_kuratert = {
+    kl: g.publisert_kl ?? na,
+    modus: spor.modus,
+    kunnskapsgrense: spor.kunnskapsgrense,
+    runde: spor.runde,
+    pr: null,
+    gren: g.id,
+    kilde: 'ko',
+  }
+  s.forsok = 0
+  s.tidligst_kl = null
+  s.gjenoppta = null
+  logg(s, { kl: na, hendelse: 'publisert', oppgave: spor.oppgave, melding: `Kurateringsgrenen er publisert (revisjon ${g.revisjon}).` })
+}
+
+function grenForkastet(s: Kostoff, oppgave: string, na: string) {
+  blokker(s, { kode: 'gren_forkastet', grunn: 'Kurateringsgrenen ble forkastet uten å bli publisert.', kl: na, kilde: 'ko' })
+  logg(s, { kl: na, hendelse: 'gren_forkastet', oppgave, melding: 'Kurateringsgrenen ble forkastet.' })
+}
+
+/**
+ * En gren som er reservert eller står i et avbrutt forsøk, og som er
+ * publisert eller forkastet før kuratoren meldte den ferdig (f.eks. en
+ * godkjent gren kuratoren publiserte, men kjøringen stoppet før `fullfort`):
+ * reservasjonen avsluttes, og stoffet føres som publisert eller blokkeres.
+ * Kunnskapsgrensen er da ukjent.
+ */
+function avsluttHoldtGren(s: Kostoff, g: Greninfo | null, na: string, innst: Koinnstillinger) {
+  if (!g || erAktivGren(g.status)) return
+  const r = s.reservasjon
+  const oppgave = r?.oppgave ?? s.gjenoppta!.oppgave
+  if (r) {
+    s.siste_kjoring = { oppgave, okt: r.okt, startet_kl: r.reservert_kl, avsluttet_kl: na, utfall: g.status === 'publisert' ? 'fullfort' : 'feilet' }
+    s.reservasjon = null
+  }
+  if (g.status === 'publisert') {
+    const modus = r?.modus ?? s.modus ?? (g.art === 'de_novo' ? 'de_novo' : 'oppdatering')
+    grenPublisert(s, g, { oppgave, modus, kunnskapsgrense: null, runde: modus === 'de_novo' ? innst.de_novo_runde : null }, na)
+  } else {
+    s.gjenoppta = null
+    grenForkastet(s, oppgave, na)
   }
 }
 

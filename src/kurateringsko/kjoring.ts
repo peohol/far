@@ -141,7 +141,7 @@ export async function kjorKo(v: Kjoringsvalg): Promise<Kjoringsresultat> {
     oppdaterRepohistorikk(t, repospor, na)
     await synkPr(t)
     kobleApnePr(t, apne, na)
-    oppdaterGrener(t, grener, na)
+    oppdaterGrener(t, grener, na, innst)
     const utlopt = utlop(t, na, innst)
     vurder(t, na, innst)
 
@@ -184,7 +184,7 @@ export async function kjorKo(v: Kjoringsvalg): Promise<Kjoringsresultat> {
     }
     if (ventende.length > 0) {
       await synkPr(t)
-      oppdaterGrener(t, grener, na)
+      oppdaterGrener(t, grener, na, innst)
       vurder(t, na, innst)
     }
 

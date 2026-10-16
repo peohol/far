@@ -302,7 +302,7 @@ describe('kurateringsgrenene i OUSFAR', () => {
     ...endring,
   })
   const steg = (t: Kotilstand, grener: Greninfo[] | null, na: string) => {
-    oppdaterGrener(t, grener, na)
+    oppdaterGrener(t, grener, na, INNSTILLINGER)
     vurder(t, na, INNSTILLINGER)
     return t.stoffer.beta!
   }
@@ -339,6 +339,31 @@ describe('kurateringsgrenene i OUSFAR', () => {
       sist_kuratert: { kl: om(T0, 6), modus: 'de_novo', kunnskapsgrense: '2026-11-01', runde: 1, pr: null, gren: GREN, kilde: 'ko' },
     })
     expect(oversikt(t, om(T0, 6)).til_gjennomgang).toEqual([])
+  })
+
+  it('fører en reservert eller gitt tilbake gren som publisert eller forkastet, også når kuratoren ikke rakk å melde den', () => {
+    const t = ny()
+    // Godkjent og gitt tilbake til kuratoren, som reserverer og publiserer, men stopper før fullfort.
+    const { oppgave } = behandle(t, f('reserver', { stoff: 'beta' }), kontekst('kurateringsko/okt/a')).oppgave!
+    behandle(t, f('fullfort', { oppgave, gren: GREN, kunnskapsgrense: '2026-11-01' }), kontekst('kurateringsko/okt/a', om(T0, 1)))
+    steg(t, [gren('godkjent', { runde: 1 })], om(T0, 2))
+    const igjen = behandle(t, f('reserver'), kontekst('kurateringsko/okt/b', om(T0, 2))).oppgave!
+    expect(igjen).toMatchObject({ stoff: 'beta', gren: GREN })
+    expect(steg(t, [gren('publisert', { runde: 1, publisert_kl: om(T0, 3) })], om(T0, 3))).toMatchObject({
+      status: 'publisert',
+      reservasjon: null,
+      gjenoppta: null,
+      siste_kjoring: { utfall: 'fullfort' },
+      sist_kuratert: { kl: om(T0, 3), modus: 'de_novo', kunnskapsgrense: null, runde: 1, gren: GREN, kilde: 'ko' },
+    })
+    expect(behandle(t, f('reserver', { stoff: 'beta' }), kontekst('kurateringsko/okt/c', om(T0, 4))).utfall).not.toBe('ok')
+
+    // En gren som står i et avbrutt forsøk, og som forkastes: stoffet blokkeres, og forsøket glemmes.
+    const u = ny()
+    const a = behandle(u, f('reserver', { stoff: 'beta' }), kontekst('kurateringsko/okt/a')).oppgave!
+    behandle(u, f('frigi', { oppgave: a.oppgave, gren: GREN, grunn: 'Tiden strakk ikke til' }), kontekst('kurateringsko/okt/a', om(T0, 1)))
+    expect(u.stoffer.beta!.gjenoppta).toMatchObject({ gren: GREN })
+    expect(steg(u, [gren('arkivert')], om(T0, 2))).toMatchObject({ status: 'blokkert', gjenoppta: null, blokkeringer: [{ kode: 'gren_forkastet' }] })
   })
 
   it('blokkerer et stoff med en aktiv gren køen ikke følger, eller en gren som er stanset, forkastet eller borte', () => {

@@ -158,8 +158,12 @@ neste time.
   (`tilbakemelding`), godkjent grenen (`godkjent`), eller grenen er tilbake i
   arbeid, gir køen stoffet til kuratoren igjen, først i køen, med grenen og
   grunnen i `gjenoppta`. En kontrollrunde teller ikke som et forsøk.
-- **Publisert.** Stoffet får grenen som sin siste kuratering.
-- **Stoppet.** En forkastet gren gir blokkeringen `gren_forkastet`, en stanset
+- **Publisert.** Stoffet får grenen som sin siste kuratering. Det gjelder
+  også en gren som er reservert eller står i `gjenoppta` (f.eks. en godkjent
+  gren kuratoren publiserte før kjøringen stoppet): reservasjonen avsluttes,
+  og kunnskapsgrensen står som ukjent.
+- **Stoppet.** En forkastet gren (også en reservert eller i `gjenoppta`) gir
+  blokkeringen `gren_forkastet`, en stanset
   gren `gren_stanset`. Finnes det en åpen gren for stoffet som ikke er den køen
   kjenner, blir stoffet blokkert (`annen_gren`) til et menneske har sett på
   det, så samme stoff aldri kurateres i to grener samtidig. `tilbakestill`

@@ -27,7 +27,14 @@ describe('dekningen', () => {
     const tomt = m.omrader.find((o) => o.nokkel === 'avhengighet_toleranse/laering_motivasjon/Lært mestringsavhengighet')!
     Object.assign(tomt, { status: 'tomt_begrunnet', kilder: [], sok: [], bevis: '' })
     expect(kontrollerDekning(m)).toEqual([`${tomt.nokkel}: et tomt område må si hva det ble søkt etter.`])
+    // Tomme oppføringer er ikke belegg, verken for et søk eller en kilde.
+    tomt.sok = ['   ']
+    expect(kontrollerDekning(m)).toEqual([`${tomt.nokkel}: kilder og sok må være lister med tekst, uten tomme oppføringer.`])
     tomt.sok = ['PubMed citalopram learned coping dependence']
+    const beholdt = m.omrader[0]!
+    beholdt.kilder = ['']
+    expect(kontrollerDekning(m)).toEqual([`${beholdt.nokkel}: kilder og sok må være lister med tekst, uten tomme oppføringer.`])
+    beholdt.kilder = ['SPC']
 
     m.omrader.push({ ...m.omrader[0]! }, { ...m.omrader[0]!, nokkel: 'ukjent' })
     m.omrader.splice(1, 1)
