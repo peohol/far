@@ -1,37 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-lurasidon-1",
-  "foresporsel_sha256": "34f8900e490d10c4b70eab8be228f2dece526eb1eb65f2f9316b00f707972ff2",
-  "handling": "forny",
+  "foresporsel_id": "fullfort-lurasidon-1",
+  "foresporsel_sha256": "4b9a10fb49584408f8ffd13f006bed214515c78d5c098452864489ac519985c4",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "Reservasjonen av lurasidon varer til 2026-10-16T17:15:34.223Z.",
-  "behandlet_kl": "2026-10-16T14:15:34.223Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38914276924",
-  "oppgave": {
-    "oppgave": "lurasidon-0004",
-    "stoff": "lurasidon",
-    "navn": "Lurasidon",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-16T17:15:34.223Z",
-    "jobbgren": "kuratorjobb/lurasidon-0004",
-    "kurateringsgren": "kuratering/lurasidon-0004",
-    "pr": null,
-    "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95",
-    "gjenoppta": null,
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-15T21:31:45.692Z",
-      "side": true,
-      "elementer": 23,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 6,
-      "referanser": 2,
-      "elementer_uten_kilde": 20
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "melding": "lurasidon er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-16T14:53:56.184Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38919449288"
 }
