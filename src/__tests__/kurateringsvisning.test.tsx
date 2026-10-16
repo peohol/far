@@ -150,6 +150,9 @@ function klient(gren: Grendetaljer = grendetaljer()): Kurateringsklient {
     gjenoppta: vi.fn(async () => sammendrag),
     forkast: vi.fn(async () => sammendrag),
     gjenopprettVersjon: vi.fn(async () => grendetaljer({ id: GREN, art: 'gjenoppretting', status: 'arbeid' })),
+    kommenter: vi.fn(async () => ({})),
+    lukkKommentar: vi.fn(async () => ({})),
+    gjenapneKommentar: vi.fn(async () => ({})),
     versjoner: vi.fn(async () => [versjonsinfo(2), versjonsinfo(1, 'basis')]),
     versjon: vi.fn(async (_stoff: string, nr: number) => ({ versjon: versjonsinfo(nr), utgave: nr === 1 ? GAMMEL : NY })),
   }
@@ -331,6 +334,45 @@ describe('kurateringssiden', () => {
     await userEvent.click(await screen.findByRole('button', { name: 'Publiser' }))
     await waitFor(() => expect(k.publiser).toHaveBeenCalledWith(GREN, 2))
     expect(await screen.findByText('Publisert som versjon 3 av fagsiden.')).toBeTruthy()
+  })
+})
+
+describe('kommentartrådene', () => {
+  it('viser trådene festet til kort og felt, og lar en administrator åpne, svare på og lukke dem', async () => {
+    const traad = {
+      id: '66666666-0000-4000-8000-000000000006',
+      art: 'sperrende' as const,
+      anker: { objekt: DOSERING, felt: 'Tekst' },
+      revisjon: 1,
+      status: 'apen' as const,
+      venter_pa_kurator: true,
+      kommentarer: [{ id: '66666666-0000-4000-8000-000000000006', handling: 'kommentar' as const, tekst: 'Kilde mangler.', revisjon: 1, av: 'ChatGPT', kl: '2026-10-01T12:00:00Z' }],
+    }
+    const k = klient(grendetaljer({ traader: [traad] }))
+    vis(<Kurateringsside gren={GREN} onGaaTil={vi.fn()} {...felles} />, kilde(k))
+    await userEvent.click(await screen.findByRole('button', { name: 'Kommentarer (1 åpne, 1 sperrende)' }))
+    const lag = await screen.findByRole('dialog', { name: 'Kommentarer' })
+    const rad = within(lag).getByRole('region', { name: 'Tråd: Dosering · kort 1 · Tekst' })
+    expect(within(rad).getByText('venter på kuratoren')).toBeTruthy()
+    expect(within(rad).getByText('Kilde mangler.')).toBeTruthy()
+
+    await userEvent.type(within(rad).getByRole('textbox', { name: 'Svar' }), 'Sett.')
+    await userEvent.click(within(rad).getByRole('button', { name: 'Svar' }))
+    await waitFor(() => expect(k.kommenter).toHaveBeenCalledWith(GREN, { tekst: 'Sett.', svarPa: traad.id }))
+    await userEvent.click(within(rad).getByRole('button', { name: 'Lukk tråden' }))
+    await waitFor(() => expect(k.lukkKommentar).toHaveBeenCalledWith(GREN, traad.id))
+
+    await userEvent.selectOptions(within(lag).getByRole('combobox', { name: 'Gjelder' }), 'Dosering · kort 1')
+    await userEvent.selectOptions(within(lag).getByRole('combobox', { name: 'Felt' }), 'Tekst')
+    await userEvent.type(within(lag).getByRole('textbox', { name: 'Ny kommentar' }), 'Doseringen mangler maksdose.')
+    await userEvent.click(within(lag).getByRole('button', { name: 'Legg inn kommentaren' }))
+    await waitFor(() =>
+      expect(k.kommenter).toHaveBeenLastCalledWith(GREN, {
+        tekst: 'Doseringen mangler maksdose.',
+        art: 'sperrende',
+        anker: { objekt: DOSERING, felt: 'Tekst' },
+      }),
+    )
   })
 })
 

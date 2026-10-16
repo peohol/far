@@ -9,7 +9,7 @@ prosjektet, så en ny økt kan fortsette herfra alene.
 
 | Dato | Punkt |
 | --- | --- |
-| 2026-10-16 | B1 (1.93.0, PR #231), B2 (1.94.0, PR #232) og C (1.95.0, grenen `claude/kurateringsvisning`) ferdige og testet; PR-ene er stablet og slås sammen i rekkefølge. Neste: D. |
+| 2026-10-16 | B1 (1.93.0, PR #231), B2 (1.94.0, PR #232), C (1.95.0, PR #233) og D (1.96.0, grenen `claude/kurateringskommentarer`) ferdige og testet; PR-ene er stablet og slås sammen i rekkefølge. Neste: E. |
 
 Neste steg står øverst i [Fasene](#fasene) med status `pågår` eller `neste`.
 
@@ -84,8 +84,8 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 | B1 | Sideversjoner: manifest ved hver publisering, basisversjon, lesing av en eldre hel side (`docs/faginnhold.md`, «Sideversjoner») | 1.93.0 | ferdig |
 | B2 | Kurateringsgrener: lagring, revisjoner, statusmaskin, prøvepublisering og samlet publisering, agentidentiteter og roller (`docs/kurateringsgrener.md`) | 1.94.0 | ferdig |
 | C | Forhåndsvisning, banner, sammenligning, versjonsliste og gjenoppretting, arbeidsoversikt (`docs/kurateringsgrener.md`, «Gjenopprettingen» og «I appen») | 1.95.0 | ferdig |
-| D | Feltkommentarer, kontrollrunder, godkjenning bundet til revisjon, sperrer | – | neste |
-| E | Agentendepunkt (HTTP og MCP), kø mot grener, «Følg agenten», kuratorprotokollen for Claude | – | |
+| D | Feltkommentarer, kontrollrunder, godkjenning bundet til revisjon, sperrer (`docs/kurateringsgrener.md`, «Kommentarene») | 1.96.0 | ferdig |
+| E | Agentnøkler, kø mot grener, «Følg agenten», kuratorprotokollen for Claude og instruksen for ChatGPT | – | neste |
 | F | Pilot: citalopram, lurasidon, GHB; deretter køstyrt de novo-runde | – | |
 
 ## Hvordan det er bygd (for den som fortsetter)
@@ -100,8 +100,11 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 - Handlingene er `kuratering.h_<navn>(aktor, data)`; `kuratering.handlinger`
   sier hvilke agentene og administratorene har. En ny handling er en ny
   funksjon og et navn i lista.
-- Fase D legger sperrende kommentarer inn i `kuratering.sperrer(gren)`, som
-  godkjenningen og publiseringen alt spør.
+- Sperrende kommentartråder står i `kuratering.sperrer(gren)`, som
+  godkjenningen og publiseringen spør; `til_kontroll` krever at kuratoren har
+  svart i hver av dem. Testen «tilbyr agentene nøyaktig de handlingene
+  databasen har» holder MCP-verktøyene (`src/kuratering/handlinger.ts`) i takt
+  med `kuratering.handlinger`.
 - En gren kan bygge på objekter utenfor grunnversjonens manifest (et fjernet
   kort en gjenoppretting tar tilbake): revisjonen står da i tilstanden som
   `grunnrevisjon`, og `kuratering.forventet_revisjon` kontrollerer mot den.
@@ -133,3 +136,8 @@ Ingen ennå. Når en oppstår, står den her med nøyaktig hva som trengs.
   versjonssiden, kurateringssiden, versjonslista, arbeidsoversikten og
   meldingen på fagsiden. Tester i `src/__tests__/kurateringsvisning.test.tsx`
   og `kurateringsgrener.test.ts`.
+- 2026-10-16: D kommentarene (1.96.0): `kuratering.kommentarer`, trådene i
+  `les`, `kommenter`, `lukk_kommentar`, `gjenapne_kommentar` og
+  `kommentarer`, sperrende tråder i `sperrer` og `til_kontroll`;
+  «Kommentarer» på kurateringssiden. Tester i `kurateringsgrener.test.ts`
+  («kommentarene») og `kurateringsvisning.test.tsx`.

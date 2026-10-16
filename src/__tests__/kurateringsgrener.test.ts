@@ -18,6 +18,8 @@
 import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
+import { PANELREKKEFOLGE } from '../faginnhold/paneler'
+import { AGENTHANDLINGER } from '../kuratering/handlinger'
 import { faginnholdskall, feilFra, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
 const DOK = (tekst: string) => ({ type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: tekst }] }] })
@@ -199,6 +201,11 @@ beforeAll(async () => {
 }, 180_000)
 
 describe('tilgangen', () => {
+  it('tilbyr agentene nøyaktig de handlingene databasen har for dem', async () => {
+    const [rad] = await kall.fasit<{ h: string[] }>('select kuratering.handlinger(false) as h')
+    expect([...rad!.h].sort()).toEqual(AGENTHANDLINGER.map((h) => h.navn).sort())
+  })
+
   it('slipper bare inn agenter med en gyldig nøkkel, og bare gjennom serveren', async () => {
     expect(claude).toMatch(/^far_[0-9a-f]{64}$/)
     expect((await feilFra(() => agent('far_' + '0'.repeat(64), 'oversikt')))?.code).toBe('42501')
@@ -528,6 +535,9 @@ describe('publiseringen', () => {
     expect((await antall()).kilder).toBe(telt.kilder)
     const lest = await agent<{ grenrevisjon: { forhandsvisning: { bivirkninger: { kilder: unknown[] } } } }>(chatgpt, 'les', { gren: g.id })
     expect(lest.grenrevisjon.forhandsvisning.bivirkninger.kilder).toHaveLength(1)
+    // En tråd kan festes til preparatomtalen i grenen, men ikke til en som ikke finnes.
+    await agent(chatgpt, 'kommenter', { gren: g.id, anker: { kilde: imp.kilde.nokkel }, tekst: 'Kontroller frekvensene.' })
+    expect((await feilFra(() => agent(chatgpt, 'kommenter', { gren: g.id, anker: { kilde: 'oppdiktet-spc' }, tekst: 'x' })))?.message).toContain('preparatomtalen')
 
     await tilGodkjent(g.id)
     expect((await adm<{ ok: boolean }>('publiser', { gren: g.id, revisjon: 1 })).ok).toBe(true)
@@ -642,6 +652,132 @@ describe('gjenopprettingen', () => {
     const svar = await adm<{ ok: boolean; status: string; kode: string }>('publiser', { gren: g.id, revisjon: 1 })
     expect(svar).toMatchObject({ ok: false, status: 'blokkert', kode: 'PT409' })
     expect(JSON.stringify(await publisert(s.slug))).toContain('Enda senere')
+  })
+})
+
+describe('kommentarene', () => {
+  interface Traad {
+    id: string
+    art: string
+    status: string
+    venter_pa_kurator?: boolean
+    anker?: Json
+    kommentarer: { tekst: string; handling: string; kurator?: boolean }[]
+  }
+
+  it('holder sperrende tråder åpne til kontrolløren lukker dem, gjennom flere kontrollrunder', async () => {
+    const k = await kuratertGren()
+    await medDokumenter(k.gren)
+    await agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 1 })
+
+    // Kontrolløren fester en sperrende tråd til et felt i doseringskortet og ber om endringer.
+    const traad = await agent<{ traad: string }>(chatgpt, 'kommenter', {
+      gren: k.gren,
+      art: 'sperrende',
+      anker: { objekt: k.dosering, felt: 'Tekst' },
+      tekst: 'Doseringen mangler kilde for maksdosen.',
+    })
+    expect((await feilFra(() => agent(chatgpt, 'kommenter', { gren: k.gren, anker: { objekt: crypto.randomUUID() }, tekst: 'x' })))?.code).toBe('22023')
+    expect((await feilFra(() => agent(claude, 'kommenter', { gren: k.gren, art: 'sperrende', tekst: 'Egen sperre' })))?.code).toBe('42501')
+    expect((await feilFra(() => agent(chatgpt, 'vurder', { gren: k.gren, revisjon: 1, beslutning: 'godkjent', begrunnelse: 'ok' })))?.code).toBe('22023')
+    await agent(chatgpt, 'vurder', { gren: k.gren, revisjon: 1, beslutning: 'endringer', begrunnelse: 'Se kommentaren.' })
+
+    // Kuratoren retter, men kan ikke sende til ny runde før den har svart i tråden.
+    await agent(claude, 'skriv', {
+      gren: k.gren,
+      forventet_revisjon: 1,
+      endringer: [{ sett: k.dosering, innhold: kort(k.side, 'dosering', 'Ny dosering med kilde', { referanser: [k.nyRef] }) }],
+    })
+    expect((await feilFra(() => agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 2 })))?.message).toMatch(/venter på svar/)
+    await agent(claude, 'kommenter', { gren: k.gren, svar_pa: traad.traad, tekst: 'Kilde lagt til i revisjon 2.' })
+    expect((await feilFra(() => agent(claude, 'lukk_kommentar', { gren: k.gren, kommentar: traad.traad })))?.code).toBe('42501')
+    expect((await agent<Sammendrag>(claude, 'til_kontroll', { gren: k.gren, revisjon: 2 })).runde).toBe(2)
+
+    // Den åpne tråden sperrer fortsatt godkjenningen, til kontrolløren lukker den.
+    const lest = await agent<{ traader: Traad[]; hindringer: string[] }>(chatgpt, 'les', { gren: k.gren })
+    expect(lest.traader[0]).toMatchObject({ art: 'sperrende', status: 'apen', venter_pa_kurator: false, anker: { objekt: k.dosering, felt: 'Tekst' } })
+    expect(lest.traader[0]!.kommentarer.map((x) => x.kurator ?? false)).toEqual([false, true])
+    expect(lest.hindringer.join(' ')).toMatch(/Sperrende kommentar er åpen/)
+    await agent(chatgpt, 'lukk_kommentar', { gren: k.gren, kommentar: traad.traad, tekst: 'Kontrollert mot kilden.' })
+    expect((await agent<Sammendrag>(chatgpt, 'vurder', { gren: k.gren, revisjon: 2, beslutning: 'godkjent', begrunnelse: 'Kontrollert.' })).status).toBe('godkjent')
+
+    // En lukket tråd kan åpnes igjen, og sperrer da publiseringen.
+    await agent(chatgpt, 'gjenapne_kommentar', { gren: k.gren, kommentar: traad.traad, tekst: 'Fant en feil til.' })
+    expect((await feilFra(() => adm('publiser', { gren: k.gren, revisjon: 2 })))?.message).toMatch(/Sperrende kommentar/)
+    await adm('lukk_kommentar', { gren: k.gren, kommentar: traad.traad })
+    expect((await adm<{ ok: boolean }>('publiser', { gren: k.gren, revisjon: 2 })).ok).toBe(true)
+    // Etter publiseringen er grenen avsluttet, og trådene står som historikk.
+    expect((await feilFra(() => agent(chatgpt, 'kommenter', { gren: k.gren, tekst: 'For sent' })))?.code).toBe('22023')
+    expect((await feilFra(() => adm('gjenapne_kommentar', { gren: k.gren, kommentar: traad.traad, tekst: 'For sent' })))?.message).toContain('avsluttet')
+    expect((await feilFra(() => adm('lukk_kommentar', { gren: k.gren, kommentar: lest.traader[0]!.id })))?.message).toContain('avsluttet')
+    expect((await adm<Traad[]>('kommentarer', { gren: k.gren }))[0]!.kommentarer.map((x) => x.handling)).toEqual([
+      'kommentar', 'kommentar', 'lukket', 'gjenapnet', 'lukket',
+    ])
+  })
+
+  it('gir en ny svarplikt når kontrolløren åpner en tråd igjen med et nytt funn', async () => {
+    const k = await kuratertGren()
+    await medDokumenter(k.gren)
+    await agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 1 })
+    const traad = await agent<{ traad: string }>(chatgpt, 'kommenter', {
+      gren: k.gren,
+      art: 'sperrende',
+      anker: { objekt: k.dosering, felt: 'Tekst' },
+      tekst: 'Doseringen mangler kilde.',
+    })
+    await agent(chatgpt, 'vurder', { gren: k.gren, revisjon: 1, beslutning: 'endringer', begrunnelse: 'Se tråden.' })
+    const rett = async (revisjon: number, tekst: string) =>
+      agent(claude, 'skriv', {
+        gren: k.gren,
+        forventet_revisjon: revisjon - 1,
+        endringer: [{ sett: k.dosering, innhold: kort(k.side, 'dosering', tekst, { referanser: [k.nyRef] }) }],
+      })
+    const venter = async () =>
+      (await agent<{ traader: Traad[] }>(chatgpt, 'les', { gren: k.gren })).traader.find((t) => t.id === traad.traad)!.venter_pa_kurator
+
+    // Svar fra kuratoren, og kontrolløren lukker tråden.
+    await rett(2, 'Dosering med kilde')
+    await agent(claude, 'kommenter', { gren: k.gren, svar_pa: traad.traad, tekst: 'Kilde lagt til i revisjon 2.' })
+    await agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 2 })
+    await agent(chatgpt, 'lukk_kommentar', { gren: k.gren, kommentar: traad.traad, tekst: 'Kontrollert.' })
+
+    // Kontrolløren åpner den igjen med et nytt funn: tråden venter på kuratoren igjen, også i appen.
+    await agent(chatgpt, 'gjenapne_kommentar', { gren: k.gren, kommentar: traad.traad, tekst: 'Maksdosen stemmer ikke med kilden.' })
+    expect(await venter()).toBe(true)
+    expect((await adm<Traad[]>('kommentarer', { gren: k.gren })).find((t) => t.id === traad.traad)).toMatchObject({ status: 'apen', venter_pa_kurator: true })
+    await agent(chatgpt, 'vurder', { gren: k.gren, revisjon: 2, beslutning: 'endringer', begrunnelse: 'Se den gjenåpnede tråden.' })
+
+    // En ny revisjon kan ikke sendes til kontroll før kuratoren har svart på det nye funnet.
+    await rett(3, 'Dosering med rettet maksdose')
+    expect((await feilFra(() => agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 3 })))?.message).toMatch(/venter på svar/)
+    await agent(claude, 'kommenter', { gren: k.gren, svar_pa: traad.traad, tekst: 'Maksdosen rettet i revisjon 3.' })
+    expect(await venter()).toBe(false)
+    expect((await agent<Sammendrag>(claude, 'til_kontroll', { gren: k.gren, revisjon: 3 })).runde).toBe(3)
+  })
+
+  it('lar kuratoren skrive merknader og andre ikke lese grenens tråder', async () => {
+    const k = await kuratertGren()
+    const merknad = await agent<{ traad: string }>(claude, 'kommenter', { gren: k.gren, anker: { seksjon: 'dosering' }, tekst: 'Usikker på barnedosen.' })
+    // Et anker må peke på noe som finnes: et felt i et objekt, og en kjent seksjon.
+    for (const [anker, melding] of [
+      [{ felt: 'Tekst' }, 'høre til et objekt'],
+      [{ seksjon: 'doseringg' }, 'ukjent seksjon'],
+    ] as const) {
+      expect((await feilFra(() => agent(claude, 'kommenter', { gren: k.gren, anker, tekst: 'x' })))?.message).toContain(melding)
+    }
+    expect((await adm<Traad[]>('kommentarer', { gren: k.gren, apne: true }))[0]).toMatchObject({ id: merknad.traad, art: 'merknad' })
+    expect((await feilFra(() => adm('kommentarer', { gren: k.gren }, leser)))?.code).toBe('42501')
+    await agent(claude, 'lukk_kommentar', { gren: k.gren, kommentar: merknad.traad })
+    expect(await adm<Traad[]>('kommentarer', { gren: k.gren, apne: true })).toEqual([])
+    const [rad] = await kall.fasit<{ id: string }>('select id from kuratering.kommentarer where traad = $1 limit 1', [merknad.traad])
+    expect((await feilFra(() => db.query('update kuratering.kommentarer set tekst = $1 where id = $2', ['x', rad!.id])))?.code).toBe('42501')
+  })
+})
+
+describe('seksjonene', () => {
+  it('er de samme i databasen som på fagsiden', async () => {
+    const [rad] = await kall.fasit<{ s: string[] }>('select kuratering.seksjoner() as s')
+    expect(rad!.s).toEqual([...PANELREKKEFOLGE])
   })
 })
 

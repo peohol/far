@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.96.0',
+    dato: '2026-10-16',
+    sammendrag: 'Kommentartråder på kurateringene, festet til kort og felt, med sperrer som må løses før publisering',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    gjelder: ['vinduer'],
+    punkter: [
+      'På siden for hver kuratering står nå «Kommentarer»: tråder som gjelder hele kurateringen, et kort eller et bestemt felt, med svar og hvem som skrev hva i hvilken runde.',
+      'En sperrende tråd må lukkes før kurateringen kan godkjennes og publiseres, og kuratoren må ha svart i den før en ny runde sendes til kontroll.',
+    ],
+  },
+  {
     versjon: '1.95.0',
     dato: '2026-10-16',
     sammendrag: 'Versjonene av hver fagside kan åpnes og sammenlignes, og administratorene får en egen side for hver kuratering',

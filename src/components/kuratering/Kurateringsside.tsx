@@ -10,6 +10,7 @@ import { Merke, type Merketone } from '../Merke'
 import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
 import { Bekreftknapp } from '../traad/Smadeler'
 import { useFaginnholdskilde } from '../stoffside/Faginnholdskilde'
+import { Kommentartrader, apneTraader } from './Kommentartrader'
 import { Sidesammenligning, Utgavevisning } from './Utgavevisning'
 import type { Utgavesideprops } from './Versjonsside'
 
@@ -19,6 +20,13 @@ const STATUSTONE: Partial<Record<Grendetaljer['status'], Merketone>> = {
   tilbakemelding: 'toksisk',
   blokkert: 'alvorlig',
   stanset: 'alvorlig',
+}
+
+/** «Kommentarer», med hvor mange som står åpne og sperrer. */
+function kommentarknapp(gren: Grendetaljer): string {
+  const { apne, sperrende } = apneTraader(gren.traader)
+  if (apne === 0) return 'Kommentarer'
+  return `Kommentarer (${apne} åpne${sperrende ? `, ${sperrende} sperrende` : ''})`
 }
 
 /** Merknadene en gjenoppretting fikk da den ble laget: det som står som nå. */
@@ -55,6 +63,7 @@ function Kurateringsinnhold({ gren: id, onGaaTil, ...props }: Utgavesideprops & 
   }, [kuratering, id, revisjon])
   const { tilstand, hentPaNytt } = useHenting(hent)
   const [sammenligner, setSammenligner] = useBevart('sammenligner', false)
+  const [kommenterer, setKommenterer] = useBevart('kommenterer', false)
 
   if (tilstand.status !== 'klar' || !kuratering) {
     return (
@@ -81,6 +90,7 @@ function Kurateringsinnhold({ gren: id, onGaaTil, ...props }: Utgavesideprops & 
       siste={revisjon === null || revisjon === gren.revisjon}
       onVelgRevisjon={setRevisjon}
       onSammenlign={() => setSammenligner(true)}
+      onKommentarer={() => setKommenterer(true)}
       onEndret={hentPaNytt}
       onTilSiden={tilSiden}
       onGaaTil={onGaaTil}
@@ -114,6 +124,14 @@ function Kurateringsinnhold({ gren: id, onGaaTil, ...props }: Utgavesideprops & 
         etter={visning}
         onLukk={() => setSammenligner(false)}
       />
+      <Kommentartrader
+        apen={kommenterer}
+        gren={gren}
+        side={visning?.side ?? grunnlag?.utgave.side ?? null}
+        klient={kuratering}
+        onEndret={hentPaNytt}
+        onLukk={() => setKommenterer(false)}
+      />
     </>
   )
 }
@@ -124,6 +142,7 @@ function Grenbanner({
   siste,
   onVelgRevisjon,
   onSammenlign,
+  onKommentarer,
   onEndret,
   onTilSiden,
   onGaaTil,
@@ -134,6 +153,7 @@ function Grenbanner({
   siste: boolean
   onVelgRevisjon: (revisjon: number | null) => void
   onSammenlign: () => void
+  onKommentarer: () => void
   onEndret: () => void
   onTilSiden: () => void
   onGaaTil: Utgavesideprops['onGaaTil']
@@ -241,6 +261,9 @@ function Grenbanner({
       <div className="utgavebanner__handlinger">
         <Button variant="kant" onClick={onTilSiden}>
           Til fagsiden
+        </Button>
+        <Button variant="kant" onClick={onKommentarer}>
+          {kommentarknapp(gren)}
         </Button>
         <Button variant="kant" onClick={onSammenlign} disabled={!r?.forhandsvisning}>
           Sammenlign med versjon {gren.grunnversjon}

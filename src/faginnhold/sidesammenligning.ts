@@ -12,6 +12,7 @@ import { frekvens, FREKVENSER, INGEN_BIVIRKNINGER, organsystem, ORGANSYSTEMER, t
 import { sammenlignFelter, type Felt, type Feltendring } from './historikk'
 import { innholdsfelter } from './innholdsfelter'
 import type { Stoffsidedata } from './lesing'
+import type { Innholdselementinnhold } from './modell'
 import { FJERNET, PANELER, panelFor } from './paneler'
 import { formaterReferanse } from './referanser'
 
@@ -36,6 +37,23 @@ const iRekkefolge = (a: Bivirkning, b: Bivirkning) =>
   (FREKVENSPLASS.get(a.frekvens) ?? 0) - (FREKVENSPLASS.get(b.frekvens) ?? 0) ||
   a.posisjon - b.posisjon
 
+/** Navnet på et kort på siden, som «Dosering · kort 1». */
+export function kortnavn(innhold: Pick<Innholdselementinnhold, 'panel' | 'posisjon'>): string {
+  return `${panelFor(innhold.panel)?.tittel ?? innhold.panel} · kort ${innhold.posisjon + 1}`
+}
+
+/** Kortene på siden i sidens rekkefølge: panelene, så plassen. Fjernede kort er utelatt. */
+export function sidensKort(side: Stoffsidedata): Stoffsidedata['elementer'] {
+  return side.elementer
+    .filter((e) => e.innhold.panel !== FJERNET)
+    .sort(
+      (a, b) =>
+        (PANELPLASS.get(a.innhold.panel) ?? PANELER.length) - (PANELPLASS.get(b.innhold.panel) ?? PANELER.length) ||
+        a.innhold.posisjon - b.innhold.posisjon ||
+        a.id.localeCompare(b.id),
+    )
+}
+
 /** Feltene på hele siden, i sidens rekkefølge. */
 export function sidefelter({ side, bivirkninger }: Sideutgave): Felt[] {
   const kilder = new Map(side.referanser.map((r) => [r.id, formaterReferanse(r.innhold)]))
@@ -55,16 +73,8 @@ export function sidefelter({ side, bivirkninger }: Sideutgave): Felt[] {
     }
   }
 
-  const kortene = side.elementer
-    .filter((e) => e.innhold.panel !== FJERNET)
-    .sort(
-      (a, b) =>
-        (PANELPLASS.get(a.innhold.panel) ?? PANELER.length) - (PANELPLASS.get(b.innhold.panel) ?? PANELER.length) ||
-        a.innhold.posisjon - b.innhold.posisjon ||
-        a.id.localeCompare(b.id),
-    )
-  for (const kort of kortene) {
-    const gruppe = `${panelFor(kort.innhold.panel)?.tittel ?? kort.innhold.panel} · kort ${kort.innhold.posisjon + 1}`
+  for (const kort of sidensKort(side)) {
+    const gruppe = kortnavn(kort.innhold)
     for (const felt of innholdsfelter('innholdselement', kort.innhold)) {
       if (felt.nokkel === 'kilder') continue
       ut.push({ ...felt, nokkel: `${kort.id}:${felt.nokkel}`, gruppe })
