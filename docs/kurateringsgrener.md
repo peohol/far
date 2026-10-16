@@ -41,6 +41,7 @@ nytt).
 | `oversikt` | alle | `{stoff?, alle?}` |
 | `apne` | kurator | `{stoff, formaal, art?: "kuratering" \| "de_novo"}` |
 | `les` | kurator (egen), kontrollør, admin | `{gren, revisjon?}` |
+| `status` | kurator (egen), kontrollør, admin | `{gren}`: status, revisjon, runde, aktiviteten, når kuratoren sist kalte inn, antallet åpne sperrende tråder og `endring` (den siste hendelsen utenom aktiviteten); ingen fagtekst |
 | `skriv` | kurator | `{gren, forventet_revisjon, endringer, melding?}` |
 | `aktivitet` | kurator | `{gren, tekst, seksjon?, objekt?}` |
 | `dokument` | kurator | `{gren, art, innhold}` |
@@ -58,6 +59,10 @@ nytt).
 | `kommenter` | kurator (egen), kontrollør, admin | `{gren, tekst, art?: "merknad" \| "sperrende", anker?}` eller `{gren, tekst, svar_pa}` |
 | `lukk_kommentar` | se [Kommentarene](#kommentarene) | `{gren, kommentar, tekst?}` |
 | `gjenapne_kommentar` | kontrollør, admin | `{gren, kommentar, tekst}` |
+
+Handlingene og hvem som har dem, står i `kuratering.handlingsliste`; en ny
+handling er en funksjon `kuratering.h_<navn>` og en rad der, og for agentene
+et verktøy i `src/kuratering/handlinger.ts` (en test holder dem i takt).
 
 Agentene kaller serveren, som kaller `kuratering_agent` med den hemmelige
 nøkkelen (`src/kuratering/endepunkt.ts`); nøkkelen kontrolleres i databasen:
@@ -98,6 +103,19 @@ forhåndsvisningen: fagsiden og bivirkningene nøyaktig slik de ville blitt
 publisert, lest med `les_stoff` og `les_bivirkninger`. En feil stopper ikke
 lagringen, men grenen kan ikke sendes til kontroll før prøven og rapporten er
 i orden.
+
+## Agentene
+
+| Agent | Rolle | Nøkkelen |
+| --- | --- | --- |
+| `claude-monografkurator` | kurator | Lagt inn som SHA-256 i migrasjonen `kurateringsagenter`; selve nøkkelen har Claude-øktene i prosjektet, utenfor repoet |
+| `chatgpt-monografkurator` | kontrollør | Lages av en administrator i appen |
+
+En administrator ser agentene under «Kurateringer» i administrasjonsmenyen:
+rollen, når nøkkelen ble laget og når agenten sist kalte inn. «Lag ny nøkkel»
+gir en ny nøkkel og gjør den gamle ugyldig med en gang. Nøkkelen vises bare
+den ene gangen, med adressen ChatGPT kobles til (MCP, med nøkkelen i
+adressen) og adressen for HTTP, og glemmes når laget lukkes.
 
 ## Statusene
 
@@ -208,6 +226,17 @@ siden alt i den har vært publisert før. Sideversjonen den gir, har opphavet
   blir publisert (forhåndsvisningen), sammenligningen med versjonen den bygger
   på, kontrollrundene og hindringene, og handlingene (vurdere, publisere,
   stanse, gjenoppta, forkaste). En eldre revisjon kan velges og vises.
+  Banneret viser hva agenten gjør (arbeider, venter, stanset, eller at
+  tilkoblingen er brutt; «arbeider» bare når kuratoren har meldt aktivitet
+  eller gjort noe i nettopp denne grenen de siste ti minuttene,
+  `kurator_sist_kl` i `status`). Siden spør etter `status` hvert
+  halve minutt, og hvert femte sekund med «Følg agenten» på; er noe nytt
+  (`endring` er større enn da grenen ble lest, eller statusen er en annen),
+  leses grenen på nytt og kortene som er endret, markeres en liten stund.
+  Slik vises også et nytt svar eller en ny merknad i en tråd.
+  «Følg agenten» ruller også til kortet eller seksjonen agenten melder at den
+  arbeider med, og slås av når man ruller selv
+  (`src/components/kuratering/Folgagenten.tsx`).
   «Kommentarer» viser trådene festet til kort og felt, og lar
   administratoren åpne nye (også sperrende), svare, lukke og åpne igjen
   (`src/components/kuratering/Kommentartrader.tsx`, ankrene i

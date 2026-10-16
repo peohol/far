@@ -118,3 +118,27 @@ a.utgaveliste__rad:focus-visible {
   margin: 0;
   color: var(--blekk-dempet);
 }
+
+/* --- «Følg agenten»: kortene agenten nettopp endret -------------------------- */
+.utgave--nylig {
+  border-radius: var(--runding-felt);
+  animation: utgave-nylig 4s ease-out;
+}
+
+@keyframes utgave-nylig {
+  from {
+    box-shadow: 0 0 0 3px var(--aksent);
+    background: var(--aksent-flate);
+  }
+  to {
+    box-shadow: 0 0 0 3px transparent;
+    background: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .utgave--nylig {
+    animation: none;
+    box-shadow: 0 0 0 3px var(--aksent);
+  }
+}

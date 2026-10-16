@@ -9,7 +9,7 @@ prosjektet, så en ny økt kan fortsette herfra alene.
 
 | Dato | Punkt |
 | --- | --- |
-| 2026-10-16 | B1 (1.93.0, PR #231), B2 (1.94.0, PR #232), C (1.95.0, PR #233) og D (1.96.0, grenen `claude/kurateringskommentarer`) ferdige og testet; PR-ene er stablet og slås sammen i rekkefølge. Neste: E. |
+| 2026-10-16 | B1 (1.93.0, PR #231), B2 (1.94.0, PR #232), C (1.95.0, PR #233), D (1.96.0, PR #234) og E1 (1.97.0, grenen `claude/kurateringsagenter`) ferdige og testet; PR-ene er stablet og slås sammen i rekkefølge. Neste: E2. |
 
 Neste steg står øverst i [Fasene](#fasene) med status `pågår` eller `neste`.
 
@@ -85,7 +85,8 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 | B2 | Kurateringsgrener: lagring, revisjoner, statusmaskin, prøvepublisering og samlet publisering, agentidentiteter og roller (`docs/kurateringsgrener.md`) | 1.94.0 | ferdig |
 | C | Forhåndsvisning, banner, sammenligning, versjonsliste og gjenoppretting, arbeidsoversikt (`docs/kurateringsgrener.md`, «Gjenopprettingen» og «I appen») | 1.95.0 | ferdig |
 | D | Feltkommentarer, kontrollrunder, godkjenning bundet til revisjon, sperrer (`docs/kurateringsgrener.md`, «Kommentarene») | 1.96.0 | ferdig |
-| E | Agentnøkler, kø mot grener, «Følg agenten», kuratorprotokollen for Claude og instruksen for ChatGPT | – | neste |
+| E1 | Agentnøklene i appen, Claude-kuratorens nøkkel, `status` og «Følg agenten», handlingslista som tabell (`docs/kurateringsgrener.md`, «Agentene» og «I appen») | 1.97.0 | ferdig |
+| E2 | Kurateringskøen mot grenene, kuratorprotokollen for Claude og instruksen for ChatGPT som kontrollør | – | neste |
 | F | Pilot: citalopram, lurasidon, GHB; deretter køstyrt de novo-runde | – | |
 
 ## Hvordan det er bygd (for den som fortsetter)
@@ -105,6 +106,11 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
   svart i hver av dem. Testen «tilbyr agentene nøyaktig de handlingene
   databasen har» holder MCP-verktøyene (`src/kuratering/handlinger.ts`) i takt
   med `kuratering.handlinger`.
+- Claude-kuratorens nøkkel ligger i prosjektets delte mappe,
+  `/mnt/project-files/.hemmelig/claude-monografkurator.nokkel`, og bare
+  SHA-256 av den i repoet. Mangler fila, eller virker ikke nøkkelen, lager en
+  administrator en ny i appen, og den legges i fila uten å skrives noe annet
+  sted.
 - En gren kan bygge på objekter utenfor grunnversjonens manifest (et fjernet
   kort en gjenoppretting tar tilbake): revisjonen står da i tilstanden som
   `grunnrevisjon`, og `kuratering.forventet_revisjon` kontrollerer mot den.
@@ -141,3 +147,8 @@ Ingen ennå. Når en oppstår, står den her med nøyaktig hva som trengs.
   `kommentarer`, sperrende tråder i `sperrer` og `til_kontroll`;
   «Kommentarer» på kurateringssiden. Tester i `kurateringsgrener.test.ts`
   («kommentarene») og `kurateringsvisning.test.tsx`.
+- 2026-10-16: E1 agentene (1.97.0): `kuratering.handlingsliste`, `status`,
+  nøkkelen til `claude-monografkurator`; agentene og «Lag ny nøkkel» under
+  «Kurateringer», «Følg agenten» og markeringen av endrede kort på
+  kurateringssiden. Tester i `kurateringsgrener.test.ts` («statusen og
+  agentene») og `kurateringsvisning.test.tsx`.

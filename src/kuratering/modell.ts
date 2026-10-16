@@ -37,6 +37,17 @@ export const ARTSNAVN: Record<Grenart, string> = {
   gjenoppretting: 'Gjenoppretting',
 }
 
+/** Hvem som har neste handling i en aktiv gren. */
+export const NESTE_HANDLING: Partial<Record<Grenstatus, string>> = {
+  arbeid: 'kuratoren arbeider',
+  retting: 'kuratoren retter',
+  tilbakemelding: 'kuratoren skal rette',
+  blokkert: 'kuratoren må oppdatere grenen',
+  klar: 'kontrolløren vurderer',
+  godkjent: 'klar til publisering',
+  stanset: 'en administrator må gjenoppta den',
+}
+
 /** Statusene der grenen fortsatt kan endres eller publiseres. */
 const AKTIVE: readonly Grenstatus[] = ['arbeid', 'klar', 'tilbakemelding', 'retting', 'godkjent', 'stanset', 'blokkert']
 
@@ -50,6 +61,90 @@ export interface Aktivitet {
   seksjon?: string
   objekt?: string
   kl: string
+}
+
+/** Den lille statusen til en gren (`status`), uten fagtekst: det appen spør etter for å se om noe er nytt. */
+export interface Grenstatusdata {
+  id: string
+  status: Grenstatus
+  revisjon: number
+  runde: number
+  blindfase: boolean
+  aktivitet?: Aktivitet
+  oppdatert_kl: string
+  /** Sist kuratoren gjorde noe i denne grenen. */
+  kurator_sist_kl?: string
+  apne_sperrer: number
+  /** Den siste hendelsen i grenen utenom aktiviteten; øker ved hver revisjon, kommentar, dokument og vurdering. */
+  endring: number
+}
+
+/** Hva agenten gjør, slik «Følg agenten» viser det. */
+export type Agenttilstand = 'aktiv' | 'venter' | 'stanset' | 'avsluttet' | 'brutt'
+
+export const AGENTTILSTANDSNAVN: Record<Agenttilstand, string> = {
+  aktiv: 'Agenten arbeider',
+  venter: 'Venter',
+  stanset: 'Stanset',
+  avsluttet: 'Avsluttet',
+  brutt: 'Tilkoblingen er brutt',
+}
+
+/** Hvor lenge en melding fra kuratoren regnes som tegn på at den arbeider. */
+export const AKTIV_I_MINUTTER = 10
+
+/** Statusene der kuratoren har neste handling. */
+const KURATORENS_TUR: readonly Grenstatus[] = ['arbeid', 'retting', 'blokkert', 'tilbakemelding']
+
+/**
+ * Hva agenten gjør ut fra statusen. «Aktiv» bare med belegg: kuratoren har
+ * meldt aktivitet eller gjort noe i denne grenen de siste minuttene, og det
+ * er dens tur.
+ */
+export function agenttilstand(status: Grenstatusdata | null, brutt: boolean, naa = Date.now()): Agenttilstand {
+  if (brutt) return 'brutt'
+  if (!status) return 'venter'
+  if (status.status === 'stanset') return 'stanset'
+  if (!erAktiv(status.status)) return 'avsluttet'
+  const sist = Math.max(Date.parse(status.aktivitet?.kl ?? '') || 0, Date.parse(status.kurator_sist_kl ?? '') || 0)
+  return KURATORENS_TUR.includes(status.status) && naa - sist < AKTIV_I_MINUTTER * 60_000 ? 'aktiv' : 'venter'
+}
+
+/**
+ * Om noe i grenen er endret siden den ble lest, så den må leses på nytt: en
+ * ny hendelse (en revisjon, en kommentar, et svar, et dokument, en vurdering)
+ * eller en annen status. Aktiviteten alene teller ikke.
+ */
+export function grenenErEndret(
+  gren: Pick<Grensammendrag, 'status' | 'revisjon' | 'runde'> & { traader?: Traad[]; endring?: number },
+  status: Grenstatusdata,
+): boolean {
+  const sperrer = (gren.traader ?? []).filter((t) => t.status === 'apen' && t.art === 'sperrende').length
+  return (
+    status.endring > (gren.endring ?? 0) ||
+    status.revisjon !== gren.revisjon ||
+    status.status !== gren.status ||
+    status.runde !== gren.runde ||
+    status.apne_sperrer !== sperrer
+  )
+}
+
+/** En KI-agent som kan arbeide i grenene (`agenter`). */
+export interface Agentinfo {
+  agent: string
+  navn: string
+  roller: ('kurator' | 'kontrollor')[]
+  aktiv: boolean
+  har_nokkel: boolean
+  nokkel_kl?: string
+  sist_sett_kl?: string
+}
+
+export const ROLLENAVN: Record<Agentinfo['roller'][number], string> = { kurator: 'Kurator', kontrollor: 'Kontrollør' }
+
+/** Adressene en agent kaller med nøkkelen: HTTP, og MCP med nøkkelen i adressen for klienter som ikke kan sende den som overskrift. */
+export function agentadresser(opphav: string, nokkel: string): { http: string; mcp: string } {
+  return { http: `${opphav}/api/kuratering`, mcp: `${opphav}/api/kuratering-mcp?nokkel=${encodeURIComponent(nokkel)}` }
 }
 
 /** En gren kort, uten fagtekst (`kuratering.sammendrag`). */
@@ -166,6 +261,8 @@ export interface Grendetaljer extends Grensammendrag {
   dokumenter: { art: string; versjon: number; kl: string }[]
   hindringer: string[]
   manglende_dokumenter: string[]
+  /** Hvor langt grenen var kommet da den ble lest (`Grenstatusdata.endring`). */
+  endring?: number
   /** Bare når grenen nettopp er laget av en gjenoppretting. */
   merknader?: string[]
   /** Kommentartrådene, sperrende og åpne først. */

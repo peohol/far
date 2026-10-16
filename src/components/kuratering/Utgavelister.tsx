@@ -1,11 +1,24 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { kurateringsadresse, versjonsadresse } from '../../domain/rute'
 import { tidspunkt } from '../../faginnhold/historikk'
 import { useJevnligSjekk } from '../../hooks/useJevnligSjekk'
 import { klient as supabase } from '../../auth/klient'
 import { lagKurateringsklient, type Kurateringsklient } from '../../kuratering/klient'
-import { ARTSNAVN, STATUSNAVN, erAktiv, versjonslinje, type Grensammendrag, type Versjonsinfo } from '../../kuratering/modell'
+import {
+  ARTSNAVN,
+  NESTE_HANDLING,
+  ROLLENAVN,
+  STATUSNAVN,
+  agentadresser,
+  erAktiv,
+  versjonslinje,
+  type Agentinfo,
+  type Grensammendrag,
+  type Versjonsinfo,
+} from '../../kuratering/modell'
+import { useClipboard } from '../../hooks/useClipboard'
 import { Button } from '../Button'
+import { Bekreftknapp } from '../traad/Smadeler'
 import { Bryter } from '../Bryter'
 import { Modallag } from '../Modallag'
 import { useFaginnholdskilde } from '../stoffside/Faginnholdskilde'
@@ -79,7 +92,13 @@ function Grenrad({ gren, onApne }: { gren: Grensammendrag; onApne?: () => void }
         {[ARTSNAVN[gren.art], gren.formaal, `revisjon ${gren.revisjon}`, tidspunkt(gren.oppdatert_kl)].join(' · ')}
       </span>
       {gren.konflikt && <span className="utgaveliste__meta">Fagsiden er publisert på nytt etter at grenen ble laget.</span>}
-      {gren.aktivitet && erAktiv(gren.status) && <span className="utgaveliste__meta">Nå: {gren.aktivitet.tekst}</span>}
+      {erAktiv(gren.status) && (
+        <span className="utgaveliste__meta">
+          {[NESTE_HANDLING[gren.status] && `Neste: ${NESTE_HANDLING[gren.status]}`, gren.aktivitet && `Nå: ${gren.aktivitet.tekst}`]
+            .filter(Boolean)
+            .join(' · ')}
+        </span>
+      )}
     </a>
   )
 }
@@ -139,7 +158,112 @@ export function Kurateringsoversikt({ apen, klient: egen, onLukk }: { apen: bool
           )}
         </>
       )}
+      {klient && <Agentene apen={apen} klient={klient} />}
     </Modallag>
+  )
+}
+
+/**
+ * KI-agentene som arbeider i grenene, med rollen, nøkkelen og når de sist
+ * kalte inn. En administrator lager en ny nøkkel her, og den vises bare den
+ * ene gangen, sammen med adressen ChatGPT kobles til med.
+ */
+function Agentene({ apen, klient }: { apen: boolean; klient: Kurateringsklient }) {
+  const [runde, setRunde] = useState(0)
+  // `runde` gir en ny henting etter en ny nøkkel.
+  const hent = useMemo(() => (runde >= 0 ? () => klient.agenter() : null), [klient, runde])
+  const tilstand = useApenHenting<Agentinfo[]>(apen, hent)
+  // Nøkkelen holdes bare her, aldri i det som bevares over en oppdatering, og
+  // glemmes når laget lukkes. Den vises utenfor lista, så den står mens lista
+  // hentes på nytt, også om hentingen feiler. Hver lukking starter en ny
+  // økt: et svar som kommer etter at laget er lukket, vises aldri.
+  const [ny, setNy] = useState<{ agent: string; navn: string; nokkel: string } | null>(null)
+  const [feil, setFeil] = useState<string | null>(null)
+  const okt = useRef(0)
+  useEffect(() => {
+    if (apen) return
+    okt.current += 1
+    setNy(null)
+    setFeil(null)
+  }, [apen])
+  const lagNokkel = (a: Agentinfo) => {
+    setFeil(null)
+    const denne = okt.current
+    const iDenneOkta = <T,>(f: (v: T) => void) => (v: T) => {
+      if (okt.current === denne) f(v)
+    }
+    klient.nyAgentnokkel(a.agent).then(
+      iDenneOkta((svar) => {
+        setNy({ ...svar, navn: a.navn })
+        setRunde((r) => r + 1)
+      }),
+      iDenneOkta((e: unknown) => setFeil(e instanceof Error ? e.message : String(e))),
+    )
+  }
+  return (
+    <>
+      <h3 className="historikk__gruppetittel">Agentene</h3>
+      {ny && <Nynokkel navn={ny.navn} nokkel={ny.nokkel} />}
+      <Lastestatus tilstand={tilstand} />
+      {feil && (
+        <p className="utgavebanner__feil" role="alert">
+          {feil}
+        </p>
+      )}
+      {tilstand.status === 'klar' && (
+        <ul className="utgaveliste" aria-label="Agentene">
+          {tilstand.data.map((a) => (
+            <li key={a.agent} className="utgaveliste__rad">
+              <span className="utgaveliste__hode">
+                {a.navn} · {a.roller.map((r) => ROLLENAVN[r]).join(', ')}
+              </span>
+              <span className="utgaveliste__meta">
+                {[
+                  a.har_nokkel ? `Nøkkel fra ${tidspunkt(a.nokkel_kl!)}` : 'Ingen nøkkel',
+                  a.sist_sett_kl ? `sist sett ${tidspunkt(a.sist_sett_kl)}` : 'aldri sett',
+                ].join(' · ')}
+              </span>
+              <span>
+                <Bekreftknapp
+                  ikon="key"
+                  tekst={a.har_nokkel ? 'Lag ny nøkkel' : 'Lag nøkkel'}
+                  bekreftTekst="Bekreft"
+                  bekreftEtikett={`Bekreft ny nøkkel til ${a.navn}. ${a.har_nokkel ? 'Den gamle slutter å virke med en gang.' : ''}`.trim()}
+                  onBekreft={() => lagNokkel(a)}
+                />
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
+  )
+}
+
+/** Den nye nøkkelen og adressene, med kopiering. Vises bare til laget lukkes. */
+function Nynokkel({ navn, nokkel }: { navn: string; nokkel: string }) {
+  const kopier = useClipboard()
+  const [kopiert, setKopiert] = useState<string | null>(null)
+  const { http, mcp } = agentadresser(window.location.origin, nokkel)
+  const felter = [
+    { navn: 'Adressen til ChatGPT (MCP)', verdi: mcp },
+    { navn: 'Nøkkelen', verdi: nokkel },
+    { navn: 'Adressen for HTTP', verdi: http },
+  ]
+  return (
+    <div className="utgavebanner__skjema" role="status">
+      <p className="utgavebanner__linje">Ny nøkkel til {navn}. Den vises bare nå: kopier det agenten trenger før du lukker.</p>
+      {felter.map((f) => (
+        <div key={f.navn} className="utgavebanner__handlinger">
+          <label>
+            {f.navn} <input readOnly value={f.verdi} onFocus={(e) => e.target.select()} />
+          </label>
+          <Button variant="kant" aria-label={`Kopier ${f.navn.toLowerCase()}`} onClick={() => void kopier(f.verdi).then((ok) => setKopiert(ok ? f.navn : null))}>
+            {kopiert === f.navn ? 'Kopiert' : 'Kopier'}
+          </Button>
+        </div>
+      ))}
+    </div>
   )
 }
 
