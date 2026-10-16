@@ -1,23 +1,23 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-ghb-1",
-  "foresporsel_sha256": "68af0e04a7e1c405f2809de8cec2ed96ff1ff68ecc9b5c37b0250c80d76ef4e5",
-  "handling": "reserver",
+  "foresporsel_id": "forny-ghb-1",
+  "foresporsel_sha256": "12d47626c5819fc316e2cadf9c4e2521b49b0f0234a5cc38432640fa21836420",
+  "handling": "forny",
   "utfall": "ok",
-  "melding": "ghb er reservert til 2026-10-16T17:54:33.657Z.",
-  "behandlet_kl": "2026-10-16T14:54:33.657Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38919550357",
+  "melding": "Reservasjonen av ghb varer til 2026-10-16T17:55:46.759Z.",
+  "behandlet_kl": "2026-10-16T14:55:46.759Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38919695287",
   "oppgave": {
     "oppgave": "ghb-0005",
     "stoff": "ghb",
     "navn": "GHB",
     "modus": "de_novo",
     "forsok": 1,
-    "frist_kl": "2026-10-16T17:54:33.657Z",
+    "frist_kl": "2026-10-16T17:55:46.759Z",
     "jobbgren": "kuratorjobb/ghb-0005",
     "kurateringsgren": "kuratering/ghb-0005",
     "pr": null,
-    "gren": null,
+    "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a",
     "gjenoppta": null,
     "sist_kuratert": null,
     "maal": {
@@ -30,16 +30,8 @@
       "elementer_uten_kilde": 1
     },
     "prioritet": {
-      "poeng": 637.9,
-      "grunner": [
-        "Står først i innstillingene.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "11 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 3 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
