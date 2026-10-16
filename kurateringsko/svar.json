@@ -1,10 +1,56 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-ghb-1",
-  "foresporsel_sha256": "1db159385533a59d7e9e52ac6d9808b676ae595c5b25c909b0c78dcbc6f25b2e",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-ghb-2",
+  "foresporsel_sha256": "65c9f6e4165d66eb4a2bf5304a7265c89c3806938df5380d1e3b5fdb55c5804c",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "ghb er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-16T15:31:55.717Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38924653876"
+  "melding": "ghb er reservert til 2026-10-16T21:10:24.195Z.",
+  "behandlet_kl": "2026-10-16T18:10:24.195Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38945244027",
+  "oppgave": {
+    "oppgave": "ghb-0006",
+    "stoff": "ghb",
+    "navn": "GHB",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-16T21:10:24.195Z",
+    "jobbgren": "kuratorjobb/ghb-0005",
+    "kurateringsgren": "kuratering/ghb-0006",
+    "pr": null,
+    "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a",
+    "gjenoppta": {
+      "oppgave": "ghb-0005",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "avbrutt_kl": "2026-10-16T18:10:24.195Z",
+      "grunn": "Grenen er tilbake hos kuratoren.",
+      "fase": null,
+      "jobbgren": "kuratorjobb/ghb-0005",
+      "kurateringsgren": null,
+      "pr": null,
+      "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a"
+    },
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-16T18:10:24.842Z",
+      "side": true,
+      "elementer": 3,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 2,
+      "referanser": 3,
+      "elementer_uten_kilde": 1
+    },
+    "prioritet": {
+      "poeng": 1637.9,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen ghb-0005.",
+        "Står først i innstillingene.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "11 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 3 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ]
+    }
+  }
 }
