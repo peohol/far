@@ -1,23 +1,23 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-neste-3",
-  "foresporsel_sha256": "ab5d989b3013767cc251e0748c7b7b702107b61f09b4b7c5be93a530a9ccae9e",
-  "handling": "reserver",
+  "foresporsel_id": "forny-doksepin-1",
+  "foresporsel_sha256": "4d7b0d6757590f206c1ad37a09ea5d7a0b88bcb72cd9a561a930422a065c83cd",
+  "handling": "forny",
   "utfall": "ok",
-  "melding": "doksepin er reservert til 2026-10-17T02:04:01.212Z.",
-  "behandlet_kl": "2026-10-16T23:04:01.212Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38979349099",
+  "melding": "Reservasjonen av doksepin varer til 2026-10-17T02:39:35.018Z.",
+  "behandlet_kl": "2026-10-16T23:39:35.018Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38982561566",
   "oppgave": {
     "oppgave": "doksepin-0014",
     "stoff": "doksepin",
     "navn": "Doksepin",
     "modus": "de_novo",
     "forsok": 1,
-    "frist_kl": "2026-10-17T02:04:01.212Z",
+    "frist_kl": "2026-10-17T02:39:35.018Z",
     "jobbgren": "kuratorjobb/doksepin-0014",
     "kurateringsgren": "kuratering/doksepin-0014",
     "pr": null,
-    "gren": null,
+    "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
     "gjenoppta": null,
     "sist_kuratert": null,
     "maal": {
@@ -30,15 +30,8 @@
       "elementer_uten_kilde": 14
     },
     "prioritet": {
-      "poeng": 460.7,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "7 av 13 redaksjonelle seksjoner er tomme.",
-        "14 av 19 elementer har ingen kilde.",
-        "Bare 4 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
