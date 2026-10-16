@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T19:45:19.576Z",
+  "oppdatert_kl": "2026-10-16T19:46:15.341Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 10,
   "stoffer": {
@@ -665,7 +665,7 @@
       "sist_kuratert": {
         "kl": "2026-10-16T18:50:54.493133+00:00",
         "modus": "de_novo",
-        "kunnskapsgrense": null,
+        "kunnskapsgrense": "2026-10-16",
         "runde": 2,
         "pr": null,
         "gren": "565f142e-dce5-4804-b3ff-c65593427539",
@@ -761,6 +761,13 @@
           "hendelse": "publisert",
           "oppgave": "citalopram-0008",
           "melding": "Kurateringsgrenen er publisert (revisjon 5)."
+        },
+        {
+          "kl": "2026-10-16T19:46:15.341Z",
+          "hendelse": "fullfort",
+          "oppgave": "citalopram-0008",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Kunnskapsgrense 2026-10-16."
         }
       ],
       "appgren": null
@@ -4730,6 +4737,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "sen-fullfort-citalopram-0008",
         "forhandsvis-runde-1",
         "fullfort-ghb-pub",
         "reserver-ghb-pub",
@@ -4755,55 +4763,21 @@
         "reserver-1"
       ],
       "siste": {
-        "id": "forhandsvis-runde-1",
-        "sha256": "880688998329f2a4d0ed9da4673628cd0117a17422cb9abac1ad4495a4af7a8c",
+        "id": "sen-fullfort-citalopram-0008",
+        "sha256": "6deb016c948c7ad0a02d6dbd37201012ace5aa8749d133e7990be9e98c0857a9",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "forhandsvis-runde-1",
-          "foresporsel_sha256": "880688998329f2a4d0ed9da4673628cd0117a17422cb9abac1ad4495a4af7a8c",
-          "handling": "forhandsvis",
+          "foresporsel_id": "sen-fullfort-citalopram-0008",
+          "foresporsel_sha256": "6deb016c948c7ad0a02d6dbd37201012ace5aa8749d133e7990be9e98c0857a9",
+          "handling": "fullfort",
           "utfall": "ok",
-          "melding": "brekspiprazol er neste; ingenting er reservert.",
-          "behandlet_kl": "2026-10-16T19:45:19.576Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38957201295",
-          "oppgave": {
-            "oppgave": "brekspiprazol-forhandsvisning",
-            "stoff": "brekspiprazol",
-            "navn": "Brekspiprazol",
-            "modus": "de_novo",
-            "forsok": 0,
-            "frist_kl": "2026-10-16T22:45:19.576Z",
-            "jobbgren": "kuratorjobb/brekspiprazol-forhandsvisning",
-            "kurateringsgren": "kuratering/brekspiprazol-forhandsvisning",
-            "pr": null,
-            "gren": null,
-            "gjenoppta": null,
-            "sist_kuratert": null,
-            "maal": {
-              "kl": "2026-10-16T18:10:24.842Z",
-              "side": true,
-              "elementer": 20,
-              "redaksjonelle_paneler": 13,
-              "paneler_med_innhold": 6,
-              "referanser": 1,
-              "elementer_uten_kilde": 17
-            },
-            "prioritet": {
-              "poeng": 466.3,
-              "grunner": [
-                "De novo-kuratering i runden som gjelder.",
-                "Aldri kuratert.",
-                "Ingen kuratering å regne alderen fra.",
-                "7 av 13 redaksjonelle seksjoner er tomme.",
-                "17 av 20 elementer har ingen kilde.",
-                "Bare 1 referanser."
-              ]
-            }
-          }
+          "melding": "citalopram er alt ført som publisert fra kurateringsgrenen 565f142e-dce5-4804-b3ff-c65593427539.",
+          "behandlet_kl": "2026-10-16T19:46:15.341Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38957315091"
         }
       },
       "besvart_commit": "54239096e362086c69caf85cd2fa0134d6652f6f",
-      "sist_brukt_kl": "2026-10-16T19:45:19.576Z"
+      "sist_brukt_kl": "2026-10-16T19:46:15.341Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
