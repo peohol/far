@@ -322,12 +322,13 @@ describe('publiseringen', () => {
     expect(side).toContain('Ny kilde')
     expect(lest.elementer.find((e) => e.id === k.indikasjon)!.innhold.panel).toBe('fjernet')
 
-    const versjoner = await kall.fasit<{ nr: number; endring_id: string }>(
-      'select nr, endring_id from public.sideversjoner where infoside = $1 order by nr desc',
+    const versjoner = await kall.fasit<{ nr: number; endring_id: string; opphav: string }>(
+      'select nr, endring_id, opphav from public.sideversjoner where infoside = $1 order by nr desc',
       [k.side],
     )
     expect(versjoner).toHaveLength(versjonerFor + 1)
     expect(svar.versjon).toBe(versjoner[0]!.nr)
+    expect(versjoner[0]!.opphav).toBe('gren')
 
     const [endring] = await kall.fasit<{ agent: string; art: string; gren: string; utfort_av: string; rapport: Json; oppsummering: string }>(
       'select agent, art, gren, utfort_av, rapport, oppsummering from public.innholdsendringer where id = $1',

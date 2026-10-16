@@ -659,6 +659,18 @@ as $$
   end
 $$;
 
+-- Revisjonen et objekt i grenen bygger på: den i sideversjonen, eller den som
+-- står i tilstanden for et objekt utenfor sideversjonen (et fjernet kort en
+-- gjenoppretting tar tilbake).
+create function kuratering.forventet_revisjon(p_versjon public.sideversjoner, p_objekt uuid, p_objektet jsonb)
+returns integer
+language sql
+immutable
+set search_path = ''
+as $$
+  select coalesce(kuratering.revisjon_i_versjon(p_versjon, p_objekt), (p_objektet ->> 'grunnrevisjon')::integer)
+$$;
+
 -- --- Endringene i en gren -----------------------------------------------------------
 
 -- Tar endringene kuratoren sender, i rekkefølge, og gir den nye tilstanden og
@@ -831,6 +843,57 @@ $$;
 
 -- --- Publiseringen ----------------------------------------------------------------
 
+-- Sideversjonen fra en gren eller en gjenoppretting får det opphavet
+-- (`far.sideversjonsopphav`, satt av kuratering.utfor for transaksjonen).
+create or replace function intern.registrer_sideversjon(p_side uuid, p_opphav text default 'publisering')
+returns bigint
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  manifestet jsonb;
+  fingeravtrykket text;
+  forrige public.sideversjoner;
+  ny bigint;
+begin
+  if p_side is null then
+    return null;
+  end if;
+  perform pg_advisory_xact_lock(hashtextextended('sideversjon:' || p_side::text, 0));
+
+  manifestet := intern.sidemanifest(p_side);
+  if manifestet is null then
+    return null;
+  end if;
+  fingeravtrykket := md5(manifestet::text);
+
+  select v.* into forrige
+  from public.sideversjoner v
+  where v.infoside = p_side
+  order by v.nr desc
+  limit 1;
+  if found and forrige.fingeravtrykk = fingeravtrykket then
+    return null;
+  end if;
+
+  insert into public.sideversjoner (infoside, nr, opphav, manifest, fingeravtrykk, endring_id)
+  values (
+    p_side,
+    coalesce(forrige.nr, 0) + 1,
+    coalesce(nullif(current_setting('far.sideversjonsopphav', true), ''), p_opphav),
+    manifestet,
+    fingeravtrykket,
+    (
+      select e.id from public.innholdsendringer e
+      where e.id = nullif(current_setting('far.endring', true), '')::uuid
+    )
+  )
+  returning id into ny;
+  return ny;
+end;
+$$;
+
 -- Forfatteren revisjonene fra grenen føres med: kuratoren, eller
 -- administratoren som laget en gjenopprettingsgren.
 create function kuratering.forfatter(p_gren kuratering.grener)
@@ -902,7 +965,7 @@ begin
   loop
     select s.revisjon, s.publisert_revisjon into utkast, publisert
     from public.objektstatus s where s.id = o.id;
-    if publisert is distinct from kuratering.revisjon_i_versjon(siste, o.id) then
+    if publisert is distinct from kuratering.forventet_revisjon(siste, o.id, o.v) then
       raise exception 'Objektet % er publisert på nytt etter grunnversjonen.', o.id using errcode = 'PT409';
     end if;
     if utkast is distinct from publisert then
@@ -918,6 +981,7 @@ begin
     perform set_config('far.endringsvalg', jsonb_build_object('agent', agentnokkel)::text, true);
   end if;
   perform set_config('far.revisjonskilde', left('Kurateringsgren: ' || p_gren.formaal, 300) || ' (grenrevisjon ' || p_gren.revisjon || ')', true);
+  perform set_config('far.sideversjonsopphav', case when p_gren.art = 'gjenoppretting' then 'gjenoppretting' else 'gren' end, true);
 
   -- Nye referanser først, så kortene kan sitere dem; deretter siden, og
   -- kortene som fjernes før de som endres og de nye, så et kort som erstatter
@@ -977,7 +1041,9 @@ begin
         deler_ved_rapport = intern.antall_deler(endring)
     where x.id = endring;
   else
-    update public.innholdsendringer x set gren = p_gren.id where x.id = endring;
+    update public.innholdsendringer x
+    set gren = p_gren.id, oppsummering = coalesce(x.oppsummering, left(p_gren.formaal, 500))
+    where x.id = endring;
   end if;
 
   return jsonb_strip_nulls(jsonb_build_object(
@@ -1131,7 +1197,9 @@ declare
   kode text;
   versjon public.sideversjoner;
 begin
-  if g.status <> 'godkjent' then
+  -- En gjenoppretting tar tilbake noe som alt har vært publisert, og
+  -- publiseres av en administrator uten en ny faglig vurdering.
+  if g.status <> 'godkjent' and not (g.art = 'gjenoppretting' and g.status = 'arbeid' and p_aktor.admin) then
     raise exception 'Bare en godkjent gren kan publiseres; denne er «%».', g.status using errcode = '22023';
   end if;
   -- En konflikt med hovedversjonen oppdages også under publiseringen, og
