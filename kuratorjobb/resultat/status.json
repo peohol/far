@@ -1,18 +1,70 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "ok",
   "jobb": {
     "gren": "kuratorjobb/publisert-pilot-20261016",
     "foresporsel_commit": "d3d3bc27df74657a0aecd652dc33df530d5db11a",
     "foresporsel_sha256": "58ba410d95be8dd373a4a02a7bac71b17752b54be256009b52e543dff4b55b00",
     "kode_commit": "8a4b94043b7ed385598440b307ea844a2fcc2763",
     "kjoring": "https://github.com/peohol/far/actions/runs/38954504724",
-    "startet_kl": "2026-10-16T19:23:31.768Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-16T19:23:33.684Z",
+    "ferdig_kl": "2026-10-16T19:23:49.215Z"
   },
-  "foresporsel": null,
-  "referanse": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "citalopram",
+      "lurasidon",
+      "ghb"
+    ],
+    "oppgaver": [
+      "funksjonstest"
+    ],
+    "referanse": "publisert-pilot-20261016"
+  },
+  "referanse": "publisert-pilot-20261016",
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 567
+    }
+  ],
+  "stoffer": {
+    "citalopram": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/citalopram/funksjonstest.json"
+        }
+      }
+    },
+    "lurasidon": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/lurasidon/funksjonstest.json"
+        }
+      }
+    },
+    "ghb": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/ghb/funksjonstest.json"
+        }
+      }
+    }
+  }
 }
