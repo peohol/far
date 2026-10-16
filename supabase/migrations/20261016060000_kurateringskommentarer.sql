@@ -407,7 +407,6 @@ as $$
 declare
   g kuratering.grener := kuratering.gren_fra(p_data);
   r kuratering.grenrevisjoner;
-  mangler text[];
   ubesvart integer;
 begin
   perform kuratering.krev_kurator(p_aktor, g);
@@ -429,10 +428,7 @@ begin
   if (kuratering.siste_versjon(g.infoside)).id is distinct from g.grunnversjon then
     raise exception 'Fagsiden er publisert på nytt; oppdater grenen til den nye versjonen først.' using errcode = 'PT409';
   end if;
-  mangler := kuratering.manglende_dokumenter(g);
-  if cardinality(mangler) > 0 then
-    raise exception 'Grenen mangler dokumentene %.', array_to_string(mangler, ', ') using errcode = '22023';
-  end if;
+  perform kuratering.krev_dokumenter(g, kuratering.pakrevde_dokumenter(g.art), 'Grenen kan ikke sendes til kontroll');
   select count(*) into ubesvart
   from jsonb_array_elements(kuratering.traader(g)) t
   where t ->> 'art' = 'sperrende' and (t ->> 'venter_pa_kurator')::boolean;
