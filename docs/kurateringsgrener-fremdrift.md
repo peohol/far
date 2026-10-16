@@ -202,3 +202,8 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 - 2026-10-16: Codex-funnene på #231–#237 rettet på laveste gren og flettet
   oppover: blant annet ankrene og avsluttede tråder (D), nøkkelen og
   aktiviteten per gren (E1), og grener køen holder i en reservasjon (E2).
+- 2026-10-16: ChatGPTs kontroll (videresendt av Peder) rettet på #232 og
+  flettet oppover: godkjenning krever begrunnelse; portene kontrollerer
+  innholdet i dokumentene; selvtesten må ha hvert krav og hver port fra
+  protokollen nøyaktig én gang, bestått (`kuratering.selvtestfeil`, malen
+  `npm run kurator -- tom-selvtest`).
