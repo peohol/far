@@ -631,6 +631,227 @@ as $$
   end
 $$;
 
+-- Kontrollpunktene i dekningsmatrisen, i sidens rekkefølge: de samme som
+-- `kontrollpunkter()` i `src/kuratorprotokoll/dekning.ts` gir fra appens
+-- innholdsmodell (en test holder dem like).
+create function kuratering.kontrollpunkter()
+returns text[]
+language sql
+immutable
+set search_path = ''
+as $$
+  select array[
+    'identitet',
+    'viktige_data',
+    'viktige_data/referanseomrade',
+    'viktige_data/toksisk_omrade',
+    'viktige_data/alvorlig_intoksikasjon',
+    'viktige_data/halveringstid',
+    'viktige_data/steady_state',
+    'farmakodynamikk',
+    'virkninger',
+    'bivirkninger',
+    'toksisitet_forgiftning',
+    'toksisitet_forgiftning/Toksisk dose og eksponering',
+    'toksisitet_forgiftning/Toksiske konsentrasjoner',
+    'toksisitet_forgiftning/Klinisk forgiftningsbilde',
+    'toksisitet_forgiftning/Alvorlige komplikasjoner',
+    'toksisitet_forgiftning/Toksikokinetiske særtrekk',
+    'toksisitet_forgiftning/Behandling ved forgiftning',
+    'indikasjon',
+    'preparater',
+    'dosering',
+    'farmakokinetikk',
+    'farmakogenetikk',
+    'interaksjoner',
+    'tdm',
+    'laboratorieanalyser',
+    'kjemiske_grunndata',
+    'serumkonsentrasjoner',
+    'graviditet_amming',
+    'graviditet_amming/Graviditet',
+    'graviditet_amming/Perinatal og neonatal påvirkning',
+    'graviditet_amming/Amming',
+    'graviditet_amming/Fertilitet og reproduksjon',
+    'avhengighet_toleranse',
+    'avhengighet_toleranse/fysiologisk_adaptasjon/Toleranseutvikling',
+    'avhengighet_toleranse/fysiologisk_adaptasjon/Abstinens, seponeringssyndrom og rebound-effekter',
+    'avhengighet_toleranse/laering_motivasjon/Addiksjon',
+    'avhengighet_toleranse/laering_motivasjon/Lært mestringsavhengighet'
+  ]
+$$;
+
+-- En tekst som ikke er tom.
+create function kuratering.er_tekst(p jsonb)
+returns boolean
+language sql
+immutable
+set search_path = ''
+as $$
+  select coalesce(jsonb_typeof(p) = 'string' and btrim(p #>> '{}') <> '', false)
+$$;
+
+-- En liste med minst én oppføring: tekster, eller objekter der hvert av
+-- feltene er en tekst.
+create function kuratering.er_liste(p jsonb, p_felt text[] default '{}')
+returns boolean
+language sql
+immutable
+set search_path = ''
+as $$
+  select case when jsonb_typeof(p) is distinct from 'array' or jsonb_array_length(p) = 0 then false
+    else not exists (
+      select 1 from jsonb_array_elements(p) x
+      where case when cardinality(p_felt) = 0 then not kuratering.er_tekst(x)
+        else jsonb_typeof(x) <> 'object' or exists (select 1 from unnest(p_felt) f where not kuratering.er_tekst(x -> f)) end
+    )
+  end
+$$;
+
+-- Hva som mangler i et arbeidsdokument, etter formen i
+-- `docs/kuratorprotokoll.md` («Dokumentene»); tom når det holder. Kontrollen
+-- hindrer tomme plassholdere og manglende belegg, ikke faglige feil: det er
+-- kontrollørens arbeid. Kildeplanen og notatene har ingen fast form.
+create function kuratering.dokumentfeil(p_art text, p_innhold jsonb)
+returns text[]
+language plpgsql
+immutable
+set search_path = ''
+as $$
+declare
+  feil text[] := '{}';
+  o jsonb;
+  n integer;
+  punkt text;
+  status text;
+begin
+  if jsonb_typeof(p_innhold) is distinct from 'object' then
+    return array[p_art || ': må være et JSON-objekt.'];
+  end if;
+  case p_art
+  when 'evidensjournal' then
+    if not (kuratering.er_tekst(p_innhold -> 'kunnskapsgrense') and p_innhold ->> 'kunnskapsgrense' ~ '^\d{4}-\d{2}-\d{2}$') then
+      feil := feil || 'evidensjournal: kunnskapsgrense må være en dato (ÅÅÅÅ-MM-DD).'::text;
+    end if;
+    if not kuratering.er_liste(p_innhold -> 'hovedkilder', array['omrade', 'kilde']) then
+      feil := feil || 'evidensjournal: hovedkilder må ha minst én kilde, hver med omrade og kilde.'::text;
+    end if;
+    if not kuratering.er_liste(p_innhold -> 'sok', array['domene', 'hva']) then
+      feil := feil || 'evidensjournal: sok må beskrive minst ett søk, hvert med domene og hva.'::text;
+    end if;
+    if not kuratering.er_liste(p_innhold -> 'pastander', array['pastand', 'grunnlag', 'evidensstyrke']) then
+      feil := feil || 'evidensjournal: pastander må ha minst én påstand, hver med pastand, grunnlag og evidensstyrke.'::text;
+    end if;
+  when 'blindprotokoll' then
+    if not kuratering.er_liste(p_innhold -> 'kontrollpunkter') then
+      feil := feil || 'blindprotokoll: kontrollpunkter må liste kontrollpunktene som er søkt for.'::text;
+    end if;
+    if not kuratering.er_liste(p_innhold -> 'kilder', array['domene', 'kilde']) then
+      feil := feil || 'blindprotokoll: kilder må ha minst én kilde fra det egne søket, hver med domene og kilde.'::text;
+    end if;
+    if not kuratering.er_liste(p_innhold -> 'konklusjoner') then
+      feil := feil || 'blindprotokoll: konklusjoner må ha hovedkonklusjonene før avstemmingen.'::text;
+    end if;
+    if not kuratering.er_tekst(p_innhold -> 'adversarial') then
+      feil := feil || 'blindprotokoll: adversarial må beskrive den adversariale kontrollen.'::text;
+    end if;
+  when 'dekningsmatrise' then
+    if p_innhold ->> 'modus' is null or p_innhold ->> 'modus' not in ('de_novo', 'kuratering', 'evidensovervaking') then
+      feil := feil || 'dekningsmatrise: modus må være de_novo, kuratering eller evidensovervaking.'::text;
+    end if;
+    if jsonb_typeof(p_innhold -> 'omrader') is distinct from 'array' then
+      return feil || 'dekningsmatrise: omrader må være en liste.'::text;
+    end if;
+    foreach punkt in array kuratering.kontrollpunkter() loop
+      select count(*) into n from jsonb_array_elements(p_innhold -> 'omrader') x where x ->> 'nokkel' = punkt;
+      if n <> 1 then
+        feil := feil || format('dekningsmatrise: %s står %s ganger (skal stå én gang).', punkt, n);
+      end if;
+    end loop;
+    for o in select x from jsonb_array_elements(p_innhold -> 'omrader') x loop
+      punkt := coalesce(o ->> 'nokkel', '(uten nøkkel)');
+      status := o ->> 'status';
+      if not (punkt = any (kuratering.kontrollpunkter())) then
+        feil := feil || format('dekningsmatrise: %s er ikke et kontrollpunkt.', punkt);
+      elsif status is null or status not in ('nytt_eller_oppdatert', 'beholdt_etter_kontroll', 'automatisk_verifisert', 'tomt_begrunnet') then
+        feil := feil || format('dekningsmatrise: %s har ukjent status.', punkt);
+      elsif not kuratering.er_tekst(o -> 'begrunnelse') then
+        feil := feil || format('dekningsmatrise: %s mangler begrunnelse.', punkt);
+      elsif jsonb_typeof(o -> 'kilder') is distinct from 'array' or jsonb_typeof(o -> 'sok') is distinct from 'array'
+        or (jsonb_array_length(o -> 'kilder') > 0 and not kuratering.er_liste(o -> 'kilder'))
+        or (jsonb_array_length(o -> 'sok') > 0 and not kuratering.er_liste(o -> 'sok'))
+      then
+        feil := feil || format('dekningsmatrise: %s: kilder og sok må være lister med tekst, uten tomme oppføringer.', punkt);
+      elsif status = 'tomt_begrunnet' and jsonb_array_length(o -> 'sok') = 0 then
+        feil := feil || format('dekningsmatrise: %s: et tomt område må si hva det ble søkt etter.', punkt);
+      elsif status in ('nytt_eller_oppdatert', 'beholdt_etter_kontroll')
+        and (jsonb_array_length(o -> 'kilder') = 0 or not kuratering.er_tekst(o -> 'bevis'))
+      then
+        feil := feil || format('dekningsmatrise: %s: det som er skrevet eller beholdt, må ha kilder og bevis.', punkt);
+      end if;
+    end loop;
+  when 'selvtest' then
+    if not kuratering.er_liste(p_innhold -> 'krav', array['krav', 'status', 'bevis'])
+      or exists (select 1 from jsonb_array_elements(p_innhold -> 'krav') x where x ->> 'status' not in ('bestatt', 'ikke_bestatt', 'ikke_relevant'))
+    then
+      feil := feil || 'selvtest: krav må ha hvert av de ufravikelige kravene med krav, status (bestatt, ikke_bestatt eller ikke_relevant) og bevis.'::text;
+    elsif exists (select 1 from jsonb_array_elements(p_innhold -> 'krav') x where x ->> 'status' = 'ikke_bestatt') then
+      feil := feil || ('selvtest: kravene er ikke bestått: ' || (
+        select string_agg(x ->> 'krav', '; ') from jsonb_array_elements(p_innhold -> 'krav') x where x ->> 'status' = 'ikke_bestatt') || '.');
+    end if;
+    if not kuratering.er_liste(p_innhold -> 'porter', array['port', 'status', 'bevis'])
+      or exists (select 1 from jsonb_array_elements(p_innhold -> 'porter') x where x ->> 'status' not in ('bestatt', 'ikke_bestatt', 'gjenstar'))
+    then
+      feil := feil || 'selvtest: porter må ha de tekniske portene med port, status (bestatt, ikke_bestatt eller gjenstar) og bevis.'::text;
+    elsif exists (select 1 from jsonb_array_elements(p_innhold -> 'porter') x where x ->> 'status' = 'ikke_bestatt') then
+      feil := feil || ('selvtest: portene er ikke bestått: ' || (
+        select string_agg(x ->> 'port', '; ') from jsonb_array_elements(p_innhold -> 'porter') x where x ->> 'status' = 'ikke_bestatt') || '.');
+    end if;
+  else
+    null;
+  end case;
+  return feil;
+end;
+$$;
+
+-- Hva som mangler i de siste versjonene av dokumentene i grenen.
+create function kuratering.dokumentfeil_i_grenen(p_gren kuratering.grener, p_arter text[])
+returns text[]
+language sql
+stable
+set search_path = ''
+as $$
+  select coalesce(array_agg(f order by a.art, f.n), '{}')
+  from unnest(p_arter) a(art)
+  left join lateral (
+    select d.innhold from kuratering.dokumenter d
+    where d.gren = p_gren.id and d.art = a.art
+    order by d.versjon desc limit 1
+  ) d on true
+  cross join lateral unnest(
+    case when d.innhold is null then array[a.art || ' mangler.'] else kuratering.dokumentfeil(a.art, d.innhold) end
+  ) with ordinality f(f, n)
+$$;
+
+-- Stopper handlingen når dokumentene mangler eller er ufullstendige, og sier hva.
+create function kuratering.krev_dokumenter(p_gren kuratering.grener, p_arter text[], p_hva text)
+returns void
+language plpgsql
+stable
+set search_path = ''
+as $$
+declare
+  feil text[] := kuratering.dokumentfeil_i_grenen(p_gren, p_arter);
+begin
+  if cardinality(feil) > 0 then
+    raise exception '% før dokumentene er fylt ut: %', p_hva, array_to_string(feil[1:10], ' ')
+      || case when cardinality(feil) > 10 then format(' (og %s til)', cardinality(feil) - 10) else '' end
+      using errcode = '22023';
+  end if;
+end;
+$$;
+
+-- Dokumentene som mangler eller er ufullstendige før grenen kan sendes til kontroll.
 create function kuratering.manglende_dokumenter(p_gren kuratering.grener)
 returns text[]
 language sql
@@ -639,7 +860,7 @@ set search_path = ''
 as $$
   select coalesce(array_agg(a order by a), '{}')
   from unnest(kuratering.pakrevde_dokumenter(p_gren.art)) a
-  where not exists (select 1 from kuratering.dokumenter d where d.gren = p_gren.id and d.art = a)
+  where cardinality(kuratering.dokumentfeil_i_grenen(p_gren, array[a])) > 0
 $$;
 
 -- Revisjonen et objekt hadde i en sideversjon, eller null.
@@ -1624,7 +1845,7 @@ end;
 $$;
 
 -- Blindfasen i en de novo-kuratering varer til kuratoren har lagret
--- blindprotokollen og evidensjournalen fra sitt eget kildesøk. Først da ser
+-- en utfylt blindprotokoll og evidensjournal fra sitt eget kildesøk. Først da ser
 -- den fagteksten som sto der fra før.
 create function kuratering.h_avslutt_blindfase(p_aktor kuratering.aktor, p_data jsonb)
 returns jsonb
@@ -1633,18 +1854,12 @@ set search_path = ''
 as $$
 declare
   g kuratering.grener := kuratering.gren_fra(p_data);
-  mangler text[];
 begin
   perform kuratering.krev_kurator(p_aktor, g);
   if not g.blindfase then
     raise exception 'Grenen er ikke i blindfasen.' using errcode = '22023';
   end if;
-  select coalesce(array_agg(a order by a), '{}') into mangler
-  from unnest(array['blindprotokoll', 'evidensjournal']) a
-  where not exists (select 1 from kuratering.dokumenter d where d.gren = g.id and d.art = a);
-  if cardinality(mangler) > 0 then
-    raise exception 'Blindfasen kan ikke avsluttes før grenen har %.', array_to_string(mangler, ' og ') using errcode = '22023';
-  end if;
+  perform kuratering.krev_dokumenter(g, array['blindprotokoll', 'evidensjournal'], 'Blindfasen kan ikke avsluttes');
   update kuratering.grener x set blindfase = false, oppdatert_kl = now() where x.id = g.id returning x.* into g;
   perform kuratering.ny_hendelse(g, 'blindfase_avsluttet', p_aktor);
   return kuratering.sammendrag(g);
@@ -1659,7 +1874,6 @@ as $$
 declare
   g kuratering.grener := kuratering.gren_fra(p_data);
   r kuratering.grenrevisjoner;
-  mangler text[];
 begin
   perform kuratering.krev_kurator(p_aktor, g);
   perform kuratering.krev_status(g, array['arbeid', 'retting'], 'sendes til kontroll');
@@ -1680,10 +1894,7 @@ begin
   if (kuratering.siste_versjon(g.infoside)).id is distinct from g.grunnversjon then
     raise exception 'Fagsiden er publisert på nytt; oppdater grenen til den nye versjonen først.' using errcode = 'PT409';
   end if;
-  mangler := kuratering.manglende_dokumenter(g);
-  if cardinality(mangler) > 0 then
-    raise exception 'Grenen mangler dokumentene %.', array_to_string(mangler, ', ') using errcode = '22023';
-  end if;
+  perform kuratering.krev_dokumenter(g, kuratering.pakrevde_dokumenter(g.art), 'Grenen kan ikke sendes til kontroll');
   update kuratering.grener x set runde = x.runde + 1 where x.id = g.id returning x.* into g;
   g := kuratering.sett_status(g, 'klar', p_aktor, 'til_kontroll', null, jsonb_build_object('runde', g.runde));
   return kuratering.sammendrag(g);

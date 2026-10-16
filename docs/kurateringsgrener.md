@@ -131,8 +131,16 @@ adressen) og adressen for HTTP, og glemmes når laget lukkes.
 | `publisert` / `arkivert` | Avsluttet | |
 
 Før `til_kontroll` må prøven og rapporten bestå, grenen bygge på den siste
-sideversjonen, og dokumentene finnes: `evidensjournal`, `dekningsmatrise` og
-`selvtest`, og for en de novo-kuratering også `blindprotokoll`. En godkjenning
+sideversjonen, og dokumentene være fylt ut: `evidensjournal`, `dekningsmatrise`
+og `selvtest`, og for en de novo-kuratering også `blindprotokoll`.
+`kuratering.dokumentfeil` kontrollerer den siste versjonen av hvert mot formen
+i `docs/kuratorprotokoll.md` («Dokumentene»): evidensjournalen må ha
+kunnskapsgrense, hovedkilder, søk og påstander; dekningsmatrisen hvert
+kontrollpunkt nøyaktig én gang (`kuratering.kontrollpunkter()`, de samme som
+`src/kuratorprotokoll/dekning.ts`) med status, begrunnelse og belegg; selvtesten
+kravene og portene, uten noe som ikke er bestått. Tomme plassholdere avvises,
+og feilen sier hva som mangler. Kontrollen hindrer at portene omgås, men
+erstatter ikke fagkontrollen. En godkjenning
 er bundet til revisjonen og fingeravtrykket; en ny lagring eller en ny
 grunnversjon opphever den. Dokumentene kan ikke endres mens grenen er til
 kontroll eller godkjent, så det som publiseres, er det kontrolløren vurderte.
@@ -187,8 +195,9 @@ hovedversjonen.
 En de novo-gren (`art: "de_novo"`) starter i blindfasen: kuratoren ser bare
 oppbygningen av siden (panelene og kortenes plass og type), ikke fagteksten
 eller forhåndsvisningen. Den avsluttes med `avslutt_blindfase` når
-blindprotokollen og evidensjournalen fra det egne kildesøket er lagret;
-blindprotokollen kan ikke endres etterpå.
+blindprotokollen og evidensjournalen fra det egne kildesøket er lagret og fylt
+ut (blindprotokollen med `kontrollpunkter`, `kilder` med domene og kilde,
+`konklusjoner` og `adversarial`); blindprotokollen kan ikke endres etterpå.
 
 ## Gjenopprettingen
 
