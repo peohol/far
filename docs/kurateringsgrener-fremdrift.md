@@ -9,7 +9,7 @@ prosjektet, så en ny økt kan fortsette herfra alene.
 
 | Dato | Punkt |
 | --- | --- |
-| 2026-10-16 | B1 (1.93.0, PR #231), B2 (1.94.0, PR #232), C (1.95.0, PR #233), D (1.96.0, PR #234), E1 (1.97.0, PR #235), E2 (1.98.0, PR #236) og F1 (1.99.0, grenen `claude/kurateringspilot`) ferdige og testet; PR-ene er stablet og slås sammen i rekkefølge. Neste: F2, når stabelen er i produksjonen og ChatGPT er koblet til (se [Avhengigheter](#avhengigheter-som-krever-peder)). |
+| 2026-10-16 | B1–F2 ferdige: piloten er bestått (citalopram, lurasidon og GHB kuratert i grener, godkjent av ChatGPT, publisert, funksjonstesten grønn). F3 (1.101.0): `bare_forrang` av og `forrang` tom, så køen går gjennom hele registeret; de planlagte kjøringene startes når PR-en er i produksjonen. |
 
 Neste steg står øverst i [Fasene](#fasene) med status `pågår` eller `neste`.
 
@@ -88,8 +88,8 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 | E1 | Agentnøklene i appen, Claude-kuratorens nøkkel, `status` og «Følg agenten», handlingslista som tabell (`docs/kurateringsgrener.md`, «Agentene» og «I appen») | 1.97.0 | ferdig |
 | E2 | Kurateringskøen mot grenene (`/api/kuratering-ko` med OIDC, kontrollrundene i køen), kuratorprotokollen for Claude med verktøyene (`docs/kuratorprotokoll.md`, `npm run kurator`, skillen `monografkurator`) og instruksen for ChatGPT som kontrollør (`docs/kontrollorinstruks.md`) | 1.98.0 | ferdig |
 | F1 | Piloten i køen: `forrang` citalopram, lurasidon, GHB med `bare_forrang`, så køen ikke gir ut andre stoffer før piloten er bestått | 1.99.0 | ferdig |
-| F2 | Piloten: Claude kuraterer de tre i grener, ChatGPT kontrollerer; publisering bare etter godkjenning og bestått prøvepublisering | – | neste |
-| F3 | De novo-runden: `bare_forrang` av og `forrang` tom, planlagte kjøringer for kuratoren og kontrolløren, godkjenning per stoff | – | |
+| F2 | Piloten: Claude kuraterer de tre i grener, ChatGPT kontrollerer; publisering bare etter godkjenning og bestått prøvepublisering | 1.101.0 | ferdig |
+| F3 | De novo-runden: `bare_forrang` av og `forrang` tom, planlagte kjøringer for kuratoren og kontrolløren, godkjenning per stoff | 1.101.0 | pågår |
 
 ## Hvordan det er bygd (for den som fortsetter)
 
@@ -150,12 +150,14 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 
 ## Avhengigheter som krever Peder
 
-1. Slå sammen PR-ene i rekkefølge (#231 først); de neste flyttes til `main`
-   etter hvert og gjøres grønne.
-2. Når stabelen er i produksjonen: lag ChatGPT-kontrollørens nøkkel i appen
-   (Adminmeny → Kurateringer → Agentene → «Lag nøkkel» for
-   ChatGPT-monografkuratoren), og legg adressen inn som en MCP-kobling i
-   ChatGPT, med tidsplanteksten i `docs/kontrollorinstruks.md`.
+1. ~~Slå sammen PR-ene #231–#237~~ (gjort 2026-10-16).
+2. ~~ChatGPT-kontrollørens nøkkel og MCP-koblingen~~ (gjort 2026-10-16; i
+   ChatGPT heter det nå «Plugins» → «Add custom MCP server», uten
+   autentisering, siden nøkkelen står i adressen). Gjenstår: den planlagte
+   kjøringen i ChatGPT med tidsplanteksten i `docs/kontrollorinstruks.md`;
+   til den finnes, ber Peder ChatGPT om hver kontrollrunde.
+3. Publisering til produksjonen krever Peders uttrykkelige ja i Claude-økten
+   (sikkerhetssperren); han ga det for piloten 2026-10-16.
 
 ## Logg
 
@@ -208,3 +210,19 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
   innholdet i dokumentene; selvtesten må ha hvert krav og hver port fra
   protokollen nøyaktig én gang, bestått (`kuratering.selvtestfeil`, malen
   `npm run kurator -- tom-selvtest`).
+- 2026-10-16: F2 piloten. Kuratorjobben `kuratorjobb/pilot-20261016` hentet
+  preparatomtalene; Latuda og Xyrem mangler norsk omtale, og bivirkningene er
+  importert fra EMAs norske produktinformasjon. Hvert stoff gikk gjennom
+  blindsøk, avstemming, skriving og dokumentene i sin gren og ble sendt til
+  kontroll med bestått prøvepublisering, dekning og selvtest. ChatGPT
+  godkjente citalopram i første runde og åpnet sperrende tråder for lurasidon
+  (4) og GHB (3), som ble besvart og rettet i en ny revisjon. Citalopram er
+  publisert (revisjon 5), og funksjonstesten mot den publiserte siden var
+  grønn. Funn: køen mistet kunnskapsgrensen når en godkjent gren ble
+  publisert, og avviste `fullfort` etterpå (køen leser grenene før
+  forespørselen, så det skjer hver gang); rettet i 1.101.0 (kunnskapsgrensen
+  følger grenen gjennom kontrollrundene, og et sent `fullfort` godtas).
+- 2026-10-16: Piloten bestått. ChatGPT godkjente lurasidon (revisjon 6) og GHB
+  (revisjon 8) i kontrollrunde 2; begge er publisert, og funksjonstesten av
+  alle tre publiserte sider (`kuratorjobb/publisert-pilot-20261016`) var
+  grønn, med alle bivirkningsradene vist. F3 i 1.101.0.

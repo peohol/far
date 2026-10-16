@@ -59,11 +59,11 @@ export const INNSTILLINGER: Koinnstillinger = {
   evidensovervaking_dager: 180,
   maling_timer: 20,
   okt_slettes_etter_dager: 14,
-  // Piloten for kurateringsgrenene (docs/kurateringsgrener-fremdrift.md, fase F).
-  // Når alle tre er publisert etter godkjent kontroll: tøm forrang og slå av
-  // bare_forrang, så går de novo-runden videre gjennom hele registeret.
-  forrang: ['citalopram', 'lurasidon', 'ghb'],
-  bare_forrang: true,
+  // Piloten for kurateringsgrenene (citalopram, lurasidon, GHB) er bestått
+  // (docs/kurateringsgrener-fremdrift.md, fase F); de novo-runden går gjennom
+  // hele registeret i prioritetsrekkefølge.
+  forrang: [],
+  bare_forrang: false,
   // En fagside laget for å prøve appen, ikke en monografi.
   utelatt: ['teststoff'],
   vekter: {

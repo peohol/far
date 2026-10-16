@@ -94,7 +94,8 @@ mister du reservasjonen; da avslutter du kjøringen uten å endre mer.
 4. **Er grenen godkjent** (`gjenoppta.grunn` sier det, og `status` gir
    `godkjent`): publiser den (`publiser` med den godkjente revisjonen), kjør
    funksjonstesten mot den publiserte siden, og send `fullfort` med grenen.
-   Køen ser at grenen er publisert, og stoffet er ferdig.
+   Køen ser at grenen er publisert, og stoffet er ferdig. Har køen alt sett
+   publiseringen, svarer den `ok` på `fullfort` uten å endre noe.
 
 ## Når noe stopper deg
 

@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.100.0',
+    versjon: '1.102.0',
     dato: '2026-10-16',
     sammendrag: 'Varsler kan arkiveres, så lista ikke vokser seg lang',
     typer: ['Funksjonalitet'],
@@ -23,6 +23,18 @@ export const ENDRINGSLOGG: Endring[] = [
       'De arkiverte varslene ligger i skuffen «Arkivet» nederst i varselvinduet. Der kan de fortsatt åpnes, og hentes fram igjen med knappen ved hvert varsel.',
       'Skjer det noe nytt i det samme etter at et varsel er arkivert, kommer det som et nytt varsel.',
     ],
+  },
+  {
+    versjon: '1.101.0',
+    dato: '2026-10-16',
+    sammendrag: 'Piloten er bestått, og kurateringskøen går videre gjennom hele stoffregisteret',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Citalopram, lurasidon og GHB er kuratert på nytt i kurateringsgrenene, kontrollert og godkjent hver for seg av en uavhengig kontrollør, og publisert. Kurateringskøen går nå videre med den nye runden gjennom hele stoffregisteret, med den samme faglige godkjenningen for hvert stoff.',
+      'Kurateringskøen husker nå datoen kildesøket gjaldt til også når en kuratering godkjennes og publiseres etter en kontrollrunde.',
+    ],
+    utenVarsel: true,
   },
   {
     versjon: '1.99.3',

@@ -284,6 +284,7 @@ function tilKuratoren(s: Kostoff, a: Kurateringsappgren, grunn: string, gren: st
     kurateringsgren: null,
     pr: null,
     gren,
+    kunnskapsgrense: a.kunnskapsgrense,
   }
   s.appgren = null
 }
@@ -439,7 +440,8 @@ function avsluttHoldtGren(s: Kostoff, g: Greninfo | null, na: string, innst: Koi
   }
   if (g.status === 'publisert') {
     const modus = r?.modus ?? s.modus ?? (g.art === 'de_novo' ? 'de_novo' : 'oppdatering')
-    grenPublisert(s, g, { oppgave, modus, kunnskapsgrense: null, runde: modus === 'de_novo' ? innst.de_novo_runde : null }, na)
+    const kunnskapsgrense = r?.kunnskapsgrense ?? s.gjenoppta?.kunnskapsgrense ?? null
+    grenPublisert(s, g, { oppgave, modus, kunnskapsgrense, runde: modus === 'de_novo' ? innst.de_novo_runde : null }, na)
   } else {
     s.gjenoppta = null
     grenForkastet(s, oppgave, na)
@@ -472,6 +474,7 @@ function avbryt(
     kurateringsgren: r.kurateringsgren,
     pr: r.pr,
     gren: r.gren ?? null,
+    kunnskapsgrense: r.kunnskapsgrense ?? null,
   }
   s.siste_kjoring = { oppgave: r.oppgave, okt: r.okt, startet_kl: r.reservert_kl, avsluttet_kl: na, utfall: hendelse }
   s.reservasjon = null
@@ -733,6 +736,7 @@ function grener(s: Kostoff, oppgave: string) {
     kurateringsgren: s.gjenoppta?.kurateringsgren ?? `kuratering/${oppgave}`,
     pr: s.gjenoppta?.pr ?? null,
     gren: s.gjenoppta?.gren ?? null,
+    kunnskapsgrense: s.gjenoppta?.kunnskapsgrense ?? null,
   }
 }
 
@@ -827,6 +831,16 @@ function utfor(t: Kotilstand, f: Foresporsel, k: Behandlingskontekst, svar: (u: 
     default: {
       const s = Object.values(t.stoffer).find((x) => x.reservasjon?.oppgave === f.oppgave)
       if (!s) {
+        const publisert = f.handling === 'fullfort' && f.gren ? Object.values(t.stoffer).find((x) => x.siste_kjoring?.oppgave === f.oppgave && x.siste_kjoring?.okt === k.gren && x.sist_kuratert?.gren === f.gren) : null
+        if (publisert) {
+          // Køen så publiseringen før kuratoren meldte den: kurateringen er alt ført, men kunnskapsgrensen tas med.
+          const spor = publisert.sist_kuratert!
+          if (!spor.kunnskapsgrense) {
+            spor.kunnskapsgrense = f.kunnskapsgrense!
+            logg(publisert, { kl: na, hendelse: 'fullfort', oppgave: f.oppgave, okt: k.gren, melding: `Kunnskapsgrense ${f.kunnskapsgrense}.` })
+          }
+          return svar('ok', `${publisert.stoff} er alt ført som publisert fra kurateringsgrenen ${f.gren}.`)
+        }
         const tidligere = Object.values(t.stoffer).find((x) => x.siste_kjoring?.oppgave === f.oppgave || x.gjenoppta?.oppgave === f.oppgave)
         return svar(
           'avvist',
