@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.99.2',
+    dato: '2026-10-16',
+    sammendrag: 'Siden ruller rolig fram til kortet du åpner, i én bevegelse',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    gjelder: ['stoff', 'stoffregister', 'fortolkning'],
+    punkter: [
+      'Når du åpner et kort eller en seksjon, ruller siden nå i én jevn bevegelse som lander der kortet står ferdig åpnet. Før gikk den ofte for langt mens kortet åpnet seg, og måtte rulle tilbake etterpå.',
+      'Siden hopper heller ikke lenger i det kortet åpnes, når et annet åpent kort eller en annen seksjon lukkes samtidig.',
+    ],
+  },
+  {
     versjon: '1.99.1',
     dato: '2026-10-16',
     sammendrag: 'Referansepillene flimrer ikke lenger når pekeren holdes over dem',
