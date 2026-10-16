@@ -31,7 +31,7 @@ Tilsvarende arbeidsflyter for stoffregister og fortolkningssider kan vurderes se
 - **Kurateringsgren:** En isolert arbeidsflate for én fagside, basert på et bestemt publisert sideøyeblikksbilde. Har egen identitet, status, endringsserie, kildeproveniens og kontrolltråder.
 - **Arbeidsrevisjon:** Uforanderlig checkpoint som viser hvordan kurateringsgrenen så ut etter en konkret endring.
 - **Kontrollrunde:** Gjennomgang av en låst arbeidsrevisjon med kommentarer og beslutning om retting/godkjenning.
-- **Publisert sideversjon:** Uforanderlig manifest/øyeblikksbilde av hele den redaksjonelle siden etter publisering, inklusive hvilke innholdselement- og referanserevisjoner som var gjeldende.
+- **Publisert sideversjon:** Uforanderlig manifest/øyeblikksbilde av hele den redaksjonelle siden etter publisering, inklusive hvilke innholdselement- og referanserevisjoner og hvilke kuratorstyrte strukturerte datasett (som SPC-importer) som var gjeldende. Opprettes også når en delt referanse publisert fra en annen side endrer det siden viser.
 - **GitHub PR:** Fortsatt relevant for kode, skjema, migrasjoner og testinfrastruktur, men er ikke en kurateringsgren.
 
 Eksisterende `objektrevisjoner`, `objekttilstander`, `objektpubliseringer`, `les_historikk` og sideendringslogg skal gjenbrukes der det er forsvarlig. **Eksisterende generelle `utkast` kan ikke alene brukes som kurateringsgren:** de er delt med annen vanlig redigering og gir ikke trygg isolasjon eller godkjenning av hele siden.
@@ -96,6 +96,11 @@ Dette er et eget **faglig kontrollsystem**, atskilt fra eksisterende generelle d
 ## 7. Fullstendig versjonshistorikk og gjenoppretting
 
 Ved **hver** publisering av en fagside – også vanlig manuell publisering – lagres ett uforanderlig, komplett sideversjonsmanifest med publiseringshendelse, innholdselementer, rekkefølge, paneltilknytning og de eksakte revisjonene av redaksjonelle referanser. Dokumenter kildeproveniens, agent/bruker, grunnversjon, kontrollrunde og publiseringstidspunkt. Unngå unødvendige datakopier når uforanderlige objektrevisjoner kan gjenbrukes.
+
+Manifestet skal binde **alt redaksjonelt innhold siden viser**, ikke bare kortene:
+
+- **Delte referanser.** En referanse som brukes av flere sider, kan publiseres fra én av dem. Enhver publisering som endrer det en side viser – også en delt referanse eller et annet delt objekt publisert fra en annen side – oppretter i **samme transaksjon** en ny sideversjon for hver berørt fagside. Slik er hver sideversjon et eksakt bilde av det som faktisk var live, og historisk sammenligning trenger ikke gjette.
+- **Kuratorstyrte strukturerte datasett.** Strukturerte SPC-bivirkninger og andre kuratorstyrte importer bindes med eksakt import-/kildeversjon (for eksempel import-ID) i manifestet. En ny import av samme kilde gir en ny sideversjon, og en eldre sideversjon viser og gjenoppretter sin egen import, ikke den nyeste.
 
 Historikken skal la en autorisert bruker:
 1. åpne en eldre **hel** sideversjon slik den redaksjonelt så ut;
