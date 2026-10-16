@@ -1,0 +1,83 @@
+{
+  "stoff": "kariprazin",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-16T04:15:06.398225+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 4,
+    "hentet": 0,
+    "dokumenter": 0,
+    "mangler": [
+      {
+        "merkevare_id": "ID_2BF19D08-60A8-4E4B-8B12-B6D3A8F7590F",
+        "varenavn": "Reagila",
+        "navn_form_styrke": "Reagila kaps 3 mg",
+        "produsent": "Gedeon Richter Plc",
+        "atc": "N05AX15",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_2DAE2BF8-810E-4A2F-947A-3E502AE5F6F2",
+        "varenavn": "Reagila",
+        "navn_form_styrke": "Reagila kaps 4,5 mg",
+        "produsent": "Gedeon Richter Plc",
+        "atc": "N05AX15",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_6E3CD1DB-97A0-4901-80C5-14C7A07D14D6",
+        "varenavn": "Reagila",
+        "navn_form_styrke": "Reagila kaps 6 mg",
+        "produsent": "Gedeon Richter Plc",
+        "atc": "N05AX15",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_9C7E1A83-EC76-4A1A-9F66-3B534876CF11",
+        "varenavn": "Reagila",
+        "navn_form_styrke": "Reagila kaps 1,5 mg",
+        "produsent": "Gedeon Richter Plc",
+        "atc": "N05AX15",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 0 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 0,
+        "ikke_dmp": 0,
+        "uten_omtale": 4
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "Ingen preparatomtale ble hentet. SPC-behovet er ikke dekket; se «dekning».",
+      "antall": {
+        "preparater": 4,
+        "hentet": 0,
+        "mangler": 4,
+        "dokumenter": 0
+      }
+    }
+  ],
+  "adresser": [],
+  "dokumenter": [],
+  "utelatt": []
+}
