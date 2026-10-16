@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T23:04:01.212Z",
+  "oppdatert_kl": "2026-10-16T23:28:27.021Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 14,
   "stoffer": {
@@ -4992,7 +4992,7 @@
           }
         }
       },
-      "besvart_commit": "2000f827a4fca458c98bea5a342e1b4a43d55762",
+      "besvart_commit": "e15b73bc7ba1519fe905cd7de9530b7060808559",
       "sist_brukt_kl": "2026-10-16T23:04:01.212Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
