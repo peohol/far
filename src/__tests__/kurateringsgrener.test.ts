@@ -622,6 +622,19 @@ describe('statusen og agentene', () => {
     expect((await feilFra(() => adm('status', { gren: crypto.randomUUID() })))?.code).toBe('PT404')
   })
 
+  it('gir kurateringskøen grenene uten fagtekst, bare gjennom serveren', async () => {
+    const k = await kuratertGren('Køstoff')
+    const ko = await db.transaction(async (tx) => {
+      await tx.query(`select set_config('role', 'service_role', true)`)
+      const { rows } = await tx.query<{ s: Json[] }>('select public.kuratering_kostatus() as s')
+      return rows[0]!.s
+    })
+    const rad = ko.find((g) => g.id === k.gren)!
+    expect(Object.keys(rad).sort()).toEqual(['art', 'id', 'oppdatert_kl', 'publisert_kl', 'revisjon', 'runde', 'status', 'stoff'])
+    expect(rad).toMatchObject({ stoff: k.slug, art: 'kuratering', status: 'arbeid', revisjon: 1 })
+    expect((await feilFra(() => kall.les(admin, 'select public.kuratering_kostatus()')))?.code).toBe('42501')
+  })
+
   it('har hver handling i lista som en funksjon, og gir Claude-kuratoren en nøkkel uten at nøkkelen står i repoet', async () => {
     const mangler = await kall.fasit<{ handling: string }>(
       `select h.handling from kuratering.handlingsliste h

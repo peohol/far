@@ -8,6 +8,9 @@
  *   HTTP), for ChatGPT og andre MCP-klienter. Nøkkelen står i
  *   `Authorization: Bearer`, eller i adressen (`?nokkel=`) for klienter som
  *   ikke kan sende den.
+ * - `/api/kuratering-ko`: grenene uten fagtekst, for kurateringskøen. Den
+ *   kaller med GitHubs OIDC-token for arbeidsflyten «Kurateringskø» på main,
+ *   uten noen hemmelighet å lagre (`docs/kurateringsko.md`).
  *
  * Endepunktet kontrollerer ikke nøkkelen selv: databasen gjør det
  * (`public.kuratering_agent`, bare for tjenesterollen), sammen med rollen og
@@ -15,7 +18,8 @@
  * og agentnøkkelen skrives aldri i loggen.
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { bearer, serverklient, svar, type Miljo } from '../server/tilgang.js'
+import type { Greninfo } from '../kurateringsko/modell.js'
+import { bearer, erAdmin, hvem, serverklient, svar, type Adminsjekk, type Githubsjekk, type Miljo } from '../server/tilgang.js'
 import { AGENTHANDLINGER, AGENTHANDLINGSNAVN } from './handlinger.js'
 
 export const MCP_PROTOKOLL = '2025-06-18'
@@ -84,7 +88,7 @@ export const MCP_VERKTOY = AGENTHANDLINGER.map((h) => ({
 }))
 
 const INSTRUKSER =
-  'OUSFARs kurateringsgrener: isolerte arbeidsversjoner av fagsidene. Kontrolløren leser grenene som er klare til kontroll (oversikt, les) og vurderer nøyaktig én revisjon (vurder). Fagteksten er bak innloggingen: gjengi den aldri utenfor OUSFAR. Arbeidsflyten står i docs/kurateringsgrener.md i repoet peohol/far.'
+  'OUSFARs kurateringsgrener: isolerte arbeidsversjoner av fagsidene. Kontrolløren leser grenene som er klare til kontroll (oversikt, les, les_dokument, kommentarer), kommenterer med ankre (kommenter) og vurderer nøyaktig den siste revisjonen (vurder). Fagteksten er bak innloggingen: gjengi den aldri utenfor OUSFAR. Instruksen for kontrolløren står i docs/kontrollorinstruks.md, og handlingene i docs/kurateringsgrener.md, i repoet peohol/far.'
 
 async function behandleRpc(melding: Rpc, db: SupabaseClient, nokkel: string): Promise<object | null> {
   const { id, method } = melding
@@ -141,4 +145,24 @@ export async function behandleKurateringMcp(foresporsel: Request, miljo: Miljo, 
   const svarene = (await Promise.all(meldinger.map((m) => behandleRpc(m ?? {}, db, nokkel)))).filter((s) => s !== null)
   if (svarene.length === 0) return new Response(null, { status: 202 })
   return svar(200, Array.isArray(kropp) ? svarene : svarene[0])
+}
+
+/* --- Kurateringskøen -------------------------------------------------------- */
+
+/** Arbeidsflyten som kjører kurateringskøen. */
+export const KO_ARBEIDSFLYT = '.github/workflows/kurateringsko.yml'
+
+/** `/api/kuratering-ko`: grenene slik køen følger dem, for køen og administratorene. */
+export async function behandleKurateringsko(
+  foresporsel: Request,
+  miljo: Miljo,
+  { klient, adminsjekk = erAdmin, githubsjekk }: Avhengigheter & { adminsjekk?: Adminsjekk; githubsjekk?: Githubsjekk } = {},
+): Promise<Response> {
+  if (foresporsel.method !== 'POST') return svar(405, { feil: 'Bare POST.' })
+  if (!(await hvem(foresporsel, miljo, adminsjekk, { arbeidsflyt: KO_ARBEIDSFLYT, sjekk: githubsjekk }))) return svar(401, { feil: 'Ikke tilgang.' })
+  const db = klient === undefined ? serverklient(miljo) : klient
+  if (!db) return svar(500, { feil: 'Mangler oppkoblingen mot databasen.' })
+  const { data, error } = await db.rpc('kuratering_kostatus')
+  if (error) return svar(502, { feil: 'Databasen svarte med en feil.' })
+  return svar(200, { grener: (data ?? []) as Greninfo[] })
 }

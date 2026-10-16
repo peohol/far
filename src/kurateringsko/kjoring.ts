@@ -4,8 +4,8 @@
  *
  * 1. Leser køen fra køgrenen (eller lager en ny).
  * 2. Oppdaterer den: stoffene og tallene fra databasen (høyst én gang i
- *    døgnet), kurateringene i repoet, PR-ene og utrullingene i GitHub, og
- *    reservasjonene som har gått ut.
+ *    døgnet), kurateringene i repoet, PR-ene og utrullingene i GitHub,
+ *    kurateringsgrenene i OUSFAR, og reservasjonene som har gått ut.
  * 3. Behandler forespørslene på øktgrenene som ikke er besvart, i den
  *    rekkefølgen de kom, én om gangen.
  * 4. Skriver køen tilbake. Har en annen kjøring skrevet imens, begynner den
@@ -25,6 +25,7 @@ import { INNSTILLINGER, type Koinnstillinger } from './innstillinger'
 import {
   behandle,
   kobleApnePr,
+  oppdaterGrener,
   oppdaterPr,
   oppdaterRepohistorikk,
   oppdaterStoffer,
@@ -50,6 +51,7 @@ import {
   OKTPREFIKS,
   OVERSIKTSFIL,
   SVARFIL,
+  type Greninfo,
   type Kotilstand,
   type Svar,
 } from './modell'
@@ -60,6 +62,8 @@ export interface Kjoringsvalg {
   github: Github | null
   /** Leser stoffene og tallene fra databasen; `null` uten testbrukeren. */
   maling: (() => Promise<Maling>) | null
+  /** Leser kurateringsgrenene i OUSFAR (`/api/kuratering-ko`); `null` når de ikke kan leses. */
+  grener?: (() => Promise<Greninfo[]>) | null
   /** Stoffene fra datafilen, når køen er ny og databasen ikke kan leses. */
   reserveregister: readonly Registerstoff[]
   repo: { migrasjoner: readonly Repofil[]; journaler: readonly Repofil[] }
@@ -101,6 +105,8 @@ export async function kjorKo(v: Kjoringsvalg): Promise<Kjoringsresultat> {
   const maling = v.maling && (v.tvingMaling || gammel) ? await v.maling() : null
   const repospor = kurateringerIRepo(v.repo.migrasjoner, v.repo.journaler)
   const apne = github ? await github.apnePr() : []
+  // Kan ikke grenene leses nå, står det køen vet om dem, til neste kjøring.
+  const grener = v.grener ? await v.grener().catch((e: unknown) => (console.log(`Kurateringsgrenene kunne ikke leses: ${e instanceof Error ? e.message : String(e)}`), null)) : null
   const prer = new Map<number, Promise<{ info: Prinfo | null; utrulling: Utrulling | null }>>()
   const slaOppPr = (nummer: number) => {
     if (!prer.has(nummer)) {
@@ -135,6 +141,7 @@ export async function kjorKo(v: Kjoringsvalg): Promise<Kjoringsresultat> {
     oppdaterRepohistorikk(t, repospor, na)
     await synkPr(t)
     kobleApnePr(t, apne, na)
+    oppdaterGrener(t, grener, na)
     const utlopt = utlop(t, na, innst)
     vurder(t, na, innst)
 
@@ -177,6 +184,7 @@ export async function kjorKo(v: Kjoringsvalg): Promise<Kjoringsresultat> {
     }
     if (ventende.length > 0) {
       await synkPr(t)
+      oppdaterGrener(t, grener, na)
       vurder(t, na, innst)
     }
 
@@ -209,7 +217,10 @@ function lesKo(git: Git, hoder: Readonly<Record<string, string>>): { t: Kotilsta
   const commit = git.hent([KOGREN])[KOGREN]!
   const fil = git.les(commit, KOFIL)
   if (!fil) throw new Error(`${KOFIL} mangler på ${KOGREN}.`)
-  return { t: JSON.parse(fil.toString('utf8')) as Kotilstand, commit }
+  const t = JSON.parse(fil.toString('utf8')) as Kotilstand
+  // Køer fra før kurateringsgrenene har ikke feltet.
+  for (const s of Object.values(t.stoffer)) s.appgren ??= null
+  return { t, commit }
 }
 
 /** Svaret på øktgrenen. Har kuratoren skrevet på grenen imens, legges svaret oppå. */

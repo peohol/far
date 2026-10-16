@@ -1,4 +1,4 @@
-# Kurateringskøen: arbeidslisten ChatGPT-monografkuratoren henter neste stoff
+# Kurateringskøen: arbeidslisten monografkuratoren henter neste stoff
 # fra (docs/kurateringsko.md).
 #
 # Kuratoren skriver en forespørsel i kurateringsko/foresporsel.json på sin egen
@@ -56,6 +56,8 @@ jobs:
       # For å følge PR-ene og utrullingen etter at de er slått sammen.
       pull-requests: read
       actions: read
+      # For OIDC-tokenet kurateringsgrenene i OUSFAR leses med (`/api/kuratering-ko`).
+      id-token: write
     concurrency:
       group: kurateringsko
       cancel-in-progress: false
@@ -64,6 +66,8 @@ jobs:
       # appen har i nettleseren. Ingen av dem er hemmelige.
       SUPABASE_URL: https://jfzqowsmjtthpbipnxnf.supabase.co
       SUPABASE_PUBLISHABLE_KEY: sb_publishable_-xx8oSXHh9dBqs3EnxyprA_vijEb2AU
+      # Kurateringsgrenene, uten fagtekst; serveren slipper bare inn denne arbeidsflyten på main.
+      OUSFAR_KO_ADRESSE: https://ousfar.vercel.app/api/kuratering-ko
       KJORING: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       MAAL: ${{ inputs.maal }}
     defaults:

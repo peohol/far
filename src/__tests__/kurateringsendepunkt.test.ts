@@ -7,7 +7,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { describe, expect, it, vi } from 'vitest'
 import { AGENTHANDLINGER } from '../kuratering/handlinger'
-import { behandleKuratering, behandleKurateringMcp, MCP_PROTOKOLL } from '../kuratering/endepunkt'
+import { behandleKuratering, behandleKurateringMcp, behandleKurateringsko, KO_ARBEIDSFLYT, MCP_PROTOKOLL } from '../kuratering/endepunkt'
 
 const NOKKEL = 'far_' + 'a'.repeat(64)
 
@@ -99,5 +99,23 @@ describe('/api/kuratering-mcp', () => {
     const varsel = await behandleKurateringMcp(post('https://x/api/kuratering-mcp', rpc('notifications/initialized', undefined, null)), {}, klient())
     expect(varsel.status).toBe(202)
     expect((await behandleKurateringMcp(post('https://x/api/kuratering-mcp', rpc('tools/list'), null), {}, klient())).status).toBe(401)
+  })
+})
+
+describe('/api/kuratering-ko', () => {
+  const GRENER = [{ id: 'g', stoff: 'a', art: 'de_novo', status: 'klar', revisjon: 1, runde: 1, oppdatert_kl: 'x', publisert_kl: null }]
+  const ingenAdmin = async () => false
+
+  it('gir grenene til kurateringskøen med OIDC-tokenet for arbeidsflyten, og ingen andre', async () => {
+    const k = klient({ data: GRENER })
+    const githubsjekk = vi.fn(async (token: string, arbeidsflyt: string) => (token === 'oidc' && arbeidsflyt === KO_ARBEIDSFLYT ? ('cron' as const) : null))
+    const svar = await behandleKurateringsko(post('https://x/api/kuratering-ko', {}, 'oidc'), {}, { ...k, adminsjekk: ingenAdmin, githubsjekk })
+    expect(svar.status).toBe(200)
+    expect(await svar.json()).toEqual({ grener: GRENER })
+    expect(k.rpc).toHaveBeenCalledWith('kuratering_kostatus')
+    expect((await behandleKurateringsko(post('https://x/api/kuratering-ko', {}, 'annet'), {}, { ...k, adminsjekk: ingenAdmin, githubsjekk })).status).toBe(401)
+    expect((await behandleKurateringsko(post('https://x/api/kuratering-ko', {}, null), {}, { ...k, adminsjekk: ingenAdmin, githubsjekk })).status).toBe(401)
+    expect((await behandleKurateringsko(new Request('https://x/api/kuratering-ko'), {}, { ...k, adminsjekk: ingenAdmin, githubsjekk })).status).toBe(405)
+    expect(k.rpc).toHaveBeenCalledTimes(1)
   })
 })

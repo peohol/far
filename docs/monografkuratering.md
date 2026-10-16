@@ -4,10 +4,13 @@ Leses når en stoffmonografi (en fagside) skal oppdateres med en
 datamigrasjon etter en kuratering. Hvordan sidene, revisjonene og
 publiseringen er bygget, står i `docs/faginnhold.md`.
 
-**Rollene.** Litteratursøket, kildevurderingen og teksten gjøres av
-ChatGPT-monografkuratoren. Claude skriver ikke faginnhold i en kuratering, men
-sørger for at det kuratoren har bestemt, lander trygt: migrasjonen, testene,
-utrullingen og kontrollen av historikken.
+**Rollene.** Nye kurateringer gjøres av Claude-monografkuratoren i en
+kurateringsgren i OUSFAR, etter `docs/kuratorprotokoll.md`, og kontrolleres
+uavhengig av ChatGPT-kontrolløren (`docs/kontrollorinstruks.md`) før de kan
+publiseres (`docs/kurateringsgrener.md`). Veien her, en datamigrasjon i en PR,
+brukes for rettelser og for kurateringer som allerede er laget slik. Da sørger
+den som skriver migrasjonen for at det kuratoren har bestemt, lander trygt:
+migrasjonen, testene, utrullingen og kontrollen av historikken.
 
 ## Arbeidsflyten
 

@@ -14,11 +14,13 @@ import {
   KOVERSJON,
   type Blokkering,
   type Foresporsel,
+  type Greninfo,
   type Hendelse,
   type Kooversikt,
   type Kostatus,
   type Kostoff,
   type Kotilstand,
+  type Kurateringsappgren,
   type Kurateringspr,
   type Kurateringsspor,
   type Modus,
@@ -58,6 +60,7 @@ function nyttStoff(stoff: string, navn: string): Kostoff {
     tidligst_kl: null,
     gjenoppta: null,
     pr: null,
+    appgren: null,
     blokkeringer: [],
     sist_kuratert: null,
     siste_kjoring: null,
@@ -125,7 +128,7 @@ export function oppdaterStoffer(t: Kotilstand, register: readonly Registerstoff[
 export function oppdaterRepohistorikk(t: Kotilstand, spor: Readonly<Record<string, Kurateringsspor>>, na: string) {
   for (const [stoff, k] of Object.entries(spor)) {
     const s = t.stoffer[stoff]
-    if (!s || s.pr || s.reservasjon) continue
+    if (!s || s.pr || s.appgren || s.reservasjon) continue
     if (s.sist_kuratert && Date.parse(s.sist_kuratert.kl) >= Date.parse(k.kl)) continue
     s.sist_kuratert = k
     logg(s, { kl: na, hendelse: 'kuratering_i_repoet', melding: `En kuratering (${k.modus}) fra ${k.kl.slice(0, 10)} står i repoet.` })
@@ -236,6 +239,119 @@ export function kobleApnePr(t: Kotilstand, prer: readonly { nummer: number; gren
   }
 }
 
+/* --- Kurateringsgrenene i OUSFAR ---------------------------------------- */
+
+/** Statusene der kuratoren har neste handling i grenen: køen gir stoffet ut igjen for å rette. */
+const KURATORENS_TUR: ReadonlySet<string> = new Set(['arbeid', 'retting', 'tilbakemelding', 'blokkert', 'godkjent'])
+
+const erAktivGren = (status: string) => status !== 'publisert' && status !== 'arkivert'
+
+/** Grenen køen vet om for stoffet: den den følger, den som er reservert, eller den et avbrutt forsøk står i. */
+const kjentGren = (s: Kostoff) => s.appgren?.id ?? s.reservasjon?.gren ?? s.gjenoppta?.gren ?? null
+
+/**
+ * Kurateringsgrenene i OUSFAR, slik databasen har dem nå (`null` når de ikke
+ * kunne leses; da står køen som den er):
+ *
+ * - en gren kuratoren har åpnet under en reservasjon uten å melde den, kobles
+ *   til reservasjonen;
+ * - en ferdig kuratering køen følger, står til kontroll til den er publisert.
+ *   Ber kontrolløren om endringer, godkjenner den (så kuratoren kan publisere),
+ *   eller blir grenen blokkert, gis stoffet ut igjen først i køen, med grenen
+ *   å fortsette i; en kontrollrunde teller ikke som et mislykket forsøk. Er den publisert, er kurateringen det; er den
+ *   forkastet, må et menneske se på stoffet;
+ * - en aktiv gren køen ikke vet om (åpnet utenom køen, eller en
+ *   gjenoppretting), holder stoffet ute av køen til den er avsluttet.
+ */
+export function oppdaterGrener(t: Kotilstand, grener: readonly Greninfo[] | null, na: string) {
+  if (!grener) return
+  const perId = new Map(grener.map((g) => [g.id, g]))
+  const aktive = new Map<string, Greninfo>()
+  for (const g of grener) if (erAktivGren(g.status)) aktive.set(g.stoff, g)
+
+  for (const s of Object.values(t.stoffer)) {
+    const aktiv = aktive.get(s.stoff)
+    if (s.reservasjon && !s.reservasjon.gren && aktiv && aktiv.art !== 'gjenoppretting') {
+      s.reservasjon.gren = aktiv.id
+      logg(s, { kl: na, hendelse: 'gren_funnet', oppgave: s.reservasjon.oppgave, melding: `Fant kurateringsgrenen ${aktiv.id}.` })
+    }
+    if (s.appgren) folgGren(s, s.appgren, perId.get(s.appgren.id) ?? null, na)
+
+    if (aktiv && aktiv.id !== kjentGren(s)) {
+      blokker(s, {
+        kode: 'annen_gren',
+        grunn: `Fagsiden har en aktiv kurateringsgren køen ikke følger (${aktiv.art}, ${aktiv.status}); den må avsluttes først.`,
+        kl: na,
+        kilde: 'system',
+      })
+    } else fjernBlokkering(s, 'annen_gren')
+  }
+}
+
+function folgGren(s: Kostoff, a: Kurateringsappgren, g: Greninfo | null, na: string) {
+  if (!g) {
+    s.appgren = null
+    blokker(s, { kode: 'gren_ukjent', grunn: `Kurateringsgrenen ${a.id} finnes ikke.`, kl: na, kilde: 'ko' })
+    logg(s, { kl: na, hendelse: 'gren_ukjent', oppgave: a.oppgave, melding: `Kurateringsgrenen ${a.id} finnes ikke.` })
+    return
+  }
+  if (g.status !== a.status || g.revisjon !== a.revisjon) {
+    logg(s, { kl: na, hendelse: `gren_${g.status}`, oppgave: a.oppgave, melding: `Grenen: ${g.status}, revisjon ${g.revisjon}, kontrollrunde ${g.runde}.` })
+  }
+  a.status = g.status
+  a.revisjon = g.revisjon
+  a.kontrollrunde = g.runde
+  if (g.status === 'stanset') blokker(s, { kode: 'gren_stanset', grunn: 'En administrator har stanset kurateringsgrenen.', kl: na, kilde: 'system' })
+  else fjernBlokkering(s, 'gren_stanset')
+
+  if (g.status === 'publisert') {
+    s.sist_kuratert = {
+      kl: g.publisert_kl ?? na,
+      modus: a.modus,
+      kunnskapsgrense: a.kunnskapsgrense,
+      runde: a.runde,
+      pr: null,
+      gren: a.id,
+      kilde: 'ko',
+    }
+    s.appgren = null
+    s.forsok = 0
+    s.tidligst_kl = null
+    s.gjenoppta = null
+    logg(s, { kl: na, hendelse: 'publisert', oppgave: a.oppgave, melding: `Kurateringsgrenen er publisert (revisjon ${g.revisjon}).` })
+  } else if (g.status === 'arkivert') {
+    s.appgren = null
+    blokker(s, { kode: 'gren_forkastet', grunn: 'Kurateringsgrenen ble forkastet uten å bli publisert.', kl: na, kilde: 'ko' })
+    logg(s, { kl: na, hendelse: 'gren_forkastet', oppgave: a.oppgave, melding: 'Kurateringsgrenen ble forkastet.' })
+  } else if (KURATORENS_TUR.has(g.status)) {
+    const grunn =
+      g.status === 'tilbakemelding'
+        ? `Kontrolløren har bedt om endringer i kontrollrunde ${g.runde}.`
+        : g.status === 'godkjent'
+          ? `Revisjon ${g.revisjon} er godkjent av kontrolløren; grenen kan publiseres.`
+          : g.status === 'blokkert'
+          ? 'Publiseringen stoppet; grenen må oppdateres.'
+          : 'Grenen er tilbake hos kuratoren.'
+    s.gjenoppta = {
+      oppgave: a.oppgave,
+      okt: s.siste_kjoring?.okt ?? '',
+      avbrutt_kl: na,
+      grunn,
+      fase: null,
+      jobbgren: a.jobbgren,
+      kurateringsgren: null,
+      pr: null,
+      gren: a.id,
+    }
+    s.appgren = null
+    // En kontrollrunde er ikke et mislykket forsøk.
+    s.forsok = 0
+    s.tidligst_kl = null
+    fjernBlokkering(s, 'for_mange_forsok')
+    logg(s, { kl: na, hendelse: 'retting', oppgave: a.oppgave, melding: grunn })
+  }
+}
+
 /* --- Fristene ------------------------------------------------------------ */
 
 /**
@@ -261,6 +377,7 @@ function avbryt(
     jobbgren: r.jobbgren,
     kurateringsgren: r.kurateringsgren,
     pr: r.pr,
+    gren: r.gren ?? null,
   }
   s.siste_kjoring = { oppgave: r.oppgave, okt: r.okt, startet_kl: r.reservert_kl, avsluttet_kl: na, utfall: hendelse }
   s.reservasjon = null
@@ -300,6 +417,7 @@ export function forfaltModus(s: Kostoff, na: string, innst: Koinnstillinger): Mo
 
 function statusFor(s: Kostoff, innst: Koinnstillinger): Kostatus {
   if (s.reservasjon) return 'reservert'
+  if (s.appgren) return s.blokkeringer.some((b) => b.kode === 'gren_stanset') ? 'blokkert' : 'venter_godkjenning'
   if (s.pr) return s.pr.tilstand === 'klar' ? 'venter_godkjenning' : s.pr.tilstand === 'sammenslatt' ? 'sammenslatt' : 'fagarbeid_ferdig'
   if (!s.aktiv || innst.utelatt.includes(s.stoff)) return 'utenfor'
   if (s.blokkeringer.length > 0) return 'blokkert'
@@ -351,13 +469,13 @@ export function prioriter(s: Kostoff, na: string, innst: Koinnstillinger): Kosto
 /** Regner ut status, modus og prioritet for alle stoffene, og blokkeringene som følger av dem. */
 export function vurder(t: Kotilstand, na: string, innst: Koinnstillinger) {
   for (const s of Object.values(t.stoffer)) {
-    if (s.maal && !s.maal.side && !s.reservasjon && !s.pr) {
+    if (s.maal && !s.maal.side && !s.reservasjon && !s.pr && !s.appgren) {
       if (!s.blokkeringer.some((b) => b.kode === 'uten_fagside')) {
         blokker(s, { kode: 'uten_fagside', grunn: 'Stoffet har ingen publisert fagside å kuratere.', kl: na, kilde: 'system' })
       }
     } else fjernBlokkering(s, 'uten_fagside')
     if (s.tidligst_kl && Date.parse(s.tidligst_kl) <= Date.parse(na)) s.tidligst_kl = null
-    s.modus = s.reservasjon?.modus ?? s.pr?.modus ?? forfaltModus(s, na, innst)
+    s.modus = s.reservasjon?.modus ?? s.pr?.modus ?? s.appgren?.modus ?? forfaltModus(s, na, innst)
     s.status = statusFor(s, innst)
     s.prioritet = prioriter(s, na, innst)
   }
@@ -388,7 +506,10 @@ export function oversikt(t: Kotilstand, na: string, antallNeste = 10): Kooversik
     neste: rekkefolge(t, na)
       .slice(0, antallNeste)
       .map((s) => ({ stoff: s.stoff, modus: s.modus!, poeng: s.prioritet.poeng, grunner: s.prioritet.grunner, tidligst_kl: s.tidligst_kl })),
-    til_gjennomgang: stoffer.flatMap((s) => (s.pr ? [{ stoff: s.stoff, pr: s.pr.nummer, status: s.status }] : [])),
+    til_gjennomgang: stoffer.flatMap((s) => [
+      ...(s.pr ? [{ stoff: s.stoff, pr: s.pr.nummer, status: s.status }] : []),
+      ...(s.appgren ? [{ stoff: s.stoff, gren: s.appgren.id, grenstatus: s.appgren.status, status: s.status }] : []),
+    ]),
     blokkert: stoffer.filter((s) => s.status === 'blokkert').map((s) => ({ stoff: s.stoff, blokkeringer: s.blokkeringer })),
   }
 }
@@ -421,7 +542,9 @@ export function oversiktMarkdown(t: Kotilstand, na: string): string {
     '',
     '## Til gjennomgang',
     '',
-    ...(o.til_gjennomgang.length === 0 ? ['Ingen PR-er venter.'] : o.til_gjennomgang.map((g) => `- **${g.stoff}**: PR #${g.pr}, ${STATUSNAVN[g.status].toLowerCase()}`)),
+    ...(o.til_gjennomgang.length === 0
+      ? ['Ingen kurateringer venter.']
+      : o.til_gjennomgang.map((g) => `- **${g.stoff}**: ${g.pr ? `PR #${g.pr}` : `kurateringsgren i OUSFAR (${g.grenstatus})`}, ${STATUSNAVN[g.status].toLowerCase()}`)),
     '',
     '## Blokkert',
     '',
@@ -455,7 +578,7 @@ export function finnStoff(t: Kotilstand, navn: string): Kostoff | undefined {
   return t.stoffer[n] ?? Object.values(t.stoffer).find((s) => s.navn.toLowerCase() === n)
 }
 
-function oppgavesvar(s: Kostoff, r: Pick<Reservasjon, 'oppgave' | 'modus' | 'frist_kl' | 'jobbgren' | 'kurateringsgren' | 'pr'>): Oppgavesvar {
+function oppgavesvar(s: Kostoff, r: Pick<Reservasjon, 'oppgave' | 'modus' | 'frist_kl' | 'jobbgren' | 'kurateringsgren' | 'pr' | 'gren'>): Oppgavesvar {
   return {
     oppgave: r.oppgave,
     stoff: s.stoff,
@@ -466,6 +589,7 @@ function oppgavesvar(s: Kostoff, r: Pick<Reservasjon, 'oppgave' | 'modus' | 'fri
     jobbgren: r.jobbgren,
     kurateringsgren: r.kurateringsgren,
     pr: r.pr,
+    gren: r.gren ?? null,
     gjenoppta: s.gjenoppta,
     sist_kuratert: s.sist_kuratert,
     maal: s.maal,
@@ -505,6 +629,7 @@ function grener(s: Kostoff, oppgave: string) {
     jobbgren: s.gjenoppta?.jobbgren ?? `kuratorjobb/${oppgave}`,
     kurateringsgren: s.gjenoppta?.kurateringsgren ?? `kuratering/${oppgave}`,
     pr: s.gjenoppta?.pr ?? null,
+    gren: s.gjenoppta?.gren ?? null,
   }
 }
 
@@ -587,6 +712,7 @@ function utfor(t: Kotilstand, f: Foresporsel, k: Behandlingskontekst, svar: (u: 
       if (!s) return svar('avvist', `Køen kjenner ikke stoffet «${f.stoff}».`)
       if (s.reservasjon) return svar('avvist', `${s.stoff} er reservert av ${s.reservasjon.okt}; frigi reservasjonen, eller vent til ${s.reservasjon.frist_kl}.`)
       if (s.pr && s.pr.tilstand !== 'lukket') return svar('avvist', `${s.stoff} har PR #${s.pr.nummer}, som køen følger til den er slått sammen eller lukket.`)
+      if (s.appgren) return svar('avvist', `${s.stoff} har en kurateringsgren i OUSFAR, som køen følger til den er publisert eller forkastet.`)
       s.blokkeringer = []
       s.forsok = 0
       s.tidligst_kl = null
@@ -612,10 +738,15 @@ function utfor(t: Kotilstand, f: Foresporsel, k: Behandlingskontekst, svar: (u: 
         const annen = Object.values(t.stoffer).find((x) => x !== s && (x.pr?.nummer === f.pr || x.reservasjon?.pr === f.pr))
         if (annen) return svar('avvist', `PR #${f.pr} hører til ${annen.stoff}.`)
       }
+      if (f.gren !== undefined) {
+        const annen = Object.values(t.stoffer).find((x) => x !== s && kjentGren(x) === f.gren)
+        if (annen) return svar('avvist', `Kurateringsgrenen ${f.gren} hører til ${annen.stoff}.`)
+      }
       if (f.fase !== undefined) r.fase = f.fase
       if (f.jobbgren) r.jobbgren = f.jobbgren
       if (f.kurateringsgren) r.kurateringsgren = f.kurateringsgren
       if (f.pr !== undefined) r.pr = f.pr
+      if (f.gren !== undefined) r.gren = f.gren
 
       switch (f.handling) {
         case 'forny': {
@@ -628,12 +759,37 @@ function utfor(t: Kotilstand, f: Foresporsel, k: Behandlingskontekst, svar: (u: 
         }
         case 'fullfort': {
           const modus = f.modus ?? r.modus
+          const runde = modus === 'de_novo' ? innst.de_novo_runde : null
+          const avslutt = (melding: string) => {
+            s.siste_kjoring = { oppgave: r.oppgave, okt: r.okt, startet_kl: r.reservert_kl, avsluttet_kl: na, utfall: 'fullfort' }
+            s.reservasjon = null
+            s.gjenoppta = null
+            s.tidligst_kl = null
+            fjernBlokkering(s, 'for_mange_forsok')
+            logg(s, { kl: na, hendelse: 'fullfort', oppgave: r.oppgave, okt: k.gren, melding })
+          }
+          if (f.gren) {
+            s.appgren = {
+              id: f.gren,
+              oppgave: r.oppgave,
+              modus,
+              runde,
+              kunnskapsgrense: f.kunnskapsgrense!,
+              jobbgren: r.jobbgren,
+              registrert_kl: na,
+              status: 'ukjent',
+              revisjon: null,
+              kontrollrunde: null,
+            }
+            avslutt(`Kurateringsgrenen ${f.gren}, kunnskapsgrense ${f.kunnskapsgrense}.`)
+            return svar('ok', `${s.stoff} er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.`)
+          }
           s.pr = {
             nummer: f.pr!,
             url: null,
             oppgave: r.oppgave,
             modus,
-            runde: modus === 'de_novo' ? innst.de_novo_runde : null,
+            runde,
             kunnskapsgrense: f.kunnskapsgrense!,
             kurateringsgren: r.kurateringsgren,
             jobbgren: r.jobbgren,
@@ -642,12 +798,7 @@ function utfor(t: Kotilstand, f: Foresporsel, k: Behandlingskontekst, svar: (u: 
             sammenslatt_kl: null,
             utrullet_kl: null,
           }
-          s.siste_kjoring = { oppgave: r.oppgave, okt: r.okt, startet_kl: r.reservert_kl, avsluttet_kl: na, utfall: 'fullfort' }
-          s.reservasjon = null
-          s.gjenoppta = null
-          s.tidligst_kl = null
-          fjernBlokkering(s, 'for_mange_forsok')
-          logg(s, { kl: na, hendelse: 'fullfort', oppgave: r.oppgave, okt: k.gren, melding: `PR #${f.pr}, kunnskapsgrense ${f.kunnskapsgrense}.` })
+          avslutt(`PR #${f.pr}, kunnskapsgrense ${f.kunnskapsgrense}.`)
           return svar('ok', `${s.stoff} er ferdig fra kuratoren; køen følger PR #${f.pr} til den er publisert.`)
         }
         case 'feilet':
@@ -659,7 +810,7 @@ function utfor(t: Kotilstand, f: Foresporsel, k: Behandlingskontekst, svar: (u: 
           return svar('ok', `${s.stoff} er blokkert til et menneske har sett på det.`)
         case 'frigi':
           avbryt(s, 'frigitt', f.grunn ?? 'Frigitt av kuratoren.', na, innst, { tellForsok: false })
-          if (s.gjenoppta && !s.gjenoppta.pr && !s.gjenoppta.fase) s.gjenoppta = null
+          if (s.gjenoppta && !s.gjenoppta.pr && !s.gjenoppta.gren && !s.gjenoppta.fase) s.gjenoppta = null
           return svar('ok', `${s.stoff} er frigitt og står i køen igjen.`)
         default:
           return svar('avvist', `Ukjent handling ${f.handling}.`)
