@@ -66,7 +66,7 @@ kurateringer samtidig.
 
 | Modus | Når køen gir den |
 | --- | --- |
-| `de_novo` | Stoffet er aldri kuratert de novo i runden som gjelder (`de_novo_runde`). Gjelder i dag alle stoffer utenom citalopram |
+| `de_novo` | Stoffet er aldri kuratert de novo i runden som gjelder (`de_novo_runde`). Runde 1 var den første piloten (citalopram); runde 2, i kurateringsgrenene, gjelder alle stoffene |
 | `evidensovervaking` | Stoffet er kuratert, og det er gått `evidensovervaking_dager` siden kunnskapsgrensen. Av til den slås på (under) |
 | `oppdatering` | Gis aldri av køen; står i historikken for eldre kurateringer funnet i repoet |
 
@@ -242,9 +242,10 @@ committes oppå den, på samme gren.
 | `reservasjon_minutter`, `maks_reservasjon_timer` | 180, 24 | Fristene |
 | `maks_forsok`, `ventetid_etter_feil_minutter` | 3, 360 | Nye forsøk |
 | `aktive_modi` | `de_novo` | Legg til `evidensovervaking` for å la køen gi ut evidensovervåkning |
-| `de_novo_runde` | 1 | Øk for en ny de novo-runde gjennom hele registeret |
+| `de_novo_runde` | 2 | Øk for en ny de novo-runde gjennom hele registeret |
 | `evidensovervaking_dager` | 180 | Fra kunnskapsgrensen til evidensovervåkningen er forfalt |
-| `forrang` | tom | Stoffer som skal først, i rekkefølge, f.eks. for en pilot |
+| `forrang` | `citalopram`, `lurasidon`, `ghb` | Stoffer som skal først, i rekkefølge, f.eks. for en pilot |
+| `bare_forrang` | på | Køen gir bare ut stoffene i `forrang` (og kurateringer som fortsettes). Slås av, og `forrang` tømmes, når piloten er bestått; da går de novo-runden gjennom hele registeret |
 | `utelatt` | `teststoff` | Stoffer køen ikke gir ut, som testsiden |
 | `maling_timer` | 20 | Hvor ofte sidene måles |
 | `okt_slettes_etter_dager` | 14 | Øktgrener uten aktiv reservasjon slettes etter så lenge |

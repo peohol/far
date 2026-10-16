@@ -56,6 +56,8 @@ import {
 } from '../kurateringsko/modell'
 import { faginnholdskall, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
+// Innstillingene uten en pilot og i runde 1, så testene ikke avhenger av hva køen gjør nå.
+const INNST: Koinnstillinger = { ...INNSTILLINGER, forrang: [], bare_forrang: false, de_novo_runde: 1 }
 const ROT = fileURLToPath(new URL('../../', import.meta.url))
 const T0 = '2026-11-02T08:00:00.000Z'
 const om = (kl: string, timer: number) => new Date(Date.parse(kl) + timer * 3_600_000).toISOString()
@@ -80,12 +82,12 @@ const REGISTER: Registerstoff[] = [
 let teller = 0
 const f = (handling: Foresporsel['handling'], felt: Partial<Foresporsel> = {}) =>
   ({ foresporsel: { versjon: 1, id: `f${(teller += 1)}`, handling, ...felt } as Foresporsel })
-const kontekst = (gren: string, na = T0, innst: Koinnstillinger = INNSTILLINGER) => ({ gren, sha256: `sha-${teller}`, na, kjoring: null, innst })
+const kontekst = (gren: string, na = T0, innst: Koinnstillinger = INNST) => ({ gren, sha256: `sha-${teller}`, na, kjoring: null, innst })
 
 function ny(register = REGISTER, na = T0): Kotilstand {
   const t = tomTilstand(na)
   oppdaterStoffer(t, register, na)
-  vurder(t, na, INNSTILLINGER)
+  vurder(t, na, INNST)
   return t
 }
 
@@ -168,9 +170,9 @@ describe('avbrudd, feil og nye forsøk', () => {
     const t = ny()
     const forste = behandle(t, f('reserver'), kontekst('kurateringsko/okt/a')).oppgave!
     behandle(t, f('forny', { oppgave: forste.oppgave, fase: 'Migrasjonen skrives', pr: 41 }), kontekst('kurateringsko/okt/a', om(T0, 1)))
-    expect(utlop(t, om(T0, 3.5), INNSTILLINGER)).toEqual([])
-    expect(utlop(t, om(T0, 4), INNSTILLINGER)).toEqual(['beta'])
-    vurder(t, om(T0, 4), INNSTILLINGER)
+    expect(utlop(t, om(T0, 3.5), INNST)).toEqual([])
+    expect(utlop(t, om(T0, 4), INNST)).toEqual(['beta'])
+    vurder(t, om(T0, 4), INNST)
     expect(t.stoffer.beta).toMatchObject({ status: 'klar', reservasjon: null, forsok: 1, gjenoppta: { oppgave: forste.oppgave, pr: 41, kurateringsgren: forste.kurateringsgren, fase: 'Migrasjonen skrives' } })
     // Gjenopptakelsen går foran alt annet, med de samme grenene og PR-en.
     const andre = behandle(t, f('reserver'), kontekst('kurateringsko/okt/c', om(T0, 4))).oppgave!
@@ -190,7 +192,7 @@ describe('avbrudd, feil og nye forsøk', () => {
       }
       na = om(na, 7)
     }
-    vurder(t, na, INNSTILLINGER)
+    vurder(t, na, INNST)
     expect(t.stoffer.alfa).toMatchObject({ status: 'blokkert', forsok: 3, blokkeringer: [{ kode: 'for_mange_forsok' }] })
     expect(behandle(t, f('tilbakestill', { stoff: 'alfa', grunn: 'Sett på.' }), kontekst('kurateringsko/okt/admin', na))).toMatchObject({ utfall: 'ok' })
     expect(t.stoffer.alfa).toMatchObject({ status: 'klar', forsok: 0, blokkeringer: [], gjenoppta: null })
@@ -223,7 +225,7 @@ describe('fra ferdig fagarbeid til publisert', () => {
     expect(behandle(t, f('reserver'), kontekst('kurateringsko/okt/b', om(T0, 2)))).toMatchObject({ utfall: 'ok', oppgave: { stoff: 'gamma' } })
     const steg = (info: Prinfo, utrulling: Utrulling | null, na: string) => {
       oppdaterPr(t, 'beta', info, utrulling, na)
-      vurder(t, na, INNSTILLINGER)
+      vurder(t, na, INNST)
       return t.stoffer.beta!.status
     }
     expect(steg(pr('utkast'), null, om(T0, 3))).toBe('fagarbeid_ferdig')
@@ -247,7 +249,7 @@ describe('fra ferdig fagarbeid til publisert', () => {
     const { oppgave } = behandle(t, f('reserver'), kontekst('kurateringsko/okt/b')).oppgave!
     expect(behandle(t, f('fullfort', { oppgave, pr: 90, kunnskapsgrense: '2026-11-01' }), kontekst('kurateringsko/okt/b'))).toMatchObject({ utfall: 'avvist' })
     oppdaterPr(t, 'beta', pr('lukket'), null, om(T0, 3))
-    vurder(t, om(T0, 3), INNSTILLINGER)
+    vurder(t, om(T0, 3), INNST)
     expect(t.stoffer.beta).toMatchObject({ status: 'blokkert', pr: null, blokkeringer: [{ kode: 'pr_lukket' }] })
   })
 
@@ -255,7 +257,7 @@ describe('fra ferdig fagarbeid til publisert', () => {
     const t = ferdig()
     // Et feil nummer: en annen PR som er slått sammen og rullet ut.
     oppdaterPr(t, 'beta', pr('sammenslatt', { sammenslatt_kl: om(T0, 3), gren: 'claude/noe-annet' }), { status: 'vellykket', kl: om(T0, 3) }, om(T0, 3))
-    vurder(t, om(T0, 3), INNSTILLINGER)
+    vurder(t, om(T0, 3), INNST)
     expect(t.stoffer.beta).toMatchObject({
       status: 'klar',
       pr: null,
@@ -266,7 +268,7 @@ describe('fra ferdig fagarbeid til publisert', () => {
     expect(t.stoffer.beta!.historikk.at(-1)).toMatchObject({ hendelse: 'pr_feil_gren' })
     // Neste forsøk fortsetter på samme gren, og finner den riktige PR-en derfra.
     kobleApnePr(t, [{ nummer: 91, gren: 'kuratering/beta-0001' }], om(T0, 4))
-    vurder(t, om(T0, 4), INNSTILLINGER)
+    vurder(t, om(T0, 4), INNST)
     expect(behandle(t, f('reserver'), kontekst('kurateringsko/okt/c', om(T0, 4)))).toMatchObject({
       utfall: 'ok',
       oppgave: { stoff: 'beta', kurateringsgren: 'kuratering/beta-0001', pr: 91 },
@@ -277,14 +279,14 @@ describe('fra ferdig fagarbeid til publisert', () => {
     const t = ny()
     const s = t.stoffer.alfa!
     s.sist_kuratert = { kl: T0, modus: 'de_novo', kunnskapsgrense: '2026-10-01', runde: 1, pr: 5, kilde: 'ko' }
-    expect(forfaltModus(s, T0, INNSTILLINGER)).toBeNull()
-    const med = { ...INNSTILLINGER, aktive_modi: ['de_novo', 'evidensovervaking'] as const }
+    expect(forfaltModus(s, T0, INNST)).toBeNull()
+    const med = { ...INNST, aktive_modi: ['de_novo', 'evidensovervaking'] as const }
     expect(forfaltModus(s, '2027-03-29T00:00:00.000Z', med)).toBeNull()
     expect(forfaltModus(s, '2027-03-30T00:00:00.000Z', med)).toBe('evidensovervaking')
-    expect(forfaltModus(s, T0, { ...INNSTILLINGER, de_novo_runde: 2 })).toBe('de_novo')
+    expect(forfaltModus(s, T0, { ...INNST, de_novo_runde: 2 })).toBe('de_novo')
     // En eldre kuratering av en annen art gir de novo.
     s.sist_kuratert = { ...s.sist_kuratert, modus: 'oppdatering', runde: null }
-    expect(forfaltModus(s, T0, INNSTILLINGER)).toBe('de_novo')
+    expect(forfaltModus(s, T0, INNST)).toBe('de_novo')
   })
 })
 
@@ -303,8 +305,8 @@ describe('kurateringsgrenene i OUSFAR', () => {
     ...endring,
   })
   const steg = (t: Kotilstand, grener: Greninfo[] | null, na: string) => {
-    oppdaterGrener(t, grener, na, INNSTILLINGER)
-    vurder(t, na, INNSTILLINGER)
+    oppdaterGrener(t, grener, na, INNST)
+    vurder(t, na, INNST)
     return t.stoffer.beta!
   }
 
@@ -323,7 +325,7 @@ describe('kurateringsgrenene i OUSFAR', () => {
     // Kontrolløren ber om endringer: stoffet står først, med grenen å fortsette i, og runden teller ikke som et forsøk.
     const etterRunde = steg(t, [gren('tilbakemelding', { runde: 1 })], om(T0, 3))
     expect(etterRunde).toMatchObject({ status: 'klar', appgren: null, forsok: 0, gjenoppta: { oppgave, gren: GREN } })
-    expect(rekkefolge(t, om(T0, 3))[0]!.stoff).toBe('beta')
+    expect(rekkefolge(t, om(T0, 3), INNST)[0]!.stoff).toBe('beta')
     const andre = behandle(t, f('reserver'), kontekst('kurateringsko/okt/c', om(T0, 3))).oppgave!
     expect(andre).toMatchObject({ stoff: 'beta', gren: GREN })
     behandle(t, f('fullfort', { oppgave: andre.oppgave, gren: GREN, kunnskapsgrense: '2026-11-01' }), kontekst('kurateringsko/okt/c', om(T0, 4)))
@@ -339,7 +341,7 @@ describe('kurateringsgrenene i OUSFAR', () => {
       gjenoppta: null,
       sist_kuratert: { kl: om(T0, 6), modus: 'de_novo', kunnskapsgrense: '2026-11-01', runde: 1, pr: null, gren: GREN, kilde: 'ko' },
     })
-    expect(oversikt(t, om(T0, 6)).til_gjennomgang).toEqual([])
+    expect(oversikt(t, om(T0, 6), INNST).til_gjennomgang).toEqual([])
   })
 
   it('fører en reservert eller gitt tilbake gren som publisert eller forkastet, også når kuratoren ikke rakk å melde den', () => {
@@ -494,29 +496,57 @@ describe('kurateringsgrenene i OUSFAR', () => {
 describe('prioriteringen og stoffene', () => {
   it('setter stoffene som mangler innhold og kilder, og som ikke er kuratert, først', () => {
     const t = ny()
-    expect(rekkefolge(t, T0).map((s) => s.stoff)).toEqual(['beta', 'gamma', 'alfa'])
+    expect(rekkefolge(t, T0, INNST).map((s) => s.stoff)).toEqual(['beta', 'gamma', 'alfa'])
     expect(t.stoffer.beta!.prioritet.grunner).toEqual(expect.arrayContaining(['Aldri kuratert.', 'Bare 1 referanser.']))
     // Nylig kuratert går bakerst.
     oppdaterRepohistorikk(t, { beta: { kl: om(T0, -24), modus: 'oppdatering', kunnskapsgrense: null, runde: null, pr: null, kilde: 'repo' } }, T0)
-    vurder(t, T0, INNSTILLINGER)
-    expect(rekkefolge(t, T0).map((s) => s.stoff)).toEqual(['gamma', 'alfa', 'beta'])
+    vurder(t, T0, INNST)
+    expect(rekkefolge(t, T0, INNST).map((s) => s.stoff)).toEqual(['gamma', 'alfa', 'beta'])
     // Forrang i innstillingene går foran.
-    vurder(t, T0, { ...INNSTILLINGER, forrang: ['alfa'] })
-    expect(rekkefolge(t, T0)[0]!.stoff).toBe('alfa')
+    vurder(t, T0, { ...INNST, forrang: ['alfa'] })
+    expect(rekkefolge(t, T0, INNST)[0]!.stoff).toBe('alfa')
+  })
+
+  it('gir bare ut stoffene i forrang under en pilot', () => {
+    const t = ny()
+    const pilot = { ...INNST, forrang: ['alfa'], bare_forrang: true }
+    vurder(t, T0, pilot)
+    expect(rekkefolge(t, T0, pilot).map((s) => s.stoff)).toEqual(['alfa'])
+    expect(oversikt(t, T0, pilot).neste.map((n) => n.stoff)).toEqual(['alfa'])
+    expect(t.stoffer.beta!.prioritet.grunner).toContain('Venter: køen gir bare ut stoffene som står først i innstillingene nå.')
+    expect(behandle(t, f('reserver', { stoff: 'beta' }), kontekst('kurateringsko/okt/a', T0, pilot))).toMatchObject({
+      utfall: 'avvist',
+      melding: 'beta kan ikke reserveres nå: køen gir bare ut alfa.',
+    })
+    const a = behandle(t, f('reserver'), kontekst('kurateringsko/okt/a', T0, pilot))
+    expect(a).toMatchObject({ utfall: 'ok', oppgave: { stoff: 'alfa' } })
+    behandle(t, f('frigi', { oppgave: a.oppgave!.oppgave }), kontekst('kurateringsko/okt/a', T0, pilot))
+    // Når alfa ikke kan gis ut, er det ingenting å gjøre, selv om andre stoffer er klare.
+    vurder(t, T0, { ...pilot, utelatt: ['alfa'] })
+    expect(behandle(t, f('reserver'), kontekst('kurateringsko/okt/a', T0, { ...pilot, utelatt: ['alfa'] }))).toMatchObject({ utfall: 'ingen_oppgave' })
+  })
+
+  it('har piloten med citalopram, lurasidon og GHB i innstillingene, og alle tre kan gis ut', () => {
+    expect(INNSTILLINGER).toMatchObject({ forrang: ['citalopram', 'lurasidon', 'ghb'], bare_forrang: true, aktive_modi: ['de_novo'] })
+    // Citalopram ble de novo-kuratert i den første piloten (runde 1); runden i grenene er en ny.
+    const t = ny()
+    const s = t.stoffer.alfa!
+    s.sist_kuratert = { kl: T0, modus: 'de_novo', kunnskapsgrense: '2026-10-13', runde: 1, pr: null, kilde: 'repo' }
+    expect(forfaltModus(s, T0, INNSTILLINGER)).toBe('de_novo')
   })
 
   it('oppdager nye stoffer, og tar dem som ikke er aktive eller ikke har en fagside, ut av køen', () => {
     const t = ny()
     oppdaterStoffer(t, [...REGISTER.slice(1), { stoff: 'delta', navn: 'Delta', aktiv: true, maal: maal(0, { side: false }) }], om(T0, 1))
-    vurder(t, om(T0, 1), INNSTILLINGER)
+    vurder(t, om(T0, 1), INNST)
     expect(t.stoffer.alfa).toMatchObject({ aktiv: false, status: 'utenfor' })
     expect(t.stoffer.delta).toMatchObject({ status: 'blokkert', blokkeringer: [{ kode: 'uten_fagside', kilde: 'system' }] })
     expect(t.stoffer.delta!.historikk[0]).toMatchObject({ hendelse: 'oppdaget' })
     // Siden kommer: blokkeringen forsvinner av seg selv.
     oppdaterStoffer(t, [{ stoff: 'delta', navn: 'Delta', aktiv: true, maal: maal(1) }], om(T0, 2))
-    vurder(t, om(T0, 2), INNSTILLINGER)
+    vurder(t, om(T0, 2), INNST)
     expect(t.stoffer.delta).toMatchObject({ status: 'klar', blokkeringer: [] })
-    expect(oversikt(t, om(T0, 2)).antall).toMatchObject({ klar: 1, utenfor: 3 })
+    expect(oversikt(t, om(T0, 2), INNST).antall).toMatchObject({ klar: 1, utenfor: 3 })
   })
 })
 
@@ -560,7 +590,7 @@ describe('historikken i repoet', () => {
 
     const t = ny([{ stoff: 'citalopram', navn: 'Citalopram', aktiv: true, maal: maal(14) }])
     oppdaterRepohistorikk(t, spor, T0)
-    expect(forfaltModus(t.stoffer.citalopram!, T0, INNSTILLINGER)).toBeNull()
+    expect(forfaltModus(t.stoffer.citalopram!, T0, INNST)).toBeNull()
   })
 
   it('kjenner igjen en kuratering etter kallet, ikke etter navnet eller en kommentar', () => {
@@ -688,6 +718,7 @@ describe('livsløpet gjennom git', () => {
       repo: { migrasjoner: [], journaler: [] },
       na: () => na,
       kjoring: 'https://example.invalid/kjoring',
+      innst: INNST,
     })
 
   it('samtidige reservasjoner, feil, tidsavbrudd, gjenopptakelse og publisering', async () => {

@@ -12,6 +12,15 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.99.0',
+    dato: '2026-10-16',
+    sammendrag: 'Kurateringskøen starter med en pilot på citalopram, lurasidon og GHB',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: ['Ingen endring i appen. Kurateringskøen gir bare ut citalopram, lurasidon og GHB til piloten med de nye kurateringsgrenene er bestått. Deretter går den videre gjennom hele stoffregisteret.'],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.98.0',
     dato: '2026-10-16',
     sammendrag: 'Kurateringskøen følger kurateringsgrenene, og Claude kan kuratere fagsider etter den faglige protokollen',

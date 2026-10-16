@@ -538,6 +538,7 @@ export function prioriter(s: Kostoff, na: string, innst: Koinnstillinger): Kosto
   if (s.gjenoppta) legg(v.gjenoppta, `Fortsetter den avbrutte kurateringen ${s.gjenoppta.oppgave}.`)
   const plass = innst.forrang.indexOf(s.stoff)
   if (plass >= 0) legg(v.forrang * (1 - plass / innst.forrang.length), 'Står først i innstillingene.')
+  else if (!gisUt(s, innst)) grunner.push('Venter: køen gir bare ut stoffene som står først i innstillingene nå.')
   if (s.modus === 'de_novo') legg(v.de_novo, 'De novo-kuratering i runden som gjelder.')
   if (!s.sist_kuratert) {
     legg(v.aldri_kuratert, 'Aldri kuratert.')
@@ -577,16 +578,21 @@ export function vurder(t: Kotilstand, na: string, innst: Koinnstillinger) {
 }
 
 /** De klare stoffene, i den rekkefølgen køen gir dem ut. Et stoff som venter etter en feil, står sist. */
-export function rekkefolge(t: Kotilstand, na: string): Kostoff[] {
+/** Om køen gir ut stoffet nå: alltid, unntatt når bare stoffene i `forrang` gis ut. */
+function gisUt(s: Kostoff, innst: Koinnstillinger): boolean {
+  return !innst.bare_forrang || innst.forrang.includes(s.stoff) || Boolean(s.gjenoppta)
+}
+
+export function rekkefolge(t: Kotilstand, na: string, innst: Koinnstillinger): Kostoff[] {
   const venter = (s: Kostoff) => Boolean(s.tidligst_kl && Date.parse(s.tidligst_kl) > Date.parse(na))
   return Object.values(t.stoffer)
-    .filter((s) => s.status === 'klar')
+    .filter((s) => s.status === 'klar' && gisUt(s, innst))
     .sort((a, b) => Number(venter(a)) - Number(venter(b)) || b.prioritet.poeng - a.prioritet.poeng || a.stoff.localeCompare(b.stoff))
 }
 
 /* --- Oversikten ---------------------------------------------------------- */
 
-export function oversikt(t: Kotilstand, na: string, antallNeste = 10): Kooversikt {
+export function oversikt(t: Kotilstand, na: string, innst: Koinnstillinger, antallNeste = 10): Kooversikt {
   const stoffer = Object.values(t.stoffer).sort((a, b) => a.stoff.localeCompare(b.stoff))
   const antall = Object.fromEntries(KOSTATUSER.map((s) => [s, 0])) as Record<Kostatus, number>
   for (const s of stoffer) antall[s.status] += 1
@@ -597,7 +603,7 @@ export function oversikt(t: Kotilstand, na: string, antallNeste = 10): Kooversik
     aktive: stoffer.flatMap((s) =>
       s.reservasjon ? [{ stoff: s.stoff, oppgave: s.reservasjon.oppgave, okt: s.reservasjon.okt, frist_kl: s.reservasjon.frist_kl, fase: s.reservasjon.fase }] : [],
     ),
-    neste: rekkefolge(t, na)
+    neste: rekkefolge(t, na, innst)
       .slice(0, antallNeste)
       .map((s) => ({ stoff: s.stoff, modus: s.modus!, poeng: s.prioritet.poeng, grunner: s.prioritet.grunner, tidligst_kl: s.tidligst_kl })),
     til_gjennomgang: stoffer.flatMap((s) => [
@@ -620,8 +626,8 @@ const STATUSNAVN: Record<Kostatus, string> = {
 }
 
 /** Køen som en tabell i Markdown, for folk. */
-export function oversiktMarkdown(t: Kotilstand, na: string): string {
-  const o = oversikt(t, na, 1000)
+export function oversiktMarkdown(t: Kotilstand, na: string, innst: Koinnstillinger): string {
+  const o = oversikt(t, na, innst, 1000)
   const celle = (v: string) => v.replace(/\|/g, '\\|')
   const linjer = [
     '# Kurateringskøen',
@@ -708,10 +714,11 @@ function velg(t: Kotilstand, f: Foresporsel, k: Behandlingskontekst): Valg {
     const s = finnStoff(t, f.stoff)
     if (!s) return { utfall: 'avvist', melding: `Køen kjenner ikke stoffet «${f.stoff}».` }
     if (s.status !== 'klar') return { utfall: 'avvist', melding: `${s.stoff} kan ikke reserveres nå: ${STATUSNAVN[s.status].toLowerCase()}.` }
+    if (!gisUt(s, k.innst)) return { utfall: 'avvist', melding: `${s.stoff} kan ikke reserveres nå: køen gir bare ut ${k.innst.forrang.join(', ')}.` }
     if (s.tidligst_kl && Date.parse(s.tidligst_kl) > Date.parse(k.na)) return { utfall: 'avvist', melding: `${s.stoff} venter etter en feil til ${s.tidligst_kl}.` }
     return { stoff: s }
   }
-  const forste = rekkefolge(t, k.na)[0]
+  const forste = rekkefolge(t, k.na, k.innst)[0]
   if (!forste) return { utfall: 'ingen_oppgave', melding: 'Ingen stoffer er klare for kuratering nå.' }
   if (forste.tidligst_kl && Date.parse(forste.tidligst_kl) > Date.parse(k.na)) {
     return { utfall: 'ingen_oppgave', melding: `Ingen stoffer er klare før ${forste.tidligst_kl}.` }
@@ -774,14 +781,14 @@ function utfor(t: Kotilstand, f: Foresporsel, k: Behandlingskontekst, svar: (u: 
   const { na, innst } = k
   switch (f.handling) {
     case 'status':
-      return svar('ok', 'Oversikten over køen.', { ko: oversikt(t, na) })
+      return svar('ok', 'Oversikten over køen.', { ko: oversikt(t, na, k.innst) })
 
     case 'forhandsvis':
     case 'reserver': {
       const egen = Object.values(t.stoffer).find((s) => s.reservasjon?.okt === k.gren)
       if (egen) return svar('ok', `Økten har allerede reservert ${egen.stoff}; fortsett med den.`, { oppgave: oppgavesvar(egen, egen.reservasjon!) })
       const valg = velg(t, f, k)
-      if (!('stoff' in valg)) return svar(valg.utfall, valg.melding, valg.utfall === 'ingen_oppgave' ? { ko: oversikt(t, na) } : {})
+      if (!('stoff' in valg)) return svar(valg.utfall, valg.melding, valg.utfall === 'ingen_oppgave' ? { ko: oversikt(t, na, k.innst) } : {})
       const s = valg.stoff
       const frist_kl = pluss(na, innst.reservasjon_minutter * MINUTT)
       if (f.handling === 'forhandsvis') {
