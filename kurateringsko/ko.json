@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T20:31:48.904Z",
+  "oppdatert_kl": "2026-10-16T20:52:28.301Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 11,
   "stoffer": {
@@ -449,9 +449,9 @@
         "okt": "kurateringsko/okt/20261016-125910",
         "modus": "de_novo",
         "reservert_kl": "2026-10-16T19:50:14.603Z",
-        "fornyet_kl": "2026-10-16T20:17:59.602Z",
-        "frist_kl": "2026-10-16T23:17:59.602Z",
-        "fase": "Blindfasen avsluttet",
+        "fornyet_kl": "2026-10-16T20:52:28.301Z",
+        "frist_kl": "2026-10-16T23:52:28.301Z",
+        "fase": "Avstemming og skriving",
         "jobbgren": "kuratorjobb/brekspiprazol-0011",
         "kurateringsgren": "kuratering/brekspiprazol-0011",
         "pr": null,
@@ -497,6 +497,13 @@
           "oppgave": "brekspiprazol-0011",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Blindfasen avsluttet"
+        },
+        {
+          "kl": "2026-10-16T20:52:28.301Z",
+          "hendelse": "fornyet",
+          "oppgave": "brekspiprazol-0011",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Avstemming og skriving"
         }
       ],
       "appgren": null
@@ -4783,6 +4790,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "forny-brekspiprazol-2051",
         "forny-brekspiprazol-1",
         "reserver-runde-1",
         "sen-fullfort-ghb-0010",
@@ -4813,24 +4821,24 @@
         "reserver-1"
       ],
       "siste": {
-        "id": "forny-brekspiprazol-1",
-        "sha256": "34e679e327e7c7a3d076f1fa6ed8e41cea498f679cf7be4cc896431cfe67c726",
+        "id": "forny-brekspiprazol-2051",
+        "sha256": "9759d01dccccef09509a2906c722c0069d694dda191db622be4840d62aec0eff",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "forny-brekspiprazol-1",
-          "foresporsel_sha256": "34e679e327e7c7a3d076f1fa6ed8e41cea498f679cf7be4cc896431cfe67c726",
+          "foresporsel_id": "forny-brekspiprazol-2051",
+          "foresporsel_sha256": "9759d01dccccef09509a2906c722c0069d694dda191db622be4840d62aec0eff",
           "handling": "forny",
           "utfall": "ok",
-          "melding": "Reservasjonen av brekspiprazol varer til 2026-10-16T23:17:59.602Z.",
-          "behandlet_kl": "2026-10-16T20:17:59.602Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38961197457",
+          "melding": "Reservasjonen av brekspiprazol varer til 2026-10-16T23:52:28.301Z.",
+          "behandlet_kl": "2026-10-16T20:52:28.301Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38965333010",
           "oppgave": {
             "oppgave": "brekspiprazol-0011",
             "stoff": "brekspiprazol",
             "navn": "Brekspiprazol",
             "modus": "de_novo",
             "forsok": 1,
-            "frist_kl": "2026-10-16T23:17:59.602Z",
+            "frist_kl": "2026-10-16T23:52:28.301Z",
             "jobbgren": "kuratorjobb/brekspiprazol-0011",
             "kurateringsgren": "kuratering/brekspiprazol-0011",
             "pr": null,
@@ -4854,7 +4862,7 @@
         }
       },
       "besvart_commit": "ff854693caaf1d8d8e6cd2633b591cfbc0a241cf",
-      "sist_brukt_kl": "2026-10-16T20:17:59.602Z"
+      "sist_brukt_kl": "2026-10-16T20:52:28.301Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
