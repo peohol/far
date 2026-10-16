@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-16T18:11:40.597Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-16T18:12:54.504Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 94 · Venter på godkjenning: 1 · Blokkert: 4 · Utenfor køen: 1
+Klar: 93 · Reservert: 1 · Venter på godkjenning: 1 · Blokkert: 4 · Utenfor køen: 1
 
 ## Pågår
 
-Ingen kurateringer er reservert nå.
+- **lurasidon** (lurasidon-0007), frist 2026-10-16T21:12:54.504Z
 
 ## Til gjennomgang
 
@@ -23,6 +23,5 @@ Ingen kurateringer er reservert nå.
 
 | # | Stoff | Modus | Poeng | Hvorfor |
 | --- | --- | --- | --- | --- |
-| 1 | lurasidon | de_novo | 1800.7 | Fortsetter den avbrutte kurateringen lurasidon-0004. Står først i innstillingene. De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 7 av 13 redaksjonelle seksjoner er tomme. 20 av 23 elementer har ingen kilde. Bare 2 referanser. |
-| 2 | citalopram | de_novo | 1552 | Fortsetter den avbrutte kurateringen citalopram-0003. Står først i innstillingene. De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-13. 1 av 43 elementer har ingen kilde. |
+| 1 | citalopram | de_novo | 1552 | Fortsetter den avbrutte kurateringen citalopram-0003. Står først i innstillingene. De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-13. 1 av 43 elementer har ingen kilde. |
 
