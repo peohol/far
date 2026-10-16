@@ -288,6 +288,11 @@ describe('kontrollen', () => {
 
     // Kuratoren kan ikke vurdere selv; kontrolløren ber om endringer.
     expect((await feilFra(() => agent(claude, 'vurder', { gren: k.gren, revisjon: 1, beslutning: 'godkjent', begrunnelse: 'Selv' })))?.code).toBe('42501')
+    // Også en godkjenning må si hva som er kontrollert.
+    for (const begrunnelse of [undefined, '', '   ']) {
+      const feil = await feilFra(() => agent(chatgpt, 'vurder', { gren: k.gren, revisjon: 1, beslutning: 'godkjent', begrunnelse }))
+      expect(feil).toMatchObject({ code: '22023', message: expect.stringContaining('må ha en begrunnelse') })
+    }
     const tilbake = await agent<Sammendrag>(chatgpt, 'vurder', { gren: k.gren, revisjon: 1, beslutning: 'endringer', begrunnelse: 'Doseringen trenger kilde.' })
     expect(tilbake.status).toBe('tilbakemelding')
 

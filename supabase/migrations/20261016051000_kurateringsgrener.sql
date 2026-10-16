@@ -1730,6 +1730,10 @@ begin
   if beslutning not in ('godkjent', 'endringer') then
     raise exception 'Beslutningen må være godkjent eller endringer.' using errcode = '22023';
   end if;
+  -- Også en godkjenning sier hva som er kontrollert, så kontrollen kan spores.
+  if char_length(btrim(coalesce(p_data ->> 'begrunnelse', ''))) not between 1 and 4000 then
+    raise exception 'Vurderingen må ha en begrunnelse (1 til 4000 tegn): hva som er kontrollert, eller hva som må endres.' using errcode = '22023';
+  end if;
   r := kuratering.revisjonen(g.id, g.revisjon);
   if beslutning = 'godkjent' then
     hindret := array(
