@@ -1,23 +1,23 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-neste-1",
-  "foresporsel_sha256": "9f77b9820dade0dde2b813a5fa2c3480bb76fd7b0e545dcf37fa40633d34ab53",
-  "handling": "reserver",
+  "foresporsel_id": "forny-kariprazin-1",
+  "foresporsel_sha256": "f43dbe8d0f3e448d9fbda62ea63f4be4716dd8cecf373e37e309fcccdcaf1aad",
+  "handling": "forny",
   "utfall": "ok",
-  "melding": "kariprazin er reservert til 2026-10-16T23:56:09.581Z.",
-  "behandlet_kl": "2026-10-16T20:56:09.581Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38965778955",
+  "melding": "Reservasjonen av kariprazin varer til 2026-10-17T00:27:02.779Z.",
+  "behandlet_kl": "2026-10-16T21:27:02.779Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38969414277",
   "oppgave": {
     "oppgave": "kariprazin-0012",
     "stoff": "kariprazin",
     "navn": "Kariprazin",
     "modus": "de_novo",
     "forsok": 1,
-    "frist_kl": "2026-10-16T23:56:09.581Z",
+    "frist_kl": "2026-10-17T00:27:02.779Z",
     "jobbgren": "kuratorjobb/kariprazin-0012",
     "kurateringsgren": "kuratering/kariprazin-0012",
     "pr": null,
-    "gren": null,
+    "gren": "e2d4268c-247a-445f-9986-74e32400b738",
     "gjenoppta": null,
     "sist_kuratert": null,
     "maal": {
@@ -30,15 +30,8 @@
       "elementer_uten_kilde": 18
     },
     "prioritet": {
-      "poeng": 464.8,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "7 av 13 redaksjonelle seksjoner er tomme.",
-        "18 av 22 elementer har ingen kilde.",
-        "Bare 2 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
