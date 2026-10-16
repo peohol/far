@@ -1,0 +1,18 @@
+{
+  "versjon": 1,
+  "status": "kjorer",
+  "jobb": {
+    "gren": "kuratorjobb/brekspiprazol-0011",
+    "foresporsel_commit": "ccc790498a234f5f72f40362fac29890d54b6eff",
+    "foresporsel_sha256": "1bfda12be4f6d240f16d7cb4c9945d5440e22e51e992a0244a80944b7a4c7bd6",
+    "kode_commit": "548dba55e6654e91eba4e7467891d32c39cfb506",
+    "kjoring": "https://github.com/peohol/far/actions/runs/38957908221",
+    "startet_kl": "2026-10-16T19:51:19.933Z",
+    "ferdig_kl": null
+  },
+  "foresporsel": null,
+  "referanse": null,
+  "feil": [],
+  "bruker": [],
+  "stoffer": {}
+}
