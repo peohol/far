@@ -501,8 +501,15 @@ describe('samtidige endringer', () => {
       (await fasit<{ kilde: string }>(`select prosrc as kilde from pg_proc where proname = $1`, [navn]))[0]!.kilde
     const laas = (await kilde('laas_utkast')).replace(/\s+/g, ' ')
     expect(laas).toMatch(/where t\.objekt_id = p_objekt and t\.tilstand = 'utkast' for update;.*if gjeldende <> p_forventet_revisjon then/)
-    for (const operasjon of ['lagre_utkast', 'gjenopprett_revisjon', 'publiser_utkast']) {
-      expect(await kilde(operasjon), operasjon).toContain('intern.laas_utkast(objekt, forventet_revisjon)')
+    // Lagringen og publiseringen går gjennom de felles hjelperne, som også
+    // kurateringsgrenene bruker; de låser på samme måte.
+    expect(await kilde('gjenopprett_revisjon')).toContain('intern.laas_utkast(objekt, forventet_revisjon)')
+    for (const [operasjon, hjelper] of [
+      ['lagre_utkast', 'lagre_objekt'],
+      ['publiser_utkast', 'publiser_objekt'],
+    ] as const) {
+      expect(await kilde(operasjon), operasjon).toContain(`intern.${hjelper}(${operasjon}.objekt, ${operasjon}.forventet_revisjon`)
+      expect(await kilde(hjelper), hjelper).toContain('intern.laas_utkast(p_objekt, p_forventet)')
     }
   })
 })

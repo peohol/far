@@ -9,7 +9,7 @@ prosjektet, så en ny økt kan fortsette herfra alene.
 
 | Dato | Punkt |
 | --- | --- |
-| 2026-10-16 | Fase B1 (sideversjoner, 1.93.0) ferdig på grenen `claude/sideversjoner`. Neste: B2. |
+| 2026-10-16 | B1 (sideversjoner, 1.93.0, PR #231) og B2 (kurateringsgrener, 1.94.0, grenen `claude/kurateringsgrener`) ferdige og testet. Neste: C. |
 
 Neste steg står øverst i [Fasene](#fasene) med status `pågår` eller `neste`.
 
@@ -82,11 +82,26 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 | --- | --- | --- | --- |
 | A | Kartlegging og arkitekturvalg (dette dokumentet) | – | ferdig |
 | B1 | Sideversjoner: manifest ved hver publisering, basisversjon, lesing av en eldre hel side (`docs/faginnhold.md`, «Sideversjoner») | 1.93.0 | ferdig |
-| B2 | Kurateringsgrener: lagring, revisjoner, statusmaskin, prøvepublisering og samlet publisering, agentidentiteter og roller | – | pågår |
-| C | Forhåndsvisning, banner, sammenligning, versjonsliste og gjenoppretting, arbeidsoversikt | – | |
+| B2 | Kurateringsgrener: lagring, revisjoner, statusmaskin, prøvepublisering og samlet publisering, agentidentiteter og roller (`docs/kurateringsgrener.md`) | 1.94.0 | ferdig |
+| C | Forhåndsvisning, banner, sammenligning, versjonsliste og gjenoppretting, arbeidsoversikt | – | neste |
 | D | Feltkommentarer, kontrollrunder, godkjenning bundet til revisjon, sperrer | – | |
 | E | Agentendepunkt (HTTP og MCP), kø mot grener, «Følg agenten», kuratorprotokollen for Claude | – | |
 | F | Pilot: citalopram, lurasidon, GHB; deretter køstyrt de novo-runde | – | |
+
+## Hvordan det er bygd (for den som fortsetter)
+
+- Skriveveien er felles: `intern.lagre_objekt`, `intern.publiser_objekt` og
+  `intern.opprett_objekt_som` tar forfatteren; `lagre_utkast`, `publiser_utkast`
+  og `intern.opprett_objekt` bruker dem med den innloggede administratoren.
+- `kuratering.utfor` skriver en gren inn og publiserer den; `kuratering.prov`
+  kjører den med `set constraints all immediate` i en del-transaksjon som
+  rulles tilbake, og leser forhåndsvisningen med `les_stoff` og
+  `les_bivirkninger` før tilbakerullingen.
+- Handlingene er `kuratering.h_<navn>(aktor, data)`; `kuratering.handlinger`
+  sier hvilke agentene og administratorene har. En ny handling er en ny
+  funksjon og et navn i lista.
+- Fase D legger sperrende kommentarer inn i `kuratering.sperrer(gren)`, som
+  godkjenningen og publiseringen alt spør.
 
 ## Avhengigheter som krever Peder
 
@@ -100,3 +115,9 @@ Ingen ennå. Når en oppstår, står den her med nøyaktig hva som trengs.
   triggere på `objektpubliseringer` og `bivirkninger.kilder`,
   `les_sideversjoner` og `les_sideversjon`. Tester i
   `src/__tests__/sideversjoner.test.ts`.
+- 2026-10-16: B2 kurateringsgrener (1.94.0): skjemaet `kuratering`
+  (agenter, grener, grenrevisjoner, vurderinger, hendelser, dokumenter),
+  prøvepublisering, samlet publisering, blindfase, agentinngangen
+  `kuratering_agent` og admininngangen `kuratering_admin`. Agenten
+  `claude-monografkurator` er lagt til. Tester i
+  `src/__tests__/kurateringsgrener.test.ts`.
