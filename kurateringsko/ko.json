@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T19:10:15.096Z",
+  "oppdatert_kl": "2026-10-16T19:30:34.336Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 10,
   "stoffer": {
@@ -4859,7 +4859,7 @@
           "kjoring": "https://github.com/peohol/far/actions/runs/38952869451"
         }
       },
-      "besvart_commit": "8a2ea46172de703eef7f102a463e30fad2793176",
+      "besvart_commit": "54239096e362086c69caf85cd2fa0134d6652f6f",
       "sist_brukt_kl": "2026-10-16T19:10:15.096Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
