@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T19:46:58.713Z",
+  "oppdatert_kl": "2026-10-16T19:47:47.223Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 10,
   "stoffer": {
@@ -1563,7 +1563,7 @@
       "sist_kuratert": {
         "kl": "2026-10-16T19:09:34.511755+00:00",
         "modus": "de_novo",
-        "kunnskapsgrense": null,
+        "kunnskapsgrense": "2026-10-16",
         "runde": 2,
         "pr": null,
         "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a",
@@ -1717,6 +1717,13 @@
           "hendelse": "publisert",
           "oppgave": "ghb-0010",
           "melding": "Kurateringsgrenen er publisert (revisjon 8)."
+        },
+        {
+          "kl": "2026-10-16T19:47:47.223Z",
+          "hendelse": "fullfort",
+          "oppgave": "ghb-0010",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Kunnskapsgrense 2026-10-16."
         }
       ],
       "appgren": null
@@ -4744,6 +4751,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "sen-fullfort-ghb-0010",
         "sen-fullfort-lurasidon-0009",
         "sen-fullfort-citalopram-0008",
         "forhandsvis-runde-1",
@@ -4771,21 +4779,21 @@
         "reserver-1"
       ],
       "siste": {
-        "id": "sen-fullfort-lurasidon-0009",
-        "sha256": "856567f34a67bd5ac2bb36b4bd799f5bdeb4429b0310bc545a07064f892f3a27",
+        "id": "sen-fullfort-ghb-0010",
+        "sha256": "c8ea59a4e7a2290a3e991bfd7fbff962caed9df5facf5bccf90467592e1c5a14",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "sen-fullfort-lurasidon-0009",
-          "foresporsel_sha256": "856567f34a67bd5ac2bb36b4bd799f5bdeb4429b0310bc545a07064f892f3a27",
+          "foresporsel_id": "sen-fullfort-ghb-0010",
+          "foresporsel_sha256": "c8ea59a4e7a2290a3e991bfd7fbff962caed9df5facf5bccf90467592e1c5a14",
           "handling": "fullfort",
           "utfall": "ok",
-          "melding": "lurasidon er alt ført som publisert fra kurateringsgrenen 3517ed43-9e99-44e7-867b-d5b0dbf59c95.",
-          "behandlet_kl": "2026-10-16T19:46:58.713Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38957406646"
+          "melding": "ghb er alt ført som publisert fra kurateringsgrenen 0d920be7-9ad8-4d91-89bc-5923b8e9407a.",
+          "behandlet_kl": "2026-10-16T19:47:47.223Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38957496749"
         }
       },
       "besvart_commit": "54239096e362086c69caf85cd2fa0134d6652f6f",
-      "sist_brukt_kl": "2026-10-16T19:46:58.713Z"
+      "sist_brukt_kl": "2026-10-16T19:47:47.223Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
