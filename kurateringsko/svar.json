@@ -1,23 +1,23 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-1",
-  "foresporsel_sha256": "e8b4fdf7468908cfff60c9bf3f57f8d0f891a3f4d60751a0392f97364c7ae49d",
-  "handling": "reserver",
+  "foresporsel_id": "forny-1",
+  "foresporsel_sha256": "28b326d002a3ddf678a43142da5fb8e2b9f674d222f23e374deea440954e215d",
+  "handling": "forny",
   "utfall": "ok",
-  "melding": "citalopram er reservert til 2026-10-16T15:59:37.459Z.",
-  "behandlet_kl": "2026-10-16T12:59:37.459Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38904433125",
+  "melding": "Reservasjonen av citalopram varer til 2026-10-16T16:01:39.299Z.",
+  "behandlet_kl": "2026-10-16T13:01:39.299Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38904686372",
   "oppgave": {
     "oppgave": "citalopram-0003",
     "stoff": "citalopram",
     "navn": "Citalopram",
     "modus": "de_novo",
     "forsok": 1,
-    "frist_kl": "2026-10-16T15:59:37.459Z",
+    "frist_kl": "2026-10-16T16:01:39.299Z",
     "jobbgren": "kuratorjobb/citalopram-0003",
     "kurateringsgren": "kuratering/citalopram-0003",
     "pr": null,
-    "gren": null,
+    "gren": "565f142e-dce5-4804-b3ff-c65593427539",
     "gjenoppta": null,
     "sist_kuratert": {
       "kl": "2026-10-13T16:00:00.000Z",
@@ -37,13 +37,8 @@
       "elementer_uten_kilde": 1
     },
     "prioritet": {
-      "poeng": 551.7,
-      "grunner": [
-        "Står først i innstillingene.",
-        "De novo-kuratering i runden som gjelder.",
-        "Sist kuratert 2026-10-13.",
-        "1 av 43 elementer har ingen kilde."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
