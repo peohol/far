@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T19:46:15.341Z",
+  "oppdatert_kl": "2026-10-16T19:46:58.713Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 10,
   "stoffer": {
@@ -2784,7 +2784,7 @@
       "sist_kuratert": {
         "kl": "2026-10-16T19:07:32.191688+00:00",
         "modus": "de_novo",
-        "kunnskapsgrense": null,
+        "kunnskapsgrense": "2026-10-16",
         "runde": 2,
         "pr": null,
         "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95",
@@ -2933,6 +2933,13 @@
           "hendelse": "publisert",
           "oppgave": "lurasidon-0009",
           "melding": "Kurateringsgrenen er publisert (revisjon 6)."
+        },
+        {
+          "kl": "2026-10-16T19:46:58.713Z",
+          "hendelse": "fullfort",
+          "oppgave": "lurasidon-0009",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Kunnskapsgrense 2026-10-16."
         }
       ],
       "appgren": null
@@ -4737,6 +4744,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "sen-fullfort-lurasidon-0009",
         "sen-fullfort-citalopram-0008",
         "forhandsvis-runde-1",
         "fullfort-ghb-pub",
@@ -4763,21 +4771,21 @@
         "reserver-1"
       ],
       "siste": {
-        "id": "sen-fullfort-citalopram-0008",
-        "sha256": "6deb016c948c7ad0a02d6dbd37201012ace5aa8749d133e7990be9e98c0857a9",
+        "id": "sen-fullfort-lurasidon-0009",
+        "sha256": "856567f34a67bd5ac2bb36b4bd799f5bdeb4429b0310bc545a07064f892f3a27",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "sen-fullfort-citalopram-0008",
-          "foresporsel_sha256": "6deb016c948c7ad0a02d6dbd37201012ace5aa8749d133e7990be9e98c0857a9",
+          "foresporsel_id": "sen-fullfort-lurasidon-0009",
+          "foresporsel_sha256": "856567f34a67bd5ac2bb36b4bd799f5bdeb4429b0310bc545a07064f892f3a27",
           "handling": "fullfort",
           "utfall": "ok",
-          "melding": "citalopram er alt ført som publisert fra kurateringsgrenen 565f142e-dce5-4804-b3ff-c65593427539.",
-          "behandlet_kl": "2026-10-16T19:46:15.341Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38957315091"
+          "melding": "lurasidon er alt ført som publisert fra kurateringsgrenen 3517ed43-9e99-44e7-867b-d5b0dbf59c95.",
+          "behandlet_kl": "2026-10-16T19:46:58.713Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38957406646"
         }
       },
       "besvart_commit": "54239096e362086c69caf85cd2fa0134d6652f6f",
-      "sist_brukt_kl": "2026-10-16T19:46:15.341Z"
+      "sist_brukt_kl": "2026-10-16T19:46:58.713Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
