@@ -115,7 +115,7 @@ En administrator ser agentene under «Kurateringer» i administrasjonsmenyen:
 rollen, når nøkkelen ble laget og når agenten sist kalte inn. «Lag ny nøkkel»
 gir en ny nøkkel og gjør den gamle ugyldig med en gang. Nøkkelen vises bare
 den ene gangen, med adressen ChatGPT kobles til (MCP, med nøkkelen i
-adressen) og adressen for HTTP.
+adressen) og adressen for HTTP, og glemmes når laget lukkes.
 
 ## Statusene
 
@@ -134,17 +134,23 @@ Før `til_kontroll` må prøven og rapporten bestå, grenen bygge på den siste
 sideversjonen, og dokumentene finnes: `evidensjournal`, `dekningsmatrise` og
 `selvtest`, og for en de novo-kuratering også `blindprotokoll`. En godkjenning
 er bundet til revisjonen og fingeravtrykket; en ny lagring eller en ny
-grunnversjon opphever den.
+grunnversjon opphever den. Dokumentene kan ikke endres mens grenen er til
+kontroll eller godkjent, så det som publiseres, er det kontrolløren vurderte.
 
 ## Kommentarene
 
 Den faglige kontrollen skjer i kommentartråder i grenen
 (`kuratering.kommentarer`, uforanderlige rader). En tråd er festet til hele
 grenen eller et `anker`: `objekt` (et kort eller siden, som må stå på siden
-eller i grenen), `felt` (navnet på feltet, som i sammenligningen), `seksjon`,
-`referanse` (en referanse på siden eller i grenen), `kilde` (en
-preparatomtale) eller `dokument` (et av grenens dokumenter). Hver kommentar
-husker revisjonen den ble skrevet på, og hvem som skrev den.
+eller i grenen), `felt` (navnet på feltet i objektet, som i
+sammenligningen; krever `objekt`), `seksjon` (en av fagsidens seksjoner,
+`kuratering.seksjoner()`, de samme som `PANELER`), `referanse` (en referanse
+på siden eller i grenen), `kilde` (nøkkelen til en preparatomtale på siden
+eller i grenen) eller `dokument` (et av grenens dokumenter). Et anker som
+ikke peker på noe som finnes, avvises. Hver kommentar husker revisjonen den
+ble skrevet på, og hvem som skrev den. Når grenen er publisert eller
+arkivert, står trådene som de var: de kan ikke kommenteres, lukkes eller
+åpnes igjen.
 
 - En tråd er en `merknad` eller `sperrende`. Bare kontrolløren (ikke den som
   kuraterer grenen) og administratorene åpner en sperrende tråd.
@@ -206,7 +212,8 @@ siden alt i den har vært publisert før. Sideversjonen den gir, har opphavet
   stanse, gjenoppta, forkaste). En eldre revisjon kan velges og vises.
   Banneret viser hva agenten gjør (arbeider, venter, stanset, eller at
   tilkoblingen er brutt; «arbeider» bare når kuratoren har meldt aktivitet
-  eller kalt inn de siste ti minuttene). Siden spør etter `status` hvert
+  eller gjort noe i nettopp denne grenen de siste ti minuttene,
+  `kurator_sist_kl` i `status`). Siden spør etter `status` hvert
   halve minutt, og hvert femte sekund med «Følg agenten» på; er noe nytt,
   leses grenen på nytt og kortene som er endret, markeres en liten stund.
   «Følg agenten» ruller også til kortet eller seksjonen agenten melder at den

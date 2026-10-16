@@ -72,7 +72,8 @@ export interface Grenstatusdata {
   blindfase: boolean
   aktivitet?: Aktivitet
   oppdatert_kl: string
-  kurator_sist_sett_kl?: string
+  /** Sist kuratoren gjorde noe i denne grenen. */
+  kurator_sist_kl?: string
   apne_sperrer: number
 }
 
@@ -95,14 +96,15 @@ const KURATORENS_TUR: readonly Grenstatus[] = ['arbeid', 'retting', 'blokkert', 
 
 /**
  * Hva agenten gjør ut fra statusen. «Aktiv» bare med belegg: kuratoren har
- * meldt aktivitet eller kalt inn de siste minuttene, og det er dens tur.
+ * meldt aktivitet eller gjort noe i denne grenen de siste minuttene, og det
+ * er dens tur.
  */
 export function agenttilstand(status: Grenstatusdata | null, brutt: boolean, naa = Date.now()): Agenttilstand {
   if (brutt) return 'brutt'
   if (!status) return 'venter'
   if (status.status === 'stanset') return 'stanset'
   if (!erAktiv(status.status)) return 'avsluttet'
-  const sist = Math.max(Date.parse(status.aktivitet?.kl ?? '') || 0, Date.parse(status.kurator_sist_sett_kl ?? '') || 0)
+  const sist = Math.max(Date.parse(status.aktivitet?.kl ?? '') || 0, Date.parse(status.kurator_sist_kl ?? '') || 0)
   return KURATORENS_TUR.includes(status.status) && naa - sist < AKTIV_I_MINUTTER * 60_000 ? 'aktiv' : 'venter'
 }
 
