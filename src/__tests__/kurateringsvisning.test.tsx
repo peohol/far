@@ -307,6 +307,11 @@ describe('versjonssiden', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Sammenlign med den gjeldende' }))
     const lag = await screen.findByRole('dialog', { name: /versjon 1 mot den gjeldende/ })
     expect(within(lag).getAllByText(/dosering/).length).toBeGreaterThan(0)
+    // Det fjernede og det nye har sine egne merker (rød og grønn bunn), også her
+    // utenfor historikkvinduet.
+    const merker = [...lag.querySelectorAll('del, ins')]
+    expect(merker.length).toBeGreaterThan(0)
+    for (const m of merker) expect(m.className).toBe(m.tagName === 'DEL' ? 'historikk__fjernet' : 'historikk__ny')
 
     await userEvent.click(screen.getByRole('button', { name: 'Lukk' }))
     await userEvent.click(screen.getByRole('button', { name: 'Ta tilbake denne versjonen' }))

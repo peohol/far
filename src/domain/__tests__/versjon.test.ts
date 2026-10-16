@@ -145,6 +145,10 @@ const ALLE_SIDER = [
   FORTOLKNING,
   ...FORTOLKNINGSOPPFORINGER.flatMap((a) => [fortolkningsrute(a.kode), redigeringsrute(a.kode)]),
   ...STOFFREGISTER.stoffer.map((s): Rute => ({ side: 'stoff', stoff: s.slug })),
+  // Versjonene og kurateringsgrenene har adresser som ikke kan listes opp på
+  // forhånd; ett eksempel på hver er nok til å kjenne igjen områdene.
+  { side: 'versjon', stoff: STOFFREGISTER.stoffer[0]!.slug, nr: 1 } satisfies Rute,
+  { side: 'kuratering', gren: '00000000-0000-4000-8000-000000000000' } satisfies Rute,
   lesRute(sokeside('')),
   lesRute(STOFFREGISTERADRESSE),
 ].map(sidesti)
@@ -160,7 +164,7 @@ function kjentOmrade(omrade: string): boolean {
 
 describe('områdene en føring gjelder', () => {
   it('kjennes igjen når de er sider, og ikke ellers', () => {
-    const kjente = ['hele appen', 'vinduer', 'fortolkning', 'fortolkning/hbup', 'fortolkning/*/rediger', 'stoff']
+    const kjente = ['hele appen', 'vinduer', 'fortolkning', 'fortolkning/hbup', 'fortolkning/*/rediger', 'stoff', 'versjon', 'kuratering']
     for (const omrade of [...kjente, 'stoff/bupropion', 'sok', 'stoffregister']) {
       expect(kjentOmrade(omrade), omrade).toBe(true)
     }
