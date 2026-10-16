@@ -1,18 +1,55 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/doksepin-0014",
     "foresporsel_commit": "599319ce486995ce64cf544983cbe78f84f26a36",
     "foresporsel_sha256": "827fc023164fcd75fb98153d1dfb1852da6eef6e7628566badc910121d4e242c",
     "kode_commit": "548dba55e6654e91eba4e7467891d32c39cfb506",
     "kjoring": "https://github.com/peohol/far/actions/runs/38979430294",
-    "startet_kl": "2026-10-16T23:05:00.416Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-16T23:05:02.376Z",
+    "ferdig_kl": "2026-10-16T23:05:11.217Z"
   },
-  "foresporsel": null,
-  "referanse": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "doksepin"
+    ],
+    "oppgaver": [
+      "funksjonstest",
+      "spc"
+    ],
+    "referanse": "doksepin-0014-2304"
+  },
+  "referanse": "doksepin-0014-2304",
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 696
+    }
+  ],
+  "stoffer": {
+    "doksepin": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/doksepin/funksjonstest.json"
+        },
+        "spc": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/doksepin/spc.json"
+        }
+      }
+    }
+  }
 }

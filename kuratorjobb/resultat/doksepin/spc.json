@@ -1,0 +1,63 @@
+{
+  "stoff": "doksepin",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-16T04:15:06.398225+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 2,
+    "hentet": 0,
+    "dokumenter": 0,
+    "mangler": [
+      {
+        "merkevare_id": "ID_689FE3A7-636D-4C2F-B0EE-30CC1A50A5F6",
+        "varenavn": "Sinequan",
+        "navn_form_styrke": "Sinequan kaps 25 mg",
+        "produsent": "Orifarm AS",
+        "atc": "N06AA12",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_959AA1A6-0F20-4EE1-8761-521FF878319E",
+        "varenavn": "Doxepin teva",
+        "navn_form_styrke": "Doxepin teva kaps 10 mg",
+        "produsent": "Teva",
+        "atc": "N06AA12",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 0 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 0,
+        "ikke_dmp": 0,
+        "uten_omtale": 2
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "Ingen preparatomtale ble hentet. SPC-behovet er ikke dekket; se «dekning».",
+      "antall": {
+        "preparater": 2,
+        "hentet": 0,
+        "mangler": 2,
+        "dokumenter": 0
+      }
+    }
+  ],
+  "adresser": [],
+  "dokumenter": [],
+  "utelatt": []
+}
