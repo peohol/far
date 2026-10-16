@@ -1,9 +1,9 @@
 {
-  "oppdatert_kl": "2026-10-16T14:53:56.184Z",
+  "oppdatert_kl": "2026-10-16T14:54:33.657Z",
   "malt_kl": "2026-10-15T21:31:44.469Z",
   "antall": {
-    "klar": 93,
-    "reservert": 0,
+    "klar": 92,
+    "reservert": 1,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 2,
     "sammenslatt": 0,
@@ -11,24 +11,16 @@
     "blokkert": 4,
     "utenfor": 1
   },
-  "aktive": [],
-  "neste": [
+  "aktive": [
     {
       "stoff": "ghb",
-      "modus": "de_novo",
-      "poeng": 637.9,
-      "grunner": [
-        "Står først i innstillingene.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "11 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 3 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ],
-      "tidligst_kl": null
+      "oppgave": "ghb-0005",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "frist_kl": "2026-10-16T17:54:33.657Z",
+      "fase": null
     }
   ],
+  "neste": [],
   "til_gjennomgang": [
     {
       "stoff": "citalopram",
