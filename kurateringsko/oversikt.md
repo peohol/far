@@ -1,16 +1,16 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-16T21:29:33.655Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-16T22:03:49.492Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 90 · Reservert: 1 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
+Klar: 90 · Venter på godkjenning: 1 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-- **kariprazin** (kariprazin-0012), frist 2026-10-17T00:27:02.779Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
-Ingen kurateringer venter.
+- **kariprazin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 
 ## Blokkert
 
