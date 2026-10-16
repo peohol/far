@@ -1,0 +1,18 @@
+{
+  "versjon": 1,
+  "status": "kjorer",
+  "jobb": {
+    "gren": "kuratorjobb/publisert-citalopram-20261016",
+    "foresporsel_commit": "f11ef1bb0edd5e1a700db98f52f1d72a2f2c2119",
+    "foresporsel_sha256": "9cd13e0f3d4dc23ff40ed41abd19c4452cc1d9605ccdf89781ca2463cf5352f9",
+    "kode_commit": "e650dd399fd2df1dd0b2058b3b3871b2858002b2",
+    "kjoring": "https://github.com/peohol/far/actions/runs/38950506553",
+    "startet_kl": "2026-10-16T18:51:43.789Z",
+    "ferdig_kl": null
+  },
+  "foresporsel": null,
+  "referanse": null,
+  "feil": [],
+  "bruker": [],
+  "stoffer": {}
+}
