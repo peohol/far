@@ -1,30 +1,28 @@
 {
-  "oppdatert_kl": "2026-10-16T15:31:00.802Z",
+  "oppdatert_kl": "2026-10-16T15:31:55.717Z",
   "malt_kl": "2026-10-15T21:31:44.469Z",
   "antall": {
     "klar": 92,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 2,
+    "venter_godkjenning": 3,
     "sammenslatt": 0,
     "publisert": 0,
     "blokkert": 4,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "ghb",
-      "oppgave": "ghb-0005",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-16T17:55:46.759Z",
-      "fase": "Blindfasen avsluttet"
-    }
-  ],
+  "aktive": [],
   "neste": [],
   "til_gjennomgang": [
     {
       "stoff": "citalopram",
       "gren": "565f142e-dce5-4804-b3ff-c65593427539",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    },
+    {
+      "stoff": "ghb",
+      "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     },

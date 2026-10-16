@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T15:31:00.802Z",
+  "oppdatert_kl": "2026-10-16T15:31:55.717Z",
   "malt_kl": "2026-10-15T21:31:44.469Z",
   "teller": 5,
   "stoffer": {
@@ -1542,7 +1542,7 @@
     "ghb": {
       "stoff": "ghb",
       "navn": "GHB",
-      "status": "reservert",
+      "status": "venter_godkjenning",
       "modus": "de_novo",
       "prioritet": {
         "poeng": 0,
@@ -1557,19 +1557,7 @@
         "referanser": 3,
         "elementer_uten_kilde": 1
       },
-      "reservasjon": {
-        "oppgave": "ghb-0005",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "modus": "de_novo",
-        "reservert_kl": "2026-10-16T14:54:33.657Z",
-        "fornyet_kl": "2026-10-16T14:55:46.759Z",
-        "frist_kl": "2026-10-16T17:55:46.759Z",
-        "fase": "Blindfasen avsluttet",
-        "jobbgren": "kuratorjobb/ghb-0005",
-        "kurateringsgren": "kuratering/ghb-0005",
-        "pr": null,
-        "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a"
-      },
+      "reservasjon": null,
       "forsok": 1,
       "tidligst_kl": null,
       "gjenoppta": null,
@@ -1580,8 +1568,8 @@
         "oppgave": "ghb-0005",
         "okt": "kurateringsko/okt/20261016-125910",
         "startet_kl": "2026-10-16T14:54:33.657Z",
-        "avsluttet_kl": null,
-        "utfall": "reservert"
+        "avsluttet_kl": "2026-10-16T15:31:55.717Z",
+        "utfall": "fullfort"
       },
       "aktiv": true,
       "historikk": [
@@ -1654,9 +1642,33 @@
           "oppgave": "ghb-0005",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Blindfasen avsluttet"
+        },
+        {
+          "kl": "2026-10-16T15:31:55.717Z",
+          "hendelse": "fullfort",
+          "oppgave": "ghb-0005",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Kurateringsgrenen 0d920be7-9ad8-4d91-89bc-5923b8e9407a, kunnskapsgrense 2026-10-16."
+        },
+        {
+          "kl": "2026-10-16T15:31:55.717Z",
+          "hendelse": "gren_klar",
+          "oppgave": "ghb-0005",
+          "melding": "Grenen: klar, revisjon 5, kontrollrunde 1."
         }
       ],
-      "appgren": null
+      "appgren": {
+        "id": "0d920be7-9ad8-4d91-89bc-5923b8e9407a",
+        "oppgave": "ghb-0005",
+        "modus": "de_novo",
+        "runde": 2,
+        "kunnskapsgrense": "2026-10-16",
+        "jobbgren": "kuratorjobb/ghb-0005",
+        "registrert_kl": "2026-10-16T15:31:55.717Z",
+        "status": "klar",
+        "revisjon": 5,
+        "kontrollrunde": 1
+      }
     },
     "haloperidol": {
       "stoff": "haloperidol",
@@ -4680,6 +4692,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "fullfort-ghb-1",
         "forny-ghb-1",
         "reserver-ghb-1",
         "fullfort-lurasidon-1",
@@ -4691,48 +4704,21 @@
         "reserver-1"
       ],
       "siste": {
-        "id": "forny-ghb-1",
-        "sha256": "12d47626c5819fc316e2cadf9c4e2521b49b0f0234a5cc38432640fa21836420",
+        "id": "fullfort-ghb-1",
+        "sha256": "1db159385533a59d7e9e52ac6d9808b676ae595c5b25c909b0c78dcbc6f25b2e",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "forny-ghb-1",
-          "foresporsel_sha256": "12d47626c5819fc316e2cadf9c4e2521b49b0f0234a5cc38432640fa21836420",
-          "handling": "forny",
+          "foresporsel_id": "fullfort-ghb-1",
+          "foresporsel_sha256": "1db159385533a59d7e9e52ac6d9808b676ae595c5b25c909b0c78dcbc6f25b2e",
+          "handling": "fullfort",
           "utfall": "ok",
-          "melding": "Reservasjonen av ghb varer til 2026-10-16T17:55:46.759Z.",
-          "behandlet_kl": "2026-10-16T14:55:46.759Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38919695287",
-          "oppgave": {
-            "oppgave": "ghb-0005",
-            "stoff": "ghb",
-            "navn": "GHB",
-            "modus": "de_novo",
-            "forsok": 1,
-            "frist_kl": "2026-10-16T17:55:46.759Z",
-            "jobbgren": "kuratorjobb/ghb-0005",
-            "kurateringsgren": "kuratering/ghb-0005",
-            "pr": null,
-            "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a",
-            "gjenoppta": null,
-            "sist_kuratert": null,
-            "maal": {
-              "kl": "2026-10-15T21:31:45.692Z",
-              "side": true,
-              "elementer": 3,
-              "redaksjonelle_paneler": 13,
-              "paneler_med_innhold": 2,
-              "referanser": 3,
-              "elementer_uten_kilde": 1
-            },
-            "prioritet": {
-              "poeng": 0,
-              "grunner": []
-            }
-          }
+          "melding": "ghb er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+          "behandlet_kl": "2026-10-16T15:31:55.717Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38924653876"
         }
       },
       "besvart_commit": "1457073e7e858566245970308574478e6c8f209b",
-      "sist_brukt_kl": "2026-10-16T14:55:46.759Z"
+      "sist_brukt_kl": "2026-10-16T15:31:55.717Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
