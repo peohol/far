@@ -178,7 +178,7 @@ export async function kjorKo(v: Kjoringsvalg): Promise<Kjoringsresultat> {
     ventende.sort((a, b) => a.kl.localeCompare(b.kl) || a.gren.localeCompare(b.gren))
     const behandlet: Kjoringsresultat['behandlet'] = []
     for (const f of ventende) {
-      const s = behandle(t, lesForesporsel(f.tekst), { gren: f.gren, sha256: f.sha, na, kjoring, innst })
+      const s = behandle(t, lesForesporsel(f.tekst), { gren: f.gren, sha256: f.sha, na, kjoring, innst, grener })
       svar.push({ gren: f.gren, commit: f.commit, svar: s })
       behandlet.push({ gren: f.gren, id: s.foresporsel_id, handling: s.handling, utfall: s.utfall, melding: s.melding })
     }

@@ -29,6 +29,7 @@ import {
   type Sidemaal,
   type Svar,
   type Svarutfall,
+  grenartFor,
 } from './modell'
 
 const MINUTT = 60_000
@@ -250,11 +251,53 @@ const erAktivGren = (status: string) => status !== 'publisert' && status !== 'ar
 const kjentGren = (s: Kostoff) => s.appgren?.id ?? s.reservasjon?.gren ?? s.gjenoppta?.gren ?? null
 
 /**
+ * Hvorfor grenen ikke kan være kurateringen av stoffet i modusen, eller `null`
+ * når den kan: den må gjelde samme stoff og ha arten modusen krever
+ * (`grenartFor`). Uten modus kontrolleres bare stoffet.
+ */
+function koblingsfeil(stoff: string, g: Greninfo, modus: Modus | null): string | null {
+  if (g.stoff !== stoff) return `Kurateringsgrenen ${g.id} gjelder ${g.stoff}, ikke ${stoff}.`
+  if (modus && g.art !== grenartFor(modus)) return `Kurateringsgrenen ${g.id} er en ${g.art}-gren; en ${modus}-kuratering må gjøres i en ${grenartFor(modus)}-gren.`
+  return null
+}
+
+/**
+ * En gren som er meldt eller holdt for stoffet, men som ikke kan være
+ * kurateringen av det: koblingen brytes, og stoffet blokkeres
+ * (`gren_feil_kobling`) til en riktig gren er koblet. Grenen blir aldri ført
+ * som stoffets kuratering.
+ */
+function brytKobling(s: Kostoff, oppgave: string, grunn: string, na: string) {
+  blokker(s, { kode: 'gren_feil_kobling', grunn, kl: na, kilde: 'system' })
+  logg(s, { kl: na, hendelse: 'gren_feil_kobling', oppgave, melding: grunn })
+}
+
+/** Oppgaven gis tilbake til kuratoren, med grenen å fortsette i (eller ingen). */
+function tilKuratoren(s: Kostoff, a: Kurateringsappgren, grunn: string, gren: string | null, na: string) {
+  s.gjenoppta = {
+    oppgave: a.oppgave,
+    okt: s.siste_kjoring?.okt ?? '',
+    avbrutt_kl: na,
+    grunn,
+    fase: null,
+    jobbgren: a.jobbgren,
+    kurateringsgren: null,
+    pr: null,
+    gren,
+  }
+  s.appgren = null
+}
+
+/**
  * Kurateringsgrenene i OUSFAR, slik databasen har dem nå (`null` når de ikke
  * kunne leses; da står køen som den er):
  *
- * - en gren kuratoren har åpnet under en reservasjon uten å melde den, kobles
- *   til reservasjonen;
+ * - en gren som gjelder et annet stoff, eller som ikke har arten
+ *   kurateringen krever, kobles aldri til stoffet: er den meldt, brytes
+ *   koblingen, og stoffet blokkeres (`gren_feil_kobling`) til riktig gren er
+ *   koblet;
+ * - en gren kuratoren har åpnet for stoffet uten å melde den, kobles til
+ *   reservasjonen, eller til et avbrutt forsøk som står uten gren;
  * - en ferdig kuratering køen følger, står til kontroll til den er publisert.
  *   Ber kontrolløren om endringer, godkjenner den (så kuratoren kan publisere),
  *   eller blir grenen blokkert, gis stoffet ut igjen først i køen, med grenen
@@ -270,18 +313,23 @@ export function oppdaterGrener(t: Kotilstand, grener: readonly Greninfo[] | null
   for (const g of grener) if (erAktivGren(g.status)) aktive.set(g.stoff, g)
 
   for (const s of Object.values(t.stoffer)) {
-    const aktiv = aktive.get(s.stoff)
-    if (s.reservasjon && !s.reservasjon.gren && aktiv && aktiv.art !== 'gjenoppretting') {
-      s.reservasjon.gren = aktiv.id
-      logg(s, { kl: na, hendelse: 'gren_funnet', oppgave: s.reservasjon.oppgave, melding: `Fant kurateringsgrenen ${aktiv.id}.` })
-    }
     if (s.appgren) folgGren(s, s.appgren, perId.get(s.appgren.id) ?? null, na)
     else avsluttHoldtGren(s, perId.get(s.reservasjon?.gren ?? s.gjenoppta?.gren ?? '') ?? null, na, innst)
+
+    const aktiv = aktive.get(s.stoff)
+    // Uten egen gren: reservasjonen, ellers et avbrutt forsøk som står uten grenen sin.
+    const uten = s.appgren ? null : s.reservasjon ? (s.reservasjon.gren ? null : s.reservasjon) : s.gjenoppta && !s.gjenoppta.gren ? s.gjenoppta : null
+    const feil = aktiv && uten ? koblingsfeil(s.stoff, aktiv, s.reservasjon?.modus ?? s.modus) : null
+    if (aktiv && uten && !feil) {
+      uten.gren = aktiv.id
+      fjernBlokkering(s, 'gren_feil_kobling')
+      logg(s, { kl: na, hendelse: 'gren_funnet', oppgave: uten.oppgave, melding: `Fant kurateringsgrenen ${aktiv.id}.` })
+    }
 
     if (aktiv && aktiv.id !== kjentGren(s)) {
       blokker(s, {
         kode: 'annen_gren',
-        grunn: `Fagsiden har en aktiv kurateringsgren køen ikke følger (${aktiv.art}, ${aktiv.status}); den må avsluttes først.`,
+        grunn: `Fagsiden har en aktiv kurateringsgren køen ikke følger (${aktiv.art}, ${aktiv.status}); den må avsluttes først.${feil ? ` ${feil}` : ''}`,
         kl: na,
         kilde: 'system',
       })
@@ -296,6 +344,14 @@ function folgGren(s: Kostoff, a: Kurateringsappgren, g: Greninfo | null, na: str
     logg(s, { kl: na, hendelse: 'gren_ukjent', oppgave: a.oppgave, melding: `Kurateringsgrenen ${a.id} finnes ikke.` })
     return
   }
+  const feil = koblingsfeil(s.stoff, g, a.modus)
+  if (feil) {
+    // Oppgaven står igjen uten grenen, så arbeidet kan fortsette når riktig gren er koblet.
+    tilKuratoren(s, a, feil, null, na)
+    brytKobling(s, a.oppgave, feil, na)
+    return
+  }
+  fjernBlokkering(s, 'gren_feil_kobling')
   if (g.status !== a.status || g.revisjon !== a.revisjon) {
     logg(s, { kl: na, hendelse: `gren_${g.status}`, oppgave: a.oppgave, melding: `Grenen: ${g.status}, revisjon ${g.revisjon}, kontrollrunde ${g.runde}.` })
   }
@@ -320,18 +376,7 @@ function folgGren(s: Kostoff, a: Kurateringsappgren, g: Greninfo | null, na: str
           : g.status === 'blokkert'
           ? 'Publiseringen stoppet; grenen må oppdateres.'
           : 'Grenen er tilbake hos kuratoren.'
-    s.gjenoppta = {
-      oppgave: a.oppgave,
-      okt: s.siste_kjoring?.okt ?? '',
-      avbrutt_kl: na,
-      grunn,
-      fase: null,
-      jobbgren: a.jobbgren,
-      kurateringsgren: null,
-      pr: null,
-      gren: a.id,
-    }
-    s.appgren = null
+    tilKuratoren(s, a, grunn, a.id, na)
     // En kontrollrunde er ikke et mislykket forsøk.
     s.forsok = 0
     s.tidligst_kl = null
@@ -372,12 +417,22 @@ function grenForkastet(s: Kostoff, oppgave: string, na: string) {
  * publisert eller forkastet før kuratoren meldte den ferdig (f.eks. en
  * godkjent gren kuratoren publiserte, men kjøringen stoppet før `fullfort`):
  * reservasjonen avsluttes, og stoffet føres som publisert eller blokkeres.
- * Kunnskapsgrensen er da ukjent.
+ * Kunnskapsgrensen er da ukjent. En gren som ikke kan være kurateringen av
+ * stoffet, kobles fra, hvilken status den enn har.
  */
 function avsluttHoldtGren(s: Kostoff, g: Greninfo | null, na: string, innst: Koinnstillinger) {
-  if (!g || erAktivGren(g.status)) return
+  if (!g) return
   const r = s.reservasjon
   const oppgave = r?.oppgave ?? s.gjenoppta!.oppgave
+  const feil = koblingsfeil(s.stoff, g, r?.modus ?? s.modus)
+  if (feil) {
+    if (r?.gren === g.id) r.gren = null
+    if (s.gjenoppta?.gren === g.id) s.gjenoppta.gren = null
+    brytKobling(s, oppgave, feil, na)
+    return
+  }
+  fjernBlokkering(s, 'gren_feil_kobling')
+  if (erAktivGren(g.status)) return
   if (r) {
     s.siste_kjoring = { oppgave, okt: r.okt, startet_kl: r.reservert_kl, avsluttet_kl: na, utfall: g.status === 'publisert' ? 'fullfort' : 'feilet' }
     s.reservasjon = null
@@ -609,6 +664,8 @@ export interface Behandlingskontekst {
   na: string
   kjoring: string | null
   innst: Koinnstillinger
+  /** Kurateringsgrenene i OUSFAR, når de kunne leses: en meldt gren må passe til stoffet og modusen. */
+  grener?: readonly Greninfo[] | null
 }
 
 /** Stoffet med nøkkelen eller navnet. */
@@ -780,6 +837,11 @@ function utfor(t: Kotilstand, f: Foresporsel, k: Behandlingskontekst, svar: (u: 
       if (f.gren !== undefined) {
         const annen = Object.values(t.stoffer).find((x) => x !== s && kjentGren(x) === f.gren)
         if (annen) return svar('avvist', `Kurateringsgrenen ${f.gren} hører til ${annen.stoff}.`)
+        // En gren køen ikke ser ennå, kontrolleres når den leses.
+        const g = k.grener?.find((x) => x.id === f.gren)
+        const feil = g ? koblingsfeil(s.stoff, g, f.modus ?? r.modus) : null
+        if (feil) return svar('avvist', `${feil} Meld kurateringsgrenen for ${s.stoff}; reservasjonen står som før.`)
+        if (g) fjernBlokkering(s, 'gren_feil_kobling')
       }
       if (f.fase !== undefined) r.fase = f.fase
       if (f.jobbgren) r.jobbgren = f.jobbgren

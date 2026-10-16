@@ -149,9 +149,17 @@ finnes ingen hemmelighet å lagre; serveren slipper bare inn «Kurateringskø» 
 `main`. Svarer OUSFAR ikke, går kjøringen videre uten grenene og prøver igjen
 neste time.
 
+- **Riktig stoff og art.** En gren hører bare til et stoff når den gjelder
+  det samme stoffet og har arten kurateringen krever: `de_novo` for en de
+  novo-kuratering, `kuratering` for evidensovervåkning og oppdatering. En
+  `gren` i `forny` eller `fullfort` som ikke passer, avvises, og reservasjonen
+  står som før. Kunne køen ikke se grenen da den ble meldt, kontrolleres den
+  når grenene leses: koblingen brytes, oppgaven står i `gjenoppta` uten grenen,
+  og stoffet blokkeres (`gren_feil_kobling`) til riktig gren er koblet. En slik
+  gren føres aldri som stoffets kuratering, heller ikke når den publiseres.
 - **Reservert.** Kuratoren melder grenen med `forny` (`gren`) så snart den er
   åpnet. Har den ikke gjort det, kobler køen den åpne grenen for stoffet til
-  reservasjonen selv.
+  reservasjonen selv, eller til et avbrutt forsøk som står uten gren.
 - **Til kontroll.** `fullfort` med `gren` avslutter reservasjonen, og køen
   følger grenen (`venter_godkjenning`). Den teller ikke mot `maks_aktive`.
 - **Kontrollrundene.** Når kontrolløren har bedt om endringer

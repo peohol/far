@@ -17,7 +17,7 @@ export const ENDRINGSLOGG: Endring[] = [
     sammendrag: 'Kurateringskøen følger kurateringsgrenene, og Claude kan kuratere fagsider etter den faglige protokollen',
     typer: ['Funksjonalitet'],
     omfang: 'Minimalt omfang',
-    punkter: ['Ingen endring i appen. Kurateringskøen følger nå hver kuratering i dens egen arbeidsversjon, gjennom kontrollrundene mellom kuratoren og kontrolløren, fram til den er publisert. Claude kan kuratere fagsidene etter den samme faglige protokollen og de samme kvalitetskravene som før, mens ChatGPT kontrollerer og godkjenner hver kuratering uavhengig.'],
+    punkter: ['Ingen endring i appen. Kurateringskøen følger nå hver kuratering i dens egen arbeidsversjon, gjennom kontrollrundene mellom kuratoren og kontrolløren, fram til den er publisert, og den føres bare som ferdig for det stoffet og den kurateringsarten arbeidsversjonen faktisk gjelder. Claude kan kuratere fagsidene etter den samme faglige protokollen og de samme kvalitetskravene som før, mens ChatGPT kontrollerer og godkjenner hver kuratering uavhengig.'],
     utenVarsel: true,
   },
   {
