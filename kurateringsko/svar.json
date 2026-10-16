@@ -1,23 +1,23 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-lurasidon-1",
-  "foresporsel_sha256": "78a5a65e990d5fbdb13862e43b16f8ee025fa9de2b0edaef7c6116dc752c713d",
-  "handling": "reserver",
+  "foresporsel_id": "forny-lurasidon-1",
+  "foresporsel_sha256": "34f8900e490d10c4b70eab8be228f2dece526eb1eb65f2f9316b00f707972ff2",
+  "handling": "forny",
   "utfall": "ok",
-  "melding": "lurasidon er reservert til 2026-10-16T17:14:02.497Z.",
-  "behandlet_kl": "2026-10-16T14:14:02.497Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38914065121",
+  "melding": "Reservasjonen av lurasidon varer til 2026-10-16T17:15:34.223Z.",
+  "behandlet_kl": "2026-10-16T14:15:34.223Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38914276924",
   "oppgave": {
     "oppgave": "lurasidon-0004",
     "stoff": "lurasidon",
     "navn": "Lurasidon",
     "modus": "de_novo",
     "forsok": 1,
-    "frist_kl": "2026-10-16T17:14:02.497Z",
+    "frist_kl": "2026-10-16T17:15:34.223Z",
     "jobbgren": "kuratorjobb/lurasidon-0004",
     "kurateringsgren": "kuratering/lurasidon-0004",
     "pr": null,
-    "gren": null,
+    "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95",
     "gjenoppta": null,
     "sist_kuratert": null,
     "maal": {
@@ -30,16 +30,8 @@
       "elementer_uten_kilde": 20
     },
     "prioritet": {
-      "poeng": 800.7,
-      "grunner": [
-        "Står først i innstillingene.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "7 av 13 redaksjonelle seksjoner er tomme.",
-        "20 av 23 elementer har ingen kilde.",
-        "Bare 2 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
