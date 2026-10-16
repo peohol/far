@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T13:01:39.299Z",
+  "oppdatert_kl": "2026-10-16T13:22:58.775Z",
   "malt_kl": "2026-10-15T21:31:44.469Z",
   "teller": 3,
   "stoffer": {
@@ -1523,11 +1523,19 @@
     "ghb": {
       "stoff": "ghb",
       "navn": "GHB",
-      "status": "fagarbeid_ferdig",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 637.9,
+        "grunner": [
+          "Står først i innstillingene.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "11 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 3 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-15T21:31:45.692Z",
@@ -1539,23 +1547,10 @@
         "elementer_uten_kilde": 1
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
       "gjenoppta": null,
-      "pr": {
-        "nummer": 228,
-        "url": "https://github.com/peohol/far/pull/228",
-        "oppgave": "ghb-0001",
-        "modus": "de_novo",
-        "runde": 1,
-        "kunnskapsgrense": "2026-10-14",
-        "kurateringsgren": "kuratering/ghb-0001",
-        "jobbgren": "kuratorjobb/ghb-0001",
-        "registrert_kl": "2026-10-14T07:39:28.362Z",
-        "tilstand": "utkast",
-        "sammenslatt_kl": null,
-        "utrullet_kl": null
-      },
+      "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
       "siste_kjoring": {
@@ -1604,6 +1599,18 @@
           "hendelse": "pr_utkast",
           "oppgave": "ghb-0001",
           "melding": "PR #228: utkast."
+        },
+        {
+          "kl": "2026-10-16T13:22:58.775Z",
+          "hendelse": "pr_lukket",
+          "oppgave": "ghb-0001",
+          "melding": "PR #228 ble lukket uten å bli slått sammen."
+        },
+        {
+          "kl": "2026-10-16T13:22:58.775Z",
+          "hendelse": "tilbakestilt",
+          "okt": "kurateringsko/okt/20261016-132230-admin",
+          "melding": "PR #228 lukket etter Peders beslutning; piloten kurateres i en kurateringsgren"
         }
       ],
       "appgren": null
@@ -4649,8 +4656,29 @@
           }
         }
       },
-      "besvart_commit": null,
+      "besvart_commit": "6b01a744e8c349810d5664486ca74905c966dab0",
       "sist_brukt_kl": "2026-10-16T13:01:39.299Z"
+    },
+    "kurateringsko/okt/20261016-132230-admin": {
+      "ider": [
+        "tilbakestill-ghb"
+      ],
+      "siste": {
+        "id": "tilbakestill-ghb",
+        "sha256": "0e7e0f3747f18cf02fe5db3e5eff99a8885ea4dbc792985e48c4665958ad499c",
+        "svar": {
+          "versjon": 1,
+          "foresporsel_id": "tilbakestill-ghb",
+          "foresporsel_sha256": "0e7e0f3747f18cf02fe5db3e5eff99a8885ea4dbc792985e48c4665958ad499c",
+          "handling": "tilbakestill",
+          "utfall": "ok",
+          "melding": "ghb er tilbakestilt.",
+          "behandlet_kl": "2026-10-16T13:22:58.775Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38907369381"
+        }
+      },
+      "besvart_commit": null,
+      "sist_brukt_kl": "2026-10-16T13:22:58.775Z"
     }
   }
 }
