@@ -12,6 +12,15 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.92.8',
+    dato: '2026-10-16',
+    sammendrag: 'Plan for isolerte kurateringsgrener og fullstendig versjonshistorikk for fagsidene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: ['Ingen endring i appen. En beskrivelse av hvordan fagsidene skal kunne kurateres i en egen arbeidsversjon, kontrolleres faglig felt for felt og publiseres samlet, er lagt inn som grunnlag for arbeidet videre.'],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.92.7',
     dato: '2026-10-14',
     sammendrag: 'Citalopram: to preparatomtaler og tydeligere forklaring av ADH-bivirkningen',
