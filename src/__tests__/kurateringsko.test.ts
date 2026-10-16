@@ -357,9 +357,23 @@ describe('kurateringsgrenene i OUSFAR', () => {
       reservasjon: null,
       gjenoppta: null,
       siste_kjoring: { utfall: 'fullfort' },
-      sist_kuratert: { kl: om(T0, 3), modus: 'de_novo', kunnskapsgrense: null, runde: 1, gren: GREN, kilde: 'ko' },
+      // Kunnskapsgrensen fra kontrollrunden følger grenen til publiseringen.
+      sist_kuratert: { kl: om(T0, 3), modus: 'de_novo', kunnskapsgrense: '2026-11-01', runde: 1, gren: GREN, kilde: 'ko' },
     })
+    // Et fullfort etter at køen har sett publiseringen, godtas uten å endre noe; fra en annen økt avvises det.
+    const sen = f('fullfort', { oppgave: igjen.oppgave, gren: GREN, kunnskapsgrense: '2026-11-02' })
+    expect(behandle(t, sen, kontekst('kurateringsko/okt/b', om(T0, 3.5)))).toMatchObject({ utfall: 'ok' })
+    expect(behandle(t, { foresporsel: { ...sen.foresporsel, id: 'annen' } }, kontekst('kurateringsko/okt/x', om(T0, 3.5))).utfall).toBe('avvist')
+    expect(t.stoffer.beta!.sist_kuratert).toMatchObject({ kunnskapsgrense: '2026-11-01' })
     expect(behandle(t, f('reserver', { stoff: 'beta' }), kontekst('kurateringsko/okt/c', om(T0, 4))).utfall).not.toBe('ok')
+
+    // Uten kunnskapsgrense (en gren publisert før den ble meldt ferdig): et sent fullfort fra økten fører den inn.
+    const v = ny()
+    const uten = behandle(v, f('reserver', { stoff: 'beta' }), kontekst('kurateringsko/okt/a')).oppgave!
+    behandle(v, f('forny', { oppgave: uten.oppgave, gren: GREN }), kontekst('kurateringsko/okt/a', om(T0, 1)))
+    expect(steg(v, [gren('publisert', { runde: 1, publisert_kl: om(T0, 2) })], om(T0, 2))).toMatchObject({ sist_kuratert: { kunnskapsgrense: null } })
+    expect(behandle(v, f('fullfort', { oppgave: uten.oppgave, gren: GREN, kunnskapsgrense: '2026-11-01' }), kontekst('kurateringsko/okt/a', om(T0, 3)))).toMatchObject({ utfall: 'ok' })
+    expect(v.stoffer.beta!.sist_kuratert).toMatchObject({ kunnskapsgrense: '2026-11-01', gren: GREN })
 
     // En gren som står i et avbrutt forsøk, og som forkastes: stoffet blokkeres, og forsøket glemmes.
     const u = ny()

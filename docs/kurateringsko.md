@@ -169,7 +169,10 @@ neste time.
 - **Publisert.** Stoffet får grenen som sin siste kuratering. Det gjelder
   også en gren som er reservert eller står i `gjenoppta` (f.eks. en godkjent
   gren kuratoren publiserte før kjøringen stoppet): reservasjonen avsluttes,
-  og kunnskapsgrensen står som ukjent.
+  med kunnskapsgrensen grenen sist ble meldt ferdig med (den følger grenen
+  gjennom kontrollrundene). Et `fullfort` for oppgaven fra samme økt etter
+  det, godtas uten å endre noe, og fører bare inn kunnskapsgrensen om den
+  manglet.
 - **Stoppet.** En forkastet gren (også en reservert eller i `gjenoppta`) gir
   blokkeringen `gren_forkastet`, en stanset
   gren `gren_stanset`. Finnes det en åpen gren for stoffet som ikke er den køen

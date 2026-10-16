@@ -12,6 +12,15 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.99.2',
+    dato: '2026-10-16',
+    sammendrag: 'Kurateringskøen husker kunnskapsgrensen gjennom kontrollrundene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: ['Ingen endring i appen. Når en kuratering ble godkjent og publisert etter en kontrollrunde, mistet kurateringskøen datoen kildesøket gjaldt til. Nå følger datoen kurateringen fram til publiseringen.'],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.99.1',
     dato: '2026-10-16',
     sammendrag: 'Referansepillene flimrer ikke lenger når pekeren holdes over dem',
