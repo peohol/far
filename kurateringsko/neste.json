@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-16T19:09:06.814Z",
+  "oppdatert_kl": "2026-10-16T19:10:15.096Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
     "klar": 92,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 0,
     "sammenslatt": 0,
-    "publisert": 2,
+    "publisert": 3,
     "blokkert": 4,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "ghb",
-      "oppgave": "ghb-0010",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-16T22:09:06.814Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "neste": [],
   "til_gjennomgang": [],
   "blokkert": [
