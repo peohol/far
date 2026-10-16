@@ -605,6 +605,36 @@ describe('kommentarene', () => {
   })
 })
 
+describe('statusen og agentene', () => {
+  it('gir en liten status uten fagtekst til den som kan lese grenen, med det kuratoren gjør nå', async () => {
+    const k = await kuratertGren('Statusstoff')
+    await agent(claude, 'aktivitet', { gren: k.gren, tekst: 'Kontrollerer doseringen', seksjon: 'dosering', objekt: k.dosering })
+    const status = await adm<Json>('status', { gren: k.gren })
+    expect(Object.keys(status).sort()).toEqual(
+      ['aktivitet', 'apne_sperrer', 'blindfase', 'id', 'kurator_sist_sett_kl', 'oppdatert_kl', 'revisjon', 'runde', 'status'].sort(),
+    )
+    expect(status).toMatchObject({ id: k.gren, status: 'arbeid', revisjon: 1, apne_sperrer: 0, aktivitet: { tekst: 'Kontrollerer doseringen', objekt: k.dosering } })
+    expect(JSON.stringify(status)).not.toContain('Ny dosering')
+    expect(await agent<Json>(chatgpt, 'status', { gren: k.gren })).toMatchObject({ revisjon: 1 })
+    await agent(chatgpt, 'kommenter', { gren: k.gren, tekst: 'Mangler kilde.', art: 'sperrende' })
+    expect(await adm<Json>('status', { gren: k.gren })).toMatchObject({ apne_sperrer: 1 })
+    expect((await feilFra(() => adm('status', { gren: k.gren }, leser)))?.code).toBe('42501')
+    expect((await feilFra(() => adm('status', { gren: crypto.randomUUID() })))?.code).toBe('PT404')
+  })
+
+  it('har hver handling i lista som en funksjon, og gir Claude-kuratoren en nøkkel uten at nøkkelen står i repoet', async () => {
+    const mangler = await kall.fasit<{ handling: string }>(
+      `select h.handling from kuratering.handlingsliste h
+       where not exists (select 1 from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+                         where n.nspname = 'kuratering' and p.proname = 'h_' || h.handling)`,
+    )
+    expect(mangler).toEqual([])
+    const fil = readFileSync(new URL('../../supabase/migrations/20261016070000_kurateringsagenter.sql', import.meta.url), 'utf8')
+    expect(fil).toMatch(/nokkel_sha256 = '[0-9a-f]{64}'/)
+    expect(fil).not.toMatch(/far_[0-9a-f]{32,}/)
+  })
+})
+
 describe('de novo', () => {
   it('holder fagteksten fra før skjult for kuratoren til blindfasen er avsluttet', async () => {
     const s = await nyFagside('Denovo')

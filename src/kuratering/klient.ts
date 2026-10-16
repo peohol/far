@@ -11,7 +11,7 @@ import { lesBivirkningsdata } from '../bivirkninger/lesing'
 import { tilFeil, type Databasefeil } from '../faginnhold/lagring'
 import { TOM_STOFFSIDE, type Stoffsidedata } from '../faginnhold/lesing'
 import type { Sideutgave } from '../faginnhold/sidesammenligning'
-import type { Anker, Grendetaljer, Grensammendrag, Sideversjonsdata, Versjonsinfo } from './modell'
+import type { Agentinfo, Anker, Grendetaljer, Grensammendrag, Grenstatusdata, Sideversjonsdata, Versjonsinfo } from './modell'
 
 /** Svaret på en publisering: `ok: false` når den stoppet, og grenen er blokkert med grunnen. */
 export interface Publiseringssvar {
@@ -27,6 +27,8 @@ export type Sideutgavedata = Required<Sideutgave>
 export interface Kurateringsklient {
   oversikt(valg?: { stoff?: string; alle?: boolean }): Promise<Grensammendrag[]>
   les(gren: string, revisjon?: number): Promise<Grendetaljer>
+  /** Den lille statusen, til å se om noe er nytt. */
+  status(gren: string): Promise<Grenstatusdata>
   vurder(gren: string, revisjon: number, beslutning: 'godkjent' | 'endringer', begrunnelse: string): Promise<Grensammendrag>
   publiser(gren: string, revisjon: number): Promise<Publiseringssvar>
   stans(gren: string, grunn?: string): Promise<Grensammendrag>
@@ -37,6 +39,9 @@ export interface Kurateringsklient {
   kommenter(gren: string, kommentar: { tekst: string; art?: 'merknad' | 'sperrende'; anker?: Anker; svarPa?: string }): Promise<unknown>
   lukkKommentar(gren: string, kommentar: string, tekst?: string): Promise<unknown>
   gjenapneKommentar(gren: string, kommentar: string, tekst: string): Promise<unknown>
+  agenter(): Promise<Agentinfo[]>
+  /** En ny nøkkel til agenten; den gamle slutter å virke. Nøkkelen gis bare her, og lagres bare som SHA-256. */
+  nyAgentnokkel(agent: string): Promise<{ agent: string; nokkel: string }>
   /** Versjonene av fagsiden, nyeste først. */
   versjoner(stoff: string): Promise<Versjonsinfo[]>
   /** Én versjon av fagsiden, eller `null` når den ikke finnes. */
@@ -76,6 +81,7 @@ export function lagKurateringsklient(klient: SupabaseClient): Kurateringsklient 
   return {
     oversikt: (valg = {}) => admin<Grensammendrag[]>('oversikt', valg).then((r) => r ?? []),
     les: (gren, revisjon) => admin('les', revisjon === undefined ? { gren } : { gren, revisjon }),
+    status: (gren) => admin('status', { gren }),
     vurder: (gren, revisjon, beslutning, begrunnelse) => admin('vurder', { gren, revisjon, beslutning, begrunnelse }),
     publiser: (gren, revisjon) => admin('publiser', { gren, revisjon }),
     stans: (gren, grunn) => admin('stans', { gren, ...(grunn && { grunn }) }),
@@ -86,6 +92,8 @@ export function lagKurateringsklient(klient: SupabaseClient): Kurateringsklient 
       admin('kommenter', { gren, tekst, ...(svarPa ? { svar_pa: svarPa } : { art: art ?? 'merknad', ...(anker && { anker }) }) }),
     lukkKommentar: (gren, kommentar, tekst) => admin('lukk_kommentar', { gren, kommentar, ...(tekst && { tekst }) }),
     gjenapneKommentar: (gren, kommentar, tekst) => admin('gjenapne_kommentar', { gren, kommentar, tekst }),
+    agenter: () => admin<Agentinfo[]>('agenter').then((r) => r ?? []),
+    nyAgentnokkel: (agent) => admin('ny_agentnokkel', { agent }),
     versjoner: (stoff) => kall<Versjonsinfo[]>('les_sideversjoner', { stoff }).then((r) => r ?? []),
     versjon: async (stoff, nr) => {
       const [data, bivirkninger] = await Promise.all([

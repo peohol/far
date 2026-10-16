@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.97.0',
+    dato: '2026-10-16',
+    sammendrag: '«Følg agenten» på kurateringene, og nøklene til KI-agentene i administrasjonsmenyen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    gjelder: ['vinduer'],
+    punkter: [
+      'Siden for hver kuratering viser om agenten arbeider, venter eller er stanset, og hva den holder på med. Med «Følg agenten» oppdateres siden fortløpende, kortene agenten nettopp endret markeres, og siden ruller dit agenten arbeider. Ruller du selv, slutter den å følge.',
+      'Under «Kurateringer» i administrasjonsmenyen står agentene, med når de sist var innom. «Lag ny nøkkel» gir en ny nøkkel og adressen ChatGPT kobles til med; nøkkelen vises bare den ene gangen.',
+    ],
+  },
+  {
     versjon: '1.96.0',
     dato: '2026-10-16',
     sammendrag: 'Kommentartråder på kurateringene, festet til kort og felt, med sperrer som må løses før publisering',

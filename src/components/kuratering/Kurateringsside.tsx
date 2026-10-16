@@ -1,15 +1,26 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { tidspunkt } from '../../faginnhold/historikk'
 import { useHenting } from '../../hooks/useHenting'
 import { forhandsvisningen, type Kurateringsklient } from '../../kuratering/klient'
-import { ARTSNAVN, STATUSNAVN, erAktiv, kanPubliseres, type Grendetaljer } from '../../kuratering/modell'
+import {
+  ARTSNAVN,
+  STATUSNAVN,
+  erAktiv,
+  grenenErEndret,
+  kanPubliseres,
+  type Aktivitet,
+  type Grendetaljer,
+  type Grenstatusdata,
+} from '../../kuratering/modell'
 import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import { Button } from '../Button'
+import { Bryter } from '../Bryter'
 import { Lukkeknapp } from '../Lukkeknapp'
 import { Merke, type Merketone } from '../Merke'
 import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
 import { Bekreftknapp } from '../traad/Smadeler'
 import { useFaginnholdskilde } from '../stoffside/Faginnholdskilde'
+import { Agentindikator, FOLG_HVER, STATUS_HVER, useFolging, useGrenstatus, useNyligEndret } from './Folgagenten'
 import { Kommentartrader, apneTraader } from './Kommentartrader'
 import { Sidesammenligning, Utgavevisning } from './Utgavevisning'
 import type { Utgavesideprops } from './Versjonsside'
@@ -53,9 +64,28 @@ export function Kurateringsside({ gren, ...props }: Utgavesideprops & { gren: st
 
 function Kurateringsinnhold({ gren: id, onGaaTil, ...props }: Utgavesideprops & { gren: string }) {
   const { kuratering } = useFaginnholdskilde()
+  if (!kuratering) {
+    return <Grenmelding tekst="Kurateringsgrenene er ikke tilgjengelige her." onLukk={() => onGaaTil({ side: 'stoffregister' })} />
+  }
+  return <Grenvisning gren={id} klient={kuratering} onGaaTil={onGaaTil} {...props} />
+}
+
+function Grenmelding({ tekst, onLukk }: { tekst: string; onLukk: () => void }) {
+  return (
+    <section className="stoffside" aria-label="Kurateringsgren">
+      <ToppmenyInnhold spor="lukk">
+        <Lukkeknapp onLukk={onLukk} />
+      </ToppmenyInnhold>
+      <div className="utgavebanner" role="status">
+        <p className="utgavebanner__tittel">{tekst}</p>
+      </div>
+    </section>
+  )
+}
+
+function Grenvisning({ gren: id, klient: kuratering, onGaaTil, ...props }: Utgavesideprops & { gren: string; klient: Kurateringsklient }) {
   const [revisjon, setRevisjon] = useBevart<number | null>('revisjon', null)
   const hent = useCallback(async () => {
-    if (!kuratering) throw new Error('Kurateringsgrenene er ikke tilgjengelige her.')
     const gren = await kuratering.les(id, revisjon ?? undefined)
     // Versjonen revisjonen som vises bygger på; en eldre revisjon kan bygge på en eldre versjon.
     const grunnlag = await kuratering.versjon(gren.stoff, gren.grunnlag?.versjon?.nr ?? gren.grunnversjon)
@@ -64,29 +94,47 @@ function Kurateringsinnhold({ gren: id, onGaaTil, ...props }: Utgavesideprops & 
   const { tilstand, hentPaNytt } = useHenting(hent)
   const [sammenligner, setSammenligner] = useBevart('sammenligner', false)
   const [kommenterer, setKommenterer] = useBevart('kommenterer', false)
+  const [folg, setFolg] = useBevart('folg', false)
+  const slaAvFolging = useCallback(() => setFolg(false), [setFolg])
+  const { status, brutt } = useGrenstatus(kuratering, id, folg ? FOLG_HVER : STATUS_HVER)
+  const lest = tilstand.status === 'klar' ? tilstand.data.gren : null
 
-  if (tilstand.status !== 'klar' || !kuratering) {
+  // Noe nytt i grenen (en revisjon, en status, en sperre): les den på nytt,
+  // når den siste revisjonen vises. Én gang per nytt svar.
+  const lestFor = useRef<string | null>(null)
+  useEffect(() => {
+    if (!lest || !status || revisjon !== null || !grenenErEndret(lest, status)) return
+    const nokkel = `${status.revisjon}:${status.status}:${status.runde}:${status.apne_sperrer}`
+    if (lestFor.current === nokkel) return
+    lestFor.current = nokkel
+    hentPaNytt()
+  }, [lest, status, revisjon, hentPaNytt])
+
+  const visning = useMemo(() => (lest ? forhandsvisningen(lest) : null), [lest])
+  const aktivitet = status?.aktivitet ?? lest?.aktivitet
+  useNyligEndret(visning)
+  useFolging(folg, aktivitet, lest?.grenrevisjon?.revisjon ?? 0, slaAvFolging)
+
+  if (tilstand.status !== 'klar') {
     return (
-      <section className="stoffside" aria-label="Kurateringsgren">
-        <ToppmenyInnhold spor="lukk">
-          <Lukkeknapp onLukk={() => onGaaTil({ side: 'stoffregister' })} />
-        </ToppmenyInnhold>
-        <div className="utgavebanner" role="status">
-          <p className="utgavebanner__tittel">
-            {tilstand.status === 'feil' ? `Fikk ikke hentet kurateringsgrenen. ${tilstand.melding}` : 'Henter kurateringsgrenen …'}
-          </p>
-        </div>
-      </section>
+      <Grenmelding
+        tekst={tilstand.status === 'feil' ? `Fikk ikke hentet kurateringsgrenen. ${tilstand.melding}` : 'Henter kurateringsgrenen …'}
+        onLukk={() => onGaaTil({ side: 'stoffregister' })}
+      />
     )
   }
 
   const { gren, grunnlag } = tilstand.data
-  const visning = forhandsvisningen(gren)
   const tilSiden = () => onGaaTil({ side: 'stoff', stoff: gren.stoff })
   const banner = (
     <Grenbanner
       gren={gren}
       klient={kuratering}
+      status={status}
+      brutt={brutt}
+      aktivitet={aktivitet}
+      folg={folg}
+      onFolg={setFolg}
       siste={revisjon === null || revisjon === gren.revisjon}
       onVelgRevisjon={setRevisjon}
       onSammenlign={() => setSammenligner(true)}
@@ -139,6 +187,11 @@ function Kurateringsinnhold({ gren: id, onGaaTil, ...props }: Utgavesideprops & 
 function Grenbanner({
   gren,
   klient,
+  status,
+  brutt,
+  aktivitet,
+  folg,
+  onFolg,
   siste,
   onVelgRevisjon,
   onSammenlign,
@@ -149,6 +202,12 @@ function Grenbanner({
 }: {
   gren: Grendetaljer
   klient: Kurateringsklient
+  status: Grenstatusdata | null
+  brutt: boolean
+  /** Det agenten sist sa den gjorde, fra statusen når den er nyere. */
+  aktivitet: Aktivitet | undefined
+  folg: boolean
+  onFolg: (pa: boolean) => void
   /** Om den siste revisjonen vises; bare den kan vurderes og publiseres. */
   siste: boolean
   onVelgRevisjon: (revisjon: number | null) => void
@@ -218,9 +277,17 @@ function Grenbanner({
         {r && <span>{tidspunkt(r.kl)}</span>}
       </p>
       {gren.status_grunn && <p className="utgavebanner__linje">{gren.status_grunn}</p>}
-      {gren.aktivitet && erAktiv(gren.status) && (
+      {erAktiv(gren.status) && gren.kurator && (
         <p className="utgavebanner__linje">
-          Nå: {gren.aktivitet.tekst} ({tidspunkt(gren.aktivitet.kl)})
+          <Agentindikator status={status} brutt={brutt} />
+          {aktivitet && (
+            <span>
+              {aktivitet.tekst} ({tidspunkt(aktivitet.kl)})
+            </span>
+          )}
+          <Bryter pa={folg} onEndre={onFolg}>
+            Følg agenten
+          </Bryter>
         </p>
       )}
       {r?.melding && <p className="utgavebanner__linje">«{r.melding}»</p>}

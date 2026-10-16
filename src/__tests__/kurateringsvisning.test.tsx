@@ -27,7 +27,8 @@ import { TOM_STOFFSIDE, type Faginnholdsleser, type Stoffsidedata, type Utgave }
 import type { Innholdselementinnhold } from '../faginnhold/modell'
 import { sammenlignSider } from '../faginnhold/sidesammenligning'
 import type { Kurateringsklient, Sideutgavedata } from '../kuratering/klient'
-import type { Grendetaljer, Grensammendrag, Versjonsinfo } from '../kuratering/modell'
+import { agenttilstand, type Agentinfo, type Grendetaljer, type Grensammendrag, type Grenstatusdata, type Versjonsinfo } from '../kuratering/modell'
+import { endredeKort } from '../components/kuratering/Folgagenten'
 import { GRUNNSTRUKTUR } from './hjelp/registerstruktur'
 
 beforeAll(() => {
@@ -139,11 +140,33 @@ function grendetaljer(overstyr: Partial<Grendetaljer> = {}): Grendetaljer {
   }
 }
 
-function klient(gren: Grendetaljer = grendetaljer()): Kurateringsklient {
+/** Statusen databasen gir for grenen, uten noe nytt. */
+function grenstatus(gren: Grendetaljer, overstyr: Partial<Grenstatusdata> = {}): Grenstatusdata {
+  return {
+    id: gren.id,
+    status: gren.status,
+    revisjon: gren.revisjon,
+    runde: gren.runde,
+    blindfase: gren.blindfase,
+    oppdatert_kl: gren.oppdatert_kl,
+    apne_sperrer: (gren.traader ?? []).filter((t) => t.status === 'apen' && t.art === 'sperrende').length,
+    ...overstyr,
+  }
+}
+
+const AGENTER: Agentinfo[] = [
+  { agent: 'claude-monografkurator', navn: 'Claude monografkurator', roller: ['kurator'], aktiv: true, har_nokkel: true, nokkel_kl: '2026-10-01T12:00:00Z' },
+  { agent: 'chatgpt-monografkurator', navn: 'ChatGPT monografkurator', roller: ['kontrollor'], aktiv: true, har_nokkel: false },
+]
+
+function klient(gren: Grendetaljer = grendetaljer(), status: Partial<Grenstatusdata> = {}): Kurateringsklient {
   const sammendrag = gren as Grensammendrag
   return {
     oversikt: vi.fn(async () => [sammendrag]),
     les: vi.fn(async () => gren),
+    status: vi.fn(async () => grenstatus(gren, status)),
+    agenter: vi.fn(async () => AGENTER),
+    nyAgentnokkel: vi.fn(async (agent: string) => ({ agent, nokkel: 'far_' + 'b'.repeat(64) })),
     vurder: vi.fn(async () => sammendrag),
     publiser: vi.fn(async () => ({ ok: true, status: 'publisert', versjon: 3 })),
     stans: vi.fn(async () => sammendrag),
@@ -325,6 +348,67 @@ describe('kommentartrådene', () => {
         anker: { objekt: DOSERING, felt: 'Tekst' },
       }),
     )
+  })
+})
+
+describe('følg agenten', () => {
+  const naa = () => new Date().toISOString()
+
+  it('viser hva agenten gjør, ruller til kortet når den følges, og slutter å følge når man ruller selv', async () => {
+    const gren = grendetaljer({ status: 'arbeid' })
+    const k = klient(gren, { aktivitet: { tekst: 'Kontrollerer doseringen', objekt: DOSERING, kl: naa() } })
+    const rull = vi.spyOn(Element.prototype, 'scrollIntoView')
+    vis(<Kurateringsside gren={GREN} onGaaTil={vi.fn()} {...felles} />, kilde(k))
+    expect(await screen.findByText('Agenten arbeider')).toBeTruthy()
+    expect(await screen.findByText(/Kontrollerer doseringen/)).toBeTruthy()
+    const bryter = screen.getByRole('switch', { name: 'Følg agenten' }) as HTMLInputElement
+    await userEvent.click(bryter)
+    await waitFor(() => expect(rull.mock.contexts).toContain(document.getElementById(`element-${DOSERING}`)))
+    window.dispatchEvent(new WheelEvent('wheel'))
+    await waitFor(() => expect(bryter.checked).toBe(false))
+    rull.mockRestore()
+  })
+
+  it('leser grenen på nytt når statusen sier at det er kommet en ny revisjon, men bare én gang', async () => {
+    const k = klient(grendetaljer(), { revisjon: 3 })
+    vis(<Kurateringsside gren={GREN} onGaaTil={vi.fn()} {...felles} />, kilde(k))
+    await waitFor(() => expect(k.les).toHaveBeenCalledTimes(2))
+    await new Promise((r) => setTimeout(r, 50))
+    expect(k.les).toHaveBeenCalledTimes(2)
+  })
+
+  it('skiller mellom en agent som arbeider, venter, er stanset og en brutt tilkobling', () => {
+    const gren = grendetaljer({ status: 'arbeid' })
+    const kl = '2026-10-01T12:00:00Z'
+    const t = Date.parse(kl)
+    const s = grenstatus(gren, { aktivitet: { tekst: 'Søker', kl } })
+    expect(agenttilstand(s, false, t + 60_000)).toBe('aktiv')
+    // Uten noe nytt fra kuratoren på ti minutter er det ikke belegg for at den arbeider.
+    expect(agenttilstand(s, false, t + 10 * 60_000)).toBe('venter')
+    expect(agenttilstand({ ...s, status: 'klar' }, false, t + 60_000)).toBe('venter')
+    expect(agenttilstand({ ...s, status: 'stanset' }, false, t)).toBe('stanset')
+    expect(agenttilstand({ ...s, status: 'publisert' }, false, t)).toBe('avsluttet')
+    expect(agenttilstand(s, true, t)).toBe('brutt')
+  })
+
+  it('finner kortene som er endret fra én revisjon til den neste', () => {
+    expect(endredeKort(GAMMEL, NY)).toEqual([DOSERING])
+    expect(endredeKort(NY, NY)).toEqual([])
+  })
+})
+
+describe('agentene', () => {
+  it('lister agentene og lager en ny nøkkel som vises én gang, med adressen til ChatGPT', async () => {
+    const k = klient()
+    render(<Kurateringsoversikt apen klient={k} onLukk={vi.fn()} />)
+    const liste = await screen.findByRole('list', { name: 'Agentene' })
+    expect(within(liste).getByText(/Claude monografkurator · Kurator/)).toBeTruthy()
+    expect(within(liste).getByText(/Ingen nøkkel · aldri sett/)).toBeTruthy()
+    await userEvent.click(within(liste).getByRole('button', { name: 'Lag nøkkel' }))
+    await userEvent.click(within(liste).getByRole('button', { name: 'Bekreft ny nøkkel til ChatGPT monografkurator.' }))
+    await waitFor(() => expect(k.nyAgentnokkel).toHaveBeenCalledWith('chatgpt-monografkurator'))
+    const mcp = (await screen.findByRole('textbox', { name: 'Adressen til ChatGPT (MCP)' })) as HTMLInputElement
+    expect(mcp.value).toBe(`${window.location.origin}/api/kuratering-mcp?nokkel=far_${'b'.repeat(64)}`)
   })
 })
 
