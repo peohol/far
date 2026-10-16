@@ -20,6 +20,7 @@ import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { PANELREKKEFOLGE } from '../faginnhold/paneler'
 import { kontrollerDekning, kontrollpunkter, tomMatrise } from '../kuratorprotokoll/dekning'
+import { SELVTESTKRAV, SELVTESTPORTER, tomSelvtest } from '../kuratorprotokoll/selvtest'
 import { AGENTHANDLINGER } from '../kuratering/handlinger'
 import { faginnholdskall, feilFra, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
@@ -801,6 +802,22 @@ describe('innholdsmodellen i databasen', () => {
     m.omrader[0]!.kilder = ['']
     expect(kontrollerDekning(m)).toHaveLength(1)
     expect(await dbFeil(m)).toHaveLength(1)
+  })
+
+  it('har de samme punktene i selvtesten som kuratorverktøyet', async () => {
+    const [rad] = await kall.fasit<{ krav: string[]; ikke_relevant: string[]; porter: string[] }>(
+      'select kuratering.selvtestkrav() as krav, kuratering.selvtestkrav_kan_vaere_ikke_relevant() as ikke_relevant, kuratering.selvtestporter() as porter',
+    )
+    expect(rad!.krav).toEqual(SELVTESTKRAV.map((k) => k.nokkel))
+    expect(rad!.ikke_relevant).toEqual(SELVTESTKRAV.filter((k) => 'kan_vaere_ikke_relevant' in k).map((k) => k.nokkel))
+    expect(rad!.porter).toEqual(SELVTESTPORTER.map((p) => p.nokkel))
+    // Malen fra verktøyet har hvert punkt, men holder ikke før status og bevis er fylt ut.
+    const mal = tomSelvtest()
+    const dbFeil = async (s: unknown) =>
+      (await kall.fasit<{ f: string[] }>(`select kuratering.dokumentfeil('selvtest', $1::jsonb) as f`, [JSON.stringify(s)]))[0]!.f
+    expect(await dbFeil(mal)).toHaveLength(2)
+    for (const o of [...mal.krav, ...mal.porter]) Object.assign(o, { status: 'bestatt', bevis: 'Syntetisk bevis' })
+    expect(await dbFeil(mal)).toEqual([])
   })
 })
 
