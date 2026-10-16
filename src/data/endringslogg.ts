@@ -12,6 +12,15 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.94.0',
+    dato: '2026-10-16',
+    sammendrag: 'Kurateringsgrener: fagsider kan kurateres i en egen arbeidsversjon og publiseres samlet etter faglig godkjenning',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: ['Ingen endring i appen ennå. En fagside kan nå kurateres i en egen, isolert arbeidsversjon som ikke påvirker den publiserte siden, kontrolleres og godkjennes av en uavhengig kontrollør, og publiseres samlet i ett steg.'],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.93.0',
     dato: '2026-10-16',
     sammendrag: 'Hver publisering av en fagside lagres som en hel versjon av siden',
