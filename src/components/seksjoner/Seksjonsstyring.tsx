@@ -1,7 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { useBevart, type Bevaringsform } from '../../oppdatering/Bevaring'
 import { rullefart } from '../../hooks/useKortHopp'
-import { MAKS_GLIDETID } from '../../hooks/useSkjuling'
+import { MAKS_GLIDETID, redusertBevegelse } from '../../hooks/useSkjuling'
+import { endeligRamme, lesFart, lesKurve, mellom } from '../../hooks/useFlytting'
 
 /**
  * Hvilke seksjoner og detaljkort på en side som er åpne, og veien til et sted
@@ -68,8 +69,9 @@ export interface Seksjonsstyring {
   tilstand(sti: readonly string[], apenFraStart: boolean): Skufftilstand
   /**
    * Brukeren åpner eller lukker skuffen. Åpnes den, lukkes søsknene straks,
-   * skuffen glir opp, og siden ruller den fram når den er tegnet: midtstilt
-   * når den får plass i det synlige feltet, ellers med toppen øverst.
+   * skuffen glir opp, og siden ruller den fram i én bevegelse som lander der
+   * den står ferdig åpnet: midtstilt når den får plass i det synlige feltet,
+   * ellers med toppen øverst.
    */
   sett(sti: readonly string[], apen: boolean): void
   /** Kalles av skuffen når den tegnes; gir tilbake avregistreringen. */
@@ -170,9 +172,10 @@ export function SeksjonsstyringKilde({ bevares = false, children }: { bevares?: 
     })
   }, [])
 
-  const rullNar = useCallback((nokkel: string, plass: Rullemal) => {
+  /** `sto`: hvor i vinduet skuffen sto før den ble åpnet (se `rullTilpasset`). */
+  const rullNar = useCallback((nokkel: string, plass: Rullemal, sto?: number) => {
     const skuff = finnSkuff(nokkel)
-    if (skuff) etterTegning(() => rull(skuff, plass))
+    if (skuff) etterTegning(() => rull(skuff, plass, sto))
     else venter.current = { nokkel, plass }
   }, [])
 
@@ -260,8 +263,14 @@ export function SeksjonsstyringKilde({ bevares = false, children }: { bevares?: 
     const sett = (sti: readonly string[], apen: boolean) => {
       const nokkel = skuffnokkel(sti)
       if (apen) {
+        // Før skuffen åpnes: nettleseren skal ikke flytte siden når det rundt
+        // skuffen skifter plass, og skuffen skal bli stående der brukeren
+        // trykket, til siden ruller den fram.
+        const slipp = laasAnker()
+        etterTegning(() => etterTegning(slipp))
+        const sto = finnSkuff(nokkel)?.getBoundingClientRect().top
         velg(kjedeFor(sti), true)
-        rullNar(nokkel, TILPASSET)
+        rullNar(nokkel, TILPASSET, sto)
       } else if (tilstand(sti, registrert.get(nokkel)?.apenFraStart ?? false).apen) {
         setValgt((forrige) => new Map(forrige).set(skuffnokkel(sti.slice(0, -1)), { nokkel: null, animer: true }))
       }
@@ -326,14 +335,18 @@ function etterTegning(gjor: () => void) {
   requestAnimationFrame(() => gjor())
 }
 
+/** Rullingen til en åpnet skuff som pågår, så en ny rulling tar over i stedet for å slåss med den. */
+let stoppRulling: (() => void) | null = null
+
 /**
  * Ruller elementet fram, straks for den som har bedt om mindre bevegelse.
  * Hvor langt under toppen av vinduet det legges, står i CSS
  * (`scroll-margin-top`, se `seksjoner.css`), så det havner under toppmenyen.
  */
-function rull(element: Element | null, plass: Rullemal) {
+function rull(element: Element | null, plass: Rullemal, sto?: number) {
   if (!element?.isConnected || !plass) return
-  if (plass === TILPASSET) rullTilpasset(element)
+  stoppRulling?.()
+  if (plass === TILPASSET) rullTilpasset(element, sto)
   else element.scrollIntoView({ behavior: rullefart(), block: plass })
 }
 
@@ -345,24 +358,75 @@ function rull(element: Element | null, plass: Rullemal) {
  * - Får skuffen plass i feltet når den er åpen, midtstilles den i det.
  * - Er den høyere, legges toppen rett under toppmenyen.
  *
- * Siden begynner å rulle straks, etter høyden skuffen er ventet å få. Når
- * den har glidd ferdig og høyden er den virkelige — og siden er lang nok til
- * å rulle helt fram — justeres det til riktig sted, med mindre brukeren
- * alt har begynt å rulle selv.
+ * Siden ruller i én bevegelse (`--fart-rull`, med `--kurve`) mot der skuffen
+ * står når den har åpnet seg ferdig: med høyden den er ventet å få, og — for
+ * et kort i et rutenett — på plassen det havner på når søsknene har krympet
+ * og naboene har flyttet seg (`endeligRamme`). Målet regnes ut på nytt i hvert
+ * bilde, så bevegelsen lander der den skal uten å gå for langt og rulle
+ * tilbake. Har skuffen ikke glidd ferdig når bevegelsen er over, følger siden
+ * den til den har det. Begynner brukeren å rulle selv, slipper siden taket.
+ *
+ * `sto` er hvor i vinduet skuffen sto før den ble åpnet. Har den flyttet seg
+ * fordi et åpent søsken over den ble lukket, legges siden først slik at den
+ * står der igjen, så bevegelsen begynner der brukeren trykket.
  */
-function rullTilpasset(skuff: Element) {
-  window.scrollTo({ top: tilpassetPlass(skuff), behavior: rullefart() })
+function rullTilpasset(skuff: Element, sto?: number) {
+  const rot = document.documentElement
+  const slippAnker = laasAnker()
+  const flyttet = sto === undefined ? 0 : skuff.getBoundingClientRect().top - sto
+  if (Math.abs(flyttet) > 0.5) window.scrollTo({ top: window.scrollY + flyttet, behavior: 'instant' })
+  const ms = redusertBevegelse() ? 0 : lesFart(rot, '--fart-rull')
+  const kurve = lesKurve(rot)
+  const fra = window.scrollY
+  const start = performance.now()
   const brukeren = folgBrukeren()
+  let glidd = false
   etterGlidning(skuff, () => {
-    if (brukeren.harRullet() || !skuff.isConnected) return
-    window.scrollTo({ top: tilpassetPlass(skuff), behavior: rullefart() })
+    glidd = true
   })
+  let ramme = 0
+  const stopp = () => {
+    cancelAnimationFrame(ramme)
+    brukeren.slipp()
+    slippAnker()
+    if (stoppRulling === stopp) stoppRulling = null
+  }
+  const steg = () => {
+    if (brukeren.harRullet() || !skuff.isConnected) return stopp()
+    const t = ms > 0 ? Math.min(1, Math.max(0, (performance.now() - start) / ms)) : 1
+    window.scrollTo({ top: mellom(fra, tilpassetPlass(skuff), kurve(t)), behavior: 'instant' })
+    if (t < 1 || !glidd) ramme = requestAnimationFrame(steg)
+    else stopp()
+  }
+  stoppRulling = stopp
+  steg()
+}
+
+/** Den som sist slo av nettleserens forankring av siden (se `laasAnker`). */
+let ankereier: object | null = null
+
+/**
+ * Slår av nettleserens egen forankring av siden (`overflow-anchor`) til
+ * funksjonen den gir, kalles. Når et kort i et rutenett åpnes, skifter kortene
+ * over og rundt det plass; forankringen ville da flytte siden i et hopp før
+ * rullingen begynner, mens kortene glir fra der de sto. Den som låser sist,
+ * eier låsen; en eldre opplåsing gjør ingenting.
+ */
+function laasAnker(): () => void {
+  const eier = {}
+  ankereier = eier
+  document.documentElement.style.setProperty('overflow-anchor', 'none')
+  return () => {
+    if (ankereier !== eier) return
+    ankereier = null
+    document.documentElement.style.removeProperty('overflow-anchor')
+  }
 }
 
 /** Hendelsene som viser at brukeren ruller eller gjør noe annet selv. */
 const EGNE_HENDELSER = ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const
 
-/** Følger med på om brukeren tar over rullingen, til `harRullet` spørres. */
+/** Følger med på om brukeren tar over rullingen, til `slipp` kalles. */
 function folgBrukeren() {
   let rullet = false
   const merk = () => {
@@ -370,16 +434,16 @@ function folgBrukeren() {
   }
   for (const h of EGNE_HENDELSER) window.addEventListener(h, merk, { capture: true, passive: true })
   return {
-    harRullet() {
+    harRullet: () => rullet,
+    slipp() {
       for (const h of EGNE_HENDELSER) window.removeEventListener(h, merk, { capture: true })
-      return rullet
     },
   }
 }
 
 /** Hvor langt ned siden skal rulles for å vise skuffen slik `rullTilpasset` beskriver. */
 function tilpassetPlass(skuff: Element): number {
-  const { top, height } = skuff.getBoundingClientRect()
+  const { top, height } = endeligRamme(skuff)
   const stil = window.getComputedStyle(skuff)
   const over = parseFloat(stil.scrollMarginTop) || 0
   const under = parseFloat(stil.scrollMarginBottom) || 0
@@ -406,18 +470,23 @@ function endeligHoyde(skuff: Element, naa: number): number {
   return innhold ? naa - innhold.getBoundingClientRect().height + innhold.scrollHeight : naa
 }
 
-/** Kjører `gjor` når skuffen har glidd ferdig, eller når den burde ha gjort det. */
+/**
+ * Kjører `gjor` når skuffen har glidd ferdig, eller når den burde ha gjort det
+ * — straks når den ikke glir, som når den er åpnet for den som har bedt om
+ * mindre bevegelse, eller et rutenett flytter den (se `useSkjuling`).
+ */
 function etterGlidning(skuff: Element, gjor: () => void) {
   const kropp = innholdI(skuff)?.parentElement
+  if (!kropp?.hasAttribute('data-glir')) return gjor()
   let ferdig = false
   const slutt = (event?: Event) => {
     if (ferdig || (event && event.target !== kropp)) return
     ferdig = true
-    kropp?.removeEventListener('transitionend', slutt)
+    kropp.removeEventListener('transitionend', slutt)
     clearTimeout(frist)
     // En skuff som er tatt bort mens den gled (siden er byttet), har ingenting å gjøre.
     if (skuff.isConnected) gjor()
   }
-  kropp?.addEventListener('transitionend', slutt)
+  kropp.addEventListener('transitionend', slutt)
   const frist = setTimeout(slutt, MAKS_GLIDETID)
 }

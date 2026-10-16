@@ -607,6 +607,32 @@ describe('rullingen', () => {
     return skuff
   }
 
+  /** Sier at skuffen har glidd ferdig. */
+  function gliddFerdig(id: string) {
+    const kropp = document.getElementById(id)!.querySelector('.skuff__kropp')!
+    act(() => {
+      const slutt = new Event('transitionend') as TransitionEvent
+      Object.defineProperty(slutt, 'propertyName', { value: 'grid-template-rows' })
+      kropp.dispatchEvent(slutt)
+    })
+  }
+
+  /** Stedene siden er rullet til, i rekkefølge. */
+  const steder = () => rulletTil.mock.calls.map(([valg]) => (valg as ScrollToOptions).top!)
+
+  /** Klokka rullingen går etter, og rullingen gitt en varighet, som når siden ruller jevnt. */
+  let klokke = 0
+  function jevnRulling() {
+    redusert = false
+    klokke = 0
+    vi.spyOn(performance, 'now').mockImplementation(() => klokke)
+    document.documentElement.style.setProperty('--fart-rull', '400ms')
+  }
+  afterEach(() => {
+    document.documentElement.style.removeProperty('--fart-rull')
+    vi.mocked(performance.now).mockRestore?.()
+  })
+
   it('midtstiller en skuff som får plass i det synlige feltet når den er åpnet', async () => {
     const user = userEvent.setup()
     render(<Side />)
@@ -614,7 +640,7 @@ describe('rullingen', () => {
     await user.click(knapp('B'))
     await nesteBilde()
     // 260 px høy i et felt på 684: 212 px luft over og under.
-    expect(rulletTil).toHaveBeenCalledWith({ top: RULLET + 300 - OVER - 212, behavior: 'auto' })
+    expect(rulletTil).toHaveBeenLastCalledWith({ top: RULLET + 300 - OVER - 212, behavior: 'instant' })
     expect(rullet).not.toHaveBeenCalled()
   })
 
@@ -624,7 +650,7 @@ describe('rullingen', () => {
     plasser('panel-b', { top: 300, hode: 60, innhold: 900 })
     await user.click(knapp('B'))
     await nesteBilde()
-    expect(rulletTil).toHaveBeenCalledWith({ top: RULLET + 300 - OVER, behavior: 'auto' })
+    expect(rulletTil).toHaveBeenLastCalledWith({ top: RULLET + 300 - OVER, behavior: 'instant' })
   })
 
   it('gjør det samme for et detaljkort, målt uten kortene i det', async () => {
@@ -637,7 +663,7 @@ describe('rullingen', () => {
     await user.click(knapp('K'))
     await nesteBilde()
     // 140 px høyt: (684 − 140) / 2 = 272 px luft.
-    expect(rulletTil).toHaveBeenLastCalledWith({ top: RULLET - 50 - OVER - 272, behavior: 'auto' })
+    expect(rulletTil).toHaveBeenLastCalledWith({ top: RULLET - 50 - OVER - 272, behavior: 'instant' })
   })
 
   it('ruller ikke når skuffen lukkes', async () => {
@@ -649,8 +675,8 @@ describe('rullingen', () => {
     expect(rullet).not.toHaveBeenCalled()
   })
 
-  it('ruller jevnt og lar skuffen gli, men lukker søsknene straks', async () => {
-    redusert = false
+  it('ruller i én jevn bevegelse som lander der skuffen står ferdig åpnet, uten å gå for langt', async () => {
+    jevnRulling()
     const user = userEvent.setup()
     render(<Side />)
     plasser('panel-b', { top: 300, hode: 60, innhold: 900 })
@@ -662,8 +688,27 @@ describe('rullingen', () => {
     const b = document.getElementById('panel-b')!
     expect(b.hasAttribute('data-stille')).toBe(false)
     expect(innholdFor(knapp('B')).parentElement!.hasAttribute('data-glir')).toBe(true)
+    const mal = RULLET + 300 - OVER
+
     await nesteBilde()
-    expect(rulletTil).toHaveBeenCalledWith({ top: RULLET + 300 - OVER, behavior: 'smooth' })
+    expect(steder()).toEqual([RULLET])
+    klokke = 200
+    await nesteBilde()
+    expect(steder().at(-1)).toBeGreaterThan(RULLET)
+    expect(steder().at(-1)).toBeLessThan(mal)
+    klokke = 400
+    await nesteBilde()
+    expect(steder().at(-1)).toBe(mal)
+    // Siden følger skuffen til den har glidd ferdig, og slipper så.
+    gliddFerdig('panel-b')
+    await nesteBilde()
+    const kall = rulletTil.mock.calls.length
+    await nesteBilde()
+    expect(rulletTil).toHaveBeenCalledTimes(kall)
+    // Hele veien framover, aldri forbi målet og tilbake.
+    const veien = steder()
+    expect(veien.every((top, i) => top <= mal && (i === 0 || top >= veien[i - 1]!))).toBe(true)
+    expect(rulletTil).toHaveBeenLastCalledWith({ top: mal, behavior: 'instant' })
   })
 
   it('åpner uten å gli og ruller straks for den som har bedt om mindre bevegelse', async () => {
@@ -674,49 +719,78 @@ describe('rullingen', () => {
     expect(innholdFor(knapp('B')).parentElement!.hasAttribute('data-glir')).toBe(false)
     expect(innholdFor(knapp('B')).hasAttribute('hidden')).toBe(false)
     await nesteBilde()
-    expect(rulletTil).toHaveBeenCalledWith(expect.objectContaining({ behavior: 'auto' }))
+    await nesteBilde()
+    expect(rulletTil).toHaveBeenCalledTimes(1)
+    expect(rulletTil).toHaveBeenCalledWith({ top: RULLET + 300 - OVER - 212, behavior: 'instant' })
   })
 
-  /** Sier at skuffen har glidd ferdig. */
-  function gliddFerdig(id: string) {
-    const kropp = document.getElementById(id)!.querySelector('.skuff__kropp')!
-    act(() => {
-      const slutt = new Event('transitionend') as TransitionEvent
-      Object.defineProperty(slutt, 'propertyName', { value: 'grid-template-rows' })
-      kropp.dispatchEvent(slutt)
-    })
-  }
-
-  it('justerer etter den virkelige høyden når skuffen har glidd ferdig', async () => {
-    redusert = false
+  it('sikter mot den virkelige høyden når skuffen blir en annen enn ventet', async () => {
+    jevnRulling()
     const user = userEvent.setup()
     render(<Side />)
     plasser('panel-b', { top: 300, hode: 60, innhold: 200 })
     await user.click(knapp('B'))
     await nesteBilde()
-    expect(rulletTil).toHaveBeenCalledTimes(1)
     // Ferdig åpnet ble skuffen 40 px høyere enn ventet (luft under som også glir): 300 px, 192 px luft.
     const skuff = document.getElementById('panel-b')!
     skuff.getBoundingClientRect = () => ({ top: 300, height: 300 }) as DOMRect
     const inner = innholdFor(knapp('B'))
     inner.getBoundingClientRect = () => ({ top: 360, height: 200 }) as DOMRect
+    klokke = 400
     gliddFerdig('panel-b')
-    expect(rulletTil).toHaveBeenCalledTimes(2)
-    expect(rulletTil).toHaveBeenLastCalledWith({ top: RULLET + 300 - OVER - 192, behavior: 'smooth' })
+    await nesteBilde()
+    expect(rulletTil).toHaveBeenLastCalledWith({ top: RULLET + 300 - OVER - 192, behavior: 'instant' })
   })
 
-  it('lar siden ligge når brukeren har begynt å rulle selv før skuffen har glidd ferdig', async () => {
-    redusert = false
+  it('begynner der skuffen sto, når et åpent søsken over den lukkes', async () => {
     const user = userEvent.setup()
     render(<Side />)
-    plasser('panel-b', { top: 300, hode: 60, innhold: 200 })
+    // B står 900 px ned; når A over lukkes, havner den 600 px høyere opp.
+    const b = plasser('panel-b', { top: 900, hode: 60, innhold: 900 })
+    // Etter at appen har tatt imot trykket, står B der den havner.
+    const flytt = () => {
+      b.getBoundingClientRect = () => ({ top: 300, height: 60 }) as DOMRect
+    }
+    document.addEventListener('click', flytt, { once: true })
+    await user.click(knapp('B'))
+    await nesteBilde()
+    expect(rulletTil.mock.calls[0]).toEqual([{ top: RULLET - 600, behavior: 'instant' }])
+  })
+
+  it('lar siden ligge når brukeren har begynt å rulle selv', async () => {
+    jevnRulling()
+    const user = userEvent.setup()
+    render(<Side />)
+    plasser('panel-b', { top: 300, hode: 60, innhold: 900 })
     await user.click(knapp('B'))
     await nesteBilde()
     act(() => {
       window.dispatchEvent(new Event('wheel'))
     })
+    const kall = rulletTil.mock.calls.length
+    klokke = 200
+    await nesteBilde()
     gliddFerdig('panel-b')
-    expect(rulletTil).toHaveBeenCalledTimes(1)
+    await nesteBilde()
+    expect(rulletTil).toHaveBeenCalledTimes(kall)
+  })
+
+  it('lar ikke nettleseren flytte siden på egen hånd mens skuffen åpnes og siden ruller', async () => {
+    jevnRulling()
+    const user = userEvent.setup()
+    render(<Side />)
+    plasser('panel-b', { top: 300, hode: 60, innhold: 900 })
+    const anker = () => document.documentElement.style.getPropertyValue('overflow-anchor')
+    expect(anker()).toBe('')
+    await user.click(knapp('B'))
+    expect(anker()).toBe('none')
+    await nesteBilde()
+    await nesteBilde()
+    expect(anker()).toBe('none')
+    klokke = 400
+    gliddFerdig('panel-b')
+    await nesteBilde()
+    expect(anker()).toBe('')
   })
 
   it('bruker toppmenyen og luften under som grenser for feltet', () => {

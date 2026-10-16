@@ -7,7 +7,7 @@
 import { act, render } from '@testing-library/react'
 import { useRef, useState } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { useFlytting } from '../hooks/useFlytting'
+import { endeligRamme, useFlytting } from '../hooks/useFlytting'
 
 /** Oppsettet testen bestemmer: element-ID → [x, y, bredde, høyde] i gjeldende tilstand. */
 let oppsett: Record<string, [number, number, number, number]> = {}
@@ -84,11 +84,15 @@ describe('flyttingen av kortene', () => {
     expect(y).toBeGreaterThan(-150)
     expect(parseFloat(a.style.width)).toBeGreaterThan(100)
     expect(parseFloat(a.style.width)).toBeLessThan(300)
+    // Den som skal rulle dit, får vite hvor kortene havner, ikke hvor de står nå.
+    expect(endeligRamme(a)).toEqual({ left: 0, top: 0, width: 300, height: 140 })
+    expect(endeligRamme(b)).toEqual({ left: 0, top: 150, width: 100, height: 100 })
 
     // Ferdig: ingen stiler igjen, og `etter` er kalt én gang.
     act(() => vi.advanceTimersByTime(200))
     for (const el of [a, b, boks, a.querySelector('span')!]) expect(el.getAttribute('style') ?? '').not.toMatch(/transform|width|height|opacity|align-items/)
     expect(etter).toHaveBeenCalledTimes(1)
+    expect(endeligRamme(b)).toMatchObject({ left: 0, top: 150, width: 100, height: 100 })
   })
 
   it('flytter ingenting uten fart, som ved redusert bevegelse', () => {
