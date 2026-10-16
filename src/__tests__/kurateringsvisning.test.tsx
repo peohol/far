@@ -21,7 +21,7 @@ import { TipsLag } from '../components/Tips'
 import { ANALYTTKATALOG } from '../domain/analyttkatalog'
 import { adresse, lesRute, sidesti } from '../domain/rute'
 import { STOFFREGISTERDATA, byggStoffregister } from '../domain/stoffregister'
-import { INGEN_BIVIRKNINGER, type Bivirkningsdata } from '../bivirkninger/modell'
+import { INGEN_BIVIRKNINGER, type Bivirkning, type Bivirkningsdata } from '../bivirkninger/modell'
 import type { Faginnholdslager } from '../faginnhold/lagring'
 import { TOM_STOFFSIDE, type Faginnholdsleser, type Stoffsidedata, type Utgave } from '../faginnhold/lesing'
 import type { Innholdselementinnhold } from '../faginnhold/modell'
@@ -195,16 +195,7 @@ describe('adressene', () => {
   })
 })
 
-describe('sammenligningen av to utgaver', () => {
-  it('viser endrede, fjernede og nye kort felt for felt, og bivirkningene per preparatomtale', () => {
-    const ny: Sideutgavedata = {
-      side: side([
-        utgave(DOSERING, kort('dosering', 'Ny dosering'), 2),
-        utgave('55555555-0000-4000-8000-000000000005', kort('farmakokinetikk', 'Ny kinetikk')),
-      ]),
-      bivirkninger: {
-        kilder: [
-          {
+const SPC: Bivirkningsdata['kilder'][number] = {
             id: 'k1',
             nokkel: 'spc',
             type: 'spc',
@@ -220,17 +211,58 @@ describe('sammenligningen av to utgaver', () => {
             importert_kl: '2026-10-01T12:00:00Z',
             importert_av: 'Rita',
             kontekster: [],
-          },
-        ],
-        bivirkninger: [{ kilde: 'k1', kontekst: null, organsystem: 'nevro', frekvens: 'svaert_vanlig', tekst: 'Hodepine', fotnote: null, posisjon: 0 } as never],
-      },
+}
+const hodepine = (frekvens: Bivirkning['frekvens'], fotnote: string | null = null): Bivirkning => ({
+  kilde: 'k1',
+  kontekst: null,
+  organsystem: 'nevrologiske',
+  frekvens,
+  tekst: 'Hodepine',
+  fotnote,
+  posisjon: 0,
+})
+
+describe('sammenligningen av to utgaver', () => {
+  it('viser endrede, fjernede og nye kort felt for felt, og bivirkningene per preparatomtale', () => {
+    const ny: Sideutgavedata = {
+      side: side([
+        utgave(DOSERING, kort('dosering', 'Ny dosering'), 2),
+        utgave('55555555-0000-4000-8000-000000000005', kort('farmakokinetikk', 'Ny kinetikk')),
+      ]),
+      bivirkninger: { kilder: [SPC], bivirkninger: [hodepine('svaert_vanlige')] },
     }
     const endringer = sammenlignSider(GAMMEL, ny).filter((e) => e.endret)
     const per = (tekst: string) => endringer.find((e) => e.for === tekst || e.etter === tekst)
     expect(per('Ny dosering')).toMatchObject({ for: 'Gammel dosering', etter: 'Ny dosering', gruppe: 'Dosering · kort 1' })
     expect(per('Gammel indikasjon')).toMatchObject({ etter: null })
     expect(per('Ny kinetikk')).toMatchObject({ for: null })
-    expect(per('Hodepine')).toMatchObject({ for: null, gruppe: 'Bivirkninger fra preparatomtalene' })
+    expect(per('Nevrologiske sykdommer · Svært vanlige: Hodepine')).toMatchObject({ for: null, gruppe: 'Bivirkninger fra preparatomtalene' })
+  })
+
+  it('viser en bivirkning med samme tekst og ny frekvens eller fotnote som endret', () => {
+    const med = (b: Bivirkning): Sideutgavedata => ({ ...GAMMEL, bivirkninger: { kilder: [SPC], bivirkninger: [b] } })
+    const endret = (a: Bivirkning, b: Bivirkning) => sammenlignSider(med(a), med(b)).filter((e) => e.endret)
+    expect(endret(hodepine('vanlige'), hodepine('sjeldne'))).toEqual([
+      expect.objectContaining({ for: 'Nevrologiske sykdommer · Vanlige: Hodepine', etter: 'Nevrologiske sykdommer · Sjeldne: Hodepine' }),
+    ])
+    expect(endret(hodepine('vanlige'), hodepine('vanlige', 'Ved høye doser'))).toHaveLength(1)
+    expect(endret(hodepine('vanlige'), hodepine('vanlige'))).toEqual([])
+  })
+
+  it('viser en sidekilde som er byttet ut med en annen, også når antallet er det samme', () => {
+    const referanse = (id: string, tittel: string) => utgave(id, { tittel, forfattere: 'A', aar: '2020', lenke: `https://example.org/${id}` } as never)
+    const medKilde = (ref: string): Sideutgavedata => ({
+      ...GAMMEL,
+      side: {
+        ...GAMMEL.side,
+        infoside: utgave(SIDE, { navn: 'Citalopram', slug: STOFF, panelreferanser: { dosering: [ref] } }),
+        referanser: [referanse('a', 'Kilde A'), referanse('b', 'Kilde B')],
+      },
+    })
+    const endret = sammenlignSider(medKilde('a'), medKilde('b')).filter((e) => e.endret)
+    expect(endret).toHaveLength(1)
+    expect(endret[0]!.for).toContain('Kilde A')
+    expect(endret[0]!.etter).toContain('Kilde B')
   })
 })
 
