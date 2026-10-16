@@ -19,6 +19,7 @@ import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { PANELREKKEFOLGE } from '../faginnhold/paneler'
+import { kontrollerDekning, kontrollpunkter, tomMatrise } from '../kuratorprotokoll/dekning'
 import { AGENTHANDLINGER } from '../kuratering/handlinger'
 import { faginnholdskall, feilFra, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
@@ -742,10 +743,24 @@ describe('statusen og agentene', () => {
   })
 })
 
-describe('seksjonene', () => {
-  it('er de samme i databasen som på fagsiden', async () => {
+describe('innholdsmodellen i databasen', () => {
+  it('har de samme seksjonene som fagsiden', async () => {
     const [rad] = await kall.fasit<{ s: string[] }>('select kuratering.seksjoner() as s')
     expect(rad!.s).toEqual([...PANELREKKEFOLGE])
+  })
+
+  it('har de samme kontrollpunktene som dekningsmatrisen, og godtar og avviser de samme matrisene som kuratorverktøyet', async () => {
+    const [rad] = await kall.fasit<{ p: string[] }>('select kuratering.kontrollpunkter() as p')
+    expect(rad!.p).toEqual(kontrollpunkter())
+    const dbFeil = async (m: unknown) =>
+      (await kall.fasit<{ f: string[] }>(`select kuratering.dokumentfeil('dekningsmatrise', $1::jsonb) as f`, [JSON.stringify(m)]))[0]!.f
+    const m = tomMatrise('de_novo')
+    for (const o of m.omrader) Object.assign(o, { begrunnelse: 'Kontrollert.', kilder: ['SPC'], sok: [], bevis: 'Lest.' })
+    expect(kontrollerDekning(m)).toEqual([])
+    expect(await dbFeil(m)).toEqual([])
+    m.omrader[0]!.kilder = ['']
+    expect(kontrollerDekning(m)).toHaveLength(1)
+    expect(await dbFeil(m)).toHaveLength(1)
   })
 })
 
