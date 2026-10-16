@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-16T13:23:51.897Z. Stoffene sist lest fra databasen 2026-10-15T21:31:44.469Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-16T13:33:26.921Z. Stoffene sist lest fra databasen 2026-10-15T21:31:44.469Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
 Klar: 94 · Reservert: 1 · Blokkert: 4 · Utenfor køen: 1
 
 ## Pågår
 
-- **citalopram** (citalopram-0003), frist 2026-10-16T16:01:39.299Z: Grenen åpnet; blindt kildesøk pågår
+- **citalopram** (citalopram-0003), frist 2026-10-16T16:33:26.921Z: Blindfasen avsluttet; avstemming pågår
 
 ## Til gjennomgang
 

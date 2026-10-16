@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T13:23:51.897Z",
+  "oppdatert_kl": "2026-10-16T13:33:26.921Z",
   "malt_kl": "2026-10-15T21:31:44.469Z",
   "teller": 3,
   "stoffer": {
@@ -676,9 +676,9 @@
         "okt": "kurateringsko/okt/20261016-125910",
         "modus": "de_novo",
         "reservert_kl": "2026-10-16T12:59:37.459Z",
-        "fornyet_kl": "2026-10-16T13:01:39.299Z",
-        "frist_kl": "2026-10-16T16:01:39.299Z",
-        "fase": "Grenen åpnet; blindt kildesøk pågår",
+        "fornyet_kl": "2026-10-16T13:33:26.921Z",
+        "frist_kl": "2026-10-16T16:33:26.921Z",
+        "fase": "Blindfasen avsluttet; avstemming pågår",
         "jobbgren": "kuratorjobb/citalopram-0003",
         "kurateringsgren": "kuratering/citalopram-0003",
         "pr": null,
@@ -735,6 +735,13 @@
           "oppgave": "citalopram-0003",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Grenen åpnet; blindt kildesøk pågår"
+        },
+        {
+          "kl": "2026-10-16T13:33:26.921Z",
+          "hendelse": "fornyet",
+          "oppgave": "citalopram-0003",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Blindfasen avsluttet; avstemming pågår"
         }
       ],
       "appgren": null
@@ -4601,28 +4608,29 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "forny-2",
         "forny-1",
         "reserver-1"
       ],
       "siste": {
-        "id": "forny-1",
-        "sha256": "28b326d002a3ddf678a43142da5fb8e2b9f674d222f23e374deea440954e215d",
+        "id": "forny-2",
+        "sha256": "61acdafc79d421b1688fbbb7fccc04199ef6c4cd1511099406aa44316b9c29fe",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "forny-1",
-          "foresporsel_sha256": "28b326d002a3ddf678a43142da5fb8e2b9f674d222f23e374deea440954e215d",
+          "foresporsel_id": "forny-2",
+          "foresporsel_sha256": "61acdafc79d421b1688fbbb7fccc04199ef6c4cd1511099406aa44316b9c29fe",
           "handling": "forny",
           "utfall": "ok",
-          "melding": "Reservasjonen av citalopram varer til 2026-10-16T16:01:39.299Z.",
-          "behandlet_kl": "2026-10-16T13:01:39.299Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38904686372",
+          "melding": "Reservasjonen av citalopram varer til 2026-10-16T16:33:26.921Z.",
+          "behandlet_kl": "2026-10-16T13:33:26.921Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38908718985",
           "oppgave": {
             "oppgave": "citalopram-0003",
             "stoff": "citalopram",
             "navn": "Citalopram",
             "modus": "de_novo",
             "forsok": 1,
-            "frist_kl": "2026-10-16T16:01:39.299Z",
+            "frist_kl": "2026-10-16T16:33:26.921Z",
             "jobbgren": "kuratorjobb/citalopram-0003",
             "kurateringsgren": "kuratering/citalopram-0003",
             "pr": null,
@@ -4653,7 +4661,7 @@
         }
       },
       "besvart_commit": "6b01a744e8c349810d5664486ca74905c966dab0",
-      "sist_brukt_kl": "2026-10-16T13:01:39.299Z"
+      "sist_brukt_kl": "2026-10-16T13:33:26.921Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
@@ -4674,7 +4682,7 @@
           "kjoring": "https://github.com/peohol/far/actions/runs/38907478666"
         }
       },
-      "besvart_commit": null,
+      "besvart_commit": "f52b72e6cea1039549616bb4f9985efb18804055",
       "sist_brukt_kl": "2026-10-16T13:23:51.897Z"
     }
   }
