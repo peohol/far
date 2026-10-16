@@ -1,10 +1,56 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-lurasidon-pub",
-  "foresporsel_sha256": "f4f54361f2d046c59b10aee19e51d1739ff70e775c6a29f34d979350e9809014",
-  "handling": "fullfort",
-  "utfall": "avvist",
-  "melding": "Oppgaven lurasidon-0009 er ikke reservert lenger (fullfort). Reserver på nytt for å fortsette.",
-  "behandlet_kl": "2026-10-16T19:08:00.644Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38952596242"
+  "foresporsel_id": "reserver-ghb-pub",
+  "foresporsel_sha256": "d6a5985450477c101dbb90195b980c31fb3d393dca0bb3062a45e8f897a730ae",
+  "handling": "reserver",
+  "utfall": "ok",
+  "melding": "ghb er reservert til 2026-10-16T22:09:06.814Z.",
+  "behandlet_kl": "2026-10-16T19:09:06.814Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38952710305",
+  "oppgave": {
+    "oppgave": "ghb-0010",
+    "stoff": "ghb",
+    "navn": "GHB",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-16T22:09:06.814Z",
+    "jobbgren": "kuratorjobb/ghb-0005",
+    "kurateringsgren": "kuratering/ghb-0010",
+    "pr": null,
+    "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a",
+    "gjenoppta": {
+      "oppgave": "ghb-0006",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "avbrutt_kl": "2026-10-16T19:07:15.526Z",
+      "grunn": "Revisjon 8 er godkjent av kontrolløren; grenen kan publiseres.",
+      "fase": null,
+      "jobbgren": "kuratorjobb/ghb-0005",
+      "kurateringsgren": null,
+      "pr": null,
+      "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a"
+    },
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-16T18:10:24.842Z",
+      "side": true,
+      "elementer": 3,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 2,
+      "referanser": 3,
+      "elementer_uten_kilde": 1
+    },
+    "prioritet": {
+      "poeng": 1637.9,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen ghb-0006.",
+        "Står først i innstillingene.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "11 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 3 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ]
+    }
+  }
 }
