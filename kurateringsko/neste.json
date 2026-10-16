@@ -1,5 +1,5 @@
 {
-  "oppdatert_kl": "2026-10-16T19:50:14.603Z",
+  "oppdatert_kl": "2026-10-16T20:17:59.602Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
     "klar": 91,
@@ -16,8 +16,8 @@
       "stoff": "brekspiprazol",
       "oppgave": "brekspiprazol-0011",
       "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-16T22:50:14.603Z",
-      "fase": null
+      "frist_kl": "2026-10-16T23:17:59.602Z",
+      "fase": "Blindfasen avsluttet"
     }
   ],
   "neste": [

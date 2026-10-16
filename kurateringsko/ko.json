@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T19:50:14.603Z",
+  "oppdatert_kl": "2026-10-16T20:17:59.602Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 11,
   "stoffer": {
@@ -449,13 +449,13 @@
         "okt": "kurateringsko/okt/20261016-125910",
         "modus": "de_novo",
         "reservert_kl": "2026-10-16T19:50:14.603Z",
-        "fornyet_kl": "2026-10-16T19:50:14.603Z",
-        "frist_kl": "2026-10-16T22:50:14.603Z",
-        "fase": null,
+        "fornyet_kl": "2026-10-16T20:17:59.602Z",
+        "frist_kl": "2026-10-16T23:17:59.602Z",
+        "fase": "Blindfasen avsluttet",
         "jobbgren": "kuratorjobb/brekspiprazol-0011",
         "kurateringsgren": "kuratering/brekspiprazol-0011",
         "pr": null,
-        "gren": null,
+        "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
         "kunnskapsgrense": null
       },
       "forsok": 1,
@@ -484,6 +484,19 @@
           "oppgave": "brekspiprazol-0011",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Forsøk 1, de_novo."
+        },
+        {
+          "kl": "2026-10-16T20:17:59.602Z",
+          "hendelse": "gren_funnet",
+          "oppgave": "brekspiprazol-0011",
+          "melding": "Fant kurateringsgrenen 65e21273-dd2c-408b-b987-9ef8adf219c9."
+        },
+        {
+          "kl": "2026-10-16T20:17:59.602Z",
+          "hendelse": "fornyet",
+          "oppgave": "brekspiprazol-0011",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Blindfasen avsluttet"
         }
       ],
       "appgren": null
@@ -4770,6 +4783,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "forny-brekspiprazol-1",
         "reserver-runde-1",
         "sen-fullfort-ghb-0010",
         "sen-fullfort-lurasidon-0009",
@@ -4799,28 +4813,28 @@
         "reserver-1"
       ],
       "siste": {
-        "id": "reserver-runde-1",
-        "sha256": "635d71d0493d75a8f669f6e129cb8f592758fd0c3effd142cb9d5de0b7ae5b34",
+        "id": "forny-brekspiprazol-1",
+        "sha256": "34e679e327e7c7a3d076f1fa6ed8e41cea498f679cf7be4cc896431cfe67c726",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "reserver-runde-1",
-          "foresporsel_sha256": "635d71d0493d75a8f669f6e129cb8f592758fd0c3effd142cb9d5de0b7ae5b34",
-          "handling": "reserver",
+          "foresporsel_id": "forny-brekspiprazol-1",
+          "foresporsel_sha256": "34e679e327e7c7a3d076f1fa6ed8e41cea498f679cf7be4cc896431cfe67c726",
+          "handling": "forny",
           "utfall": "ok",
-          "melding": "brekspiprazol er reservert til 2026-10-16T22:50:14.603Z.",
-          "behandlet_kl": "2026-10-16T19:50:14.603Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38957797194",
+          "melding": "Reservasjonen av brekspiprazol varer til 2026-10-16T23:17:59.602Z.",
+          "behandlet_kl": "2026-10-16T20:17:59.602Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38961197457",
           "oppgave": {
             "oppgave": "brekspiprazol-0011",
             "stoff": "brekspiprazol",
             "navn": "Brekspiprazol",
             "modus": "de_novo",
             "forsok": 1,
-            "frist_kl": "2026-10-16T22:50:14.603Z",
+            "frist_kl": "2026-10-16T23:17:59.602Z",
             "jobbgren": "kuratorjobb/brekspiprazol-0011",
             "kurateringsgren": "kuratering/brekspiprazol-0011",
             "pr": null,
-            "gren": null,
+            "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
             "gjenoppta": null,
             "sist_kuratert": null,
             "maal": {
@@ -4833,21 +4847,14 @@
               "elementer_uten_kilde": 17
             },
             "prioritet": {
-              "poeng": 466.3,
-              "grunner": [
-                "De novo-kuratering i runden som gjelder.",
-                "Aldri kuratert.",
-                "Ingen kuratering å regne alderen fra.",
-                "7 av 13 redaksjonelle seksjoner er tomme.",
-                "17 av 20 elementer har ingen kilde.",
-                "Bare 1 referanser."
-              ]
+              "poeng": 0,
+              "grunner": []
             }
           }
         }
       },
       "besvart_commit": "54239096e362086c69caf85cd2fa0134d6652f6f",
-      "sist_brukt_kl": "2026-10-16T19:50:14.603Z"
+      "sist_brukt_kl": "2026-10-16T20:17:59.602Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [

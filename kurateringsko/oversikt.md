@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-16T19:50:14.603Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-16T20:17:59.602Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
 Klar: 91 · Reservert: 1 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
 
 ## Pågår
 
-- **brekspiprazol** (brekspiprazol-0011), frist 2026-10-16T22:50:14.603Z
+- **brekspiprazol** (brekspiprazol-0011), frist 2026-10-16T23:17:59.602Z: Blindfasen avsluttet
 
 ## Til gjennomgang
 
