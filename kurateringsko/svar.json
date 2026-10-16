@@ -1,10 +1,86 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-citalopram-pub",
-  "foresporsel_sha256": "f1bcbf7bba0613821b8e3b0e279d8939ceaa384e3da2ad1fe385ed71a16b86d1",
-  "handling": "fullfort",
-  "utfall": "avvist",
-  "melding": "Oppgaven citalopram-0008 er ikke reservert lenger (fullfort). Reserver på nytt for å fortsette.",
-  "behandlet_kl": "2026-10-16T18:52:56.053Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38950683396"
+  "foresporsel_id": "status-1",
+  "foresporsel_sha256": "089c1386973e2c3a073b729b3fd455530d8113ddd8f00f8550eb2f7008f4cb34",
+  "handling": "status",
+  "utfall": "ok",
+  "melding": "Oversikten over køen.",
+  "behandlet_kl": "2026-10-16T18:53:49.282Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38950797675",
+  "ko": {
+    "oppdatert_kl": "2026-10-16T18:53:49.282Z",
+    "malt_kl": "2026-10-16T18:10:24.195Z",
+    "antall": {
+      "klar": 92,
+      "reservert": 0,
+      "fagarbeid_ferdig": 0,
+      "venter_godkjenning": 2,
+      "sammenslatt": 0,
+      "publisert": 1,
+      "blokkert": 4,
+      "utenfor": 1
+    },
+    "aktive": [],
+    "neste": [],
+    "til_gjennomgang": [
+      {
+        "stoff": "ghb",
+        "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a",
+        "grenstatus": "klar",
+        "status": "venter_godkjenning"
+      },
+      {
+        "stoff": "lurasidon",
+        "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95",
+        "grenstatus": "klar",
+        "status": "venter_godkjenning"
+      }
+    ],
+    "blokkert": [
+      {
+        "stoff": "etanol",
+        "blokkeringer": [
+          {
+            "kode": "uten_fagside",
+            "grunn": "Stoffet har ingen publisert fagside å kuratere.",
+            "kl": "2026-10-14T04:50:43.758Z",
+            "kilde": "system"
+          }
+        ]
+      },
+      {
+        "stoff": "kokain",
+        "blokkeringer": [
+          {
+            "kode": "uten_fagside",
+            "grunn": "Stoffet har ingen publisert fagside å kuratere.",
+            "kl": "2026-10-14T04:50:43.758Z",
+            "kilde": "system"
+          }
+        ]
+      },
+      {
+        "stoff": "mdma",
+        "blokkeringer": [
+          {
+            "kode": "uten_fagside",
+            "grunn": "Stoffet har ingen publisert fagside å kuratere.",
+            "kl": "2026-10-14T04:50:43.758Z",
+            "kilde": "system"
+          }
+        ]
+      },
+      {
+        "stoff": "metamfetamin",
+        "blokkeringer": [
+          {
+            "kode": "uten_fagside",
+            "grunn": "Stoffet har ingen publisert fagside å kuratere.",
+            "kl": "2026-10-14T04:50:43.758Z",
+            "kilde": "system"
+          }
+        ]
+      }
+    ]
+  }
 }
