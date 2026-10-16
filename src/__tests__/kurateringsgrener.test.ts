@@ -228,6 +228,26 @@ describe('isolasjonen', () => {
       (await skriv([{ ny: 'referanse', innhold: { tittel: 'Dobbel', forfattere: 'A', aar: '2020', lenke: `https://example.org/gren/${lopenummer - 1}` } }]))
         ?.message,
     ).toContain('Bruk den')
+    // En ny referanse i grenen kontrolleres på nytt når den endres.
+    const ny = crypto.randomUUID()
+    const nyRef = (lenke: string) => ({ tittel: 'Ny', forfattere: 'A', aar: '2026', lenke })
+    expect((await skriv([{ ny: 'referanse', id: ny, innhold: nyRef('https://example.org/egen') }, { sett: ny, innhold: nyRef('') }]))?.message).toContain(
+      'må ha en lenke',
+    )
+    expect(
+      (await skriv([{ ny: 'referanse', id: ny, innhold: nyRef('https://example.org/egen') }, { sett: ny, innhold: nyRef(`https://example.org/gren/${lopenummer}`) }]))
+        ?.message,
+    ).toContain('Bruk den')
+    expect(
+      (
+        await skriv([
+          { ny: 'referanse', innhold: nyRef('https://example.org/a') },
+          { ny: 'referanse', id: ny, innhold: nyRef('https://example.org/b') },
+          { sett: ny, innhold: nyRef('https://example.org/a') },
+        ])
+      )?.message,
+    ).toContain('alt en ny referanse med lenken')
+    expect(await skriv([{ ny: 'referanse', id: ny, innhold: nyRef('https://example.org/egen') }, { sett: ny, innhold: nyRef('https://example.org/egen') }])).toBeNull()
     expect((await feilFra(() => agent(chatgpt, 'skriv', { gren: g.id, forventet_revisjon: 0, endringer: [{ rapport: null }] })))?.code).toBe('42501')
     expect((await feilFra(() => agent(claude, 'skriv', { gren: g.id, forventet_revisjon: 3, endringer: [{ rapport: null }] })))?.code).toBe('PT409')
   })
@@ -357,6 +377,10 @@ describe('publiseringen', () => {
     const k = await kuratertGren()
     expect((await feilFra(() => agent(chatgpt, 'publiser', { gren: k.gren, revisjon: 1 })))?.code).toBe('42501')
     await tilGodkjent(k.gren)
+    // Dokumentene kontrolløren vurderte, kan ikke byttes ut etter godkjenningen.
+    expect((await feilFra(() => agent(claude, 'dokument', { gren: k.gren, art: 'evidensjournal', innhold: { annen: true } })))?.message).toContain(
+      'få nye dokumenter',
+    )
     expect((await agent<{ ok: boolean }>(claude, 'publiser', { gren: k.gren, revisjon: 1 })).ok).toBe(true)
     expect(JSON.stringify(await publisert(k.slug))).toContain('Ny kinetikk')
   })
