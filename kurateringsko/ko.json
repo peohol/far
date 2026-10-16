@@ -1,8 +1,8 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T20:55:02.710Z",
+  "oppdatert_kl": "2026-10-16T20:56:09.581Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
-  "teller": 11,
+  "teller": 12,
   "stoffer": {
     "alprazolam": {
       "stoff": "alprazolam",
@@ -1992,18 +1992,11 @@
     "kariprazin": {
       "stoff": "kariprazin",
       "navn": "Kariprazin",
-      "status": "klar",
+      "status": "reservert",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 464.8,
-        "grunner": [
-          "De novo-kuratering i runden som gjelder.",
-          "Aldri kuratert.",
-          "Ingen kuratering å regne alderen fra.",
-          "7 av 13 redaksjonelle seksjoner er tomme.",
-          "18 av 22 elementer har ingen kilde.",
-          "Bare 2 referanser."
-        ]
+        "poeng": 0,
+        "grunner": []
       },
       "maal": {
         "kl": "2026-10-16T18:10:24.842Z",
@@ -2014,20 +2007,46 @@
         "referanser": 2,
         "elementer_uten_kilde": 18
       },
-      "reservasjon": null,
-      "forsok": 0,
+      "reservasjon": {
+        "oppgave": "kariprazin-0012",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "modus": "de_novo",
+        "reservert_kl": "2026-10-16T20:56:09.581Z",
+        "fornyet_kl": "2026-10-16T20:56:09.581Z",
+        "frist_kl": "2026-10-16T23:56:09.581Z",
+        "fase": null,
+        "jobbgren": "kuratorjobb/kariprazin-0012",
+        "kurateringsgren": "kuratering/kariprazin-0012",
+        "pr": null,
+        "gren": null,
+        "kunnskapsgrense": null
+      },
+      "forsok": 1,
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
-      "siste_kjoring": null,
+      "siste_kjoring": {
+        "oppgave": "kariprazin-0012",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "startet_kl": "2026-10-16T20:56:09.581Z",
+        "avsluttet_kl": null,
+        "utfall": "reservert"
+      },
       "aktiv": true,
       "historikk": [
         {
           "kl": "2026-10-14T04:50:43.758Z",
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
+        },
+        {
+          "kl": "2026-10-16T20:56:09.581Z",
+          "hendelse": "reservert",
+          "oppgave": "kariprazin-0012",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Forsøk 1, de_novo."
         }
       ],
       "appgren": null
@@ -4802,6 +4821,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "reserver-neste-1",
         "blokkert-brekspiprazol-1",
         "forny-brekspiprazol-2051",
         "forny-brekspiprazol-1",
@@ -4834,21 +4854,55 @@
         "reserver-1"
       ],
       "siste": {
-        "id": "blokkert-brekspiprazol-1",
-        "sha256": "d1aad9fcabf4bd902bcbdeb1dfcdf7296c02923312cca8a67609cc69e4674843",
+        "id": "reserver-neste-1",
+        "sha256": "9f77b9820dade0dde2b813a5fa2c3480bb76fd7b0e545dcf37fa40633d34ab53",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "blokkert-brekspiprazol-1",
-          "foresporsel_sha256": "d1aad9fcabf4bd902bcbdeb1dfcdf7296c02923312cca8a67609cc69e4674843",
-          "handling": "blokkert",
+          "foresporsel_id": "reserver-neste-1",
+          "foresporsel_sha256": "9f77b9820dade0dde2b813a5fa2c3480bb76fd7b0e545dcf37fa40633d34ab53",
+          "handling": "reserver",
           "utfall": "ok",
-          "melding": "brekspiprazol er blokkert til et menneske har sett på det.",
-          "behandlet_kl": "2026-10-16T20:55:02.710Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38965641127"
+          "melding": "kariprazin er reservert til 2026-10-16T23:56:09.581Z.",
+          "behandlet_kl": "2026-10-16T20:56:09.581Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38965778955",
+          "oppgave": {
+            "oppgave": "kariprazin-0012",
+            "stoff": "kariprazin",
+            "navn": "Kariprazin",
+            "modus": "de_novo",
+            "forsok": 1,
+            "frist_kl": "2026-10-16T23:56:09.581Z",
+            "jobbgren": "kuratorjobb/kariprazin-0012",
+            "kurateringsgren": "kuratering/kariprazin-0012",
+            "pr": null,
+            "gren": null,
+            "gjenoppta": null,
+            "sist_kuratert": null,
+            "maal": {
+              "kl": "2026-10-16T18:10:24.842Z",
+              "side": true,
+              "elementer": 22,
+              "redaksjonelle_paneler": 13,
+              "paneler_med_innhold": 6,
+              "referanser": 2,
+              "elementer_uten_kilde": 18
+            },
+            "prioritet": {
+              "poeng": 464.8,
+              "grunner": [
+                "De novo-kuratering i runden som gjelder.",
+                "Aldri kuratert.",
+                "Ingen kuratering å regne alderen fra.",
+                "7 av 13 redaksjonelle seksjoner er tomme.",
+                "18 av 22 elementer har ingen kilde.",
+                "Bare 2 referanser."
+              ]
+            }
+          }
         }
       },
       "besvart_commit": "ff854693caaf1d8d8e6cd2633b591cfbc0a241cf",
-      "sist_brukt_kl": "2026-10-16T20:55:02.710Z"
+      "sist_brukt_kl": "2026-10-16T20:56:09.581Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
