@@ -1,37 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-brekspiprazol-2051",
-  "foresporsel_sha256": "9759d01dccccef09509a2906c722c0069d694dda191db622be4840d62aec0eff",
-  "handling": "forny",
+  "foresporsel_id": "blokkert-brekspiprazol-1",
+  "foresporsel_sha256": "d1aad9fcabf4bd902bcbdeb1dfcdf7296c02923312cca8a67609cc69e4674843",
+  "handling": "blokkert",
   "utfall": "ok",
-  "melding": "Reservasjonen av brekspiprazol varer til 2026-10-16T23:52:28.301Z.",
-  "behandlet_kl": "2026-10-16T20:52:28.301Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38965333010",
-  "oppgave": {
-    "oppgave": "brekspiprazol-0011",
-    "stoff": "brekspiprazol",
-    "navn": "Brekspiprazol",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-16T23:52:28.301Z",
-    "jobbgren": "kuratorjobb/brekspiprazol-0011",
-    "kurateringsgren": "kuratering/brekspiprazol-0011",
-    "pr": null,
-    "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
-    "gjenoppta": null,
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-16T18:10:24.842Z",
-      "side": true,
-      "elementer": 20,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 6,
-      "referanser": 1,
-      "elementer_uten_kilde": 17
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "melding": "brekspiprazol er blokkert til et menneske har sett på det.",
+  "behandlet_kl": "2026-10-16T20:55:02.710Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38965641127"
 }
