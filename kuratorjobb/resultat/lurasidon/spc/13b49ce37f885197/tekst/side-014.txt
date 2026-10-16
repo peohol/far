@@ -1,0 +1,59 @@
+I begge dosegruppene var Lurasidone Accord overlegen placebo for reduksjon av PANSS- og
+CGI-S-scores ved uke 6. I gjennomsnitt gav ikke dosen på 74 mg/døgn flere fordeler enn dosen
+på 37 mg/døgn.
+
+De primære effektresultatene er oppgitt i tabell 4.
+
+Tabell 4            Primære effektresultater (PANSS-totalscore) – endring fra baseline til uke 6 –
+                    MMRM for studien av schizofreni hos ungdom D1050301: Intention-to-treat-
+                    analysesett
+
+     Studiestatistikk                          Placebo                 Lurasidondose (a)
+                                                                       37 mg               74 mg
+ Studie D1050301                               N=112                   N=108               N=106
+    Gjennomsnitt baseline (SD)                 92,8 (11,08)            94,5 (10,97)        94,0 (11,12)
+    LS gjennomsnittlig endring                 -10,5 (1,59)            -18,6 (1,59)        -18,3 (1,60)
+ Behandlingsendring
+    (SE)            vs.
+ placebo
+    Estimat (SE)                               --                      -8,0 (2,21)         -7,7 (2,22)
+    p-verdi                                    --                      0,0006              0,0008
+N er antallet forsøkspersoner for hvert modellestimat.
+(a) p-verdiene for lurasidon vs. placebo ble justert for flere sammenligninger
+
+Forbedringene i CGI-S-scores ved uke 6 var signifikant forskjellige fra placebo for både
+behandlingsgruppene lurasidon 74 mg/døgn (-0,42 ± 0,130, justert p = 0,0015) og lurasidon
+37 mg/døgn (-0,47 ± 0,130, justert p = 0,0008).
+
+En 104-ukers forlengelsesstudie (studie D1050302) var utformet for å evaluere langsiktig sikkerhet,
+tolerabilitet og effekt av fleksibelt dosert lurasidon (18,5, 37, 55,5 eller 74 mg/døgn) hos pediatriske
+forsøkspersoner som fullførte en 6-ukers behandlingsperiode i tre foregående studier av ulike
+indikasjoner. Kun resultatene fra 271 forsøkspersoner med schizofreni som ble innmeldt i studie
+D1050301, vil heretter bli presentert. Av disse fullførte 186 forsøkspersoner (68,6 %) 52 uker, og
+156 (57,6 %) forsøkspersoner fullførte 104 ukers fleksibel dosering med lurasidon 18,5 til
+74 mg/døgn.
+
+For forsøkspersoner som fortsatte fra D1050301, var gjennomsnittlig (95 % KI) i PANSS-totalscore
+fra DB-baseline -26,5 (-28,5, -24,5) ved uke 28 LOCF, -28,2 (-30,2, -26,2) ved uke 52 LOCF, og
+29,5 (-31,8, -27,3) ved uke 104 LOCF/post-OL-endepunktet, og gjennomsnittlig endring (95 % KI)
+fra OL-baseline var -9,2 (-11,1, -7,2) ved uke 28 LOCF, -10,8 (-13,0, -8,7) ved uke 52 LOCF, og -
+12,2 (-14,5, -9,8) ved uke 104 LOCF/post-OL-endepunktet.
+
+Bipolar depresjon
+
+Kortvarig effekt av lurasidon ble studert i en seks ukers randomisert, dobbeltblindet,
+placebokontrollert flersenterstudie av barn og ungdom (10–17 år) som oppfylte de diagnostiske
+kriteriene (DSM-V) for en alvorlig depressiv episode forbundet med bipolar lidelse type 1, med eller
+uten raske svingninger, og uten psykotiske symptomer (N=350). Pasientene ble randomisert til
+fleksibelt dosert lurasidon 18–74 mg én gang daglig eller placebo.
+
+Det primære effektendepunktet ble definert som den gjennomsnittlige forandringen fra baseline til
+uke 6 i Children's Depression Rating Scale-Revised [vurderingsskala for barnedepresjon] (CDRS-R)
+total score. Det viktigste sekundære endepunktet i studien var klinisk global impresjon – bipolar
+versjon, alvorlighetsgrad av sykdom (CGI-BP-S) depresjonsscore. Statistisk signifikante forskjeller
+som favoriserte lurasidon over placebo, ble vist for disse endepunktene for den samlede studerte
+populasjonen, påbegynt i uke 2 og ble opprettholdt ved hvert studiebesøk til slutten av studien. De
+primære og viktigste sekundære effektendepunktene ble imidlertid ikke oppfylt blant yngre pasienter
+(under 15 år). Placebojustert LS-gjennomsnittlig forandring (95 % KI) fra baseline til uke 6 LOCF i
+
+                                                              14

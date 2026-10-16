@@ -1,0 +1,57 @@
+                 Studie 4                          Baseline          Median endring          Endring fra
+                                                                      fra baseline            baseline
+                                                                                            sammenlignet
+                                                                                            med placebo
+                                                                                              (p-verdi)
+                                                                 Median, anfall/to uker
+Placebo                         29                    4,0                 21,0                    -
+
+Natriumoksybat                  26                    1,9                   0                 p <0,001
+
+I studie 4 var responsen numerisk nesten lik for pasienter som ble behandlet med doser på 6 til
+9 g/dag, men det ble ikke observert noen effekt hos pasienter som ble behandlet med doser på mindre
+enn 6 g/dag.
+
+Pediatrisk populasjon
+
+Effekt av natriumoksybat hos pediatriske pasienter som har narkolepsi med katapleksi ble fastslått i
+en dobbeltblind, placebokontrollert, randomisert seponerings-multisenterstudie.
+
+Denne studien viste klinisk effekt av natriumoksybat i behandling av katapleksi og uttalt søvnighet
+på dagtid (Excess Daytime Sleepiness, EDS) ved narkolepsi hos pediatriske personer.
+63 pasienter ble randomisert i effektpopulasjonen der det primære endepunktet for effekt i denne
+studien var endring i antallet ukentlige katapleksianfall mellom de siste to ukene av perioden med
+stabil dose og den dobbeltblinde perioden.
+
+I løpet av den dobbeltblinde perioden var median (1. kvartil, 3. kvartil) endring fra baseline (dvs. de
+2 siste ukene av perioden med stabil dose) i ukentlig antall katapleksianfall 12,71 (3,44, 19,77) for
+pasienter randomisert til placebo og 0,27 (-1,00, 2,50) for pasienter randomisert til natriumoksybat.
+
+Tabell 8 Sammendrag av resultat i studie 13-005 med barn/ungdom
+
+  Behandlingsgruppe          Antall pasienter     Ukentlig antall katapleksianfall (median)
+                                                   Baseline (dvs.         Dobbeltblind      Endring fra
+                                                   siste 2 uker av           periode         baseline
+                                                   perioden med
+                                                     stabil dose)
+
+        Placebo                      32                  4,67                   21,25             12,71
+   Natriumoksybat                    31                  3,50                    3,77              0,27
+p-verdi                                                                                       < 0,0001
+
+Når subgruppeanalyser etter alder (7–11 år og 12–17 år) ble utført for det primære endepunktet, ble
+lignende resultater observert. I den dobbeltblinde behandlingsperioden for personer i alderen 7 til 11
+år var median (1. kvartil, 3. kvartil) endring fra baseline i ukentlig antall katapleksianfall 18,32 (7,58,
+35,75) for personer randomisert til placebo og 0,13 (-1,15, 2,05) for personer randomisert til
+natriumoksybat (p < 0,0001).
+
+I den dobbeltblinde behandlingsperioden for personer 12 til 17 år var median (1. kvartil, 3. kvartil)
+endring fra baseline i ukentlig antall katapleksianfall 9,39 (1,08, 16,12) for personer randomisert til
+placebo og 0,58 (-0,88, 2,58) for personer randomisert til natriumoksybat (p = 0,0044). I den
+dobbeltblinde behandlingsperioden var median (1. kvartil, 3. kvartil) endring i sekundært endepunkt
+(endring i ESS-skår) fra baseline (som forekom ved besøk 3 – på slutten av perioden med stabil dose)
+i Epworth søvnighetsskala for barn og ungdom (ESS-CHAD)-skår 3,0 (1,0, 5,0) for personer
+randomisert til placebo og 0,0 (-1,0, 2,0) for personer randomisert til natriumoksybat.
+Sammenligning av rangert endring fra baseline mellom behandlingene var statistisk signifikant (p =
+0,0004) ved analyse med ANCOVA-modellen ved bruk av behandling som en faktor og rangert
+                                                    13

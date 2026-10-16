@@ -1,0 +1,56 @@
+Citalopram og desmetylcitalopram er ubetydelige hemmere av CYP2C9, CYP2E1 og CYP3A4, og
+kun svake hemmere av CYP1A2, CYP2C19 og CYP2D6 sammenlignet med andre SSRIer som har
+vist seg å være signifikante hemmere.
+
+Levopromazin, digoksin, karbamazepin
+Ingen endring eller svært små endringer uten klinisk betydning ble sett når citalopram ble gitt samtidig
+med substrater av CYP1A2 (klozapin og teofyllin), CYP2C9 (warfarin), CYP2C19 (imipramin og
+mefenytoin), CYP2D6 (spartein, imipramin, amitriptylin, risperidon) og CYP3A4 (warfarin,
+karbamazepin (og dets metabolitt karbamazepinepoksid) og triazolam).
+
+Det er ikke sett farmakokinetiske interaksjoner mellom citalopram og levomepromazin eller digoksin
+(noe som indikerer at citalopram verken induserer eller hemmer P-glykoprotein).
+
+Desipramin, imipramin
+I en farmakokinetisk studie ble det ikke funnet effekter på verken citalopram- eller
+imipraminkonsentrasjoner, selv om konsentrasjonen av desipramin, hovedmetabolitten til imipramin,
+var økt. Når desipramin kombineres med citalopram, er det observert en økning i
+plasmakonsentrasjonen av desipramin. En reduksjon av desipramindosen kan være nødvendig.
+
+
+4.6   Fertilitet, graviditet og amming
+
+Graviditet
+Publiserte data fra gravide kvinner (flere enn 2500 fødte barn ble eksponert) indikerer ingen
+misdannelser pga. føtal/neonatal toksisitet Citalopram bør likevel ikke brukes under graviditet hvis
+ikke det er absolutt nødvendig og kun etter nøye vurdering av nytte-risiko.
+
+Nyfødte bør observeres dersom moren har brukt citalopram under siste del av graviditeten, spesielt i
+tredje trimester. Brå seponering bør unngås under graviditeten.
+
+Følgende symptomer kan inntreffe hos nyfødte dersom moren har brukt SSRI/SNRI sent i
+graviditeten: respirasjonsforstyrrelser, cyanose, apné, kramper, ustabil temperatur, matingsproblemer,
+oppkast, hypoglykemi, hypertoni, hypotoni, hyperrefleksi, tremor, engstelse, irritabilitet, letargi,
+vedvarende gråt, somnolens og vanskeligheter med å sove. Disse symptomene kan være forårsaket av
+den serotonerge effekten eller de kan være seponeringssymptomer. I de fleste tilfellene vil
+komplikasjonene inntreffe umiddelbart eller kort tid (< 24 timer) etter fødselen.
+
+
+Epidemiologiske data kan tyde på at bruk av SSRI-preparater under graviditet, spesielt sent i
+graviditeten, kan øke risikoen for vedvarende pulmonal hypertensjon hos nyfødte (PPHN). Den
+observerte risikoen var anslagsvis 5 tilfeller per 1000 graviditeter. I den øvrige befolkningen er
+forekomsten 1-2 tilfeller av PPHN per 1000 graviditeter.
+
+Observasjonsdata indikerer en økt risiko (mindre enn doblet) for postpartumblødning ved eksponering
+for SSRI/SNRI den siste måneden før fødsel (se pkt. 4.4 og 4.8).
+
+Amming
+Citalopram skilles ut i morsmelk. Det er anslått at det diende spedbarnet vil få 5 % av vektrelatert
+maternal daglig dose (i mg/kg). Ingen eller kun mindre reaksjoner er observert hos spedbarn.
+Eksisterende informasjon er imidlertid utilstrekkelig for å vurdere risikoen for barnet. Forsiktighet
+anbefales.
+
+
+
+
+                                                    9

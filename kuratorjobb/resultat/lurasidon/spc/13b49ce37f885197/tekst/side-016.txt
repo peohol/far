@@ -1,0 +1,59 @@
+CYP3A4 er hovedenzymet ansvarlig for metabolisme av den aktive metabolitten ID-14283.
+Lurasidon og dets aktive metabolitt ID-14283 bidrar begge til den farmakodynamiske effekten på
+dopaminerge og serotonerge reseptorer.
+
+Basert på in vitro-studier er lurasidon ikke substrat for CYP1A1-, CYP1A2-, CYP2A6-, CYP4A11-,
+CYP2B6-, CYP2C8-, CYP2C9-, CYP2C19-, CYP2D6- eller CYP2E1-enzymer.
+
+Lurasidon viste in vitro ingen direkte, eller svak hemming (direkte eller tidsavhengig) (IC50 >5,9
+µM) av cytokrom P-450-enzymene (CYP)1A2, CYP2B6, CYP2C8, CYP2C9, CYP2C19, CYP2D6,
+CYP2E1 og CYP3A4. Basert på disse dataene forventes ikke lurasidon å påvirke farmakokinetikken
+til legemidler som er substrat for CYP1A2, CYP2B6, CYP2C8, CYP2C9, CYP2C19, CYP2D6 og
+CYP2E1. For administrasjon av legemidler som er substrater for CYP3A4 med smalt terapeutisk
+vindu, se pkt. 4.5.
+
+Lurasidon er et in vitro-substrat for transportproteinene P-gp og BCRP. Lurasidon gjennomgår ikke
+aktivt opptak via OATP1B1 eller OATP1B3.
+
+Lurasidon hemmer P-gp, BCRP og OCT1 in vitro (se pkt. 4.5). Lurasidon forventes ikke å ha klinisk
+relevant hemmende potensial på transporterne OATP1B1, OATP1B3, OCT2, OAT1, OAT3, MATE1,
+MATE2K eller BSEP basert på in vitro-data.
+
+Eliminasjon
+Etter administrasjon av lurasidon var eliminasjonshalveringstiden 20–40 timer. Etter oral
+administrasjon av en radiomerket dose ble cirka 67 % gjenfunnet i feces og 19 % i urin. Urin inneholdt
+for det meste en rekke metabolitter med minimal renal utskillelse av den opprinnelige forbindelsen.
+
+Linearitet/ikke-linearitet
+Farmakokinetikken til lurasidon er doseproporsjonal innenfor en total daglig dose på 18,5 mg til
+148 mg. Steady-state-konsentrasjoner av lurasidon oppnås innen 7 dager etter oppstart.
+
+Farmakokinetikk i spesielle pasientgrupper
+
+Eldre
+Det finnes begrenset med data hos friske individer ≥ 65 år. Samlede data viser tilsvarende
+eksponering som hos individer ≤ 65 år. En økning i eksponering hos eldre kan imidlertid
+forventes hvis de har nedsatt nyre- eller leverfunksjon.
+
+Nedsatt leverfunksjon
+Serumkonsentrasjonen av lurasidon øker hos friske individer med nedsatt leverfunksjon Child-Pugh
+klasse A, B og C, med en økt eksponering på henholdsvis 1,5, 1,7 og 3 ganger.
+
+Nedsatt nyrefunksjon
+Serumkonsentrasjonen av lurasidon øker hos friske individer med lett, moderat og alvorlig
+nedsatt nyrefunksjon med en økt eksponering på henholdsvis 1,5, 1,9 og 2,0 ganger. Individer
+med terminal nyresykdom (CrCl < 15 ml/minutt) er ikke undersøkt.
+
+Kjønn
+Det var ingen klinisk relevante forskjeller mellom kjønn på farmakokinetikken til lurasidon i en
+farmakokinetisk analyse av pasienter med schizofreni.
+
+Rase
+Det var ingen klinisk relevante forskjeller på farmakokinetikken til lurasidon i en
+populasjonsfarmakokinetisk analyse av pasienter med schizofreni. Det ble observert at asiatiske
+pasienter hadde 1,5 ganger høyere eksponering for lurasidon enn kaukasiske pasienter.
+
+Røyking
+
+
+                                                  16

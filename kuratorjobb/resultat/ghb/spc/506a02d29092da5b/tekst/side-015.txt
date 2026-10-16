@@ -1,0 +1,57 @@
+opp til en konsentrasjon på 3 mM (378 g/ml). Disse verdiene er betydelig høyere enn nivåene som oppnås
+ved terapeutiske doser.
+
+Eliminasjon
+Clearance av natriumoksybat er nesten bare ved biotransformasjon til karbondioksid som deretter elimineres
+ved utånding. I gjennomsnitt gjenfinnes mindre enn 5 % av uforandret legemiddel i urinen 6-8 timer etter
+dosering. Fekal ekskresjon er ubetydelig.
+
+Spesielle populasjoner
+
+Eldre
+Hos et begrenset antall pasienter eldre enn 65 år, var farmakokinetikken til natriumoksybat ikke forskjellig
+ved sammenligning med pasienter yngre enn 65 år.
+
+Pediatrisk populasjon
+De viktigste farmakokinetiske egenskapene til natriumoksybat hos pediatriske personer er de samme som er
+rapportert i farmakokinetiske studier av natriumoksybat hos voksne.
+
+Pediatriske og voksne personer som får samme dose i mg/kg har like profiler for plasmakonsentrasjon/tid (se
+pkt. 4.2).
+
+Nedsatt nyrefunksjon
+Siden nyrene ikke spiller en betydelig rolle for utskillelsen av natriumoksybat har det ikke vært gjennomført
+farmakokinetiske studier hos pasienter med nedsatt nyrefunksjon; det forventes ikke at nyrefunksjonen
+påvirker farmakokinetikken av natriumoksybat.
+
+Nedsatt leverfunksjon
+Natriumoksybat gjennomgår betydelig presystemisk metabolisme (”first-pass”-metabolisme i leveren). Etter
+en enkel oral dose på 25 mg/kg, var AUC-verdier fordoblet hos cirrhotiske pasienter, med tilsynelatende
+oral clearance redusert fra 9,1 hos friske voksne til 4,5 og 4,1 ml/min/kg hos henholdsvis Klasse A (uten
+ascites) og Klasse C (med ascites) pasienter. Eliminasjonshalveringstid var signifikant lengre hos Klasse C
+og Klasse A pasienter enn hos kontrollpersonene (gjennomsnittlig t1/2 på 59 og 32 versus 22 minutter).
+Startdosen bør halveres hos alle pasienter med nedsatt leverfunksjon, og responsen på doseøkninger bør
+følges nøye (se pkt. 4.2).
+
+Rase
+Rasens innvirkning på metabolismen til natriumoksybat er ikke evaluert.
+
+5.3   Prekliniske sikkerhetsdata
+
+Gjentatt administrering av natriumoksybat til rotter (90 dager og 26 uker) og hunder (52 uker) ga ingen
+signifikante funn når det gjelder klinisk kjemi og mikro- og makropatologi. Behandlingsrelaterte kliniske
+tegn var hovedsakelig relatert til sedering, redusert matinntak og sekundære endringer i kroppsvekt,
+vektøkning og organvekt. Eksponeringer for rotter og hunder ved NOEL var lavere (~50 %) enn for
+mennesker. Natriumoksybat var ikke-mutagent og ikke-klastogent i in vitro- og in vivo-studier.
+
+Gammabutyrolakton (GBL), et prodrug av GHB testet ved eksponeringer tilsvarende den som forventes hos
+mennesker (1,21-1,64 ganger) er blitt klassifisert av NTP som ikke-karsinogen hos rotter og muligens
+karsinogen hos mus på grunn av en svak økning av feokromocytomer som var vanskelig å tolke på grunn av
+høy mortalitet i gruppen som fikk høy dose. I en karsinogenisitetsstudie med oksybat hos rotter ble det ikke
+funnet tumorer relatert til forbindelsen.
+
+GHB hadde ingen effekt på paring, generell fertilitet eller sædparametre, og førte ikke til embryoføtal
+toksisitet hos rotter eksponert for opptil 1000 mg/kg/dag GHB (1,64 ganger menneskelig eksponering
+beregnet ut fra ikke-drektige dyr). Perinatal mortalitet var økt og gjennomsnittlig avkomvekt var redusert i
+dieperioden hos høydose F1-dyr. Sammenhengen mellom disse effektene på utvikling og maternell toksisitet
+                                                  15

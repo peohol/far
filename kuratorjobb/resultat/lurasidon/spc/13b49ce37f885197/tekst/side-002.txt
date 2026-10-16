@@ -1,0 +1,58 @@
+Pasienter på doser som er høyere enn 111 mg én gang daglig, og som tar pause i behandlingen i mer
+enn 3 dager, skal starte opp med 111 mg én gang daglig og titreres opp til deres optimale dose. For
+alle andre doser kan pasienter starte opp igjen med deres tidligere dose uten behov for opptitrering.
+
+Pediatrisk populasjon
+Anbefalt startdose er 37 mg lurasidon én gang daglig. Initial dosetitrering er ikke nødvendig. Det er
+effektivt i doser fra 37 til 74 mg én gang daglig. Doseøkning skal baseres på legens bedømmelse og
+observert klinisk respons. Maksimal døgndose bør ikke overskride 74 mg. Hos barn skal lurasidon
+kun forskrives av en ekspert innen pediatrisk psykiatri.
+
+Dosejustering på grunn av interaksjoner
+En startdose på 18,5 mg anbefales, og maksimal døgndose bør ikke overskride 74 mg daglig i
+kombinasjon med moderate CYP3A4-hemmere. Dosejustering kan være nødvendig i kombinasjon
+med milde og moderate CYP3A4-induktorer (se pkt. 4.5). For sterke CYP3A4-hemmere og -
+induktorer, se pkt. 4.3.
+
+Bytte mellom antipsykotiske legemidler
+På grunn av forskjellige farmakodynamiske og farmakokinetiske profiler mellom de ulike
+antipsykotiske legemidlene er det nødvendig med tilsyn av lege når bytte til et annet
+antipsykotisk legemiddel anses medisinsk hensiktsmessig.
+
+Eldre
+Hos eldre pasienter med normal nyrefunksjon (CrCl ≥ 80 ml/minutt) er doseringsanbefalingene den
+samme som for voksne med normal nyrefunksjon. Siden eldre pasienter kan ha redusert
+nyrefunksjon, kan imidlertid dosejustering være nødvendig i henhold til pasientens
+nyrefunksjonsstatus (se “Nedsatt nyrefunksjon” nedenfor).
+
+Det er begrenset data tilgjengelig om eldre pasienter behandlet med høye doser av lurasidon. Det
+finnes ingen tilgjengelige data om eldre pasienter behandlet med 148 mg lurasidon. Det skal utvises
+forsiktighet ved behandling av pasienter ≥ 65 år med høye doser av lurasidon.
+
+Nedsatt nyrefunksjon
+Det er ikke nødvendig med dosejustering av lurasidon hos pasienter med mildt nedsatt nyrefunksjon.
+Hos pasienter med moderat (kreatininclearance (CrCl) ≥ 30 og < 50 ml/minutt), alvorlig nedsatt
+nyrefunksjon (CrCL >15 og < 30 ml/min) og terminal nyresykdom (ESRD) (CrCl < 15 ml/minutt), er
+anbefalt startdose 18,5 mg, og maksimal dose bør ikke overskride 74 mg én gang per døgn. Lurasidon
+bør ikke brukes hos pasienter med terminal nyresykdom med mindre den potensielle nytten overgår
+den potensielle risikoen. Hvis det brukes ved terminal nyresykdom, anbefales klinisk overvåking.
+
+Nedsatt leverfunksjon
+Dosejustering er ikke nødvendig hos pasienter med mildt nedsatt leverfunksjon. Dosejustering
+anbefales ved moderat (Child Pugh klasse B) og alvorlig nedsatt leverfunksjon (Child Pugh klasse C).
+Anbefalt startdose er 18,5 mg. Maksimal døgndose hos pasienter med moderat nedsatt leverfunksjon
+bør ikke overskride 74 mg daglig, og bør hos pasienter med alvorlig nedsatt leverfunksjon ikke
+overskride 37 mg daglig.
+
+Administrasjonsmåte
+
+Lurasidone Accord filmdrasjerte tabletter er til oral bruk og skal tas én gang daglig sammen med et
+måltid. Hvis det tas uten mat antas det at eksponering for lurasidon blir signifikant lavere enn når det
+tas sammen med mat (se pkt. 5.2).
+
+Lurasidone Accord-tablettene skal svelges hele for å maskere den bitre smaken. Lurasidone
+Accord-tablettene bør tas til samme tidspunkt hver dag for å bedre compliance.
+
+4.3   Kontraindikasjoner
+
+                                                    2

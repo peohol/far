@@ -1,0 +1,59 @@
+Siden lurasidon primært har effekt på sentralnervesystemet, bør lurasidon brukes med
+forsiktighet i kombinasjon med andre sentralt virkende legemidler og alkohol.
+
+Forsiktighet anbefales ved bruk av lurasidon sammen med legemidler som er kjent for å forlenge
+QT-intervallet, f.eks. klasse IA antiarytmika (f.eks. kinidin, disopyramid) og klasse III antiarytmika
+(f.eks.amiodaron, sotalol), noen antihistaminer, noen andre antipsykotika og noen antimalariamidler
+(f.eks. meflokin).
+
+Lurasidone Accord bør brukes med forsiktighet når det administreres sammen med andre
+serotonerge legemidler, for eksempel buprenorfin/opioider, MAO-hemmere, selektive serotonin-
+reopptakshemmere (SSRI-er), serotonin-norepinefrin-reopptakshemmere (SNRI-er) eller
+trisykliske antidepressiva, grunnet den økte risikoen for serotoninsyndrom, en potensielt
+livstruende tilstand (se pkt. 4.4).
+
+Farmakokinetiske interaksjoner
+Samtidig administrasjon av lurasidon og grapefruktjuice er ikke undersøkt. Grapefruktjuice
+hemmer CYP3A4 og kan øke serumkonsentrasjonen av lurasidon. Grapefruktjuice skal unngås
+under behandling med lurasidon.
+
+Andre legemidlers påvirkning på lurasidon
+Lurasidon og dets aktive metabolitt ID-14283 bidrar begge til den farmakodynamiske effekten på
+dopaminerge og serotonerge reseptorer. Lurasidon og den aktive metabolitten ID-14283 metaboliseres
+primært av CYP3A4.
+
+CYP3A4-hemmere
+Lurasidon er kontraindisert med sterke CYP3A4-hemmere (f.eks. boseprevir, klaritromycin,
+kobicistat, indinavir, itrakonazol, ketokonazol, nefazodon, nelfinavir, posakonazol, ritonavir,
+sakinavir, telaprevir, telitromycin, vorikonazol) (se pkt. 4.3).
+
+Samtidig administrasjon av lurasidon og den sterke CYP3A4-hemmeren ketokonazol resulterte i 9
+og 6 ganger høyere eksponering for henholdsvis lurasidon og den aktive metabolitten ID-14283.
+
+Samtidig administrasjon av lurasidon og posakonazol (sterk CYP3A4-hemmer) resulterte i
+omtrent 4–5 ganger høyere eksponering for lurasidon. Denne effekten ble observert i opptil 2–
+3 uker etter at behandlingen med posakonazol ble avsluttet.
+
+Samtidig administrasjon av lurasidon med legemidler som hemmer CYP3A4 moderat (f.eks.
+diltiazem, erytromycin, flukonazol, verapamil), kan øke eksponeringen for lurasidon. Moderate
+hemmer av CYP3A4 anslås å resultere i en 2–5 høyere eksponering for CYP3A4-substrater.
+
+Samtidig administrasjon av lurasidon og diltiazem (langsom frisetting), en moderat CYP3A3-
+hemmer, resulterte i henholdsvis 2,2 og 2,4 ganger høyere eksponering for lurasidon og den aktive
+metabolitten ID-14283 (se pkt. 4.2). Bruk av diltiazemformuleringer med øyeblikkelig frisetting kan
+resultere i en større økning i lurasidons eksponering.
+
+CYP3A4-induktorer
+Lurasidon er kontraindisert med sterke CYP3A4-induktorer (f.eks. karbamazepin, fenobarbital,
+fenytoin, rifampicin, johannesurt (Hypericum perforatum)) (se pkt. 4.3).
+
+Samtidig administrasjon av lurasidon og den sterke CYP3A4-induktoren rifampicin resulterte i
+6 ganger lavere eksponering for lurasidon.
+
+Samtidig administrasjon av lurasidon og svake (f.eks. armodafinil, amprenavir, aprepitant,
+prednison, rufinamid) eller moderate (f.eks. bosentan, efavirenz, etravirin, modafinil, naficillin)
+CYP3A4-induktorer forventes å gi < 2 ganger lavere eksponering for lurasidon ved samtidig
+administrasjon og i opptil 2 uker etter seponering av milde til moderate CYP3A4-induktorer.
+
+
+                                                    5

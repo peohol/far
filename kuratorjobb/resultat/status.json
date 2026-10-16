@@ -1,18 +1,83 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/pilot-20261016",
     "foresporsel_commit": "d3e272ca98b2e06d6b9ebe59ba954eb8e4f5f04c",
     "foresporsel_sha256": "c63923b892d38d5f0ae8d8a85a974882ed4adb7b64993f9761f607a910fa1a27",
     "kode_commit": "d534eeefa5c840ea48da981e00a79cca052440b4",
     "kjoring": "https://github.com/peohol/far/actions/runs/38904476295",
-    "startet_kl": "2026-10-16T13:00:10.894Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-16T13:00:13.104Z",
+    "ferdig_kl": "2026-10-16T13:01:17.602Z"
   },
-  "foresporsel": null,
-  "referanse": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "citalopram",
+      "lurasidon",
+      "ghb"
+    ],
+    "oppgaver": [
+      "funksjonstest",
+      "spc"
+    ],
+    "referanse": "pilot-20261016"
+  },
+  "referanse": "pilot-20261016",
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 743
+    }
+  ],
+  "stoffer": {
+    "citalopram": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/citalopram/funksjonstest.json"
+        },
+        "spc": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/citalopram/spc.json"
+        }
+      }
+    },
+    "lurasidon": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/lurasidon/funksjonstest.json"
+        },
+        "spc": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/lurasidon/spc.json"
+        }
+      }
+    },
+    "ghb": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/ghb/funksjonstest.json"
+        },
+        "spc": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/ghb/spc.json"
+        }
+      }
+    }
+  }
 }
