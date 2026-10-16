@@ -53,7 +53,9 @@ export const INNSTILLINGER: Koinnstillinger = {
   maks_forsok: 3,
   ventetid_etter_feil_minutter: 360,
   aktive_modi: ['de_novo'],
-  de_novo_runde: 1,
+  // Runde 1 var den første de novo-piloten (citalopram, gjennom migrasjonene).
+  // Runde 2 er den første i kurateringsgrenene, gjennom hele registeret.
+  de_novo_runde: 2,
   evidensovervaking_dager: 180,
   maling_timer: 20,
   okt_slettes_etter_dager: 14,

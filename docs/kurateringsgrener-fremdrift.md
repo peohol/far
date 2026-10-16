@@ -197,4 +197,8 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 - 2026-10-16: F1 piloten i køen (1.99.0): innstillingen `bare_forrang`, og
   `forrang` citalopram, lurasidon, GHB. Tester i `kurateringsko.test.ts`
   («gir bare ut stoffene i forrang under en pilot»); testene bruker egne
-  innstillinger uten pilot.
+  innstillinger uten pilot. `de_novo_runde` er 2, siden citalopram ble
+  de novo-kuratert i runde 1 (den første piloten) og ellers ikke kunne gis ut.
+- 2026-10-16: Codex-funnene på #231–#237 rettet på laveste gren og flettet
+  oppover: blant annet ankrene og avsluttede tråder (D), nøkkelen og
+  aktiviteten per gren (E1), og grener køen holder i en reservasjon (E2).

@@ -55,8 +55,8 @@ import {
 } from '../kurateringsko/modell'
 import { faginnholdskall, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
-// Innstillingene uten en pilot, så testene ikke avhenger av hva som står først i køen nå.
-const INNST: Koinnstillinger = { ...INNSTILLINGER, forrang: [], bare_forrang: false }
+// Innstillingene uten en pilot og i runde 1, så testene ikke avhenger av hva køen gjør nå.
+const INNST: Koinnstillinger = { ...INNSTILLINGER, forrang: [], bare_forrang: false, de_novo_runde: 1 }
 const ROT = fileURLToPath(new URL('../../', import.meta.url))
 const T0 = '2026-11-02T08:00:00.000Z'
 const om = (kl: string, timer: number) => new Date(Date.parse(kl) + timer * 3_600_000).toISOString()
@@ -446,8 +446,13 @@ describe('prioriteringen og stoffene', () => {
     expect(behandle(t, f('reserver'), kontekst('kurateringsko/okt/a', T0, { ...pilot, utelatt: ['alfa'] }))).toMatchObject({ utfall: 'ingen_oppgave' })
   })
 
-  it('har piloten med citalopram, lurasidon og GHB i innstillingene', () => {
+  it('har piloten med citalopram, lurasidon og GHB i innstillingene, og alle tre kan gis ut', () => {
     expect(INNSTILLINGER).toMatchObject({ forrang: ['citalopram', 'lurasidon', 'ghb'], bare_forrang: true, aktive_modi: ['de_novo'] })
+    // Citalopram ble de novo-kuratert i den første piloten (runde 1); runden i grenene er en ny.
+    const t = ny()
+    const s = t.stoffer.alfa!
+    s.sist_kuratert = { kl: T0, modus: 'de_novo', kunnskapsgrense: '2026-10-13', runde: 1, pr: null, kilde: 'repo' }
+    expect(forfaltModus(s, T0, INNSTILLINGER)).toBe('de_novo')
   })
 
   it('oppdager nye stoffer, og tar dem som ikke er aktive eller ikke har en fagside, ut av køen', () => {
