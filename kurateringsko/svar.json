@@ -1,10 +1,60 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-lurasidon-2",
-  "foresporsel_sha256": "3c1f0e7c3cbb67d18b1dfde0a08c2ce5ab1cb470c3904058635c3e8db3a9a469",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-citalopram-2",
+  "foresporsel_sha256": "8fbb6bc38a1e9cbb0eb70b05e8c5cbcc8d1ca5e89e5e49ea8eb2b9684e7b6cef",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "lurasidon er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-16T18:13:44.261Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38945669069"
+  "melding": "citalopram er reservert til 2026-10-16T21:49:43.706Z.",
+  "behandlet_kl": "2026-10-16T18:49:43.706Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38950275034",
+  "oppgave": {
+    "oppgave": "citalopram-0008",
+    "stoff": "citalopram",
+    "navn": "Citalopram",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-16T21:49:43.706Z",
+    "jobbgren": "kuratorjobb/citalopram-0003",
+    "kurateringsgren": "kuratering/citalopram-0008",
+    "pr": null,
+    "gren": "565f142e-dce5-4804-b3ff-c65593427539",
+    "gjenoppta": {
+      "oppgave": "citalopram-0003",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "avbrutt_kl": "2026-10-16T18:10:24.195Z",
+      "grunn": "Revisjon 5 er godkjent av kontrolløren; grenen kan publiseres.",
+      "fase": null,
+      "jobbgren": "kuratorjobb/citalopram-0003",
+      "kurateringsgren": null,
+      "pr": null,
+      "gren": "565f142e-dce5-4804-b3ff-c65593427539"
+    },
+    "sist_kuratert": {
+      "kl": "2026-10-13T16:00:00.000Z",
+      "modus": "de_novo",
+      "kunnskapsgrense": "2026-10-13",
+      "runde": 1,
+      "pr": null,
+      "kilde": "repo"
+    },
+    "maal": {
+      "kl": "2026-10-16T18:10:24.842Z",
+      "side": true,
+      "elementer": 43,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 13,
+      "referanser": 23,
+      "elementer_uten_kilde": 1
+    },
+    "prioritet": {
+      "poeng": 1552,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen citalopram-0003.",
+        "Står først i innstillingene.",
+        "De novo-kuratering i runden som gjelder.",
+        "Sist kuratert 2026-10-13.",
+        "1 av 43 elementer har ingen kilde."
+      ]
+    }
+  }
 }
