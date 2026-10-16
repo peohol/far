@@ -332,6 +332,11 @@ describe('kontrollen', () => {
 
     // Kuratoren kan ikke vurdere selv; kontrolløren ber om endringer.
     expect((await feilFra(() => agent(claude, 'vurder', { gren: k.gren, revisjon: 1, beslutning: 'godkjent', begrunnelse: 'Selv' })))?.code).toBe('42501')
+    // Også en godkjenning må si hva som er kontrollert.
+    for (const begrunnelse of [undefined, '', '   ']) {
+      const feil = await feilFra(() => agent(chatgpt, 'vurder', { gren: k.gren, revisjon: 1, beslutning: 'godkjent', begrunnelse }))
+      expect(feil).toMatchObject({ code: '22023', message: expect.stringContaining('må ha en begrunnelse') })
+    }
     const tilbake = await agent<Sammendrag>(chatgpt, 'vurder', { gren: k.gren, revisjon: 1, beslutning: 'endringer', begrunnelse: 'Doseringen trenger kilde.' })
     expect(tilbake.status).toBe('tilbakemelding')
 
@@ -528,6 +533,115 @@ describe('publiseringen', () => {
     expect((await adm<{ ok: boolean }>('publiser', { gren: g.id, revisjon: 1 })).ok).toBe(true)
     const [lestEtter] = await kall.fasit<{ b: { kilder: unknown[] } }>('select public.les_bivirkninger($1) as b', [s.slug])
     expect(lestEtter!.b.kilder).toHaveLength(1)
+  })
+})
+
+describe('gjenopprettingen', () => {
+  const versjonNaa = async (side: string) =>
+    (await kall.fasit<{ nr: number }>('select max(nr)::int as nr from public.sideversjoner where infoside = $1', [side]))[0]!.nr
+  const importer = (slug: string, tekst: string) => {
+    const imp = structuredClone(MAL)
+    imp.stoff = slug
+    imp.organsystemer[0].frekvenser[0].bivirkninger[0] = tekst
+    return db.query('select bivirkninger.importer($1::jsonb)', [JSON.stringify(imp)])
+  }
+  const innholdIVersjon = async (slug: string, nr: number) => {
+    const [v] = await kall.fasit<{ v: { elementer: { id: string; innhold: Json }[]; bivirkninger: unknown[] } }>(
+      'select public.les_sideversjon($1, $2) as v',
+      [slug, nr],
+    )
+    return v!.v
+  }
+
+  /** En side der doseringen er skrevet om, indikasjonen fjernet, et kort lagt til og en bivirkningskilde importert etter `nr`. */
+  async function endretSide() {
+    const s = await nyFagside('Gjenopprettstoff')
+    await importer(s.slug, 'Syntetisk hodepine')
+    const nr = await versjonNaa(s.side)
+    await kall.lagre(s.dosering, 1, kort(s.side, 'dosering', 'Senere dosering'))
+    await kall.publiser(s.dosering, 2)
+    await kall.lagre(s.indikasjon, 1, { ...kort(s.side, 'fjernet', 'Gammel indikasjon'), referanser: [s.ref] })
+    await kall.publiser(s.indikasjon, 2)
+    const senere = (await kall.opprett('innholdselement', kort(s.side, 'farmakokinetikk', 'Senere kinetikk'))).id
+    await kall.publiser(senere, 1)
+    const imp = structuredClone(MAL)
+    imp.stoff = s.slug
+    imp.kilde.nokkel = 'senere-kilde'
+    await db.query('select bivirkninger.importer($1::jsonb)', [JSON.stringify(imp)])
+    return { ...s, nr, senere }
+  }
+
+  it('tar en eldre versjon tilbake som en gren, forhåndsvist, og publiserer den som en ny versjon', async () => {
+    const s = await endretSide()
+    expect(JSON.stringify(await publisert(s.slug))).toContain('Senere dosering')
+    const [biv] = await kall.les<{ gammel: { kilder: { nokkel: string }[] }; naa: { kilder: unknown[] } }>(
+      leser,
+      'select public.les_sideversjon_bivirkninger($1, $2) as gammel, public.les_bivirkninger($1) as naa',
+      [s.slug, s.nr],
+    )
+    expect(biv!.gammel.kilder.map((k) => k.nokkel)).not.toContain('senere-kilde')
+    expect(biv!.naa.kilder).toHaveLength(biv!.gammel.kilder.length + 1)
+
+    expect((await feilFra(() => adm('gjenopprett_versjon', { stoff: s.slug, nr: s.nr }, leser)))?.code).toBe('42501')
+    expect((await feilFra(() => agent(claude, 'gjenopprett_versjon', { stoff: s.slug, nr: s.nr })))?.code).toBe('22023')
+
+    const telt = await antall()
+    const g = await adm<Sammendrag & { fra_versjon: number; merknader: string[]; grenrevisjon: { teknisk: Teknisk; forhandsvisning: Json } }>(
+      'gjenopprett_versjon',
+      { stoff: s.slug, nr: s.nr, grunn: 'Feil i senere endring' },
+    )
+    expect(g).toMatchObject({ status: 'arbeid', art: 'gjenoppretting', revisjon: 1, fra_versjon: s.nr })
+    expect(g.grenrevisjon.teknisk, JSON.stringify(g.grenrevisjon.teknisk)).toMatchObject({ ok: true })
+    const visning = JSON.stringify(g.grenrevisjon.forhandsvisning)
+    expect(visning).toContain('Gammel dosering')
+    expect(visning).toContain('Gammel indikasjon')
+    expect(visning).not.toContain('senere-kilde')
+    // Ingenting er publisert ennå, og prøven har ikke etterlatt noe.
+    expect(JSON.stringify(await publisert(s.slug))).toContain('Senere dosering')
+    expect((await antall()).versjoner).toBe(telt.versjoner)
+
+    const svar = await adm<{ ok: boolean; versjon: number }>('publiser', { gren: g.id, revisjon: 1 })
+    expect(svar.ok).toBe(true)
+    const [versjon] = await kall.fasit<{ opphav: string }>('select opphav from public.sideversjoner where infoside = $1 and nr = $2', [s.side, svar.versjon])
+    expect(versjon!.opphav).toBe('gjenoppretting')
+
+    // Kortene og bivirkningskildene er som i den gamle versjonen.
+    const gammel = await innholdIVersjon(s.slug, s.nr)
+    const ny = await innholdIVersjon(s.slug, svar.versjon)
+    const kortene = (v: typeof gammel) => Object.fromEntries(v.elementer.map((e) => [e.id, e.innhold]))
+    expect(kortene(ny)).toEqual(kortene(gammel))
+    expect(ny.bivirkninger.map((b) => (b as { nokkel: string }).nokkel)).toEqual(gammel.bivirkninger.map((b) => (b as { nokkel: string }).nokkel))
+    const lest = await publisert<{ elementer: { id: string; innhold: { panel: string } }[] }>(s.slug)
+    expect(lest.elementer.find((e) => e.id === s.senere)!.innhold.panel).toBe('fjernet')
+    await kall.forventSamsvar(s.indikasjon)
+
+    const [endring] = await kall.fasit<{ gren: string; oppsummering: string; utfort_av: string }>(
+      'select e.gren, e.oppsummering, e.utfort_av from public.innholdsendringer e join public.sideversjoner v on v.endring_id = e.id where v.infoside = $1 and v.nr = $2',
+      [s.side, svar.versjon],
+    )
+    expect(endring).toMatchObject({ gren: g.id, utfort_av: admin })
+    expect(endring!.oppsummering).toContain(`Gjenoppretting av versjon ${s.nr}`)
+  })
+
+  it('tar ikke tilbake den gjeldende versjonen, eller ved siden av en aktiv gren', async () => {
+    const s = await nyFagside('Gjenopprettstopp')
+    const naa = await versjonNaa(s.side)
+    expect((await feilFra(() => adm('gjenopprett_versjon', { stoff: s.slug, nr: naa })))?.code).toBe('22023')
+    expect((await feilFra(() => adm('gjenopprett_versjon', { stoff: s.slug, nr: naa + 5 })))?.code).toBe('PT404')
+    await kall.lagre(s.dosering, 1, kort(s.side, 'dosering', 'Endret'))
+    await kall.publiser(s.dosering, 2)
+    await agent(claude, 'apne', { stoff: s.slug, formaal: 'Pågår' })
+    expect((await feilFra(() => adm('gjenopprett_versjon', { stoff: s.slug, nr: naa })))?.code).toBe('PT409')
+  })
+
+  it('blokkeres når siden publiseres på nytt før gjenopprettingen er publisert', async () => {
+    const s = await endretSide()
+    const g = await adm<Sammendrag>('gjenopprett_versjon', { stoff: s.slug, nr: s.nr })
+    await kall.lagre(s.dosering, 2, kort(s.side, 'dosering', 'Enda senere'))
+    await kall.publiser(s.dosering, 3)
+    const svar = await adm<{ ok: boolean; status: string; kode: string }>('publiser', { gren: g.id, revisjon: 1 })
+    expect(svar).toMatchObject({ ok: false, status: 'blokkert', kode: 'PT409' })
+    expect(JSON.stringify(await publisert(s.slug))).toContain('Enda senere')
   })
 })
 

@@ -189,8 +189,12 @@ som fantes før systemet, fikk én basisversjon (`opphav = 'basis'`); eldre
 versjoner er ikke laget i ettertid. Radene kan ikke endres eller slettes,
 unntatt sammen med siden når den slettes for godt. `les_sideversjoner(stoff)`
 lister versjonene, og `les_sideversjon(stoff, nr)` gir siden slik den var, i
-samme form som `les_stoff`. Kurateringsgrenene bygger på dette
-(`docs/kurateringsgrener-fremdrift.md`).
+samme form som `les_stoff`; `les_sideversjon_bivirkninger(stoff, nr)` gir
+bivirkningene slik de var, i samme form som `les_bivirkninger`. Hver versjon
+har opphavet sitt: `publisering`, `gren` (en kurateringsgren) eller
+`gjenoppretting`. Appen viser versjonene under «Versjoner» i menyen på
+fagsiden, på `#/versjon/<stoff>/<nr>`. Kurateringsgrenene bygger på dette
+(`docs/kurateringsgrener.md`).
 
 ## Operasjonene
 

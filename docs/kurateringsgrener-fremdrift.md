@@ -9,7 +9,7 @@ prosjektet, så en ny økt kan fortsette herfra alene.
 
 | Dato | Punkt |
 | --- | --- |
-| 2026-10-16 | B1 (sideversjoner, 1.93.0, PR #231) og B2 (kurateringsgrener, 1.94.0, grenen `claude/kurateringsgrener`) ferdige og testet. Neste: C. |
+| 2026-10-16 | B1 (1.93.0, PR #231), B2 (1.94.0, PR #232) og C (1.95.0, grenen `claude/kurateringsvisning`) ferdige og testet; PR-ene er stablet og slås sammen i rekkefølge. Neste: D. |
 
 Neste steg står øverst i [Fasene](#fasene) med status `pågår` eller `neste`.
 
@@ -83,8 +83,8 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 | A | Kartlegging og arkitekturvalg (dette dokumentet) | – | ferdig |
 | B1 | Sideversjoner: manifest ved hver publisering, basisversjon, lesing av en eldre hel side (`docs/faginnhold.md`, «Sideversjoner») | 1.93.0 | ferdig |
 | B2 | Kurateringsgrener: lagring, revisjoner, statusmaskin, prøvepublisering og samlet publisering, agentidentiteter og roller (`docs/kurateringsgrener.md`) | 1.94.0 | ferdig |
-| C | Forhåndsvisning, banner, sammenligning, versjonsliste og gjenoppretting, arbeidsoversikt | – | neste |
-| D | Feltkommentarer, kontrollrunder, godkjenning bundet til revisjon, sperrer | – | |
+| C | Forhåndsvisning, banner, sammenligning, versjonsliste og gjenoppretting, arbeidsoversikt (`docs/kurateringsgrener.md`, «Gjenopprettingen» og «I appen») | 1.95.0 | ferdig |
+| D | Feltkommentarer, kontrollrunder, godkjenning bundet til revisjon, sperrer | – | neste |
 | E | Agentendepunkt (HTTP og MCP), kø mot grener, «Følg agenten», kuratorprotokollen for Claude | – | |
 | F | Pilot: citalopram, lurasidon, GHB; deretter køstyrt de novo-runde | – | |
 
@@ -102,6 +102,13 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
   funksjon og et navn i lista.
 - Fase D legger sperrende kommentarer inn i `kuratering.sperrer(gren)`, som
   godkjenningen og publiseringen alt spør.
+- En gren kan bygge på objekter utenfor grunnversjonens manifest (et fjernet
+  kort en gjenoppretting tar tilbake): revisjonen står da i tilstanden som
+  `grunnrevisjon`, og `kuratering.forventet_revisjon` kontrollerer mot den.
+- Appen: `src/kuratering/` (klienten og modellen), `src/components/kuratering/`
+  (sidene og listene). En utgave av siden vises med `Stoffside` selv, med
+  `utgave`-propen og en kilde der leseren gir utgavens data
+  (`Utgavevisning`).
 
 ## Avhengigheter som krever Peder
 
@@ -121,3 +128,8 @@ Ingen ennå. Når en oppstår, står den her med nøyaktig hva som trengs.
   `kuratering_agent` og admininngangen `kuratering_admin`. Agenten
   `claude-monografkurator` er lagt til. Tester i
   `src/__tests__/kurateringsgrener.test.ts`.
+- 2026-10-16: C visningen (1.95.0): `gjenopprett_versjon`,
+  `les_sideversjon_bivirkninger`, opphavet på sideversjonene fra grener;
+  versjonssiden, kurateringssiden, versjonslista, arbeidsoversikten og
+  meldingen på fagsiden. Tester i `src/__tests__/kurateringsvisning.test.tsx`
+  og `kurateringsgrener.test.ts`.

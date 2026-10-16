@@ -8,8 +8,10 @@ import { Menyvalg, Nedtrekksmeny } from '../toppmeny/Nedtrekksmeny'
 import { Autoerstattregler } from './Autoerstattregler'
 import { Brukerliste } from './Brukerliste'
 import { Datakilder } from './Datakilder'
+import type { Kurateringsklient } from '../../kuratering/klient'
+import { Kurateringsoversikt } from '../kuratering/Utgavelister'
 
-type Panel = 'brukere' | 'datakilder' | 'autoerstatt' | null
+type Panel = 'brukere' | 'datakilder' | 'autoerstatt' | 'kurateringer' | null
 
 /**
  * Navnene på datakildene som bør ses over, sjekket som idémenyen ser etter nye
@@ -36,7 +38,7 @@ function useDatakildetilsyn(admin: boolean, egenLeser?: Datakildeleser) {
  * ikke en tilgangskontroll: databasen og Edge-funksjonene slår opp rollen selv.
  * Bør en datakilde ses over, står det en prikk på knappen og på «Datakilder».
  */
-export function Adminmeny({ leser }: { leser?: Datakildeleser } = {}) {
+export function Adminmeny({ leser, kuratering }: { leser?: Datakildeleser; kuratering?: Kurateringsklient } = {}) {
   const admin = useProfil().role === 'admin'
   const [panel, setPanel] = useBevart<Panel>('adminmeny', null)
   const tilsyn = useDatakildetilsyn(admin, leser)
@@ -78,6 +80,9 @@ export function Adminmeny({ leser }: { leser?: Datakildeleser } = {}) {
                 <Menyvalg ikon="reset" tekst="Datakilder" nytt={sesOver} onClick={apne('datakilder')} />
               </li>
               <li>
+                <Menyvalg ikon="oppgaver" tekst="Kurateringer" onClick={apne('kurateringer')} />
+              </li>
+              <li>
                 <Menyvalg ikon="edit" tekst="Autoerstatt" onClick={apne('autoerstatt')} />
               </li>
             </ul>
@@ -87,6 +92,7 @@ export function Adminmeny({ leser }: { leser?: Datakildeleser } = {}) {
       <Brukerliste apen={panel === 'brukere'} onLukk={lukkPanel} />
       <Datakilder apen={panel === 'datakilder'} onLukk={lukkPanel} />
       <Autoerstattregler apen={panel === 'autoerstatt'} onLukk={lukkPanel} />
+      <Kurateringsoversikt apen={panel === 'kurateringer'} klient={kuratering} onLukk={lukkPanel} />
     </>
   )
 }
