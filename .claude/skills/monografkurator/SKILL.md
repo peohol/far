@@ -34,6 +34,7 @@ npm run kurator -- kall <handling> '<json>'       # eller @fil.json
 npm run kurator -- tom-dekning de_novo > /mnt/project-files/kuratering/<stoff>/dekning.json
 npm run kurator -- dekning /mnt/project-files/kuratering/<stoff>/dekning.json
 npm run kurator -- dekning-gren <gren>
+npm run kurator -- tom-selvtest > /mnt/project-files/kuratering/<stoff>/selvtest.json
 ```
 
 De vanligste handlingene, i rekkefølgen en kuratering bruker dem (argumentene

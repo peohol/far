@@ -20,6 +20,7 @@ import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { PANELREKKEFOLGE } from '../faginnhold/paneler'
 import { kontrollerDekning, kontrollpunkter, tomMatrise } from '../kuratorprotokoll/dekning'
+import { SELVTESTKRAV, SELVTESTPORTER, tomSelvtest } from '../kuratorprotokoll/selvtest'
 import { AGENTHANDLINGER } from '../kuratering/handlinger'
 import { faginnholdskall, feilFra, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
@@ -120,7 +121,11 @@ const DOKUMENTER = ['evidensjournal', 'dekningsmatrise', 'selvtest']
 
 /** Syntetiske arbeidsdokumenter som har formen i `docs/kuratorprotokoll.md`. */
 async function gyldigeDokumenter(): Promise<Record<string, Json>> {
-  const [{ punkter } = { punkter: [] }] = await kall.fasit<{ punkter: string[] }>('select kuratering.kontrollpunkter() as punkter')
+  const { punkter, krav, porter } = (
+    await kall.fasit<{ punkter: string[]; krav: string[]; porter: string[] }>(
+      'select kuratering.kontrollpunkter() as punkter, kuratering.selvtestkrav() as krav, kuratering.selvtestporter() as porter',
+    )
+  )[0]!
   return {
     evidensjournal: {
       modus: 'kuratering',
@@ -141,8 +146,8 @@ async function gyldigeDokumenter(): Promise<Record<string, Json>> {
       omrader: punkter.map((nokkel) => ({ nokkel, status: 'beholdt_etter_kontroll', begrunnelse: 'Kontrollert.', kilder: ['Syntetisk kilde'], sok: [], artefakt: '', bevis: 'Lest.' })),
     },
     selvtest: {
-      krav: [{ krav: 'Hver påstand har kilde', status: 'bestatt', bevis: 'Dekningsmatrisen' }],
-      porter: [{ port: 'Prøvepubliseringen', status: 'bestatt', bevis: 'Revisjon 1' }],
+      krav: krav.map((k) => ({ krav: k, status: 'bestatt', bevis: 'Syntetisk bevis' })),
+      porter: porter.map((p) => ({ port: p, status: 'bestatt', bevis: 'Syntetisk bevis' })),
     },
   }
 }
@@ -318,8 +323,8 @@ describe('kontrollen', () => {
       ['dekningsmatrise', {}, 'dekningsmatrise: omrader må være en liste'],
       ['dekningsmatrise', { ...matrise, omrader: matrise.omrader.slice(1) }, 'dekningsmatrise: identitet står 0 ganger'],
       ['dekningsmatrise', { ...matrise, omrader: [{ ...matrise.omrader[0], kilder: [''] }, ...matrise.omrader.slice(1)] }, 'uten tomme oppføringer'],
-      ['selvtest', {}, 'selvtest: krav må ha'],
-      ['selvtest', { ...gyldige.selvtest, krav: [{ krav: 'Tallene stemmer', status: 'ikke_bestatt', bevis: 'Nei' }] }, 'kravene er ikke bestått: Tallene stemmer'],
+      ['selvtest', {}, 'selvtest: krav må være en liste'],
+      ['selvtest', { ...gyldige.selvtest, porter: [{ port: 'provepublisering', status: 'gjenstar', bevis: 'Ikke kjørt' }] }, 'porten provepublisering er ikke bestått (gjenstar)'],
       ['evidensjournal', { kunnskapsgrense: '2026-10-16', hovedkilder: [], sok: [{ domene: '', hva: ' ' }] }, 'evidensjournal: hovedkilder må ha minst én kilde'],
     ] as const) {
       await medDokumenter(k.gren)
@@ -368,6 +373,42 @@ describe('kontrollen', () => {
     expect(lest.status).toBe('retting')
     expect(lest.hindringer.join(' ')).toContain('ikke faglig godkjent')
     expect((await feilFra(() => agent(claude, 'publiser', { gren: k.gren, revisjon: 3 })))?.message).toContain('Bare en godkjent gren')
+  })
+
+  it('godtar bare en selvtest der hvert obligatoriske krav og hver port står én gang og er bestått', async () => {
+    const { selvtest } = (await gyldigeDokumenter()) as { selvtest: { krav: Json[]; porter: Json[] } }
+    const feil = async (innhold: Json) =>
+      (await kall.fasit<{ f: string[] }>(`select kuratering.dokumentfeil('selvtest', $1::jsonb) as f`, [JSON.stringify(innhold)]))[0]!.f
+    const medKrav = (nokkel: string, endring: Record<string, string>) => ({
+      ...selvtest,
+      krav: selvtest.krav.map((k) => ((k as { krav: string }).krav === nokkel ? { ...(k as object), ...endring } : k)),
+    })
+
+    expect(await feil(selvtest)).toEqual([])
+    // Et stoff uten norsk preparatomtale: bare kravene om preparatomtalene kan være ikke_relevant.
+    expect(await feil(medKrav('kildetroskap_preparatomtale', { status: 'ikke_relevant', bevis: 'Ingen norsk preparatomtale' }))).toEqual([])
+
+    for (const [innhold, melding] of [
+      [{ ...selvtest, porter: selvtest.porter.map((p) => ({ ...(p as object), status: 'gjenstar' })) }, 'porten funksjonstest er ikke bestått (gjenstar)'],
+      [{ ...selvtest, porter: [...selvtest.porter.slice(0, 3), { port: 'funksjonstest', status: 'ikke_bestatt', bevis: 'Feilet' }] }, 'porten funksjonstest er ikke bestått (ikke_bestatt)'],
+      [medKrav('evidensstyrke', { status: 'ikke_bestatt' }), 'kravet evidensstyrke er ikke bestått (ikke_bestatt)'],
+      [medKrav('ingenting_finnes_pa', { status: 'ikke_relevant' }), 'kravet ingenting_finnes_pa gjelder alltid og kan ikke være ikke_relevant'],
+      [medKrav('faste_kort', { bevis: ' ' }), 'selvtest: krav må være en liste der hver oppføring har krav, status og bevis'],
+      [{ ...selvtest, krav: selvtest.krav.slice(1) }, 'kravet kildetroskap_preparatomtale mangler'],
+      [{ ...selvtest, krav: [...selvtest.krav, selvtest.krav[0]] }, 'kravet kildetroskap_preparatomtale står 2 ganger'],
+      [{ ...selvtest, porter: [...selvtest.porter, { port: 'Alt ser fint ut', status: 'bestatt', bevis: 'Ja' }] }, 'Alt ser fint ut er ikke et av punktene i porter'],
+      [{ ...selvtest, porter: [] }, 'selvtest: porter må være en liste'],
+    ] as const) {
+      expect((await feil(innhold)).join(' | ')).toContain(melding)
+    }
+
+    // Den gamle, løse formen med ett vilkårlig krav og én port holder ikke lenger.
+    const lost = await feil({
+      krav: [{ krav: 'Hver påstand har kilde', status: 'bestatt', bevis: 'Dekningsmatrisen' }],
+      porter: [{ port: 'Prøvepubliseringen', status: 'bestatt', bevis: 'Revisjon 1' }],
+    })
+    expect(lost).toEqual(expect.arrayContaining(['selvtest: kravet offentlig_repo mangler.', 'selvtest: porten funksjonstest mangler.']))
+    expect(lost.length).toBeGreaterThanOrEqual(15)
   })
 
   it('lar en administrator vurdere, stanse, gjenoppta og forkaste', async () => {
@@ -761,6 +802,22 @@ describe('innholdsmodellen i databasen', () => {
     m.omrader[0]!.kilder = ['']
     expect(kontrollerDekning(m)).toHaveLength(1)
     expect(await dbFeil(m)).toHaveLength(1)
+  })
+
+  it('har de samme punktene i selvtesten som kuratorverktøyet', async () => {
+    const [rad] = await kall.fasit<{ krav: string[]; ikke_relevant: string[]; porter: string[] }>(
+      'select kuratering.selvtestkrav() as krav, kuratering.selvtestkrav_kan_vaere_ikke_relevant() as ikke_relevant, kuratering.selvtestporter() as porter',
+    )
+    expect(rad!.krav).toEqual(SELVTESTKRAV.map((k) => k.nokkel))
+    expect(rad!.ikke_relevant).toEqual(SELVTESTKRAV.filter((k) => 'kan_vaere_ikke_relevant' in k).map((k) => k.nokkel))
+    expect(rad!.porter).toEqual(SELVTESTPORTER.map((p) => p.nokkel))
+    // Malen fra verktøyet har hvert punkt, men holder ikke før status og bevis er fylt ut.
+    const mal = tomSelvtest()
+    const dbFeil = async (s: unknown) =>
+      (await kall.fasit<{ f: string[] }>(`select kuratering.dokumentfeil('selvtest', $1::jsonb) as f`, [JSON.stringify(s)]))[0]!.f
+    expect(await dbFeil(mal)).toHaveLength(2)
+    for (const o of [...mal.krav, ...mal.porter]) Object.assign(o, { status: 'bestatt', bevis: 'Syntetisk bevis' })
+    expect(await dbFeil(mal)).toEqual([])
   })
 })
 

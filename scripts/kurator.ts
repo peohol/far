@@ -6,6 +6,7 @@
  *   npm run kurator -- tom-dekning <modus>                 en tom dekningsmatrise mot modellen nå
  *   npm run kurator -- dekning <fil>                       kontrollerer en dekningsmatrise
  *   npm run kurator -- dekning-gren <gren>                 kontrollerer dekningsmatrisen som er lagret i grenen
+ *   npm run kurator -- tom-selvtest                        en tom selvtest med hvert krav og hver port
  *
  * Miljøet: `OUSFAR_ADRESSE` (standard ousfar.vercel.app), og nøkkelen i
  * `OUSFAR_AGENTNOKKEL` eller fila i `OUSFAR_NOKKELFIL` (standard i prosjektets
@@ -14,6 +15,7 @@
  */
 import { readFileSync } from 'node:fs'
 import { kontrollerDekning, tomMatrise, type Dekningsmatrise } from '../src/kuratorprotokoll/dekning'
+import { tomSelvtest } from '../src/kuratorprotokoll/selvtest'
 import { Agentfeil, STANDARD_NOKKELFIL, lagAgentklient, lesArgumenter } from '../src/kuratorprotokoll/agentklient'
 
 const [kommando, ...rest] = process.argv.slice(2).filter((a) => a !== '--')
@@ -43,6 +45,9 @@ try {
     case 'tom-dekning':
       skriv(tomMatrise((rest[0] as Dekningsmatrise['modus']) || 'de_novo'))
       break
+    case 'tom-selvtest':
+      skriv(tomSelvtest())
+      break
     case 'dekning':
       dekning(JSON.parse(readFileSync(rest[0] ?? '', 'utf8')))
       break
@@ -52,7 +57,7 @@ try {
       break
     }
     default:
-      console.error('Bruk: npm run kurator -- kall|tom-dekning|dekning|dekning-gren …')
+      console.error('Bruk: npm run kurator -- kall|tom-dekning|tom-selvtest|dekning|dekning-gren …')
       process.exitCode = 2
   }
 } catch (e) {

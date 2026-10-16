@@ -189,21 +189,30 @@ hovedkonklusjonene før avstemmingen, og den adversariale kontrollen.
 }
 ```
 
-**`selvtest`**: hvert av de ufravikelige kravene og de tekniske portene
-(prøvepubliseringen, rapporten, dekningen, funksjonstesten), med beviset.
-Kuratoren sender ikke grenen til kontroll med et krav eller en port som ikke
-er bestått: det rettes først, eller stoffet blokkeres for et menneske.
+**`selvtest`**: hvert av de ufravikelige kravene og hver av de tekniske
+portene nøyaktig én gang, med den faste nøkkelen, status og beviset. Malen
+lages med `npm run kurator -- tom-selvtest` (`src/kuratorprotokoll/selvtest.ts`).
+Kravene er, i rekkefølgen over: `kildetroskap_preparatomtale`,
+`bivirkninger_kildetro`, `beskyttede_norske_data`, `pastand_og_kilde`,
+`ingenting_finnes_pa`, `konflikter_synliggjort`, `evidensstyrke`,
+`automatiske_lag`, `faste_kort`, `kunnskapsgrense` og `offentlig_repo`. Portene
+er `provepublisering`, `rapport`, `dekning` og `funksjonstest`. Alt må være
+`bestatt`; bare de to kravene om preparatomtalene kan være `ikke_relevant`, for
+et stoff uten norsk preparatomtale, og beviset sier da hvorfor. Kuratoren
+sender ikke grenen til kontroll med et krav eller en port som ikke er bestått
+eller gjenstår: det rettes først, eller stoffet blokkeres for et menneske.
 
 ```json
 {
-  "krav": [{ "krav": "…", "status": "bestatt | ikke_bestatt | ikke_relevant", "bevis": "…" }],
-  "porter": [{ "port": "…", "status": "bestatt | ikke_bestatt | gjenstar", "bevis": "…" }]
+  "krav": [{ "krav": "kildetroskap_preparatomtale", "status": "bestatt | ikke_relevant", "bevis": "…" }],
+  "porter": [{ "port": "provepublisering", "status": "bestatt", "bevis": "…" }]
 }
 ```
 
 Databasen stopper `avslutt_blindfase` og `til_kontroll` når et av dokumentene
-mangler disse feltene, har tomme oppføringer, eller (dekningsmatrisen) ikke
-dekker hvert kontrollpunkt nøyaktig én gang med belegg
+mangler disse feltene, har tomme oppføringer, eller ikke dekker hvert
+kontrollpunkt (dekningsmatrisen) eller hvert krav og hver port (selvtesten)
+nøyaktig én gang med belegg; i selvtesten stopper også alt som ikke er bestått
 (`kuratering.dokumentfeil`). Fingeravtrykket `modell_sha256` kontrolleres av
 `npm run kurator -- dekning-gren`. Kontrollen hindrer at portene omgås med
 plassholdere; den erstatter ikke fagkontrollen.
