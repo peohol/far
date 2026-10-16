@@ -1,8 +1,8 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T18:53:49.282Z",
+  "oppdatert_kl": "2026-10-16T19:07:15.526Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
-  "teller": 8,
+  "teller": 9,
   "stoffer": {
     "alprazolam": {
       "stoff": "alprazolam",
@@ -1564,11 +1564,20 @@
     "ghb": {
       "stoff": "ghb",
       "navn": "GHB",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1637.9,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen ghb-0006.",
+          "Står først i innstillingene.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "11 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 3 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-16T18:10:24.842Z",
@@ -1580,9 +1589,19 @@
         "elementer_uten_kilde": 1
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "ghb-0006",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-16T19:07:15.526Z",
+        "grunn": "Revisjon 8 er godkjent av kontrolløren; grenen kan publiseres.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/ghb-0005",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -1709,20 +1728,21 @@
           "hendelse": "gren_klar",
           "oppgave": "ghb-0006",
           "melding": "Grenen: klar, revisjon 8, kontrollrunde 2."
+        },
+        {
+          "kl": "2026-10-16T19:07:15.526Z",
+          "hendelse": "gren_godkjent",
+          "oppgave": "ghb-0006",
+          "melding": "Grenen: godkjent, revisjon 8, kontrollrunde 2."
+        },
+        {
+          "kl": "2026-10-16T19:07:15.526Z",
+          "hendelse": "retting",
+          "oppgave": "ghb-0006",
+          "melding": "Revisjon 8 er godkjent av kontrolløren; grenen kan publiseres."
         }
       ],
-      "appgren": {
-        "id": "0d920be7-9ad8-4d91-89bc-5923b8e9407a",
-        "oppgave": "ghb-0006",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-16",
-        "jobbgren": "kuratorjobb/ghb-0005",
-        "registrert_kl": "2026-10-16T18:11:40.597Z",
-        "status": "klar",
-        "revisjon": 8,
-        "kontrollrunde": 2
-      }
+      "appgren": null
     },
     "haloperidol": {
       "stoff": "haloperidol",
@@ -2786,7 +2806,7 @@
     "lurasidon": {
       "stoff": "lurasidon",
       "navn": "Lurasidon",
-      "status": "venter_godkjenning",
+      "status": "reservert",
       "modus": "de_novo",
       "prioritet": {
         "poeng": 0,
@@ -2801,19 +2821,41 @@
         "referanser": 2,
         "elementer_uten_kilde": 20
       },
-      "reservasjon": null,
+      "reservasjon": {
+        "oppgave": "lurasidon-0009",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "modus": "de_novo",
+        "reservert_kl": "2026-10-16T19:07:15.526Z",
+        "fornyet_kl": "2026-10-16T19:07:15.526Z",
+        "frist_kl": "2026-10-16T22:07:15.526Z",
+        "fase": null,
+        "jobbgren": "kuratorjobb/lurasidon-0004",
+        "kurateringsgren": "kuratering/lurasidon-0009",
+        "pr": null,
+        "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95"
+      },
       "forsok": 1,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "lurasidon-0007",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-16T19:07:15.526Z",
+        "grunn": "Revisjon 6 er godkjent av kontrolløren; grenen kan publiseres.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/lurasidon-0004",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
       "siste_kjoring": {
-        "oppgave": "lurasidon-0007",
+        "oppgave": "lurasidon-0009",
         "okt": "kurateringsko/okt/20261016-125910",
-        "startet_kl": "2026-10-16T18:12:54.504Z",
-        "avsluttet_kl": "2026-10-16T18:13:44.261Z",
-        "utfall": "fullfort"
+        "startet_kl": "2026-10-16T19:07:15.526Z",
+        "avsluttet_kl": null,
+        "utfall": "reservert"
       },
       "aktiv": true,
       "historikk": [
@@ -2926,20 +2968,28 @@
           "hendelse": "gren_klar",
           "oppgave": "lurasidon-0007",
           "melding": "Grenen: klar, revisjon 6, kontrollrunde 2."
+        },
+        {
+          "kl": "2026-10-16T19:07:15.526Z",
+          "hendelse": "gren_godkjent",
+          "oppgave": "lurasidon-0007",
+          "melding": "Grenen: godkjent, revisjon 6, kontrollrunde 2."
+        },
+        {
+          "kl": "2026-10-16T19:07:15.526Z",
+          "hendelse": "retting",
+          "oppgave": "lurasidon-0007",
+          "melding": "Revisjon 6 er godkjent av kontrolløren; grenen kan publiseres."
+        },
+        {
+          "kl": "2026-10-16T19:07:15.526Z",
+          "hendelse": "reservert",
+          "oppgave": "lurasidon-0009",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Forsøk 1, de_novo, fortsetter lurasidon-0007."
         }
       ],
-      "appgren": {
-        "id": "3517ed43-9e99-44e7-867b-d5b0dbf59c95",
-        "oppgave": "lurasidon-0007",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-16",
-        "jobbgren": "kuratorjobb/lurasidon-0004",
-        "registrert_kl": "2026-10-16T18:13:44.261Z",
-        "status": "klar",
-        "revisjon": 6,
-        "kontrollrunde": 2
-      }
+      "appgren": null
     },
     "mdma": {
       "stoff": "mdma",
@@ -4778,6 +4828,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "reserver-lurasidon-pub",
         "status-1",
         "fullfort-citalopram-pub",
         "forny-citalopram-pub",
@@ -4798,97 +4849,67 @@
         "reserver-1"
       ],
       "siste": {
-        "id": "status-1",
-        "sha256": "089c1386973e2c3a073b729b3fd455530d8113ddd8f00f8550eb2f7008f4cb34",
+        "id": "reserver-lurasidon-pub",
+        "sha256": "4c9b3063f55f038670026d91ee1f0a01dd166278e9185e326f6d06b7ba03e1ff",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "status-1",
-          "foresporsel_sha256": "089c1386973e2c3a073b729b3fd455530d8113ddd8f00f8550eb2f7008f4cb34",
-          "handling": "status",
+          "foresporsel_id": "reserver-lurasidon-pub",
+          "foresporsel_sha256": "4c9b3063f55f038670026d91ee1f0a01dd166278e9185e326f6d06b7ba03e1ff",
+          "handling": "reserver",
           "utfall": "ok",
-          "melding": "Oversikten over køen.",
-          "behandlet_kl": "2026-10-16T18:53:49.282Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38950797675",
-          "ko": {
-            "oppdatert_kl": "2026-10-16T18:53:49.282Z",
-            "malt_kl": "2026-10-16T18:10:24.195Z",
-            "antall": {
-              "klar": 92,
-              "reservert": 0,
-              "fagarbeid_ferdig": 0,
-              "venter_godkjenning": 2,
-              "sammenslatt": 0,
-              "publisert": 1,
-              "blokkert": 4,
-              "utenfor": 1
+          "melding": "lurasidon er reservert til 2026-10-16T22:07:15.526Z.",
+          "behandlet_kl": "2026-10-16T19:07:15.526Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38952492282",
+          "oppgave": {
+            "oppgave": "lurasidon-0009",
+            "stoff": "lurasidon",
+            "navn": "Lurasidon",
+            "modus": "de_novo",
+            "forsok": 1,
+            "frist_kl": "2026-10-16T22:07:15.526Z",
+            "jobbgren": "kuratorjobb/lurasidon-0004",
+            "kurateringsgren": "kuratering/lurasidon-0009",
+            "pr": null,
+            "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95",
+            "gjenoppta": {
+              "oppgave": "lurasidon-0007",
+              "okt": "kurateringsko/okt/20261016-125910",
+              "avbrutt_kl": "2026-10-16T19:07:15.526Z",
+              "grunn": "Revisjon 6 er godkjent av kontrolløren; grenen kan publiseres.",
+              "fase": null,
+              "jobbgren": "kuratorjobb/lurasidon-0004",
+              "kurateringsgren": null,
+              "pr": null,
+              "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95"
             },
-            "aktive": [],
-            "neste": [],
-            "til_gjennomgang": [
-              {
-                "stoff": "ghb",
-                "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a",
-                "grenstatus": "klar",
-                "status": "venter_godkjenning"
-              },
-              {
-                "stoff": "lurasidon",
-                "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95",
-                "grenstatus": "klar",
-                "status": "venter_godkjenning"
-              }
-            ],
-            "blokkert": [
-              {
-                "stoff": "etanol",
-                "blokkeringer": [
-                  {
-                    "kode": "uten_fagside",
-                    "grunn": "Stoffet har ingen publisert fagside å kuratere.",
-                    "kl": "2026-10-14T04:50:43.758Z",
-                    "kilde": "system"
-                  }
-                ]
-              },
-              {
-                "stoff": "kokain",
-                "blokkeringer": [
-                  {
-                    "kode": "uten_fagside",
-                    "grunn": "Stoffet har ingen publisert fagside å kuratere.",
-                    "kl": "2026-10-14T04:50:43.758Z",
-                    "kilde": "system"
-                  }
-                ]
-              },
-              {
-                "stoff": "mdma",
-                "blokkeringer": [
-                  {
-                    "kode": "uten_fagside",
-                    "grunn": "Stoffet har ingen publisert fagside å kuratere.",
-                    "kl": "2026-10-14T04:50:43.758Z",
-                    "kilde": "system"
-                  }
-                ]
-              },
-              {
-                "stoff": "metamfetamin",
-                "blokkeringer": [
-                  {
-                    "kode": "uten_fagside",
-                    "grunn": "Stoffet har ingen publisert fagside å kuratere.",
-                    "kl": "2026-10-14T04:50:43.758Z",
-                    "kilde": "system"
-                  }
-                ]
-              }
-            ]
+            "sist_kuratert": null,
+            "maal": {
+              "kl": "2026-10-16T18:10:24.842Z",
+              "side": true,
+              "elementer": 23,
+              "redaksjonelle_paneler": 13,
+              "paneler_med_innhold": 6,
+              "referanser": 2,
+              "elementer_uten_kilde": 20
+            },
+            "prioritet": {
+              "poeng": 1800.7,
+              "grunner": [
+                "Fortsetter den avbrutte kurateringen lurasidon-0007.",
+                "Står først i innstillingene.",
+                "De novo-kuratering i runden som gjelder.",
+                "Aldri kuratert.",
+                "Ingen kuratering å regne alderen fra.",
+                "7 av 13 redaksjonelle seksjoner er tomme.",
+                "20 av 23 elementer har ingen kilde.",
+                "Bare 2 referanser."
+              ]
+            }
           }
         }
       },
       "besvart_commit": "8a2ea46172de703eef7f102a463e30fad2793176",
-      "sist_brukt_kl": "2026-10-16T18:53:49.282Z"
+      "sist_brukt_kl": "2026-10-16T19:07:15.526Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
