@@ -1,56 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-lurasidon-2",
-  "foresporsel_sha256": "0692cd858a97d73d52f12597a0e6e808d531204a7832cf3d93ffad6b791b6ff6",
-  "handling": "reserver",
+  "foresporsel_id": "fullfort-lurasidon-2",
+  "foresporsel_sha256": "3c1f0e7c3cbb67d18b1dfde0a08c2ce5ab1cb470c3904058635c3e8db3a9a469",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "lurasidon er reservert til 2026-10-16T21:12:54.504Z.",
-  "behandlet_kl": "2026-10-16T18:12:54.504Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38945547020",
-  "oppgave": {
-    "oppgave": "lurasidon-0007",
-    "stoff": "lurasidon",
-    "navn": "Lurasidon",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-16T21:12:54.504Z",
-    "jobbgren": "kuratorjobb/lurasidon-0004",
-    "kurateringsgren": "kuratering/lurasidon-0007",
-    "pr": null,
-    "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95",
-    "gjenoppta": {
-      "oppgave": "lurasidon-0004",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "avbrutt_kl": "2026-10-16T18:10:24.195Z",
-      "grunn": "Grenen er tilbake hos kuratoren.",
-      "fase": null,
-      "jobbgren": "kuratorjobb/lurasidon-0004",
-      "kurateringsgren": null,
-      "pr": null,
-      "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95"
-    },
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-16T18:10:24.842Z",
-      "side": true,
-      "elementer": 23,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 6,
-      "referanser": 2,
-      "elementer_uten_kilde": 20
-    },
-    "prioritet": {
-      "poeng": 1800.7,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen lurasidon-0004.",
-        "Står først i innstillingene.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "7 av 13 redaksjonelle seksjoner er tomme.",
-        "20 av 23 elementer har ingen kilde.",
-        "Bare 2 referanser."
-      ]
-    }
-  }
+  "melding": "lurasidon er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-16T18:13:44.261Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38945669069"
 }
