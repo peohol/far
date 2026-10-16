@@ -47,7 +47,7 @@ nytt).
 | `les_dokument` | kurator (egen), kontrollør, admin | `{gren, art, versjon?}` |
 | `avslutt_blindfase` | kurator | `{gren}` |
 | `til_kontroll` / `trekk_fra_kontroll` | kurator | `{gren, revisjon}` / `{gren}` |
-| `vurder` | kontrollør, admin | `{gren, revisjon, beslutning, begrunnelse}` |
+| `vurder` | kontrollør, admin | `{gren, revisjon, beslutning, begrunnelse}`; begrunnelsen kreves også ved `godkjent` (hva som er kontrollert) |
 | `oppdater_grunnlag` | kurator | `{gren}` |
 | `publiser` | kurator (egen), admin | `{gren, revisjon}` |
 | `stans` / `gjenoppta` | admin | `{gren, grunn?}` / `{gren}` |
