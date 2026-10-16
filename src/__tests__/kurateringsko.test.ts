@@ -540,13 +540,16 @@ describe('prioriteringen og stoffene', () => {
     expect(behandle(t, f('reserver'), kontekst('kurateringsko/okt/a', T0, { ...pilot, utelatt: ['alfa'] }))).toMatchObject({ utfall: 'ingen_oppgave' })
   })
 
-  it('har piloten med citalopram, lurasidon og GHB i innstillingene, og alle tre kan gis ut', () => {
-    expect(INNSTILLINGER).toMatchObject({ forrang: ['citalopram', 'lurasidon', 'ghb'], bare_forrang: true, aktive_modi: ['de_novo'] })
-    // Citalopram ble de novo-kuratert i den første piloten (runde 1); runden i grenene er en ny.
+  it('går gjennom hele registeret i de novo-runde 2 etter piloten, uten å gi ut pilotstoffene igjen', () => {
+    expect(INNSTILLINGER).toMatchObject({ forrang: [], bare_forrang: false, aktive_modi: ['de_novo'], de_novo_runde: 2 })
     const t = ny()
     const s = t.stoffer.alfa!
+    // Kuratert i den første piloten (runde 1): forfalt i runden i grenene.
     s.sist_kuratert = { kl: T0, modus: 'de_novo', kunnskapsgrense: '2026-10-13', runde: 1, pr: null, kilde: 'repo' }
     expect(forfaltModus(s, T0, INNSTILLINGER)).toBe('de_novo')
+    // Publisert fra en gren i piloten (runde 2): ikke forfalt.
+    s.sist_kuratert = { kl: T0, modus: 'de_novo', kunnskapsgrense: '2026-10-16', runde: 2, pr: null, gren: '0b6f3c1e-2222-4000-8000-000000000002', kilde: 'ko' }
+    expect(forfaltModus(s, T0, INNSTILLINGER)).toBeNull()
   })
 
   it('oppdager nye stoffer, og tar dem som ikke er aktive eller ikke har en fagside, ut av køen', () => {

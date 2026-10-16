@@ -12,12 +12,15 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.99.2',
+    versjon: '1.100.0',
     dato: '2026-10-16',
-    sammendrag: 'Kurateringskøen husker kunnskapsgrensen gjennom kontrollrundene',
+    sammendrag: 'Piloten er bestått, og kurateringskøen går videre gjennom hele stoffregisteret',
     typer: ['Funksjonalitet'],
     omfang: 'Minimalt omfang',
-    punkter: ['Ingen endring i appen. Når en kuratering ble godkjent og publisert etter en kontrollrunde, mistet kurateringskøen datoen kildesøket gjaldt til. Nå følger datoen kurateringen fram til publiseringen.'],
+    punkter: [
+      'Ingen endring i appen. Citalopram, lurasidon og GHB er kuratert på nytt i kurateringsgrenene, kontrollert og godkjent hver for seg av en uavhengig kontrollør, og publisert. Kurateringskøen går nå videre med den nye runden gjennom hele stoffregisteret, med den samme faglige godkjenningen for hvert stoff.',
+      'Kurateringskøen husker nå datoen kildesøket gjaldt til også når en kuratering godkjennes og publiseres etter en kontrollrunde.',
+    ],
     utenVarsel: true,
   },
   {
