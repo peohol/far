@@ -140,6 +140,9 @@
      og blir beviset i limsteget. Kort nok til at blinket fra kopieringen
      fortsatt står når knappen lander. */
   --fart-flyt: 340ms;
+  /* Siden ruller til en skuff brukeren åpnet. Ikke kortere enn `--fart-glid`
+     og `--fart-flyt`, så skuffen står ferdig når rullingen lander. */
+  --fart-rull: 420ms;
   --fart-ikon: 700ms; /* ikonanimasjon */
   --kurve: cubic-bezier(0.22, 0.61, 0.36, 1);
   --kurve-ikon: cubic-bezier(0.3, 0.7, 0.3, 1);
@@ -368,6 +371,7 @@
     --fart-rask: 0ms;
     --fart-glid: 0ms;
     --fart-flyt: 0ms;
+    --fart-rull: 0ms;
     --fart-ikon: 0ms;
   }
 }

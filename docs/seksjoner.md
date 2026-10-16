@@ -32,11 +32,17 @@ offentlige kilder.
   - får den åpne skuffen plass i feltet, midtstilles den;
   - er den høyere enn feltet, legges toppen rett under toppmenyen.
 
-  Siden begynner å rulle straks, etter høyden skuffen er ventet å få, og
-  justeres til den virkelige når skuffen har glidd ferdig — med mindre
-  brukeren alt har begynt å rulle selv. Søsknene som lukkes, lukkes straks,
-  så skuffen står stille mens siden ruller. Nederst på siden kan den ikke
-  alltid midtstilles, for siden kan ikke rulles forbi slutten.
+  Siden ruller i én bevegelse (`--fart-rull`) som lander der skuffen står
+  når den har åpnet seg ferdig: målet er høyden skuffen er ventet å få, og
+  for et kort i et rutenett plassen det havner på når kortet som var åpent,
+  har krympet og naboene har flyttet seg (`endeligRamme` i `useFlytting`).
+  Målet regnes ut på nytt i hvert bilde, så siden går aldri for langt og
+  ruller tilbake. Søsknene som lukkes, lukkes straks; flytter det skuffen,
+  legges siden først slik at skuffen står der brukeren trykket, og ruller så
+  derfra. Nettleserens egen forankring av siden (`overflow-anchor`) står av
+  mens dette pågår, så den ikke flytter siden i et hopp. Begynner brukeren å
+  rulle selv, slipper siden taket. Nederst på siden kan skuffen ikke alltid
+  midtstilles, for siden kan ikke rulles forbi slutten.
   Direktelenker legger fortsatt toppen øverst, og søket midtstiller treffet.
 - Identiteten og viktige data øverst på siden, og kritiske varsler, er ikke
   skuffer. De står alltid fram, og å åpne en seksjon lukker dem ikke.

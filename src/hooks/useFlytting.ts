@@ -22,7 +22,37 @@ const INNTONING = 0.4
 
 /** Mindre enn en halv piksel er ingen flytting. */
 const ulik = (a: number, b: number) => Math.abs(a - b) > 0.5
-const mellom = (fra: number, til: number, e: number) => fra + (til - fra) * e
+export const mellom = (fra: number, til: number, e: number) => fra + (til - fra) * e
+
+/** Barna som flyttes nå: beholderen de står i, og hvor de skal stå i den når flyttingen er ferdig. */
+const underveis = new WeakMap<Element, { boks: HTMLElement; til: Boks }>()
+
+/**
+ * Hvor elementet står når flyttingen det er med i, er ferdig, i vinduets
+ * koordinater — eller der det står nå, når ingenting flytter det. Mens et
+ * kort vokser og naboene glir, står de et annet sted enn de havner; den som
+ * skal rulle dit, må sikte mot der de havner (se `rullTilpasset`).
+ */
+export function endeligRamme(el: Element): Ramme {
+  const naa = el.getBoundingClientRect()
+  let barn: Element | null = el
+  while (barn && !underveis.has(barn)) barn = barn.parentElement
+  if (!barn) return naa
+  const { boks, til } = underveis.get(barn)!
+  const o = endeligRamme(boks)
+  // Innholdet står i sin endelige bredde mens barnet flyttes, så det ligger der det skal i barnet.
+  const b = barn.getBoundingClientRect()
+  const selv = el === barn
+  return {
+    left: o.left + til.x + naa.left - b.left,
+    top: o.top + til.y + naa.top - b.top,
+    width: selv ? til.bredde : naa.width,
+    height: selv ? til.hoyde : naa.height,
+  }
+}
+
+/** Et elements plass i vinduet, som fra `getBoundingClientRect`. */
+export type Ramme = Pick<DOMRect, 'left' | 'top' | 'width' | 'height'>
 
 /**
  * Lar barna i en beholder gli fra der de sto til der de havner når oppsettet
@@ -132,8 +162,10 @@ function spill(boks: HTMLElement, forrige: Opptak, ms: number, kurve: (t: number
 
   let ramme = 0
   const start = performance.now()
+  for (const el of alle) underveis.set(el, { boks, til: endelig.get(el)! })
   const rydd = () => {
     cancelAnimationFrame(ramme)
+    for (const el of alle) underveis.delete(el)
     boks.style.removeProperty('height')
     boks.style.removeProperty('align-items')
     for (const el of faste) el.style.removeProperty('height')
@@ -177,7 +209,7 @@ function spill(boks: HTMLElement, forrige: Opptak, ms: number, kurve: (t: number
 }
 
 /** Et fart-token (`340ms`, `0.34s`) i millisekunder; 0 når det mangler. */
-function lesFart(el: Element, token: string): number {
+export function lesFart(el: Element, token: string): number {
   const verdi = getComputedStyle(el).getPropertyValue(token).trim()
   const tall = parseFloat(verdi)
   if (!Number.isFinite(tall)) return 0
@@ -185,7 +217,7 @@ function lesFart(el: Element, token: string): number {
 }
 
 /** `--kurve` som funksjon av tiden. Uten token: en myk utfasing. */
-function lesKurve(el: Element): (t: number) => number {
+export function lesKurve(el: Element): (t: number) => number {
   const treff = /cubic-bezier\(([^)]+)\)/.exec(getComputedStyle(el).getPropertyValue('--kurve'))
   const tall = treff?.[1]!.split(',').map(Number) ?? []
   if (tall.length !== 4 || tall.some((n) => !Number.isFinite(n))) return (t) => 1 - (1 - t) ** 3

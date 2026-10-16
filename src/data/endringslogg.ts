@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.100.0',
+    versjon: '1.101.0',
     dato: '2026-10-16',
     sammendrag: 'Piloten er bestått, og kurateringskøen går videre gjennom hele stoffregisteret',
     typer: ['Funksjonalitet'],
@@ -22,6 +22,30 @@ export const ENDRINGSLOGG: Endring[] = [
       'Kurateringskøen husker nå datoen kildesøket gjaldt til også når en kuratering godkjennes og publiseres etter en kontrollrunde.',
     ],
     utenVarsel: true,
+  },
+  {
+    versjon: '1.99.3',
+    dato: '2026-10-16',
+    sammendrag: 'Endringer vises med rød og grønn bakgrunn, som i GitHub',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    gjelder: ['kuratering', 'versjon', 'stoff', 'fortolkning/*/rediger', 'vinduer'],
+    punkter: [
+      'Når en kurateringsgren eller en tidligere versjon sammenlignes med den gjeldende fagsiden, står slettet tekst nå på rød bakgrunn og gjennomstreket, og ny tekst på grønn bakgrunn uten understreking. Før var det bare gjennomstreking og understreking der.',
+      'Historikken og regelredigeringen viser endringene på samme måte.',
+    ],
+  },
+  {
+    versjon: '1.99.2',
+    dato: '2026-10-16',
+    sammendrag: 'Siden ruller rolig fram til kortet du åpner, i én bevegelse',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    gjelder: ['stoff', 'stoffregister', 'fortolkning'],
+    punkter: [
+      'Når du åpner et kort eller en seksjon, ruller siden nå i én jevn bevegelse som lander der kortet står ferdig åpnet. Før gikk den ofte for langt mens kortet åpnet seg, og måtte rulle tilbake etterpå.',
+      'Siden hopper heller ikke lenger i det kortet åpnes, når et annet åpent kort eller en annen seksjon lukkes samtidig.',
+    ],
   },
   {
     versjon: '1.99.1',
