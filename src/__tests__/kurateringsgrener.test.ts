@@ -18,6 +18,7 @@
 import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
+import { PANELREKKEFOLGE } from '../faginnhold/paneler'
 import { AGENTHANDLINGER } from '../kuratering/handlinger'
 import { faginnholdskall, feilFra, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
@@ -442,6 +443,9 @@ describe('publiseringen', () => {
     expect((await antall()).kilder).toBe(telt.kilder)
     const lest = await agent<{ grenrevisjon: { forhandsvisning: { bivirkninger: { kilder: unknown[] } } } }>(chatgpt, 'les', { gren: g.id })
     expect(lest.grenrevisjon.forhandsvisning.bivirkninger.kilder).toHaveLength(1)
+    // En tråd kan festes til preparatomtalen i grenen, men ikke til en som ikke finnes.
+    await agent(chatgpt, 'kommenter', { gren: g.id, anker: { kilde: imp.kilde.nokkel }, tekst: 'Kontroller frekvensene.' })
+    expect((await feilFra(() => agent(chatgpt, 'kommenter', { gren: g.id, anker: { kilde: 'oppdiktet-spc' }, tekst: 'x' })))?.message).toContain('preparatomtalen')
 
     await tilGodkjent(g.id)
     expect((await adm<{ ok: boolean }>('publiser', { gren: g.id, revisjon: 1 })).ok).toBe(true)
@@ -612,6 +616,8 @@ describe('kommentarene', () => {
     expect((await adm<{ ok: boolean }>('publiser', { gren: k.gren, revisjon: 2 })).ok).toBe(true)
     // Etter publiseringen er grenen avsluttet, og trådene står som historikk.
     expect((await feilFra(() => agent(chatgpt, 'kommenter', { gren: k.gren, tekst: 'For sent' })))?.code).toBe('22023')
+    expect((await feilFra(() => adm('gjenapne_kommentar', { gren: k.gren, kommentar: traad.traad, tekst: 'For sent' })))?.message).toContain('avsluttet')
+    expect((await feilFra(() => adm('lukk_kommentar', { gren: k.gren, kommentar: lest.traader[0]!.id })))?.message).toContain('avsluttet')
     expect((await adm<Traad[]>('kommentarer', { gren: k.gren }))[0]!.kommentarer.map((x) => x.handling)).toEqual([
       'kommentar', 'kommentar', 'lukket', 'gjenapnet', 'lukket',
     ])
@@ -620,12 +626,26 @@ describe('kommentarene', () => {
   it('lar kuratoren skrive merknader og andre ikke lese grenens tråder', async () => {
     const k = await kuratertGren()
     const merknad = await agent<{ traad: string }>(claude, 'kommenter', { gren: k.gren, anker: { seksjon: 'dosering' }, tekst: 'Usikker på barnedosen.' })
+    // Et anker må peke på noe som finnes: et felt i et objekt, og en kjent seksjon.
+    for (const [anker, melding] of [
+      [{ felt: 'Tekst' }, 'høre til et objekt'],
+      [{ seksjon: 'doseringg' }, 'ukjent seksjon'],
+    ] as const) {
+      expect((await feilFra(() => agent(claude, 'kommenter', { gren: k.gren, anker, tekst: 'x' })))?.message).toContain(melding)
+    }
     expect((await adm<Traad[]>('kommentarer', { gren: k.gren, apne: true }))[0]).toMatchObject({ id: merknad.traad, art: 'merknad' })
     expect((await feilFra(() => adm('kommentarer', { gren: k.gren }, leser)))?.code).toBe('42501')
     await agent(claude, 'lukk_kommentar', { gren: k.gren, kommentar: merknad.traad })
     expect(await adm<Traad[]>('kommentarer', { gren: k.gren, apne: true })).toEqual([])
     const [rad] = await kall.fasit<{ id: string }>('select id from kuratering.kommentarer where traad = $1 limit 1', [merknad.traad])
     expect((await feilFra(() => db.query('update kuratering.kommentarer set tekst = $1 where id = $2', ['x', rad!.id])))?.code).toBe('42501')
+  })
+})
+
+describe('seksjonene', () => {
+  it('er de samme i databasen som på fagsiden', async () => {
+    const [rad] = await kall.fasit<{ s: string[] }>('select kuratering.seksjoner() as s')
+    expect(rad!.s).toEqual([...PANELREKKEFOLGE])
   })
 })
 

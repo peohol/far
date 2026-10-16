@@ -124,10 +124,15 @@ kontroll eller godkjent, så det som publiseres, er det kontrolløren vurderte.
 Den faglige kontrollen skjer i kommentartråder i grenen
 (`kuratering.kommentarer`, uforanderlige rader). En tråd er festet til hele
 grenen eller et `anker`: `objekt` (et kort eller siden, som må stå på siden
-eller i grenen), `felt` (navnet på feltet, som i sammenligningen), `seksjon`,
-`referanse` (en referanse på siden eller i grenen), `kilde` (en
-preparatomtale) eller `dokument` (et av grenens dokumenter). Hver kommentar
-husker revisjonen den ble skrevet på, og hvem som skrev den.
+eller i grenen), `felt` (navnet på feltet i objektet, som i
+sammenligningen; krever `objekt`), `seksjon` (en av fagsidens seksjoner,
+`kuratering.seksjoner()`, de samme som `PANELER`), `referanse` (en referanse
+på siden eller i grenen), `kilde` (nøkkelen til en preparatomtale på siden
+eller i grenen) eller `dokument` (et av grenens dokumenter). Et anker som
+ikke peker på noe som finnes, avvises. Hver kommentar husker revisjonen den
+ble skrevet på, og hvem som skrev den. Når grenen er publisert eller
+arkivert, står trådene som de var: de kan ikke kommenteres, lukkes eller
+åpnes igjen.
 
 - En tråd er en `merknad` eller `sperrende`. Bare kontrolløren (ikke den som
   kuraterer grenen) og administratorene åpner en sperrende tråd.
