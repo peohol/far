@@ -1,86 +1,56 @@
 {
   "versjon": 1,
-  "foresporsel_id": "status-1",
-  "foresporsel_sha256": "089c1386973e2c3a073b729b3fd455530d8113ddd8f00f8550eb2f7008f4cb34",
-  "handling": "status",
+  "foresporsel_id": "reserver-lurasidon-pub",
+  "foresporsel_sha256": "4c9b3063f55f038670026d91ee1f0a01dd166278e9185e326f6d06b7ba03e1ff",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "Oversikten over køen.",
-  "behandlet_kl": "2026-10-16T18:53:49.282Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38950797675",
-  "ko": {
-    "oppdatert_kl": "2026-10-16T18:53:49.282Z",
-    "malt_kl": "2026-10-16T18:10:24.195Z",
-    "antall": {
-      "klar": 92,
-      "reservert": 0,
-      "fagarbeid_ferdig": 0,
-      "venter_godkjenning": 2,
-      "sammenslatt": 0,
-      "publisert": 1,
-      "blokkert": 4,
-      "utenfor": 1
+  "melding": "lurasidon er reservert til 2026-10-16T22:07:15.526Z.",
+  "behandlet_kl": "2026-10-16T19:07:15.526Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38952492282",
+  "oppgave": {
+    "oppgave": "lurasidon-0009",
+    "stoff": "lurasidon",
+    "navn": "Lurasidon",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-16T22:07:15.526Z",
+    "jobbgren": "kuratorjobb/lurasidon-0004",
+    "kurateringsgren": "kuratering/lurasidon-0009",
+    "pr": null,
+    "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95",
+    "gjenoppta": {
+      "oppgave": "lurasidon-0007",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "avbrutt_kl": "2026-10-16T19:07:15.526Z",
+      "grunn": "Revisjon 6 er godkjent av kontrolløren; grenen kan publiseres.",
+      "fase": null,
+      "jobbgren": "kuratorjobb/lurasidon-0004",
+      "kurateringsgren": null,
+      "pr": null,
+      "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95"
     },
-    "aktive": [],
-    "neste": [],
-    "til_gjennomgang": [
-      {
-        "stoff": "ghb",
-        "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a",
-        "grenstatus": "klar",
-        "status": "venter_godkjenning"
-      },
-      {
-        "stoff": "lurasidon",
-        "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95",
-        "grenstatus": "klar",
-        "status": "venter_godkjenning"
-      }
-    ],
-    "blokkert": [
-      {
-        "stoff": "etanol",
-        "blokkeringer": [
-          {
-            "kode": "uten_fagside",
-            "grunn": "Stoffet har ingen publisert fagside å kuratere.",
-            "kl": "2026-10-14T04:50:43.758Z",
-            "kilde": "system"
-          }
-        ]
-      },
-      {
-        "stoff": "kokain",
-        "blokkeringer": [
-          {
-            "kode": "uten_fagside",
-            "grunn": "Stoffet har ingen publisert fagside å kuratere.",
-            "kl": "2026-10-14T04:50:43.758Z",
-            "kilde": "system"
-          }
-        ]
-      },
-      {
-        "stoff": "mdma",
-        "blokkeringer": [
-          {
-            "kode": "uten_fagside",
-            "grunn": "Stoffet har ingen publisert fagside å kuratere.",
-            "kl": "2026-10-14T04:50:43.758Z",
-            "kilde": "system"
-          }
-        ]
-      },
-      {
-        "stoff": "metamfetamin",
-        "blokkeringer": [
-          {
-            "kode": "uten_fagside",
-            "grunn": "Stoffet har ingen publisert fagside å kuratere.",
-            "kl": "2026-10-14T04:50:43.758Z",
-            "kilde": "system"
-          }
-        ]
-      }
-    ]
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-16T18:10:24.842Z",
+      "side": true,
+      "elementer": 23,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 6,
+      "referanser": 2,
+      "elementer_uten_kilde": 20
+    },
+    "prioritet": {
+      "poeng": 1800.7,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen lurasidon-0007.",
+        "Står først i innstillingene.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "7 av 13 redaksjonelle seksjoner er tomme.",
+        "20 av 23 elementer har ingen kilde.",
+        "Bare 2 referanser."
+      ]
+    }
   }
 }
