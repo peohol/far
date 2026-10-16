@@ -1,8 +1,8 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T08:39:10.833Z",
+  "oppdatert_kl": "2026-10-16T12:59:37.459Z",
   "malt_kl": "2026-10-15T21:31:44.469Z",
-  "teller": 2,
+  "teller": 3,
   "stoffer": {
     "alprazolam": {
       "stoff": "alprazolam",
@@ -12,6 +12,7 @@
       "prioritet": {
         "poeng": 445.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -44,7 +45,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "amfetamin": {
       "stoff": "amfetamin",
@@ -54,6 +56,7 @@
       "prioritet": {
         "poeng": 426.4,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -85,7 +88,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "amisulprid": {
       "stoff": "amisulprid",
@@ -95,6 +99,7 @@
       "prioritet": {
         "poeng": 423.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -126,7 +131,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "amitriptylin": {
       "stoff": "amitriptylin",
@@ -136,6 +142,7 @@
       "prioritet": {
         "poeng": 420.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -167,7 +174,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "amlodipin": {
       "stoff": "amlodipin",
@@ -177,6 +185,7 @@
       "prioritet": {
         "poeng": 395.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -208,7 +217,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "aripiprazol": {
       "stoff": "aripiprazol",
@@ -218,6 +228,7 @@
       "prioritet": {
         "poeng": 417.3,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -249,7 +260,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "atenolol": {
       "stoff": "atenolol",
@@ -259,6 +271,7 @@
       "prioritet": {
         "poeng": 395.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -290,7 +303,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "atomoksetin": {
       "stoff": "atomoksetin",
@@ -300,6 +314,7 @@
       "prioritet": {
         "poeng": 446.4,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -332,7 +347,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "bendroflumetiazid": {
       "stoff": "bendroflumetiazid",
@@ -342,6 +358,7 @@
       "prioritet": {
         "poeng": 396,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -373,7 +390,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "bisoprolol": {
       "stoff": "bisoprolol",
@@ -383,6 +401,7 @@
       "prioritet": {
         "poeng": 395.3,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -414,7 +433,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "brekspiprazol": {
       "stoff": "brekspiprazol",
@@ -424,6 +444,7 @@
       "prioritet": {
         "poeng": 466.3,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -456,7 +477,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "bumetanid": {
       "stoff": "bumetanid",
@@ -466,6 +488,7 @@
       "prioritet": {
         "poeng": 418,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -498,7 +521,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "buprenorfin": {
       "stoff": "buprenorfin",
@@ -508,6 +532,7 @@
       "prioritet": {
         "poeng": 425.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -539,7 +564,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "bupropion": {
       "stoff": "bupropion",
@@ -549,6 +575,7 @@
       "prioritet": {
         "poeng": 432.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -580,7 +607,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "cbd": {
       "stoff": "cbd",
@@ -590,6 +618,7 @@
       "prioritet": {
         "poeng": 462.3,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -621,13 +650,14 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "citalopram": {
       "stoff": "citalopram",
       "navn": "Citalopram",
-      "status": "publisert",
-      "modus": null,
+      "status": "reservert",
+      "modus": "de_novo",
       "prioritet": {
         "poeng": 0,
         "grunner": []
@@ -641,8 +671,20 @@
         "referanser": 23,
         "elementer_uten_kilde": 1
       },
-      "reservasjon": null,
-      "forsok": 0,
+      "reservasjon": {
+        "oppgave": "citalopram-0003",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "modus": "de_novo",
+        "reservert_kl": "2026-10-16T12:59:37.459Z",
+        "fornyet_kl": "2026-10-16T12:59:37.459Z",
+        "frist_kl": "2026-10-16T15:59:37.459Z",
+        "fase": null,
+        "jobbgren": "kuratorjobb/citalopram-0003",
+        "kurateringsgren": "kuratering/citalopram-0003",
+        "pr": null,
+        "gren": null
+      },
+      "forsok": 1,
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
@@ -655,7 +697,13 @@
         "pr": null,
         "kilde": "repo"
       },
-      "siste_kjoring": null,
+      "siste_kjoring": {
+        "oppgave": "citalopram-0003",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "startet_kl": "2026-10-16T12:59:37.459Z",
+        "avsluttet_kl": null,
+        "utfall": "reservert"
+      },
       "aktiv": true,
       "historikk": [
         {
@@ -667,8 +715,16 @@
           "kl": "2026-10-14T04:50:43.758Z",
           "hendelse": "kuratering_i_repoet",
           "melding": "En kuratering (de_novo) fra 2026-10-13 står i repoet."
+        },
+        {
+          "kl": "2026-10-16T12:59:37.459Z",
+          "hendelse": "reservert",
+          "oppgave": "citalopram-0003",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Forsøk 1, de_novo."
         }
-      ]
+      ],
+      "appgren": null
     },
     "diazepam": {
       "stoff": "diazepam",
@@ -678,6 +734,7 @@
       "prioritet": {
         "poeng": 445.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -710,7 +767,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "diltiazem": {
       "stoff": "diltiazem",
@@ -720,6 +778,7 @@
       "prioritet": {
         "poeng": 395.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -751,7 +810,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "doksazosin": {
       "stoff": "doksazosin",
@@ -761,6 +821,7 @@
       "prioritet": {
         "poeng": 418,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -793,7 +854,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "doksepin": {
       "stoff": "doksepin",
@@ -803,6 +865,7 @@
       "prioritet": {
         "poeng": 460.7,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -835,7 +898,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "duloksetin": {
       "stoff": "duloksetin",
@@ -845,6 +909,7 @@
       "prioritet": {
         "poeng": 423.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -876,7 +941,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "enalapril": {
       "stoff": "enalapril",
@@ -886,6 +952,7 @@
       "prioritet": {
         "poeng": 397.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -917,7 +984,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "eplerenon": {
       "stoff": "eplerenon",
@@ -927,6 +995,7 @@
       "prioritet": {
         "poeng": 419.8,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -959,7 +1028,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "escitalopram": {
       "stoff": "escitalopram",
@@ -969,6 +1039,7 @@
       "prioritet": {
         "poeng": 426.9,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1000,7 +1071,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "etanol": {
       "stoff": "etanol",
@@ -1042,7 +1114,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "fenobarbital": {
       "stoff": "fenobarbital",
@@ -1052,6 +1125,7 @@
       "prioritet": {
         "poeng": 447.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1084,7 +1158,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "fentanyl": {
       "stoff": "fentanyl",
@@ -1094,6 +1169,7 @@
       "prioritet": {
         "poeng": 425.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1125,7 +1201,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "fenytoin": {
       "stoff": "fenytoin",
@@ -1135,6 +1212,7 @@
       "prioritet": {
         "poeng": 447.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1167,7 +1245,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "flunitrazepam": {
       "stoff": "flunitrazepam",
@@ -1177,6 +1256,7 @@
       "prioritet": {
         "poeng": 451.7,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1209,7 +1289,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "fluoksetin": {
       "stoff": "fluoksetin",
@@ -1219,6 +1300,7 @@
       "prioritet": {
         "poeng": 421.2,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1250,7 +1332,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "flupentiksol": {
       "stoff": "flupentiksol",
@@ -1260,6 +1343,7 @@
       "prioritet": {
         "poeng": 423.1,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1291,7 +1375,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "fluvoksamin": {
       "stoff": "fluvoksamin",
@@ -1301,6 +1386,7 @@
       "prioritet": {
         "poeng": 422.4,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1332,7 +1418,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "furosemid": {
       "stoff": "furosemid",
@@ -1342,6 +1429,7 @@
       "prioritet": {
         "poeng": 395.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1373,7 +1461,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "gabapentin": {
       "stoff": "gabapentin",
@@ -1383,6 +1472,7 @@
       "prioritet": {
         "poeng": 427.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1414,7 +1504,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "ghb": {
       "stoff": "ghb",
@@ -1501,7 +1592,8 @@
           "oppgave": "ghb-0001",
           "melding": "PR #228: utkast."
         }
-      ]
+      ],
+      "appgren": null
     },
     "haloperidol": {
       "stoff": "haloperidol",
@@ -1511,6 +1603,7 @@
       "prioritet": {
         "poeng": 416.7,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1542,7 +1635,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "hydroklortiazid": {
       "stoff": "hydroklortiazid",
@@ -1552,6 +1646,7 @@
       "prioritet": {
         "poeng": 396,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1583,7 +1678,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "irbesartan": {
       "stoff": "irbesartan",
@@ -1593,6 +1689,7 @@
       "prioritet": {
         "poeng": 395.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1624,7 +1721,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "kandesartan": {
       "stoff": "kandesartan",
@@ -1634,6 +1732,7 @@
       "prioritet": {
         "poeng": 395.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1665,7 +1764,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "karbamazepin": {
       "stoff": "karbamazepin",
@@ -1675,6 +1775,7 @@
       "prioritet": {
         "poeng": 427.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1706,7 +1807,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "kariprazin": {
       "stoff": "kariprazin",
@@ -1716,6 +1818,7 @@
       "prioritet": {
         "poeng": 464.8,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1748,7 +1851,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "karvedilol": {
       "stoff": "karvedilol",
@@ -1758,6 +1862,7 @@
       "prioritet": {
         "poeng": 395,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1789,7 +1894,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "ketamin": {
       "stoff": "ketamin",
@@ -1799,6 +1905,7 @@
       "prioritet": {
         "poeng": 101.2,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Sist kuratert 2026-10-04.",
           "6 av 13 redaksjonelle seksjoner er tomme.",
@@ -1841,7 +1948,8 @@
           "hendelse": "kuratering_i_repoet",
           "melding": "En kuratering (oppdatering) fra 2026-10-04 står i repoet."
         }
-      ]
+      ],
+      "appgren": null
     },
     "ketobemidon": {
       "stoff": "ketobemidon",
@@ -1851,6 +1959,7 @@
       "prioritet": {
         "poeng": 451.7,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1883,7 +1992,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "klomipramin": {
       "stoff": "klomipramin",
@@ -1893,6 +2003,7 @@
       "prioritet": {
         "poeng": 418.1,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1924,7 +2035,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "klonazepam": {
       "stoff": "klonazepam",
@@ -1934,6 +2046,7 @@
       "prioritet": {
         "poeng": 425.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -1965,7 +2078,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "klorprotiksen": {
       "stoff": "klorprotiksen",
@@ -1975,6 +2089,7 @@
       "prioritet": {
         "poeng": 421.8,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2006,7 +2121,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "klozapin": {
       "stoff": "klozapin",
@@ -2016,6 +2132,7 @@
       "prioritet": {
         "poeng": 422.3,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2047,7 +2164,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "kodein": {
       "stoff": "kodein",
@@ -2057,6 +2175,7 @@
       "prioritet": {
         "poeng": 425.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2088,7 +2207,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "kokain": {
       "stoff": "kokain",
@@ -2130,7 +2250,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "kvetiapin": {
       "stoff": "kvetiapin",
@@ -2140,6 +2261,7 @@
       "prioritet": {
         "poeng": 63.4,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Sist kuratert 2026-10-05.",
           "1 av 13 redaksjonelle seksjoner er tomme.",
@@ -2182,7 +2304,8 @@
           "hendelse": "kuratering_i_repoet",
           "melding": "En kuratering (oppdatering) fra 2026-10-05 står i repoet."
         }
-      ]
+      ],
+      "appgren": null
     },
     "labetalol": {
       "stoff": "labetalol",
@@ -2192,6 +2315,7 @@
       "prioritet": {
         "poeng": 395.3,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2223,7 +2347,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "lamotrigin": {
       "stoff": "lamotrigin",
@@ -2233,6 +2358,7 @@
       "prioritet": {
         "poeng": 449.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2265,7 +2391,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "lerkanidipin": {
       "stoff": "lerkanidipin",
@@ -2275,6 +2402,7 @@
       "prioritet": {
         "poeng": 395.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2306,7 +2434,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "levetiracetam": {
       "stoff": "levetiracetam",
@@ -2316,6 +2445,7 @@
       "prioritet": {
         "poeng": 447.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2348,7 +2478,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "levomepromazin": {
       "stoff": "levomepromazin",
@@ -2358,6 +2489,7 @@
       "prioritet": {
         "poeng": 419.7,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2389,7 +2521,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "lisinopril": {
       "stoff": "lisinopril",
@@ -2399,6 +2532,7 @@
       "prioritet": {
         "poeng": 396,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2430,7 +2564,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "litium": {
       "stoff": "litium",
@@ -2440,6 +2575,7 @@
       "prioritet": {
         "poeng": 444.8,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2472,7 +2608,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "losartan": {
       "stoff": "losartan",
@@ -2482,6 +2619,7 @@
       "prioritet": {
         "poeng": 395.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2513,7 +2651,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "lurasidon": {
       "stoff": "lurasidon",
@@ -2521,9 +2660,10 @@
       "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 1467.3,
+        "poeng": 1800.7,
         "grunner": [
           "Fortsetter den avbrutte kurateringen lurasidon-0002.",
+          "Står først i innstillingene.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2605,7 +2745,8 @@
           "okt": "kurateringsko/okt/20261014-173642",
           "melding": "Kjøringen ble omdirigert til pågående PR-oppfølging"
         }
-      ]
+      ],
+      "appgren": null
     },
     "mdma": {
       "stoff": "mdma",
@@ -2647,7 +2788,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "metadon": {
       "stoff": "metadon",
@@ -2657,6 +2799,7 @@
       "prioritet": {
         "poeng": 427.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2688,7 +2831,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "metamfetamin": {
       "stoff": "metamfetamin",
@@ -2730,7 +2874,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "metoprolol": {
       "stoff": "metoprolol",
@@ -2740,6 +2885,7 @@
       "prioritet": {
         "poeng": 395.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2771,7 +2917,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "metylfenidat": {
       "stoff": "metylfenidat",
@@ -2781,6 +2928,7 @@
       "prioritet": {
         "poeng": 426.4,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2812,7 +2960,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "mianserin": {
       "stoff": "mianserin",
@@ -2822,6 +2971,7 @@
       "prioritet": {
         "poeng": 422.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2853,7 +3003,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "mirtazapin": {
       "stoff": "mirtazapin",
@@ -2863,6 +3014,7 @@
       "prioritet": {
         "poeng": 421.8,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2894,7 +3046,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "morfin": {
       "stoff": "morfin",
@@ -2904,6 +3057,7 @@
       "prioritet": {
         "poeng": 424.8,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2935,7 +3089,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "nifedipin": {
       "stoff": "nifedipin",
@@ -2945,6 +3100,7 @@
       "prioritet": {
         "poeng": 395.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -2976,7 +3132,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "nitrazepam": {
       "stoff": "nitrazepam",
@@ -2986,6 +3143,7 @@
       "prioritet": {
         "poeng": 445.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3018,7 +3176,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "nortriptylin": {
       "stoff": "nortriptylin",
@@ -3028,6 +3187,7 @@
       "prioritet": {
         "poeng": 421.8,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3059,7 +3219,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "oksazepam": {
       "stoff": "oksazepam",
@@ -3069,6 +3230,7 @@
       "prioritet": {
         "poeng": 445.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3101,7 +3263,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "okskarbazepin": {
       "stoff": "okskarbazepin",
@@ -3111,6 +3274,7 @@
       "prioritet": {
         "poeng": 447.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3143,7 +3307,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "oksykodon": {
       "stoff": "oksykodon",
@@ -3153,6 +3318,7 @@
       "prioritet": {
         "poeng": 425.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3184,7 +3350,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "olanzapin": {
       "stoff": "olanzapin",
@@ -3194,6 +3361,7 @@
       "prioritet": {
         "poeng": 425.1,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3225,7 +3393,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "paliperidon": {
       "stoff": "paliperidon",
@@ -3235,6 +3404,7 @@
       "prioritet": {
         "poeng": 426.9,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3266,7 +3436,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "paroksetin": {
       "stoff": "paroksetin",
@@ -3276,6 +3447,7 @@
       "prioritet": {
         "poeng": 423.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3307,7 +3479,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "perfenazin": {
       "stoff": "perfenazin",
@@ -3317,6 +3490,7 @@
       "prioritet": {
         "poeng": 418,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3348,7 +3522,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "petidin": {
       "stoff": "petidin",
@@ -3358,6 +3533,7 @@
       "prioritet": {
         "poeng": 445.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3390,7 +3566,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "ramipril": {
       "stoff": "ramipril",
@@ -3400,6 +3577,7 @@
       "prioritet": {
         "poeng": 397.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3431,7 +3609,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "risperidon": {
       "stoff": "risperidon",
@@ -3441,6 +3620,7 @@
       "prioritet": {
         "poeng": 416.7,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3472,7 +3652,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "sertindol": {
       "stoff": "sertindol",
@@ -3482,6 +3663,7 @@
       "prioritet": {
         "poeng": 447.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3514,7 +3696,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "sertralin": {
       "stoff": "sertralin",
@@ -3524,6 +3707,7 @@
       "prioritet": {
         "poeng": 423.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3555,7 +3739,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "spironolakton": {
       "stoff": "spironolakton",
@@ -3565,6 +3750,7 @@
       "prioritet": {
         "poeng": 419.3,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3597,7 +3783,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "tapentadol": {
       "stoff": "tapentadol",
@@ -3607,6 +3794,7 @@
       "prioritet": {
         "poeng": 442.3,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3637,7 +3825,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "telmisartan": {
       "stoff": "telmisartan",
@@ -3647,6 +3836,7 @@
       "prioritet": {
         "poeng": 396,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3678,7 +3868,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "teststoff": {
       "stoff": "teststoff",
@@ -3713,7 +3904,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "thc": {
       "stoff": "thc",
@@ -3723,6 +3915,7 @@
       "prioritet": {
         "poeng": 51.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Sist kuratert 2026-10-10."
         ]
@@ -3763,7 +3956,8 @@
           "hendelse": "kuratering_i_repoet",
           "melding": "En kuratering (oppdatering) fra 2026-10-10 står i repoet."
         }
-      ]
+      ],
+      "appgren": null
     },
     "topiramat": {
       "stoff": "topiramat",
@@ -3773,6 +3967,7 @@
       "prioritet": {
         "poeng": 447.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3805,7 +4000,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "tramadol": {
       "stoff": "tramadol",
@@ -3815,6 +4011,7 @@
       "prioritet": {
         "poeng": 424.2,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3846,7 +4043,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "trimipramin": {
       "stoff": "trimipramin",
@@ -3856,6 +4054,7 @@
       "prioritet": {
         "poeng": 432.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3887,7 +4086,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "valproat": {
       "stoff": "valproat",
@@ -3897,6 +4097,7 @@
       "prioritet": {
         "poeng": 447.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3929,7 +4130,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "valsartan": {
       "stoff": "valsartan",
@@ -3939,6 +4141,7 @@
       "prioritet": {
         "poeng": 395.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -3970,7 +4173,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "venlafaksin": {
       "stoff": "venlafaksin",
@@ -3980,6 +4184,7 @@
       "prioritet": {
         "poeng": 419.2,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -4011,7 +4216,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "verapamil": {
       "stoff": "verapamil",
@@ -4021,6 +4227,7 @@
       "prioritet": {
         "poeng": 395.6,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -4052,7 +4259,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "vortioksetin": {
       "stoff": "vortioksetin",
@@ -4062,6 +4270,7 @@
       "prioritet": {
         "poeng": 455.7,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -4094,7 +4303,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "ziprasidon": {
       "stoff": "ziprasidon",
@@ -4104,6 +4314,7 @@
       "prioritet": {
         "poeng": 425.1,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -4135,7 +4346,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "zolpidem": {
       "stoff": "zolpidem",
@@ -4145,6 +4357,7 @@
       "prioritet": {
         "poeng": 445.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -4177,7 +4390,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "zopiklon": {
       "stoff": "zopiklon",
@@ -4187,6 +4401,7 @@
       "prioritet": {
         "poeng": 445.5,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -4219,7 +4434,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     },
     "zuklopentiksol": {
       "stoff": "zuklopentiksol",
@@ -4229,6 +4445,7 @@
       "prioritet": {
         "poeng": 421.2,
         "grunner": [
+          "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
           "Aldri kuratert.",
           "Ingen kuratering å regne alderen fra.",
@@ -4260,7 +4477,8 @@
           "hendelse": "oppdaget",
           "melding": "Nytt stoff i stoffregisteret."
         }
-      ]
+      ],
+      "appgren": null
     }
   },
   "okter": {
@@ -4364,6 +4582,66 @@
       },
       "besvart_commit": "de79763b30570d9b44e4e53c10b3aa0d49b269a3",
       "sist_brukt_kl": "2026-10-14T18:04:44.264Z"
+    },
+    "kurateringsko/okt/20261016-125910": {
+      "ider": [
+        "reserver-1"
+      ],
+      "siste": {
+        "id": "reserver-1",
+        "sha256": "e8b4fdf7468908cfff60c9bf3f57f8d0f891a3f4d60751a0392f97364c7ae49d",
+        "svar": {
+          "versjon": 1,
+          "foresporsel_id": "reserver-1",
+          "foresporsel_sha256": "e8b4fdf7468908cfff60c9bf3f57f8d0f891a3f4d60751a0392f97364c7ae49d",
+          "handling": "reserver",
+          "utfall": "ok",
+          "melding": "citalopram er reservert til 2026-10-16T15:59:37.459Z.",
+          "behandlet_kl": "2026-10-16T12:59:37.459Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38904433125",
+          "oppgave": {
+            "oppgave": "citalopram-0003",
+            "stoff": "citalopram",
+            "navn": "Citalopram",
+            "modus": "de_novo",
+            "forsok": 1,
+            "frist_kl": "2026-10-16T15:59:37.459Z",
+            "jobbgren": "kuratorjobb/citalopram-0003",
+            "kurateringsgren": "kuratering/citalopram-0003",
+            "pr": null,
+            "gren": null,
+            "gjenoppta": null,
+            "sist_kuratert": {
+              "kl": "2026-10-13T16:00:00.000Z",
+              "modus": "de_novo",
+              "kunnskapsgrense": "2026-10-13",
+              "runde": 1,
+              "pr": null,
+              "kilde": "repo"
+            },
+            "maal": {
+              "kl": "2026-10-15T21:31:45.692Z",
+              "side": true,
+              "elementer": 43,
+              "redaksjonelle_paneler": 13,
+              "paneler_med_innhold": 13,
+              "referanser": 23,
+              "elementer_uten_kilde": 1
+            },
+            "prioritet": {
+              "poeng": 551.7,
+              "grunner": [
+                "Står først i innstillingene.",
+                "De novo-kuratering i runden som gjelder.",
+                "Sist kuratert 2026-10-13.",
+                "1 av 43 elementer har ingen kilde."
+              ]
+            }
+          }
+        }
+      },
+      "besvart_commit": null,
+      "sist_brukt_kl": "2026-10-16T12:59:37.459Z"
     }
   }
 }
