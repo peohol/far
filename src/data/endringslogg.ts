@@ -17,7 +17,7 @@ export const ENDRINGSLOGG: Endring[] = [
     sammendrag: 'Endringer vises med rød og grønn bakgrunn, som i GitHub',
     typer: ['Design / layout'],
     omfang: 'Mindre omfang',
-    gjelder: ['kuratering', 'versjon', 'stoff', 'fortolkning/*/rediger'],
+    gjelder: ['kuratering', 'versjon', 'stoff', 'fortolkning/*/rediger', 'vinduer'],
     punkter: [
       'Når en kurateringsgren eller en tidligere versjon sammenlignes med den gjeldende fagsiden, står slettet tekst nå på rød bakgrunn og gjennomstreket, og ny tekst på grønn bakgrunn uten understreking. Før var det bare gjennomstreking og understreking der.',
       'Historikken og regelredigeringen viser endringene på samme måte.',

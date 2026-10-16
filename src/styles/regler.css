@@ -472,6 +472,14 @@ button.historikk__velg:hover {
   text-decoration: none;
 }
 
+/* Uten egne farger (høykontrastmodus) er bakgrunnen borte, så det nye
+   understrekes der for ikke å se ut som uendret tekst. */
+@media (forced-colors: active) {
+  .historikk__ny {
+    text-decoration: underline;
+  }
+}
+
 .historikk__gjenopprett {
   padding-top: var(--rom-3);
   border-top: var(--kant) solid var(--linje);
