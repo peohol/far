@@ -1,0 +1,18 @@
+{
+  "versjon": 1,
+  "status": "kjorer",
+  "jobb": {
+    "gren": "kuratorjobb/pilot-20261016",
+    "foresporsel_commit": "d3e272ca98b2e06d6b9ebe59ba954eb8e4f5f04c",
+    "foresporsel_sha256": "c63923b892d38d5f0ae8d8a85a974882ed4adb7b64993f9761f607a910fa1a27",
+    "kode_commit": "d534eeefa5c840ea48da981e00a79cca052440b4",
+    "kjoring": "https://github.com/peohol/far/actions/runs/38904476295",
+    "startet_kl": "2026-10-16T13:00:10.894Z",
+    "ferdig_kl": null
+  },
+  "foresporsel": null,
+  "referanse": null,
+  "feil": [],
+  "bruker": [],
+  "stoffer": {}
+}
