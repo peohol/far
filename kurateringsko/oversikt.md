@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-16T22:30:30.684Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-16T22:34:51.735Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
 Klar: 89 · Reservert: 1 · Venter på godkjenning: 1 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-- **cbd** (cbd-0013), frist 2026-10-17T01:04:59.838Z
+- **cbd** (cbd-0013), frist 2026-10-17T01:34:51.735Z
 
 ## Til gjennomgang
 
