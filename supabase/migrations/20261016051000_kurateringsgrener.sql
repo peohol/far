@@ -681,6 +681,50 @@ as $$
   ]
 $$;
 
+-- Punktene selvtesten må dekke (`docs/kuratorprotokoll.md`, «Dokumentene»):
+-- de ufravikelige kravene i protokollens rekkefølge, og de tekniske portene.
+-- De samme som i `src/kuratorprotokoll/selvtest.ts` (en test holder dem
+-- like). Bare kravene om preparatomtalene kan være ikke_relevant, for et stoff
+-- uten norsk preparatomtale; alt annet må være bestått.
+create function kuratering.selvtestkrav()
+returns text[]
+language sql
+immutable
+set search_path = ''
+as $$
+  select array[
+    'kildetroskap_preparatomtale',
+    'bivirkninger_kildetro',
+    'beskyttede_norske_data',
+    'pastand_og_kilde',
+    'ingenting_finnes_pa',
+    'konflikter_synliggjort',
+    'evidensstyrke',
+    'automatiske_lag',
+    'faste_kort',
+    'kunnskapsgrense',
+    'offentlig_repo'
+  ]
+$$;
+
+create function kuratering.selvtestkrav_kan_vaere_ikke_relevant()
+returns text[]
+language sql
+immutable
+set search_path = ''
+as $$
+  select array['kildetroskap_preparatomtale', 'bivirkninger_kildetro']
+$$;
+
+create function kuratering.selvtestporter()
+returns text[]
+language sql
+immutable
+set search_path = ''
+as $$
+  select array['provepublisering', 'rapport', 'dekning', 'funksjonstest']
+$$;
+
 -- En tekst som ikke er tom.
 create function kuratering.er_tekst(p jsonb)
 returns boolean
@@ -706,6 +750,50 @@ as $$
         else jsonb_typeof(x) <> 'object' or exists (select 1 from unnest(p_felt) f where not kuratering.er_tekst(x -> f)) end
     )
   end
+$$;
+
+-- Hva som er galt i én liste i selvtesten (kravene eller portene): hvert av
+-- punktene skal stå nøyaktig én gang, med bevis, og være bestått. Et punkt i
+-- p_kan_vaere_ikke_relevant kan også være ikke_relevant, med beviset for
+-- hvorfor. ikke_bestatt, gjenstar og alt annet stopper grenen.
+create function kuratering.selvtestfeil(p_liste jsonb, p_felt text, p_punkter text[], p_kan_vaere_ikke_relevant text[] default '{}')
+returns text[]
+language plpgsql
+immutable
+set search_path = ''
+as $$
+declare
+  feil text[] := '{}';
+  hva text := case p_felt when 'krav' then 'kravet' else 'porten' end;
+  liste text := case p_felt when 'krav' then 'krav' else 'porter' end;
+  punkt text;
+  n integer;
+  x jsonb;
+begin
+  if not kuratering.er_liste(p_liste, array[p_felt, 'status', 'bevis']) then
+    return array[format('selvtest: %s må være en liste der hver oppføring har %s, status og bevis, med %s.',
+      liste, p_felt, array_to_string(p_punkter, ', '))];
+  end if;
+  foreach punkt in array p_punkter loop
+    select count(*) into n from jsonb_array_elements(p_liste) e where e ->> p_felt = punkt;
+    if n = 0 then
+      feil := feil || format('selvtest: %s %s mangler.', hva, punkt);
+    elsif n > 1 then
+      feil := feil || format('selvtest: %s %s står %s ganger (skal stå én gang).', hva, punkt, n);
+    end if;
+  end loop;
+  for x in select e from jsonb_array_elements(p_liste) e loop
+    punkt := x ->> p_felt;
+    if not (punkt = any (p_punkter)) then
+      feil := feil || format('selvtest: %s er ikke et av punktene i %s (%s).', punkt, liste, array_to_string(p_punkter, ', '));
+    elsif x ->> 'status' = 'ikke_relevant' and not (punkt = any (p_kan_vaere_ikke_relevant)) then
+      feil := feil || format('selvtest: %s %s gjelder alltid og kan ikke være ikke_relevant.', hva, punkt);
+    elsif x ->> 'status' not in ('bestatt', 'ikke_relevant') then
+      feil := feil || format('selvtest: %s %s er ikke bestått (%s).', hva, punkt, x ->> 'status');
+    end if;
+  end loop;
+  return feil;
+end;
 $$;
 
 -- Hva som mangler i et arbeidsdokument, etter formen i
@@ -791,22 +879,8 @@ begin
       end if;
     end loop;
   when 'selvtest' then
-    if not kuratering.er_liste(p_innhold -> 'krav', array['krav', 'status', 'bevis'])
-      or exists (select 1 from jsonb_array_elements(p_innhold -> 'krav') x where x ->> 'status' not in ('bestatt', 'ikke_bestatt', 'ikke_relevant'))
-    then
-      feil := feil || 'selvtest: krav må ha hvert av de ufravikelige kravene med krav, status (bestatt, ikke_bestatt eller ikke_relevant) og bevis.'::text;
-    elsif exists (select 1 from jsonb_array_elements(p_innhold -> 'krav') x where x ->> 'status' = 'ikke_bestatt') then
-      feil := feil || ('selvtest: kravene er ikke bestått: ' || (
-        select string_agg(x ->> 'krav', '; ') from jsonb_array_elements(p_innhold -> 'krav') x where x ->> 'status' = 'ikke_bestatt') || '.');
-    end if;
-    if not kuratering.er_liste(p_innhold -> 'porter', array['port', 'status', 'bevis'])
-      or exists (select 1 from jsonb_array_elements(p_innhold -> 'porter') x where x ->> 'status' not in ('bestatt', 'ikke_bestatt', 'gjenstar'))
-    then
-      feil := feil || 'selvtest: porter må ha de tekniske portene med port, status (bestatt, ikke_bestatt eller gjenstar) og bevis.'::text;
-    elsif exists (select 1 from jsonb_array_elements(p_innhold -> 'porter') x where x ->> 'status' = 'ikke_bestatt') then
-      feil := feil || ('selvtest: portene er ikke bestått: ' || (
-        select string_agg(x ->> 'port', '; ') from jsonb_array_elements(p_innhold -> 'porter') x where x ->> 'status' = 'ikke_bestatt') || '.');
-    end if;
+    feil := kuratering.selvtestfeil(p_innhold -> 'krav', 'krav', kuratering.selvtestkrav(), kuratering.selvtestkrav_kan_vaere_ikke_relevant())
+      || kuratering.selvtestfeil(p_innhold -> 'porter', 'port', kuratering.selvtestporter());
   else
     null;
   end case;
