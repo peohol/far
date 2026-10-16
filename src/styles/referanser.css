@@ -6,7 +6,12 @@
 /* En sitering er en liten, rund pille med numrene på siden, som i Slaids.
    Inline står den midt på tekstlinjen; for et helt kort eller panel står den
    i referansefeltet nederst. Aksenten er forbeholdt det som kan trykkes på. */
+/* Festet er en innebygd blokk, så boblen som står i det, ikke regnes med når
+   avsnittet brytes. Ellers ga Chromium opp `text-wrap: pretty` for avsnittet
+   så snart boblen åpnet seg: linjene brøt annerledes, pillen hoppet bort fra
+   pekeren, boblen lukket seg, og det flimret. */
 .referansepille-feste {
+  display: inline-block;
   position: relative;
   line-height: 0;
 }
