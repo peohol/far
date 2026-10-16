@@ -137,6 +137,15 @@ describe('publiseringene', () => {
     expect(await versjon(slug, 9)).toBeNull()
   })
 
+  it('gir nøkkelen siden hadde da, også når den er endret siden', async () => {
+    const { side, slug } = await nyFagside('Nøkkelstoff')
+    const navn = (await kall.fasit<{ navn: string }>('select navn from public.infosider where objekt_id = $1 limit 1', [side]))[0]!.navn
+    await kall.lagre(side, 1, { navn, slug: `${slug}-ny` })
+    await kall.publiser(side, 2)
+    expect((await versjon(`${slug}-ny`, 2))!.stoff).toMatchObject({ id: side, slug: `${slug}-ny` })
+    expect((await versjon(`${slug}-ny`, 1))!.stoff).toMatchObject({ id: side, slug, navn })
+  })
+
   it('tar ikke med kort som er fjernet', async () => {
     const { side, slug } = await nyFagside()
     const kort = await kall.opprett('innholdselement', kortinnhold(side, 'Skal bort'))
