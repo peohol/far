@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T16:32:52.628Z",
+  "oppdatert_kl": "2026-10-16T17:30:07.346Z",
   "malt_kl": "2026-10-15T21:31:44.469Z",
   "teller": 5,
   "stoffer": {
@@ -2334,7 +2334,7 @@
       "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 63.4,
+        "poeng": 63.6,
         "grunner": [
           "Venter: køen gir bare ut stoffene som står først i innstillingene nå.",
           "De novo-kuratering i runden som gjelder.",
