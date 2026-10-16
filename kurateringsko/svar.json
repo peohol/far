@@ -1,56 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-lurasidon-pub",
-  "foresporsel_sha256": "4c9b3063f55f038670026d91ee1f0a01dd166278e9185e326f6d06b7ba03e1ff",
-  "handling": "reserver",
-  "utfall": "ok",
-  "melding": "lurasidon er reservert til 2026-10-16T22:07:15.526Z.",
-  "behandlet_kl": "2026-10-16T19:07:15.526Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38952492282",
-  "oppgave": {
-    "oppgave": "lurasidon-0009",
-    "stoff": "lurasidon",
-    "navn": "Lurasidon",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-16T22:07:15.526Z",
-    "jobbgren": "kuratorjobb/lurasidon-0004",
-    "kurateringsgren": "kuratering/lurasidon-0009",
-    "pr": null,
-    "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95",
-    "gjenoppta": {
-      "oppgave": "lurasidon-0007",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "avbrutt_kl": "2026-10-16T19:07:15.526Z",
-      "grunn": "Revisjon 6 er godkjent av kontrolløren; grenen kan publiseres.",
-      "fase": null,
-      "jobbgren": "kuratorjobb/lurasidon-0004",
-      "kurateringsgren": null,
-      "pr": null,
-      "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95"
-    },
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-16T18:10:24.842Z",
-      "side": true,
-      "elementer": 23,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 6,
-      "referanser": 2,
-      "elementer_uten_kilde": 20
-    },
-    "prioritet": {
-      "poeng": 1800.7,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen lurasidon-0007.",
-        "Står først i innstillingene.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "7 av 13 redaksjonelle seksjoner er tomme.",
-        "20 av 23 elementer har ingen kilde.",
-        "Bare 2 referanser."
-      ]
-    }
-  }
+  "foresporsel_id": "fullfort-lurasidon-pub",
+  "foresporsel_sha256": "f4f54361f2d046c59b10aee19e51d1739ff70e775c6a29f34d979350e9809014",
+  "handling": "fullfort",
+  "utfall": "avvist",
+  "melding": "Oppgaven lurasidon-0009 er ikke reservert lenger (fullfort). Reserver på nytt for å fortsette.",
+  "behandlet_kl": "2026-10-16T19:08:00.644Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38952596242"
 }
