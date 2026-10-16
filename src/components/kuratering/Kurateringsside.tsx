@@ -99,12 +99,12 @@ function Grenvisning({ gren: id, klient: kuratering, onGaaTil, ...props }: Utgav
   const { status, brutt } = useGrenstatus(kuratering, id, folg ? FOLG_HVER : STATUS_HVER)
   const lest = tilstand.status === 'klar' ? tilstand.data.gren : null
 
-  // Noe nytt i grenen (en revisjon, en status, en sperre): les den på nytt,
+  // Noe nytt i grenen (en revisjon, en kommentar, en status): les den på nytt,
   // når den siste revisjonen vises. Én gang per nytt svar.
   const lestFor = useRef<string | null>(null)
   useEffect(() => {
     if (!lest || !status || revisjon !== null || !grenenErEndret(lest, status)) return
-    const nokkel = `${status.revisjon}:${status.status}:${status.runde}:${status.apne_sperrer}`
+    const nokkel = `${status.endring}:${status.revisjon}:${status.status}:${status.runde}:${status.apne_sperrer}`
     if (lestFor.current === nokkel) return
     lestFor.current = nokkel
     hentPaNytt()

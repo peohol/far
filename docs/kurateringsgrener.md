@@ -41,7 +41,7 @@ nytt).
 | `oversikt` | alle | `{stoff?, alle?}` |
 | `apne` | kurator | `{stoff, formaal, art?: "kuratering" \| "de_novo"}` |
 | `les` | kurator (egen), kontrollør, admin | `{gren, revisjon?}` |
-| `status` | kurator (egen), kontrollør, admin | `{gren}`: status, revisjon, runde, aktiviteten, når kuratoren sist kalte inn og antallet åpne sperrende tråder; ingen fagtekst |
+| `status` | kurator (egen), kontrollør, admin | `{gren}`: status, revisjon, runde, aktiviteten, når kuratoren sist kalte inn, antallet åpne sperrende tråder og `endring` (den siste hendelsen utenom aktiviteten); ingen fagtekst |
 | `skriv` | kurator | `{gren, forventet_revisjon, endringer, melding?}` |
 | `aktivitet` | kurator | `{gren, tekst, seksjon?, objekt?}` |
 | `dokument` | kurator | `{gren, art, innhold}` |
@@ -237,8 +237,10 @@ siden alt i den har vært publisert før. Sideversjonen den gir, har opphavet
   tilkoblingen er brutt; «arbeider» bare når kuratoren har meldt aktivitet
   eller gjort noe i nettopp denne grenen de siste ti minuttene,
   `kurator_sist_kl` i `status`). Siden spør etter `status` hvert
-  halve minutt, og hvert femte sekund med «Følg agenten» på; er noe nytt,
+  halve minutt, og hvert femte sekund med «Følg agenten» på; er noe nytt
+  (`endring` er større enn da grenen ble lest, eller statusen er en annen),
   leses grenen på nytt og kortene som er endret, markeres en liten stund.
+  Slik vises også et nytt svar eller en ny merknad i en tråd.
   «Følg agenten» ruller også til kortet eller seksjonen agenten melder at den
   arbeider med, og slås av når man ruller selv
   (`src/components/kuratering/Folgagenten.tsx`).

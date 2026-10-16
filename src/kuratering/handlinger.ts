@@ -41,7 +41,7 @@ export const AGENTHANDLINGER: readonly Agenthandling[] = [
   },
   {
     navn: 'status',
-    beskrivelse: 'Den lille statusen til en gren: status, revisjon, kontrollrunde, hva kuratoren holder på med og antallet åpne sperrende tråder. Ingen fagtekst; billig å spørre ofte.',
+    beskrivelse: 'Den lille statusen til en gren: status, revisjon, kontrollrunde, hva kuratoren holder på med, antallet åpne sperrende tråder og `endring`, som øker ved hver revisjon, kommentar, dokument og vurdering. Ingen fagtekst; billig å spørre ofte.',
     argumenter: objekt({ gren }, ['gren']),
     leser: true,
   },
