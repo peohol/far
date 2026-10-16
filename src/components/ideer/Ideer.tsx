@@ -13,7 +13,7 @@ import type { Fremheving } from '../traad/Kommentartraad'
 import { Ideliste } from './Ideliste'
 import { Ideside } from './Ideside'
 import { Ideskjema } from './Ideskjema'
-import { veksleSkuff } from './Ideskuff'
+import { veksleSkuff } from '../Skuff'
 import { useForlatvakt, useMeldVakt, type Forlat } from './useForlatvakt'
 import '../../styles/ideer.css'
 

@@ -5,7 +5,7 @@ import { visEndringslogg } from '../endringsloggvisning'
 import { Ikon } from '../ikon/Ikon'
 import { Ikonknapp } from '../Ikonknapp'
 import { Forfatterbilde, useForfatternavn } from '../traad/Forfatterkontekst'
-import { Ideskuff } from './Ideskuff'
+import { Skuff } from '../Skuff'
 import { Kategorimerke, Oppgavekode } from './Merker'
 import { Tidspunkt } from '../traad/Smadeler'
 
@@ -35,7 +35,7 @@ export function Oppgaveliste({
       {aktive.map((gruppe) => (
         <Statusgruppe key={gruppe.status} status={gruppe.status} oppgaver={gruppe.oppgaver} onApne={onApne} />
       ))}
-      <Ideskuff
+      <Skuff
         tittel="Utførte oppgaver"
         ikon="done"
         antall={utforte.length}
@@ -62,7 +62,7 @@ export function Oppgaveliste({
             ))}
           </ul>
         )}
-      </Ideskuff>
+      </Skuff>
     </div>
   )
 }

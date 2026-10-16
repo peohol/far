@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ENDRINGSLOGG } from '../../data/endringslogg'
 import { useJevnligSjekk } from '../../hooks/useJevnligSjekk'
 import {
+  arkiverVarsler,
+  gjenopprettVarsler,
   hentEndringsloggstatus,
   hentUleste,
   hentVarsler,
@@ -13,10 +15,14 @@ import {
 } from '../../varsler/api'
 import {
   antallUleste,
+  arkiverEndringer,
   endringsvarsler,
+  etterKilde,
+  gjenopprettEndringer,
   merkEndringerLest,
   samleVarsler,
   startstatus,
+  type Databasevarsel,
   type Endringsloggstatus,
   type Ulesttall,
   type Varsel,
@@ -35,6 +41,10 @@ export interface Varselstatus {
   hent: () => void
   merkLest: (varsel: Varsel) => void
   merkAlleLest: () => void
+  /** Legger varslene i arkivet, og merker dem lest. */
+  arkiver: (varsler: readonly Varsel[]) => void
+  /** Henter varslene fram fra arkivet. */
+  gjenopprett: (varsler: readonly Varsel[]) => void
   endreValg: (kategori: Varselkategori, pa: boolean) => void
 }
 
@@ -94,42 +104,64 @@ export function useVarsler(): Varselstatus {
 
   const endringer = useMemo(() => (logg ? endringsvarsler(ENDRINGSLOGG, logg) : []), [logg])
 
-  const lesEndringer = useCallback((versjoner: string[]) => {
+  /** Endrer hvor langt brukeren er kommet i endringsloggen, og lagrer det. */
+  const endreLoggen = useCallback((versjoner: string[], endre: (status: Endringsloggstatus) => Endringsloggstatus) => {
     const naa = loggen.current
     if (!naa || versjoner.length === 0) return
-    const ny = merkEndringerLest(ENDRINGSLOGG, naa, versjoner)
+    const ny = endre(naa)
+    loggen.current = ny
     setLogg(ny)
     void lagreEndringsloggstatus(ny).catch(() => undefined)
   }, [])
 
-  /** Merker lest i lista med én gang, og i databasen etterpå. */
-  const lesIDatabasen = useCallback(
-    (ider: string[]) => {
-      if (!liste) return
-      setListe({ ...liste, varsler: liste.varsler.map((v) => (ider.includes(v.id) ? { ...v, lest: true } : v)) })
-      merkVarslerLest(ider, liste.lest_kl).then(sjekk, () => undefined)
+  /** Endrer varslene i lista med én gang, og i databasen etterpå. */
+  const endreIDatabasen = useCallback(
+    (ider: string[], endring: Partial<Pick<Databasevarsel, 'lest' | 'arkivert'>>, lagre: (ider: string[], til: string) => Promise<void>) => {
+      if (!liste || ider.length === 0) return
+      setListe({ ...liste, varsler: liste.varsler.map((v) => (ider.includes(v.id) ? { ...v, ...endring } : v)) })
+      lagre(ider, liste.lest_kl).then(sjekk, () => undefined)
     },
     [liste, sjekk],
   )
 
-  const merkLest = useCallback(
-    (varsel: Varsel) => {
-      if (varsel.lest) return
-      if (varsel.kilde === 'endringslogg') lesEndringer([varsel.endring.versjon])
-      else lesIDatabasen([varsel.id])
-    },
-    [lesEndringer, lesIDatabasen],
-  )
-
   const varsler = useMemo(() => (liste ? samleVarsler([...liste.varsler, ...endringer], valg) : null), [liste, endringer, valg])
 
+  const lesVarsler = useCallback(
+    (uleste: readonly Varsel[]) => {
+      const { versjoner, ider } = etterKilde(uleste)
+      endreLoggen(versjoner, (status) => merkEndringerLest(ENDRINGSLOGG, status, versjoner))
+      endreIDatabasen(ider, { lest: true }, merkVarslerLest)
+    },
+    [endreLoggen, endreIDatabasen],
+  )
+
+  const merkLest = useCallback(
+    (varsel: Varsel) => {
+      if (!varsel.lest) lesVarsler([varsel])
+    },
+    [lesVarsler],
+  )
+
   /** Merker det brukeren ser, lest: kategoriene som er slått av, står urørt. */
-  const merkAlleLest = useCallback(() => {
-    const uleste = (varsler ?? []).filter((v) => !v.lest)
-    lesEndringer(uleste.flatMap((v) => (v.kilde === 'endringslogg' ? [v.endring.versjon] : [])))
-    const ider = uleste.flatMap((v) => (v.kilde === 'database' ? [v.id] : []))
-    if (ider.length > 0) lesIDatabasen(ider)
-  }, [varsler, lesEndringer, lesIDatabasen])
+  const merkAlleLest = useCallback(() => lesVarsler((varsler ?? []).filter((v) => !v.lest)), [varsler, lesVarsler])
+
+  const arkiver = useCallback(
+    (valgte: readonly Varsel[]) => {
+      const { versjoner, ider } = etterKilde(valgte.filter((v) => !v.arkivert))
+      endreLoggen(versjoner, (status) => arkiverEndringer(ENDRINGSLOGG, status, versjoner))
+      endreIDatabasen(ider, { lest: true, arkivert: true }, arkiverVarsler)
+    },
+    [endreLoggen, endreIDatabasen],
+  )
+
+  const gjenopprett = useCallback(
+    (valgte: readonly Varsel[]) => {
+      const { versjoner, ider } = etterKilde(valgte.filter((v) => v.arkivert))
+      endreLoggen(versjoner, (status) => gjenopprettEndringer(status, versjoner))
+      endreIDatabasen(ider, { arkivert: false }, (valgte) => gjenopprettVarsler(valgte))
+    },
+    [endreLoggen, endreIDatabasen],
+  )
 
   const endreValg = useCallback((kategori: Varselkategori, pa: boolean) => {
     const neste = { ...valgene.current, [kategori]: pa }
@@ -146,6 +178,8 @@ export function useVarsler(): Varselstatus {
     hent,
     merkLest,
     merkAlleLest,
+    arkiver,
+    gjenopprett,
     endreValg,
   }
 }

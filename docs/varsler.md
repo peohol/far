@@ -14,7 +14,8 @@ Varslene berører ikke fortolkningen; de forteller bare at noe er endret.
 | `src/varsler/modell.ts` | Kategoriene, valgene, føringene i endringsloggen som varsler, sorteringen og tekstene (rene funksjoner) |
 | `src/varsler/api.ts` | Kallene mot Supabase og brukerinnstillingene |
 | `src/components/varsler/` | Bjella (`Varselknapp`), tilstanden (`useVarsler`) og vinduet (`Varsler`) |
-| `src/styles/varsler.css` | Vinduet. Tallet på bjella står i `toppmeny.css` |
+| `src/styles/varsler.css` | Vinduet. Tallet på bjella står i `toppmeny.css`, og skuffen arkivet står i, i `skuff.css` |
+| `supabase/migrations/*_varselarkiv.sql` | Arkivet: når et varsel ble arkivert, og funksjonene som arkiverer og henter fram |
 
 ## Kategoriene
 
@@ -77,22 +78,31 @@ fortolkningen for den. En idékommentar som er slettet, forsvinner fra varselet,
 varsel uten hendelser vises ikke. Slettes idéen, går varslene med.
 
 `mine_varsler()` gir alle uleste og de leste fra de siste 30 dagene
-(`intern.varselfrist()`, og `VARSELFRIST_DAGER` i appen), med `lest_kl`.
+(`intern.varselfrist()`, og `VARSELFRIST_DAGER` i appen), med `lest_kl` og
+`arkivert_kl`.
 `merk_varsler_lest(varsler, til)` merker dem lest slik de var da lista ble
 lest, så et varsel som har fått noe nytt imens, står ulest. Den rydder også
 bort leste varsler eldre enn fristen. Å åpne en idé (`merk_ide_sett`) merker
 varslene om den lest. `uleste_varsler()` teller de uleste per kategori, til
 tallet på bjella. Tabellen kan bare leses, og bare egne rader.
 
+`arkiver_varsler(varsler, til)` legger varslene i arkivet (`arkivert_kl`) og
+merker dem lest, med samme vakt som `merk_varsler_lest`: et ulest varsel som
+har fått noe nytt siden lista ble lest, blir stående. Et arkivert varsel er
+alltid lest (`varsler_arkivert_er_lest`), så en ny hendelse begynner på et nytt
+varsel, og det ryddes bort som de andre leste når fristen har gått.
+`gjenopprett_varsler(varsler)` henter dem fram igjen, som leste.
+
 ## Endringsloggen
 
 Føringene i `src/data/endringslogg.ts` er varsler i appen, ikke i databasen:
 de kommer med appen selv. Hvor langt brukeren er kommet, lagres i
 `brukerinnstillinger` under `varsler.endringslogg`: `fra` (føringene til og
-med denne er historie) og `lest` (de nyere som er lest). Første gang
+med denne er historie), `lest` (de nyere som er lest) og `arkivert` (de av
+dem som er lagt i arkivet). Første gang
 begynner brukeren rett før den nyeste føringen, så den er et varsel og resten
 ikke. `merkEndringerLest` flytter `fra` forbi de eldste leste som har passert
-fristen, så lista over leste ikke vokser.
+fristen, så listene over leste og arkiverte ikke vokser.
 
 En føring er `funksjonalitet`, eller `fortolkning` når den har
 `endrerFortolkning: true` (se `docs/endringslogg.md`). En føring med
@@ -113,6 +123,13 @@ leder dit det gjelder, og er lest når man går dit: idéen (`visIde`, som
 fortolkningen reglene gjelder. «Merk som lest» og «Merk alle som lest» gjør det
 samme uten å gå noe sted; «Merk alle som lest» gjelder bare kategoriene brukeren har slått på. Tannhjulet åpner innstillingene, der de
 obligatoriske kategoriene står låst.
+
+«Arkiver» ved et varsel, og «Arkiver alle» ved «Tidligere», legger varslene i
+skuffen «Arkivet» nederst (`Skuff`, som Idéer også bruker), og et ulest
+varsel som arkiveres, er lest. Der kan de åpnes som før, og «Hent fram fra
+arkivet» legger dem tilbake under «Tidligere». Varslene fra databasen og
+føringene i endringsloggen arkiveres på samme måte (`arkiver` og `gjenopprett`
+i `useVarsler`), hver der de lagres.
 
 ## Favorittene
 

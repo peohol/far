@@ -8,6 +8,9 @@ import { describe, expect, it } from 'vitest'
 import type { Endring } from '../domain/versjon'
 import {
   DATABASEKATEGORIER,
+  arkiverEndringer,
+  etterKilde,
+  gjenopprettEndringer,
   KATEGORIREKKEFOLGE,
   kategorierIGrupper,
   antallUleste,
@@ -94,14 +97,14 @@ describe('kategoriene og valgene', () => {
 
 describe('endringsloggen', () => {
   it('lar en ny bruker begynne med den nyeste føringen som varsel', () => {
-    expect(startstatus(LOGG)).toEqual({ fra: '1.2.0', lest: [] })
+    expect(startstatus(LOGG)).toEqual({ fra: '1.2.0', lest: [], arkivert: [] })
     expect(endringsvarsler(LOGG, startstatus(LOGG), NAA).map((v) => [v.endring.versjon, v.kategori, v.lest])).toEqual([
       ['1.3.0', 'fortolkning', false],
     ])
   })
 
   it('viser de uleste og de leste fra de siste 30 dagene', () => {
-    const status = { fra: '1.0.0', lest: ['1.1.0', '1.2.0'] }
+    const status = { fra: '1.0.0', lest: ['1.1.0', '1.2.0'], arkivert: [] }
     expect(endringsvarsler(LOGG, status, NAA).map((v) => [v.endring.versjon, v.kategori, v.lest])).toEqual([
       ['1.3.0', 'fortolkning', false],
       ['1.2.0', 'funksjonalitet', true],
@@ -109,10 +112,10 @@ describe('endringsloggen', () => {
   })
 
   it('flytter starten forbi de eldste leste som har passert fristen', () => {
-    const status = merkEndringerLest(LOGG, { fra: '1.0.0', lest: [] }, ['1.1.0', '1.3.0'], NAA)
-    expect(status).toEqual({ fra: '1.1.0', lest: ['1.3.0'] })
+    const status = merkEndringerLest(LOGG, { fra: '1.0.0', lest: [], arkivert: [] }, ['1.1.0', '1.3.0'], NAA)
+    expect(status).toEqual({ fra: '1.1.0', lest: ['1.3.0'], arkivert: [] })
     // 1.2.0 er ulest og holder 1.3.0 igjen.
-    expect(merkEndringerLest(LOGG, status, ['1.2.0'], NAA)).toEqual({ fra: '1.1.0', lest: ['1.3.0', '1.2.0'] })
+    expect(merkEndringerLest(LOGG, status, ['1.2.0'], NAA)).toEqual({ fra: '1.1.0', lest: ['1.3.0', '1.2.0'], arkivert: [] })
   })
 
   it('varsler ikke føringer som ikke merkes i appen, og lar dem ikke holde starten igjen', () => {
@@ -122,18 +125,30 @@ describe('endringsloggen', () => {
       endring('1.1.1', '2026-08-02', { utenVarsel: true }),
       ...LOGG.slice(2),
     ]
-    expect(startstatus(logg)).toEqual({ fra: '1.2.0', lest: [] })
-    expect(endringsvarsler(logg, { fra: '1.0.0', lest: [] }, NAA).map((v) => v.endring.versjon)).toEqual(['1.3.0', '1.2.0', '1.1.0'])
-    expect(merkEndringerLest(logg, { fra: '1.0.0', lest: [] }, ['1.1.0'], NAA)).toEqual({ fra: '1.1.1', lest: [] })
+    expect(startstatus(logg)).toEqual({ fra: '1.2.0', lest: [], arkivert: [] })
+    expect(endringsvarsler(logg, { fra: '1.0.0', lest: [], arkivert: [] }, NAA).map((v) => v.endring.versjon)).toEqual(['1.3.0', '1.2.0', '1.1.0'])
+    expect(merkEndringerLest(logg, { fra: '1.0.0', lest: [], arkivert: [] }, ['1.1.0'], NAA)).toEqual({ fra: '1.1.1', lest: [], arkivert: [] })
     // En endring i fortolkningen varsles alltid.
     const begge = [endring('1.4.0', '2026-09-29', { utenVarsel: true, endrerFortolkning: true }), ...LOGG]
-    expect(endringsvarsler(begge, { fra: '1.3.0', lest: [] }, NAA).map((v) => [v.endring.versjon, v.kategori])).toEqual([['1.4.0', 'fortolkning']])
+    expect(endringsvarsler(begge, { fra: '1.3.0', lest: [], arkivert: [] }, NAA).map((v) => [v.endring.versjon, v.kategori])).toEqual([['1.4.0', 'fortolkning']])
   })
 
   it('leser bare en gyldig status', () => {
-    expect(lesEndringsloggstatus({ fra: '1.2.0', lest: ['1.3.0', 'x', 4] })).toEqual({ fra: '1.2.0', lest: ['1.3.0'] })
+    expect(lesEndringsloggstatus({ fra: '1.2.0', lest: ['1.3.0', 'x', 4] })).toEqual({ fra: '1.2.0', lest: ['1.3.0'], arkivert: [] })
     expect(lesEndringsloggstatus({ fra: 'x' })).toBeNull()
     expect(lesEndringsloggstatus(null)).toBeNull()
+  })
+
+  it('arkiverer føringer som lest, henter dem fram igjen, og glemmer dem når de har passert fristen', () => {
+    const arkivert = arkiverEndringer(LOGG, { fra: '1.1.0', lest: [], arkivert: [] }, ['1.3.0'], NAA)
+    expect(arkivert).toEqual({ fra: '1.1.0', lest: ['1.3.0'], arkivert: ['1.3.0'] })
+    expect(endringsvarsler(LOGG, arkivert, NAA).map((v) => [v.endring.versjon, v.lest, v.arkivert])).toEqual([
+      ['1.3.0', true, true],
+      ['1.2.0', false, false],
+    ])
+    expect(gjenopprettEndringer(arkivert, ['1.3.0'])).toEqual({ fra: '1.1.0', lest: ['1.3.0'], arkivert: [] })
+    // 1.1.0 har passert fristen: den flyttes forbi, og står ikke lenger i arkivet.
+    expect(arkiverEndringer(LOGG, { fra: '1.0.0', lest: [], arkivert: [] }, ['1.1.0'], NAA)).toEqual({ fra: '1.1.0', lest: [], arkivert: [] })
   })
 })
 
@@ -149,6 +164,7 @@ const ideVarsel = (ekstra: Partial<Databasevarsel> = {}): Databasevarsel => ({
   ],
   oppdatert_kl: '2026-09-29T12:00:00Z',
   lest: false,
+  arkivert: false,
   ...ekstra,
 })
 
@@ -208,20 +224,28 @@ describe('tekstene', () => {
 
 describe('samlet', () => {
   it('teller de uleste i kategoriene brukeren har valgt', () => {
-    const endringer = endringsvarsler(LOGG, { fra: '1.1.0', lest: [] }, NAA)
+    const endringer = endringsvarsler(LOGG, { fra: '1.1.0', lest: [], arkivert: [] }, NAA)
     const uleste = { mine_ideer: 2, aktive_ideer: 3, fortolkning: 1 }
     expect(antallUleste(uleste, endringer, {})).toBe(2 + 3 + 1 + 2)
     expect(antallUleste(uleste, endringer, { aktive_ideer: false, funksjonalitet: false })).toBe(2 + 1 + 1)
   })
 
   it('viser de uleste først, og ellers de nyeste først, bare i valgte kategorier', () => {
-    const endringer = endringsvarsler(LOGG, { fra: '1.1.0', lest: ['1.2.0'] }, NAA)
+    const endringer = endringsvarsler(LOGG, { fra: '1.1.0', lest: ['1.2.0'], arkivert: [] }, NAA)
     const gammel = ideVarsel({ id: 'gammel', oppdatert_kl: '2026-09-01T10:00:00Z' })
     const aktiv = ideVarsel({ id: 'aktiv', kategori: 'aktive_ideer', oppdatert_kl: '2026-09-29T23:00:00Z' })
     const lest = ideVarsel({ id: 'lest', lest: true, oppdatert_kl: '2026-09-29T14:00:00Z' })
     const ider = (valg = {}) => samleVarsler([gammel, aktiv, lest, ...endringer], valg).map((v) => v.id)
     expect(ider()).toEqual(['aktiv', 'endring:1.3.0', 'gammel', 'lest', 'endring:1.2.0'])
     expect(ider({ aktive_ideer: false, funksjonalitet: false })).toEqual(['endring:1.3.0', 'gammel', 'lest'])
+  })
+
+  it('deler varslene i føringer og varsler fra databasen', () => {
+    const endringer = endringsvarsler(LOGG, { fra: '1.1.0', lest: [], arkivert: [] }, NAA)
+    expect(etterKilde([ideVarsel({ id: 'a' }), ...endringer, ideVarsel({ id: 'b' })])).toEqual({
+      versjoner: ['1.3.0', '1.2.0'],
+      ider: ['a', 'b'],
+    })
   })
 
   it('leser svaret fra databasen og hopper over det som ikke har formen', () => {
@@ -243,14 +267,15 @@ describe('samlet', () => {
           hendelser: [{ kl: 'x', av: 'a', side: { id: 's', navn: 'Litium', stoff: 'litium' }, deler: ['tdm', 4] }],
           oppdatert_kl: 'x',
           lest_kl: 'x',
+          arkivert_kl: 'x',
         },
         { id: 'v2', kategori: 'ukjent', hendelser: [{}] },
         { id: 'v3', kategori: 'mine_ideer', hendelser: [] },
       ],
     })
-    expect(liste.varsler.map((v) => [v.id, v.lest, v.hendelser[0]!.objekt?.navn])).toEqual([
-      ['v1', false, 'N'],
-      ['v4', true, undefined],
+    expect(liste.varsler.map((v) => [v.id, v.lest, v.arkivert, v.hendelser[0]!.objekt?.navn])).toEqual([
+      ['v1', false, false, 'N'],
+      ['v4', true, true, undefined],
     ])
     expect(liste.varsler[1]!.hendelser[0]).toMatchObject({ side: { id: 's', navn: 'Litium', stoff: 'litium' }, deler: ['tdm'] })
   })
