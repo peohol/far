@@ -717,6 +717,46 @@ describe('kommentarene', () => {
     ])
   })
 
+  it('gir en ny svarplikt når kontrolløren åpner en tråd igjen med et nytt funn', async () => {
+    const k = await kuratertGren()
+    await medDokumenter(k.gren)
+    await agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 1 })
+    const traad = await agent<{ traad: string }>(chatgpt, 'kommenter', {
+      gren: k.gren,
+      art: 'sperrende',
+      anker: { objekt: k.dosering, felt: 'Tekst' },
+      tekst: 'Doseringen mangler kilde.',
+    })
+    await agent(chatgpt, 'vurder', { gren: k.gren, revisjon: 1, beslutning: 'endringer', begrunnelse: 'Se tråden.' })
+    const rett = async (revisjon: number, tekst: string) =>
+      agent(claude, 'skriv', {
+        gren: k.gren,
+        forventet_revisjon: revisjon - 1,
+        endringer: [{ sett: k.dosering, innhold: kort(k.side, 'dosering', tekst, { referanser: [k.nyRef] }) }],
+      })
+    const venter = async () =>
+      (await agent<{ traader: Traad[] }>(chatgpt, 'les', { gren: k.gren })).traader.find((t) => t.id === traad.traad)!.venter_pa_kurator
+
+    // Svar fra kuratoren, og kontrolløren lukker tråden.
+    await rett(2, 'Dosering med kilde')
+    await agent(claude, 'kommenter', { gren: k.gren, svar_pa: traad.traad, tekst: 'Kilde lagt til i revisjon 2.' })
+    await agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 2 })
+    await agent(chatgpt, 'lukk_kommentar', { gren: k.gren, kommentar: traad.traad, tekst: 'Kontrollert.' })
+
+    // Kontrolløren åpner den igjen med et nytt funn: tråden venter på kuratoren igjen, også i appen.
+    await agent(chatgpt, 'gjenapne_kommentar', { gren: k.gren, kommentar: traad.traad, tekst: 'Maksdosen stemmer ikke med kilden.' })
+    expect(await venter()).toBe(true)
+    expect((await adm<Traad[]>('kommentarer', { gren: k.gren })).find((t) => t.id === traad.traad)).toMatchObject({ status: 'apen', venter_pa_kurator: true })
+    await agent(chatgpt, 'vurder', { gren: k.gren, revisjon: 2, beslutning: 'endringer', begrunnelse: 'Se den gjenåpnede tråden.' })
+
+    // En ny revisjon kan ikke sendes til kontroll før kuratoren har svart på det nye funnet.
+    await rett(3, 'Dosering med rettet maksdose')
+    expect((await feilFra(() => agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 3 })))?.message).toMatch(/venter på svar/)
+    await agent(claude, 'kommenter', { gren: k.gren, svar_pa: traad.traad, tekst: 'Maksdosen rettet i revisjon 3.' })
+    expect(await venter()).toBe(false)
+    expect((await agent<Sammendrag>(claude, 'til_kontroll', { gren: k.gren, revisjon: 3 })).runde).toBe(3)
+  })
+
   it('lar kuratoren skrive merknader og andre ikke lese grenens tråder', async () => {
     const k = await kuratertGren()
     const merknad = await agent<{ traad: string }>(claude, 'kommenter', { gren: k.gren, anker: { seksjon: 'dosering' }, tekst: 'Usikker på barnedosen.' })
