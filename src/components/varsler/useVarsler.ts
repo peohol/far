@@ -64,6 +64,8 @@ export function useVarsler(): Varselstatus {
   const [logg, setLogg] = useState<Endringsloggstatus | null>(null)
   const loggen = useRef(logg)
   loggen.current = logg
+  /** Lagringene av statusen, etter hverandre, så den siste alltid lagres sist. */
+  const lagringen = useRef<Promise<void>>(Promise.resolve())
 
   const sjekk = useCallback(() => {
     hentUleste().then(setUleste, () => undefined)
@@ -111,17 +113,28 @@ export function useVarsler(): Varselstatus {
     const ny = endre(naa)
     loggen.current = ny
     setLogg(ny)
-    void lagreEndringsloggstatus(ny).catch(() => undefined)
+    lagringen.current = lagringen.current.then(() => lagreEndringsloggstatus(ny)).catch(() => undefined)
   }, [])
 
-  /** Endrer varslene i lista med én gang, og i databasen etterpå. */
+  /**
+   * Endrer varslene i lista med én gang, og i databasen etterpå. Svarer
+   * databasen at ikke alle ble endret — et varsel har fått noe nytt imens —
+   * hentes lista på nytt, så varselet står slik det er.
+   */
   const endreIDatabasen = useCallback(
-    (ider: string[], endring: Partial<Pick<Databasevarsel, 'lest' | 'arkivert'>>, lagre: (ider: string[], til: string) => Promise<void>) => {
+    (
+      ider: string[],
+      endring: Partial<Pick<Databasevarsel, 'lest' | 'arkivert'>>,
+      lagre: (ider: string[], til: string) => Promise<void | readonly string[]>,
+    ) => {
       if (!liste || ider.length === 0) return
       setListe({ ...liste, varsler: liste.varsler.map((v) => (ider.includes(v.id) ? { ...v, ...endring } : v)) })
-      lagre(ider, liste.lest_kl).then(sjekk, () => undefined)
+      lagre(ider, liste.lest_kl).then(
+        (endret) => (endret && endret.length < ider.length ? hent() : sjekk()),
+        () => undefined,
+      )
     },
-    [liste, sjekk],
+    [liste, hent, sjekk],
   )
 
   const varsler = useMemo(() => (liste ? samleVarsler([...liste.varsler, ...endringer], valg) : null), [liste, endringer, valg])

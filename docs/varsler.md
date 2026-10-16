@@ -88,9 +88,12 @@ tallet på bjella. Tabellen kan bare leses, og bare egne rader.
 
 `arkiver_varsler(varsler, til)` legger varslene i arkivet (`arkivert_kl`) og
 merker dem lest, med samme vakt som `merk_varsler_lest`: et ulest varsel som
-har fått noe nytt siden lista ble lest, blir stående. Et arkivert varsel er
-alltid lest (`varsler_arkivert_er_lest`), så en ny hendelse begynner på et nytt
-varsel, og det ryddes bort som de andre leste når fristen har gått.
+har fått noe nytt siden lista ble lest, blir stående. Den gir ID-ene til dem
+som ble arkivert, og ble noen stående, henter appen lista på nytt. Et
+arkivert varsel er alltid lest (`varsler_arkivert_er_lest`), så en ny hendelse
+begynner på et nytt varsel, og det ryddes bort som de andre leste når fristen
+har gått. Appen lagrer statusen for endringsloggen én gang om gangen, så den
+siste endringen alltid lagres sist.
 `gjenopprett_varsler(varsler)` henter dem fram igjen, som leste.
 
 ## Endringsloggen

@@ -55,7 +55,7 @@ describe('varslene', () => {
   const uleste = (bruker: string) => en<Record<string, number>>(bruker, 'select public.uleste_varsler()')
   const merkLest = (bruker: string, ider: string[] | null, til: string) =>
     sql(bruker, 'select public.merk_varsler_lest($1, $2)', [ider, til])
-  const arkiver = (bruker: string, ider: string[], til: string) => sql(bruker, 'select public.arkiver_varsler($1, $2)', [ider, til])
+  const arkiver = (bruker: string, ider: string[], til: string) => en<string[]>(bruker, 'select public.arkiver_varsler($1, $2)', [ider, til])
   const gjenopprett = (bruker: string, ider: string[]) => sql(bruker, 'select public.gjenopprett_varsler($1)', [ider])
   /** Varslene om kommentarene på idéen; varselet om at den er ny, testes for seg. */
   const omIde = async (bruker: string, ide: string) =>
@@ -161,10 +161,10 @@ describe('varslene', () => {
     const id = alle.find((v) => v.ide?.id === ide && v.kategori === 'mine_ideer')!.id
 
     // Bare egne varsler kan arkiveres.
-    await arkiver(bo, [id], lest_kl)
+    expect(await arkiver(bo, [id], lest_kl)).toEqual([])
     expect((await omIde(ada, ide))[0]).toMatchObject({ lest_kl: null, arkivert_kl: null })
 
-    await arkiver(ada, [id], lest_kl)
+    expect(await arkiver(ada, [id], lest_kl)).toEqual([id])
     const [arkivert] = await omIde(ada, ide)
     expect(arkivert!.arkivert_kl).toEqual(expect.any(String))
     expect(arkivert!.lest_kl).toEqual(expect.any(String))
@@ -187,7 +187,7 @@ describe('varslene', () => {
     const { lest_kl, varsler: alle } = await mine(ada)
     const id = alle.find((v) => v.ide?.id === ide && v.kategori === 'mine_ideer')!.id
     await db.query(`update public.varsler set oppdatert_kl = $2::timestamptz + interval '1 second' where id = $1`, [id, lest_kl])
-    await arkiver(ada, [id], lest_kl)
+    expect(await arkiver(ada, [id], lest_kl)).toEqual([])
     expect((await omIde(ada, ide))[0]).toMatchObject({ lest_kl: null, arkivert_kl: null })
   })
 

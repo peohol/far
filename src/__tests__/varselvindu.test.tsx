@@ -109,7 +109,7 @@ const api = vi.hoisted(() => ({
   hentVarsler: vi.fn(),
   hentUleste: vi.fn(),
   merkVarslerLest: vi.fn(async (_ider: readonly string[] | null, _til: string) => {}),
-  arkiverVarsler: vi.fn(async (_ider: readonly string[], _til: string) => {}),
+  arkiverVarsler: vi.fn(async (ider: readonly string[], _til: string) => [...ider]),
   gjenopprettVarsler: vi.fn(async (_ider: readonly string[]) => {}),
   hentVarselvalg: vi.fn(),
   lagreVarselvalg: vi.fn(async (_valg: Varselvalg) => {}),
@@ -263,6 +263,15 @@ describe('vinduet', () => {
     await bruker.click(within(fortolkning).getByRole('button', { name: 'Hent fram fra arkivet' }))
     expect(api.gjenopprettVarsler).toHaveBeenCalledWith(['v-fortolkning'])
     expect(within(tidligere()).getByText('Fortolkningen er endret')).toBeTruthy()
+  })
+
+  it('henter lista på nytt når et varsel har fått noe nytt og ikke ble arkivert', async () => {
+    api.arkiverVarsler.mockResolvedValueOnce([])
+    const { bruker, vindu } = await apne()
+    const aktiv = within(vindu).getByText(/kommenterte en idé du har kommentert/).closest('li')!
+    await bruker.click(within(aktiv).getByRole('button', { name: 'Arkiver' }))
+    await waitFor(() => expect(api.hentVarsler).toHaveBeenCalledTimes(2))
+    expect(within(within(vindu).getByRole('region', { name: 'Nye' })).getByText(/kommenterte en idé du har kommentert/)).toBeTruthy()
   })
 
   it('viser endringene på favorittsidene når brukeren har slått dem på, og leder til siden', async () => {

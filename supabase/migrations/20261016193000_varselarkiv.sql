@@ -51,31 +51,38 @@ $$;
 
 -- Legger de oppgitte varslene i arkivet, og merker dem lest. Som
 -- `merk_varsler_lest` gjelder det et ulest varsel slik det var da lista ble
--- lest (`til`): har det fått noe nytt siden, blir det stående.
+-- lest (`til`): har det fått noe nytt siden, blir det stående. Gir ID-ene til
+-- dem som ble arkivert, så appen ser om noen ble stående.
 create function public.arkiver_varsler(varsler uuid[], til timestamptz)
-returns void
+returns uuid[]
 language plpgsql
 security definer
 set search_path = ''
 as $$
 declare
   bruker uuid := (select auth.uid());
+  arkiverte uuid[];
 begin
   if bruker is null then
     raise exception 'Bare innloggede har varsler.' using errcode = '42501';
   end if;
-  update public.varsler v
-  set arkivert_kl = now(),
-      lest_kl = coalesce(v.lest_kl, now())
-  where v.mottaker_id = bruker
-    and v.arkivert_kl is null
-    and v.id = any (arkiver_varsler.varsler)
-    and (v.lest_kl is not null or v.oppdatert_kl <= least(arkiver_varsler.til, now()));
+  with arkivert as (
+    update public.varsler v
+    set arkivert_kl = now(),
+        lest_kl = coalesce(v.lest_kl, now())
+    where v.mottaker_id = bruker
+      and v.arkivert_kl is null
+      and v.id = any (arkiver_varsler.varsler)
+      and (v.lest_kl is not null or v.oppdatert_kl <= least(arkiver_varsler.til, now()))
+    returning v.id
+  )
+  select coalesce(array_agg(a.id), '{}') into arkiverte from arkivert a;
+  return arkiverte;
 end;
 $$;
 
 comment on function public.arkiver_varsler(uuid[], timestamptz) is
-  'Legger den innloggedes oppgitte varsler i arkivet og merker dem lest, slik de var på tidspunktet `til`.';
+  'Legger den innloggedes oppgitte varsler i arkivet og merker dem lest, slik de var på tidspunktet `til`. Gir ID-ene til dem som ble arkivert.';
 
 -- Henter de oppgitte varslene fram fra arkivet. De står som leste.
 create function public.gjenopprett_varsler(varsler uuid[])
