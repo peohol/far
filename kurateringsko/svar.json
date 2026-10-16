@@ -1,37 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-ghb-1",
-  "foresporsel_sha256": "12d47626c5819fc316e2cadf9c4e2521b49b0f0234a5cc38432640fa21836420",
-  "handling": "forny",
+  "foresporsel_id": "fullfort-ghb-1",
+  "foresporsel_sha256": "1db159385533a59d7e9e52ac6d9808b676ae595c5b25c909b0c78dcbc6f25b2e",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "Reservasjonen av ghb varer til 2026-10-16T17:55:46.759Z.",
-  "behandlet_kl": "2026-10-16T14:55:46.759Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38919695287",
-  "oppgave": {
-    "oppgave": "ghb-0005",
-    "stoff": "ghb",
-    "navn": "GHB",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-16T17:55:46.759Z",
-    "jobbgren": "kuratorjobb/ghb-0005",
-    "kurateringsgren": "kuratering/ghb-0005",
-    "pr": null,
-    "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a",
-    "gjenoppta": null,
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-15T21:31:45.692Z",
-      "side": true,
-      "elementer": 3,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 2,
-      "referanser": 3,
-      "elementer_uten_kilde": 1
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "melding": "ghb er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-16T15:31:55.717Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38924653876"
 }
