@@ -1,23 +1,23 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-runde-1",
-  "foresporsel_sha256": "635d71d0493d75a8f669f6e129cb8f592758fd0c3effd142cb9d5de0b7ae5b34",
-  "handling": "reserver",
+  "foresporsel_id": "forny-brekspiprazol-1",
+  "foresporsel_sha256": "34e679e327e7c7a3d076f1fa6ed8e41cea498f679cf7be4cc896431cfe67c726",
+  "handling": "forny",
   "utfall": "ok",
-  "melding": "brekspiprazol er reservert til 2026-10-16T22:50:14.603Z.",
-  "behandlet_kl": "2026-10-16T19:50:14.603Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38957797194",
+  "melding": "Reservasjonen av brekspiprazol varer til 2026-10-16T23:17:59.602Z.",
+  "behandlet_kl": "2026-10-16T20:17:59.602Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38961197457",
   "oppgave": {
     "oppgave": "brekspiprazol-0011",
     "stoff": "brekspiprazol",
     "navn": "Brekspiprazol",
     "modus": "de_novo",
     "forsok": 1,
-    "frist_kl": "2026-10-16T22:50:14.603Z",
+    "frist_kl": "2026-10-16T23:17:59.602Z",
     "jobbgren": "kuratorjobb/brekspiprazol-0011",
     "kurateringsgren": "kuratering/brekspiprazol-0011",
     "pr": null,
-    "gren": null,
+    "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
     "gjenoppta": null,
     "sist_kuratert": null,
     "maal": {
@@ -30,15 +30,8 @@
       "elementer_uten_kilde": 17
     },
     "prioritet": {
-      "poeng": 466.3,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "7 av 13 redaksjonelle seksjoner er tomme.",
-        "17 av 20 elementer har ingen kilde.",
-        "Bare 1 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
