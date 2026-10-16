@@ -1,10 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "sen-fullfort-citalopram-0008",
-  "foresporsel_sha256": "6deb016c948c7ad0a02d6dbd37201012ace5aa8749d133e7990be9e98c0857a9",
+  "foresporsel_id": "sen-fullfort-lurasidon-0009",
+  "foresporsel_sha256": "856567f34a67bd5ac2bb36b4bd799f5bdeb4429b0310bc545a07064f892f3a27",
   "handling": "fullfort",
   "utfall": "ok",
-  "melding": "citalopram er alt ført som publisert fra kurateringsgrenen 565f142e-dce5-4804-b3ff-c65593427539.",
-  "behandlet_kl": "2026-10-16T19:46:15.341Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38957315091"
+  "melding": "lurasidon er alt ført som publisert fra kurateringsgrenen 3517ed43-9e99-44e7-867b-d5b0dbf59c95.",
+  "behandlet_kl": "2026-10-16T19:46:58.713Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38957406646"
 }
