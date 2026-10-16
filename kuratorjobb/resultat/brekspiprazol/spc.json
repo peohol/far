@@ -1,0 +1,113 @@
+{
+  "stoff": "brekspiprazol",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-16T04:15:06.398225+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 7,
+    "hentet": 0,
+    "dokumenter": 0,
+    "mangler": [
+      {
+        "merkevare_id": "ID_0B409E58-44B6-4FEE-B0C3-A70963D4D602",
+        "varenavn": "Rxulti",
+        "navn_form_styrke": "Rxulti tab 2 mg",
+        "produsent": "Otsuka Pharmaceutical Netherlands B.V.",
+        "atc": "N05AX16",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_41ACDF24-EB68-45CD-A0FD-40EF3E924C9B",
+        "varenavn": "Rxulti",
+        "navn_form_styrke": "Rxulti tab 0,5 mg",
+        "produsent": "Otsuka Pharmaceutical Netherlands B.V.",
+        "atc": "N05AX16",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_49C5155F-488E-4E7B-B0BB-B4B581D00830",
+        "varenavn": "Rxulti",
+        "navn_form_styrke": "Rxulti tab 1 mg",
+        "produsent": "Otsuka Pharmaceutical Netherlands B.V.",
+        "atc": "N05AX16",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_86CB34FF-FF12-4A4F-A3F4-A87217259702",
+        "varenavn": "Rxulti",
+        "navn_form_styrke": "Rxulti tab 2 mg",
+        "produsent": "Abacus Medicine A/S",
+        "atc": "N05AX16",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_B973F4E7-9B2F-4920-B9BE-7B12A0C3134A",
+        "varenavn": "Rxulti",
+        "navn_form_styrke": "Rxulti tab 3 mg",
+        "produsent": "Otsuka Pharmaceutical Netherlands B.V.",
+        "atc": "N05AX16",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_BBDAB1CC-2E08-4149-BD21-91D0288AB3D7",
+        "varenavn": "Rxulti",
+        "navn_form_styrke": "Rxulti tab 4 mg",
+        "produsent": "Otsuka Pharmaceutical Netherlands B.V.",
+        "atc": "N05AX16",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_FA6003C8-3F97-4687-A21E-CA5AF7ABBDE4",
+        "varenavn": "Rxulti",
+        "navn_form_styrke": "Rxulti tab 1 mg",
+        "produsent": "2care4 ApS",
+        "atc": "N05AX16",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 0 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 0,
+        "ikke_dmp": 0,
+        "uten_omtale": 7
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "Ingen preparatomtale ble hentet. SPC-behovet er ikke dekket; se «dekning».",
+      "antall": {
+        "preparater": 7,
+        "hentet": 0,
+        "mangler": 7,
+        "dokumenter": 0
+      }
+    }
+  ],
+  "adresser": [],
+  "dokumenter": [],
+  "utelatt": []
+}
