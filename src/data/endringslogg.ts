@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.95.0',
+    dato: '2026-10-16',
+    sammendrag: 'Versjonene av hver fagside kan åpnes og sammenlignes, og administratorene får en egen side for hver kuratering',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    gjelder: ['stoff', 'vinduer'],
+    punkter: [
+      'I menyen «Mer» på hver fagside står nå «Versjoner»: alle publiserte utgaver av siden. Hver av dem kan åpnes slik den var, og sammenlignes felt for felt med den gjeldende.',
+      'Administratorer kan ta en tidligere versjon tilbake. Siden vises først i sin helhet med forskjellene, og blir ikke publisert før den er sett over.',
+      'Administratorer ser hver kuratering på en egen side: fagsiden nøyaktig slik den blir publisert, forskjellene fra siden slik den er, kontrollrundene og det som hindrer publisering, med knapper for å godkjenne, be om endringer, publisere, stanse og forkaste. «Kurateringer» i administrasjonsmenyen samler dem, og fagsiden sier fra når en kuratering pågår.',
+    ],
+  },
+  {
     versjon: '1.94.0',
     dato: '2026-10-16',
     sammendrag: 'Kurateringsgrener: fagsider kan kurateres i en egen arbeidsversjon og publiseres samlet etter faglig godkjenning',

@@ -53,6 +53,7 @@ nytt).
 | `stans` / `gjenoppta` | admin | `{gren, grunn?}` / `{gren}` |
 | `forkast` | kurator (egen), admin | `{gren, grunn?}` |
 | `agenter` / `ny_agentnokkel` | admin | `{}` / `{agent}` |
+| `gjenopprett_versjon` | admin | `{stoff, nr, grunn?}` |
 
 Agentene kaller serveren, som kaller `kuratering_agent` med den hemmelige
 nøkkelen (`src/kuratering/endepunkt.ts`); nøkkelen kontrolleres i databasen:
@@ -138,6 +139,35 @@ oppbygningen av siden (panelene og kortenes plass og type), ikke fagteksten
 eller forhåndsvisningen. Den avsluttes med `avslutt_blindfase` når
 blindprotokollen og evidensjournalen fra det egne kildesøket er lagret;
 blindprotokollen kan ikke endres etterpå.
+
+## Gjenopprettingen
+
+En administrator tar en eldre versjon av siden tilbake med
+`gjenopprett_versjon`. Det blir en gren (`art: "gjenoppretting"`, uten
+kurator) med én revisjon: forskjellen mellom versjonen og siden slik den står,
+som endringer. Kortene får innholdet de hadde i versjonen, kortene som er
+kommet til, fjernes, og bivirkningsimportene fra versjonen legges inn på nytt
+mens de som er kommet til, trekkes tilbake. Navnet og nøkkelen til siden og
+referansene (de deles med andre sider) står som nå, og det som ikke kan tas
+tilbake, står i merknadene. Grenen prøvepubliseres og forhåndsvises som andre,
+og publiseres av en administrator fra `arbeid` uten en ny faglig vurdering,
+siden alt i den har vært publisert før. Sideversjonen den gir, har opphavet
+`gjenoppretting`.
+
+## I appen
+
+- `#/kuratering/<gren>`: grenen for administratorene, med fagsiden slik den
+  blir publisert (forhåndsvisningen), sammenligningen med versjonen den bygger
+  på, kontrollrundene og hindringene, og handlingene (vurdere, publisere,
+  stanse, gjenoppta, forkaste). En eldre revisjon kan velges og vises.
+- `#/versjon/<stoff>/<nr>`: en versjon av fagsiden for alle innloggede, med
+  sammenligningen med den gjeldende og, for administratorene, «Ta tilbake
+  denne versjonen».
+- «Versjoner» i menyen på fagsiden, «Kurateringer» i administrasjonsmenyen, og
+  en melding øverst på fagsiden for administratorene når en gren er aktiv.
+- Sammenligningen av to hele utgaver av siden står i
+  `src/faginnhold/sidesammenligning.ts`, og bruker de samme feltene som
+  historikken for ett objekt.
 
 ## Historikken
 

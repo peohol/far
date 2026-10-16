@@ -56,6 +56,9 @@ import {
 } from './domain/valg'
 import { lagFaginnholdslager, lagerFor } from './faginnhold/lagring'
 import { lagFaginnholdsleser } from './faginnhold/lesing'
+import { lagKurateringsklient } from './kuratering/klient'
+import { Kurateringsside } from './components/kuratering/Kurateringsside'
+import { Versjonsside } from './components/kuratering/Versjonsside'
 import { lagEndringsloggleser } from './endringslogg/api'
 import type { Endringskontekst } from './endringslogg/operasjon'
 import { endringssideFor } from './endringslogg/sider'
@@ -159,7 +162,8 @@ export default function App() {
   // stoffenes, i stoffregisteret; koblingene der er veien mellom de to.
   const katalog = useMemo(() => byggKatalog(alleAnalytter), [alleAnalytter])
   const [rute, gaaTil] = useRute(apneFraAdressen)
-  const paaInfoside = rute.side === 'stoff'
+  // Fagsidene, også en tidligere versjon eller en kurateringsgren av en.
+  const paaInfoside = rute.side === 'stoff' || rute.side === 'versjon' || rute.side === 'kuratering'
   // Siden brukeren er på, for meldingen om en ny versjon: den står bare når
   // versjonen berører siden, og å gå til en annen side er et rolig øyeblikk
   // der den kan tas i bruk i stillhet (`src/oppdatering/sider.ts`).
@@ -178,6 +182,7 @@ export default function App() {
       bivirkninger: lagBivirkningsleser(klient()),
       kjemi: lagKjemileser(klient()),
       laboratorier: lagLableser(klient()),
+      kuratering: lagKurateringsklient(klient()),
     }),
     [profil.role],
   )
@@ -725,6 +730,31 @@ export default function App() {
                         onApneFortolkning={apneFortolkning}
                         onLukk={lukkInfoside}
                       />
+                    </FaginnholdskildeProvider>
+                  </main>
+                )}
+
+                {(rute.side === 'versjon' || rute.side === 'kuratering') && (
+                  <main className="scene scene--infoside">
+                    <FaginnholdskildeProvider kilde={faginnhold}>
+                      {rute.side === 'versjon' ? (
+                        <Versjonsside
+                          stoff={rute.stoff}
+                          nr={rute.nr}
+                          register={register}
+                          katalog={katalog}
+                          onApneFortolkning={apneFortolkning}
+                          onGaaTil={gaaTil}
+                        />
+                      ) : (
+                        <Kurateringsside
+                          gren={rute.gren}
+                          register={register}
+                          katalog={katalog}
+                          onApneFortolkning={apneFortolkning}
+                          onGaaTil={gaaTil}
+                        />
+                      )}
                     </FaginnholdskildeProvider>
                   </main>
                 )}

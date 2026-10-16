@@ -1,4 +1,4 @@
--- Gjenoppretting av en eldre versjon av en fagside
+-- Gjenoppretting av en eldre versjon av en fagside, og bivirkningene i en versjon
 -- (docs/kurateringsgrener.md, fase C i docs/kurateringsgrener-fremdrift.md).
 --
 -- En administrator tar en eldre sideversjon tilbake som en gren
@@ -177,6 +177,83 @@ begin
 end;
 $$;
 
+-- --- Bivirkningene i en versjon ------------------------------------------------
+
+-- Bivirkningene fra bestemte kilder, i samme form som `les_bivirkninger`. En
+-- kilde som er erstattet eller trukket tilbake, har radene sine fortsatt.
+create function bivirkninger.les_kilder(p_kilder uuid[])
+returns jsonb
+language sql
+stable
+set search_path = ''
+as $$
+  with kilder as (
+    select k.* from bivirkninger.kilder k where k.id = any (p_kilder)
+  )
+  select jsonb_build_object(
+    'kilder', coalesce((
+      select jsonb_agg(jsonb_build_object(
+        'id', k.id, 'nokkel', k.nokkel, 'type', k.type, 'tittel', k.tittel, 'preparat', k.preparat,
+        'innehaver', k.innehaver, 'spc_versjon', k.spc_versjon, 'revisjonsdato', k.revisjonsdato,
+        'lenke', k.lenke, 'kontrollert', k.kontrollert, 'kontrollert_av', k.kontrollert_av,
+        'merknad', k.merknad, 'importert_kl', k.importert_kl, 'importert_av', k.importert_av,
+        'kontekster', coalesce((
+          select jsonb_agg(jsonb_build_object(
+            'nokkel', t.nokkel, 'navn', t.navn, 'frekvensgrunnlag', t.frekvensgrunnlag, 'merknad', t.merknad)
+            order by t.posisjon)
+          from bivirkninger.kontekster t
+          where t.kilde = k.id), '[]'))
+        order by k.importert_kl, k.nokkel)
+      from kilder k), '[]'),
+    'bivirkninger', coalesce((
+      select jsonb_agg(jsonb_build_object(
+        'kilde', b.kilde, 'kontekst', t.nokkel, 'organsystem', b.organsystem, 'frekvens', b.frekvens,
+        'tekst', b.tekst, 'fotnote', b.fotnote, 'posisjon', b.posisjon)
+        order by o.rang, f.rang, k.importert_kl, k.nokkel, t.posisjon nulls first, b.posisjon)
+      from bivirkninger.bivirkninger b
+      join kilder k on k.id = b.kilde
+      left join bivirkninger.kontekster t on t.id = b.kontekst
+      join bivirkninger.organsystemer o on o.kode = b.organsystem
+      join bivirkninger.frekvenser f on f.kode = b.frekvens), '[]')
+  )
+$$;
+
+create or replace function public.les_bivirkninger(stoff text)
+returns jsonb
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select bivirkninger.les_kilder(array(
+    select k.id
+    from bivirkninger.kilder k
+    where k.erstattet_av is null
+      and k.trukket_kl is null
+      and k.infoside in (select s.objekt_id from public.infosider s where s.slug = les_bivirkninger.stoff)
+  ))
+$$;
+
+-- Bivirkningene på fagsiden slik de var i en versjon av den, i samme form som
+-- `les_bivirkninger`. `null` når versjonen ikke finnes.
+create function public.les_sideversjon_bivirkninger(stoff text, nr integer)
+returns jsonb
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select bivirkninger.les_kilder(array(
+    select (x ->> 'id')::uuid from jsonb_array_elements(v.manifest -> 'bivirkninger') x
+  ))
+  from public.sideversjoner v
+  join public.infosider s on s.objekt_id = v.infoside and s.tilstand = 'publisert'
+  where s.slug = btrim(les_sideversjon_bivirkninger.stoff) and v.nr = les_sideversjon_bivirkninger.nr
+$$;
+
+comment on function public.les_sideversjon_bivirkninger(text, integer) is
+  'Bivirkningene på fagsiden slik de var i en versjon, i samme form som les_bivirkninger. For alle innloggede.';
+
 create or replace function kuratering.handlinger(p_admin boolean)
 returns text[]
 language sql
@@ -192,3 +269,6 @@ as $$
 $$;
 
 revoke all on all functions in schema kuratering from public, anon, authenticated, service_role;
+revoke all on function bivirkninger.les_kilder(uuid[]) from public, anon, authenticated, service_role;
+revoke all on function public.les_sideversjon_bivirkninger(text, integer) from public, anon, authenticated, service_role;
+grant execute on function public.les_sideversjon_bivirkninger(text, integer) to authenticated;

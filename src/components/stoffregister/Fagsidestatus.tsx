@@ -1,3 +1,4 @@
+import { useBevart } from '../../oppdatering/Bevaring'
 import { useStoffregisterkilde } from '../../stoffregister/Stoffregisterkilde'
 import { kanSletteStoff } from '../../stoffregister/modell'
 import { Button } from '../Button'
@@ -5,6 +6,8 @@ import { Menyvalg, Nedtrekksmeny } from '../toppmeny/Nedtrekksmeny'
 import { Bekreftknapp } from '../traad/Smadeler'
 import { useRegisterhandling } from './Registerhandling'
 import { slettesForGodt } from './papirkurv'
+import { Versjonsliste } from '../kuratering/Utgavelister'
+import { useValgfriFaginnholdskilde } from '../stoffside/Faginnholdskilde'
 
 /**
  * Fagsidens plass i stoffregisteret, på selve siden: menyen som arkiverer og
@@ -12,54 +15,78 @@ import { slettesForGodt } from './papirkurv'
  * papirkurven. Reglene er de samme som på helsiden (`kanSletteStoff`).
  */
 
-/** «Mer» i toppmenyen: arkiver eller slett fagsiden. Ingenting når siden ikke kan noen av delene. */
-export function Fagsidemeny({ slug }: { slug: string }) {
+/**
+ * «Mer» i toppmenyen: versjonene av fagsiden, og å arkivere eller slette den.
+ * Ingenting når siden ikke har noen av delene.
+ */
+export function Fagsidemeny({ slug, navn }: { slug: string; navn?: string }) {
   const kilde = useStoffregisterkilde()
+  const kuratering = useValgfriFaginnholdskilde()?.kuratering
   const { utfor } = useRegisterhandling()
+  const [versjoner, setVersjoner] = useBevart('versjoner', false)
   const stoff = kilde?.register.menystoff(slug)
-  if (!kilde || !stoff || kilde.register.status(slug) !== 'aktiv') return null
-  const { handlinger, admin } = kilde
-  const slett = kanSletteStoff(stoff, admin)
+  const register = kilde && stoff && kilde.register.status(slug) === 'aktiv' ? { ...kilde, stoff } : null
+  if (!register && !kuratering) return null
+  const slett = register ? kanSletteStoff(register.stoff, register.admin) : null
   return (
-    <Nedtrekksmeny
-      knapp={{ ikon: 'more', etikett: 'Mer for fagsiden', variant: 'myk' }}
-      etikett="Mer for fagsiden"
-      lag="fagsidemeny"
-    >
-      {(lukk) => (
-        <ul className="nedtrekk__valg">
-          <li>
-            <Menyvalg
-              ikon="arkiv"
-              tekst="Arkiver fagsiden"
-              onClick={() => {
-                lukk()
-                void utfor(() => handlinger.arkiverStoff(slug, true), {
-                  melding: `${stoff.navn} er arkivert.`,
-                  angre: () => handlinger.arkiverStoff(slug, false),
-                })
-              }}
-            />
-          </li>
-          {slett.lov && (
-            <li>
-              <Menyvalg
-                ikon="trash"
-                tekst="Slett fagsiden"
-                {...(admin && { hint: 'Til papirkurven' })}
-                onClick={() => {
-                  lukk()
-                  void utfor(() => handlinger.slettStoff(slug), {
-                    melding: `${stoff.navn} er slettet.`,
-                    angre: () => handlinger.gjenopprettStoff(slug),
-                  })
-                }}
-              />
-            </li>
-          )}
-        </ul>
+    <>
+      <Nedtrekksmeny
+        knapp={{ ikon: 'more', etikett: 'Mer for fagsiden', variant: 'myk' }}
+        etikett="Mer for fagsiden"
+        lag="fagsidemeny"
+      >
+        {(lukk) => (
+          <ul className="nedtrekk__valg">
+            {kuratering && (
+              <li>
+                <Menyvalg
+                  ikon="history"
+                  tekst="Versjoner"
+                  onClick={() => {
+                    lukk()
+                    setVersjoner(true)
+                  }}
+                />
+              </li>
+            )}
+            {register && (
+              <li>
+                <Menyvalg
+                  ikon="arkiv"
+                  tekst="Arkiver fagsiden"
+                  onClick={() => {
+                    lukk()
+                    void utfor(() => register.handlinger.arkiverStoff(slug, true), {
+                      melding: `${register.stoff.navn} er arkivert.`,
+                      angre: () => register.handlinger.arkiverStoff(slug, false),
+                    })
+                  }}
+                />
+              </li>
+            )}
+            {register && slett?.lov && (
+              <li>
+                <Menyvalg
+                  ikon="trash"
+                  tekst="Slett fagsiden"
+                  {...(register.admin && { hint: 'Til papirkurven' })}
+                  onClick={() => {
+                    lukk()
+                    void utfor(() => register.handlinger.slettStoff(slug), {
+                      melding: `${register.stoff.navn} er slettet.`,
+                      angre: () => register.handlinger.gjenopprettStoff(slug),
+                    })
+                  }}
+                />
+              </li>
+            )}
+          </ul>
+        )}
+      </Nedtrekksmeny>
+      {kuratering && (
+        <Versjonsliste apen={versjoner} stoff={slug} navn={navn || stoff?.navn || slug} onLukk={() => setVersjoner(false)} />
       )}
-    </Nedtrekksmeny>
+    </>
   )
 }
 

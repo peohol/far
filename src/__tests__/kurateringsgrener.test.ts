@@ -458,6 +458,13 @@ describe('gjenopprettingen', () => {
   it('tar en eldre versjon tilbake som en gren, forhåndsvist, og publiserer den som en ny versjon', async () => {
     const s = await endretSide()
     expect(JSON.stringify(await publisert(s.slug))).toContain('Senere dosering')
+    const [biv] = await kall.les<{ gammel: { kilder: { nokkel: string }[] }; naa: { kilder: unknown[] } }>(
+      leser,
+      'select public.les_sideversjon_bivirkninger($1, $2) as gammel, public.les_bivirkninger($1) as naa',
+      [s.slug, s.nr],
+    )
+    expect(biv!.gammel.kilder.map((k) => k.nokkel)).not.toContain('senere-kilde')
+    expect(biv!.naa.kilder).toHaveLength(biv!.gammel.kilder.length + 1)
 
     expect((await feilFra(() => adm('gjenopprett_versjon', { stoff: s.slug, nr: s.nr }, leser)))?.code).toBe('42501')
     expect((await feilFra(() => agent(claude, 'gjenopprett_versjon', { stoff: s.slug, nr: s.nr })))?.code).toBe('22023')

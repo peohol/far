@@ -19,6 +19,7 @@ import { useFaginnholdskilde } from './Faginnholdskilde'
 import { useFavoritter } from '../../favoritter/Favorittkilde'
 import { useStoffregisterkilde } from '../../stoffregister/Stoffregisterkilde'
 import { Fagsidebanner, Fagsidemeny } from '../stoffregister/Fagsidestatus'
+import { Kurateringsbanner } from '../kuratering/Utgavelister'
 import { Registerhandlingskilde } from '../stoffregister/Registerhandling'
 import { Identitetspanel } from './Identitetspanel'
 import { finnKobling, Preparatpanel, preparatsoketekster } from './Preparatpanel'
@@ -65,6 +66,14 @@ export interface StoffsideProps {
   onApneFortolkning: (analyte: Analyte) => void
   /** Tilbake til fortolkningen slik den sto. */
   onLukk: () => void
+  /**
+   * En annen utgave av siden enn den gjeldende: en tidligere versjon eller en
+   * kurateringsgren (`src/components/kuratering/`). Innholdet kommer da fra
+   * kilden rundt siden, og siden vises bare til lesing, med `banner` øverst i
+   * stedet for sidens egne handlinger. `navn` skiller det som tas vare på for
+   * utgaven fra det som tas vare på for siden.
+   */
+  utgave?: { navn: string; banner: ReactNode }
 }
 
 /**
@@ -98,8 +107,8 @@ export function Stoffside(props: StoffsideProps) {
   // seksjoner som er åpne, hører til siden. Det samme tas vare på når appen
   // oppdateres, under sidens eget område.
   return (
-    <Bevaringsomrade navn={`stoff:${props.stoff}`}>
-      <SeksjonsstyringKilde key={props.stoff} bevares>
+    <Bevaringsomrade navn={props.utgave ? `utgave:${props.utgave.navn}` : `stoff:${props.stoff}`}>
+      <SeksjonsstyringKilde key={props.utgave?.navn ?? props.stoff} bevares>
         <Registerhandlingskilde>
           <Innhold {...props} />
         </Registerhandlingskilde>
@@ -125,9 +134,10 @@ function Ikkefunnet({ onLukk, children }: { onLukk: () => void; children: ReactN
   )
 }
 
-function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLukk }: StoffsideProps) {
-  const { kanRedigere } = useFaginnholdskilde()
-  const favoritter = useFavoritter()
+function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLukk, utgave }: StoffsideProps) {
+  const kanRedigere = useFaginnholdskilde().kanRedigere && !utgave
+  const favorittene = useFavoritter()
+  const favoritter = utgave ? null : favorittene
   const registerkilde = useStoffregisterkilde()
   const [modus, setModus] = useBevart<Sidemodus>('modus', 'lese')
   const [sporring, setSporring] = useBevart('sok', '')
@@ -293,7 +303,7 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
             {kanRedigere && (
               <Ikonknapp ikon="edit" etikett="Rediger" aria-pressed="false" onClick={() => setModus('rediger')} />
             )}
-            {finnes && <Fagsidemeny slug={slug} />}
+            {finnes && !utgave && <Fagsidemeny slug={slug} navn={navn} />}
           </ToppmenyInnhold>
           <ToppmenyInnhold spor="lukk">
             <Lukkeknapp onLukk={onLukk} />
@@ -312,7 +322,14 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
         />
       </ToppmenyInnhold>
 
-      <Fagsidebanner slug={slug} />
+      {utgave ? (
+        utgave.banner
+      ) : (
+        <>
+          <Fagsidebanner slug={slug} />
+          <Kurateringsbanner stoff={slug} />
+        </>
+      )}
       {modus === 'rediger' && redigerer && !side.data.infoside && (
         <p className="redigeringsstripe">Siden opprettes i databasen første gang du lagrer noe på den.</p>
       )}

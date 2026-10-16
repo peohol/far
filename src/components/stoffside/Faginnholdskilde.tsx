@@ -7,6 +7,7 @@ import type { Legemiddelleser } from '../../legemiddeldata/lesing'
 import type { Bivirkningsleser } from '../../bivirkninger/lesing'
 import type { Kjemileser } from '../../kjemi/lesing'
 import type { Lableser } from '../../farmakologiportalen/lesing'
+import type { Kurateringsklient } from '../../kuratering/klient'
 
 /**
  * Hvor stoffsidene henter og lagrer faginnholdet, og om den innloggede
@@ -53,6 +54,11 @@ export interface Faginnholdskilde {
    * «Analyse ved norske laboratorier» viser for de samme forbindelsene.
    */
   laboratorier?: Lableser
+  /**
+   * Versjonene av fagsidene og kurateringsgrenene (`docs/kurateringsgrener.md`).
+   * Uten den vises verken versjonene eller grenene.
+   */
+  kuratering?: Kurateringsklient
 }
 
 const Kontekst = createContext<Faginnholdskilde | null>(null)
@@ -71,4 +77,9 @@ export function useFaginnholdskilde(): Faginnholdskilde {
   const kilde = useContext(Kontekst)
   if (!kilde) throw new Error('useFaginnholdskilde må stå innenfor <FaginnholdskildeProvider>')
   return kilde
+}
+
+/** Kilden når det er en, ellers `null` — for det som også vises utenfor stoffsidene. */
+export function useValgfriFaginnholdskilde(): Faginnholdskilde | null {
+  return useContext(Kontekst)
 }

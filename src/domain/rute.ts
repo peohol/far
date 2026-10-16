@@ -61,6 +61,13 @@ import { STOFFREGISTER, stoffslug, type Stoffregister } from './stoffregister'
  * Stoffregisteret har en helside, der det også redigeres:
  *
  *   #/stoffregister
+ *
+ * En tidligere versjon av en fagside har sin egen adresse, etter nummeret i
+ * sideversjonene, og en kurateringsgren etter ID-en, så de kan deles og
+ * åpnes fra en lenke:
+ *
+ *   #/versjon/bupropion/3
+ *   #/kuratering/<gren-ID>
  */
 
 export type Rute =
@@ -86,6 +93,18 @@ export type Rute =
       q: string
     }
   | { side: 'stoffregister' }
+  | {
+      side: 'versjon'
+      /** Stoffets nøkkel. */
+      stoff: string
+      /** Nummeret på versjonen av fagsiden. */
+      nr: number
+    }
+  | {
+      side: 'kuratering'
+      /** ID-en til kurateringsgrenen. */
+      gren: string
+    }
 
 export const FORTOLKNING: Rute = { side: 'fortolkning' }
 
@@ -135,6 +154,10 @@ const SOK = /^#\/sok\/?(?:\?(.*))?$/i
 
 const STOFFREGISTERSIDE = /^#\/stoffregister\/?$/i
 
+const VERSJON = /^#\/versjon\/([a-z0-9]+(?:-[a-z0-9]+)*)\/([1-9][0-9]{0,8})\/?$/i
+
+const KURATERING = /^#\/kuratering\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/?$/i
+
 /** Adressen til helsiden for stoffregisteret. */
 export const STOFFREGISTERADRESSE = '#/stoffregister'
 
@@ -152,6 +175,10 @@ export function lesRute(hash: string, register: Stoffregister = STOFFREGISTER): 
   const sok = SOK.exec(hash)
   if (sok) return { side: 'sok', q: new URLSearchParams(sok[1] ?? '').get('q') ?? '' }
   if (STOFFREGISTERSIDE.test(hash)) return { side: 'stoffregister' }
+  const versjon = VERSJON.exec(hash)
+  if (versjon?.[1] && versjon[2]) return { side: 'versjon', stoff: versjon[1].toLowerCase(), nr: Number(versjon[2]) }
+  const gren = KURATERING.exec(hash)
+  if (gren?.[1]) return { side: 'kuratering', gren: gren[1].toLowerCase() }
   const fortolkning = FORTOLKNINGSSIDE.exec(hash)
   if (fortolkning?.[1]) {
     const analytt = fortolkning[1].toLowerCase()
@@ -237,11 +264,25 @@ export function adresse(rute: Rute): string {
       return sokeside(rute.q)
     case 'stoffregister':
       return STOFFREGISTERADRESSE
+    case 'versjon':
+      return versjonsadresse(rute.stoff, rute.nr)
+    case 'kuratering':
+      return kurateringsadresse(rute.gren)
     default:
       if (!rute.analytt) return '#/'
       if (!rute.rediger) return `#/fortolkning/${rute.analytt}`
       return ['#/fortolkning', rute.analytt, REDIGER, ...(rute.sted ?? []).map(encodeURIComponent)].join('/')
   }
+}
+
+/** Adressen til en versjon av fagsiden for et stoff. */
+export function versjonsadresse(slug: string, nr: number): string {
+  return `#/versjon/${encodeURIComponent(slug)}/${nr}`
+}
+
+/** Adressen til en kurateringsgren. */
+export function kurateringsadresse(gren: string): string {
+  return `#/kuratering/${gren}`
 }
 
 /** Adressen til søkesiden for et søk. */
@@ -256,8 +297,8 @@ export function stoffadresse(slug: string, sted: readonly string[] = []): string
 
 /**
  * Siden ruten står på, uten stedet på den og uten søket: `fortolkning`,
- * `fortolkning/hbup`, `fortolkning/hbup/rediger`, `stoff/bupropion`, `sok` og
- * `stoffregister`. Det er formen områdene i endringsloggen skrives på
+ * `fortolkning/hbup`, `fortolkning/hbup/rediger`, `stoff/bupropion`, `sok`,
+ * `stoffregister`, `versjon/bupropion/3` og `kuratering/<gren-ID>`. Det er formen områdene i endringsloggen skrives på
  * (`src/oppdatering/sider.ts`), og det som skifter når brukeren går til en
  * annen side — ikke når en seksjon åpnes eller søket skrives om.
  */
@@ -265,6 +306,10 @@ export function sidesti(rute: Rute): string {
   switch (rute.side) {
     case 'stoff':
       return `stoff/${rute.stoff}`
+    case 'versjon':
+      return `versjon/${rute.stoff}/${rute.nr}`
+    case 'kuratering':
+      return `kuratering/${rute.gren}`
     case 'fortolkning':
       return ['fortolkning', rute.analytt, rute.rediger ? REDIGER : undefined].filter(Boolean).join('/')
     default:

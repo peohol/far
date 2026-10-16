@@ -1,0 +1,120 @@
+/* Versjonene av en fagside og kurateringsgrenene (src/components/kuratering/). */
+
+/* --- Banneret over en utgave av siden ----------------------------------------- */
+.utgavebanner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  margin: 0;
+  padding: var(--rom-5) var(--rom-7);
+  font-size: var(--tekst-ui);
+  line-height: var(--linjehoyde-lesing);
+  color: var(--blekk);
+  background: var(--aksent-flate);
+  border-radius: var(--runding-felt);
+}
+
+.utgavebanner__tittel {
+  margin: 0;
+  font-size: var(--tekst-ingress);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-sterk);
+}
+
+.utgavebanner__linje {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2) var(--rom-4);
+  margin: 0;
+  color: var(--blekk-dempet);
+}
+
+.utgavebanner__handlinger {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-3);
+}
+
+.utgavebanner__liste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  margin: 0;
+  padding-left: 1.2em;
+  list-style: disc;
+}
+
+.utgavebanner__liste--hindring {
+  color: var(--toksisk-blekk);
+}
+
+.utgavebanner__skjema {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  width: 100%;
+}
+
+.utgavebanner__skjema textarea {
+  width: 100%;
+  min-height: 5em;
+  padding: var(--rom-3);
+  font: inherit;
+  color: var(--blekk);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje-kontroll);
+  border-radius: var(--runding-felt);
+}
+
+.utgavebanner__feil {
+  margin: 0;
+  color: var(--alvorlig-blekk);
+}
+
+/* --- Listene: versjonene og grenene ------------------------------------------- */
+.utgaveliste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.utgaveliste__rad {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  padding: var(--rom-4) var(--rom-5);
+  color: inherit;
+  text-decoration: none;
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-felt);
+}
+
+a.utgaveliste__rad:hover,
+a.utgaveliste__rad:focus-visible {
+  border-color: var(--kant-aktiv);
+  background: var(--flate-hevet);
+}
+
+.utgaveliste__hode {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2) var(--rom-3);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk-sterk);
+}
+
+.utgaveliste__meta {
+  font-size: var(--tekst-meta);
+  color: var(--blekk-dempet);
+}
+
+.utgaveliste__tomt {
+  margin: 0;
+  color: var(--blekk-dempet);
+}
