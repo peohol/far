@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T18:50:40.764Z",
+  "oppdatert_kl": "2026-10-16T18:52:56.053Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 8,
   "stoffer": {
@@ -656,8 +656,8 @@
     "citalopram": {
       "stoff": "citalopram",
       "navn": "Citalopram",
-      "status": "reservert",
-      "modus": "de_novo",
+      "status": "publisert",
+      "modus": null,
       "prioritet": {
         "poeng": 0,
         "grunner": []
@@ -671,48 +671,27 @@
         "referanser": 23,
         "elementer_uten_kilde": 1
       },
-      "reservasjon": {
-        "oppgave": "citalopram-0008",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "modus": "de_novo",
-        "reservert_kl": "2026-10-16T18:49:43.706Z",
-        "fornyet_kl": "2026-10-16T18:50:40.764Z",
-        "frist_kl": "2026-10-16T21:50:40.764Z",
-        "fase": "Publiserer etter godkjenning",
-        "jobbgren": "kuratorjobb/citalopram-0003",
-        "kurateringsgren": "kuratering/citalopram-0008",
-        "pr": null,
-        "gren": "565f142e-dce5-4804-b3ff-c65593427539"
-      },
-      "forsok": 1,
+      "reservasjon": null,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "citalopram-0003",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-16T18:10:24.195Z",
-        "grunn": "Revisjon 5 er godkjent av kontrolløren; grenen kan publiseres.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/citalopram-0003",
-        "kurateringsgren": null,
-        "pr": null,
-        "gren": "565f142e-dce5-4804-b3ff-c65593427539"
-      },
+      "gjenoppta": null,
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": {
-        "kl": "2026-10-13T16:00:00.000Z",
+        "kl": "2026-10-16T18:50:54.493133+00:00",
         "modus": "de_novo",
-        "kunnskapsgrense": "2026-10-13",
-        "runde": 1,
+        "kunnskapsgrense": null,
+        "runde": 2,
         "pr": null,
-        "kilde": "repo"
+        "gren": "565f142e-dce5-4804-b3ff-c65593427539",
+        "kilde": "ko"
       },
       "siste_kjoring": {
         "oppgave": "citalopram-0008",
         "okt": "kurateringsko/okt/20261016-125910",
         "startet_kl": "2026-10-16T18:49:43.706Z",
-        "avsluttet_kl": null,
-        "utfall": "reservert"
+        "avsluttet_kl": "2026-10-16T18:52:56.053Z",
+        "utfall": "fullfort"
       },
       "aktiv": true,
       "historikk": [
@@ -791,6 +770,12 @@
           "oppgave": "citalopram-0008",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Publiserer etter godkjenning"
+        },
+        {
+          "kl": "2026-10-16T18:52:56.053Z",
+          "hendelse": "publisert",
+          "oppgave": "citalopram-0008",
+          "melding": "Kurateringsgrenen er publisert (revisjon 5)."
         }
       ],
       "appgren": null
@@ -4793,6 +4778,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "fullfort-citalopram-pub",
         "forny-citalopram-pub",
         "reserver-citalopram-2",
         "fullfort-lurasidon-2",
@@ -4811,65 +4797,21 @@
         "reserver-1"
       ],
       "siste": {
-        "id": "forny-citalopram-pub",
-        "sha256": "bbbea58fdcdc7f28971f32ccd10f4076e14f430de0cedc0a4f881a11e43776aa",
+        "id": "fullfort-citalopram-pub",
+        "sha256": "f1bcbf7bba0613821b8e3b0e279d8939ceaa384e3da2ad1fe385ed71a16b86d1",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "forny-citalopram-pub",
-          "foresporsel_sha256": "bbbea58fdcdc7f28971f32ccd10f4076e14f430de0cedc0a4f881a11e43776aa",
-          "handling": "forny",
-          "utfall": "ok",
-          "melding": "Reservasjonen av citalopram varer til 2026-10-16T21:50:40.764Z.",
-          "behandlet_kl": "2026-10-16T18:50:40.764Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38950389554",
-          "oppgave": {
-            "oppgave": "citalopram-0008",
-            "stoff": "citalopram",
-            "navn": "Citalopram",
-            "modus": "de_novo",
-            "forsok": 1,
-            "frist_kl": "2026-10-16T21:50:40.764Z",
-            "jobbgren": "kuratorjobb/citalopram-0003",
-            "kurateringsgren": "kuratering/citalopram-0008",
-            "pr": null,
-            "gren": "565f142e-dce5-4804-b3ff-c65593427539",
-            "gjenoppta": {
-              "oppgave": "citalopram-0003",
-              "okt": "kurateringsko/okt/20261016-125910",
-              "avbrutt_kl": "2026-10-16T18:10:24.195Z",
-              "grunn": "Revisjon 5 er godkjent av kontrolløren; grenen kan publiseres.",
-              "fase": null,
-              "jobbgren": "kuratorjobb/citalopram-0003",
-              "kurateringsgren": null,
-              "pr": null,
-              "gren": "565f142e-dce5-4804-b3ff-c65593427539"
-            },
-            "sist_kuratert": {
-              "kl": "2026-10-13T16:00:00.000Z",
-              "modus": "de_novo",
-              "kunnskapsgrense": "2026-10-13",
-              "runde": 1,
-              "pr": null,
-              "kilde": "repo"
-            },
-            "maal": {
-              "kl": "2026-10-16T18:10:24.842Z",
-              "side": true,
-              "elementer": 43,
-              "redaksjonelle_paneler": 13,
-              "paneler_med_innhold": 13,
-              "referanser": 23,
-              "elementer_uten_kilde": 1
-            },
-            "prioritet": {
-              "poeng": 0,
-              "grunner": []
-            }
-          }
+          "foresporsel_id": "fullfort-citalopram-pub",
+          "foresporsel_sha256": "f1bcbf7bba0613821b8e3b0e279d8939ceaa384e3da2ad1fe385ed71a16b86d1",
+          "handling": "fullfort",
+          "utfall": "avvist",
+          "melding": "Oppgaven citalopram-0008 er ikke reservert lenger (fullfort). Reserver på nytt for å fortsette.",
+          "behandlet_kl": "2026-10-16T18:52:56.053Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38950683396"
         }
       },
       "besvart_commit": "8a2ea46172de703eef7f102a463e30fad2793176",
-      "sist_brukt_kl": "2026-10-16T18:50:40.764Z"
+      "sist_brukt_kl": "2026-10-16T18:52:56.053Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
