@@ -156,6 +156,8 @@ arkivert, står trådene som de var: de kan ikke kommenteres, lukkes eller
   kuratoren retter og svarer i hver tråd (`til_kontroll` stopper mens en
   sperrende tråd venter på svar fra kuratoren), og kontrolløren lukker trådene
   som er løst, eller åpner dem igjen, før den godkjenner den nye revisjonen.
+  En tråd som åpnes igjen med et nytt funn, venter på kuratoren til den har
+  svart etter gjenåpningen.
 - `les` gir trådene med `traader`: status, om tråden venter på kuratoren, og
   kommentarene.
 

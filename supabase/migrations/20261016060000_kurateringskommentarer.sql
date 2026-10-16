@@ -45,7 +45,9 @@ alter table kuratering.kommentarer enable row level security;
 -- --- Trådene ----------------------------------------------------------------------
 
 -- Hver tråd i grenen med status: åpen eller lukket, og om den venter på
--- kuratoren (kontrolløren eller en administrator skrev sist i en åpen tråd).
+-- kuratoren: kontrolløren eller en administrator skrev sist i en åpen tråd,
+-- eller åpnet den igjen med en ny innvending. En gjenåpning gir en ny
+-- svarplikt, som først er oppfylt når kuratoren svarer etter den.
 create function kuratering.traader(p_gren kuratering.grener)
 returns jsonb
 language sql
@@ -85,7 +87,7 @@ as $$
         (
           select x.agent is not distinct from p_gren.kurator and x.agent is not null
           from kuratering.kommentarer x
-          where x.traad = r.id and x.handling = 'kommentar'
+          where x.traad = r.id and x.handling in ('kommentar', 'gjenapnet')
           order by x.opprettet_kl desc, x.id desc limit 1
         ) as siste_fra_kurator
     ) s
