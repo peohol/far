@@ -112,7 +112,8 @@ Før `til_kontroll` må prøven og rapporten bestå, grenen bygge på den siste
 sideversjonen, og dokumentene finnes: `evidensjournal`, `dekningsmatrise` og
 `selvtest`, og for en de novo-kuratering også `blindprotokoll`. En godkjenning
 er bundet til revisjonen og fingeravtrykket; en ny lagring eller en ny
-grunnversjon opphever den.
+grunnversjon opphever den. Dokumentene kan ikke endres mens grenen er til
+kontroll eller godkjent, så det som publiseres, er det kontrolløren vurderte.
 
 ## Publiseringen
 
