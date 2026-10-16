@@ -448,21 +448,36 @@ button.historikk__velg:hover {
   background: var(--toksisk-flate);
 }
 
-/* Fjernet: rødt og gjennomstreket. Lagt til: grønt og understreket, så
-   forskjellen ikke bare hviler på fargen. */
-.historikk del,
-.regelredigering__konflikt del {
+/* Forskjellene, som i GitHub: det fjernede på rød bunn og gjennomstreket, det
+   nye på grønn bunn. Klassene sitter på selve merkene, så de ser like ut
+   uansett hvor listen vises (historikken, regelkonflikten, sammenligningen av
+   en kurateringsgren). */
+.historikk__fjernet,
+.historikk__ny {
+  padding: 0 0.125em;
+  border-radius: 0.2em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.historikk__fjernet {
   color: var(--alvorlig-blekk);
   background: var(--alvorlig-flate);
   text-decoration: line-through;
 }
 
-.historikk ins,
-.regelredigering__konflikt ins {
+.historikk__ny {
   color: var(--referanse-blekk);
   background: var(--referanse-flate);
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
+  text-decoration: none;
+}
+
+/* Uten egne farger (høykontrastmodus) er bakgrunnen borte, så det nye
+   understrekes der for ikke å se ut som uendret tekst. */
+@media (forced-colors: active) {
+  .historikk__ny {
+    text-decoration: underline;
+  }
 }
 
 .historikk__gjenopprett {

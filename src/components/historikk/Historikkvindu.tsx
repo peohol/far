@@ -268,17 +268,17 @@ function Feltverdi({ endring, side }: { endring: Feltendring; side: 'for' | 'ett
       <>
         {ordforskjell(for_, etter).map((del, i) => {
           if (del.slag === 'lik') return <span key={i}>{del.tekst}</span>
-          if (del.slag === 'fjernet') return side === 'etter' ? null : <del key={i}>{del.tekst}</del>
-          return side === 'for' ? null : <ins key={i}>{del.tekst}</ins>
+          if (del.slag === 'fjernet') return side === 'etter' ? null : <del key={i} className="historikk__fjernet">{del.tekst}</del>
+          return side === 'for' ? null : <ins key={i} className="historikk__ny">{del.tekst}</ins>
         })}
       </>
     )
   }
   return (
     <>
-      {side !== 'etter' && for_ !== null && <del>{for_}</del>}
+      {side !== 'etter' && for_ !== null && <del className="historikk__fjernet">{for_}</del>}
       {side === 'begge' && for_ !== null && etter !== null && ' '}
-      {side !== 'for' && etter !== null && <ins>{etter}</ins>}
+      {side !== 'for' && etter !== null && <ins className="historikk__ny">{etter}</ins>}
     </>
   )
 }
@@ -295,8 +295,8 @@ function grupper(endringer: readonly Feltendring[]): { gruppe: string | undefine
 }
 
 /**
- * Feltene som er endret, med det fjernede rødt og gjennomstreket og det nye
- * grønt. `forste` viser alle feltene som de er, uten noe å sammenligne med.
+ * Feltene som er endret, med det fjernede på rød bunn og gjennomstreket og det
+ * nye på grønn bunn. `forste` viser alle feltene som de er, uten noe å sammenligne med.
  */
 export function Endringsliste({ endringer, forste }: { endringer: Feltendring[]; forste: boolean }) {
   const vises = forste ? endringer : endringer.filter((e) => e.endret)

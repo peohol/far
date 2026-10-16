@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.99.3',
+    dato: '2026-10-16',
+    sammendrag: 'Endringer vises med rød og grønn bakgrunn, som i GitHub',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    gjelder: ['kuratering', 'versjon', 'stoff', 'fortolkning/*/rediger', 'vinduer'],
+    punkter: [
+      'Når en kurateringsgren eller en tidligere versjon sammenlignes med den gjeldende fagsiden, står slettet tekst nå på rød bakgrunn og gjennomstreket, og ny tekst på grønn bakgrunn uten understreking. Før var det bare gjennomstreking og understreking der.',
+      'Historikken og regelredigeringen viser endringene på samme måte.',
+    ],
+  },
+  {
     versjon: '1.99.2',
     dato: '2026-10-16',
     sammendrag: 'Siden ruller rolig fram til kortet du åpner, i én bevegelse',
