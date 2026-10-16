@@ -1,5 +1,5 @@
 {
-  "oppdatert_kl": "2026-10-16T14:54:33.657Z",
+  "oppdatert_kl": "2026-10-16T14:55:46.759Z",
   "malt_kl": "2026-10-15T21:31:44.469Z",
   "antall": {
     "klar": 92,
@@ -16,8 +16,8 @@
       "stoff": "ghb",
       "oppgave": "ghb-0005",
       "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-16T17:54:33.657Z",
-      "fase": null
+      "frist_kl": "2026-10-16T17:55:46.759Z",
+      "fase": "Blindfasen avsluttet"
     }
   ],
   "neste": [],

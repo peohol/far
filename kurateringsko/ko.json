@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T14:54:33.657Z",
+  "oppdatert_kl": "2026-10-16T14:55:46.759Z",
   "malt_kl": "2026-10-15T21:31:44.469Z",
   "teller": 5,
   "stoffer": {
@@ -1562,13 +1562,13 @@
         "okt": "kurateringsko/okt/20261016-125910",
         "modus": "de_novo",
         "reservert_kl": "2026-10-16T14:54:33.657Z",
-        "fornyet_kl": "2026-10-16T14:54:33.657Z",
-        "frist_kl": "2026-10-16T17:54:33.657Z",
-        "fase": null,
+        "fornyet_kl": "2026-10-16T14:55:46.759Z",
+        "frist_kl": "2026-10-16T17:55:46.759Z",
+        "fase": "Blindfasen avsluttet",
         "jobbgren": "kuratorjobb/ghb-0005",
         "kurateringsgren": "kuratering/ghb-0005",
         "pr": null,
-        "gren": null
+        "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a"
       },
       "forsok": 1,
       "tidligst_kl": null,
@@ -1641,6 +1641,19 @@
           "oppgave": "ghb-0005",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Forsøk 1, de_novo."
+        },
+        {
+          "kl": "2026-10-16T14:55:46.759Z",
+          "hendelse": "gren_funnet",
+          "oppgave": "ghb-0005",
+          "melding": "Fant kurateringsgrenen 0d920be7-9ad8-4d91-89bc-5923b8e9407a."
+        },
+        {
+          "kl": "2026-10-16T14:55:46.759Z",
+          "hendelse": "fornyet",
+          "oppgave": "ghb-0005",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Blindfasen avsluttet"
         }
       ],
       "appgren": null
@@ -4667,6 +4680,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "forny-ghb-1",
         "reserver-ghb-1",
         "fullfort-lurasidon-1",
         "forny-lurasidon-1",
@@ -4677,28 +4691,28 @@
         "reserver-1"
       ],
       "siste": {
-        "id": "reserver-ghb-1",
-        "sha256": "68af0e04a7e1c405f2809de8cec2ed96ff1ff68ecc9b5c37b0250c80d76ef4e5",
+        "id": "forny-ghb-1",
+        "sha256": "12d47626c5819fc316e2cadf9c4e2521b49b0f0234a5cc38432640fa21836420",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "reserver-ghb-1",
-          "foresporsel_sha256": "68af0e04a7e1c405f2809de8cec2ed96ff1ff68ecc9b5c37b0250c80d76ef4e5",
-          "handling": "reserver",
+          "foresporsel_id": "forny-ghb-1",
+          "foresporsel_sha256": "12d47626c5819fc316e2cadf9c4e2521b49b0f0234a5cc38432640fa21836420",
+          "handling": "forny",
           "utfall": "ok",
-          "melding": "ghb er reservert til 2026-10-16T17:54:33.657Z.",
-          "behandlet_kl": "2026-10-16T14:54:33.657Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38919550357",
+          "melding": "Reservasjonen av ghb varer til 2026-10-16T17:55:46.759Z.",
+          "behandlet_kl": "2026-10-16T14:55:46.759Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38919695287",
           "oppgave": {
             "oppgave": "ghb-0005",
             "stoff": "ghb",
             "navn": "GHB",
             "modus": "de_novo",
             "forsok": 1,
-            "frist_kl": "2026-10-16T17:54:33.657Z",
+            "frist_kl": "2026-10-16T17:55:46.759Z",
             "jobbgren": "kuratorjobb/ghb-0005",
             "kurateringsgren": "kuratering/ghb-0005",
             "pr": null,
-            "gren": null,
+            "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a",
             "gjenoppta": null,
             "sist_kuratert": null,
             "maal": {
@@ -4711,22 +4725,14 @@
               "elementer_uten_kilde": 1
             },
             "prioritet": {
-              "poeng": 637.9,
-              "grunner": [
-                "Står først i innstillingene.",
-                "De novo-kuratering i runden som gjelder.",
-                "Aldri kuratert.",
-                "Ingen kuratering å regne alderen fra.",
-                "11 av 13 redaksjonelle seksjoner er tomme.",
-                "1 av 3 elementer har ingen kilde.",
-                "Bare 3 referanser."
-              ]
+              "poeng": 0,
+              "grunner": []
             }
           }
         }
       },
       "besvart_commit": "16168d875531565a7557f281909a69c925221a49",
-      "sist_brukt_kl": "2026-10-16T14:54:33.657Z"
+      "sist_brukt_kl": "2026-10-16T14:55:46.759Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
