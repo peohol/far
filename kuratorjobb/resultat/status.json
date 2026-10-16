@@ -1,0 +1,18 @@
+{
+  "versjon": 1,
+  "status": "kjorer",
+  "jobb": {
+    "gren": "kuratorjobb/doksepin-0014",
+    "foresporsel_commit": "599319ce486995ce64cf544983cbe78f84f26a36",
+    "foresporsel_sha256": "827fc023164fcd75fb98153d1dfb1852da6eef6e7628566badc910121d4e242c",
+    "kode_commit": "548dba55e6654e91eba4e7467891d32c39cfb506",
+    "kjoring": "https://github.com/peohol/far/actions/runs/38979430294",
+    "startet_kl": "2026-10-16T23:05:00.416Z",
+    "ferdig_kl": null
+  },
+  "foresporsel": null,
+  "referanse": null,
+  "feil": [],
+  "bruker": [],
+  "stoffer": {}
+}
