@@ -1,18 +1,55 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/flunitrazepam-0017",
     "foresporsel_commit": "8636580e8deedbac3d62b492e22b53e20cf3a1eb",
     "foresporsel_sha256": "b8941b939ab52ac183bbcad3329250b0fc3a36764f26b2bc4d496039651ff2b6",
     "kode_commit": "548dba55e6654e91eba4e7467891d32c39cfb506",
     "kjoring": "https://github.com/peohol/far/actions/runs/38989551709",
-    "startet_kl": "2026-10-17T01:08:42.704Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-17T01:08:44.329Z",
+    "ferdig_kl": "2026-10-17T01:08:51.903Z"
   },
-  "foresporsel": null,
-  "referanse": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "flunitrazepam"
+    ],
+    "oppgaver": [
+      "funksjonstest",
+      "spc"
+    ],
+    "referanse": "flunitrazepam-0017-0108"
+  },
+  "referanse": "flunitrazepam-0017-0108",
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 633
+    }
+  ],
+  "stoffer": {
+    "flunitrazepam": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/flunitrazepam/funksjonstest.json"
+        },
+        "spc": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/flunitrazepam/spc.json"
+        }
+      }
+    }
+  }
 }

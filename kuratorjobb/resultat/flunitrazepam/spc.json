@@ -1,0 +1,83 @@
+{
+  "stoff": "flunitrazepam",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-16T04:15:06.398225+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 4,
+    "hentet": 0,
+    "dokumenter": 0,
+    "mangler": [
+      {
+        "merkevare_id": "ID_840A10A4-1157-4F9A-B1AE-5FE845D19BC8",
+        "varenavn": "Rohypnol",
+        "navn_form_styrke": "Rohypnol tab 1 mg",
+        "produsent": "Cheplapharm Arzneimittel GmbH",
+        "atc": "N05CD03",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_BDD68BC1-94C9-4E16-958E-DDCD45B60F64",
+        "varenavn": "Flunitrazepam teva",
+        "navn_form_styrke": "Flunitrazepam teva tab 1 mg",
+        "produsent": "Teva B.V.",
+        "atc": "N05CD03",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_C295CDAD-3710-42E0-84B3-A5B57BF04A2D",
+        "varenavn": "Rohypnol",
+        "navn_form_styrke": "Rohypnol tab 1 mg",
+        "produsent": "Cheplapharm",
+        "atc": "N05CD03",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_C793624F-F4C2-4BD6-AC9C-C942D71BC426",
+        "varenavn": "Roipnol",
+        "navn_form_styrke": "Roipnol tab 1 mg",
+        "produsent": "Cheplapharm",
+        "atc": "N05CD03",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 0 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 0,
+        "ikke_dmp": 0,
+        "uten_omtale": 4
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "Ingen preparatomtale ble hentet. SPC-behovet er ikke dekket; se «dekning».",
+      "antall": {
+        "preparater": 4,
+        "hentet": 0,
+        "mangler": 4,
+        "dokumenter": 0
+      }
+    }
+  ],
+  "adresser": [],
+  "dokumenter": [],
+  "utelatt": []
+}
