@@ -9,6 +9,7 @@ import {
   erAktiv,
   grenenErEndret,
   kanPubliseres,
+  rundeUtenEndringer,
   type Aktivitet,
   type Grendetaljer,
   type Grenstatusdata,
@@ -283,7 +284,7 @@ function Grenbanner({
         <span>
           Revisjon {vist}
           {vist !== gren.revisjon ? ` av ${gren.revisjon}` : ''} · bygger på versjon {gren.grunnversjon}
-          {gren.runde > 0 ? ` · kontrollrunde ${gren.runde}` : ''}
+          {gren.runde > 0 ? ` · kontrollrunde ${gren.runde}${rundeUtenEndringer(gren) ? ', uten nye endringer' : ''}` : ''}
         </span>
         <span>{gren.kurator ?? gren.opprettet_av}</span>
         {r && <span>{tidspunkt(r.kl)}</span>}

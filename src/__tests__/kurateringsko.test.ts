@@ -344,6 +344,27 @@ describe('kurateringsgrenene i OUSFAR', () => {
     expect(oversikt(t, om(T0, 6), INNST).til_gjennomgang).toEqual([])
   })
 
+  it('følger en ny kontrollrunde med samme revisjon som den forrige, når kuratoren har svart uten å rette', () => {
+    const t = ny()
+    const { oppgave } = behandle(t, f('reserver', { stoff: 'beta' }), kontekst('kurateringsko/okt/a')).oppgave!
+    behandle(t, f('fullfort', { oppgave, gren: GREN, kunnskapsgrense: '2026-11-01' }), kontekst('kurateringsko/okt/a', om(T0, 1)))
+    steg(t, [gren('klar', { runde: 1 })], om(T0, 1))
+    expect(steg(t, [gren('tilbakemelding', { runde: 1 })], om(T0, 2))).toMatchObject({ status: 'klar', appgren: null, gjenoppta: { oppgave, gren: GREN } })
+    const igjen = behandle(t, f('reserver'), kontekst('kurateringsko/okt/b', om(T0, 2))).oppgave!
+    expect(igjen).toMatchObject({ stoff: 'beta', gren: GREN })
+    behandle(t, f('fullfort', { oppgave: igjen.oppgave, gren: GREN, kunnskapsgrense: '2026-11-01' }), kontekst('kurateringsko/okt/b', om(T0, 3)))
+    expect(steg(t, [gren('klar', { runde: 2 })], om(T0, 3))).toMatchObject({
+      status: 'venter_godkjenning',
+      appgren: { id: GREN, status: 'klar', revisjon: 1, kontrollrunde: 2 },
+    })
+    // En ny runde køen ikke rakk å se, står i historikken også når statusen og revisjonen er de samme.
+    expect(steg(t, [gren('klar', { runde: 3 })], om(T0, 4)).historikk.at(-1)).toMatchObject({
+      hendelse: 'gren_klar',
+      melding: 'Grenen: klar, revisjon 1, kontrollrunde 3.',
+    })
+    expect(steg(t, [gren('godkjent', { runde: 3 })], om(T0, 5))).toMatchObject({ status: 'klar', gjenoppta: { gren: GREN } })
+  })
+
   it('fører en reservert eller gitt tilbake gren som publisert eller forkastet, også når kuratoren ikke rakk å melde den', () => {
     const t = ny()
     // Godkjent og gitt tilbake til kuratoren, som reserverer og publiserer, men stopper før fullfort.

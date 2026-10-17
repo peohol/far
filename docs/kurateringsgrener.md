@@ -47,7 +47,7 @@ nytt).
 | `dokument` | kurator | `{gren, art, innhold}` |
 | `les_dokument` | kurator (egen), kontrollør, admin | `{gren, art, versjon?}` |
 | `avslutt_blindfase` | kurator | `{gren}` |
-| `til_kontroll` / `trekk_fra_kontroll` | kurator | `{gren, revisjon}` / `{gren}` |
+| `til_kontroll` / `trekk_fra_kontroll` | kurator | `{gren, revisjon}` (den siste; fra `tilbakemelding` også uten en ny revisjon, se [Statusene](#statusene)) / `{gren}` |
 | `vurder` | kontrollør, admin | `{gren, revisjon, beslutning, begrunnelse}`; begrunnelsen kreves også ved `godkjent` (hva som er kontrollert) |
 | `oppdater_grunnlag` | kurator | `{gren}` |
 | `publiser` | kurator (egen), admin | `{gren, revisjon}` |
@@ -130,7 +130,7 @@ adressen) og adressen for HTTP, og glemmes når laget lukkes.
 | --- | --- | --- |
 | `arbeid` | Kuratoren arbeider | `til_kontroll` → `klar` |
 | `klar` | Revisjonen er låst for kontroll | `vurder` → `godkjent` eller `tilbakemelding`; `trekk_fra_kontroll` |
-| `tilbakemelding` | Kontrolløren har bedt om endringer | `skriv` → `retting` |
+| `tilbakemelding` | Kontrolløren har bedt om endringer | `skriv` → `retting`; `til_kontroll` → `klar` (ny runde med samme revisjon, når kuratoren har svart på vurderingen) |
 | `retting` | Kuratoren retter | `til_kontroll` → `klar` (ny runde) |
 | `godkjent` | Nøyaktig denne revisjonen er godkjent | `publiser` → `publisert`; `skriv` → `retting` |
 | `blokkert` | Publiseringen stoppet (konflikt eller teknisk feil, grunnen står) | `oppdater_grunnlag` eller `skriv` |
@@ -157,6 +157,17 @@ er bundet til revisjonen og fingeravtrykket; en ny lagring eller en ny
 grunnversjon opphever den. Dokumentene kan ikke endres mens grenen er til
 kontroll eller godkjent, så det som publiseres, er det kontrolløren vurderte.
 
+Har kuratoren ikke noe å rette etter `endringer` (kontrolløren var ikke
+ferdig, eller kildene viser at innvendingen ikke holder), sendes den samme
+revisjonen fra `tilbakemelding` til en ny runde uten en ny revisjon. Kravene
+over gjelder som ellers, og i tillegg må kuratoren ha svart på vurderingen:
+minst én kommentar i grenen (et svar i en tråd eller en ny merknad, ikke en
+lukking) etter den. Runden økes, og hendelsen `til_kontroll` får
+`uten_endringer: true` når revisjonen er vurdert før. En revisjon kan altså
+ha flere vurderinger; den siste er den som gjelder, for publiseringen og for
+`gjelder_denne` i `les`. En godkjenning etter en ny runde kan publiseres, og
+en godkjenning fra før en senere `endringer` gjelder ikke.
+
 ## Kommentarene
 
 Den faglige kontrollen skjer i kommentartråder i grenen
@@ -179,8 +190,9 @@ arkivert, står trådene som de var: de kan ikke kommenteres, lukkes eller
   administrator; en merknad lukkes av alle som kan lese grenen.
 - Kontrollrundene: kontrolløren åpner sperrende tråder og ber om endringer,
   kuratoren retter og svarer i hver tråd (`til_kontroll` stopper mens en
-  sperrende tråd venter på svar fra kuratoren), og kontrolløren lukker trådene
-  som er løst, eller åpner dem igjen, før den godkjenner den nye revisjonen.
+  sperrende tråd venter på svar fra kuratoren), eller svarer uten å rette og
+  sender den samme revisjonen, og kontrolløren lukker trådene som er løst,
+  eller åpner dem igjen, før den godkjenner revisjonen.
   En tråd som åpnes igjen med et nytt funn, venter på kuratoren til den har
   svart etter gjenåpningen.
 - `les` gir trådene med `traader`: status, om tråden venter på kuratoren, og
@@ -189,9 +201,9 @@ arkivert, står trådene som de var: de kan ikke kommenteres, lukkes eller
 ## Publiseringen
 
 `publiser` krever status `godkjent`, en godkjenning av siste revisjon fra
-andre enn kuratoren, en bestått prøve og ingen sperrer, og skriver så hele
-grenen inn i én transaksjon: nye referanser, siden, kortene som fjernes,
-endres og legges til, og bivirkningene. Revisjonene føres på kuratoren og
+andre enn kuratoren (den siste vurderingen av den), en bestått prøve og ingen
+sperrer, og skriver så hele grenen inn i én transaksjon: nye referanser,
+siden, kortene som fjernes, endres og legges til, og bivirkningene. Revisjonene føres på kuratoren og
 publiseringene på den som publiserte; endringsloggen får én kuratering med
 rapporten og grenen (`innholdsendringer.gren`), og siden får én ny
 sideversjon. Stopper noe, er ingenting publisert: grenen blir `blokkert` med
@@ -243,7 +255,9 @@ siden alt i den har vært publisert før. Sideversjonen den gir, har opphavet
 - `#/kuratering/<gren>`: grenen for administratorene, med fagsiden slik den
   blir publisert (forhåndsvisningen), sammenligningen med versjonen den bygger
   på, kontrollrundene og hindringene, og handlingene (vurdere, publisere,
-  stanse, gjenoppta, forkaste). En eldre revisjon kan velges og vises.
+  stanse, gjenoppta, forkaste). En kontrollrunde med samme revisjon som den
+  forrige står som «kontrollrunde N, uten nye endringer». En eldre revisjon
+  kan velges og vises.
   Banneret viser hva agenten gjør (arbeider, venter, stanset, eller at
   tilkoblingen er brutt; «arbeider» bare når kuratoren har meldt aktivitet
   eller gjort noe i nettopp denne grenen de siste ti minuttene,

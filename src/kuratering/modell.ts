@@ -205,6 +205,7 @@ export interface Vurdering {
   begrunnelse: string
   av: string
   kl: string
+  /** Vurderingen som gjelder revisjonen som vises: den siste av den. */
   gjelder_denne: boolean
 }
 
@@ -319,4 +320,14 @@ export function versjonslinje(v: Versjonsinfo): string {
 export function kanPubliseres(gren: Pick<Grendetaljer, 'status' | 'art' | 'hindringer'>): boolean {
   const status = gren.status === 'godkjent' || (gren.art === 'gjenoppretting' && gren.status === 'arbeid')
   return status && gren.hindringer.length === 0
+}
+
+/**
+ * Om kontrollrunden grenen står i, gjelder den samme revisjonen som en
+ * tidligere runde: kuratoren har svart på vurderingen uten å endre noe
+ * (`uten_endringer` i hendelsen `til_kontroll`). Da er det svarene som er nye.
+ */
+export function rundeUtenEndringer(gren: Pick<Grendetaljer, 'runde' | 'revisjon' | 'hendelser'>): boolean {
+  const sist = gren.hendelser.find((h) => h.hendelse === 'til_kontroll')
+  return sist?.data?.uten_endringer === true && sist.data.runde === gren.runde && sist.revisjon === gren.revisjon
 }

@@ -27,7 +27,16 @@ import { TOM_STOFFSIDE, type Faginnholdsleser, type Stoffsidedata, type Utgave }
 import type { Innholdselementinnhold } from '../faginnhold/modell'
 import { sammenlignSider } from '../faginnhold/sidesammenligning'
 import type { Kurateringsklient, Sideutgavedata } from '../kuratering/klient'
-import { agenttilstand, type Agentinfo, type Grendetaljer, type Grensammendrag, type Grenstatusdata, type Versjonsinfo } from '../kuratering/modell'
+import {
+  agenttilstand,
+  rundeUtenEndringer,
+  type Agentinfo,
+  type Grendetaljer,
+  type Grenhendelse,
+  type Grensammendrag,
+  type Grenstatusdata,
+  type Versjonsinfo,
+} from '../kuratering/modell'
 import { endredeSteder } from '../components/kuratering/Folgagenten'
 import { GRUNNSTRUKTUR } from './hjelp/registerstruktur'
 
@@ -355,6 +364,24 @@ describe('kurateringssiden', () => {
     await userEvent.type(felt, 'Dosering og kilder kontrollert mot preparatomtalen.')
     await userEvent.click(screen.getByRole('button', { name: 'Godkjenn revisjon 2' }))
     await waitFor(() => expect(k.vurder).toHaveBeenCalledWith(GREN, 2, 'godkjent', 'Dosering og kilder kontrollert mot preparatomtalen.'))
+  })
+
+  it('viser at kontrollrunden gjelder den samme revisjonen som den forrige', async () => {
+    const tilKontroll = (revisjon: number, data: Record<string, unknown>): Grenhendelse => ({
+      hendelse: 'til_kontroll',
+      til: 'klar',
+      revisjon,
+      data,
+      kl: '2026-10-01T12:00:00Z',
+    })
+    const uten = tilKontroll(2, { runde: 2, uten_endringer: true })
+    expect(rundeUtenEndringer({ runde: 2, revisjon: 2, hendelser: [uten, tilKontroll(2, { runde: 1 })] })).toBe(true)
+    expect(rundeUtenEndringer({ runde: 1, revisjon: 2, hendelser: [tilKontroll(2, { runde: 1 })] })).toBe(false)
+    // Etter en ny revisjon gjelder den ikke lenger.
+    expect(rundeUtenEndringer({ runde: 2, revisjon: 3, hendelser: [uten] })).toBe(false)
+
+    vis(<Kurateringsside gren={GREN} onGaaTil={vi.fn()} {...felles} />, kilde(klient(grendetaljer({ runde: 2, hendelser: [uten] }))))
+    expect(await screen.findByText(/kontrollrunde 2, uten nye endringer/)).toBeTruthy()
   })
 
   it('publiserer en godkjent gren uten hindringer', async () => {

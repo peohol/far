@@ -230,3 +230,9 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
   detaljkortet agenten arbeider i, eller det som er endret i en ny revisjon,
   åpnes og merkes; siden tegnes ikke på nytt for hver revisjon. Tester i
   `kurateringsvisning.test.tsx` («følg agenten»).
+- 2026-10-17: En ny kontrollrunde uten endringer (1.103.2): seks grener sto i
+  `tilbakemelding` uten noe å rette, og kuratoren måtte lage en kunstig
+  revisjon. `til_kontroll` tar nå den samme revisjonen fra `tilbakemelding`
+  når kuratoren har kommentert etter vurderingen; hendelsen får
+  `uten_endringer`, og `gjelder_denne` følger den siste vurderingen. Tester i
+  `kurateringsgrener.test.ts` («en ny kontrollrunde uten endringer»).

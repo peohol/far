@@ -132,7 +132,11 @@ Kuratoren melder hva den gjør med `aktivitet` (med seksjonen og kortet), så
 9. **Kontrollrundene.** Ber kontrolløren om endringer, svarer kuratoren i hver
    tråd (`kommenter` med `svar_pa`): hva som er gjort, og i hvilken revisjon,
    eller hvorfor ikke, med kilden. Rettingene lagres som en ny revisjon,
-   dokumentene oppdateres, og grenen sendes til kontroll igjen. Kuratoren kan
+   dokumentene oppdateres, og grenen sendes til kontroll igjen. Er det ikke
+   noe å rette (kontrolløren var ikke ferdig, eller kildene viser at
+   innvendingen ikke holder), lages ingen ny revisjon: kuratoren svarer i
+   trådene eller i en merknad og sender den samme revisjonen til en ny
+   kontrollrunde (`til_kontroll`). Kuratoren kan
    foreslå at en tråd er løst, men lukker aldri en sperrende tråd selv.
 10. **Publiseringen.** Når den siste revisjonen er godkjent og ingenting
     hindrer det, publiserer kuratoren (`publiser`). Etterpå kjøres

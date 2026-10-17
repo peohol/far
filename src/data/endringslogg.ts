@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.103.2',
+    dato: '2026-10-17',
+    sammendrag: 'En kuratering uten noe å rette kan sendes til en ny kontrollrunde uten en ny revisjon',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring for vanlige brukere. Når kontrolløren har bedt om endringer i en kuratering, men det ikke er noe å rette — kontrolløren var ikke ferdig med å kontrollere kildene, eller kuratoren har vist med kilder at innvendingen ikke holder — kan kuratoren nå svare i kommentarene og sende den samme revisjonen til en ny kontrollrunde. Før måtte kuratoren lage en kunstig ny revisjon for å komme videre.',
+      'Kuratoren må ha svart på vurderingen først, og kravene til en kontrollrunde gjelder som før. I kurateringsgrenen står en slik runde som «kontrollrunde N, uten nye endringer».',
+      'Har den samme revisjonen fått flere vurderinger, er det den siste som gjelder: en godkjenning i den nye runden kan publiseres, og en eldre godkjenning gjelder aldri etter at kontrolløren senere har bedt om endringer.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.103.1',
     dato: '2026-10-17',
     sammendrag: 'En kuratering som stoppet for en menneskelig avgjørelse, kan fortsette i samme kurateringsgren',
