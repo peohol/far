@@ -1,23 +1,23 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-202610170551",
-  "foresporsel_sha256": "d28cc01c75c6d8bc2f8f61adad9e6b78398a66d9eb6726f56dcd551e4a9fcb13",
-  "handling": "reserver",
+  "foresporsel_id": "forny-fenobarbital-0026-gren",
+  "foresporsel_sha256": "82a6d3ed70a911b7a4ffed9c65393c8a8f5bde37d71918baf15db1e6cf1b6040",
+  "handling": "forny",
   "utfall": "ok",
-  "melding": "fenobarbital er reservert til 2026-10-17T08:52:23.058Z.",
-  "behandlet_kl": "2026-10-17T05:52:23.058Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39007821455",
+  "melding": "Reservasjonen av fenobarbital varer til 2026-10-17T09:24:57.621Z.",
+  "behandlet_kl": "2026-10-17T06:24:57.621Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39009802382",
   "oppgave": {
     "oppgave": "fenobarbital-0026",
     "stoff": "fenobarbital",
     "navn": "Fenobarbital",
     "modus": "de_novo",
     "forsok": 1,
-    "frist_kl": "2026-10-17T08:52:23.058Z",
+    "frist_kl": "2026-10-17T09:24:57.621Z",
     "jobbgren": "kuratorjobb/fenobarbital-0026",
     "kurateringsgren": "kuratering/fenobarbital-0026",
     "pr": null,
-    "gren": null,
+    "gren": "f99c5bb5-b7f1-4038-b5ab-0cab1a706f97",
     "gjenoppta": null,
     "sist_kuratert": null,
     "maal": {
@@ -30,15 +30,8 @@
       "elementer_uten_kilde": 1
     },
     "prioritet": {
-      "poeng": 447.6,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
