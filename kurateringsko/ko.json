@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T18:33:14.025Z",
+  "oppdatert_kl": "2026-10-17T18:42:30.266Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "teller": 41,
   "stoffer": {
@@ -6008,21 +6008,21 @@
         "reserver-ketobemidon-052754"
       ],
       "siste": {
-        "id": "blokkert-topiramat-0041",
-        "sha256": "e0584e1254e9fb0cf5ed833a79493473c57f6a7b01ba3026dbbbb2d173c41dc2",
+        "id": "",
+        "sha256": "e54ac2a768a9a34671b25508e75a453adc7a5f3428bea1be2bc686371ae37ab5",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "blokkert-topiramat-0041",
-          "foresporsel_sha256": "e0584e1254e9fb0cf5ed833a79493473c57f6a7b01ba3026dbbbb2d173c41dc2",
-          "handling": "blokkert",
-          "utfall": "ok",
-          "melding": "topiramat er blokkert til et menneske har sett på det.",
-          "behandlet_kl": "2026-10-17T18:26:32.826Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39058077651"
+          "foresporsel_id": null,
+          "foresporsel_sha256": "e54ac2a768a9a34671b25508e75a453adc7a5f3428bea1be2bc686371ae37ab5",
+          "handling": null,
+          "utfall": "avvist",
+          "melding": "Forespørselen kan ikke brukes: tilbakestill krever feltet grunn.",
+          "behandlet_kl": "2026-10-17T18:42:30.266Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39059265638"
         }
       },
       "besvart_commit": "210b71ade8e48660f6393feff6dadb5bb451ceb5",
-      "sist_brukt_kl": "2026-10-17T18:26:32.826Z"
+      "sist_brukt_kl": "2026-10-17T18:42:30.266Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
