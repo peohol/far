@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T19:25:09.228Z",
+  "oppdatert_kl": "2026-10-17T19:26:18.057Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "teller": 49,
   "stoffer": {
@@ -1563,8 +1563,8 @@
     "fenobarbital": {
       "stoff": "fenobarbital",
       "navn": "Fenobarbital",
-      "status": "reservert",
-      "modus": "de_novo",
+      "status": "publisert",
+      "modus": null,
       "prioritet": {
         "poeng": 0,
         "grunner": []
@@ -1578,43 +1578,27 @@
         "referanser": 3,
         "elementer_uten_kilde": 1
       },
-      "reservasjon": {
-        "oppgave": "fenobarbital-0049",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "modus": "de_novo",
-        "reservert_kl": "2026-10-17T19:25:09.228Z",
-        "fornyet_kl": "2026-10-17T19:25:09.228Z",
-        "frist_kl": "2026-10-17T22:25:09.228Z",
-        "fase": null,
-        "jobbgren": "kuratorjobb/fenobarbital-0026",
-        "kurateringsgren": "kuratering/fenobarbital-0049",
-        "pr": null,
-        "gren": "f99c5bb5-b7f1-4038-b5ab-0cab1a706f97",
-        "kunnskapsgrense": "2026-10-17"
-      },
-      "forsok": 1,
+      "reservasjon": null,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "fenobarbital-0043",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-17T19:13:54.813Z",
-        "grunn": "Revisjon 6 er godkjent av kontrolløren; grenen kan publiseres.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/fenobarbital-0026",
-        "kurateringsgren": null,
-        "pr": null,
-        "gren": "f99c5bb5-b7f1-4038-b5ab-0cab1a706f97",
-        "kunnskapsgrense": "2026-10-17"
-      },
+      "gjenoppta": null,
       "pr": null,
       "blokkeringer": [],
-      "sist_kuratert": null,
+      "sist_kuratert": {
+        "kl": "2026-10-17T19:25:40.327673+00:00",
+        "modus": "de_novo",
+        "kunnskapsgrense": "2026-10-17",
+        "runde": 2,
+        "pr": null,
+        "gren": "f99c5bb5-b7f1-4038-b5ab-0cab1a706f97",
+        "kilde": "ko"
+      },
       "siste_kjoring": {
         "oppgave": "fenobarbital-0049",
         "okt": "kurateringsko/okt/20261016-125910",
         "startet_kl": "2026-10-17T19:25:09.228Z",
-        "avsluttet_kl": null,
-        "utfall": "reservert"
+        "avsluttet_kl": "2026-10-17T19:26:18.057Z",
+        "utfall": "fullfort"
       },
       "aktiv": true,
       "historikk": [
@@ -1705,6 +1689,12 @@
           "oppgave": "fenobarbital-0049",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Forsøk 1, de_novo, fortsetter fenobarbital-0043."
+        },
+        {
+          "kl": "2026-10-17T19:26:18.057Z",
+          "hendelse": "publisert",
+          "oppgave": "fenobarbital-0049",
+          "melding": "Kurateringsgrenen er publisert (revisjon 6)."
         }
       ],
       "appgren": null
@@ -6179,6 +6169,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "fullfort-fenobarbital-pub-202610171925",
         "reserver-fenobarbital-pub-202610171924",
         "fullfort-sertindol-0048",
         "reserver-sertindol-192029",
@@ -6227,71 +6218,24 @@
         "fullfort-brekspiprazol-0033",
         "reserver-brekspiprazol-074439",
         "fullfort-flunitrazepam-0032",
-        "reserver-flunitrazepam-074306",
-        "fullfort-vortioksetin-0031"
+        "reserver-flunitrazepam-074306"
       ],
       "siste": {
-        "id": "reserver-fenobarbital-pub-202610171924",
-        "sha256": "b7352dc5ba47f9ecd6119b0f66d1ecb40547e51aa5ac69b4c2014f4106079a61",
+        "id": "fullfort-fenobarbital-pub-202610171925",
+        "sha256": "2a776b11428be36d639d46a32b5235ffa3fa5c4cd46fb4718a9d0a5518a86f4a",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "reserver-fenobarbital-pub-202610171924",
-          "foresporsel_sha256": "b7352dc5ba47f9ecd6119b0f66d1ecb40547e51aa5ac69b4c2014f4106079a61",
-          "handling": "reserver",
+          "foresporsel_id": "fullfort-fenobarbital-pub-202610171925",
+          "foresporsel_sha256": "2a776b11428be36d639d46a32b5235ffa3fa5c4cd46fb4718a9d0a5518a86f4a",
+          "handling": "fullfort",
           "utfall": "ok",
-          "melding": "fenobarbital er reservert til 2026-10-17T22:25:09.228Z.",
-          "behandlet_kl": "2026-10-17T19:25:09.228Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39062353203",
-          "oppgave": {
-            "oppgave": "fenobarbital-0049",
-            "stoff": "fenobarbital",
-            "navn": "Fenobarbital",
-            "modus": "de_novo",
-            "forsok": 1,
-            "frist_kl": "2026-10-17T22:25:09.228Z",
-            "jobbgren": "kuratorjobb/fenobarbital-0026",
-            "kurateringsgren": "kuratering/fenobarbital-0049",
-            "pr": null,
-            "gren": "f99c5bb5-b7f1-4038-b5ab-0cab1a706f97",
-            "gjenoppta": {
-              "oppgave": "fenobarbital-0043",
-              "okt": "kurateringsko/okt/20261016-125910",
-              "avbrutt_kl": "2026-10-17T19:13:54.813Z",
-              "grunn": "Revisjon 6 er godkjent av kontrolløren; grenen kan publiseres.",
-              "fase": null,
-              "jobbgren": "kuratorjobb/fenobarbital-0026",
-              "kurateringsgren": null,
-              "pr": null,
-              "gren": "f99c5bb5-b7f1-4038-b5ab-0cab1a706f97",
-              "kunnskapsgrense": "2026-10-17"
-            },
-            "sist_kuratert": null,
-            "maal": {
-              "kl": "2026-10-17T14:23:30.777Z",
-              "side": true,
-              "elementer": 6,
-              "redaksjonelle_paneler": 13,
-              "paneler_med_innhold": 4,
-              "referanser": 3,
-              "elementer_uten_kilde": 1
-            },
-            "prioritet": {
-              "poeng": 1447.6,
-              "grunner": [
-                "Fortsetter den avbrutte kurateringen fenobarbital-0043.",
-                "De novo-kuratering i runden som gjelder.",
-                "Aldri kuratert.",
-                "Ingen kuratering å regne alderen fra.",
-                "9 av 13 redaksjonelle seksjoner er tomme.",
-                "1 av 6 elementer har ingen kilde.",
-                "Bare 3 referanser."
-              ]
-            }
-          }
+          "melding": "fenobarbital er alt ført som publisert fra kurateringsgrenen f99c5bb5-b7f1-4038-b5ab-0cab1a706f97.",
+          "behandlet_kl": "2026-10-17T19:26:18.057Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39062441999"
         }
       },
       "besvart_commit": "210b71ade8e48660f6393feff6dadb5bb451ceb5",
-      "sist_brukt_kl": "2026-10-17T19:25:09.228Z"
+      "sist_brukt_kl": "2026-10-17T19:26:18.057Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
