@@ -1,9 +1,9 @@
 {
-  "oppdatert_kl": "2026-10-17T07:31:39.228Z",
+  "oppdatert_kl": "2026-10-17T07:38:33.861Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
-    "klar": 91,
-    "reservert": 0,
+    "klar": 90,
+    "reservert": 1,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 1,
     "sammenslatt": 0,
@@ -11,7 +11,15 @@
     "blokkert": 4,
     "utenfor": 1
   },
-  "aktive": [],
+  "aktive": [
+    {
+      "stoff": "cbd",
+      "oppgave": "cbd-0029",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "frist_kl": "2026-10-17T10:38:33.861Z",
+      "fase": null
+    }
+  ],
   "neste": [
     {
       "stoff": "brekspiprazol",
@@ -40,20 +48,6 @@
         "7 av 13 redaksjonelle seksjoner er tomme.",
         "18 av 22 elementer har ingen kilde.",
         "Bare 2 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "cbd",
-      "modus": "de_novo",
-      "poeng": 1462.3,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen cbd-0022.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "12 av 13 redaksjonelle seksjoner er tomme.",
-        "Bare 1 referanser."
       ],
       "tidligst_kl": null
     },
@@ -148,6 +142,20 @@
     },
     {
       "stoff": "levetiracetam",
+      "modus": "de_novo",
+      "poeng": 447.6,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "okskarbazepin",
       "modus": "de_novo",
       "poeng": 447.6,
       "grunner": [
