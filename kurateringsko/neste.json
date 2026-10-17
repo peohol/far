@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-17T05:20:46.121Z",
+  "oppdatert_kl": "2026-10-17T05:21:44.298Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
     "klar": 88,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 1,
+    "venter_godkjenning": 2,
     "sammenslatt": 0,
     "publisert": 3,
     "blokkert": 6,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "kariprazin",
-      "oppgave": "kariprazin-0021",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-17T08:20:46.121Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "neste": [
     {
       "stoff": "cbd",
@@ -167,6 +159,12 @@
   ],
   "til_gjennomgang": [
     {
+      "stoff": "kariprazin",
+      "gren": "e2d4268c-247a-445f-9986-74e32400b738",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    },
+    {
       "stoff": "vortioksetin",
       "gren": "afab07ef-a24e-485e-b31f-9f38498a61af",
       "grenstatus": "klar",
@@ -180,7 +178,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.",
-          "kl": "2026-10-17T05:20:46.121Z",
+          "kl": "2026-10-17T05:21:44.298Z",
           "kilde": "system"
         }
       ]
@@ -191,7 +189,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.",
-          "kl": "2026-10-17T05:20:46.121Z",
+          "kl": "2026-10-17T05:21:44.298Z",
           "kilde": "system"
         }
       ]
