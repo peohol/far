@@ -1,12 +1,12 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-vortioksetin-0015-gren",
-  "foresporsel_sha256": "8c952d829ce55d2835c381aef8c5922db28428fdadcc2b60e98a09423d1561ba",
-  "handling": "forny",
+  "foresporsel_id": "reserver-doksepin-r2",
+  "foresporsel_sha256": "cec31f8783ef8ff1f605364b969931c0a468bdf8d84415b2bd0da86377cf17a9",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "Reservasjonen av vortioksetin varer til 2026-10-17T03:29:29.910Z.",
-  "behandlet_kl": "2026-10-17T00:29:29.910Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38986565815",
+  "melding": "Økten har allerede reservert vortioksetin; fortsett med den.",
+  "behandlet_kl": "2026-10-17T00:52:44.469Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38988363754",
   "oppgave": {
     "oppgave": "vortioksetin-0015",
     "stoff": "vortioksetin",
