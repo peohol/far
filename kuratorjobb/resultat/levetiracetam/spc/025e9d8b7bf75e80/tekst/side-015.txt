@@ -1,0 +1,53 @@
+Nedsatt nyrefunksjon
+Tilsynelatende totalclearance av både levetiracetam og dets primære metabolitt er korrelert til
+kreatininclearance. Det anbefales derfor å justere den daglige vedlikeholdsdosen av Levetiracetam Stragen
+hos pasienter med moderat og alvorlig nedsatt nyrefunksjon basert på kreatininclearance (se pkt. 4.2).
+
+Hos voksne pasienter med anurisk terminal nyresykdom var halveringstiden mellom og innenfor
+dialyseperiodene henholdsvis ca. 25 og 3,1 timer.
+Den fraksjonelle elimineringen av levetiracetam var 51 % under et karakteristisk 4-timers dialyseforløp.
+
+Nedsatt leverfunksjon
+Hos personer med mild og moderat nedsatt leverfunksjon var det ingen relevant endring i clearance av
+levetiracetam. Hos de fleste personer med alvorlig nedsatt leverfunksjon var clearance av levetiracetam
+redusert med mer enn 50 % på grunn av samtidig nedsatt nyrefunksjon (se pkt. 4.2).
+
+Pediatrisk populasjon
+Barn (4–12 år)
+Farmakokinetikken hos barn er ikke undersøkt etter intravenøs administrering. Basert på de
+farmakokinetiske egenskapene til levetiracetam, farmakokinetikken hos voksne etter intravenøs
+administrering og farmakokinetikken hos barn etter oral administrasjon forventes det imidlertid at
+eksponeringen (AUC) for levetiracetam er identisk hos barn mellom 4 og 12 år etter intravenøs og oral
+administrering.
+
+Etter inntak av én enkelt oral dose (20 mg/kg) til barn med epilepsi (6–12 år) var halveringstiden for
+levetiracetam 6,0 timer. Tilsynelatende clearance justert for kroppsvekt var ca. 30 % høyere enn hos voksne
+med epilepsi.
+
+Etter gjentatt oral dosering (20–60 mg/kg/dag) til barn med epilepsi (4–12 år), ble levetiracetam raskt
+absorbert. Maksimale plasmakonsentrasjoner ble observert 0,5 til 1,0 timer etter dosering. Det ble sett at
+maksimal plasmakonsentrasjon og AUC økte lineært og proporsjonalt med dosen.
+Eliminasjonshalveringstiden var ca. 5 timer. Tilsynelatende totalclearance var 1,1 ml/min/kg.
+
+5.3.   Prekliniske sikkerhetsdata
+
+Prekliniske data indikerer ingen spesiell fare for mennesker basert på konvensjonelle studier av
+sikkerhetsfarmakologi, gentoksisitet og karsinogent potensial.
+Bivirkninger som ikke var observert i kliniske studier, men som er sett hos rotter og i mindre utstrekning
+hos mus ved eksponeringsnivåer som tilsvarer eksponeringsnivået hos mennesker og som var av mulig
+klinisk betydning,var leverendringer som tyder på en adaptiv respons så som vektøkning og centrilobulær
+hypertrofi, fettinfiltrasjon og forhøyede leverenzymer i plasma.
+
+Det ble ikke sett noen uønskede effekter på fertilitet eller reproduksjonsevne hos hann- eller hunnrotter
+ved doser på opp til 1800 mg/kg/dag (6 ganger maksimal anbefalt dose til mennesker, beregnet ut fra
+mg/m2 eller eksponering) hos foreldre eller F1-generasjonen.
+
+To studier av embryoføtal utvikling ble utført hos rotter med doser på 400, 1200 og 3600 mg/kg/dag. Ved
+3600 mg/kg/dag ble det i kun én av de to studiene sett en lett reduksjon i fostervekt som var forbundet med
+en marginal økning i skjelettendringer/mindre anomalier. Det var ingen effekt på embryomortalitet og ingen
+økt insidens av misdannelser. NOAEL (No Observed Adverse Effect Level) var 3600 mg/kg/dag for drektige
+hunnrotter (12 ganger maksimal anbefalt dose til mennesker, beregnet ut fra mg/m2) og 1200 mg/kg/dag for
+fostrene.
+
+Fire studier av embryoføtal utvikling ble utført hos kaniner med dosene 200, 600, 800, 1200 og
+1800 mg/kg/dag. Ved dosenivået 1800 mg/kg/dag ble det indusert en markert toksisitet hos mordyrene og

@@ -1,0 +1,874 @@
+                                             PREPARATOMTALE
+
+
+1.      LEGEMIDLETS NAVN
+
+Levetiracetam Stragen 5 mg/ml infusjonsvæske, oppløsning
+Levetiracetam Stragen 10 mg/ml infusjonsvæske, oppløsning
+
+
+2.      KVALITATIV OG KVANTITATIV SAMMENSETNING
+
+Hver ml inneholder 5 mg levetiracetam.
+Hver 100 ml pose inneholder 500 mg levetiracetam.
+
+Hver ml inneholder 10 mg levetiracetam.
+Hver 100 ml pose inneholder 1000 mg levetiracetam.
+
+Hjelpestoffer med kjent effekt:
+Levetiracetam Stragen 5 mg/ml: Hver ml inneholder 3,50 mg natrium.
+Levetiracetam Stragen 10 mg/ml: Hver ml inneholder 3,23 mg natrium.
+
+For fullstendig liste over hjelpestoffer, se pkt. 6.1.
+
+
+3.      LEGEMIDDELFORM
+
+Infusjonsvæske, oppløsning.
+
+Klar, fargeløs til lysegul væske,
+pH: 5.3 – 6.0
+Osmolaritet (mOsmol/kg): 270 - 330
+
+
+4.      KLINISKE OPPLYSNINGER
+
+4.1.    Indikasjoner
+
+Levetiracetam Stragen er indisert som monoterapi ved behandling av partielle anfall med eller uten
+sekundær generalisering hos voksne og ungdom fra og med 16 år med nylig diagnostisert epilepsi.
+
+Levetiracetam Stragen er indisert som tilleggsbehandling
+  • ved behandling av partielle anfall med eller uten sekundær generalisering hos voksne, ungdom og barn
+      fra og med 4 år med epilepsi
+  • ved behandling av myoklone anfall hos voksne og ungdom fra og med 12 år med juvenil myoklon
+      epilepsi
+  • ved behandling av primære generaliserte tonisk-kloniske anfall hos voksne og ungdom fra og med 12
+      år med idiopatisk generalisert epilepsi
+
+Levetiracetam Stragen er et alternativ for pasienter når oral administrering midlertidig ikke er mulig.
+
+4.2.    Dosering og administrasjonsmåte
+
+Dosering
+Behandling med Levetiracetam Stragen kan startes med enten intravenøs eller oral administrering.
+Overgang mellom oral og intravenøs administrering kan gjøres direkte uten titrering. Den totale daglige
+dosen og administreringshyppigheten bør vedlikeholdes.
+
+Partielle epileptiske anfall
+Den anbefalte doseringen for monoterapi (fra og med 16 år) og tilleggsbehandling er den samme, som
+skissert nedenfor.
+
+Alle indikasjoner
+
+Voksne (≥ 18 år) og ungdom (12 til 17 år) som veier 50 kg eller mer
+Den terapeutiske startdosen er 500 mg to ganger daglig. Denne dosen kan gis fra første
+behandlingsdag. En lavere startdose på 250 mg to ganger daglig kan imidlertid gis basert på legens
+vurdering av reduksjon av anfall kontra potensielle bivirkninger. Denne kan økes til 500 mg to
+ganger daglig etter to uker.
+Avhengig av klinisk effekt og tolerabilitet kan den daglige dosen økes til 1500 mg to ganger daglig.
+Endringer av dosen kan foretas ved økning eller reduksjon med 250 mg eller 500 mg to ganger daglig hver
+andre til fjerde uke.
+
+Ungdom (12 til 17 år) som veier under 50 kg og barn fra og med 4 år
+Legen bør forskrive den mest hensiktsmessige legemiddelformen, pakningen og styrken i henhold til vekt,
+alder og dose. Se avsnittet Pediatrisk populasjon for doseringssjusteringer basert på vekt.
+
+Behandlingsvarighet
+Det er ingen erfaring med intravenøs administrering av levetiracetam i mer enn 4 dager.
+
+Seponering
+Dersom behandlingen med levetiracetam må seponeres, anbefales en gradvis nedtrapping (f.eks.: Hos
+voksne og ungdom som veier mer enn 50 kg: reduksjon med 500 mg to ganger daglig hver andre til fjerde
+uke. Hos barn og ungdom som veier mindre enn 50 kg: dosereduksjon bør ikke overskride 10 mg/kg to
+ganger daglig annenhver uke).
+
+Spesielle populasjoner
+Eldre (65 år og eldre)
+Justering av dosen anbefales hos eldre med nedsatt nyrefunksjon (se «Nedsatt nyrefunksjon» nedenfor).
+
+Nedsatt nyrefunksjon
+Døgndosen tilpasses individuelt til nyrefunksjonen.
+
+For voksne pasienter henvises det til tabellen nedenfor, og dosen justeres som angitt. For å bruke denne
+doseringstabellen er det nødvendig å beregne pasientens kreatininclearance (CLcr) i ml/min. For voksne og
+ungdom som veier 50 kg eller mer, kan CLcr i ml/min beregnes ut fra serumkreatinin (mg/dl)
+ved hjelp av følgende formel:
+
+                [140 – alder (år)] x vekt (kg)
+CLcr (ml/min) = ----------------------------------------- (x 0,85 for kvinner)
+                72 x serumkreatinin (mg/dl)
+
+CLcr justeres deretter i henhold til kroppsoverflate (BSA) på følgende måte:
+
+                             CLcr (ml/min)
+CLcr (ml/min/1,73 m2) = ---------------------------- x 1,73
+                              Individets BSA (m2)
+Dosejusteringer for voksne og ungdom som veier mer enn 50 kg, og som har nedsatt nyrefunksjon:
+Gruppe                           Kreatininclearance
+                                                              Dose og hyppighet
+                                 (ml/min/1,73 m2)
+Normal                           ≥ 80                         500–1500 mg to ganger daglig
+
+Mild                                 50-79                           500–1000 mg to ganger daglig
+
+Moderat                              30-49                           250–750 mg to ganger daglig
+                                     < 30
+Alvorlig                                                             250–500 mg to ganger daglig
+Pasienter med terminal
+nyresykdom som gjennomgår          -                            500–1000 mg én gang daglig (2)
+         (1)
+dialyse
+(1)
+    En støtdose på 750 mg anbefales ved første behandlingsdag med levetiracetam.
+(2)
+    Etter dialyse anbefales 250–500 mg som supplerende dose.
+
+Hos barn med nedsatt nyrefunksjon justeres levetiracetamdosen på grunnlag av nyrefunksjonen, siden
+clearance av levetiracetam er knyttet til nyrefunksjonen. Denne anbefalingen er basert på en studie av
+voksne pasienter med nedsatt nyrefunksjon.
+
+For yngre ungdom og barn kan CLcr i ml/min/1,73 m2 beregnes ut fra serumkreatinin (mg/dl) ved å bruke
+følgende formel (Schwartz-formelen):
+
+                           Høyde (cm) x ks
+CLcr (ml/min/1,73 m2) = ------------------------------------
+                           Serumkreatinin (mg/dl)
+
+ks = 0,55 for barn opp til 13 år og for jenter i ungdomsalder; ks = 0,7 for gutter i ungdomsalder.
+
+Dosejustering for barn og ungdom som veier mindre enn 50 kg, og som har nedsatt nyrefunksjon:
+                                      Kreatinin-        Dose og hyppighet
+            Gruppe                    clearance         Barn fra 4 år og ungdom som veier mindre enn
+                                      (ml/min/1,73 m2) 50 kg
+5 mg/ml     Normal                    ≥ 80              50 kg mg/kg (2–6 ml/kg) to ganger daglig
+                                                        10–30
+10 mg/ml                                                10–30 mg/kg (1–3 ml/kg) to ganger daglig
+15 mg/ml                                                10–30 mg/kg (0,66–2 ml/kg) to ganger daglig
+5 mg/ml     Mild                      50-79             10–20 mg/kg (2–4 ml/kg) to ganger daglig
+10 mg/ml                                                10–20 mg/kg (1–2 ml/kg) to ganger daglig
+15 mg/ml                                                10–20 mg/kg (0,66–1,33 ml/kg) to ganger daglig
+5 mg/ml     Moderat                   30-49             5–15 mg/kg (1–3 ml/kg) to ganger daglig
+10 mg/ml                                                5–15 mg/kg (0,5–1,5 ml/kg) to ganger daglig
+15 mg/ml                                                5–15 mg/kg (0,33–1 ml/kg) to ganger daglig
+5 mg/ml     Alvorlig                  < 30              5–10 mg/kg (1–2 ml/kg) to ganger daglig
+10 mg/ml                                                5–10 mg/kg (0,5–1 ml/kg) to ganger daglig
+15 mg/ml                                                       5–10 mg/kg (0,33–0,66 ml/kg) to ganger daglig
+5 mg/ml        Pasienter med terminal
+               nyresykdom                                    10–20 mg/kg (2–4 ml/kg) én gang daglig (1) (2)
+               som gjennomgår dialyse
+10 mg/ml
+                                                             10–20 mg/kg (1–2 ml/kg) én gang daglig (1) (2)
+
+15 mg/ml
+                                                             10–20 mg/kg (0,66–1,33 ml/kg) én gang daglig (1)
+                                                             (2)
+
+
+(1)
+      En støtdose på 15 mg/kg anbefales ved første behandlingsdag med levetiracetam.
+(2)
+      Etter dialyse anbefales 5–10 mg/kg som supplerende dose.
+
+Nedsatt leverfunksjon
+Dosejustering er ikke nødvendig hos pasienter med mild til moderat nedsatt leverfunksjon. Hos pasienter
+med alvorlig nedsatt leverfunksjon kan kreatininclearance underestimere nedsatt nyrefunksjon. En
+reduksjon av den daglige vedlikeholdsdosen på 50 % anbefales derfor når kreatininclearance er <
+60 ml/min/1,73 m2.
+
+Pediatrisk populasjon
+Legen bør forskrive den mest hensiktsmessige legemiddelformen, pakningen og styrken i henhold til
+alder, vekt og dose.
+
+Monoterapi
+Sikkerhet og effekt av behandling med levetiracetam som monoterapi hos barn og ungdom under
+16 år har ikke blitt fastslått.
+Det er ingen tilgjengelige data.
+
+Ungdom (16 og 17 år) som veier 50 kg eller mer og som har partielle epileptiske anfall med eller uten
+sekundær generalisering med nylig diagnostisert epilepsi
+Se avsnittet ovenfor om Voksne (≥ 18 år) og ungdom (12 til 17 år) som veier 50 kg eller mer.
+
+Tilleggsbehandling hos barn fra 4 til 11 år og ungdom (12 til 17 år) som veier mindre enn 50 kg
+Den terapeutiske startdosen er 10 mg/kg to ganger daglig.
+Avhengig av klinisk effekt og tolerabilitet kan dosen økes til 30 mg/kg to ganger daglig. Doseendringer må
+ikke overstige økninger eller reduksjoner på 10 mg/kg to ganger daglig annenhver uke. Den laveste dosen
+som gir effekt bør brukes for alle indikasjoner.
+
+Dosen til barn som veier 50 kg eller mer, er den samme som til voksne for all indikasjoner.
+Se avsnittet ovenfor om Voksne (≥ 18 år) og ungdom (12 til 17 år) som veier 50 kg eller mer for alle
+indikasjoner.
+
+Doseanbefalinger for barn og ungdom:
+  Vekt                                 Startdose:                           Maksimal dose:
+                                       10 mg/kg to ganger daglig            30 mg/kg to ganger daglig
+  15 kg(1)                             150 mg to ganger daglig              450 mg to ganger daglig
+        (1)
+  20 kg                                200 mg to ganger daglig              600 mg to ganger daglig
+  25 kg                                250 mg to ganger daglig              750 mg to ganger daglig
+  Fra 50 kg(2)                         500 mg to ganger daglig              1500 mg to ganger daglig
+(1)
+    Barn som veier 25 kg eller mindre, bør helst starte behandlingen med en mikstur.
+(2)
+    Dosen til barn og ungdom som veier 50 kg eller mer, er den samme som til voksne.
+
+Tilleggsbehandling hos spedbarn og barn under 4 år
+Sikkerhet og effekt av levetiracetam hos spedbarn og barn under 4 år har ikke blitt fastslått.
+For tiden tilgjengelige data er beskrevet i pkt. 4.8, 5.1 og 5.2, men ingen doseringsanbefalinger kan
+gis.
+
+Administrasjonsmåte
+Levetiracetam Stragen er bare til intravenøs bruk. Den klargjorte oppløsningen er bare til engangsbruk. Den
+trenger ikke å fortynnes ytterligere og bør administreres som en intravenøs infusjon i løpet av 15 minutter.
+
+Obs! Konsentrasjonen er forskjellig fra andre levetiracetamholdige produkter til intravenøs bruk.
+
+Legemiddel med partikler eller misfarging skal ikke brukes.
+
+4.3.   Kontraindikasjoner
+
+Overfølsomhet overfor virkestoffet eller andre pyrrolidonderivater eller overfor ett eller flere av
+hjelpestoffene listet opp i pkt. 6.1.
+
+4.4.   Advarsler og forsiktighetsregler
+
+Nedsatt nyrefunksjon
+Bruk av levetiracetam hos pasienter med nedsatt nyrefunksjon kan kreve dosejusteringer. Hos pasienter med
+alvorlig nedsatt leverfunksjon anbefales en vurdering av nyrefunksjonen før valg av dose (se pkt. 4.2).
+
+Akutt nyreskade
+Bruk av levetiracetam har i svært sjeldne tilfeller vært forbundet med akutt nyreskade, der tiden til det har
+oppstått har vært fra noen få dager til flere måneder.
+
+Blodcelletelling
+Sjeldne tilfeller av nedsatt blodcelletall (nøytropeni, agranulocytose, leukopeni, trombocytopeni og
+pancytopeni) er beskrevet i forbindelse med administrering av levetiracetam, vanligvis i begynnelsen av
+behandlingen. Fullstendig blodcelletelling anbefales hos pasienter som opplever betydelig svekkelse, feber,
+gjentatte infeksjoner eller koagulasjonsforstyrrelser (pkt. 4.8).
+
+Selvmord
+Selvmord, selvmordsforsøk, selvmordstanker og selvmordsrelatert atferd er rapportert hos pasienter som
+behandles med antiepileptika (herunder levetiracetam). I en metaanalyse av randomiserte,
+placebokontrollerte studier med antiepileptika er det vist en liten økning i risikoen for selvmordstanker
+og selvmordsrelatert atferd. Mekanismen bak denne risikoen er ikke kjent.
+
+Pasienter bør derfor overvåkes for tegn på depresjon og/eller selvmordstanker og selvmordsrelatert atferd,
+og nødvendig behandling bør vurderes. Pasienter (og pårørende) bør oppfordres til å søke medisinsk hjelp
+dersom det oppstår tegn på depresjon og/eller selvmordstanker eller selvmordsrelatert atferd.
+
+Unormal og aggressiv atferd
+Levetiracetam kan forårsake psykotiske symptomer og atferdsforstyrrelser, inkludert irritabilitet og
+aggressivitet. Pasienter som behandles med levetiracetam bør overvåkes for utvikling av psykiatriske tegn
+som tyder på viktige endringer i sinnsstemning og/eller personlighet. Dersom det legges merke til slik atferd
+bør tilpasning av behandlingen eller gradvis seponering vurderes. Hvis seponering av behandlingen vurderes,
+se pkt. 4.2.
+
+Forverring av anfall
+Som med andre typer antiepileptiske legemidler kan levetiracetam i sjeldne tilfeller forverre anfallenes
+hyppighet eller alvorlighetsgrad. Denne paradoksale effekten ble stort sett rapportert i løpet av den første
+måneden etter oppstart av levetiracetam eller økning av dosen, og var reversibel ved seponering av
+legemidlet eller dosereduksjon. Pasientene bør rådes til å konsultere lege umiddelbart dersom epilepsien
+forverres.
+Mangel på effekt eller forverring av anfall har for eksempel blitt rapportert hos pasienter med epilepsi
+som er forbundet med mutasjoner i SCN8A (alfa-subenhet 8 i spenningsstyrte natriumkanaler).
+
+Forlengelse av QT-intervall i elektrokardiogram
+Sjeldne tilfeller av forlenget QT-intervall i EKG er observert under overvåking etter markedsføring.
+Levetiracetam bør brukes med forsiktighet hos pasienter med forlenget QTc-intervall, hos pasienter som
+samtidig behandles med legemidler som påvirker QTc-intervallet og hos pasienter med relevant eksisterende
+hjertesykdom eller elektrolyttforstyrrelser.
+
+Pediatrisk populasjon
+Tilgjengelige data for barn viser ingen påvirkning på vekst og pubertet. Langsiktige effekter på læring,
+intelligens, vekst, endokrin funksjon, pubertet og fertilitet ved bruk hos barn er imidlertid ukjent.
+
+Hjelpestoffer:
+Levetiracetam Stragen 5 mg/ml inneholder 3,50 mg natrium per ml. Dette tilsvarer 17,5 % av WHOs
+anbefalte maksimale daglige inntak av natrium på 2 g for en voksen person.
+
+Levetiracetam Stragen 10 mg/ml inneholder 3,23 mg natrium per ml. Dette tilsvarer 16,15 % av WHOs
+anbefalte maksimale daglige inntak av natrium på 2 g for en voksen person.
+
+
+4.5.   Interaksjon med andre legemidler og andre former for interaksjon
+
+Antiepileptika
+Data fra kliniske studier med voksne før markedsføring tyder på at levetiracetam ikke påvirker
+serumkonsentrasjonen av andre antiepileptika (fenytoin, karbamazepin, valproatsyre, fenobarbital,
+lamotrigin, gabapentin og primidon), og at disse antiepileptikaene ikke påvirker levetiracetams
+farmakokinetikk.
+
+Som hos voksne er det ingen klinisk signifikante legemiddelinteraksjoner hos barn som får opptil
+60 mg/kg/dag av levetiracetam.
+En retrospektiv vurdering av farmakokinetiske interaksjoner hos barn og ungdom med epilepsi (4–17 år)
+bekreftet at tilleggsbehandling med oral administrering av levetiracetam ikke påvirket steady state-
+serumkonsentrasjonene av samtidig administrert karbamazepin og valproat. Data antydet imidlertid en
+økning av levetiracetamclearance på 20 % hos barn som tar enzyminduserende antiepileptika. Dosejustering
+er ikke nødvendig.
+
+Probenecid
+Det er vist at probenecid (500 mg fire ganger daglig), en forbindelse som blokkerer den tubulære
+sekresjonen i nyrene, hemmer renal utskillelse av den primære metabolitten, men ikke av levetiracetam.
+Konsentrasjonen av denne metabolitten holder seg likevel lav.
+
+Metotreksat
+Det er rapportert at samtidig administrering av levetiracetam og metotreksat reduserer clearance av
+metotreksat, noe som fører til økt/forlenget konsentrasjon av metotreksat i blodet, til potensielt toksiske
+nivåer. Blodkonsentrasjonene av metotreksat og levetiracetam bør overvåkes nøye hos pasienter som får
+samtidig behandling med disse to legemidlene.
+
+Orale antikonseptiva og andre farmakokinetiske interaksjoner
+Levetiracetam 1000 mg daglig påvirket ikke farmakokinetikken til orale antikonseptiva (etinyløstradiol og
+levonorgestrel). Endokrine parametere (luteiniserende hormon og progesteron) ble ikke endret.
+Levetiracetam 2000 mg daglig påvirket ikke farmakokinetikken til digoksin og warfarin. Protrombintider
+ble ikke endret. Samtidig inntak av digoksin, orale antikonseptiva og warfarin påvirket ikke levetiracetams
+farmakokinetikk.
+
+Alkohol
+Det foreligger ingen data vedrørende interaksjon mellom levetiracetam og alkohol.
+
+4.6.    Fertilitet, graviditet og amming
+
+Fertile kvinner
+Råd fra spesialist bør gis til fertile kvinner. Behandling med levetiracetam bør revurderes når en kvinne
+planlegger å bli gravid. Som med alle antiepileptika, skal plutselig seponering av levetiracetam unngås, da
+dette kan føre til gjennombruddsanfall som kan få alvorlige konsekvenser for kvinnen og det ufødte barnet.
+Monoterapi bør foretrekkes så sant det er mulig, fordi behandling med flere antiepileptika kan være
+forbundet med høyere risiko for medfødte misdannelser enn monoterapi, avhengig av de aktuelle
+antiepileptika.
+
+Graviditet
+En stor mengde data innhentet etter markedsføring for kvinner som ble eksponert for levetiracetam
+monoterapi (flere enn 1800, og hos flere enn 1500 av disse skjedde eksponeringen i løpet av første
+trimester) tyder ikke på økt risiko for større medfødte misdannelser. Det finnes begrenset dokumentasjon
+vedrørende nevrologisk utvikling hos barn som har vært eksponert for levetiracetam monoterapi in utero.
+Data fra to observasjonelle populasjonsbaserte registerstudier utført med stort sett samme datasett fra de
+nordiske landene og som inkluderte flere enn 1000 barn født av kvinner med epilepsi og som prenatalt ble
+eksponert for levetiracetam monoterapi, viser ikke en økt risiko for autismespekterforstyrrelser eller
+utviklingshemming sammenlignet med barn født av kvinner med epilepsi der barnet ikke ble eksponert for
+et antiepileptikum in utero. Gjennomsnittlig oppfølgingstid for barn i levetiracetamgruppen var kortere enn
+for gruppen av barn som ikke var eksponert for noe antiepileptikum (f.eks. 4,4 år mot 6,8 år i én av
+studiene).
+Levetiracetam kan brukes under graviditet, hvis det etter nøye vurdering er ansett for å være klinisk
+nødvendig. I et slikt tilfelle anbefales den laveste effektive dosen.
+
+Fysiologiske forandringer under svangerskapet kan påvirke konsentrasjonen av levetiracetam. Det er
+observert nedsatt plasmakonsentrasjon av levetiracetam under graviditet. Denne reduksjonen er mer uttalt
+under tredje trimester (inntil 60 % av utgangskonsentrasjon før graviditet). Gravide kvinner som behandles
+med levetiracetam må sikres riktig klinisk behandling.
+
+Amming
+Levetiracetam skilles ut i morsmelk hos mennesker. Amming anbefales derfor ikke. Dersom det er
+behov for levetiracetambehandling under amming, bør imidlertid nytte/risiko av behandlingen vurderes
+opp mot betydningen av amming.
+
+Fertilitet
+Det ble ikke sett noen påvirkning på fertilitet i dyrestudier (se pkt. 5.3). Det finnes ingen kliniske data,
+og potensiell risiko for mennesker er ukjent.
+
+4.7.    Påvirkning av evnen til å kjøre bil og bruke maskiner
+
+Det er ikke gjort undersøkelser vedrørende påvirkningen på evnen til å kjøre bil og bruke maskiner.
+Den individuelle følsomheten varierer, og noen pasienter kan derfor oppleve søvnighet eller andre
+symptomer relatert til sentralnervesystemet, spesielt i begynnelsen av behandlingen eller etter
+doseøkning. Forsiktighet anbefales derfor hos disse pasientene ved utføring av krevende oppgaver, f.eks.
+bilkjøring eller betjening av maskiner. Pasienter bør ikke kjøre eller bruke maskiner før det er fastslått at
+evnen til å utføre slike aktiviteter ikke blir påvirket.
+
+4.8.    Bivirkninger
+Sammendrag av sikkerhetsprofilen
+Bivirkningsprofilen som er presentert nedenfor, er basert på analysen av sammenslåtte data fra
+placebokontrollerte kliniske studier for alle indikasjoner som er undersøkt, med totalt 3416 pasienter som
+ble behandlet med levetiracetam. Disse dataene er supplert med data fra bruk av levetiracetam i
+tilsvarende åpne, forlengede studier, i tillegg til erfaring etter markedsføring. De hyppigst rapporterte
+bivirkningene var nasofaryngitt, somnolens, hodepine, fatigasjon og svimmelhet. Sikkerhetsprofilen for
+levetiracetam er generelt lik for ulike aldersgrupper (voksne og pediatriske pasienter) og for de ulike
+godkjente epilepsiindikasjonene. Siden det er begrenset informasjon om intravenøs bruk av
+levetiracetam, og siden orale og intravenøse formuleringer er bioekvivalente, er sikkerhetsinformasjonen
+for intravenøs bruk av levetiracetam basert på oral bruk av levetiracetam.
+
+Bivirkninger i tabellform
+Bivirkninger rapportert i kliniske studier (voksne, ungdom, barn og spedbarn > 1 måned) og fra erfaring
+etter markedsføring er vist i tabellen nedenfor, etter organklassesystem og frekvens. Bivirkningene er
+presentert etter synkende alvorlighetsgrad, og frekvensen er definert som følger: svært vanlige (≥ 1/10),
+vanlige (≥ 1/100 til < 1/10), mindre vanlige (≥ 1/1000 til < 1/100), sjeldne (≥ 1/10 000 til < 1/1000) og
+svært sjeldne (< 1/10 000).
+
+                      Hyppighetskategori
+MedDRA SOC            Svært vanlige Vanlige             Mindre vanlige     Sjeldne           Svært sjeldne
+
+
+
+
+Infeksiøse og         Nasofaryngitt                                        Infeksjon
+parasittære
+sykdommer
+                                                        Trombocytopeni     Pancytopeni
+Sykdommer i blod                                        , leukopeni        nøytropeni
+og lymfatiske                                                              Agranulocytos
+organer                                                                    e
+
+                                                                           Legemiddelrea
+                                                                           ksjon
+                                                                           med eosinofili
+                                                                           og
+                                                                           systemiske
+Forstyrrelser i                                                            symptomer
+immunsystemet                                                              (DRESS)(1)
+                                                                           Overfølsomhet
+                                                                           (inkludert
+                                                                           angioødem og
+                                                                           anafylaksi)
+
+                                        Anoreksi        Vekttap,           Hyponatremi
+Stoffskifte- og                                         vektøkning
+ernæringsbetingede
+sykdommer
+                                   Depresjon,        Selvmordsforsø       Gjennomført       Tvangslidelse(2)
+                                   fiendtlighet/     k,                   selvmord,
+                                   aggresjon,        selvmordstanker      personlighets-
+                                   angst,            , psykotisk          forstyrrelse,
+                                   søvnløshet        lidelse,             unormal
+                                   nervøsitet/irri   unormal atferd,      tankegang,
+Psykiatriske                       tabilitet         hallusinasjoner,     delirium
+lidelser                                             sinne,
+                                                     forvirringstilstan
+                                                     d, panikkanfall,
+                                                     emosjonell
+                                                     labilitet /
+                                                     humørsvingning
+                                                     er, agitasjon
+                      Somnolens,   Krampe,           Amnesi, svekket      Choreoathetosi
+                      hodepine     balanseforsty     hukommelse,          s,
+                                   rrelse,           unormal              dyskinesi,
+                                   svimmelhet,       koordinasjon/ata     hyperkinesi,
+                                   letargi,          ksi, parestesi,      forstyrrelser i
+Nevrologiske                       tremor            konsentrasjonss      gange,
+sykdommer                                            vikt                 encefalopati,
+                                                                          forverring av
+                                                                          anfall, malignt
+                                                                          nevroleptikasy
+                                                                          ndrom(3)
+
+                                                     Diplopi, uklart
+Øyesykdommer                                         syn
+Sykdommer i øre                    Vertigo
+og labyrint
+                                                                          Forlenget QT i
+                                                                          elektrokardiog
+Hjertesykdommer                                                           ram
+
+
+Sykdommer i                        Hoste
+respirasjonsorganer
+, thorax og
+mediastinum
+                                   Buksmerter,                            Pankreatitt
+                                   diaré,
+Gastrointestinale                  dyspepsi,
+sykdommer                          oppkast,
+                                   kvalme
+                                                     Unormale             Leversvikt,
+Sykdommer i lever                                    leverfunksjonste     hepatitt
+og galleveier                                        ster
+                                                                              Akutt
+                                                                              nyreskade
+Sykdommer i nyre
+og urinveier
+
+
+                                         Utslett          Alopesi,            Toksisk
+                                                          eksem,              epidermal
+                                                          kløe,               nekrolyse,
+Hud- og                                                                       Stevens-
+underhudssykdom                                                               Johnsons
+mer                                                                           syndrom,
+                                                                              erythema
+                                                                              multiforme
+
+                                                          Muskelsvakhet,      Rabdomyolyse
+Sykdommer i                                               myalgi              og økt
+                                                                              kreatinfosfoki
+muskler, bindevev
+                                                                              nase i blodet(3)
+og skjelett
+
+
+Generelle lidelser                       Asteni/fatiga
+og reaksjoner på                         sjon
+administrasjonssted
+et
+                                                          Skade
+Skader,
+forgiftninger og
+komplikasjoner ved
+medisinske
+prosedyrer
+
+(1)
+    Se Beskrivelse av utvalgte bivirkninger.
+(2)
+    Svært sjeldne tilfeller av utvikling av tvangslidelser (OCD) hos pasienter med underliggende
+historikk med OCD eller psykiatrisk sykdom er sett etter markedsføring
+(3)
+   Prevalensen er signifikant høyere hos japanske pasienter enn hos ikke-japanske pasienter.
+
+Beskrivelse av utvalgte bivirkninger
+
+Overfølsomhetsreaksjoner som omfatter flere organer
+Overfølsomhetsreaksjoner som omfatter flere organer (også kjent som legemiddelreaksjon med
+eosinofili og systemiske symptomer, DRESS) er i sjeldne tilfeller rapportert hos pasienter behandlet
+med levetiracetam. Kliniske manifestasjoner kan utvikles 2 - 8 uker etter oppstart av behandling. Disse
+reaksjonene arter seg forskjellig, men feber, utslett, ansiktsødem, lymfadenopatier og/eller
+hematologiske abnormiteter er vanligvis tilstede og kan være forbundet med at forskjellige
+organsystemer er involvert, som oftest leveren. Hvis overfølsomhetsreaksjon som omfatter flere
+organer mistenkes, bør levetiracetam seponeres.
+
+Risikoen for anoreksi er høyere når topiramat gis samtidig med levetiracetam.
+I flere tilfeller av alopesi ble det sett bedring når levetiracetam ble seponert.
+Beinmargssuppresjon ble funnet i noen av tilfellene av pancytopeni.
+
+Tilfeller av encefalopati oppsto vanligvis i begynnelsen av behandlingen (fra få dager til noen
+få måneder) og var reversible etter seponering av behandling.
+
+Pediatrisk populasjon
+Hos pasienter i alderen 1 måned opp til 4 år har totalt 190 pasienter fått behandling med levetiracetam i
+placebokontrollerte og åpne, forlengede studier. Seksti (60) av disse pasientene ble behandlet med
+levetiracetam i placebokontrollerte studier. Hos pasienter i alderen 4–16 år har totalt 645 pasienter fått
+behandling med levetiracetam i placebokontrollerte og åpne, forlengede studier.
+233 av disse pasientene ble behandlet med levetiracetam i placebokontrollerte studier. I begge disse
+aldersgruppene av barn er data supplert med erfaring fra bruk av levetiracetam etter markedsføring.
+
+I tillegg er 101 spedbarn yngre enn 12 måneder eksponert i en sikkerhetsstudie etter markedsføring. Det
+er ikke gjort noen nye funn vedrørende sikkerheten av levetiracetam hos spedbarn yngre enn 12 måneder
+med epilepsi.
+
+Bivirkningsprofilen for levetiracetam er generelt lik for de ulike aldersgruppene og for de ulike godkjente
+epilepsiindikasjonene. Sikkerhetsresultatene for pediatriske pasienter i placebokontrollerte kliniske studier
+var i samsvar med sikkerhetsprofilen for levetiracetam hos voksne, bortsett fra bivirkninger knyttet til atferd
+og psykiatriske lidelser, som forekom hyppigere hos barn enn hos voksne. Hos barn og ungdom i alderen 4–
+16 år ble oppkast (svært vanlig, 11,2 %), agitasjon (vanlig, 3,4 %), humørsvingninger (vanlig, 2,1 %),
+emosjonell labilitet (vanlig, 1,7 %), aggresjon (vanlig, 8,2 %), unormal atferd (vanlig, 5,6 %), og letargi
+(vanlig, 3,9 %) hyppigere rapportert enn i andre aldersgrupper eller for den samlede sikkerhetsprofilen. Hos
+spedbarn og barn i alderen 1 måned opp til 4 år ble irritabilitet (svært vanlig, 11,7 %) og unormal
+koordinasjon (vanlig, 3,3 %) hyppigere rapportert enn i andre aldersgrupper eller for den samlede
+sikkerhetsprofilen.
+
+I en dobbeltblind, placebokontrollert sikkerhetsstudie med barn med en «non-inferiority»-metode ble
+kognitive og nevropsykologiske effekter av levetiracetam undersøkt hos barn i alderen 4–16 år med
+partielle anfall. Det ble konkludert med at levetiracetam ikke var forskjellig («non-inferior») fra placebo
+med hensyn til endring i score fra baseline for Leiter-R Attention and Memory, Memory Screen Composite
+i per-protokoll-populasjonen. Resultater knyttet til atferd og emosjonell funksjon tydet på en forverring av
+aggressiv atferd hos pasienter som ble behandlet med levetiracetam, målt på en standardisert og systematisk
+måte ved bruk av et validert verktøy (CBCL – Achenbach Child Behavior Checklist).
+Deltagere som fikk levetiracetam i den langvarige, åpne oppfølgingsstudien, opplevde imidlertid i
+gjennomsnitt ingen forverring av atferd og emosjonell funksjon, nærmere bestemt var mål på aggressiv
+atferd ikke forverret fra baseline.
+
+Melding av mistenkte bivirkninger
+Melding av mistenkte bivirkninger etter godkjenning av legemidlet er viktig. Det gjør det mulig å overvåke
+forholdet mellom nytte og risiko for legemidlet kontinuerlig. Helsepersonell oppfordres til å melde enhver
+mistenkt bivirkning. Dette gjøres via meldeskjema som finnes på nettsiden til Statens legemiddelverk:
+www.legemiddelverket.no/meldeskjema.
+
+4.9.   Overdosering
+
+Symptomer
+Somnolens, agitasjon, aggresjon, nedsatt bevissthetsnivå, nedsatt respirasjon og koma ble observert ved
+overdosering med levetiracetam.
+
+Behandling av overdosering
+Det finnes ikke noe spesifikt antidot for levetiracetam. Behandling ved overdosering er symptomatisk og
+kan omfatte hemodialyse. Effektiviteten ved dialyseekstraksjon er 60 % for levetiracetam og 74 % for den
+primære metabolitten.
+5.     FARMAKOLOGISKE EGENSKAPER
+
+5.1.   Farmakodynamiske egenskaper
+
+Farmakodynamisk gruppe: antiepileptika, diverse antiepileptika, ATC-kode: N03AX14.
+
+Virkestoffet, levetiracetam, er et pyrrolidonderivat (S-enantiomer av α-etyl-2-okso-1-
+pyrrolidinacetamid) og er kjemisk sett ikke beslektet med virkestoffer med antiepileptisk effekt.
+
+Virkningsmekanisme
+Virkningsmekanismen for levetiracetam er ennå ikke helt klarlagt. In vitro- og in vivo-studier tyder
+på at levetiracetam ikke endrer cellens basale egenskaper og normale nevrotransmisjon.
+
+In vitro-studier viser at levetiracetam påvirker intranevronale Ca 2+-nivåer ved delvis hemming av N-type
+Ca2+-strømmer og ved redusert frisetting av Ca2+ fra intranevronale lagre. I tillegg vil det delvis reversere
+reduksjonen i GABA- og glysinstyrte strømmer indusert av sink og β-karboliner. Videre er det vist i in vitro-
+studier at levetiracetam bindes til et spesifikt sted i hjernevev hos gnagere. Dette bindingsstedet er det
+synaptiske vesikkelproteinet 2A, som antas å være involvert i vesikkelfusjon og eksocytose av
+nevrotransmittere. I en audiogen epilepsimodell hos mus viser levetiracetam og beslektede analoger en
+rangordnet affinitet for binding til det synaptiske vesikkelproteinet 2A som korrelerer med potensen av deres
+antiepileptiske beskyttelse. Dette funnet antyder at interaksjonen mellom levetiracetam og det synaptiske
+vesikkelproteinet 2A ser ut til å medvirke til legemidlets antiepileptiske virkningsmekanisme.
+
+Farmakodynamiske effekter
+Levetiracetam induserer beskyttelse i en lang rekke dyremodeller med partielle og primære
+generaliserte anfall uten å ha en pro-konvulsiv virkning. Den primære metabolitten er inaktiv.
+Hos mennesker har virkningen ved tilstander med både partiell og generalisert epilepsi (epileptiform
+utladning/fotoparoksysmal respons) bekreftet den bredspektrede farmakologiske profilen til
+levetiracetam.
+
+Klinisk effekt og sikkerhet
+Tilleggsbehandling ved behandling av partiell epilepsi med eller uten sekundær generalisering hos voksne,
+ungdom og barn fra og med 4 år.
+
+Hos voksne ble effekten av levetiracetam vist i 3 dobbeltblinde, placebokontrollerte studier med 1000 mg,
+2000 mg eller 3000 mg/dag fordelt på 2 doser, med en behandlingsvarighet på opptil 18 uker. I en
+samleanalyse ble hyppigheten av anfall av partiell type per uke redusert med 50 % eller mer fra baseline
+ved stabil dosering (12/14 uker) hos 27,7 %, 31,6 % og 41,3 % av pasientene som fikk henholdsvis 1000,
+2000 eller 3000 mg levetiracetam, og hos 12,6 % av pasientene som fikk placebo.
+
+Pediatrisk populasjon
+
+Hos pediatriske pasienter (4–16 år) ble effekten av levetiracetam vist i en dobbeltblind, placebokontrollert
+studie med 198 pasienter, som hadde en behandlingsvarighet på 14 uker. I denne studien fikk pasientene
+levetiracetam som en fast dose på 60 mg/kg/dag (dosering to ganger daglig).
+Frekvensen av anfall av partiell type per uke ble redusert med 50 % eller mer fra baseline hos 44,6 % av
+pasientene som ble behandlet med levetiracetam, og 19,6 % av pasientene som fikk placebo. Med fortsatt
+langtidsbehandling var 11,4 % av pasientene uten anfall i minst 6 måneder, og 7,2 % var uten anfall i minst
+1 år.
+35 spedbarn yngre enn 1 år med partielle epileptiske anfall er eksponert i placebokontrollerte kliniske
+studier der bare 13 var under 6 måneder.
+
+Monoterapi ved behandling av pasienter fra og med 16 år med nylig diagnostisert partiell epilepsi med
+eller uten sekundær generalisering.
+Effekten av levetiracetam som monoterapi ble vist i en dobbeltblind, parallellgruppe-, ekvivalensstudie av
+en karbamazepinformulering med kontrollert frisetting (CR) hos 576 pasienter på 16 år eller eldre med
+nylig diagnostisert epilepsi. Pasientene måtte ha uprovoserte partielle anfall eller bare generaliserte tonisk-
+kloniske anfall. Pasientene ble randomisert til karbamazepin CR 400–1200 mg/dag eller levetiracetam
+1000–3000 mg/dag, og varigheten av behandlingen var på opp til 121 uker avhengig av responsen.
+Seks måneder uten anfall ble oppnådd hos 73,0 % av pasientene som ble behandlet med levetiracetam,
+og 72,8 % av pasientene som ble behandlet med karbamazepin CR. Den justerte absolutte forskjellen
+mellom behandlingene var 0,2 % (95 % KI: -7,8 8,2). Mer enn halvparten av pasientene var uten anfall
+etter 12 måneder (56,6 % og 58,5 % av pasientene for henholdsvis levetiracetam og karbamazepin CR).
+
+I en studie som gjenspeilet klinisk praksis, kunne samtidig bruk av antiepileptika seponeres hos et
+begrenset antall pasienter som responderte på tilleggsbehandling med levetiracetam (36 av 69 voksne
+pasienter).
+
+Tilleggsbehandling ved behandling av myoklone anfall hos voksne og ungdom fra og med 12 år med
+juvenil myoklon epilepsi.
+
+Effekten av levetiracetam ble vist i en dobbeltblind, placebokontrollert studie over 16 uker hos pasienter på
+12 år eller eldre med idiopatisk generalisert epilepsi med myoklone anfall i ulike syndromer. De fleste av
+pasientene hadde juvenil myoklon epilepsi.
+I denne studien ble levetiracetamdosen på 3000 mg/dag fordelt på 2 doser.
+Antall dager med myoklone anfall per uke ble redusert med minst 50 % hos 58,3 % av pasientene som ble
+behandlet med levetiracetam, og 23,3 % av pasientene som fikk placebo. Med fortsatt langvarig
+behandling var 28,6 % av pasientene uten myoklone anfall i minst 6 måneder, og 21,0 % var uten
+myoklone anfall i minst 1 år.
+
+Tilleggsbehandling ved behandling av primære generaliserte tonisk-kloniske anfall hos voksne og
+ungdom fra og med 12 år med idiopatisk generalisert epilepsi.
+
+Effekten av levetiracetam ble vist i en dobbeltblind placebokontrollert studie over 24 uker hos en
+pasientgruppe bestående av voksne, ungdom og et begrenset antall barn med idiopatisk generalisert
+epilepsi med primære generaliserte tonisk-kloniske anfall i ulike syndromer (juvenil myoklon epilepsi,
+juvenil absense-epilepsi, absense-epilepsi i barnealder, eller epilepsi med Grand Mal-anfall ved
+oppvåkning). I denne studien var dosen med levetiracetam 3000 mg/dag for voksne og ungdom eller
+60 mg/kg/dag for barn fordelt på 2 doser.
+Hyppigheten av primære generaliserte tonisk-kloniske anfall per uke ble redusert med 50 % eller mer
+hos 72,2 % av pasientene som ble behandlet med levetiracetam, og 45,2 % av pasientene som fikk
+placebo. Med fortsatt langvarig behandling var 47,4 % av pasientene uten tonisk-kloniske anfall i minst
+6 måneder, og 31,5 % var uten tonisk-kloniske anfall i minst 1 år.
+
+5.2.    Farmakokinetiske egenskaper
+
+Den farmakokinetiske profilen er basert på oral administrering. En enkelt dose på 1500 mg levetiracetam
+fortynnet i 100 ml kompatibelt fortynningsmiddel og infundert intravenøst i løpet av 15 minutter er
+bioekvivalent med oral administrering av 1500 mg levetiracetam gitt som tre 500 mg tabletter.
+
+Intravenøs administrering av doser på opp til 4000 mg fortynnet i 100 ml 9 mg/ml natriumklorid infundert
+i løpet av 15 minutter og doser på opp til 2500 mg fortynnet i 100 ml 9 mg/ml natriumklorid infundert i
+løpet av 5 minutter ble evaluert. Den farmakokinetiske profilen og sikkerhetsprofilen viste ingen
+sikkerhetsproblemer.
+
+Levetiracetam er en lett oppløselig og permeabel forbindelse. Den farmakokinetiske profilen er lineær med
+liten variasjon hos det enkelte individ og mellom individer. Det vises ingen endringer i clearance etter
+gjentatt dosering. Den tidsuavhengige farmakokinetiske profilen for levetiracetam ble også bekreftet ved
+intravenøs infusjon av 1500 mg i fire dager med dosering to ganger daglig.
+Det er ikke holdepunkter for noen relevant kjønns-, rase- eller døgnvariasjon. Den farmakokinetiske profilen
+er sammenlignbar hos friske frivillige forsøkspersoner og hos pasienter med epilepsi.
+
+Voksne og ungdom
+Distribusjon
+Maksimal plasmakonsentrasjon (Cmax) observert hos 17 personer etter én enkelt intravenøs dose på
+1500 mg infundert i løpet av 15 minutter var 51 ±19 µg/ml (aritmetisk gjennomsnitt ± standardavvik).
+
+Det foreligger ikke data om fordeling til vev hos mennesker.
+Verken levetiracetam eller hovedmetabolitten bindes signifikant til plasmaproteiner (< 10 %).
+Fordelingsvolumet for levetiracetam er ca. 0,5 til 0,7 l/kg, en verdi som ligger nær det totale volumet av
+kroppsvæske.
+
+Biotransformasjon
+Levetiracetam metaboliseres ikke i uttalt grad hos mennesker. Den viktigste metabolismeveien (24 % av
+dosen) er enzymatisk hydrolyse av acetamidgruppen. Dannelse av den primære metabolitten, ucb L057, er
+ikke avhengig av hepatiske cytokrom P450-isoformer. Hydrolyse av acetamidgruppen var målbar i en
+lang rekke vev, herunder blodceller. Metabolitten ucb L057 er farmakologisk inaktiv.
+
+To mindre metabolitter ble også identifisert. Én ble dannet ved hydroksylering av pyrrolidonringen
+(1,6 % av dosen), den andre gjennom åpning av pyrrolidonringen (0,9 % av dosen). Andre uidentifiserte
+komponenter utgjorde kun 0,6 % av dosen.
+
+Det ble ikke påvist enantiomer omdannelse In vivo verken av levetiracetam eller den primære
+metabolitten.
+
+In vitro er det vist at levetiracetam og dets primære metabolitt ikke hemmer de viktigste cytokrom P450-
+isoformene (CYP3A4, 2A6, 2C9, 2C19, 2D6, 2E1 og 1A2) i human lever, glukuronyltransferase
+(UGT1A1 og UGT1A6) og epoksidhydroksylaseaktivitet. Levetiracetam påvirker dessuten ikke in vitro-
+glukuronidering av valproinsyre.
+Levetiracetam hadde liten eller ingen effekt på CYP1A2, SULT1E1 eller UGT1A1 i humane hepatocytter i
+kultur. Levetiracetam forårsaket en svak induksjon av CYP2B6 og CYP3A4. In vitro-data og in vivo-data
+vedrørende interaksjoner med orale antikonseptiva, digoksin og warfarin tyder på at det ikke kan forventes
+noen signifikant enzyminduksjon in vivo. Interaksjon mellom Levetiracetam Stragen og andre legemidler
+er derfor ikke sannsynlig.
+
+Eliminasjon
+Halveringstiden i plasma for levetiracetam hos voksne er 7 ±1 timer og påvirkes verken av dose,
+administrasjonsmåte eller gjentatt dosering. Totalclearance var gjennomsnittlig 0,96 ml/min/kg.
+
+Utskillelse skjer primært via urin. Dette utgjør gjennomsnittlig 95 % av dosen (ca. 93 % av dosen ble utskilt
+innen 48 timer). Eliminasjon via fæces utgjør bare 0,3 % av dosen.
+Kumulativ urinveisutskillelse av levetiracetam og dets primære metabolitt i løpet av de første 48 timene
+utgjør henholdsvis 66 % og 24 % av dosen.
+Renal clearance av levetiracetam og ucb L057 er henholdsvis 0,6 og 4,2 ml/min/kg, noe som tyder på at
+levetiracetam utskilles ved glomerulær filtrasjon og etterfølgende tubulær reabsorpsjon, og at den primære
+metabolitten også skilles ut ved aktiv tubulær sekresjon i tillegg til glomerulær filtrasjon. Eliminasjonen av
+levetiracetam er korrelert til kreatininclearance.
+
+Eldre
+Hos eldre øker halveringstiden med ca. 40 % (10–11 timer). Dette er relatert til nedsatt nyrefunksjon i
+denne populasjonen (se pkt. 4.2).
+Nedsatt nyrefunksjon
+Tilsynelatende totalclearance av både levetiracetam og dets primære metabolitt er korrelert til
+kreatininclearance. Det anbefales derfor å justere den daglige vedlikeholdsdosen av Levetiracetam Stragen
+hos pasienter med moderat og alvorlig nedsatt nyrefunksjon basert på kreatininclearance (se pkt. 4.2).
+
+Hos voksne pasienter med anurisk terminal nyresykdom var halveringstiden mellom og innenfor
+dialyseperiodene henholdsvis ca. 25 og 3,1 timer.
+Den fraksjonelle elimineringen av levetiracetam var 51 % under et karakteristisk 4-timers dialyseforløp.
+
+Nedsatt leverfunksjon
+Hos personer med mild og moderat nedsatt leverfunksjon var det ingen relevant endring i clearance av
+levetiracetam. Hos de fleste personer med alvorlig nedsatt leverfunksjon var clearance av levetiracetam
+redusert med mer enn 50 % på grunn av samtidig nedsatt nyrefunksjon (se pkt. 4.2).
+
+Pediatrisk populasjon
+Barn (4–12 år)
+Farmakokinetikken hos barn er ikke undersøkt etter intravenøs administrering. Basert på de
+farmakokinetiske egenskapene til levetiracetam, farmakokinetikken hos voksne etter intravenøs
+administrering og farmakokinetikken hos barn etter oral administrasjon forventes det imidlertid at
+eksponeringen (AUC) for levetiracetam er identisk hos barn mellom 4 og 12 år etter intravenøs og oral
+administrering.
+
+Etter inntak av én enkelt oral dose (20 mg/kg) til barn med epilepsi (6–12 år) var halveringstiden for
+levetiracetam 6,0 timer. Tilsynelatende clearance justert for kroppsvekt var ca. 30 % høyere enn hos voksne
+med epilepsi.
+
+Etter gjentatt oral dosering (20–60 mg/kg/dag) til barn med epilepsi (4–12 år), ble levetiracetam raskt
+absorbert. Maksimale plasmakonsentrasjoner ble observert 0,5 til 1,0 timer etter dosering. Det ble sett at
+maksimal plasmakonsentrasjon og AUC økte lineært og proporsjonalt med dosen.
+Eliminasjonshalveringstiden var ca. 5 timer. Tilsynelatende totalclearance var 1,1 ml/min/kg.
+
+5.3.   Prekliniske sikkerhetsdata
+
+Prekliniske data indikerer ingen spesiell fare for mennesker basert på konvensjonelle studier av
+sikkerhetsfarmakologi, gentoksisitet og karsinogent potensial.
+Bivirkninger som ikke var observert i kliniske studier, men som er sett hos rotter og i mindre utstrekning
+hos mus ved eksponeringsnivåer som tilsvarer eksponeringsnivået hos mennesker og som var av mulig
+klinisk betydning,var leverendringer som tyder på en adaptiv respons så som vektøkning og centrilobulær
+hypertrofi, fettinfiltrasjon og forhøyede leverenzymer i plasma.
+
+Det ble ikke sett noen uønskede effekter på fertilitet eller reproduksjonsevne hos hann- eller hunnrotter
+ved doser på opp til 1800 mg/kg/dag (6 ganger maksimal anbefalt dose til mennesker, beregnet ut fra
+mg/m2 eller eksponering) hos foreldre eller F1-generasjonen.
+
+To studier av embryoføtal utvikling ble utført hos rotter med doser på 400, 1200 og 3600 mg/kg/dag. Ved
+3600 mg/kg/dag ble det i kun én av de to studiene sett en lett reduksjon i fostervekt som var forbundet med
+en marginal økning i skjelettendringer/mindre anomalier. Det var ingen effekt på embryomortalitet og ingen
+økt insidens av misdannelser. NOAEL (No Observed Adverse Effect Level) var 3600 mg/kg/dag for drektige
+hunnrotter (12 ganger maksimal anbefalt dose til mennesker, beregnet ut fra mg/m2) og 1200 mg/kg/dag for
+fostrene.
+
+Fire studier av embryoføtal utvikling ble utført hos kaniner med dosene 200, 600, 800, 1200 og
+1800 mg/kg/dag. Ved dosenivået 1800 mg/kg/dag ble det indusert en markert toksisitet hos mordyrene og
+en reduksjon i fostervekt som var forbundet med økt insidens av foster med kardiovaskulære
+anomalier/skjelettanomalier. NOAEL var < 200 mg/kg/dag for mordyrene og 200 mg/kg/dag for fostrene
+(tilsvarende maksimal anbefalt dose til mennesker, beregnet ut fra mg/m2).
+En studie av peri- og postnatal utvikling ble utført hos rotter med levetiracetamdoser på 70, 350 og
+1800 mg/kg/dag. NOAEL var ≥ 1800 mg/kg/dag for F0-hunnene og for overlevelse, vekst og utvikling for
+F1-avkommet opp til ablaktasjon (6 ganger maksimal anbefalt dose til mennesker, beregnet ut fra mg/m2).
+
+I neonatale og juvenile dyrestudier med rotter og hunder ble det ikke sett bivirkninger i noen av
+standardendepunktene for utvikling og modning ved doser opp til 1800 mg/kg/dag (6–17 ganger
+maksimal anbefalt dose til mennesker, beregnet ut fra mg/m2).
+
+
+
+6.      FARMASØYTISKE OPPLYSNINGER
+
+6.1.    Fortegnelse over hjelpestoffer
+
+Natriumacetattrihydrat
+Natriumklorid
+Iseddik
+Vann til injeksjonsvæsker
+
+6.2.    Uforlikeligheter
+
+Dette legemidlet må ikke blandes med andre legemidler.
+
+6.3.    Holdbarhet
+
+3 år.
+
+Fra et mikrobiologisk synspunkt skal produktet brukes umiddelbart. Dersom det ikke brukes umiddelbart,
+er brukeren ansvarlig for oppbevaringstid under bruk og oppbevaringsforhold før bruk. Dette er vanligvis
+ikke mer enn 24 timer ved 2–8 °C.
+
+6.4.    Oppbevaringsbetingelser
+
+Dette legemidlet krever ingen spesielle oppbevaringsbetingelser.
+
+6.5.    Emballasje (type og innhold)
+
+100 ml pose med to porter og aluminiumsovertrekk.
+
+Posen er fremstilt av flerlagsfilm av polyolefin og utstyrt med to administreringsslangeporter: en
+injeksjonsport og en avrivbar port med lukkehette.
+
+Slangeportene er fremstilt av PP/EVA-materiale.
+Pakningsstørrelse: 10 poser/eske
+
+6.6.    Spesielle forholdsregler for destruksjon og annen håndtering
+
+Dette legemidlet er bare til engangsbruk. Ikke anvendt oppløsning skal kastes.
+
+Ikke anvendt legemiddel eller avfall bør destrueres i samsvar med lokale krav.
+7.     INNEHAVER AV MARKEDSFØRINGSTILLATELSEN
+
+Stragen Nordic A/S
+Industrivej 24F,
+DK-3550 Slangerup
+Danmark
+
+
+8.     MARKEDSFØRINGSTILLATELSESNUMMER (NUMRE)
+
+5 mg/ml: 12-9264
+10 mg/ml: 12-9265
+
+
+9.     DATO FOR FØRSTE MARKEDSFØRINGSTILLATELSE / SISTE FORNYELSE
+
+Dato for første markedsføringstillatelse: 20. januar 2014
+Dato for siste fornyelse: 19. november 2018
+
+
+10.    OPPDATERINGSDATO
+
+17.11.2025
+

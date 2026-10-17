@@ -1,0 +1,407 @@
+{
+  "stoff": "levetiracetam",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-17T04:15:05.944175+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 17,
+    "hentet": 2,
+    "dokumenter": 1,
+    "mangler": [
+      {
+        "merkevare_id": "ID_12C8BD77-7DC7-4486-A2C7-64FE2F7FD2BC",
+        "varenavn": "Levetiracetam Accord",
+        "navn_form_styrke": "Levetiracetam Accord tab 500 mg",
+        "produsent": "Accord Healthcare S.L.U.",
+        "atc": "N03AX14",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_1A28367C-7F3B-45FF-A08C-AB589DDB3968",
+        "varenavn": "Levetiracetam desitin",
+        "navn_form_styrke": "Levetiracetam desitin gran 250 mg",
+        "produsent": "Desitin",
+        "atc": "N03AX14",
+        "legemiddelform": "Granulat i dosepose",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_1DB2F37A-AA09-452A-B2AA-13F5840C29DC",
+        "varenavn": "Levetiracetam Accord",
+        "navn_form_styrke": "Levetiracetam Accord tab 1000 mg",
+        "produsent": "Accord Healthcare S.L.U.",
+        "atc": "N03AX14",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_388C8C31-F335-4304-8228-20C97114BB8A",
+        "varenavn": "Keppra",
+        "navn_form_styrke": "Keppra tab 500 mg",
+        "produsent": "Abacus Medicine A/S",
+        "atc": "N03AX14",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_53B5F41B-28DA-4E43-82EE-4A3FA87E2803",
+        "varenavn": "Keppra",
+        "navn_form_styrke": "Keppra tab 1000 mg",
+        "produsent": "UCB Pharma S.A.",
+        "atc": "N03AX14",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_5B61AD5F-69BC-482D-8111-3E5024CAD692",
+        "varenavn": "Keppra",
+        "navn_form_styrke": "Keppra kons til inf oppl 100 mg/ml",
+        "produsent": "2care4 ApS",
+        "atc": "N03AX14",
+        "legemiddelform": "Konsentrat til infusjonsvæske, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_64A3C06E-A6A1-47C6-9329-1AD87BFB374F",
+        "varenavn": "Keppra",
+        "navn_form_styrke": "Keppra tab 1000 mg",
+        "produsent": "Abacus Medicine A/S",
+        "atc": "N03AX14",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_6B448F16-AC86-4B1D-9971-18797EEFBD30",
+        "varenavn": "Spritam",
+        "navn_form_styrke": "Spritam disperg tab 500 mg",
+        "produsent": "Aprecia",
+        "atc": "N03AX14",
+        "legemiddelform": "Dispergerbar tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_7004CF0F-B673-4E0E-B4C4-FD8B34098948",
+        "varenavn": "Spritam",
+        "navn_form_styrke": "Spritam disperg tab 250 mg",
+        "produsent": "Aprecia",
+        "atc": "N03AX14",
+        "legemiddelform": "Dispergerbar tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_78D88D6D-9EEA-4F08-A1FB-9F7EC812F902",
+        "varenavn": "Levetiracetam Accord",
+        "navn_form_styrke": "Levetiracetam Accord tab 250 mg",
+        "produsent": "Accord Healthcare S.L.U.",
+        "atc": "N03AX14",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_7B7088FE-61A4-4C5C-BED9-FE85C15EA9BE",
+        "varenavn": "Keppra",
+        "navn_form_styrke": "Keppra tab 250 mg",
+        "produsent": "UCB Pharma S.A.",
+        "atc": "N03AX14",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_904B5212-112A-40DE-B2AC-BAC87721AE7A",
+        "varenavn": "Keppra",
+        "navn_form_styrke": "Keppra tab 1000 mg",
+        "produsent": "Orifarm AS",
+        "atc": "N03AX14",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_923C4D6A-4543-49A3-AA9E-C5D4EAFCDA2F",
+        "varenavn": "Keppra",
+        "navn_form_styrke": "Keppra mikst oppl 100 mg/ml",
+        "produsent": "UCB Pharma S.A.",
+        "atc": "N03AX14",
+        "legemiddelform": "Mikstur, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_B55E6D45-04DC-44CC-9B19-EDFF42343105",
+        "varenavn": "Keppra",
+        "navn_form_styrke": "Keppra tab 500 mg",
+        "produsent": "UCB Pharma S.A.",
+        "atc": "N03AX14",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_FF899474-85D5-47FD-A71D-5A5694CCF058",
+        "varenavn": "Keppra",
+        "navn_form_styrke": "Keppra kons til inf oppl 100 mg/ml",
+        "produsent": "UCB Pharma S.A.",
+        "atc": "N03AX14",
+        "legemiddelform": "Konsentrat til infusjonsvæske, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 2 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 2,
+        "ikke_dmp": 0,
+        "uten_omtale": 15
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "15 av 17 preparater i FEST mangler en hentet preparatomtale fra DMP: 15 uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA). SPC-behovet er ikke dekket; se «dekning.mangler».",
+      "antall": {
+        "preparater": 17,
+        "hentet": 2,
+        "mangler": 15,
+        "dokumenter": 1
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/12-9265.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/12-9265.pdf",
+      "hentet_kl": "2026-10-17T10:16:52.632Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "363663",
+        "content-md5": "6PG67ZKV3ZpmozjDBQ1X+g==",
+        "last-modified": "Thu, 19 Mar 2026 20:48:37 GMT",
+        "etag": "0x8DE85F8E4EEAA48",
+        "date": "Sat, 17 Oct 2026 10:16:53 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_C036F9FC-5CEE-41E8-8C15-90BC6537187F",
+          "varenavn": "Levetiracetam Stragen",
+          "navn_form_styrke": "Levetiracetam Stragen inf, oppl 10 mg/ml",
+          "produsent": "Stragen Nordic A/S",
+          "atc": "N03AX14",
+          "legemiddelform": "Infusjonsvæske, oppløsning"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/12-9265.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (363663 byte).",
+          "antall": {
+            "bytes": 363663
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "025e9d8b7bf75e8079a3d90df3227fc2a6217e13100a6d1c424807c1a7a72a2e"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/12-9264.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/12-9264.pdf",
+      "hentet_kl": "2026-10-17T10:17:01.066Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "363663",
+        "content-md5": "6PG67ZKV3ZpmozjDBQ1X+g==",
+        "last-modified": "Thu, 19 Mar 2026 20:48:37 GMT",
+        "etag": "0x8DE85F8E4EBC482",
+        "date": "Sat, 17 Oct 2026 10:17:01 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_EE55585D-633E-4448-90D7-BB648095F2BC",
+          "varenavn": "Levetiracetam Stragen",
+          "navn_form_styrke": "Levetiracetam Stragen inf, oppl 5 mg/ml",
+          "produsent": "Stragen Nordic A/S",
+          "atc": "N03AX14",
+          "legemiddelform": "Infusjonsvæske, oppløsning"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/12-9264.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (363663 byte).",
+          "antall": {
+            "bytes": 363663
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "025e9d8b7bf75e8079a3d90df3227fc2a6217e13100a6d1c424807c1a7a72a2e"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "025e9d8b7bf75e8079a3d90df3227fc2a6217e13100a6d1c424807c1a7a72a2e",
+      "bytes": 363663,
+      "mappe": "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80",
+      "pdf": {
+        "sider": 17,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": "Keppra, INN-levetiracetam",
+        "laget": "Tue Jan  6 08:06:01 2026 UTC",
+        "endret": "Tue Jan  6 08:06:01 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/original.pdf",
+        "tekst": "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-001.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-002.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-003.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-004.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-005.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-006.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-007.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-008.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-009.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-010.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-011.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-012.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-013.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-014.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-015.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-016.txt",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/tekst/side-017.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-001.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-002.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-003.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-004.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-005.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-006.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-007.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-008.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-009.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-010.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-011.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-012.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-013.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-014.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-015.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-016.png",
+          "kuratorjobb/resultat/levetiracetam/spc/025e9d8b7bf75e80/sider/side-017.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 7,
+        "til": 11
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (17 sider).",
+          "antall": {
+            "sider": 17
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 37205
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 7."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 17
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

@@ -1,18 +1,55 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/levetiracetam-0038",
     "foresporsel_commit": "5e06b095a1ba70b102a7dfb727f14c17739c6fc2",
     "foresporsel_sha256": "7fbbb9be878049cfaa5c38684bef2bc4422d3bdd0fd5ff689075fb4e22bc5af0",
     "kode_commit": "84e1152ae2d549c754a29488f7f4b61fd1dcce47",
     "kjoring": "https://github.com/peohol/far/actions/runs/39024253767",
-    "startet_kl": "2026-10-17T10:16:42.381Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-17T10:16:44.433Z",
+    "ferdig_kl": "2026-10-17T10:17:01.917Z"
   },
-  "foresporsel": null,
-  "referanse": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "levetiracetam"
+    ],
+    "oppgaver": [
+      "funksjonstest",
+      "spc"
+    ],
+    "referanse": "levetiracetam-0038-1016"
+  },
+  "referanse": "levetiracetam-0038-1016",
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 626
+    }
+  ],
+  "stoffer": {
+    "levetiracetam": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/levetiracetam/funksjonstest.json"
+        },
+        "spc": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/levetiracetam/spc.json"
+        }
+      }
+    }
+  }
 }

@@ -1,0 +1,54 @@
+forverres.
+Mangel på effekt eller forverring av anfall har for eksempel blitt rapportert hos pasienter med epilepsi
+som er forbundet med mutasjoner i SCN8A (alfa-subenhet 8 i spenningsstyrte natriumkanaler).
+
+Forlengelse av QT-intervall i elektrokardiogram
+Sjeldne tilfeller av forlenget QT-intervall i EKG er observert under overvåking etter markedsføring.
+Levetiracetam bør brukes med forsiktighet hos pasienter med forlenget QTc-intervall, hos pasienter som
+samtidig behandles med legemidler som påvirker QTc-intervallet og hos pasienter med relevant eksisterende
+hjertesykdom eller elektrolyttforstyrrelser.
+
+Pediatrisk populasjon
+Tilgjengelige data for barn viser ingen påvirkning på vekst og pubertet. Langsiktige effekter på læring,
+intelligens, vekst, endokrin funksjon, pubertet og fertilitet ved bruk hos barn er imidlertid ukjent.
+
+Hjelpestoffer:
+Levetiracetam Stragen 5 mg/ml inneholder 3,50 mg natrium per ml. Dette tilsvarer 17,5 % av WHOs
+anbefalte maksimale daglige inntak av natrium på 2 g for en voksen person.
+
+Levetiracetam Stragen 10 mg/ml inneholder 3,23 mg natrium per ml. Dette tilsvarer 16,15 % av WHOs
+anbefalte maksimale daglige inntak av natrium på 2 g for en voksen person.
+
+
+4.5.   Interaksjon med andre legemidler og andre former for interaksjon
+
+Antiepileptika
+Data fra kliniske studier med voksne før markedsføring tyder på at levetiracetam ikke påvirker
+serumkonsentrasjonen av andre antiepileptika (fenytoin, karbamazepin, valproatsyre, fenobarbital,
+lamotrigin, gabapentin og primidon), og at disse antiepileptikaene ikke påvirker levetiracetams
+farmakokinetikk.
+
+Som hos voksne er det ingen klinisk signifikante legemiddelinteraksjoner hos barn som får opptil
+60 mg/kg/dag av levetiracetam.
+En retrospektiv vurdering av farmakokinetiske interaksjoner hos barn og ungdom med epilepsi (4–17 år)
+bekreftet at tilleggsbehandling med oral administrering av levetiracetam ikke påvirket steady state-
+serumkonsentrasjonene av samtidig administrert karbamazepin og valproat. Data antydet imidlertid en
+økning av levetiracetamclearance på 20 % hos barn som tar enzyminduserende antiepileptika. Dosejustering
+er ikke nødvendig.
+
+Probenecid
+Det er vist at probenecid (500 mg fire ganger daglig), en forbindelse som blokkerer den tubulære
+sekresjonen i nyrene, hemmer renal utskillelse av den primære metabolitten, men ikke av levetiracetam.
+Konsentrasjonen av denne metabolitten holder seg likevel lav.
+
+Metotreksat
+Det er rapportert at samtidig administrering av levetiracetam og metotreksat reduserer clearance av
+metotreksat, noe som fører til økt/forlenget konsentrasjon av metotreksat i blodet, til potensielt toksiske
+nivåer. Blodkonsentrasjonene av metotreksat og levetiracetam bør overvåkes nøye hos pasienter som får
+samtidig behandling med disse to legemidlene.
+
+Orale antikonseptiva og andre farmakokinetiske interaksjoner
+Levetiracetam 1000 mg daglig påvirket ikke farmakokinetikken til orale antikonseptiva (etinyløstradiol og
+levonorgestrel). Endokrine parametere (luteiniserende hormon og progesteron) ble ikke endret.
+Levetiracetam 2000 mg daglig påvirket ikke farmakokinetikken til digoksin og warfarin. Protrombintider
+ble ikke endret. Samtidig inntak av digoksin, orale antikonseptiva og warfarin påvirket ikke levetiracetams

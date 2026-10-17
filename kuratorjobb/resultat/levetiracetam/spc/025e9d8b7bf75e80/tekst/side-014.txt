@@ -1,0 +1,54 @@
+gjentatt dosering. Den tidsuavhengige farmakokinetiske profilen for levetiracetam ble også bekreftet ved
+intravenøs infusjon av 1500 mg i fire dager med dosering to ganger daglig.
+Det er ikke holdepunkter for noen relevant kjønns-, rase- eller døgnvariasjon. Den farmakokinetiske profilen
+er sammenlignbar hos friske frivillige forsøkspersoner og hos pasienter med epilepsi.
+
+Voksne og ungdom
+Distribusjon
+Maksimal plasmakonsentrasjon (Cmax) observert hos 17 personer etter én enkelt intravenøs dose på
+1500 mg infundert i løpet av 15 minutter var 51 ±19 µg/ml (aritmetisk gjennomsnitt ± standardavvik).
+
+Det foreligger ikke data om fordeling til vev hos mennesker.
+Verken levetiracetam eller hovedmetabolitten bindes signifikant til plasmaproteiner (< 10 %).
+Fordelingsvolumet for levetiracetam er ca. 0,5 til 0,7 l/kg, en verdi som ligger nær det totale volumet av
+kroppsvæske.
+
+Biotransformasjon
+Levetiracetam metaboliseres ikke i uttalt grad hos mennesker. Den viktigste metabolismeveien (24 % av
+dosen) er enzymatisk hydrolyse av acetamidgruppen. Dannelse av den primære metabolitten, ucb L057, er
+ikke avhengig av hepatiske cytokrom P450-isoformer. Hydrolyse av acetamidgruppen var målbar i en
+lang rekke vev, herunder blodceller. Metabolitten ucb L057 er farmakologisk inaktiv.
+
+To mindre metabolitter ble også identifisert. Én ble dannet ved hydroksylering av pyrrolidonringen
+(1,6 % av dosen), den andre gjennom åpning av pyrrolidonringen (0,9 % av dosen). Andre uidentifiserte
+komponenter utgjorde kun 0,6 % av dosen.
+
+Det ble ikke påvist enantiomer omdannelse In vivo verken av levetiracetam eller den primære
+metabolitten.
+
+In vitro er det vist at levetiracetam og dets primære metabolitt ikke hemmer de viktigste cytokrom P450-
+isoformene (CYP3A4, 2A6, 2C9, 2C19, 2D6, 2E1 og 1A2) i human lever, glukuronyltransferase
+(UGT1A1 og UGT1A6) og epoksidhydroksylaseaktivitet. Levetiracetam påvirker dessuten ikke in vitro-
+glukuronidering av valproinsyre.
+Levetiracetam hadde liten eller ingen effekt på CYP1A2, SULT1E1 eller UGT1A1 i humane hepatocytter i
+kultur. Levetiracetam forårsaket en svak induksjon av CYP2B6 og CYP3A4. In vitro-data og in vivo-data
+vedrørende interaksjoner med orale antikonseptiva, digoksin og warfarin tyder på at det ikke kan forventes
+noen signifikant enzyminduksjon in vivo. Interaksjon mellom Levetiracetam Stragen og andre legemidler
+er derfor ikke sannsynlig.
+
+Eliminasjon
+Halveringstiden i plasma for levetiracetam hos voksne er 7 ±1 timer og påvirkes verken av dose,
+administrasjonsmåte eller gjentatt dosering. Totalclearance var gjennomsnittlig 0,96 ml/min/kg.
+
+Utskillelse skjer primært via urin. Dette utgjør gjennomsnittlig 95 % av dosen (ca. 93 % av dosen ble utskilt
+innen 48 timer). Eliminasjon via fæces utgjør bare 0,3 % av dosen.
+Kumulativ urinveisutskillelse av levetiracetam og dets primære metabolitt i løpet av de første 48 timene
+utgjør henholdsvis 66 % og 24 % av dosen.
+Renal clearance av levetiracetam og ucb L057 er henholdsvis 0,6 og 4,2 ml/min/kg, noe som tyder på at
+levetiracetam utskilles ved glomerulær filtrasjon og etterfølgende tubulær reabsorpsjon, og at den primære
+metabolitten også skilles ut ved aktiv tubulær sekresjon i tillegg til glomerulær filtrasjon. Eliminasjonen av
+levetiracetam er korrelert til kreatininclearance.
+
+Eldre
+Hos eldre øker halveringstiden med ca. 40 % (10–11 timer). Dette er relatert til nedsatt nyrefunksjon i
+denne populasjonen (se pkt. 4.2).

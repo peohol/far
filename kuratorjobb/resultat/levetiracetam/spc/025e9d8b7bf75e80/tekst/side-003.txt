@@ -1,0 +1,50 @@
+Dosejusteringer for voksne og ungdom som veier mer enn 50 kg, og som har nedsatt nyrefunksjon:
+Gruppe                           Kreatininclearance
+                                                              Dose og hyppighet
+                                 (ml/min/1,73 m2)
+Normal                           ≥ 80                         500–1500 mg to ganger daglig
+
+Mild                                 50-79                           500–1000 mg to ganger daglig
+
+Moderat                              30-49                           250–750 mg to ganger daglig
+                                     < 30
+Alvorlig                                                             250–500 mg to ganger daglig
+Pasienter med terminal
+nyresykdom som gjennomgår          -                            500–1000 mg én gang daglig (2)
+         (1)
+dialyse
+(1)
+    En støtdose på 750 mg anbefales ved første behandlingsdag med levetiracetam.
+(2)
+    Etter dialyse anbefales 250–500 mg som supplerende dose.
+
+Hos barn med nedsatt nyrefunksjon justeres levetiracetamdosen på grunnlag av nyrefunksjonen, siden
+clearance av levetiracetam er knyttet til nyrefunksjonen. Denne anbefalingen er basert på en studie av
+voksne pasienter med nedsatt nyrefunksjon.
+
+For yngre ungdom og barn kan CLcr i ml/min/1,73 m2 beregnes ut fra serumkreatinin (mg/dl) ved å bruke
+følgende formel (Schwartz-formelen):
+
+                           Høyde (cm) x ks
+CLcr (ml/min/1,73 m2) = ------------------------------------
+                           Serumkreatinin (mg/dl)
+
+ks = 0,55 for barn opp til 13 år og for jenter i ungdomsalder; ks = 0,7 for gutter i ungdomsalder.
+
+Dosejustering for barn og ungdom som veier mindre enn 50 kg, og som har nedsatt nyrefunksjon:
+                                      Kreatinin-        Dose og hyppighet
+            Gruppe                    clearance         Barn fra 4 år og ungdom som veier mindre enn
+                                      (ml/min/1,73 m2) 50 kg
+5 mg/ml     Normal                    ≥ 80              50 kg mg/kg (2–6 ml/kg) to ganger daglig
+                                                        10–30
+10 mg/ml                                                10–30 mg/kg (1–3 ml/kg) to ganger daglig
+15 mg/ml                                                10–30 mg/kg (0,66–2 ml/kg) to ganger daglig
+5 mg/ml     Mild                      50-79             10–20 mg/kg (2–4 ml/kg) to ganger daglig
+10 mg/ml                                                10–20 mg/kg (1–2 ml/kg) to ganger daglig
+15 mg/ml                                                10–20 mg/kg (0,66–1,33 ml/kg) to ganger daglig
+5 mg/ml     Moderat                   30-49             5–15 mg/kg (1–3 ml/kg) to ganger daglig
+10 mg/ml                                                5–15 mg/kg (0,5–1,5 ml/kg) to ganger daglig
+15 mg/ml                                                5–15 mg/kg (0,33–1 ml/kg) to ganger daglig
+5 mg/ml     Alvorlig                  < 30              5–10 mg/kg (1–2 ml/kg) to ganger daglig
+10 mg/ml                                                5–10 mg/kg (0,5–1 ml/kg) to ganger daglig
+15 mg/ml                                                       5–10 mg/kg (0,33–0,66 ml/kg) to ganger daglig

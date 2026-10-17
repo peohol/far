@@ -1,0 +1,48 @@
+Sammendrag av sikkerhetsprofilen
+Bivirkningsprofilen som er presentert nedenfor, er basert på analysen av sammenslåtte data fra
+placebokontrollerte kliniske studier for alle indikasjoner som er undersøkt, med totalt 3416 pasienter som
+ble behandlet med levetiracetam. Disse dataene er supplert med data fra bruk av levetiracetam i
+tilsvarende åpne, forlengede studier, i tillegg til erfaring etter markedsføring. De hyppigst rapporterte
+bivirkningene var nasofaryngitt, somnolens, hodepine, fatigasjon og svimmelhet. Sikkerhetsprofilen for
+levetiracetam er generelt lik for ulike aldersgrupper (voksne og pediatriske pasienter) og for de ulike
+godkjente epilepsiindikasjonene. Siden det er begrenset informasjon om intravenøs bruk av
+levetiracetam, og siden orale og intravenøse formuleringer er bioekvivalente, er sikkerhetsinformasjonen
+for intravenøs bruk av levetiracetam basert på oral bruk av levetiracetam.
+
+Bivirkninger i tabellform
+Bivirkninger rapportert i kliniske studier (voksne, ungdom, barn og spedbarn > 1 måned) og fra erfaring
+etter markedsføring er vist i tabellen nedenfor, etter organklassesystem og frekvens. Bivirkningene er
+presentert etter synkende alvorlighetsgrad, og frekvensen er definert som følger: svært vanlige (≥ 1/10),
+vanlige (≥ 1/100 til < 1/10), mindre vanlige (≥ 1/1000 til < 1/100), sjeldne (≥ 1/10 000 til < 1/1000) og
+svært sjeldne (< 1/10 000).
+
+                      Hyppighetskategori
+MedDRA SOC            Svært vanlige Vanlige             Mindre vanlige     Sjeldne           Svært sjeldne
+
+
+
+
+Infeksiøse og         Nasofaryngitt                                        Infeksjon
+parasittære
+sykdommer
+                                                        Trombocytopeni     Pancytopeni
+Sykdommer i blod                                        , leukopeni        nøytropeni
+og lymfatiske                                                              Agranulocytos
+organer                                                                    e
+
+                                                                           Legemiddelrea
+                                                                           ksjon
+                                                                           med eosinofili
+                                                                           og
+                                                                           systemiske
+Forstyrrelser i                                                            symptomer
+immunsystemet                                                              (DRESS)(1)
+                                                                           Overfølsomhet
+                                                                           (inkludert
+                                                                           angioødem og
+                                                                           anafylaksi)
+
+                                        Anoreksi        Vekttap,           Hyponatremi
+Stoffskifte- og                                         vektøkning
+ernæringsbetingede
+sykdommer

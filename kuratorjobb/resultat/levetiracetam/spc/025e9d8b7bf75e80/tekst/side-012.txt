@@ -1,0 +1,54 @@
+5.     FARMAKOLOGISKE EGENSKAPER
+
+5.1.   Farmakodynamiske egenskaper
+
+Farmakodynamisk gruppe: antiepileptika, diverse antiepileptika, ATC-kode: N03AX14.
+
+Virkestoffet, levetiracetam, er et pyrrolidonderivat (S-enantiomer av α-etyl-2-okso-1-
+pyrrolidinacetamid) og er kjemisk sett ikke beslektet med virkestoffer med antiepileptisk effekt.
+
+Virkningsmekanisme
+Virkningsmekanismen for levetiracetam er ennå ikke helt klarlagt. In vitro- og in vivo-studier tyder
+på at levetiracetam ikke endrer cellens basale egenskaper og normale nevrotransmisjon.
+
+In vitro-studier viser at levetiracetam påvirker intranevronale Ca 2+-nivåer ved delvis hemming av N-type
+Ca2+-strømmer og ved redusert frisetting av Ca2+ fra intranevronale lagre. I tillegg vil det delvis reversere
+reduksjonen i GABA- og glysinstyrte strømmer indusert av sink og β-karboliner. Videre er det vist i in vitro-
+studier at levetiracetam bindes til et spesifikt sted i hjernevev hos gnagere. Dette bindingsstedet er det
+synaptiske vesikkelproteinet 2A, som antas å være involvert i vesikkelfusjon og eksocytose av
+nevrotransmittere. I en audiogen epilepsimodell hos mus viser levetiracetam og beslektede analoger en
+rangordnet affinitet for binding til det synaptiske vesikkelproteinet 2A som korrelerer med potensen av deres
+antiepileptiske beskyttelse. Dette funnet antyder at interaksjonen mellom levetiracetam og det synaptiske
+vesikkelproteinet 2A ser ut til å medvirke til legemidlets antiepileptiske virkningsmekanisme.
+
+Farmakodynamiske effekter
+Levetiracetam induserer beskyttelse i en lang rekke dyremodeller med partielle og primære
+generaliserte anfall uten å ha en pro-konvulsiv virkning. Den primære metabolitten er inaktiv.
+Hos mennesker har virkningen ved tilstander med både partiell og generalisert epilepsi (epileptiform
+utladning/fotoparoksysmal respons) bekreftet den bredspektrede farmakologiske profilen til
+levetiracetam.
+
+Klinisk effekt og sikkerhet
+Tilleggsbehandling ved behandling av partiell epilepsi med eller uten sekundær generalisering hos voksne,
+ungdom og barn fra og med 4 år.
+
+Hos voksne ble effekten av levetiracetam vist i 3 dobbeltblinde, placebokontrollerte studier med 1000 mg,
+2000 mg eller 3000 mg/dag fordelt på 2 doser, med en behandlingsvarighet på opptil 18 uker. I en
+samleanalyse ble hyppigheten av anfall av partiell type per uke redusert med 50 % eller mer fra baseline
+ved stabil dosering (12/14 uker) hos 27,7 %, 31,6 % og 41,3 % av pasientene som fikk henholdsvis 1000,
+2000 eller 3000 mg levetiracetam, og hos 12,6 % av pasientene som fikk placebo.
+
+Pediatrisk populasjon
+
+Hos pediatriske pasienter (4–16 år) ble effekten av levetiracetam vist i en dobbeltblind, placebokontrollert
+studie med 198 pasienter, som hadde en behandlingsvarighet på 14 uker. I denne studien fikk pasientene
+levetiracetam som en fast dose på 60 mg/kg/dag (dosering to ganger daglig).
+Frekvensen av anfall av partiell type per uke ble redusert med 50 % eller mer fra baseline hos 44,6 % av
+pasientene som ble behandlet med levetiracetam, og 19,6 % av pasientene som fikk placebo. Med fortsatt
+langtidsbehandling var 11,4 % av pasientene uten anfall i minst 6 måneder, og 7,2 % var uten anfall i minst
+1 år.
+35 spedbarn yngre enn 1 år med partielle epileptiske anfall er eksponert i placebokontrollerte kliniske
+studier der bare 13 var under 6 måneder.
+
+Monoterapi ved behandling av pasienter fra og med 16 år med nylig diagnostisert partiell epilepsi med
+eller uten sekundær generalisering.

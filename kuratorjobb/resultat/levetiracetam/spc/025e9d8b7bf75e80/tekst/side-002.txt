@@ -1,0 +1,53 @@
+Behandling med Levetiracetam Stragen kan startes med enten intravenøs eller oral administrering.
+Overgang mellom oral og intravenøs administrering kan gjøres direkte uten titrering. Den totale daglige
+dosen og administreringshyppigheten bør vedlikeholdes.
+
+Partielle epileptiske anfall
+Den anbefalte doseringen for monoterapi (fra og med 16 år) og tilleggsbehandling er den samme, som
+skissert nedenfor.
+
+Alle indikasjoner
+
+Voksne (≥ 18 år) og ungdom (12 til 17 år) som veier 50 kg eller mer
+Den terapeutiske startdosen er 500 mg to ganger daglig. Denne dosen kan gis fra første
+behandlingsdag. En lavere startdose på 250 mg to ganger daglig kan imidlertid gis basert på legens
+vurdering av reduksjon av anfall kontra potensielle bivirkninger. Denne kan økes til 500 mg to
+ganger daglig etter to uker.
+Avhengig av klinisk effekt og tolerabilitet kan den daglige dosen økes til 1500 mg to ganger daglig.
+Endringer av dosen kan foretas ved økning eller reduksjon med 250 mg eller 500 mg to ganger daglig hver
+andre til fjerde uke.
+
+Ungdom (12 til 17 år) som veier under 50 kg og barn fra og med 4 år
+Legen bør forskrive den mest hensiktsmessige legemiddelformen, pakningen og styrken i henhold til vekt,
+alder og dose. Se avsnittet Pediatrisk populasjon for doseringssjusteringer basert på vekt.
+
+Behandlingsvarighet
+Det er ingen erfaring med intravenøs administrering av levetiracetam i mer enn 4 dager.
+
+Seponering
+Dersom behandlingen med levetiracetam må seponeres, anbefales en gradvis nedtrapping (f.eks.: Hos
+voksne og ungdom som veier mer enn 50 kg: reduksjon med 500 mg to ganger daglig hver andre til fjerde
+uke. Hos barn og ungdom som veier mindre enn 50 kg: dosereduksjon bør ikke overskride 10 mg/kg to
+ganger daglig annenhver uke).
+
+Spesielle populasjoner
+Eldre (65 år og eldre)
+Justering av dosen anbefales hos eldre med nedsatt nyrefunksjon (se «Nedsatt nyrefunksjon» nedenfor).
+
+Nedsatt nyrefunksjon
+Døgndosen tilpasses individuelt til nyrefunksjonen.
+
+For voksne pasienter henvises det til tabellen nedenfor, og dosen justeres som angitt. For å bruke denne
+doseringstabellen er det nødvendig å beregne pasientens kreatininclearance (CLcr) i ml/min. For voksne og
+ungdom som veier 50 kg eller mer, kan CLcr i ml/min beregnes ut fra serumkreatinin (mg/dl)
+ved hjelp av følgende formel:
+
+                [140 – alder (år)] x vekt (kg)
+CLcr (ml/min) = ----------------------------------------- (x 0,85 for kvinner)
+                72 x serumkreatinin (mg/dl)
+
+CLcr justeres deretter i henhold til kroppsoverflate (BSA) på følgende måte:
+
+                             CLcr (ml/min)
+CLcr (ml/min/1,73 m2) = ---------------------------- x 1,73
+                              Individets BSA (m2)
