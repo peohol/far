@@ -1,10 +1,44 @@
 {
   "versjon": 1,
-  "foresporsel_id": "blokkert-okskarbazepin-0039-b",
-  "foresporsel_sha256": "9ce42da5627d452e3b89677dae98153acd98125532404ee15b5a22ce0cc87b63",
-  "handling": "blokkert",
+  "foresporsel_id": "reserver-202610171453",
+  "foresporsel_sha256": "4b2f7d5f6d455256b6c6a3fc971e8a23bde906f97825585a1b65dd79b13d99ee",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "okskarbazepin er blokkert til et menneske har sett på det.",
-  "behandlet_kl": "2026-10-17T14:52:49.441Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39042608135"
+  "melding": "sertindol er reservert til 2026-10-17T17:53:59.439Z.",
+  "behandlet_kl": "2026-10-17T14:53:59.439Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39042684387",
+  "oppgave": {
+    "oppgave": "sertindol-0040",
+    "stoff": "sertindol",
+    "navn": "Sertindol",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-17T17:53:59.439Z",
+    "jobbgren": "kuratorjobb/sertindol-0040",
+    "kurateringsgren": "kuratering/sertindol-0040",
+    "pr": null,
+    "gren": null,
+    "gjenoppta": null,
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-17T14:23:30.777Z",
+      "side": true,
+      "elementer": 6,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 4,
+      "referanser": 2,
+      "elementer_uten_kilde": 1
+    },
+    "prioritet": {
+      "poeng": 447.6,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 2 referanser."
+      ]
+    }
+  }
 }
