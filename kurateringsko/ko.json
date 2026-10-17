@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T04:03:00.158Z",
+  "oppdatert_kl": "2026-10-17T04:33:48.326Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 19,
   "stoffer": {
@@ -453,7 +453,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, klar); den må avsluttes først.",
-          "kl": "2026-10-17T04:03:00.158Z",
+          "kl": "2026-10-17T04:33:48.326Z",
           "kilde": "system"
         }
       ],
@@ -1022,7 +1022,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, klar); den må avsluttes først.",
-          "kl": "2026-10-17T04:03:00.158Z",
+          "kl": "2026-10-17T04:33:48.326Z",
           "kilde": "system"
         }
       ],
@@ -5243,7 +5243,7 @@
           "kjoring": "https://github.com/peohol/far/actions/runs/39001075603"
         }
       },
-      "besvart_commit": "58b9d21bbc6d652d5ecece965470ef0f5c8961a4",
+      "besvart_commit": "6cd7292c3d48f09bc5b937ed663c9b4d6aa304aa",
       "sist_brukt_kl": "2026-10-17T04:03:00.158Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
