@@ -1,0 +1,18 @@
+{
+  "versjon": 1,
+  "status": "kjorer",
+  "jobb": {
+    "gren": "kuratorjobb/fenytoin-0037",
+    "foresporsel_commit": "012bf3ccde63959bf651b274ec6d82d4521e88c2",
+    "foresporsel_sha256": "32ef156cb27f05334b89473a8696c8fcc6660a2a1d12d0113d11a75654465c7c",
+    "kode_commit": "159c33d2817f3f7a4ddc0149df17f5205287d6c0",
+    "kjoring": "https://github.com/peohol/far/actions/runs/39015294354",
+    "startet_kl": "2026-10-17T07:53:48.725Z",
+    "ferdig_kl": null
+  },
+  "foresporsel": null,
+  "referanse": null,
+  "feil": [],
+  "bruker": [],
+  "stoffer": {}
+}
