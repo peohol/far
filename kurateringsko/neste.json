@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-17T20:40:34.514Z",
+  "oppdatert_kl": "2026-10-17T20:41:19.470Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "antall": {
     "klar": 79,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 10,
+    "venter_godkjenning": 11,
     "sammenslatt": 0,
     "publisert": 4,
     "blokkert": 5,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "sertindol",
-      "oppgave": "sertindol-0052",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-17T23:40:34.514Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "neste": [
     {
       "stoff": "lamotrigin",
@@ -209,6 +201,12 @@
     {
       "stoff": "levetiracetam",
       "gren": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    },
+    {
+      "stoff": "sertindol",
+      "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     },
