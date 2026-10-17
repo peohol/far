@@ -4,13 +4,15 @@ import { useJevnligSjekk } from '../../hooks/useJevnligSjekk'
 import type { Kurateringsklient } from '../../kuratering/klient'
 import { AGENTTILSTANDSNAVN, agenttilstand, type Aktivitet, type Grenstatusdata } from '../../kuratering/modell'
 import { Merke, type Merketone } from '../Merke'
+import { detaljkortRundt } from '../seksjoner/Seksjon'
+import { TILPASSET, useSeksjonsstyring } from '../seksjoner/Seksjonsstyring'
 import { elementAnker, panelAnker } from '../stoffside/Paneler'
 
 /** Hvor ofte statusen spørres etter når agenten følges, og ellers. */
 export const FOLG_HVER = 5_000
 export const STATUS_HVER = 30_000
 
-/** Hvor lenge et kort som nettopp er endret, er markert. */
+/** Hvor lenge et sted som nettopp er endret, er markert. */
 export const NYLIG_I = 4_000
 const NYLIG = 'utgave--nylig'
 
@@ -46,24 +48,189 @@ export function useGrenstatus(klient: Kurateringsklient, gren: string, hver: num
   return { status, brutt }
 }
 
-/** Kortet, eller seksjonen, agenten sier den arbeider med, når det står på siden. */
-function maalet(aktivitet: Aktivitet): HTMLElement | null {
-  const kort = aktivitet.objekt ? document.getElementById(elementAnker(aktivitet.objekt)) : null
-  if (kort && kort.offsetParent !== null) return kort
-  return aktivitet.seksjon ? document.getElementById(panelAnker(aktivitet.seksjon)) : kort
+/** Et sted på siden: et kort, seksjonen det står i, eller bare en seksjon. */
+export interface Sted {
+  kort?: string
+  seksjon?: string
+}
+
+/** Stedene som er endret fra én utgave av siden til den neste; et nytt objekt for hver ny utgave. */
+export interface Endringene {
+  steder: Sted[]
+}
+
+/** Seksjonen bivirkningene står i; de er ikke kort, men tabeller (se `sidesammenligning`). */
+const BIVIRKNINGSSEKSJON = 'bivirkninger'
+/** Kildene til en seksjon er et felt på siden, `kilder-<seksjon>`. */
+const SEKSJONSKILDER = 'side:kilder-'
+
+/**
+ * Stedene som er endret fra én utgave av siden til den neste og fortsatt står
+ * på siden: kortene, med seksjonen de står i, og seksjonene der bivirkningene
+ * eller kildene er endret.
+ */
+export function endredeSteder(for_: Sideutgave, etter: Sideutgave): Sted[] {
+  const kortene = new Map(sidensKort(etter.side).map((e) => [e.id, e.innhold.panel]))
+  const steder = new Map<string, Sted>()
+  for (const e of sammenlignSider(for_, etter)) {
+    if (!e.endret) continue
+    const id = e.nokkel.slice(0, e.nokkel.indexOf(':'))
+    const seksjon = kortene.get(id)
+    if (seksjon !== undefined) steder.set(id, { kort: id, seksjon })
+    else if (id === 'biv') steder.set(id, { seksjon: BIVIRKNINGSSEKSJON })
+    else if (e.nokkel.startsWith(SEKSJONSKILDER)) steder.set(e.nokkel, { seksjon: e.nokkel.slice(SEKSJONSKILDER.length) })
+  }
+  return [...steder.values()]
 }
 
 /**
- * «Følg agenten»: ruller til det agenten arbeider med hver gang den melder
- * noe nytt, og når siden er lest på nytt. Ruller man selv (hjul, berøring
- * eller tastene), slås følgingen av.
+ * Det som er endret i den siste utgaven som vises, regnet ut i samme tegning
+ * som utgaven kommer, så ingenting merkes eller åpnes etter den forrige.
  */
-export function useFolging(pa: boolean, aktivitet: Aktivitet | undefined, revisjon: number, onAv: () => void) {
-  useEffect(() => {
-    if (!pa || !aktivitet) return
-    maalet(aktivitet)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }, [pa, aktivitet?.kl, aktivitet?.objekt, aktivitet?.seksjon, revisjon]) // eslint-disable-line react-hooks/exhaustive-deps
+export function useEndringene(visning: Sideutgave | null): Endringene | null {
+  const [spor, setSpor] = useState<{
+    visning: Sideutgave | null
+    endringene: Endringene | null
+  }>({ visning, endringene: null })
+  if (visning && visning !== spor.visning) {
+    const endringene = spor.visning ? { steder: endredeSteder(spor.visning, visning) } : null
+    setSpor({ visning, endringene })
+    return endringene
+  }
+  return spor.endringene
+}
 
+/** Elementet stedet er på siden: kortet når det står der, ellers seksjonen. */
+function elementFor(sted: Sted): HTMLElement | null {
+  const kort = sted.kort ? document.getElementById(elementAnker(sted.kort)) : null
+  return kort ?? (sted.seksjon ? document.getElementById(panelAnker(sted.seksjon)) : null)
+}
+
+/** Flaten som merkes og rulles fram: detaljkortet elementet står i, eller elementet selv. */
+function flatenFor(element: HTMLElement): HTMLElement {
+  return detaljkortRundt(element) ?? element
+}
+
+/** Hvor lenge det ventes på at et sted skal tegnes — innholdet hentes når utgaven skifter. */
+const VENT_I = 10_000
+
+/**
+ * Kjører `gjor` med elementet til stedet så snart det står på siden: straks,
+ * eller når innholdet er tegnet, innen `VENT_I`. Gir tilbake opprydningen.
+ */
+function naarDetStar(sted: Sted, gjor: (element: HTMLElement) => void): () => void {
+  const funnet = elementFor(sted)
+  if (funnet) {
+    gjor(funnet)
+    return () => {}
+  }
+  const vakt = new MutationObserver(() => {
+    const element = elementFor(sted)
+    if (!element) return
+    stopp()
+    gjor(element)
+  })
+  const frist = window.setTimeout(() => stopp(), VENT_I)
+  const stopp = () => {
+    vakt.disconnect()
+    window.clearTimeout(frist)
+  }
+  vakt.observe(document.body, { childList: true, subtree: true })
+  return stopp
+}
+
+/** Klassen, attributtet og teksten som merker stedet agenten arbeider. */
+const AGENT = 'utgave--agent'
+const AGENTMERKE = 'data-agentmerke'
+const AGENTTEKST = 'Agenten arbeider her'
+
+/** Om stedet er der agenten sier den arbeider. */
+function sammeSted(sted: Sted, aktivitet: Aktivitet | undefined): boolean {
+  return Boolean(aktivitet && (sted.kort ? sted.kort === aktivitet.objekt : sted.seksjon === aktivitet.seksjon))
+}
+
+/**
+ * Hvor «Følg agenten» skal vise: når en ny utgave er kommet, det som er endret
+ * — helst der agenten sier den arbeider — og ellers stedet agenten sier den
+ * arbeider med.
+ */
+function hvorHen(endringene: Endringene | null, nye: boolean, aktivitet: Aktivitet | undefined): Sted | null {
+  const endret = nye ? (endringene?.steder ?? []) : []
+  const der = endret.find((s) => sammeSted(s, aktivitet)) ?? endret.find((s) => s.seksjon === aktivitet?.seksjon) ?? endret[0]
+  if (der) return der
+  return aktivitet?.objekt || aktivitet?.seksjon ? { kort: aktivitet.objekt, seksjon: aktivitet.seksjon } : null
+}
+
+/**
+ * «Følg agenten», inne på siden: åpner seksjonen og detaljkortet agenten
+ * arbeider i — eller det den nettopp endret, når en ny revisjon kommer — og
+ * ruller dit, og merker stedet så lenge agenten er der. Kortene som er endret,
+ * lyser opp en liten stund når en ny revisjon vises, så den som følger med ser
+ * hva agenten nettopp gjorde. Står i sidens `SeksjonsstyringKilde`, så den kan
+ * åpne skuffene.
+ */
+export function Agentfolging({
+  pa,
+  aktivitet,
+  endringene,
+}: {
+  pa: boolean
+  aktivitet: Aktivitet | undefined
+  endringene: Endringene | null
+}) {
+  const apneTil = useSeksjonsstyring()?.apneTil
+  useNyligEndret(endringene)
+
+  // Endringene som er vist fram; slås følgingen på, er det agenten som vises, ikke det som alt er endret.
+  const vist = useRef<Endringene | null>(null)
+  useEffect(() => {
+    const nye = endringene !== vist.current
+    vist.current = endringene
+    if (!pa || !apneTil) return
+    const sted = hvorHen(endringene, nye, aktivitet)
+    if (!sted) return
+    let merket: HTMLElement | null = null
+    const stopp = naarDetStar(sted, (element) => {
+      const flate = flatenFor(element)
+      apneTil(flate, TILPASSET)
+      flate.classList.add(AGENT)
+      flate.setAttribute(AGENTMERKE, AGENTTEKST)
+      merket = flate
+    })
+    return () => {
+      stopp()
+      merket?.classList.remove(AGENT)
+      merket?.removeAttribute(AGENTMERKE)
+    }
+  }, [pa, apneTil, endringene, aktivitet?.kl, aktivitet?.objekt, aktivitet?.seksjon]) // eslint-disable-line react-hooks/exhaustive-deps
+  return null
+}
+
+/** Lar stedene som er endret i den nye revisjonen lyse opp en liten stund, også de som tegnes litt etter. */
+function useNyligEndret(endringene: Endringene | null) {
+  useEffect(() => {
+    if (!endringene?.steder.length) return
+    const merket: HTMLElement[] = []
+    const stopp = endringene.steder.map((sted) =>
+      naarDetStar(sted, (element) => {
+        const flate = flatenFor(element)
+        flate.classList.add(NYLIG)
+        merket.push(flate)
+      }),
+    )
+    const frist = window.setTimeout(() => merket.forEach((e) => e.classList.remove(NYLIG)), NYLIG_I)
+    return () => {
+      stopp.forEach((s) => s())
+      window.clearTimeout(frist)
+      merket.forEach((e) => e.classList.remove(NYLIG))
+    }
+  }, [endringene])
+}
+
+/**
+ * Slutter å følge agenten når man ruller selv (hjul, berøring eller tastene).
+ */
+export function useSlaAvVedRulling(pa: boolean, onAv: () => void) {
   useEffect(() => {
     if (!pa) return
     const av = () => onAv()
@@ -80,37 +247,6 @@ export function useFolging(pa: boolean, aktivitet: Aktivitet | undefined, revisj
       window.removeEventListener('keydown', tast)
     }
   }, [pa, onAv])
-}
-
-/** Kortene som er endret fra én utgave av siden til den neste, og fortsatt står på siden. */
-export function endredeKort(for_: Sideutgave, etter: Sideutgave): string[] {
-  const kort = new Set(sidensKort(etter.side).map((e) => e.id))
-  const ider = sammenlignSider(for_, etter)
-    .filter((e) => e.endret)
-    .map((e) => e.nokkel.slice(0, e.nokkel.indexOf(':')))
-  return [...new Set(ider)].filter((id) => kort.has(id))
-}
-
-/**
- * Markerer kortene som er endret en liten stund når en ny revisjon vises,
- * så den som følger med ser hva agenten nettopp gjorde.
- */
-export function useNyligEndret(visning: Sideutgave | null) {
-  const forrige = useRef<Sideutgave | null>(null)
-  useEffect(() => {
-    const for_ = forrige.current
-    forrige.current = visning
-    if (!for_ || !visning || for_ === visning) return
-    const elementer = endredeKort(for_, visning)
-      .map((id) => document.getElementById(elementAnker(id)))
-      .filter((e): e is HTMLElement => e !== null)
-    elementer.forEach((e) => e.classList.add(NYLIG))
-    const frist = window.setTimeout(() => elementer.forEach((e) => e.classList.remove(NYLIG)), NYLIG_I)
-    return () => {
-      window.clearTimeout(frist)
-      elementer.forEach((e) => e.classList.remove(NYLIG))
-    }
-  }, [visning])
 }
 
 /** Hva agenten gjør: aktiv (med belegg), venter, stanset, avsluttet, eller brutt tilkobling. */

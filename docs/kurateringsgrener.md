@@ -250,11 +250,13 @@ siden alt i den har vært publisert før. Sideversjonen den gir, har opphavet
   `kurator_sist_kl` i `status`). Siden spør etter `status` hvert
   halve minutt, og hvert femte sekund med «Følg agenten» på; er noe nytt
   (`endring` er større enn da grenen ble lest, eller statusen er en annen),
-  leses grenen på nytt og kortene som er endret, markeres en liten stund.
-  Slik vises også et nytt svar eller en ny merknad i en tråd.
-  «Følg agenten» ruller også til kortet eller seksjonen agenten melder at den
-  arbeider med, og slås av når man ruller selv
-  (`src/components/kuratering/Folgagenten.tsx`).
+  leses grenen på nytt og kortene som er endret, lyser opp en liten stund.
+  Siden står mens revisjonene skifter, med de samme skuffene åpne; bare
+  innholdet byttes. Slik vises også et nytt svar eller en ny merknad i en tråd.
+  «Følg agenten» åpner seksjonen og detaljkortet agenten melder at den
+  arbeider med — eller det som er endret, når en ny revisjon kommer — ruller
+  dit og merker stedet («Agenten arbeider her») så lenge agenten er der. Den
+  slås av når man ruller selv (`src/components/kuratering/Folgagenten.tsx`).
   «Kommentarer» viser trådene festet til kort og felt, og lar
   administratoren åpne nye (også sperrende), svare, lukke og åpne igjen
   (`src/components/kuratering/Kommentartrader.tsx`, ankrene i

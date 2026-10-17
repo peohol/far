@@ -119,7 +119,40 @@ a.utgaveliste__rad:focus-visible {
   color: var(--blekk-dempet);
 }
 
-/* --- «Følg agenten»: kortene agenten nettopp endret -------------------------- */
+/* --- «Følg agenten»: der agenten arbeider, og det den nettopp endret ---------- */
+.utgave--agent {
+  position: relative;
+  outline: 2px solid var(--aksent);
+  outline-offset: var(--rom-1);
+  animation: utgave-agent 2s ease-in-out infinite;
+}
+
+/* Merket står på kanten øverst, så det ikke dekker tittelen eller knappene. */
+.utgave--agent::before {
+  content: attr(data-agentmerke);
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: var(--rom-6);
+  transform: translateY(calc(-50% - var(--rom-1)));
+  padding: 0 var(--rom-2);
+  border-radius: var(--runding-pille);
+  background: var(--aksent);
+  color: var(--flate);
+  font-size: var(--tekst-meta);
+  font-weight: var(--vekt-medium);
+  line-height: 1.6;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@keyframes utgave-agent {
+  50% {
+    box-shadow: 0 0 0 var(--rom-2) var(--aksent-flate);
+  }
+}
+
+
 .utgave--nylig {
   border-radius: var(--runding-felt);
   animation: utgave-nylig 4s ease-out;
@@ -137,6 +170,10 @@ a.utgaveliste__rad:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .utgave--agent {
+    animation: none;
+  }
+
   .utgave--nylig {
     animation: none;
     box-shadow: 0 0 0 3px var(--aksent);

@@ -20,7 +20,7 @@ import { Merke, type Merketone } from '../Merke'
 import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
 import { Bekreftknapp } from '../traad/Smadeler'
 import { useFaginnholdskilde } from '../stoffside/Faginnholdskilde'
-import { Agentindikator, FOLG_HVER, STATUS_HVER, useFolging, useGrenstatus, useNyligEndret } from './Folgagenten'
+import { Agentfolging, Agentindikator, FOLG_HVER, STATUS_HVER, useEndringene, useGrenstatus, useSlaAvVedRulling } from './Folgagenten'
 import { Kommentartrader, apneTraader } from './Kommentartrader'
 import { Sidesammenligning, Utgavevisning } from './Utgavevisning'
 import type { Utgavesideprops } from './Versjonsside'
@@ -112,8 +112,8 @@ function Grenvisning({ gren: id, klient: kuratering, onGaaTil, ...props }: Utgav
 
   const visning = useMemo(() => (lest ? forhandsvisningen(lest) : null), [lest])
   const aktivitet = status?.aktivitet ?? lest?.aktivitet
-  useNyligEndret(visning)
-  useFolging(folg, aktivitet, lest?.grenrevisjon?.revisjon ?? 0, slaAvFolging)
+  const endringene = useEndringene(visning)
+  useSlaAvVedRulling(folg, slaAvFolging)
 
   if (tilstand.status !== 'klar') {
     return (
@@ -126,37 +126,37 @@ function Grenvisning({ gren: id, klient: kuratering, onGaaTil, ...props }: Utgav
 
   const { gren, grunnlag } = tilstand.data
   const tilSiden = () => onGaaTil({ side: 'stoff', stoff: gren.stoff })
+  const vist = gren.grenrevisjon?.revisjon ?? 0
   const banner = (
-    <Grenbanner
-      gren={gren}
-      klient={kuratering}
-      status={status}
-      brutt={brutt}
-      aktivitet={aktivitet}
-      folg={folg}
-      onFolg={setFolg}
-      siste={revisjon === null || revisjon === gren.revisjon}
-      onVelgRevisjon={setRevisjon}
-      onSammenlign={() => setSammenligner(true)}
-      onKommentarer={() => setKommenterer(true)}
-      onEndret={hentPaNytt}
-      onTilSiden={tilSiden}
-      onGaaTil={onGaaTil}
-    />
+    <>
+      {/* En gren som er publisert eller forkastet, har ingen agent å følge. */}
+      <Agentfolging pa={folg && erAktiv(gren.status)} aktivitet={aktivitet} endringene={endringene} />
+      <Grenbanner
+        // Vurderingen og meldingene gjelder revisjonen som vises; en ny revisjon gir et nytt banner.
+        key={vist}
+        gren={gren}
+        klient={kuratering}
+        status={status}
+        brutt={brutt}
+        aktivitet={aktivitet}
+        folg={folg}
+        onFolg={setFolg}
+        siste={revisjon === null || revisjon === gren.revisjon}
+        onVelgRevisjon={setRevisjon}
+        onSammenlign={() => setSammenligner(true)}
+        onKommentarer={() => setKommenterer(true)}
+        onEndret={hentPaNytt}
+        onTilSiden={tilSiden}
+        onGaaTil={onGaaTil}
+      />
+    </>
   )
 
   return (
     <>
       {visning ? (
-        <Utgavevisning
-          key={`${gren.id}:${gren.grenrevisjon?.revisjon ?? 0}`}
-          stoff={gren.stoff}
-          utgave={visning}
-          navn={`kuratering:${gren.id}:${gren.grenrevisjon?.revisjon ?? 0}`}
-          banner={banner}
-          onLukk={tilSiden}
-          {...props}
-        />
+        // Siden står mens revisjonene skifter, med de samme skuffene åpne, så den som følger agenten ser endringene der de skjer.
+        <Utgavevisning stoff={gren.stoff} utgave={visning} navn={`kuratering:${gren.id}`} banner={banner} onLukk={tilSiden} {...props} />
       ) : (
         <section className="stoffside" aria-label="Kurateringsgren">
           <ToppmenyInnhold spor="lukk">

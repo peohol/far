@@ -226,3 +226,7 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
   (revisjon 8) i kontrollrunde 2; begge er publisert, og funksjonstesten av
   alle tre publiserte sider (`kuratorjobb/publisert-pilot-20261016`) var
   grønn, med alle bivirkningsradene vist. F3 i 1.101.0.
+- 2026-10-17: «Følg agenten» åpner skuffene (1.102.2): seksjonen og
+  detaljkortet agenten arbeider i, eller det som er endret i en ny revisjon,
+  åpnes og merkes; siden tegnes ikke på nytt for hver revisjon. Tester i
+  `kurateringsvisning.test.tsx` («følg agenten»).
