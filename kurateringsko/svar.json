@@ -1,48 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-ketobemidon-0510",
-  "foresporsel_sha256": "d870794ec85e0d3a68088e3f03cdd0461d3c33c500f086678db121bc9006fdd9",
-  "handling": "reserver",
+  "foresporsel_id": "fullfort-vortioksetin-0020",
+  "foresporsel_sha256": "a53588a65ac3c022d993e93c51e8dc468211abc7b8e7bc0f0da7c76a2ac9c211",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "Økten har allerede reservert vortioksetin; fortsett med den.",
-  "behandlet_kl": "2026-10-17T05:10:52.358Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39005293928",
-  "oppgave": {
-    "oppgave": "vortioksetin-0020",
-    "stoff": "vortioksetin",
-    "navn": "Vortioksetin",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T08:07:11.984Z",
-    "jobbgren": "kuratorjobb/vortioksetin-0015",
-    "kurateringsgren": "kuratering/vortioksetin-0020",
-    "pr": null,
-    "gren": "afab07ef-a24e-485e-b31f-9f38498a61af",
-    "gjenoppta": {
-      "oppgave": "vortioksetin-0015",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "avbrutt_kl": "2026-10-17T03:57:26.550Z",
-      "grunn": "Grenen er tilbake hos kuratoren.",
-      "fase": null,
-      "jobbgren": "kuratorjobb/vortioksetin-0015",
-      "kurateringsgren": null,
-      "pr": null,
-      "gren": "afab07ef-a24e-485e-b31f-9f38498a61af",
-      "kunnskapsgrense": "2026-10-17"
-    },
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-16T18:10:24.842Z",
-      "side": true,
-      "elementer": 24,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 7,
-      "referanser": 4,
-      "elementer_uten_kilde": 19
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "melding": "vortioksetin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-17T05:20:05.343Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39005855125"
 }
