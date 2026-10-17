@@ -11,6 +11,8 @@
  * - publiseringen er samlet: alt eller ingenting, med rapporten i
  *   endringsloggen og én ny sideversjon;
  * - konflikter med hovedversjonen og upubliserte utkast stopper publiseringen;
+ * - en ny referanse en annen gren alt har publisert, brukes i stedet for å
+ *   lages på nytt;
  * - blindfasen i en de novo-kuratering, og bivirkningsimporter i grenen.
  *
  * Innholdet er syntetisk.
@@ -545,6 +547,147 @@ describe('publiseringen', () => {
     expect((await adm<{ ok: boolean }>('publiser', { gren: g.id, revisjon: 1 })).ok).toBe(true)
     const [lestEtter] = await kall.fasit<{ b: { kilder: unknown[] } }>('select public.les_bivirkninger($1) as b', [s.slug])
     expect(lestEtter!.b.kilder).toHaveLength(1)
+  })
+})
+
+describe('delte referanser', () => {
+  const nyLenke = () => `https://example.org/delt/${crypto.randomUUID()}`
+
+  /** En gren på en ny fagside der doseringskortet siterer en ny referanse, både som kilde og i teksten. */
+  async function grenMedReferanse(id: string, lenke: string) {
+    const s = await nyFagside('Delt kilde')
+    const g = await agent<Sammendrag>(claude, 'apne', { stoff: s.slug, formaal: 'Delt kilde' })
+    const dokument = { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Dosering med delt kilde' }, { type: 'sitering', attrs: { referanser: [id] } }] }] }
+    const svar = await agent<{ teknisk: Teknisk }>(claude, 'skriv', {
+      gren: g.id,
+      forventet_revisjon: 0,
+      endringer: [
+        { ny: 'referanse', id, innhold: { tittel: 'Delt kilde', forfattere: 'C', aar: '2026', lenke } },
+        { sett: s.dosering, innhold: kort(s.side, 'dosering', '', { referanser: [id], data: { dokument } }) },
+        {
+          rapport: {
+            oppsummering: 'Delt kilde',
+            seksjoner: [{ seksjon: 'dosering', endret: ['Doseringen fikk en ny kilde'] }],
+            kildegrunnlag: ['Delt kilde (2026)'],
+          },
+        },
+      ],
+    })
+    expect(svar.teknisk).toMatchObject({ ok: true, rapport_ok: true })
+    await tilGodkjent(g.id)
+    return { ...s, gren: g.id }
+  }
+
+  const prov = async (gren: string) =>
+    (await kall.fasit<{ t: Teknisk }>(`select kuratering.prov(g, kuratering.tilstand(g)) -> 'teknisk' as t from kuratering.grener g where g.id = $1`, [gren]))[0]!.t
+  const medLenke = (lenke: string) => kall.fasit<{ objekt_id: string }>('select distinct objekt_id from public.referanser where lenke = $1', [lenke])
+  const publiserteKoblinger = (objekt: string) =>
+    kall.fasit<{ niva: string; referanse_id: string }>(
+      `select niva::text, referanse_id from public.referansekoblinger where objekt_id = $1 and tilstand = 'publisert' order by nr`,
+      [objekt],
+    )
+
+  for (const [hvordan, sammeId] of [
+    ['med samme ID', true],
+    ['med en annen ID og samme lenke', false],
+  ] as const) {
+    it(`bruker en ny referanse en annen gren alt har publisert, ${hvordan}`, async () => {
+      const lenke = nyLenke()
+      const forste = crypto.randomUUID()
+      const andre = sammeId ? forste : crypto.randomUUID()
+      const a = await grenMedReferanse(forste, lenke)
+      const b = await grenMedReferanse(andre, lenke)
+      expect((await adm<{ ok: boolean }>('publiser', { gren: a.gren, revisjon: 1 })).ok).toBe(true)
+
+      // Prøvepubliseringen og publiseringen av den andre grenen går, og lager ingen ny referanse.
+      expect(await prov(b.gren)).toMatchObject({ ok: true, rapport_ok: true })
+      expect(await medLenke(lenke)).toEqual([{ objekt_id: forste }])
+      expect((await adm<{ ok: boolean }>('publiser', { gren: b.gren, revisjon: 1 })).ok).toBe(true)
+      expect(await adm<Sammendrag>('les', { gren: b.gren })).toMatchObject({ status: 'publisert' })
+
+      expect(await medLenke(lenke)).toEqual([{ objekt_id: forste }])
+      expect((await kall.fasit<{ n: number }>('select count(*)::int as n from public.redigerbare_objekter where id = $1', [andre]))[0]!.n).toBe(sammeId ? 1 : 0)
+      // Kortet på den andre siden siterer den publiserte referansen, som kilde og i teksten.
+      expect(await publiserteKoblinger(b.dosering)).toEqual([
+        { niva: 'element', referanse_id: forste },
+        { niva: 'inline', referanse_id: forste },
+      ])
+      const side = JSON.stringify(await publisert(b.slug))
+      expect(side).toContain('Dosering med delt kilde')
+      if (!sammeId) expect(side).not.toContain(andre)
+      await kall.forventSamsvar(b.dosering)
+    })
+  }
+
+  const utkastrevisjon = async (objekt: string) =>
+    (await kall.fasit<{ revisjon: number }>('select revisjon from public.objektstatus where id = $1', [objekt]))[0]!.revisjon
+
+  for (const [hva, sammeId] of [
+    ['et upublisert utkast med en annen lenke', true],
+    ['et arkivert utkast', false],
+  ] as const) {
+    it(`bruker ikke en publisert referanse som har ${hva}, men stopper som en konflikt`, async () => {
+      const lenke = nyLenke()
+      const forste = crypto.randomUUID()
+      const a = await grenMedReferanse(forste, lenke)
+      const b = await grenMedReferanse(sammeId ? forste : crypto.randomUUID(), lenke)
+      expect((await adm<{ ok: boolean }>('publiser', { gren: a.gren, revisjon: 1 })).ok).toBe(true)
+
+      // Noen redigerer den publiserte referansen på vanlig måte uten å publisere.
+      const innhold = { tittel: 'Delt kilde', forfattere: 'C', aar: '2026', lenke }
+      if (sammeId) {
+        await kall.lagre(forste, await utkastrevisjon(forste), { ...innhold, lenke: nyLenke() })
+      } else {
+        // En sitert referanse kan ikke arkiveres; kortet slutter å sitere den i utkastet først.
+        await kall.lagre(a.dosering, await utkastrevisjon(a.dosering), kort(a.side, 'dosering', 'Uten kilden'))
+        await kall.lagre(forste, await utkastrevisjon(forste), { ...innhold, arkivert: true })
+      }
+
+      expect(await prov(b.gren)).toMatchObject({ ok: false, kode: 'PT409' })
+      const telt = await antall()
+      const svar = await adm<{ ok: boolean; status: string; kode: string; feil: string }>('publiser', { gren: b.gren, revisjon: 1 })
+      expect(svar).toMatchObject({ ok: false, status: 'blokkert', kode: 'PT409' })
+      expect(svar.feil).toContain('under redigering')
+      expect(await antall()).toEqual(telt)
+      expect(await medLenke(lenke)).toEqual([{ objekt_id: forste }])
+      expect(JSON.stringify(await publisert(b.slug))).toContain('Gammel dosering')
+    })
+  }
+
+  // PGlite kjører én transaksjon om gangen, så to samtidige publiseringer kan
+  // ikke prøves her; låsen per lenke de ville ventet på, kan det.
+  it('låser hver ny lenke på tvers av sidene mens grenen publiseres', async () => {
+    const lenke = nyLenke()
+    const b = await grenMedReferanse(crypto.randomUUID(), lenke)
+    const laaste = await db.transaction(async (tx) => {
+      await tx.query('select kuratering.utfor(g, kuratering.tilstand(g), kuratering.forfatter(g), true) from kuratering.grener g where g.id = $1', [b.gren])
+      const { rows } = await tx.query<{ n: number }>(
+        `select count(*)::int as n from pg_locks l
+         where l.locktype = 'advisory' and l.granted and l.pid = pg_backend_pid()
+           and ((l.classid::bigint << 32) | l.objid::bigint) = hashtextextended('referanselenke:' || lower(btrim($1)), 0)`,
+        [` ${lenke.toUpperCase()} `],
+      )
+      await tx.rollback()
+      return rows[0]!.n
+    })
+    expect(laaste).toBe(1)
+  })
+
+  it('stopper som en konflikt når ID-en er tatt av en referanse med en annen lenke', async () => {
+    const id = crypto.randomUUID()
+    const a = await grenMedReferanse(id, nyLenke())
+    const b = await grenMedReferanse(id, nyLenke())
+    expect((await adm<{ ok: boolean }>('publiser', { gren: a.gren, revisjon: 1 })).ok).toBe(true)
+
+    expect(await prov(b.gren)).toMatchObject({ ok: false, kode: 'PT409' })
+    const telt = await antall()
+    const svar = await adm<{ ok: boolean; status: string; kode: string; feil: string }>('publiser', { gren: b.gren, revisjon: 1 })
+    expect(svar).toMatchObject({ ok: false, status: 'blokkert', kode: 'PT409' })
+    expect(svar.feil).toContain('alt er i bruk')
+    const [grunn] = await kall.fasit<{ status_grunn: string }>('select status_grunn from kuratering.grener where id = $1', [b.gren])
+    expect(grunn!.status_grunn).toMatch(/^Konflikt: /)
+    expect(await antall()).toEqual(telt)
+    expect(JSON.stringify(await publisert(b.slug))).toContain('Gammel dosering')
   })
 })
 

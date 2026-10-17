@@ -197,6 +197,17 @@ rapporten og grenen (`innholdsendringer.gren`), og siden får én ny
 sideversjon. Stopper noe, er ingenting publisert: grenen blir `blokkert` med
 grunnen.
 
+En ny referanse som en annen gren har publisert i mellomtiden (samme kilde på
+to sider til kontroll samtidig), lages ikke på nytt, verken ved publiseringen
+eller prøvepubliseringen: med samme ID og lenke brukes den publiserte, og med
+samme lenke og en annen ID siterer grenens objekter den publiserte i stedet
+(ID-en byttes før grenen skrives inn). Den publiserte referansen står som den
+er. Lenken slås opp som i `intern.kuratering_referanse`, og låses på tvers av
+sidene mens grenen publiseres, så to grener ikke lager den samme samtidig. Det
+er en konflikt (`PT409`) når lenken står på flere referanser, når referansen
+med lenken har et upublisert utkast med en annen lenke eller en arkivering, og
+når ID-en er tatt av noe annet.
+
 Publiseringen stopper (konflikt, `PT409`) når siden er publisert på nytt etter
 grunnversjonen, også gjennom en delt referanse, og når noe grenen endrer har et
 upublisert utkast fra vanlig redigering. Det utkastet overtas ikke; det må
