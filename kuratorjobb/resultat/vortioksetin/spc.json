@@ -1,0 +1,143 @@
+{
+  "stoff": "vortioksetin",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-16T04:15:06.398225+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 10,
+    "hentet": 0,
+    "dokumenter": 0,
+    "mangler": [
+      {
+        "merkevare_id": "ID_0AA60E12-E3EF-4AD1-BD2A-FDCC37EE93B6",
+        "varenavn": "Brintellix",
+        "navn_form_styrke": "Brintellix tab 5 mg",
+        "produsent": "Abacus Medicine A/S",
+        "atc": "N06AX26",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_261C785D-685A-4F08-92A3-E9E8C5A46608",
+        "varenavn": "Brintellix",
+        "navn_form_styrke": "Brintellix tab 10 mg",
+        "produsent": "Orifarm AS",
+        "atc": "N06AX26",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_3018302C-5BDA-4E78-94D6-CBA93C5B1B54",
+        "varenavn": "Brintellix",
+        "navn_form_styrke": "Brintellix tab 10 mg",
+        "produsent": "H.Lundbeck",
+        "atc": "N06AX26",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_31F8766F-EB20-4190-A4EC-EC33B4DBA754",
+        "varenavn": "Brintellix",
+        "navn_form_styrke": "Brintellix tab 20 mg",
+        "produsent": "Orifarm AS",
+        "atc": "N06AX26",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_6D448B5A-82BA-48B6-A096-12FF2CE710F7",
+        "varenavn": "Brintellix",
+        "navn_form_styrke": "Brintellix tab 20 mg",
+        "produsent": "H.Lundbeck",
+        "atc": "N06AX26",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_91F0D5AE-7438-4606-9B38-1B760060C926",
+        "varenavn": "Brintellix",
+        "navn_form_styrke": "Brintellix tab 15 mg",
+        "produsent": "H.Lundbeck",
+        "atc": "N06AX26",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_9604D096-2C99-4354-A435-3C74A03B07B0",
+        "varenavn": "Brintellix",
+        "navn_form_styrke": "Brintellix tab 5 mg",
+        "produsent": "Orifarm AS",
+        "atc": "N06AX26",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_9DFA71DA-782F-4E89-8E58-E9810AE81079",
+        "varenavn": "Brintellix",
+        "navn_form_styrke": "Brintellix tab 20 mg",
+        "produsent": "2care4 ApS",
+        "atc": "N06AX26",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_C0964809-8AB3-4D9B-80E0-051620543408",
+        "varenavn": "Brintellix",
+        "navn_form_styrke": "Brintellix tab 5 mg",
+        "produsent": "H.Lundbeck",
+        "atc": "N06AX26",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_D2C058FF-BD35-40B1-8A92-125F257F553F",
+        "varenavn": "Brintellix",
+        "navn_form_styrke": "Brintellix tab 10 mg",
+        "produsent": "Abacus Medicine A/S",
+        "atc": "N06AX26",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 0 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 0,
+        "ikke_dmp": 0,
+        "uten_omtale": 10
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "Ingen preparatomtale ble hentet. SPC-behovet er ikke dekket; se «dekning».",
+      "antall": {
+        "preparater": 10,
+        "hentet": 0,
+        "mangler": 10,
+        "dokumenter": 0
+      }
+    }
+  ],
+  "adresser": [],
+  "dokumenter": [],
+  "utelatt": []
+}
