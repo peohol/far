@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T01:01:00.695Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T01:06:42.830Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 87 · Reservert: 1 · Venter på godkjenning: 3 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
+Klar: 87 · Venter på godkjenning: 3 · Publisert: 3 · Blokkert: 6 · Utenfor køen: 1
 
 ## Pågår
 
-- **doksepin** (doksepin-0016), frist 2026-10-17T03:54:25.901Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
@@ -17,6 +17,7 @@ Klar: 87 · Reservert: 1 · Venter på godkjenning: 3 · Publisert: 3 · Blokker
 ## Blokkert
 
 - **brekspiprazol**: Krav 3: beskyttet norsk referanseomraade avviker fra AGNP 2026; et menneske avgjoer. Se merknad i grenen.
+- **doksepin**: Krav 3: steady state i viktige data maa avgjoeres av et menneske (sperrende traad). Rev 5 klar.
 - **etanol**: Stoffet har ingen publisert fagside å kuratere.
 - **kokain**: Stoffet har ingen publisert fagside å kuratere.
 - **mdma**: Stoffet har ingen publisert fagside å kuratere.

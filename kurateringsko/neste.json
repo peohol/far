@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-17T01:01:00.695Z",
+  "oppdatert_kl": "2026-10-17T01:06:42.830Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
     "klar": 87,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 3,
     "sammenslatt": 0,
     "publisert": 3,
-    "blokkert": 5,
+    "blokkert": 6,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "doksepin",
-      "oppgave": "doksepin-0016",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-17T03:54:25.901Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "neste": [
     {
       "stoff": "flunitrazepam",
@@ -190,6 +182,17 @@
           "kode": "agent",
           "grunn": "Krav 3: beskyttet norsk referanseomraade avviker fra AGNP 2026; et menneske avgjoer. Se merknad i grenen.",
           "kl": "2026-10-16T20:55:02.710Z",
+          "kilde": "agent"
+        }
+      ]
+    },
+    {
+      "stoff": "doksepin",
+      "blokkeringer": [
+        {
+          "kode": "agent",
+          "grunn": "Krav 3: steady state i viktige data maa avgjoeres av et menneske (sperrende traad). Rev 5 klar.",
+          "kl": "2026-10-17T01:06:42.830Z",
           "kilde": "agent"
         }
       ]
