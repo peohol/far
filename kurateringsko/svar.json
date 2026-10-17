@@ -1,10 +1,55 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-lamotrigin-0045",
-  "foresporsel_sha256": "7651a5f56ab607629294961d8158e75c9a3524101ce624bd9faca6a1ed14add9",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-cbd-191649",
+  "foresporsel_sha256": "69251b8e28ae79359a04737e211fa8ea5a21fd701b349f1fa3a5056c2c433b85",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "lamotrigin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-17T19:16:30.152Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39061724790"
+  "melding": "cbd er reservert til 2026-10-17T22:17:20.424Z.",
+  "behandlet_kl": "2026-10-17T19:17:20.424Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39061777748",
+  "oppgave": {
+    "oppgave": "cbd-0046",
+    "stoff": "cbd",
+    "navn": "CBD",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-17T22:17:20.424Z",
+    "jobbgren": "kuratorjobb/cbd-0013",
+    "kurateringsgren": "kuratering/cbd-0046",
+    "pr": null,
+    "gren": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
+    "gjenoppta": {
+      "oppgave": "cbd-0029",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "avbrutt_kl": "2026-10-17T19:13:54.813Z",
+      "grunn": "Grenen er tilbake hos kuratoren.",
+      "fase": null,
+      "jobbgren": "kuratorjobb/cbd-0013",
+      "kurateringsgren": null,
+      "pr": null,
+      "gren": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
+      "kunnskapsgrense": "2026-10-16"
+    },
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-17T14:23:30.777Z",
+      "side": true,
+      "elementer": 2,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 1,
+      "referanser": 1,
+      "elementer_uten_kilde": 0
+    },
+    "prioritet": {
+      "poeng": 1462.3,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen cbd-0029.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "12 av 13 redaksjonelle seksjoner er tomme.",
+        "Bare 1 referanser."
+      ]
+    }
+  }
 }
