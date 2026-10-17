@@ -1,12 +1,12 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-202610170245",
-  "foresporsel_sha256": "0635228b35bf6b2f86918cbe10b258142ee874315bebb06e38518fc940b958fb",
+  "foresporsel_id": "reserver-brekspiprazol-etter-peder",
+  "foresporsel_sha256": "7ba11dde6fb61160b460e6d912fe1418e44d48ec51097f5cb4366e811a894086",
   "handling": "reserver",
   "utfall": "ok",
-  "melding": "lamotrigin er reservert til 2026-10-17T05:46:04.257Z.",
-  "behandlet_kl": "2026-10-17T02:46:04.257Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38996188763",
+  "melding": "Økten har allerede reservert lamotrigin; fortsett med den.",
+  "behandlet_kl": "2026-10-17T03:16:19.016Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38998115755",
   "oppgave": {
     "oppgave": "lamotrigin-0019",
     "stoff": "lamotrigin",
@@ -30,15 +30,8 @@
       "elementer_uten_kilde": 12
     },
     "prioritet": {
-      "poeng": 449.5,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "6 av 13 redaksjonelle seksjoner er tomme.",
-        "12 av 18 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
