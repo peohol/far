@@ -1,10 +1,44 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-kariprazin-0036",
-  "foresporsel_sha256": "7e9084e36cda25c9eac629ef700264ff7a915f31c419b01bfabd17232ad4b2a8",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-202610170751",
+  "foresporsel_sha256": "ccb09a4bf43d242e8c0ee2220592ab405b3acd5b84e17749d1baf952bdff075c",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "kariprazin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-17T07:50:35.572Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39015125133"
+  "melding": "fenytoin er reservert til 2026-10-17T10:52:23.938Z.",
+  "behandlet_kl": "2026-10-17T07:52:23.938Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39015237809",
+  "oppgave": {
+    "oppgave": "fenytoin-0037",
+    "stoff": "fenytoin",
+    "navn": "Fenytoin",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-17T10:52:23.938Z",
+    "jobbgren": "kuratorjobb/fenytoin-0037",
+    "kurateringsgren": "kuratering/fenytoin-0037",
+    "pr": null,
+    "gren": null,
+    "gjenoppta": null,
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-16T18:10:24.842Z",
+      "side": true,
+      "elementer": 6,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 4,
+      "referanser": 3,
+      "elementer_uten_kilde": 1
+    },
+    "prioritet": {
+      "poeng": 447.6,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ]
+    }
+  }
 }
