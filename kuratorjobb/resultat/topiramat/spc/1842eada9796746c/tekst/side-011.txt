@@ -1,0 +1,61 @@
+innenfor hver frekvensgruppe. Frekvensen er oppført på følgende måte: Svært vanlige (≥1/10), vanlige
+(≥1/100 til <1/10) og mindre vanlige (≥1/1000 til <1/100), sjeldne (≥1/10 000 til <1/1000).
+Bivirkninger rapportert under overvåkning etter markedsføring, er oppgitt med ukjent frekvens.
+
+Tabell 2 Bivirkningene av Qsiva med en forekomst høyere enn placebobehandling i kliniske
+         studier*
+ Organklassesystem       Frekvens: Bivirkning
+ Infeksiøse og           Mindre vanlige: Urinveisinfeksjon
+ parasittære             Sjeldne: Luftveisinfeksjon, sinusitt, influensa, bronkitt, candidiasis, øreinfeksjon
+ sykdommer               Ikke kjent: Viral gastroenteritt
+ Sykdommer i blod og     Mindre vanlige: Anemi
+ lymfatiske organer
+ Stoffskifte‑ og         Vanlige: Anoreksi
+ ernæringsbetingede      Mindre vanlige: Hypokalemi, hypoglykemi, væskeretensjon, dehydrering, økt
+ sykdommer               appetitt
+                         Sjeldne: Metabolsk acidose, gikt
+ Psykiatriske lidelser   Vanlige: Insomni, depresjon, angst
+                         Mindre vanlige: Nervøsitet, endret libido, endret humør, agitasjon, forvirret tilstand,
+                         søvnforstyrrelse (inkludert unormale drømmer og mareritt), rastløshet, gråting, stress,
+                         affektlabilitet, emosjonell forstyrrelse, apati, sinne, panikkanfall, paranoia
+                         Sjeldne: Selvmordstanker, aggresjon, anhedoni, sorgreaksjon, bruksisme,
+                         mataversjon, hallusinasjon, desorientering, dysfemi
+                         Ikke kjent: Selvmordsforsøk, logoré
+ Nevrologiske            Svært vanlige: Parestesier
+ sykdommer               Vanlige: Hodepine, dysgeusi, svimmelhet, oppmerksomhetsforstyrrelser, hypoastesi,
+                         nedsatt hukommelse
+                         Mindre vanlige: Amnesi, letargi, somnolens, afasi, tremor, kognitiv lidelse,
+                         hypogeusi, migrene, dårlig søvnkvalitet, synkope, nevropati, psykomotorisk
+                         hyperaktivitet, parosmi, restless leg-syndrom, brennende følelse, dysartri, unormal
+                         koordinasjon
+                         Sjeldne: Maurkrypninger
+                         Ikke kjent: Anfall, nevralgi
+ Øyesykdommer            Vanlige: Tåkesyn, tørre øyne
+                         Mindre vanlige: Øyesmerter, blefarospasme, fotofobi, fotopsi, diplopi, øyepruritus
+                         Sjeldne: Økt tåreflom, glaukom, konjunktival blødning
+                         Ikke kjent: Vinkelblokkglaukom, forbigående blindhet, katarakt, mydriasis,
+                         makuladegenerasjon, uveitt
+ Sykdommer i øre og      Mindre vanlige: Tinnitus, vertigo
+ labyrint                Sjeldne: Døvhet, øresmerter
+                         Ikke kjent: Hypoacusis, mellomøreeffusjon
+ Hjertesykdommer         Vanlige: Palpitasjoner
+                         Mindre vanlige: Takykardi
+                         Sjeldne: Atrieflimmer, arytmi
+                         Ikke kjent: Hjertesvikt
+ Karsykdommer            Mindre vanlige: Hetetokter, hypotensjon, hypertensjon
+                         Sjeldne: Dyp venetrombose
+ Sykdommer i             Mindre vanlige: Hoste, epistaksis, dyspné, faryngolaryngeal smerte, tette bihuler,
+ respirasjonsorganer,    tett nese, postnasalt drypp
+ thorax og               Sjeldne: Tørr hals, rhinorré
+ mediastinum             Ikke kjent: Nesepolypper, akutt respirasjonssvikt
+ Gastrointestinale       Svært vanlige: Munntørrhet, konstipasjon
+ sykdommer               Vanlige: Kvalme, diaré, abdominalsmerter, dyspepsi
+                         Mindre vanlige: Flatulens, gastroøsofageal refluks, oppkast, eruktasjon
+                         Sjeldne: Lukt på ånden, tannkjøttsmerter, glossitt, glossodyni, hemoroider, sjelden
+                         avføring
+                         Ikke kjent: Dysfagi, oralt ubehag, brekninger
+ Sykdommer i lever       Sjeldne: Kolelitiasis, kolecystitt
+ og galleveier
+
+
+                                                      11

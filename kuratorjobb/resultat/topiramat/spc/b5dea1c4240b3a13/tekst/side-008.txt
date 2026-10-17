@@ -1,0 +1,60 @@
+        ↔ = Ingen effekt på plasmakonsentrasjonen (≤ 15 % endring)
+        ** = Økt plasmakonsentrasjon hos enkelte pasienter
+        ↓ = Redusert plasmakonsentrasjon
+        NS = Ikke undersøkt (Not studied)
+
+
+
+Andre legemiddelinteraksjoner
+Digoksin
+I en enkeltdosestudie ble arealet under plasmakonsentrasjonskurven (AUC) for digoksin i serum
+redusert med 12 % på grunn av samtidig administrering av Topimax. Den kliniske relevansen av
+denne observasjonen er ikke fastslått. Når Topimax legges til eller seponeres hos pasienter som står på
+digoksin bør man være ekstra påpasselig med den rutinemessige monitoreringen av serumdigoksin.
+
+CNS-depressiva
+Samtidig administrering av Topimax og alkohol eller andre CNS-depressiva har ikke blitt undersøkt i
+kliniske studier. Topimax anbefales ikke brukt samtidig med alkohol eller andre CNS-depressiva.
+
+Johannesurt (Hypericum perforatum)
+Samtidig administrering av topiramat og Johannesurt kan medføre risiko for redusert
+plasmakonsentrasjon og redusert effekt. Det finnes ingen kliniske studier med vurdering av en
+potensiell interaksjon.
+
+Systemiske hormonelle prevensjonsmidler
+I en farmakokinetisk interaksjonsstudie hos friske frivillige som samtidig fikk et oralt
+prevensjonsmiddel av kombinasjonstypen inneholdende 1 mg noretindron (NET) pluss 35 µg
+etinyløstradiol (EE), ble Topimax i doser på 50 til 200 mg/dag og uten andre legemidler til stede, ikke
+forbundet med statistisk signifikante endringer i gjennomsnittlig eksponering (AUC) for noen av
+komponentene i det orale prevensjonsmiddelet. I en annen studie var eksponering for EE statistisk
+signifikant redusert ved doser på 200, 400 og 800 mg/dag (henholdsvis 18 %, 21 % og 30 %) når gitt
+som tilleggsbehandling hos epilepsipasienter som fikk valproinsyre. Topimax (50-200 mg/dag til
+friske frivillige og 200-800 mg/dag til epilepsipasienter) hadde ingen signifikant påvirkning på
+eksponering overfor NET i noen av de to studiene. Selv om det var en doseavhengig reduksjon i EE-
+eksponeringen ved doser mellom 200-800 mg/dag (til epilepsipasienter), var det ingen signifikant
+doseavhengig endring i EE-eksponeringen ved doser på 50-200 mg/dag (til friske frivillige). Den
+kliniske betydningen av de observerte endringene er ikke kjent. Muligheten for redusert
+prevensjonseffekt og økt gjennombruddsblødning må vurderes hos pasienter som tar systemiske
+hormonelle prevensjonsmidler sammen med Topimax. Pasienter bør bli bedt om å melde fra om
+eventuelle endringer i blødningsmønster. Prevensjonseffekten kan være redusert selv om det ikke
+forekommer gjennombruddsblødning. Kvinner som bruker systemiske hormonelle prevensjonsmidler,
+bør rådes til å bruke en barrieremetode i tillegg.
+
+Litium
+Hos friske frivillige ble det observert en reduksjon (18 % for AUC) i systemisk eksponering overfor
+litium ved samtidig administrering av topiramat 200 mg/dag. Hos pasienter med bipolare lidelser var
+farmakokinetikken til litium upåvirket under behandling med topiramatdoser på 200 mg/dag. Det ble
+imidlertid observert en økning i systemisk eksponering (26 % for AUC) etter topiramatdoser på opp til
+600 mg/dag. Litiumnivået bør monitoreres når det gis samtidig med topiramat.
+
+Risperidon
+Legemiddelinteraksjonsstudier utført under enkeltdosebetingelser hos friske frivillige og
+flerdosebetingelser hos pasienter med bipolar lidelse ga lignende resultater. Når gitt samtidig med
+topiramat i gradvis økende doser på 100, 250 og 400 mg/dag var det en reduksjon i systemisk
+eksponering (henholdsvis 16 % og 33 % ved steady-state AUC for doser på 250 og 400 mg/dag) av
+risperidon (gitt i doser på 1 til 6 mg/dag). Forskjell i AUC for den totale aktive fraksjonen av
+risperidon alene og for kombinasjonsbehandling med topiramat var imidlertid ikke statistisk
+signifikant. Det ble observert minimale endringer i farmakokinetikken til den totale aktive fraksjonen
+(risperidon pluss 9-hydroksyrisperidon) og ingen endringer for 9-hydroksyrisperidon. Det var ingen
+
+                                                       8

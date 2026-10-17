@@ -1,0 +1,59 @@
+kliniske konsekvensene ikke alvorlige, men dødsfall er rapportert etter overdoser med polyfarmasi,
+inkludert topiramat.
+
+Overdoser av topiramat kan medføre alvorlig metabolsk acidose (se pkt. 4.4).
+
+Behandling
+Ved overdose skal topiramat seponeres og generell støttebehandling gis til klinisk toksisitet reduseres
+eller går tilbake. Pasienten skal hydreres godt. Hemodialyse har vist seg å være en effektiv måte å
+fjerne topiramat fra kroppen på. Andre tiltak kan også gjennomføres etter legens skjønn.
+
+
+5.    FARMAKOLOGISKE EGENSKAPER
+
+5.1   Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: antiepileptika, diverse antiepileptika, ATC-kode: N03AX11.
+
+Topiramat er klassifisert som et sulfamatsubstituert monosakkarid. Den nøyaktige mekanismen for
+hvordan topiramat utøver sin effekt mot anfall og som migreneprofylakse er ikke kjent.
+Elektrofysiologiske og biokjemiske studier på kultiverte nevroner har identifisert tre egenskaper som
+kan bidra til den antiepileptiske effekten av topiramat.
+
+Repetitive aksjonspotensialer utløst av en vedvarende depolarisering av nevronene ble blokkert av
+topiramat på en tidsavhengig måte, noe som kan tyde på en tilstandsavhengig
+natriumkanalblokkerende effekt. Topiramat økte hyppigheten av γ-aminobutyrat (GABA)-aktivering
+av GABAA-reseptorer og forsterket GABA sin evne til å indusere en strøm av kloridioner inn i
+nevronene, noe som kan tyde på at topiramat potenserer aktiviteten til denne inhibitoriske
+nevrotransmittoren.
+
+Denne effekten ble ikke blokkert av flumazenil, en benzodiazepine antagonist, og topiramat økte
+heller ikke tiden kanalen var åpen, noe som skiller topiramat fra barbiturater som modulerer GABAA-
+reseptorer.
+
+Fordi den antiepileptiske profilen til topiramat skiller seg markant fra profilen til benzodiazepin kan
+den modulere en benzodiazepin-ufølsom subtype av GABAA-reseptorer. Topiramat motvirket kainats
+evne til å aktivere kainat/AMPA (α -amino-3-hydroksy-5-metylisoksazol-4-propionsyre) subtypen av
+eksitatoriske aminosyrereseptorer (glutamat), men hadde tilsynelatende ingen effekt på aktiviteten av
+N-metyl-D-aspartat (NMDA) på NMDA-reseptor subtypene. Disse effektene av topiramat var
+konsentrasjonsavhengige i omtrådet 1 µM til 200 µM, med minst aktivitet observert fra 1 µM til
+10 µM.
+
+I tillegg hemmer topiramat enkelte isoenzymer av karbonanhydrase. Den farmakologiske effekten er
+mye svakere enn for acetazolamid, en kjent karbonanhydrasehemmer, og antas ikke å være en viktig
+del av den antiepileptiske aktiviteten til topiramat.
+
+I dyrestudier viser topiramat krampestillende effekt i maksimale elektrosjokk anfallstester (MES) hos
+rotte og mus, og er effektiv i epilepsimodeller hos gnagere der toniske og absenslignende anfall hos
+spontanepileptiske rotter (SER) og toniske og kloniske anfall indusert ved stimulering av amygdala
+eller ved total iskemi hos rotter er inkludert. Topiramat er bare delvis effektiv i blokkering av kloniske
+anfall indusert av GABAA-reseptorantagonisten pentylentetrazol.
+
+Studier av mus som fikk topiramat samtidig med karbamazepin eller fenobarbital viste synergetisk
+krampestillende aktivitet, mens kombinasjon med fenytoin viste additiv krampestillende aktivitet.
+Velkontrollerte add-on studier har ikke vist noen korrelasjon mellom laveste plasmakonsentrasjon av
+topiramat og den kliniske effekten. Toleranse hos mennesker er ikke vist.
+
+
+
+                                                   17

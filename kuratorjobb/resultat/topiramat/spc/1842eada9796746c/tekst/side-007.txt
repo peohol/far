@@ -1,0 +1,59 @@
+(f.eks. alfentanil, ciklosporin, dihydroergotamin, ergotamin, everolimus, fentanyl, pimozid, kinidin,
+sirolimus og takrolimus) brukes samtidig med Qsiva.
+
+Topiramat hemmet CYP2C19 in vitro. Dette kan påvirke andre legemidler som metaboliseres via dette
+enzymet, for eksempel diazepam, imipramin, moklobemid, proguanil, omeprazol. Dette har imidlertid
+ikke blitt studert in vivo.
+
+Effekt av andre legemidler på plasmanivåene av topiramat, en komponent i Qsiva
+Antiepileptika:
+Fenytoin og karbamazepin reduserte plasmakonsentrasjonen av topiramat, en komponent i Qsiva. Hvis
+fenytoin eller karbamazepin legges til eller trekkes fra Qsiva-behandling, kan det være nødvendig å
+justere dosen med Qsiva. Dette bør gjøres ved å titrere til klinisk effekt.
+
+Hydroklorotiazid:
+Samtidig administrasjon av hydroklorotiazid alene med topiramat, en komponent i Qsiva, har alene
+vist seg å øke topiramats Cmax og AUC med henholdsvis 27 % og 29 %.
+
+Johannesurt (Hypericum perforatum):
+En risiko for redusert plasmatopiramatkonsentrasjoner som fører til et tap av effekt, kan observeres
+ved samtidig administrasjon av Qsiva og johannesurt. Det har ikke blitt utført noen kliniske studier
+som evaluerer denne potensielle interaksjonen.
+
+Effekter av Qsiva på plasmanivåene til andre legemidler
+Systemiske hormonelle prevensjonsmidler
+Samtidig administrering av flere doser med 15 mg/92 mg Qsiva én gang daglig og én dose peroralt
+prevensjonsmiddel som inneholder 35 μg etinyløstradiol (østrogenkomponent) og 1 mg noretisteron
+(progestinkomponent), hos overvektige, ellers friske frivillige, reduserte eksponeringen for
+etinyløstradiol med 16 % og økte eksponeringen for noretisteron med 22 %. Muligheten for redusert
+prevensjonseffekt og økt gjennombruddsblødning må vurderes hos pasienter som tar systemiske
+hormonelle prevensjonsmidler sammen med Qsiva. Pasienter bør bli bedt om å melde fra om
+eventuelle endringer i blødningsmønster. Prevensjonseffekten kan være redusert selv om det ikke
+forekommer gjennombruddsblødning. Kvinner som tar systemiske hormonelle prevensjonsmidler, bør
+rådes til å også bruke en barrieremetode.
+
+Antiepileptika:
+Tilføyelse av topiramat til antiepileptika (karbamazepin, valproinsyre, fenobarbital, primidon eller
+lamotrigin) hadde ingen klinisk signifikant effekt på steady-state plasmakonsentrasjonene til disse.
+Hos noen pasienter kan behandling med Qsiva og fenytoin resultere i en økning i
+plasmakonsentrasjonene til fenytoin. Dette er muligens på grunn av at CYP2C19 hemmes av
+topiramat. Det anbefales derfor at alle pasienter som tar fenytoin, skal få fenytoinverdiene overvåket.
+
+Antidiabetika:
+Metformin
+Metformins Cmax og AUC0-τ økte med henholdsvis ca. 16 % og 23 % hos friske pasienter med fedme
+etter samtidig administrasjon av flere doser av Qsiva tatt én gang daglig (15 mg/92 mg) med flere
+doser på 500 mg metformin tatt to ganger daglig. Pasienter som tar metformin skal overvåkes på
+passende måte. Ingen dosejustering av metformin eller Qsiva anbefales.
+
+Lavt serumbikarbonat som følge av overdreven bikarbonatutskillelse relatert til
+topiramatadministrasjon, kan være et problem hos personer med diabetes og fedme som behandles
+med metformin, som allerede har høy risiko for laktacidose. Det anbefales ingen dosejusteringer for
+enten Qsiva eller metformin. Pasienter som tar metformin bør imidlertid få målt
+serumbikarbonatverdiene sine regelmessig.
+
+Pioglitazon
+En reduksjon i eksponering av pioglitazon og dens aktive metabolitter ble registrert med samtidig bruk
+av pioglitazon og topiramat i en klinisk studie. Den kliniske relevansen av disse observasjonene er
+
+                                                   7

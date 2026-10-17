@@ -1,0 +1,975 @@
+{
+  "stoff": "topiramat",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-17T04:15:05.944175+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 14,
+    "hentet": 13,
+    "dokumenter": 3,
+    "mangler": [
+      {
+        "merkevare_id": "ID_BB985C9E-0E2F-4C8C-9EA2-5F5D33627945",
+        "varenavn": "Topiramat SA",
+        "navn_form_styrke": "Topiramat SA mikst susp 6 mg/ml",
+        "produsent": "Sykehusapotekene HF",
+        "atc": "N03AX11",
+        "legemiddelform": "Mikstur, suspensjon",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 10 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 10,
+        "ikke_dmp": 0,
+        "uten_omtale": 1
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "1 av 14 preparater i FEST mangler en hentet preparatomtale fra DMP: 1 uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA). SPC-behovet er ikke dekket; se «dekning.mangler».",
+      "antall": {
+        "preparater": 14,
+        "hentet": 13,
+        "mangler": 1,
+        "dokumenter": 3
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-12998.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-12998.pdf",
+      "hentet_kl": "2026-10-17T16:22:55.445Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "404169",
+        "content-md5": "pKB5eji6RhOdVWNDdJqWRA==",
+        "last-modified": "Thu, 08 Oct 2026 06:50:16 GMT",
+        "etag": "0x8DF2508693A4D06",
+        "date": "Sat, 17 Oct 2026 16:22:56 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_06DCFE4B-0D96-4843-98DD-33E1451AC86D",
+          "varenavn": "Qsiva",
+          "navn_form_styrke": "Qsiva kaps modif frisett 7,5 mg/46 mg",
+          "produsent": "VIVUS BV",
+          "atc": "A08AA51",
+          "legemiddelform": "Kapsel med modifisert frisetting, hard"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-12998.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (404169 byte).",
+          "antall": {
+            "bytes": 404169
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "1842eada9796746ceb39d23af9666ab4d71d47cc3b56fb2a28c4a35da29bc1cb"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1998-03716.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1998-03716.pdf",
+      "hentet_kl": "2026-10-17T16:23:06.305Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "283230",
+        "content-md5": "ZQ4iEVIwke0sqrsf8+AouA==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:51 GMT",
+        "etag": "0x8DE53793D4997D1",
+        "date": "Sat, 17 Oct 2026 16:23:07 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_0C6AAFB2-2532-45C2-8822-8451C4A837A1",
+          "varenavn": "Topimax",
+          "navn_form_styrke": "Topimax kaps 25 mg",
+          "produsent": "Janssen-Cilag AS",
+          "atc": "N03AX11",
+          "legemiddelform": "Kapsel, hard"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1998-03716.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (283230 byte).",
+          "antall": {
+            "bytes": 283230
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "b5dea1c4240b3a13f9fb0dabe5066d1f9f7b0e18fb78c821c7e28179032d8ff3"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-13000.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-13000.pdf",
+      "hentet_kl": "2026-10-17T16:23:16.739Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "404169",
+        "content-md5": "pKB5eji6RhOdVWNDdJqWRA==",
+        "last-modified": "Thu, 08 Oct 2026 06:50:16 GMT",
+        "etag": "0x8DF2508693F2E3D",
+        "date": "Sat, 17 Oct 2026 16:23:17 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_4E4C87A3-1323-4331-B1E8-12CF0E7DF378",
+          "varenavn": "Qsiva",
+          "navn_form_styrke": "Qsiva kaps modif frisett 15 mg/92 mg",
+          "produsent": "VIVUS BV",
+          "atc": "A08AA51",
+          "legemiddelform": "Kapsel med modifisert frisetting, hard"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-13000.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (404169 byte).",
+          "antall": {
+            "bytes": 404169
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "1842eada9796746ceb39d23af9666ab4d71d47cc3b56fb2a28c4a35da29bc1cb"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-12997.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-12997.pdf",
+      "hentet_kl": "2026-10-17T16:23:17.226Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "404169",
+        "content-md5": "pKB5eji6RhOdVWNDdJqWRA==",
+        "last-modified": "Thu, 08 Oct 2026 06:50:16 GMT",
+        "etag": "0x8DF25086937B54B",
+        "date": "Sat, 17 Oct 2026 16:23:17 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_60EA2558-C1D5-4EB7-9773-A69BB0CA0C00",
+          "varenavn": "Qsiva",
+          "navn_form_styrke": "Qsiva kaps modif frisett 3,75 mg/23 mg",
+          "produsent": "VIVUS BV",
+          "atc": "A08AA51",
+          "legemiddelform": "Kapsel med modifisert frisetting, hard"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-12997.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (404169 byte).",
+          "antall": {
+            "bytes": 404169
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "1842eada9796746ceb39d23af9666ab4d71d47cc3b56fb2a28c4a35da29bc1cb"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-12999.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-12999.pdf",
+      "hentet_kl": "2026-10-17T16:23:17.530Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "404169",
+        "content-md5": "pKB5eji6RhOdVWNDdJqWRA==",
+        "last-modified": "Thu, 08 Oct 2026 06:50:16 GMT",
+        "etag": "0x8DF2508693C96AA",
+        "date": "Sat, 17 Oct 2026 16:23:17 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_66F1D78A-EE08-4BD5-A4BD-0B0C1FD6F962",
+          "varenavn": "Qsiva",
+          "navn_form_styrke": "Qsiva kaps modif frisett 11,25 mg/69 mg",
+          "produsent": "VIVUS BV",
+          "atc": "A08AA51",
+          "legemiddelform": "Kapsel med modifisert frisetting, hard"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-12999.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (404169 byte).",
+          "antall": {
+            "bytes": 404169
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "1842eada9796746ceb39d23af9666ab4d71d47cc3b56fb2a28c4a35da29bc1cb"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1995-00792.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1995-00792.pdf",
+      "hentet_kl": "2026-10-17T16:23:17.895Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "287225",
+        "content-md5": "ThkplY9Xsfb1BbdRkKNoZg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:43 GMT",
+        "etag": "0x8DE5379383FE2A4",
+        "date": "Sat, 17 Oct 2026 16:23:18 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_6D29FF0C-DFBD-41A8-A4E2-632D3D6F82FB",
+          "varenavn": "Topimax",
+          "navn_form_styrke": "Topimax tab 100 mg",
+          "produsent": "2care4 ApS",
+          "atc": "N03AX11",
+          "legemiddelform": "Tablett, filmdrasjert"
+        },
+        {
+          "merkevare_id": "ID_B3D41F89-17CA-4367-A092-570941A4D2BE",
+          "varenavn": "Topimax",
+          "navn_form_styrke": "Topimax tab 100 mg",
+          "produsent": "Janssen-Cilag AS",
+          "atc": "N03AX11",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1995-00792.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (287225 byte).",
+          "antall": {
+            "bytes": 287225
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "990792d03b54aeb906d837d8e55e4f29927c54a3fbcaf27076264f7b07999aea"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1995-00793.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1995-00793.pdf",
+      "hentet_kl": "2026-10-17T16:23:27.420Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "287225",
+        "content-md5": "ThkplY9Xsfb1BbdRkKNoZg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:59 GMT",
+        "etag": "0x8DE537941DF8D38",
+        "date": "Sat, 17 Oct 2026 16:23:28 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_728B811D-3766-4E08-A621-E4DC322D85BB",
+          "varenavn": "Topimax",
+          "navn_form_styrke": "Topimax tab 200 mg",
+          "produsent": "Janssen-Cilag AS",
+          "atc": "N03AX11",
+          "legemiddelform": "Tablett, filmdrasjert"
+        },
+        {
+          "merkevare_id": "ID_79C7469B-56D1-478F-B169-36A0134F57A9",
+          "varenavn": "Topimax",
+          "navn_form_styrke": "Topimax tab 200 mg",
+          "produsent": "Orifarm AS",
+          "atc": "N03AX11",
+          "legemiddelform": "Tablett, filmdrasjert"
+        },
+        {
+          "merkevare_id": "ID_D35F388A-AE2E-453E-96FC-D2853487C06F",
+          "varenavn": "Topamax",
+          "navn_form_styrke": "Topamax tab 200 mg",
+          "produsent": "Orifarm AS",
+          "atc": "N03AX11",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1995-00793.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (287225 byte).",
+          "antall": {
+            "bytes": 287225
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "990792d03b54aeb906d837d8e55e4f29927c54a3fbcaf27076264f7b07999aea"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1995-00791.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1995-00791.pdf",
+      "hentet_kl": "2026-10-17T16:23:28.615Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "287225",
+        "content-md5": "ThkplY9Xsfb1BbdRkKNoZg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:57 GMT",
+        "etag": "0x8DE5379408E10A9",
+        "date": "Sat, 17 Oct 2026 16:23:29 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_89DBE76D-319D-43A4-A846-13157AAA0307",
+          "varenavn": "Topimax",
+          "navn_form_styrke": "Topimax tab 50 mg",
+          "produsent": "Janssen-Cilag AS",
+          "atc": "N03AX11",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1995-00791.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (287225 byte).",
+          "antall": {
+            "bytes": 287225
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "990792d03b54aeb906d837d8e55e4f29927c54a3fbcaf27076264f7b07999aea"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1995-00790.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1995-00790.pdf",
+      "hentet_kl": "2026-10-17T16:23:29.635Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "287225",
+        "content-md5": "ThkplY9Xsfb1BbdRkKNoZg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:48 GMT",
+        "etag": "0x8DE53793B6A2098",
+        "date": "Sat, 17 Oct 2026 16:23:29 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_AFE38C21-A66A-4B28-A338-57299B54AF02",
+          "varenavn": "Topimax",
+          "navn_form_styrke": "Topimax tab 25 mg",
+          "produsent": "Janssen-Cilag AS",
+          "atc": "N03AX11",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1995-00790.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (287225 byte).",
+          "antall": {
+            "bytes": 287225
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "990792d03b54aeb906d837d8e55e4f29927c54a3fbcaf27076264f7b07999aea"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1998-03715.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1998-03715.pdf",
+      "hentet_kl": "2026-10-17T16:23:29.895Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "283230",
+        "content-md5": "ZQ4iEVIwke0sqrsf8+AouA==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:57 GMT",
+        "etag": "0x8DE537940B8EB0A",
+        "date": "Sat, 17 Oct 2026 16:23:30 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_C26CC634-EA4E-4050-950D-ADE4484F295F",
+          "varenavn": "Topimax",
+          "navn_form_styrke": "Topimax kaps 15 mg",
+          "produsent": "Janssen-Cilag AS",
+          "atc": "N03AX11",
+          "legemiddelform": "Kapsel, hard"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1998-03715.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (283230 byte).",
+          "antall": {
+            "bytes": 283230
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "b5dea1c4240b3a13f9fb0dabe5066d1f9f7b0e18fb78c821c7e28179032d8ff3"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "1842eada9796746ceb39d23af9666ab4d71d47cc3b56fb2a28c4a35da29bc1cb",
+      "bytes": 404169,
+      "mappe": "kuratorjobb/resultat/topiramat/spc/1842eada9796746c",
+      "pdf": {
+        "sider": 19,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": null,
+        "laget": "Fri Jun 19 10:51:57 2026 UTC",
+        "endret": "Fri Jun 19 10:51:57 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/original.pdf",
+        "tekst": "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-001.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-002.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-003.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-004.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-005.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-006.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-007.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-008.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-009.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-010.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-011.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-012.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-013.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-014.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-015.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-016.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-017.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-018.txt",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/tekst/side-019.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-001.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-002.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-003.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-004.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-005.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-006.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-007.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-008.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-009.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-010.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-011.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-012.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-013.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-014.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-015.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-016.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-017.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-018.png",
+          "kuratorjobb/resultat/topiramat/spc/1842eada9796746c/sider/side-019.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 10,
+        "til": 13
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (19 sider).",
+          "antall": {
+            "sider": 19
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 49749
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 10."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 19
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "b5dea1c4240b3a13f9fb0dabe5066d1f9f7b0e18fb78c821c7e28179032d8ff3",
+      "bytes": 283230,
+      "mappe": "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13",
+      "pdf": {
+        "sider": 21,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "PREPARATOMTALE,",
+        "laget": "Fri May  3 11:23:51 2024 UTC",
+        "endret": "Fri May  3 11:23:51 2024 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/original.pdf",
+        "tekst": "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-001.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-002.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-003.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-004.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-005.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-006.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-007.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-008.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-009.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-010.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-011.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-012.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-013.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-014.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-015.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-016.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-017.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-018.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-019.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-020.txt",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/tekst/side-021.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-001.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-002.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-003.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-004.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-005.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-006.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-007.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-008.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-009.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-010.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-011.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-012.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-013.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-014.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-015.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-016.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-017.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-018.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-019.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-020.png",
+          "kuratorjobb/resultat/topiramat/spc/b5dea1c4240b3a13/sider/side-021.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 13,
+        "til": 16
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (21 sider).",
+          "antall": {
+            "sider": 21
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 53468
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 13."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 21
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "990792d03b54aeb906d837d8e55e4f29927c54a3fbcaf27076264f7b07999aea",
+      "bytes": 287225,
+      "mappe": "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9",
+      "pdf": {
+        "sider": 21,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "PREPARATOMTALE,",
+        "laget": "Fri May  3 11:23:50 2024 UTC",
+        "endret": "Fri May  3 11:23:50 2024 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/original.pdf",
+        "tekst": "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-001.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-002.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-003.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-004.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-005.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-006.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-007.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-008.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-009.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-010.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-011.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-012.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-013.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-014.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-015.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-016.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-017.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-018.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-019.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-020.txt",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/tekst/side-021.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-001.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-002.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-003.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-004.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-005.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-006.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-007.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-008.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-009.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-010.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-011.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-012.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-013.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-014.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-015.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-016.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-017.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-018.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-019.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-020.png",
+          "kuratorjobb/resultat/topiramat/spc/990792d03b54aeb9/sider/side-021.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 13,
+        "til": 16
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (21 sider).",
+          "antall": {
+            "sider": 21
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 54010
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 13."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 21
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

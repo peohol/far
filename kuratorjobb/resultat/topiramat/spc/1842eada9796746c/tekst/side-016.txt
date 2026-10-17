@@ -1,0 +1,60 @@
+5.2   Farmakokinetiske egenskaper
+
+Absorpsjon
+Biotilgjengeligheten av fentermin (75 % til 85 %) og topiramat (81 % til 95 %) er høy. Etter oral
+administrasjon av Qsiva, forekom topplasmakonsentrasjoner av fentermin og topiramat ved en median
+(variasjonsbredde) Tmax på henholdsvis 6 timer (2-10) og 10 timer (7-16) etter dosering. Det var ingen
+klinisk signifikant effekt av mat på biotilgjengeligheten av fentermin og topiramat.
+
+Distribusjon
+Andelen av fentermin (17,5 %) eller topiramat (13-17 %) som er reversibelt bundet til
+plasmaproteiner, er lav. Det har blitt observert et bindested med lav kapasitet for topiramat i/på
+erytrocytter som kan mettes over plasmakonsentrasjoner på 4 μg/ml. Gjennomsnittlig oralt
+distribusjonsvolum (V/F) for fentermin og topiramat etter en enkel dose med Qsiva 7,5 mg/46 mg, var
+henholdsvis 369 liter og 76,4 liter.
+
+Biotransformasjon
+Topiramat og fentermin metaboliseres ikke i stor grad og elimineres hovedsakelig uendret i urin. Seks
+metabolitter av topiramat dannet via hydroksylering, hydrolyse og glukuronidering har blitt identifisert
+hos mennesker. Ingen av disse utgjør mer enn 5 % av en administrert dose. In vitro-studier indiserte at
+studies at det primære enzymet ansvarlig for den begrensede metabolismen av fentermin er CYP3A4.
+Topiramat er en svak induktor av CYP3A4 og en svak hemmer av CYP2C19 in vitro.
+
+Eliminasjon
+Den terminale eliminasjonshalveringstiden (t1/2) til fentermin og topiramat var henholdsvis 21 timer og
+49 timer. Den tilsynelatende totale clearance (CL/F) av fentermin og topiramat fra plasma etter
+administrasjon, var 7,84 l/t og 1,35 l/t for henholdsvis fentermin og topiramat. Cirka 75-85 % og 70 %
+av en administrert dose av henholdsvis fentermin eller topiramat skilles uendret ut i urin. For
+fentermin ble 3-4 % og <5 % av den administrerte dosen skilt ut i urin hos mennesker som henholdsvis
+p-hydroksylerte produkter og N-oksidasjonsprodukter.
+
+Linearitet/ikke‑linearitet
+Etter administrasjon av enkle og flere doser av Qsiva, økte plasma Cmax og AUC for topiramat og
+fentermin lineært med økte doser. Plasma Cmax og AUC for fentermin og topiramat økte henholdsvis
+ca. 2,5 til 2,9 ganger og 3,7 til 5,2 ganger etter flere doser med Qsiva.
+
+Nedsatt nyrefunksjon
+Sammenlignet med forsøkspersoner med normal nyrefunksjon, ble det forutsett økninger i plasma
+AUCss på 150 %, 59 % og 24 % for eksponering for fentermin, og i plasma AUCss på 134 %, 59 %
+og 25 % for topiramat hos pasienter med henholdsvis alvorlig, moderat og mildt nedsatt nyrefunksjon,
+baser på analyse av populasjonsfarmakokinetikken ved alle dosenivåer. Det finnes ingen informasjon
+om farmakokinetikken til Qsiva hos pasienter med nyresykdom i endestadiet (se pkt. 4.2).
+
+Monte-Carlo-simuleringer ble utført ved å bruke modeller av farmakokinetikken til den endelige
+populasjonen for fentermin og topiramat for å forutsi eksponeringsnivåene hos forsøkspersoner med
+fedme med forskjellige grader av nyrefunksjon (se tabell 4).
+
+Tabell 4 Gjennomsnittlige konsentrasjoner av fentermin og topiramat ved steady-state forventet
+         for pasienter med normal nyrefunksjon og med nedsatt nyrefunksjon ved de anbefalte
+         dosenivåene
+                                                     Gjennomsnitt (variasjonskoeffisient)
+                                                       Gjennomsnittlige konsentrasjoner
+                                                    (fentermin [ng/ml], topiramat [µg/ml])
+ Doseringsfrekvens   Dosenivåer             Normal           Mildt         Moderat         Alvorlig
+                                          nyrefunksjon      nedsatt         nedsatt        nedsatt
+                                                         nyrefunksjon nyrefunksjon nyrefunksjon
+                     Fentermin 3,75 mg                                                  24,2 (36,8 %)
+ Annenhver dag
+                     Topiramat 23 mg                                                         0,843
+
+                                                  16

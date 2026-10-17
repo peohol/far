@@ -1,0 +1,59 @@
+                                                                                             (27,2 %)
+                      Fentermin 3,75 mg    19,0 (35,4 %)   23,6 (33,8 %)   30,3 (34,7 %)   47,5 (37,2 %)
+                                               0,706           0,883
+                      Topiramat 23 mg                                      1,13 (28,5 %)   1,66 (27,6 %)
+                                             (29,0 %)        (28,9 %)
+                      Fentermin 7,5 mg     38,0 (35,4 %)   47,2 (33,8 %)
+                      Topiramat 46 mg      1,41 (29,0 %)   1,77 (28,9 %)
+ Én gang daglig
+                      Fentermin 11,25 mg   57,0 (35,4 %)
+                      Topiramat 69 mg      2,12 (29,0 %)
+                      Fentermin 15 mg      76,1 (35,4 %)
+                      Topiramat 92 mg      2,83 (29,0 %)
+
+Nedsatt leverfunksjon
+Hos pasienter med mildt (Child-Pugh-skår 5-6) eller moderat nedsatt leverinsuffisiens (Child-Pugh-
+skår 7-9), var eksponeringen for fentermin 37 % og 60 % høyere sammenlignet med friske matchede
+kontroller. Farmakokinetikken til topiramat ble ikke berørt hos pasienter med mildt eller moderat
+leverdysfunksjon sammenlignet med friske matchede kontroller. Det finnes ingen informasjon om
+farmakokinetikken hos pasienter med alvorlig nedsatt leverfunksjon (Child-Pugh‑skår ≥10) (se
+pkt. 4.2).
+
+Eldre
+Alder (18-70 år) så ikke ut til å ha noen klinisk meningsfull virkning på farmakokinetikken til Qsiva
+basert på en populasjonsbasert farmakokinetisk analyse.
+
+Andre spesielle populasjoner
+KMI så generelt ikke ut til å ha noen klinisk meningsfull virkning på farmakokinetikken til Qsiva
+basert på en populasjonsbasert farmakokinetisk analyse.
+
+5.3   Prekliniske sikkerhetsdata
+
+Prekliniske data om fentermin eller topiramat alene indikerer ingen spesiell fare for mennesker basert
+på studier av gentoksisitet og karsinogenitet.
+
+Det er godt kjent at topiramat er teratogen for dyr, inkludert mus, rotter og kaniner, samt for
+mennesker (se pkt. 4.6).
+I studier av embryoføtal utvikling hos rotter og kaniner ble topiramat eller fentermin testet enten alene
+eller i kombinasjon under organogeneseperioden. Topiramat eller fentermin administrert alene førte
+ikke til noen maternal eller embryoføtal toksisitet hos rotter og kaniner. Behandling med en
+kombinasjon av topiramat og fentermin forårsaket en nedgang i fostervekt hos rotter, men
+teratogenisitet ble ikke sett ved doser som ikke produserte maternal toksisitet. Hos kaniner ble det ikke
+observert noen maternal eller embryoføtal toksisitet. Eksponeringsmarginen hos rotter fra
+NOAEL-nivået (No observed adverse effect level) til den kliniske dosen, ble estimert til <1 for
+fentermin og 2× for topiramat. Hos kaniner var eksponeringsmarginene til den kliniske dosen fra
+maksimum testet dose <1 for fentermin og 2× for topiramat.
+
+I en studie om pre- og postnatal utvikling hos rotter ble topiramat eller fentermin administrert enten
+alene eller i kombinasjon fra og med 6. dag av graviditeten og fortsatte til dag 20. av diingen.
+Behandling med fentermin alene var assosiert med lavere gestasjons- og laktasjonsvekt, lavere
+gestasjonskroppsvektøkning, redusert matinntak under gestasjon, dårlig overlevelse blant ungene og
+maternal forsømmelse tidlig i diegivingsperioden, samt lavere kroppsvekt hos ungene til og med
+avvenning og dag 28 etter fødsel. Behandling med topiramat alene ble assosiert med lavere kroppsvekt
+hos ungene under diegiving og til dag 28 etter fødsel. Behandling med en kombinasjon av fentermin
+og topiramat ble assosiert med lavere gestasjons- og laktasjonsvekt, lavere gestasjonsvektøkning,
+redusert matinntak under gestasjon og diegiving, dårlig overlevelse blant ungene og maternal
+forsømmelse tidlig i diegivingsperioden, samt lavere kroppsvekt hos ungene ved fødsel og til og med
+avvenning, forsinkelse i debut av flere parametre for fysisk utvikling (løsning av ytre øre, åpning av
+
+                                                   17

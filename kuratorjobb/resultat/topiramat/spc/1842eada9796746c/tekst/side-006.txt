@@ -1,0 +1,59 @@
+Endringer som følge av vekttap
+På grunn av redusert matinntak som et resultat av å ta Qsiva, kan det være nødvendig å modifisere
+dosen av legemidler mot diabetes, spesielt insulin eller sulfonylurea, for å redusere risikoen for
+hypoglykemi.
+
+Pasienter som blir behandlet for hypertensjon kan ha behov for å modifisere dosen med
+blodtrykkslegemiddel fordi vekttap med Qsiva kan redusere blodtrykk basert på data fra kliniske
+studier. Vekttap kan utfelle eller forverre gallesteindannelse.
+
+Hypokalemi
+Hypokalemi har blitt rapportert for Qsiva. Samtidig bruk av Qsiva med ikke-kaliumsparende diuretika
+kan forsterke den kaliumutskillende virkningen av disse diuretikaene. Når Qsiva forskrives mens det
+tas diuretika som ikke holder på kalium, må pasientene overvåkes for hypokalemi.
+
+Potensial for misbruk
+Fentermin er et svakt stimulerende legemiddel og kan ha potensial for legemiddelmisbruk og -
+avhengighet.
+
+Nedsatt leverfunksjon
+Det finnes ingen klinisk erfaring hos pasienter med alvorlig nedsatt leverfunksjon. Behandling av
+fedme hos disse pasientene bør unngås (se pkt. 4.2). Hos pasienter med mildt (Child-Pugh‑skår 5-6)
+eller moderat (Child-Pugh-skår 7-9) nedsatt leverfunksjon var eksponering for fenterminkomponenten
+av Qsiva høyere sammenlignet med matchede normale kontrollforsøkspersoner (se pkt. 4.2 og 5.2).
+
+Nedsatt nyrefunksjon
+Fentermin- og topiramatkomponentene av Qsiva fjernes hovedsakelig via utskillelse via nyrene, og
+eksponeringen er større hos pasienter med nedsatt nyrefunksjon (se pkt. 4.2 og 5.2).
+
+Forhøyelser i serumkreatinin
+Qsiva kan forårsake en økning i serumkreatinin som gjenspeiler en reduksjon i nyrefunksjon
+(glomerulær filtrasjonsrate). Det anbefales å måle serumkreatinin før oppstart av Qsiva og før økning
+av Qsiva‑dosen (se pkt. 4.8). Hvis det oppstår vedvarende forhøyelser i serumkreatinin mens Qsiva
+tas, skal dosen reduseres eller Qsiva seponeres.
+
+Pasienter med hypertyreose
+Qsiva anbefales ikke hos pasienter med hypertyreose.
+
+Anfall ved plutselig stopp av toppdoseringen av Qsiva
+Det er en risiko for anfall ved plutselig stopp av toppdoseringen av Qsiva. Hvis Qsiva 15 mg/92 mg
+seponeres, skal dette derfor gjøres gradvis som beskrevet i pkt. 4.2.
+
+Sukrose
+Qsiva harde kapsler med modifisert frisetting inneholder sukrose. Pasienter med sjeldne arvelige
+problemer med fruktoseintoleranse, glukose-galaktose malabsorpsjon eller sukrose-isomaltasemangel
+bør ikke ta dette legemidlet.
+
+Qsiva 7,5 mg/46 mg, 11,25 mg/69 mg og 15 mg/92 mg harde kapsler med modifisert frisetting
+Tartrazin og paraoransje
+Disse fargestoffene i de harde kapslene med modifisert frisetting kan forårsake allergiske reaksjoner.
+
+4.5   Interaksjon med andre legemidler og andre former for interaksjon
+
+Metabolske interaksjoner
+
+Topiramat induserte CYP3A4 doseavhengig in vitro, noe som potensielt kunne føre til lavere
+eksponeringer og en redusert effekt av CYP3A4-substrater som administreres samtidig med Qsiva.
+Overvåkning av effekt anbefales når et sensitivt CYP3A4-substrat med et smalt terapeutisk vindu
+
+                                                   6

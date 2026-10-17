@@ -1,0 +1,58 @@
+signifikante endringer i den systemiske eksponeringen overfor total aktiv fraksjon av risperidon eller
+av topiramat. Ved tillegg av topiramat til etablert behandling med risperidon (1-6 mg/dag), ble
+bivirkninger rapportert oftere enn før topiramat (250-400 mg/dag) ble introdusert (henholdsvis 90 %
+og 54 %). De hyppigst rapporterte bivirkningene når topiramat ble lagt til behandling med risperidon
+var søvnighet (27 % og 12 %), parestesier (22 % og 0 %) og kvalme (hhv 18 % og 9 %).
+
+Hydroklortiazid (HCTZ)
+En legemiddelinteraksjonsstudie utført hos friske frivillige evaluerte steady-state farmakokinetikken til
+HCTZ (25 mg hver 24. time) og topiramat (96 mg hver 12. time) når de ble gitt alene og samtidig.
+Resultatene fra denne studien indikerer at Cmaks for topiramat øker med 27 % og AUC øker med 29 %
+når HCTZ blir lagt til topiramat. Den kliniske betydningen av denne endringen er ikke kjent. Tillegg
+av HCTZ til topiramatbehandling kan kreve justering av topiramatdosen. Steady-state
+farmakokinetikken til HCTZ ble ikke signifikant påvirket av samtidig administrering av topiramat.
+Kliniske laboratorieprøver indikerte reduksjon i serumkalium etter administrering av topiramat eller
+HCTZ. Denne var større når HCTZ og topiramat ble gitt i kombinasjon.
+
+Metformin
+En legemiddelinteraksjonsstudie utført hos friske frivillige evaluerte steady-state farmakokinetikken til
+metformin og topiramat i plasma når metformin ble gitt alene og når metformin og topiramat ble gitt
+samtidig. Resultatene fra denne studien indikerte at gjennomsnittlig Cmaks og gjennomsnittlig AUC0-
+12timer for metformin økte med henholdsvis 18 % og 25 %, mens gjennomsnittlig CL/F ble redusert med
+20 % når metformin ble gitt samtidig med topiramat. Topiramat påvirket ikke tmaks for metformin. Den
+kliniske relevansen av effekten av topiramat på farmakokinetikken til metformin er uklar. Oral plasma
+clearance av topiramat synes å være redusert når den gis samtidig med metformin. Graden av endring i
+clearance er ikke kjent. Det er ikke kjent om effekten av metformin på farmakokinetikken til topiramat
+har klinisk betydning.
+
+Når Topiramat legges til eller seponeres hos pasienter som står på metforminbehandling, bør man
+være ekstra påpasselig med den rutinemessige monitoreringen for å sikre tilfredsstillende kontroll av
+diabetessykdommen.
+
+Pioglitazon
+En legemiddelinteraksjonsstudie utført hos friske frivillige evaluerte farmakokinetikken til topiramat
+og pioglitazon ved steady-state når gitt alene og samtidig. Det ble observert en reduksjon i AUC,ss for
+pioglitazon på 15 %, mens ingen endring ble observert i Cmaks,ss. Dette funnet var ikke statistisk
+signifikant. I tillegg ble det observert en reduksjon i Cmaks,ss og AUC,ss på henholdsvis 13 % og 16 %
+for den aktive hydroksymetabolitten, så vel som en reduksjon på 60 % i Cmaks,ss og AUC,ss for den
+aktive ketometabolitten. Den kliniske betydningen av disse funnene er ikke kjent. Når Topimax blir
+lagt til pioglitazonbehandling eller pioglitazon blir lagt til behandling med Topimax bør man være
+ekstra påpasselig med rutinemessig monitorering av pasientene for å sikre tilfredsstillende kontroll
+med diabetessykdommen.
+
+Glibenklamid
+En legemiddelinteraksjonsstudie utført hos pasienter med type 2 diabetes evaluerte farmakokinetikken
+for glibenklamid (5 mg/dag) ved steady-state alene og sammen med topiramat (150 mg/dag). Ved
+administrering av topiramat var det en reduksjon i glibenklamid AUC24 på 25 %. Systemisk
+eksponering overfor de aktive metabolittene 4-trans-hydroksyglibenklamid (M1) og 3-cis-
+hydroksyglibenklamid (M2) ble også redusert med henholdsvis 13 % og 15 %. Farmakokinetikken til
+topiramat ved steady-state ble ikke påvirket av samtidig administrering av glibenklamid.
+
+Når topiramat blir lagt til glibenklamidbehandling eller glibenklamid blir lagt til topiramatbehandling,
+bør man være ekstra påpasselig med rutinemessig monitorering av pasientene for å sikre tilstrekkelig
+kontroll med diabetessykdommen deres.
+
+
+
+
+                                                   9

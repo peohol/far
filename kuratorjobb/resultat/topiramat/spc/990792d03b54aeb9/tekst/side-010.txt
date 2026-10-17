@@ -1,0 +1,60 @@
+Andre former for interaksjon
+Midler som predisponerer for nefrolitiasis
+Topimax kan øke risikoen for nefrolitiasis når brukt samtidig med andre midler som predisponerer for
+nefrolitiasis. Når man bruker Topimax bør slike midler unngås siden de kan skape et fysiologisk miljø
+som øker risikoen for nyresteinsdannelse.
+
+Valproinsyre
+Samtidig administrering av topiramat og valproinsyre er forbundet med hyperammonemi med eller
+uten encefalopati hos pasienter som har tålt ett av legemidlene alene. I de fleste tilfellene avtok
+symptomene og tegnene når ett av legemidlene ble seponert (se pkt. 4.4 og 4.8). Denne bivirkningen
+skyldes ikke en farmakokinetisk interaksjon.
+
+Hypotermi, definert som et utilsiktet fall i kroppstemperaturen til <35°C, er rapportert i forbindelse
+med samtidig bruk av topiramat og valproinsyre (VPA), både i nærvær og fravær av hyperammonemi.
+Denne bivirkningen hos pasienter som bruker topiramat og valproat samtidig kan oppstå etter oppstart
+av topiramatbehandling eller etter økning av døgndosen av topiramat.
+
+Warfarin
+Redusert protrombintid/internasjonal normalisert ratio (PT/INR) er rapportert hos pasienter behandlet
+med topiramat i kombinasjon med warfarin. INR skal derfor overvåkes nøye hos pasienter som
+samtidig behandles med topiramat og warfarin.
+
+Andre farmakokinetiske legemiddelinteraksjonsstudier
+Kliniske studier er utført for å vurdere potensielle farmakokinetiske legemiddelinteraksjoner mellom
+topiramat og andre midler. Endringer i Cmaks eller AUC som et resultat av interaksjonene er summert
+nedenfor. Andre kolonne (konsentrasjon av samtidig legemiddel) beskriver endring i konsentrasjonen
+av legemidlet som gis samtidig, angitt i første kolonne, når topiramat blir lagt til. Tredje kolonne
+(topiramatkonsentrasjon) beskriver hvordan konsentrasjonen av topiramat endres ved samtidig
+administrering av legemidlet angitt i første kolonne.
+
+
+               Oppsummering av resultatene fra andre kliniske farmakokinetiske
+                              legemiddelinteraksjonsstudier
+  Samtidig legemiddel          Konsentrasjon av samtidig         Topiramatkonsentrasjona
+                                                 a
+                                       legemiddel
+  Amitriptylin               ↔ 20 % økning i Cmaks og AUC                  NS
+                                    for metabolitten nortriptylin
+  Dihydroergotamin                               ↔                                 ↔
+  (oralt og subkutant)
+  Haloperidol                      ↔ 31 % økning i AUC for den                     NS
+                                      reduserte metabolitten
+
+  Propranolol                       ↔ 17 % økning i Cmaks for 4-      9 % og 16 % økning i Cmaks,
+                                   OH propranolol (TPM 50 mg          9 % og 17 % økning i AUC
+                                             q12h)                   (hhv 40 og 80 mg propranolol
+                                                                                 q12h)
+  Sumatriptan                                    ↔                                NS
+  (oralt og subkutant)
+  Pizotifen                                      ↔                               ↔
+  Diltiazem                         25 % reduksjon av AUC for             20 % økning i AUC
+                                   diltiazem og 18 % reduksjon i
+                                       DEA, og ↔ for DEM*
+  Venlafaksin                                    ↔                                 ↔
+  Flunarizin                             16 % økning i AUC                         ↔
+                                                            b
+                                        (TPM 50 mg q12h)
+
+
+                                                 10

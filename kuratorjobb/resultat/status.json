@@ -1,18 +1,55 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/topiramat-0041",
     "foresporsel_commit": "809727a65b8af06dca9959a98db24d2d9acce827",
     "foresporsel_sha256": "ae18e36464c2645de666c6f7c3c2766327f260f25f71124211dcf5db31edbe0c",
     "kode_commit": "63a73d6d280aa61d787b268407acd4618ef59c72",
     "kjoring": "https://github.com/peohol/far/actions/runs/39049108836",
-    "startet_kl": "2026-10-17T16:22:45.908Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-17T16:22:47.888Z",
+    "ferdig_kl": "2026-10-17T16:23:30.289Z"
   },
-  "foresporsel": null,
-  "referanse": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "topiramat"
+    ],
+    "oppgaver": [
+      "funksjonstest",
+      "spc"
+    ],
+    "referanse": "topiramat-0041-1622"
+  },
+  "referanse": "topiramat-0041-1622",
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 679
+    }
+  ],
+  "stoffer": {
+    "topiramat": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/topiramat/funksjonstest.json"
+        },
+        "spc": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/topiramat/spc.json"
+        }
+      }
+    }
+  }
 }

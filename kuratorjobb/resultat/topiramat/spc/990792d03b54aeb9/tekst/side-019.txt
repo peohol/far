@@ -1,0 +1,59 @@
+Eliminasjon
+Den viktigste humane eliminasjonsveien for uendret topiramat og dens metabolitter er via nyrene
+(minst 81 % av dosen). Tilnærmet 66 % av en dose med 14C-topiramat ble skilt ut uendret i urinen
+innen fire dager. Etter dosering av topiramat med 50 og 100 mg to ganger daglig var gjennomsnittlig
+renal clearance på henholdsvis ca. 18 ml/min og 17 ml/min. Det foreligger bevis for renal tubulær
+reabsorpsjon av topiramat. Dette støttes av studier hos rotter der topiramat ble gitt samtidig med
+probenecid, der det ble sett en signifikant økning i renal clearance av topiramat. Human
+plasmaclearance er generelt tilnærmet 20 til 30 ml/min etter oral administrering.
+
+Linearitet/ikke-linearitet
+Topiramat viser liten individuell variasjon i plasmakonsentrasjonen, og har derfor forutsigbar
+farmakokinetikk. Farmakokinetikken til topiramat er lineær med konstant plasmaclearance og hos
+friske individer øker arealet under plasmakonsentrasjonskurven doseproporsjonalt i et oralt
+enkeltdoseområde på 100 til 400 mg. Pasienter med normal nyrefunksjon kan bruke 4 til 8 dager på å
+nå steady-state plasmakonsentrasjon. Gjennomsnittlig Cmaks hos friske individer etter flere orale doser
+på 100 mg to ganger daglig var 6,76 µg/ml. Etter administrering av flere doser på 50 og 100 mg
+topiramat to ganger daglig, var gjennomsnittlig plasmahalveringstid på tilnærmet 21 timer.
+
+Bruk sammen med andre antiepileptika
+Samtidig flerdoseadministrering av topiramat på 100 til 400 mg to ganger daglig sammen med
+fenytoin eller karbamazepin viser en doseproporsjonal økning i plasmakonsentrasjonen av topiramat.
+
+Nedsatt nyrefunksjon
+Plasma- og renalclearance av topiramat er redusert hos pasienter med moderat og alvorlig nedsatt
+nyrefunksjon (CLCR ≤ 70 ml/min). Som en følge er det for en gitt dose forventet en høyere steady-state
+plasmakonsentrasjon av topiramat hos pasienter med nedsatt nyrefunksjon sammenlignet med de med
+normal nyrefunksjon. I tillegg vil pasienter med nedsatt nyrefunksjon trenge lenger tid for å nå steady-
+state for hver dose. Hos pasienter med moderat og alvorlig nedsatt nyrefunksjon anbefales halvparten
+av den vanlige start- og vedlikeholdsdosen.
+
+Topiramat fjernes effektivt fra plasma ved hemodialyse. En lang hemodialyseperiode kan medføre at
+topiramatkonsentrasjonen faller under nivået som kreves for å opprettholde en antiepileptisk effekt.
+For å unngå raske fall i plasmakonsentrasjonen av topiramat ved hemodialyse, kan det være nødvendig
+med en tilleggsdose av topiramat. Justeringen bør ta hensyn til 1) dialysetid, 2) clearancehastighet i
+dialysesystemet som brukes og 3) effektiv nyreclearance av topiramat hos dialysepasienten.
+
+Nedsatt leverfunksjon
+Plasmaclearance av topiramat er gjennomsnitt 26 % redusert hos pasienter med moderat til alvorlig
+nedsatt leverfunksjon. Topiramat bør derfor gis med forsiktighet til pasienter med nedsatt
+leverfunksjon.
+
+Eldre populasjon
+Plasmaclearance av topiramat er uendret hos eldre individer uten underliggende nyresykdom.
+
+Pediatrisk populasjon (farmakokinetikk opp til 12 års alder)
+Hos barn er farmakokinetikken til topiramat er lineær, med clearance uavhengig av dosen, og med
+steady-state plasmakonsentrasjon økende i takt med dosen, på samme måten som for voksne som får
+add-on behandling. Barn har imidlertid en høyere clearance og en kortere eliminasjonshalveringstid.
+Som en følge av dette kan plasmakonsentrasjonen av topiramat for den samme dosen i mg/kg være
+lavere hos barn sammenlignet med voksne. Som for voksne kan antiepileptika som induserer hepatiske
+enzymer redusere plasmakonsentrasjonen ved steady-state.
+
+5.3   Prekliniske sikkerhetsdata
+
+Prekliniske fertilitetsstudier viser, til tross for så lav maternal og paternal toksisitet som 8 mg/kg/dag,
+ingen effekt på på fertilitet hos hann- eller hunnrotter ved doser opp til 100 mg/kg/dag.
+
+
+                                                    19

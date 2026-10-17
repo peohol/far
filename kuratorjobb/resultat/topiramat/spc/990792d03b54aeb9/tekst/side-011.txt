@@ -1,0 +1,60 @@
+  a   =    %-verdier er endringene i gjennomsnittlig Cmaks eller AUC under behandling med hensyn til monoterapi
+  ↔   =    Ingen effekt på Cmaks og AUC (≤ 15 % endring) for morsubstans
+ NS   =    Ikke undersøkt (Not studied)
+ *DEA =    desacetyldiltiazem, DEM = N-demetyldiltiazem
+ b    =    AUC for flunarizin økte med 14 % hos individer som tok flunarizin alene. Økt eksponering kan tilskrives
+           akkumulering under oppnåelse av steady-state.
+
+4.6   Fertilitet, graviditet og amming
+
+Graviditet
+Risiko relatert til epilepsi og antiepileptika generelt
+Det bør gis spesialistråd til fertile kvinner. Behov for behandling med antiepileptika bør overveies når
+en kvinne planlegger å bli gravid. Hos kvinner som behandles for epilepsi, bør brå seponering av
+antiepileptika unngås da dette kan medføre gjennombruddsanfall som kan få alvorlige følger for
+kvinnen og det ufødte barnet. Monoterapi bør foretrekkes så sant det er mulig, fordi behandling med
+flere antiepileptika kan være forbundet med høyere risiko for medfødte misdannelser enn monoterapi,
+avhengig av de involverte antiepileptika.
+
+Risiko relatert til topiramat
+Topiramat er teratogent hos mus, rotter og kaniner (se pkt. 5.3). Topiramat passerer placentabarrieren
+hos rotter.
+
+Hos mennesker krysser topiramat placentabarrieren, og tilsvarende konsentrasjoner er rapportert i
+navlestrengen og i morens blod.
+
+Kliniske data fra graviditetsregistre tyder på at spedbarn eksponert for monoterapi med topiramat i
+livmoren har:
+
+Alvorlig medfødt misdannelse og hemmet fostervekst
+     Økt risiko for medfødte misdannelser (spesielt hareskår/ganespalte, hypospadi og anomalier
+      som omfatter ulike kroppsdeler) etter eksponering i første trimester. Svangerskapsregisteret til
+      ”North American Antiepileptic Drug Pregnancy Registry” viste omtrent tre ganger høyere
+      forekomst av alvorlige medfødte misdannelser (4,3 %) sammenlignet med en referansegruppe
+      som ikke brukte antiepileptika (1,4 %). Data fra en populasjonsbasert observasjonell
+      registerstudie fra de nordiske landene viste en 2–3 ganger høyere forekomst av alvorlige
+      medfødte misdannelser (opptil 9,5 %) sammenlignet med en referansegruppe som ikke brukte
+      antiepileptika (3,0 %). Data fra andre studier tyder i tillegg på at bruk av antiepileptika i
+      kombinasjonsterapi medfører en økt risiko for virkninger på fosteret sammenlignet med
+      monoterapi. Risikoen rapporteres å være doseavhengig, og virkninger ble observert i alle doser.
+      Hos kvinner behandlet med topiramat, som har fått et barn med en medfødt misdannelse, synes
+      det å være en økt risiko for misdannelser i påfølgende svangerskap med eksponering for
+      topiramat.
+     En høyere prevalens av lav fødselsvekt (< 2 500 gram) sammenlignet med en referansegruppe.
+     En økt prevalens av liten størrelse i forhold til gestasjonsalderen (SGA, definert som fødselsvekt
+      under 10. persentilen, korrigert for gestasjonsalder og stratifisert etter kjønn). I
+      svangerskapsregisteret til ”North American Antiepileptic Drug Pregnancy Registry” var
+      risikoen for SGA hos barn av kvinner som fikk topiramat 18 %, sammenlignet med 5 % hos
+      barn av kvinner uten epilepsi som ikke fikk antiepileptika. De langsiktige konsekvensene av
+      SGA-funnene kunne ikke fastslås.
+
+Nevroutviklingsforstyrrelser
+    Data fra to populasjonsbaserte observasjonelle registerstudier utført i hovedsakelig samme
+     datasett fra de nordiske landene tyder på at det kan være en 2–3 ganger høyere forekomst av
+     gjennomgripende utviklingsforstyrrelser, psykisk utviklingshemming eller ADHD hos nesten
+     300 barn av mødre med epilepsi som ble utsatt for topiramat i livmoren, sammenlignet med
+     barn av mødre med epilepsi som ikke ble utsatt for antiepileptika. En tredje observasjonsstudie
+     fra USA tyder ikke på en økt kumulativ forekomst av disse utfallene hos omtrent 1 000 barn i en
+
+
+                                                         11

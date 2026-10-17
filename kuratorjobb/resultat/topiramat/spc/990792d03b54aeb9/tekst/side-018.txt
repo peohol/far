@@ -1,0 +1,59 @@
+Absenser
+To små studier med én behandlingsgruppe ble gjennomført med barn i alderen 4-11 år (CAPSS-326 og
+TOPAMAT-ABS-001). Den ene inkluderte 5 barn og den andre inkluderte 12 barn før den ble stoppet
+tidlig på grunn av manglende terapeutisk respons. Dosene som ble brukt i disse studiene var inntil ca.
+12 mg/kg i studie TOPAMAT-ABS-001 og maksimalt det laveste av 9 mg/kg/døgn eller 400 mg/døgn
+i studie CAPSS-326. Disse studiene ga ikke tilstrekkelige holdepunkter til å konkludere vedrørende
+effekt og sikkerhet i den pediatriske populasjonen.
+
+Monoterapi til pediatriske pasienter i alderen 6 til 15 år med ny eller nylig epilepsi
+En ettårig, åpen studie hos pediatriske pasienter i alderen 6 til 15 år som inkluderte 63 forsøkspersoner
+med nylig eller ny forekomst av epilepsi, ble utført for å vurdere effekt av topiramat
+(28 forsøkspersoner) sammenlignet med levetiracetam på vekst, utvikling og benmineralisering.
+Vedvarende vekst ble observert i begge behandlingsgrupper, men topiramatgruppen viste statistisk
+signifikant reduksjon i gjennomsnittlig årlig endring fra baseline i kroppsvekt og bentetthet
+sammenlignet med levetiracetamgruppen. En tilsvarende trend ble også observert for høyde og
+hastighet av høydevekst, men dette var ikke statistisk signifikant. Vekstrelaterte endringer var ikke
+klinisk signifikante eller behandlingsbegrensende. Andre medvirkende faktorer kan ikke utelukkes.
+
+5.2   Farmakokinetiske egenskaper
+
+Den filmdrasjerte tabletten og hard kapsel er bioekvivalente formuleringer.
+
+Sammenlignet med andre antiepileptika viser farmakokinetikkprofilen til topiramat en lang
+plasmahalveringstid, lineær farmakokinetikk, hovedsakelig renal clearance, fravær av betydelig
+proteinbinding og mangel på klinisk relevante aktive metabolitter.
+
+Topiramat er ingen potent induser av legemiddelmetaboliserende enzymer, kan gis uavhengig av
+måltider og rutinemessig monitorering av plasmakonsentrasjonen av topiramat er ikke nødvendig. I
+kliniske studier var det ingen konsistente forhold mellom plasmakonsentrasjon og effekt eller
+bivirkninger.
+
+Absorpsjon
+Topiramat absorberes hurtig og godt. Etter oral administrering av 100 mg topiramat til friske individer
+ble en gjennomsnittlig maksimal plasmakonsentrasjon (Cmaks) på 1,5 µg/ml oppnådd innen 2 til 3 timer
+(Tmaks).
+
+Basert på gjenvinning av radioaktivitet fra urin var den gjennomsnittlige absorpsjonsgraden av en oral
+dose på 100 mg 14C-topiramat på minst 81 %. Mat hadde ingen klinisk signifikant effekt på
+biotilgjengeligheten av topiramat.
+
+Distribusjon
+Vanligvis er 13 til 17 % av topiramat bundet til plasmaproteiner. Det er oppdaget et lavkapasitets
+bindingssete for topiramat som er mettbart ved plasmakonsentrasjoner over 4 µg/ml i/på erytrocytter.
+Distribusjonsvolumet varierte omvendt av dosen. Gjennomsnittlig tilsynelatende distribusjonsvolum
+var 0,80 til 0,55 l/kg for en enkelt dose på 100 til 1200 mg. Det ble oppdaget at kjønn hadde effekt på
+distribusjonsvolumet, med verdier for kvinner på ca 50 % av verdiene for menn. Dette ble tilskrevet en
+høyere andel kroppsfett hos kvinnelige pasienter, og har ingen klinisk betydning.
+
+Biotransformasjon
+Topiramat metaboliseres ikke i stor utstrekning hos friske frivillige (~20 %). Hos pasienter som får
+samtidig antiepileptisk behandling med kjente indusere av legemiddelmetaboliserende enzymer
+metaboliseres opp til 50 %. Seks metabolitter dannet via hydroksylering, hydrolyse og
+glukuronidering er isolert, karakterisert og identifisert fra human plasma, urin og fæces. Hver
+metabolitt representerer mindre enn 3 % av den totale radioaktiviteten som er skilt ut etter
+administrering av 14C-topiramat. To metabolitter som beholdt mesteparten av strukturen til topiramat
+ble testet og funnet å ha lite eller ingen krampestillende aktivitet.
+
+
+                                                   18

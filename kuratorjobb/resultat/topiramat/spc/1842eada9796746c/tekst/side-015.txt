@@ -1,0 +1,61 @@
+Klinisk effekt
+Effekten av Qsiva på vekttap etter 1 års behandling ble studert hos pasienter med fedme (EQUIP-
+studien; OB-302) og hos de pasientene med fedme og overvekt og signifikante komorbiditeter
+(CONQUER-studien; OB-303). En ytterligere fase 3-studie med pasienter med fedme evaluerte
+sikkerheten og effekten av Qsiva i løpet av 6 måneders behandling (OB-301). Alle studiene
+demonstrerte at pasienter behandlet med Qsiva, opplevde større vekttap enn de som ble behandlet med
+fentermin eller topiramat alene.
+
+Data fra 3678 pasienter i ITT-populasjonen i de individuelle ettårige studiene viste at behandling med
+Qsiva sammen med et hypokalorisk kosthold og økt fysisk aktivitet resulterte i en gjennomsnittlig
+(SD) vektnedgang på 1 år på henholdsvis 5,1 %, 7,8 % og 9,8-10,9 % for Qsiva 3,75 mg/23 mg,
+7,5 mg/46 mg og 15 mg/92 mg. Dette var sammenlignbart med et gjennomsnittlig vekttap på
+1,2-1,6 % for placebo. Forskjellene sammenlignet med placebo var statistisk signifikante for alle
+Qsiva-doser. Prosentandelen av pasienter som oppnådde 5 %, 10 % eller 15 % vekttap ved 1 år, var
+høyere for alle dosenivåer av Qsiva sammenlignet med placebo (tabell 3).
+
+Tabell 3 Prosentandel av pasienter (ITT-populasjon) som oppnår 5 %, 10 % og 15 % vekttap
+         på 1 år
+    Prosent       Behandlingsgruppe    Antall pasienter som oppnår prosentandel av vekttap / antall
+    vekttap                                                    eksponert (%)
+                                                        [p-verdi (Qsiva vs. placebo)]
+                                                 OB-302                             OB-303
+      5%                 Placebo              86/498 (17,3)                      204/979 (20,8)
+                     3,75 mg/23 mg          105/234 (44,9)*                             -
+                      7,5 mg/46 mg                  -                            303/488 (62,1)*
+                      15 mg/92 mg           332/498 (66,7)*                      687/981 (70,0)*
+      10 %               Placebo               37/498 (7,4)                       72/979 (7,4)
+                     3,75 mg/23 mg           44/234 (18,8)*                             -
+                      7,5 mg/46 mg                  -                            182/488 (37,3)*
+                      15 mg/92 mg           235/498 (47,2)*                      467/981 (47,6)*
+      15 %               Placebo               17/498 (3,4)                       28/979 (2,9)
+                     3,75 mg/23 mg             17/234 (7,3)                             -
+                      7,5 mg/46 mg                  -                            94/488 (19,3)*
+                      15 mg/92 mg           161/498 (32,3)*                      283/981 (28,8)*
+*p-verdi (Qsiva vs. placebo): <0,001
+
+Effektene av Qsiva på vekttap ble observert på tvers av undergruppene etter kjønn, alder, rase,
+baseline KMI og diabetesstatus. Ved 1 år resulterte Qsiva-behandling i statistisk signifikante
+reduksjoner fra baseline i systolisk og diastolisk blodtrykk. I CONQUER-studien reduserte dosene på
+7,5 mg/46 mg og 15 mg/92 mg systolisk blodtrykk med henholdsvis 4,7 og 5,6 mmHg sammenlignet
+med en reduksjon på 2,4 mmHg med placebo. I en 8-ukers studie med 24-timers ambulatorisk
+blodtrykksmåling (ABPM) var endringen i systolisk blodtrykk fra baseline -3,3 mmHg for Qsiva
+15/92 mg og -0,1 mmHg for placebo. Endringen i diastolisk blodtrykk fra baseline for Qsiva var
++0,8 mmHg og -0,4 mmHg for placebo. Triglyserider og HDL-kolesterol (HDL-C) ble begge
+signifikant forbedret fra baseline sammenlignet med placebo på tvers av fase 3-studiene.
+
+Hemoglobin A1c (HbA1c) og fastende glukose ble også konsekvent og signifikant redusert fra
+baseline sammenlignet med placebo på tvers av fase 3-studiene. I CONQUER-studien ble også
+fastende serumglukosenivåer redusert fra baseline hos pasienter med diabetes, som ble behandlet med
+dosene på 7,5 mg/46 mg og 15 mg/92 mg med henholdsvis 9,7 og 11,9 mg/dl sammenlignet med en
+reduksjon på 5,6 mg/dl med placebo.
+
+Qsiva-behandling (15 mg/92 mg) over 1 år resulterte i en reduksjon i annualisert forekomst av type 2
+diabetes hos pasienter med fedme på 58 % sammenlignet med placebo. Blant pasientene uten diabetes,
+som ble evaluert i CONQUER-studien, forekom utvikling til diabetes type 2 hos 4,5 % av pasienter
+behandlet med placebo, 3,1 % av pasientene behandlet med dosen av Qsiva på 7,5 mg/46 mg og 1,9 %
+av pasienter behandlet med dosen med Qsiva på 15 mg/92 mg.
+
+
+
+                                                  15

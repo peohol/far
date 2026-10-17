@@ -1,0 +1,62 @@
+ Organklassesystem           Frekvens: Bivirkning
+ Hud- og                     Vanlige: Alopesi
+ underhudssykdommer          Mindre vanlige: Pruritus, utslett, tørr hud, hyperhidrose, akne, unormal lukt på
+                             huden, urtikari, erytem, unormal hårekstur
+                             Sjeldne: Onychoclasis
+                             Ikke kjent: Angioødem
+ Sykdommer i                 Mindre vanlige: Muskelspasmer, smerter i ekstremitet, myalgi, artralgi,
+ muskler, bindevev og        ryggsmerter, muskelsvakhet, muskelrykninger
+ skjelett                    Sjeldne: Muskelstramhet
+ Sykdommer i nyre og         Mindre vanlige: Nefrolitiasis, pollakiuri, urinær hesitasjon, nokturi
+ urinveier                   Sjeldne: Unormal lukt på urin
+                             Ikke kjent: Akutt nyreskade
+ Lidelser i                  Mindre vanlige: Erektil dysfunksjon, menstruasjonsforstyrrelser
+ kjønnsorganer og
+ brystsykdommer
+ Generelle lidelser og       Vanlige: Fatigue, irritabilitet, tørste, føle seg skjelven
+ reaksjoner på               Mindre vanlige: Asteni, følelse seg unormal, føle seg kald, perifert ødem,
+ administrasjonsstedet       brystsmerter, økt energi, føle seg varm
+                             Sjeldne: Gangeforstyrrelse
+                             Ikke kjent: Følelse av fremmedlegeme
+ Undersøkelser               Mindre vanlige: Økt hjerterytme, økt nivå av bikarbonat i blodet, redusert nivå av
+                             kalium i blodet, unormal leverfunksjonstest, redusert kreatininclearance i nyrene
+                             Sjeldne: Økt nivå av kreatinin i blodet, økt blodglukose
+                             Ikke kjent: Redusert blodglukose, økt nivå av tyreotropin i blodet, økt nivå av
+                             triglyserider i blodet, økt nivå av glykosylert hemoglobin
+ Skader, forgiftninger       Sjeldne: Fall
+ og komplikasjoner
+ ved medisinske
+ prosedyrer
+ Forstyrrelser i             Ikke kjent: Overfølsomhet
+ immunsystemet
+*Bivirkninger ble ikke inkludert hvis bare én hendelse ble rapportert for Qsiva-behandling. Bivirkninger ble også tatt med i
+ tabellen hvis forekomsten for Qsiva‑behandling ikke var høyere enn med placebobehandling, men det ble dokumentert
+ >3 rapporter etter markedsføring. Bivirkninger merket som «ikke kjent» ble kun rapportert etter markedsføring.
+
+Beskrivelse av utvalgte bivirkninger:
+Parestesier
+I kliniske studier (1-års kohort) økte forekomsten av parestesibivirkninger doseavhengig med
+behandling med Qsiva sammenlignet med placebo: 3,3 %, 11,8 % og 17,3 % vs. 1,2 % for 3,75/23 mg,
+7,5/46 mg og 15/92 mg Qsiva vs. placebo. Symptomer ble som regel karakterisert som prikking i
+hender og føtter. Ingen alvorlige bivirkninger med parestesier ble rapportert, og symptomene var
+milde i alvorlighetsgrad hos de fleste pasienter (80-86 %). Symptomer på parestesier vedvarte i ca.
+3 måneder og forsvant spontant hos 75-80 % av pasientene med fortsatt behandling.
+
+Psykiatriske lidelser
+I kliniske studier (1-års kohort) var det en doseavhengig økt risiko for bivirkninger som vitnet om
+psykiatriske lidelser med behandling med Qsiva (15,8 %, 14,5 % og 20,6 % for henholdsvis
+3,75/23 mg, 7,5/46 mg og 15/92 mg Qsiva) sammenlignet med placebo (10,3 %). Psykiatriske lidelser
+var hovedsakelig søvnforstyrrelser, depresjonsrelatert eller angstrelatert. De fleste (94 %)
+bivirkningene var milde til moderate i intensitet. Det ble ikke rapportert om noen alvorlige hendelser.
+
+Bivirkninger som tydet på depresjon ble rapportert for 5,0 %, 3,8 % og 7,7 % av pasientene behandlet
+med henholdsvis 3,75/23 mg, 7,5/46 mg og 15/92 mg Qsiva, sammenlignet med 3,4 % i
+placebogruppen. Angst og relaterte hendelser ble rapportert hos 4,6 %, 4,8 % og 7,9 % av pasientene
+behandlet med henholdsvis 3,75/23 mg, 7,5/46 mg og 15/92 mg Qsiva, sammenlignet med 2,6 % i
+placebogruppen. I tillegg ble ett tilfelle av selvmordstanker av moderat intensitet rapportert for hver av
+Qsiva- og placebogruppene.
+
+
+
+
+                                                             12

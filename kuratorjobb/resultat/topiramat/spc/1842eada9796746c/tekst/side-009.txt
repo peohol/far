@@ -1,0 +1,59 @@
+Samtidig bruk av Qsiva med ikke-kaliumsparende diuretika kan forsterke den kaliumutskillende
+virkningen av disse diuretikaene. Når Qsiva forskrives mens det tas diuretika som ikke holder på
+kalium, må pasientene overvåkes for hypokalemi (se pkt. 4.4).
+
+Valproinsyre:
+Samtidig administrasjon av topiramat, en komponent av Qsiva, og valproinsyre har blitt assosiert med
+hyperammonemi med eller uten encefalopati hos pasienter som har tålt det ene og det andre legemidlet
+alene. I de fleste tilfeller mildnet symptomer og tegn ved seponering av ett av legemidlene. Denne
+bivirkningen er ikke på grunn av en farmakokinetisk interaksjon.
+
+Hypotermi, definert som et utilsiktet fall i kroppstemperatur til <35 °C, har blitt rapportert i
+assosiasjon med samtidig bruk av topiramat og valproinsyre (VPA) både i forbindelse med
+hyperammonemi og i fravær av hyperammonemi. Denne bivirkningen hos pasienter som bruker
+topiramat og valproat samtidig, kan forekomme etter å ha startet topiramatbehandling eller etter å ha
+økt den daglige dosen av topiramat.
+
+4.6   Fertilitet, graviditet og amming
+
+Graviditet
+Qsiva er kontraindisert under graviditet (se pkt. 4.3 og 4.4).
+
+Topiramat er kjent for å fremkalle fosterskader hos dyr (se pkt. 5.3) og mennesker. Hos mennesker
+krysser topiramat placentabarrieren, og tilsvarende konsentrasjoner er rapportert i navlestrengen og i
+morens blod.
+
+Kliniske data fra graviditetsregistre tyder på at spedbarn eksponert in utero for monoterapi med
+topiramat har:
+
+Alvorlige medfødte misdannelser og vekstretardasjon hos fosteret
+      -     Økt risiko for medfødte misdannelser (spesielt hareskår/ganespalte, hypospadi og
+            uregelmessigheter som involverer ulike organsystemer) etter eksponering i første
+            trimester. Graviditetsregisteret til North American Antiepileptic Drug Pregnancy Registry
+            viste omtrent tre ganger høyere forekomst av alvorlige medfødte misdannelser (4,3 %)
+            sammenlignet med en referansegruppe som ikke brukte antiepileptika (1,4 %). Data fra en
+            populasjonsbasert observasjonell registerstudie fra de nordiske landene viste en
+            2-3 ganger høyere forekomst av alvorlige medfødte misdannelser (opptil 9,5 %)
+            sammenlignet med en referansegruppe som ikke brukte antiepileptika (3,0 %). Hos
+            kvinner behandlet med topiramat, som har fått et barn med en medfødt misdannelse,
+            synes det å være en økt risiko for misdannelser i påfølgende graviditet med eksponering
+            for topiramat.
+      -     En høyere prevalens av lav fødselsvekt (< 2500 gram) sammenlignet med en
+            referansegruppe.
+      -     En økt forekomst av liten størrelse i forhold til gestasjonsalderen (SGA, definert som
+            fødselsvekt under den 10. persentilen, korrigert for gestasjonsalder og stratifisert etter
+            kjønn). I graviditetsregisteret til North American Antiepileptic Drug Pregnancy Registry
+            var risikoen for SGA hos barn av kvinner som fikk topiramat 18 %, sammenlignet med
+            5 % hos barn av kvinner uten epilepsi som ikke fikk antiepileptika. De langsiktige
+            konsekvensene av SGA-funnene kunne ikke fastslås.
+
+Nevroutviklingsforstyrrelser
+     -      Data fra to populasjonsbaserte observasjonelle registerstudier utført i hovedsakelig
+            samme datasett fra de nordiske landene tyder på at det kan være en 2–3 ganger høyere
+            forekomst av gjennomgripende utviklingsforstyrrelser, psykisk utviklingshemming eller
+            ADHD hos nesten 300 barn av mødre med epilepsi som ble utsatt for topiramat i
+            livmoren, sammenlignet med barn av mødre med epilepsi som ikke ble utsatt for
+            antiepileptika. En tredje observasjonsstudie fra USA tyder ikke på en økt kumulativ
+            forekomst av disse utfallene hos omtrent 1000 barn på åtte år av mødre med epilepsi som
+
+                                                    9

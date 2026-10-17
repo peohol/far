@@ -1,0 +1,58 @@
+behandlingen. Studier vedrørende kognitivt utfall hos barn behandlet med topiramat er imidlertid
+utilstrekkelige, og dets effekt i denne sammenheng må utredes bedre.
+
+Hyperammonemi og encefalopati
+Hyperammonemi med eller uten encefalopati er rapportert ved topiramatbehandling (se pkt. 4.8).
+Risikoen for hyperammonemi med topiramat synes å være doserelatert. Hyperammonemi er rapportert
+hyppigere når topiramat brukes sammen med valproinsyre (se pkt. 4.5).
+
+Hos pasienter som får uforklarlig letargi eller endringer i mental status i forbindelse med topiramat
+monoterapi eller tilleggsbehandling, anbefales det å vurdere hyperammonemisk encefalopati og måle
+ammoniakknivåer.
+
+Kosttilskudd
+Enkelte pasienter kan oppleve vekttap under behandling med topiramat. Det anbefales at pasienter
+som behandles med topiramat kontrolleres med hensyn til vekttap. Dersom pasienten taper vekt under
+behandling med topiramat, bør det vurderes å gi kosttilskudd eller å øke matinntaket.
+
+Sukroseintoleranse
+Dette legemidlet inneholder sukrose: pasienter med sjeldne arvelige problemer med
+fruktoseintoleranse, glukose-galaktose malabsorpsjon eller sukrase-isomaltasemangel bør ikke ta dette
+legemidlet.
+
+4.5   Interaksjon med andre legemidler og andre former for interaksjon
+
+Effekten av Topimax på andre antiepileptika
+Tillegg av Topimax til andre antiepileptika (fenytoin, karbamazepin, valproinsyre, fenobarbital,
+primidon) har ingen effekt på steady-state plasmakonsentrasjonen til disse, med unntak av hos enkelte
+pasienter der tillegg av Topimax til fenytoin kan føre til en økt plasmakonsentrasjon av fenytoin.
+Dette kan skyldes hemming av en spesifikk polymorf isoform av et enzym (CYP2C19). Som en følge
+av dette bør fenytoinnivået monitoreres hos alle pasienter som står på fenytoin og som viser kliniske
+tegn eller symptomer på toksisitet.
+
+En farmakokinetisk interaksjonsstudie av pasienter med epilepsi indikerte at tillegg av topiramat til
+lamotrigin ikke hadde effekt på steady-state plasmakonsentrasjonen av lamotrigin ved topiramatdoser
+på 100 til 400 mg/dag. I tillegg var det ingen endring i steady-state plasmakonsentrasjonen av
+topiramat under eller etter seponering av lamotriginbehandlingen (gjennomsnittlig dose på
+327 mg/dag).
+
+Topiramat hemmer enzymet CYP 2C19 og kan påvirke andre substanser som metaboliseres via dette
+enzymet (f.eks diazepam, imipramin, moclobemid, proguanil, omeprazol).
+
+Effekten av andre antiepileptika på Topimax
+Fenytoin og karbamazepin reduserer plasmakonsentrasjonen av topiramat. Tillegg eller seponering av
+fenytoin eller karbamazepin ved behandling med Topimax kan kreve dosejustering av sistenevnte.
+Dette bør gjøres ved titrering til klinisk effekt. Tillegg eller seponering av valproinsyre gir ingen
+klinisk signifikante endringer i plasmakonsentrasjonen av Topimax og berettiger derfor ikke
+dosejustering av Topimax. Resultatet av disse interaksjonene er summert under:
+
+        Antiepileptika gitt                 Konsentrasjon av          Konsentrasjon av
+        samtidig                            antiepileptika            Topimax
+
+        Fenytoin                                      ↔**                        ↓
+        Karbamazepin (CBZ)                            ↔                          ↓
+        Valproinsyre                                  ↔                         ↔
+        Lamotrigin                                    ↔                         ↔
+        Fenobarbital                                  ↔                         NS
+        Primidon                                      ↔                         NS
+                                                  7
