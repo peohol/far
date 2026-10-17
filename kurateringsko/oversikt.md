@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T20:30:47.695Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T20:37:14.200Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 80 · Venter på godkjenning: 10 · Publisert: 4 · Blokkert: 5 · Utenfor køen: 1
+Klar: 80 · Reservert: 1 · Venter på godkjenning: 9 · Publisert: 4 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-Ingen kurateringer er reservert nå.
+- **levetiracetam** (levetiracetam-0051), frist 2026-10-17T23:37:14.200Z
 
 ## Til gjennomgang
 
@@ -17,7 +17,6 @@ Ingen kurateringer er reservert nå.
 - **flunitrazepam**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **kariprazin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **ketobemidon**: kurateringsgren i OUSFAR (klar), venter på godkjenning
-- **lamotrigin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **topiramat**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **vortioksetin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 
@@ -33,7 +32,7 @@ Ingen kurateringer er reservert nå.
 
 | # | Stoff | Modus | Poeng | Hvorfor |
 | --- | --- | --- | --- | --- |
-| 1 | levetiracetam | de_novo | 1447.6 | Fortsetter den avbrutte kurateringen levetiracetam-0047. De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 6 elementer har ingen kilde. Bare 3 referanser. |
+| 1 | lamotrigin | de_novo | 1449.5 | Fortsetter den avbrutte kurateringen lamotrigin-0045. De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 6 av 13 redaksjonelle seksjoner er tomme. 12 av 18 elementer har ingen kilde. Bare 3 referanser. |
 | 2 | sertindol | de_novo | 1447.6 | Fortsetter den avbrutte kurateringen sertindol-0048. De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 6 elementer har ingen kilde. Bare 2 referanser. |
 | 3 | valproat | de_novo | 447.6 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 6 elementer har ingen kilde. Bare 3 referanser. |
 | 4 | atomoksetin | de_novo | 446.4 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 7 elementer har ingen kilde. Bare 3 referanser. |

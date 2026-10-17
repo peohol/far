@@ -1,29 +1,37 @@
 {
-  "oppdatert_kl": "2026-10-17T20:30:47.695Z",
+  "oppdatert_kl": "2026-10-17T20:37:14.200Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "antall": {
     "klar": 80,
-    "reservert": 0,
+    "reservert": 1,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 10,
+    "venter_godkjenning": 9,
     "sammenslatt": 0,
     "publisert": 4,
     "blokkert": 5,
     "utenfor": 1
   },
-  "aktive": [],
-  "neste": [
+  "aktive": [
     {
       "stoff": "levetiracetam",
+      "oppgave": "levetiracetam-0051",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "frist_kl": "2026-10-17T23:37:14.200Z",
+      "fase": null
+    }
+  ],
+  "neste": [
+    {
+      "stoff": "lamotrigin",
       "modus": "de_novo",
-      "poeng": 1447.6,
+      "poeng": 1449.5,
       "grunner": [
-        "Fortsetter den avbrutte kurateringen levetiracetam-0047.",
+        "Fortsetter den avbrutte kurateringen lamotrigin-0045.",
         "De novo-kuratering i runden som gjelder.",
         "Aldri kuratert.",
         "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
+        "6 av 13 redaksjonelle seksjoner er tomme.",
+        "12 av 18 elementer har ingen kilde.",
         "Bare 3 referanser."
       ],
       "tidligst_kl": null
@@ -196,12 +204,6 @@
     {
       "stoff": "ketobemidon",
       "gren": "030084b9-47c7-4ab5-8a71-11bfe76b6f5c",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
-      "stoff": "lamotrigin",
-      "gren": "48e10b1b-31b0-452d-9e29-8404e30aa989",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     },
