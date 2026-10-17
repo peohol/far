@@ -1,37 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-fenytoin-0037-gren",
-  "foresporsel_sha256": "504f9898f25520b1efb10b35ccecffabf860566a2a7237bf1c39db763b2012ae",
-  "handling": "forny",
+  "foresporsel_id": "fullfort-fenytoin-0037",
+  "foresporsel_sha256": "9b41d91954088901e1832f1b5165c54f3fa5054232e046b3c91b6191ebc9a2d4",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "Reservasjonen av fenytoin varer til 2026-10-17T12:17:08.292Z.",
-  "behandlet_kl": "2026-10-17T09:17:08.292Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39020519415",
-  "oppgave": {
-    "oppgave": "fenytoin-0037",
-    "stoff": "fenytoin",
-    "navn": "Fenytoin",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T12:17:08.292Z",
-    "jobbgren": "kuratorjobb/fenytoin-0037",
-    "kurateringsgren": "kuratering/fenytoin-0037",
-    "pr": null,
-    "gren": "40ecac1a-e908-4cb8-a62e-94546263372b",
-    "gjenoppta": null,
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-16T18:10:24.842Z",
-      "side": true,
-      "elementer": 6,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 4,
-      "referanser": 3,
-      "elementer_uten_kilde": 1
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "melding": "fenytoin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-17T10:14:38.296Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39024127126"
 }
