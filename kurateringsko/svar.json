@@ -1,56 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-fenobarbital-pub-202610171924",
-  "foresporsel_sha256": "b7352dc5ba47f9ecd6119b0f66d1ecb40547e51aa5ac69b4c2014f4106079a61",
-  "handling": "reserver",
+  "foresporsel_id": "fullfort-fenobarbital-pub-202610171925",
+  "foresporsel_sha256": "2a776b11428be36d639d46a32b5235ffa3fa5c4cd46fb4718a9d0a5518a86f4a",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "fenobarbital er reservert til 2026-10-17T22:25:09.228Z.",
-  "behandlet_kl": "2026-10-17T19:25:09.228Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39062353203",
-  "oppgave": {
-    "oppgave": "fenobarbital-0049",
-    "stoff": "fenobarbital",
-    "navn": "Fenobarbital",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T22:25:09.228Z",
-    "jobbgren": "kuratorjobb/fenobarbital-0026",
-    "kurateringsgren": "kuratering/fenobarbital-0049",
-    "pr": null,
-    "gren": "f99c5bb5-b7f1-4038-b5ab-0cab1a706f97",
-    "gjenoppta": {
-      "oppgave": "fenobarbital-0043",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "avbrutt_kl": "2026-10-17T19:13:54.813Z",
-      "grunn": "Revisjon 6 er godkjent av kontrolløren; grenen kan publiseres.",
-      "fase": null,
-      "jobbgren": "kuratorjobb/fenobarbital-0026",
-      "kurateringsgren": null,
-      "pr": null,
-      "gren": "f99c5bb5-b7f1-4038-b5ab-0cab1a706f97",
-      "kunnskapsgrense": "2026-10-17"
-    },
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-17T14:23:30.777Z",
-      "side": true,
-      "elementer": 6,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 4,
-      "referanser": 3,
-      "elementer_uten_kilde": 1
-    },
-    "prioritet": {
-      "poeng": 1447.6,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen fenobarbital-0043.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ]
-    }
-  }
+  "melding": "fenobarbital er alt ført som publisert fra kurateringsgrenen f99c5bb5-b7f1-4038-b5ab-0cab1a706f97.",
+  "behandlet_kl": "2026-10-17T19:26:18.057Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39062441999"
 }
