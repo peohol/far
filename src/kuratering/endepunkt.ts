@@ -5,9 +5,9 @@
  * - `/api/kuratering`: `POST {"handling": ..., "data": {...}}` med
  *   `Authorization: Bearer <agentnøkkel>`;
  * - `/api/kuratering-mcp`: de samme handlingene som MCP-verktøy (JSON-RPC over
- *   HTTP), for ChatGPT og andre MCP-klienter. Nøkkelen står i
- *   `Authorization: Bearer`, eller i adressen (`?nokkel=`) for klienter som
- *   ikke kan sende den.
+ *   HTTP), for ChatGPT og andre MCP-klienter, og verktøyet `instruks` med
+ *   kontrollørinstruksen. Nøkkelen står i `Authorization: Bearer`, eller i
+ *   adressen (`?nokkel=`) for klienter som ikke kan sende den.
  * - `/api/kuratering-ko`: grenene uten fagtekst, for kurateringskøen. Den
  *   kaller med GitHubs OIDC-token for arbeidsflyten «Kurateringskø» på main,
  *   uten noen hemmelighet å lagre (`docs/kurateringsko.md`).
@@ -17,6 +17,8 @@
  * statusen for hver handling. Den hemmelige nøkkelen forlater aldri serveren,
  * og agentnøkkelen skrives aldri i loggen.
  */
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Greninfo } from '../kurateringsko/modell.js'
 import { bearer, erAdmin, hvem, serverklient, svar, type Adminsjekk, type Githubsjekk, type Miljo } from '../server/tilgang.js'
@@ -55,6 +57,8 @@ function feilutfall(kode: string | undefined, melding: string | undefined, ukjen
 
 export interface Avhengigheter {
   klient?: SupabaseClient | null
+  /** Leser kontrollørinstruksen; byttes ut i testene. */
+  lesInstruks?: () => Promise<string | null>
 }
 
 /** `/api/kuratering`. */
@@ -88,17 +92,52 @@ interface Rpc {
 const rpcSvar = (id: Rpc['id'], result: unknown) => ({ jsonrpc: '2.0', id: id ?? null, result })
 const rpcFeil = (id: Rpc['id'], code: number, message: string) => ({ jsonrpc: '2.0', id: id ?? null, error: { code, message } })
 
-export const MCP_VERKTOY = AGENTHANDLINGER.map((h) => ({
-  name: h.navn,
-  description: h.beskrivelse,
-  inputSchema: h.argumenter,
-  annotations: { readOnlyHint: h.leser === true, destructiveHint: false, openWorldHint: false },
-}))
+/**
+ * Kontrollørinstruksen er én fil i repoet. Den tas med i funksjonen med
+ * `includeFiles` i `vercel.json`, og leses der den ligger, så verktøyet
+ * `instruks` alltid gir teksten i den utlagte versjonen. Ingen kopi i koden.
+ */
+export const INSTRUKSFIL = 'docs/kontrollorinstruks.md'
+
+export async function lesKontrollorinstruks(): Promise<string | null> {
+  try {
+    return await readFile(join(process.cwd(), INSTRUKSFIL), 'utf8')
+  } catch {
+    return null
+  }
+}
+
+// Bare den offentlige instruksteksten: verktøyet spør ikke databasen og tar
+// ingen argumenter, så det gir ingen tilgang til noe i grenene.
+const INSTRUKSVERKTOY = {
+  name: 'instruks',
+  description:
+    'Instruksen for kontrolløren, slik den gjelder nå (docs/kontrollorinstruks.md). Kontrolløren leser den før noe annet i hver kjøring, og følger den. Bare den offentlige teksten; ingen fagtekst.',
+  inputSchema: { type: 'object', properties: {}, additionalProperties: false },
+  annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
+}
+
+export const MCP_VERKTOY = [
+  INSTRUKSVERKTOY,
+  ...AGENTHANDLINGER.map((h) => ({
+    name: h.navn,
+    description: h.beskrivelse,
+    inputSchema: h.argumenter,
+    annotations: { readOnlyHint: h.leser === true, destructiveHint: false, openWorldHint: false },
+  })),
+]
 
 const INSTRUKSER =
-  'OUSFARs kurateringsgrener: isolerte arbeidsversjoner av fagsidene. Kontrolløren leser grenene som er klare til kontroll (oversikt, les, les_dokument, kommentarer), kommenterer med ankre (kommenter) og vurderer nøyaktig den siste revisjonen (vurder). Fagteksten er bak innloggingen: gjengi den aldri utenfor OUSFAR. Instruksen for kontrolløren står i docs/kontrollorinstruks.md, og handlingene i docs/kurateringsgrener.md, i repoet peohol/far.'
+  'OUSFARs kurateringsgrener: isolerte arbeidsversjoner av fagsidene. Kontrolløren kaller verktøyet instruks før noe annet i hver kjøring, og følger instruksen det gir; en kort beskjed som «Kjør en kontrollrunde i OUSFAR» er nok. Grunnreglene: kontrolløren skriver aldri i grenen, men leser (oversikt, les, les_dokument, kommentarer), kommenterer med ankre (kommenter), lukker sine egne løste tråder (lukk_kommentar) og vurderer nøyaktig den siste revisjonen (vurder). Fagteksten er bak innloggingen: gjengi den aldri utenfor OUSFAR. Kjøringen avsluttes med en kort oversikt per gren til den som startet den, med ethvert kall som ble stoppet og feilmeldingen.'
 
-async function behandleRpc(melding: Rpc, db: SupabaseClient, nokkel: string): Promise<object | null> {
+const tekstsvar = (id: Rpc['id'], innhold: unknown, feil: boolean) =>
+  rpcSvar(id, {
+    content: [{ type: 'text', text: JSON.stringify(innhold) }],
+    structuredContent: innhold !== null && typeof innhold === 'object' && !Array.isArray(innhold) ? innhold : { resultat: innhold },
+    isError: feil,
+  })
+
+async function behandleRpc(melding: Rpc, db: SupabaseClient | null, nokkel: string, lesInstruks: () => Promise<string | null>): Promise<object | null> {
   const { id, method } = melding
   const varsel = id === undefined
   if (melding.jsonrpc !== '2.0' || typeof method !== 'string') return varsel ? null : rpcFeil(id, -32600, 'Ugyldig forespørsel.')
@@ -120,15 +159,18 @@ async function behandleRpc(melding: Rpc, db: SupabaseClient, nokkel: string): Pr
       return rpcSvar(id, { tools: MCP_VERKTOY })
     case 'tools/call': {
       const navn = melding.params?.name
+      if (navn === INSTRUKSVERKTOY.name) {
+        const instruks = await lesInstruks()
+        if (instruks === null) {
+          return tekstsvar(id, { feil: 'Instruksen kunne ikke leses i OUSFAR nå. Les docs/kontrollorinstruks.md på main i repoet peohol/far, og si fra om feilen.' }, true)
+        }
+        return rpcSvar(id, { content: [{ type: 'text', text: instruks }], isError: false })
+      }
       if (typeof navn !== 'string' || !AGENTHANDLINGSNAVN.has(navn)) return rpcFeil(id, -32602, `Ukjent verktøy «${String(navn)}».`)
+      if (!db) return rpcFeil(id, -32603, 'Mangler oppkoblingen mot databasen.')
       const utfall = await utforHandling(db, nokkel, navn, melding.params?.arguments ?? {})
       if (!utfall.ok && utfall.status === 403) return rpcFeil(id, -32001, utfall.feil)
-      const innhold = utfall.ok ? utfall.data : { feil: utfall.feil, kode: utfall.kode }
-      return rpcSvar(id, {
-        content: [{ type: 'text', text: JSON.stringify(innhold) }],
-        structuredContent: innhold !== null && typeof innhold === 'object' && !Array.isArray(innhold) ? innhold : { resultat: innhold },
-        isError: !utfall.ok,
-      })
+      return tekstsvar(id, utfall.ok ? utfall.data : { feil: utfall.feil, kode: utfall.kode }, !utfall.ok)
     }
     default:
       return rpcFeil(id, -32601, `Ukjent metode «${method}».`)
@@ -136,12 +178,16 @@ async function behandleRpc(melding: Rpc, db: SupabaseClient, nokkel: string): Pr
 }
 
 /** `/api/kuratering-mcp`. */
-export async function behandleKurateringMcp(foresporsel: Request, miljo: Miljo, { klient }: Avhengigheter = {}): Promise<Response> {
+export async function behandleKurateringMcp(
+  foresporsel: Request,
+  miljo: Miljo,
+  { klient, lesInstruks = lesKontrollorinstruks }: Avhengigheter = {},
+): Promise<Response> {
   if (foresporsel.method !== 'POST') return svar(405, { feil: 'Bare POST (MCP over HTTP uten strøm).' })
   const nokkel = bearer(foresporsel) ?? new URL(foresporsel.url).searchParams.get('nokkel')
   if (!nokkel) return svar(401, { feil: 'Agentnøkkelen mangler.' })
+  // Uten databasen svarer protokollen og instruksen likevel; bare handlingene trenger den.
   const db = klient === undefined ? serverklient(miljo) : klient
-  if (!db) return svar(500, { feil: 'Mangler oppkoblingen mot databasen.' })
 
   let kropp: unknown
   try {
@@ -150,7 +196,7 @@ export async function behandleKurateringMcp(foresporsel: Request, miljo: Miljo, 
     return svar(400, rpcFeil(null, -32700, 'Forespørselen må være JSON.'))
   }
   const meldinger = Array.isArray(kropp) ? (kropp as Rpc[]) : [kropp as Rpc]
-  const svarene = (await Promise.all(meldinger.map((m) => behandleRpc(m ?? {}, db, nokkel)))).filter((s) => s !== null)
+  const svarene = (await Promise.all(meldinger.map((m) => behandleRpc(m ?? {}, db, nokkel, lesInstruks)))).filter((s) => s !== null)
   if (svarene.length === 0) return new Response(null, { status: 202 })
   return svar(200, Array.isArray(kropp) ? svarene : svarene[0])
 }
