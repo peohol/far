@@ -1,9 +1,9 @@
 {
-  "oppdatert_kl": "2026-10-17T07:42:46.644Z",
+  "oppdatert_kl": "2026-10-17T07:43:33.742Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
-    "klar": 88,
-    "reservert": 0,
+    "klar": 87,
+    "reservert": 1,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 4,
     "sammenslatt": 0,
@@ -11,7 +11,15 @@
     "blokkert": 4,
     "utenfor": 1
   },
-  "aktive": [],
+  "aktive": [
+    {
+      "stoff": "flunitrazepam",
+      "oppgave": "flunitrazepam-0032",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "frist_kl": "2026-10-17T10:43:33.742Z",
+      "fase": null
+    }
+  ],
   "neste": [
     {
       "stoff": "brekspiprazol",
@@ -55,21 +63,6 @@
         "7 av 13 redaksjonelle seksjoner er tomme.",
         "14 av 19 elementer har ingen kilde.",
         "Bare 4 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "flunitrazepam",
-      "modus": "de_novo",
-      "poeng": 1451.7,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen flunitrazepam-0024.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "2 av 8 elementer har ingen kilde.",
-        "Bare 1 referanser."
       ],
       "tidligst_kl": null
     },
@@ -155,6 +148,20 @@
         "9 av 13 redaksjonelle seksjoner er tomme.",
         "1 av 6 elementer har ingen kilde.",
         "Bare 4 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "valproat",
+      "modus": "de_novo",
+      "poeng": 447.6,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 3 referanser."
       ],
       "tidligst_kl": null
     }
