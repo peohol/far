@@ -1,9 +1,9 @@
 {
-  "oppdatert_kl": "2026-10-17T05:23:12.494Z",
+  "oppdatert_kl": "2026-10-17T05:28:18.276Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
-    "klar": 87,
-    "reservert": 0,
+    "klar": 86,
+    "reservert": 1,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 3,
     "sammenslatt": 0,
@@ -11,7 +11,15 @@
     "blokkert": 6,
     "utenfor": 1
   },
-  "aktive": [],
+  "aktive": [
+    {
+      "stoff": "ketobemidon",
+      "oppgave": "ketobemidon-0023",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "frist_kl": "2026-10-17T08:28:18.276Z",
+      "fase": null
+    }
+  ],
   "neste": [
     {
       "stoff": "flunitrazepam",
@@ -19,21 +27,6 @@
       "poeng": 1451.7,
       "grunner": [
         "Fortsetter den avbrutte kurateringen flunitrazepam-0017.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "2 av 8 elementer har ingen kilde.",
-        "Bare 1 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "ketobemidon",
-      "modus": "de_novo",
-      "poeng": 1451.7,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen ketobemidon-0018.",
         "De novo-kuratering i runden som gjelder.",
         "Aldri kuratert.",
         "Ingen kuratering å regne alderen fra.",
@@ -155,6 +148,20 @@
         "Bare 3 referanser."
       ],
       "tidligst_kl": null
+    },
+    {
+      "stoff": "atomoksetin",
+      "modus": "de_novo",
+      "poeng": 446.4,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 7 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ],
+      "tidligst_kl": null
     }
   ],
   "til_gjennomgang": [
@@ -184,7 +191,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, retting); den må avsluttes først.",
-          "kl": "2026-10-17T05:23:12.494Z",
+          "kl": "2026-10-17T05:28:18.276Z",
           "kilde": "system"
         }
       ]
@@ -195,7 +202,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, retting); den må avsluttes først.",
-          "kl": "2026-10-17T05:23:12.494Z",
+          "kl": "2026-10-17T05:28:18.276Z",
           "kilde": "system"
         }
       ]
