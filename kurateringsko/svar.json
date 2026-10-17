@@ -1,23 +1,23 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-neste-4",
-  "foresporsel_sha256": "ffea0165205e0319232a545c5601a7c8f99bb416cf5468cb3ed3e30323332125",
-  "handling": "reserver",
+  "foresporsel_id": "forny-vortioksetin-0015-gren",
+  "foresporsel_sha256": "8c952d829ce55d2835c381aef8c5922db28428fdadcc2b60e98a09423d1561ba",
+  "handling": "forny",
   "utfall": "ok",
-  "melding": "vortioksetin er reservert til 2026-10-17T03:04:01.092Z.",
-  "behandlet_kl": "2026-10-17T00:04:01.092Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38984583016",
+  "melding": "Reservasjonen av vortioksetin varer til 2026-10-17T03:29:29.910Z.",
+  "behandlet_kl": "2026-10-17T00:29:29.910Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38986565815",
   "oppgave": {
     "oppgave": "vortioksetin-0015",
     "stoff": "vortioksetin",
     "navn": "Vortioksetin",
     "modus": "de_novo",
     "forsok": 1,
-    "frist_kl": "2026-10-17T03:04:01.092Z",
+    "frist_kl": "2026-10-17T03:29:29.910Z",
     "jobbgren": "kuratorjobb/vortioksetin-0015",
     "kurateringsgren": "kuratering/vortioksetin-0015",
     "pr": null,
-    "gren": null,
+    "gren": "afab07ef-a24e-485e-b31f-9f38498a61af",
     "gjenoppta": null,
     "sist_kuratert": null,
     "maal": {
@@ -30,15 +30,8 @@
       "elementer_uten_kilde": 19
     },
     "prioritet": {
-      "poeng": 455.7,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "6 av 13 redaksjonelle seksjoner er tomme.",
-        "19 av 24 elementer har ingen kilde.",
-        "Bare 4 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
