@@ -1,12 +1,12 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-cbd-0508",
-  "foresporsel_sha256": "3b58e34415ab6cde48387612fd5c299e434aa6a4f799e4aade4735e60285778f",
+  "foresporsel_id": "reserver-flunitrazepam-0509",
+  "foresporsel_sha256": "926e2afdf0e4f728f5a1f2051e9f734fcda8ab8a74829f615437db7ff9672398",
   "handling": "reserver",
   "utfall": "ok",
   "melding": "Økten har allerede reservert vortioksetin; fortsett med den.",
-  "behandlet_kl": "2026-10-17T05:09:29.879Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39005203395",
+  "behandlet_kl": "2026-10-17T05:10:10.676Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39005247237",
   "oppgave": {
     "oppgave": "vortioksetin-0020",
     "stoff": "vortioksetin",
