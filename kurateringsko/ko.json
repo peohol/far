@@ -1,8 +1,8 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T19:16:30.152Z",
+  "oppdatert_kl": "2026-10-17T19:17:20.424Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
-  "teller": 45,
+  "teller": 46,
   "stoffer": {
     "alprazolam": {
       "stoff": "alprazolam",
@@ -701,18 +701,11 @@
     "cbd": {
       "stoff": "cbd",
       "navn": "CBD",
-      "status": "klar",
+      "status": "reservert",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 1462.3,
-        "grunner": [
-          "Fortsetter den avbrutte kurateringen cbd-0029.",
-          "De novo-kuratering i runden som gjelder.",
-          "Aldri kuratert.",
-          "Ingen kuratering å regne alderen fra.",
-          "12 av 13 redaksjonelle seksjoner er tomme.",
-          "Bare 1 referanser."
-        ]
+        "poeng": 0,
+        "grunner": []
       },
       "maal": {
         "kl": "2026-10-17T14:23:30.777Z",
@@ -723,8 +716,21 @@
         "referanser": 1,
         "elementer_uten_kilde": 0
       },
-      "reservasjon": null,
-      "forsok": 0,
+      "reservasjon": {
+        "oppgave": "cbd-0046",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "modus": "de_novo",
+        "reservert_kl": "2026-10-17T19:17:20.424Z",
+        "fornyet_kl": "2026-10-17T19:17:20.424Z",
+        "frist_kl": "2026-10-17T22:17:20.424Z",
+        "fase": null,
+        "jobbgren": "kuratorjobb/cbd-0013",
+        "kurateringsgren": "kuratering/cbd-0046",
+        "pr": null,
+        "gren": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
+        "kunnskapsgrense": "2026-10-16"
+      },
+      "forsok": 1,
       "tidligst_kl": null,
       "gjenoppta": {
         "oppgave": "cbd-0029",
@@ -742,11 +748,11 @@
       "blokkeringer": [],
       "sist_kuratert": null,
       "siste_kjoring": {
-        "oppgave": "cbd-0029",
+        "oppgave": "cbd-0046",
         "okt": "kurateringsko/okt/20261016-125910",
-        "startet_kl": "2026-10-17T07:38:33.861Z",
-        "avsluttet_kl": "2026-10-17T07:39:19.320Z",
-        "utfall": "fullfort"
+        "startet_kl": "2026-10-17T19:17:20.424Z",
+        "avsluttet_kl": null,
+        "utfall": "reservert"
       },
       "aktiv": true,
       "historikk": [
@@ -868,6 +874,13 @@
           "hendelse": "retting",
           "oppgave": "cbd-0029",
           "melding": "Grenen er tilbake hos kuratoren."
+        },
+        {
+          "kl": "2026-10-17T19:17:20.424Z",
+          "hendelse": "reservert",
+          "oppgave": "cbd-0046",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Forsøk 1, de_novo, fortsetter cbd-0029."
         }
       ],
       "appgren": null
@@ -6130,6 +6143,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "reserver-cbd-191649",
         "fullfort-lamotrigin-0045",
         "reserver-lamotrigin-191517",
         "fullfort-doksepin-0044",
@@ -6178,25 +6192,69 @@
         "reserver-ketobemidon-073939",
         "fullfort-cbd-0029",
         "reserver-cbd-073807",
-        "fullfort-fenobarbital-0026",
-        "tilbakestill-doksepin-0646"
+        "fullfort-fenobarbital-0026"
       ],
       "siste": {
-        "id": "fullfort-lamotrigin-0045",
-        "sha256": "7651a5f56ab607629294961d8158e75c9a3524101ce624bd9faca6a1ed14add9",
+        "id": "reserver-cbd-191649",
+        "sha256": "69251b8e28ae79359a04737e211fa8ea5a21fd701b349f1fa3a5056c2c433b85",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "fullfort-lamotrigin-0045",
-          "foresporsel_sha256": "7651a5f56ab607629294961d8158e75c9a3524101ce624bd9faca6a1ed14add9",
-          "handling": "fullfort",
+          "foresporsel_id": "reserver-cbd-191649",
+          "foresporsel_sha256": "69251b8e28ae79359a04737e211fa8ea5a21fd701b349f1fa3a5056c2c433b85",
+          "handling": "reserver",
           "utfall": "ok",
-          "melding": "lamotrigin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-          "behandlet_kl": "2026-10-17T19:16:30.152Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39061724790"
+          "melding": "cbd er reservert til 2026-10-17T22:17:20.424Z.",
+          "behandlet_kl": "2026-10-17T19:17:20.424Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39061777748",
+          "oppgave": {
+            "oppgave": "cbd-0046",
+            "stoff": "cbd",
+            "navn": "CBD",
+            "modus": "de_novo",
+            "forsok": 1,
+            "frist_kl": "2026-10-17T22:17:20.424Z",
+            "jobbgren": "kuratorjobb/cbd-0013",
+            "kurateringsgren": "kuratering/cbd-0046",
+            "pr": null,
+            "gren": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
+            "gjenoppta": {
+              "oppgave": "cbd-0029",
+              "okt": "kurateringsko/okt/20261016-125910",
+              "avbrutt_kl": "2026-10-17T19:13:54.813Z",
+              "grunn": "Grenen er tilbake hos kuratoren.",
+              "fase": null,
+              "jobbgren": "kuratorjobb/cbd-0013",
+              "kurateringsgren": null,
+              "pr": null,
+              "gren": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
+              "kunnskapsgrense": "2026-10-16"
+            },
+            "sist_kuratert": null,
+            "maal": {
+              "kl": "2026-10-17T14:23:30.777Z",
+              "side": true,
+              "elementer": 2,
+              "redaksjonelle_paneler": 13,
+              "paneler_med_innhold": 1,
+              "referanser": 1,
+              "elementer_uten_kilde": 0
+            },
+            "prioritet": {
+              "poeng": 1462.3,
+              "grunner": [
+                "Fortsetter den avbrutte kurateringen cbd-0029.",
+                "De novo-kuratering i runden som gjelder.",
+                "Aldri kuratert.",
+                "Ingen kuratering å regne alderen fra.",
+                "12 av 13 redaksjonelle seksjoner er tomme.",
+                "Bare 1 referanser."
+              ]
+            }
+          }
         }
       },
       "besvart_commit": "210b71ade8e48660f6393feff6dadb5bb451ceb5",
-      "sist_brukt_kl": "2026-10-17T19:16:30.152Z"
+      "sist_brukt_kl": "2026-10-17T19:17:20.424Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
