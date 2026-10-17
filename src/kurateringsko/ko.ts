@@ -827,6 +827,7 @@ function utfor(t: Kotilstand, f: Foresporsel, k: Behandlingskontekst, svar: (u: 
         if (!k.grener) return svar('avvist', `Kurateringsgrenene i OUSFAR kunne ikke leses nå; prøv igjen senere. ${uendret}`)
         if (!g) return svar('avvist', `Kurateringsgrenen ${f.gren} finnes ikke. ${uendret}`)
         if (!erAktivGren(g.status)) return svar('avvist', `Kurateringsgrenen ${g.id} er ikke aktiv (${g.status}). ${uendret}`)
+        if (g.status === 'stanset') return svar('avvist', `Kurateringsgrenen ${g.id} er stanset av en administrator; den må gjenopptas i OUSFAR først. ${uendret}`)
         if (!s.modus) return svar('avvist', `Ingen kuratering av ${s.stoff} er forfalt. ${uendret}`)
         const feil = koblingsfeil(s.stoff, g, s.modus)
         if (feil) return svar('avvist', `${feil} ${uendret}`)

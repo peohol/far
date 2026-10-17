@@ -185,7 +185,7 @@ neste time.
   kuratoren med grenen: blokkeringene fjernes, grenen står i `gjenoppta`, og
   neste `reserver` gir stoffet med grenen, som etter en kontrollrunde. Står et
   avbrutt forsøk i samme gren, beholdes det (oppgaven, jobbgrenen og
-  kunnskapsgrensen). Grenen må finnes, være aktiv og høre til stoffet med
+  kunnskapsgrensen). Grenen må finnes, være aktiv (ikke stanset) og høre til stoffet med
   arten kurateringen krever; ellers, eller når grenene ikke kan leses,
   avvises forespørselen, og ingenting endres. Uten `gren` glemmer
   `tilbakestill` grenen, og en åpen gren gir da `annen_gren`.

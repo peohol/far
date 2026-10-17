@@ -420,6 +420,7 @@ describe('kurateringsgrenene i OUSFAR', () => {
     avvist('0b6f3c1e-3333-4000-8000-000000000003', grener, 'finnes ikke')
     avvist(ANNEN, grener, 'gjelder gamma, ikke beta')
     avvist(GREN, [gren('arkivert')], 'er ikke aktiv (arkivert)')
+    avvist(GREN, [gren('stanset')], 'er stanset av en administrator')
     avvist(GREN, [gren('klar', { art: 'kuratering' })], 'en de_novo-kuratering må gjøres i en de_novo-gren')
     avvist(GREN, null, 'kunne ikke leses')
     expect(t.stoffer.beta).toMatchObject({ status: 'blokkert', gjenoppta: null, blokkeringer: [{ kode: 'annen_gren' }] })
