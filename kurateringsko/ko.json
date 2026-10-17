@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T00:29:29.910Z",
+  "oppdatert_kl": "2026-10-17T00:52:44.469Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 15,
   "stoffer": {
@@ -997,11 +997,19 @@
     "doksepin": {
       "stoff": "doksepin",
       "navn": "Doksepin",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1460.7,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen doksepin-0014.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "7 av 13 redaksjonelle seksjoner er tomme.",
+          "14 av 19 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-16T18:10:24.842Z",
@@ -1013,9 +1021,20 @@
         "elementer_uten_kilde": 14
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "doksepin-0014",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-17T00:52:44.469Z",
+        "grunn": "Kontrolløren har bedt om endringer i kontrollrunde 1.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/doksepin-0014",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
+        "kunnskapsgrense": "2026-10-16"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -1064,20 +1083,21 @@
           "hendelse": "gren_klar",
           "oppgave": "doksepin-0014",
           "melding": "Grenen: klar, revisjon 4, kontrollrunde 1."
+        },
+        {
+          "kl": "2026-10-17T00:52:44.469Z",
+          "hendelse": "gren_tilbakemelding",
+          "oppgave": "doksepin-0014",
+          "melding": "Grenen: tilbakemelding, revisjon 4, kontrollrunde 1."
+        },
+        {
+          "kl": "2026-10-17T00:52:44.469Z",
+          "hendelse": "retting",
+          "oppgave": "doksepin-0014",
+          "melding": "Kontrolløren har bedt om endringer i kontrollrunde 1."
         }
       ],
-      "appgren": {
-        "id": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
-        "oppgave": "doksepin-0014",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-16",
-        "jobbgren": "kuratorjobb/doksepin-0014",
-        "registrert_kl": "2026-10-17T00:03:17.016Z",
-        "status": "klar",
-        "revisjon": 4,
-        "kontrollrunde": 1
-      }
+      "appgren": null
     },
     "duloksetin": {
       "stoff": "duloksetin",
@@ -4960,6 +4980,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "reserver-doksepin-r2",
         "forny-vortioksetin-0015-gren",
         "reserver-neste-4",
         "fullfort-doksepin-1",
@@ -5003,17 +5024,17 @@
         "reserver-1"
       ],
       "siste": {
-        "id": "forny-vortioksetin-0015-gren",
-        "sha256": "8c952d829ce55d2835c381aef8c5922db28428fdadcc2b60e98a09423d1561ba",
+        "id": "reserver-doksepin-r2",
+        "sha256": "cec31f8783ef8ff1f605364b969931c0a468bdf8d84415b2bd0da86377cf17a9",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "forny-vortioksetin-0015-gren",
-          "foresporsel_sha256": "8c952d829ce55d2835c381aef8c5922db28428fdadcc2b60e98a09423d1561ba",
-          "handling": "forny",
+          "foresporsel_id": "reserver-doksepin-r2",
+          "foresporsel_sha256": "cec31f8783ef8ff1f605364b969931c0a468bdf8d84415b2bd0da86377cf17a9",
+          "handling": "reserver",
           "utfall": "ok",
-          "melding": "Reservasjonen av vortioksetin varer til 2026-10-17T03:29:29.910Z.",
-          "behandlet_kl": "2026-10-17T00:29:29.910Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38986565815",
+          "melding": "Økten har allerede reservert vortioksetin; fortsett med den.",
+          "behandlet_kl": "2026-10-17T00:52:44.469Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38988363754",
           "oppgave": {
             "oppgave": "vortioksetin-0015",
             "stoff": "vortioksetin",
@@ -5044,7 +5065,7 @@
         }
       },
       "besvart_commit": "e15b73bc7ba1519fe905cd7de9530b7060808559",
-      "sist_brukt_kl": "2026-10-17T00:29:29.910Z"
+      "sist_brukt_kl": "2026-10-17T00:52:44.469Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
