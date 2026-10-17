@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T06:43:45.513Z",
+  "oppdatert_kl": "2026-10-17T06:46:12.505Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 26,
   "stoffer": {
@@ -429,11 +429,19 @@
     "brekspiprazol": {
       "stoff": "brekspiprazol",
       "navn": "Brekspiprazol",
-      "status": "blokkert",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1466.3,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen brekspiprazol-0011.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "7 av 13 redaksjonelle seksjoner er tomme.",
+          "17 av 20 elementer har ingen kilde.",
+          "Bare 1 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-16T18:10:24.842Z",
@@ -447,16 +455,20 @@
       "reservasjon": null,
       "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "brekspiprazol-0011",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-17T06:46:12.505Z",
+        "grunn": "Tilbakestilt med kurateringsgrenen 65e21273-dd2c-408b-b987-9ef8adf219c9: Fagansvarlig har avgjort; grenen følges igjen.",
+        "fase": null,
+        "jobbgren": null,
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
+        "kunnskapsgrense": null
+      },
       "pr": null,
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.",
-          "kl": "2026-10-17T06:43:45.513Z",
-          "kilde": "system"
-        }
-      ],
+      "blokkeringer": [],
       "sist_kuratert": null,
       "siste_kjoring": {
         "oppgave": "brekspiprazol-0011",
@@ -511,6 +523,12 @@
           "hendelse": "tilbakestilt",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Menneskelig avgjoerelse 2026-10-17; grenen er sendt til kontroll."
+        },
+        {
+          "kl": "2026-10-17T06:46:12.505Z",
+          "hendelse": "tilbakestilt",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Fagansvarlig har avgjort; grenen følges igjen. Gitt tilbake med kurateringsgrenen 65e21273-dd2c-408b-b987-9ef8adf219c9."
         }
       ],
       "appgren": null
@@ -1073,7 +1091,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.",
-          "kl": "2026-10-17T06:43:45.513Z",
+          "kl": "2026-10-17T06:46:12.505Z",
           "kilde": "system"
         }
       ],
@@ -5480,6 +5498,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "tilbakestill-brekspiprazol-0645",
         "forny-fenobarbital-0026-gren",
         "reserver-202610170551",
         "fullfort-lamotrigin-0025",
@@ -5528,52 +5547,24 @@
         "forny-cbd-1",
         "reserver-neste-2",
         "fullfort-kariprazin-1",
-        "forny-kariprazin-1",
-        "reserver-neste-1"
+        "forny-kariprazin-1"
       ],
       "siste": {
-        "id": "forny-fenobarbital-0026-gren",
-        "sha256": "82a6d3ed70a911b7a4ffed9c65393c8a8f5bde37d71918baf15db1e6cf1b6040",
+        "id": "tilbakestill-brekspiprazol-0645",
+        "sha256": "eb9a3e48e0a8044d6c1ee80abff9c0806bc85159ee7d77add6eea3aba35a8c9e",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "forny-fenobarbital-0026-gren",
-          "foresporsel_sha256": "82a6d3ed70a911b7a4ffed9c65393c8a8f5bde37d71918baf15db1e6cf1b6040",
-          "handling": "forny",
+          "foresporsel_id": "tilbakestill-brekspiprazol-0645",
+          "foresporsel_sha256": "eb9a3e48e0a8044d6c1ee80abff9c0806bc85159ee7d77add6eea3aba35a8c9e",
+          "handling": "tilbakestill",
           "utfall": "ok",
-          "melding": "Reservasjonen av fenobarbital varer til 2026-10-17T09:24:57.621Z.",
-          "behandlet_kl": "2026-10-17T06:24:57.621Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39009802382",
-          "oppgave": {
-            "oppgave": "fenobarbital-0026",
-            "stoff": "fenobarbital",
-            "navn": "Fenobarbital",
-            "modus": "de_novo",
-            "forsok": 1,
-            "frist_kl": "2026-10-17T09:24:57.621Z",
-            "jobbgren": "kuratorjobb/fenobarbital-0026",
-            "kurateringsgren": "kuratering/fenobarbital-0026",
-            "pr": null,
-            "gren": "f99c5bb5-b7f1-4038-b5ab-0cab1a706f97",
-            "gjenoppta": null,
-            "sist_kuratert": null,
-            "maal": {
-              "kl": "2026-10-16T18:10:24.842Z",
-              "side": true,
-              "elementer": 6,
-              "redaksjonelle_paneler": 13,
-              "paneler_med_innhold": 4,
-              "referanser": 3,
-              "elementer_uten_kilde": 1
-            },
-            "prioritet": {
-              "poeng": 0,
-              "grunner": []
-            }
-          }
+          "melding": "brekspiprazol er tilbakestilt og gis tilbake til kuratoren med kurateringsgrenen 65e21273-dd2c-408b-b987-9ef8adf219c9.",
+          "behandlet_kl": "2026-10-17T06:46:12.505Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39011116194"
         }
       },
       "besvart_commit": "3a1898a7d12b7fcb09f952cd5e1529468bccde34",
-      "sist_brukt_kl": "2026-10-17T06:24:57.621Z"
+      "sist_brukt_kl": "2026-10-17T06:46:12.505Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
