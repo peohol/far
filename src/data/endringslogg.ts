@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.102.2',
+    dato: '2026-10-17',
+    sammendrag: '«Følg agenten» åpner kortene agenten arbeider i, så endringene vises mens de skjer',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Mindre omfang',
+    gjelder: ['kuratering'],
+    punkter: [
+      'Med «Følg agenten» på åpnes nå seksjonen og kortet agenten arbeider i, og siden ruller dit. Før rullet den bare dit, og kortet kunne stå lukket.',
+      'Stedet som følges, har en ramme, og merket «Agenten arbeider her» mens agenten arbeider der.',
+      'Når agenten lagrer en ny revisjon, åpnes det som er endret, og det lyser opp en liten stund. Siden står som før mens innholdet byttes, med de samme kortene åpne.',
+    ],
+  },
+  {
     versjon: '1.102.1',
     dato: '2026-10-17',
     sammendrag: 'Kurateringer som legger inn den samme nye kilden, stopper ikke lenger hverandre',

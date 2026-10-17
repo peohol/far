@@ -61,8 +61,8 @@ export type Rulleplass = ScrollLogicalPosition | false
  * Plassen en skuff brukeren har åpnet, rulles til: midt i det synlige feltet
  * når den får plass der, ellers med toppen rett under toppmenyen (se `rullTilpasset`).
  */
-const TILPASSET = 'tilpasset'
-type Rullemal = Rulleplass | typeof TILPASSET
+export const TILPASSET = 'tilpasset'
+export type Rullemal = Rulleplass | typeof TILPASSET
 
 export interface Seksjonsstyring {
   /** Tilstanden til skuffen stien peker på. */
@@ -84,10 +84,11 @@ export interface Seksjonsstyring {
   apne(sti: readonly string[], plass?: Rulleplass): void
   /**
    * Åpner skuffene elementet står i, innenfra og ut, og ruller elementet fram.
-   * Brukes av søket for å vise et treff i en lukket seksjon, og av
-   * nettleserens eget søk.
+   * Brukes av søket for å vise et treff i en lukket seksjon, av nettleserens
+   * eget søk, og av «Følg agenten» (`TILPASSET`: midtstilt når elementet får
+   * plass, ellers med toppen øverst).
    */
-  apneTil(element: Element, plass?: Rulleplass): void
+  apneTil(element: Element, plass?: Rullemal): void
   /**
    * Et sted på siden som alltid står fram og ikke er en skuff, som «Viktige
    * data» eller et detaljkort uten noe mer å vise. En direktelenke dit åpner
@@ -227,7 +228,7 @@ export function SeksjonsstyringKilde({ bevares = false, children }: { bevares?: 
   )
 
   const apneTil = useCallback(
-    (element: Element, plass: Rulleplass = 'center') => {
+    (element: Element, plass: Rullemal = 'center') => {
       element.dispatchEvent(new Event(VIS_HENDELSE, { bubbles: true }))
       velg(skufferRundt(element), false)
       etterTegning(() => rull(element, plass))
