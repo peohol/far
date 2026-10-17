@@ -1,0 +1,59 @@
+Tabell 5: Voksne over 18 år - justering av daglig lamotrigindosering etter tillegg av andre legemidler
+for behandling av bipolar lidelse
+
+Det er ingen klinisk erfaring med justering av daglig lamotrigindosering etter tillegg av andre
+legemidler. Imidlertid, basert på interaksjonsstudier med andre legemidler, kan følgene anbefalinger
+gjøres:
+
+Behandlingsregime     Nåværende           Uke 1                Uke 2              Uke 3 og videre
+                      stabiliserende      (Tilleggsstart)
+                      lamotrigindose
+                      (før tillegg)
+Tillegg av valproat (hemmer av lamotrigin-glukuronidering – se pkt. 4.5), avhengig av opprinnelig
+lamotrigindose:
+Dette                 200 mg/dag          100 mg/dag           Dosen vedlikeholdes (100 mg/dag)
+doseringsregimet      300 mg/dag          150 mg/dag           Dosen vedlikeholdes (150 mg/dag)
+skal brukes når       400 mg/dag          200 mg/dag           Dosen vedlikeholdes (200 mg/dag)
+valproat legges til,
+uavhengig av andre
+legemidler
+Tillegg av legemidler som induserer lamotrigin-glukuronidering hos pasienter som IKKE
+bruker valproat (se pkt. 4.5), avhengig av opprinnelig lamotrigindose:
+Dette                 200 mg/dag          200 mg/dag           300 mg/dag         400 mg/dag
+doseringsregimet      150 mg/dag          150 mg/dag           225 mg/dag         300 mg/dag
+skal brukes når       100 mg/dag          100 mg/dag           150 mg/dag         200 mg/dag
+følgende legges til
+uten valproat:
+
+Fenytoin
+Karbamazepin
+Fenobarbital
+Primidon
+Rifampicin
+Lopinavir/Ritonavir
+Tillegg av legemidler som IKKE signifikant hemmer eller induserer lamotrigin-glukuronidering
+(se pkt. 4.5):
+Dette                  Vedlikehold måldose oppnådd ved doseøkning (200 mg/dag, doseringsområde
+doseringsregimet       100 - 400 mg/dag)
+skal brukes når
+andre legemidler
+som ikke
+signifikant hemmer
+eller induserer
+lamotrigin-
+glukuronidering
+legges til.
+Hos pasienter som bruker legemidler hvor farmakokinetisk interaksjon med lamotrigin er ukjent (se
+pkt. 4.5), bør doseringsregime anbefalt for lamotrigin ved samtidig bruk av valproat anvendes.
+
+Seponering av Lamictal hos pasienter med bipolar lidelse
+I kliniske studier var det ingen økning i insidens, alvorlighet eller type bivirkninger etter brå
+seponering av lamotrigin sammenlignet med placebo. Pasienter kan derfor seponere Lamictal uten
+trinnvis dosereduksjon.
+
+Barn og ungdom under 18 år
+Lamictal er ikke anbefalt brukt hos barn under 18 år fordi en randomisert seponeringsstudie viste
+ingen signifikant effekt og viste økt rapportering av selvmordsadferd (se pkt. 4.4 og 5.1).
+
+
+                                                  8

@@ -1,0 +1,59 @@
+26 måneder med enzyminduserende behandling, 136 timer når gitt samtidig med valproat og 38 timer
+hos personer uten enzyminduserende behandling. Den inter-individuelle variasjonen for clearance var
+større i gruppen av pediatriske pasienter i alderen 2 - 26 måneder (47 %). Den antatte
+serumkonsentrasjonen hos barn 2 - 26 måneder var generelt i samme område som hos eldre barn, selv
+om høyere Cmax nivå vil sannsynligvis bli observert hos noen barn med kroppsvekt under 10 kg.
+
+Eldre
+Resultat fra en farmakokinetisk populasjonsanalyse med både yngre og eldre epilepsipasienter i de
+samme studiene tydet på at clearance av lamotrigin ikke endres i klinisk relevant omfang. Etter
+enkeltdoser ble clearance redusert med 12 % fra 35 mL/min ved alder 20 år til 31 mL/min ved alder 70
+år. Reduksjon etter 48 behandlingsuker var 10 % fra 41 til 37 mL/min mellom de yngste og eldste
+gruppene. I tillegg ble farmakokinetikk av lamotrigin undersøkt hos 12 friske, eldre personer etter
+inntak av en enkeltdose på 150 mg. Gjennomsnittlig clearance hos eldre (0,39 mL/min/kg) ligger
+innenfor området av gjennomsnittlig clearanceverdi (0,31 - 0,65 mL/min/kg) funnet i ni studier med
+yngre voksne etter enkeltdoser på 30 til 450 mg.
+
+Nedsatt nyrefunksjon
+Tolv frivillige med kronisk nyresvikt og seks personer som gjennomgikk hemodialyse fikk en
+enkeltdose 100 mg lamotrigin. Gjennomsnittlig clearance var 0,42 mL/min/kg (kronisk nyresvikt),
+0,33 mL/min/kg (mellom hemodialyse) og 1,57 mL/min/kg (ved hemodialyse), sammenlignet med
+0,58 mL/min/kg hos friske frivillige. Gjennomsnittlig halveringstid var 42,9 timer (kronisk nyresvikt),
+57,4 timer (mellom hemodialyse) og 13,0 timer (ved hemodialyse), sammenlignet med 26,2 timer hos
+friske frivillige. Jevnt over ble omtrent 20 % (område = 5,6 - 35,1) av lamotriginmengden i kroppen
+eliminert i løpet av 4-timers hemodialyse. For denne pasientgruppen bør startdoser av lamotrigin være
+basert på andre legemidler pasienten bruker samtidig. Reduksjon av vedlikeholdsdose kan være
+effektivt hos pasienter med signifikant nedsatt nyrefunksjon (se pkt. 4.2 og 4.4).
+
+Nedsatt leverfunksjon
+Farmakokinetisk studie med enkeltdose ble utført hos 24 personer med varierende grad av nedsatt
+leverfunksjon og hos 12 friske frivillige som kontroller. Tilsynelatende median for clearance var 0,31,
+0,24 eller 0,10 mL/min/kg hos pasienter med henholdsvis Grad A, B eller C (Child-Pugh
+klassifisering) nedsatt leverfunksjon, sammenlignet med 0,34 mL/min/kg hos friske kontroller. Start-,
+opptrappings- og vedlikeholdsdose bør generelt reduseres hos pasienter med moderat eller alvorlig
+nedsatt leverfunksjon (se pkt. 4.2).
+
+5.3     Prekliniske sikkerhetsdata
+
+Ikke-klinisk data viste ingen spesiell fare for mennesker basert på studier på sikkerhetsfarmakologi,
+toksisitetstester ved gjentatt dosering, gentoksisitet og karsinogent potensial.
+
+Toksisitetsstudier av reproduksjon og utvikling hos gnagere og kanin viste ingen teratogen effekt, men
+redusert fødselsvekt og forsinket forbening i skjelettet ved doser under eller tilsvarende den forventede
+kliniske dose ble sett. Da høyere doser ikke kan testes ut i dyrestudier på grunn av maternell toksisitet,
+er lamotrigins teratogene potensiale ikke karakterisert utover klinisk eksponering.
+
+Hos rotter ble det observert en økt forekomst av føtal og postnatal dødelighet når lamotrigin ble
+administrert sent i drektigheten eller like etter fødsel. Disse effektene ble observert ved
+eksponeringsnivåer lavere enn forventet klinisk eksponering.
+
+Hos unge rotter ble en effekt på læring i Biel labyrint test, noe forsinket balanopreputial separasjon og
+vaginal tydelighet samt redusert vektøkning etter fødsel sett hos F1 dyr ved eksponering mindre enn
+terapeutisk eksponering hos voksne mennesker basert på kroppsoverflate.
+
+Dyrestudier viste ingen nedsatt fertilitet ved eksponering for lamotrigin. Lamotrigin reduserte det
+føtale folsyrenivået hos rotter. Folsyremangel antas å være assosiert med en økt risiko for medfødte
+misdannelser hos dyr og mennesker.
+
+
+                                                   24

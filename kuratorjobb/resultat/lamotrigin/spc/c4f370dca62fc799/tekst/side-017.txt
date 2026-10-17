@@ -1,0 +1,59 @@
+Interaksjoner med andre legemidler
+
+I en studie med 10 mannlige frivillige økte rifampicin clearance og reduserte halveringstid av
+lamotrigin ved induksjon av glukuroniderende leverenzymer. Pasienter som anvender rifampicin
+samtidig med lamotrigin bør følge passende doseringsregime (se pkt. 4.2).
+
+I en studie med friske frivillige tilnærmet halverte lopinavir/ritonavir plasmakonsentrasjonen av
+lamotrigin, sannsynligvis ved induksjon av glukuronidering. Pasienter som anvender
+lopinavir/ritonavir samtidig med lamotrigin bør følge passende doseringsskjema (se pkt. 4.2).
+
+Atazanavir/ritonavir (300 mg/100 mg) administrert i 9 dager reduserte plasma AUC og Cmax av
+lamotrigin (enkeltdose på 100 mg) med hhv. gjennomsnittlig 32 % og 6 % i en studie med friske
+frivillige voksne. Hos pasienter som får samtidig behandling med atazanavir/ritonavir, bør et tilpasset
+behandlingsregime velges (se avsnitt 4.2).
+Paracetamol 1 g (fire ganger daglig) reduserte plasma AUC og Cmin av lamotrigin med henholdsvis 20
+% og 25 % i en studie med friske frivillige voksne.
+
+Data fra in vitro-studier viser at lamotrigin, men ikke N(2)-glukuronidmetabolitten, er en hemmer av
+Organisk Transporter 2 (OCT2) ved potensielt klinisk relevante konsentrasjoner. Disse dataene viser
+at lamotrigin er en hemmer av OCT 2, med en IC50-verdi på 53,8 μM. Samtidig administrering av
+lamotrigin med legemidler som utskilles renalt og som er substrater for OCT2 (f.eks. metformin,
+gabapentin og vareniklin) kan resultere i økte plasmanivåer av disse legemidlene. Den kliniske
+betydningen av dette er ikke enda klarlagt, men forsiktighet bør imidlertid utvises hos pasienter som
+bruker disse legemidlene samtidig.
+
+4.6     Fertilitet, graviditet og amming
+
+Risiko relatert til antiepileptika generelt
+
+Kvinner som kan bli gravide bør rådføre seg med spesialist. Den antiepileptiske behandlingen skal
+vurderes når en kvinne planlegger å bli gravid. Brå seponering av antiepileptika hos kvinner som blir
+behandlet for epilepsi bør unngås, da dette kan føre til gjennombruddsanfall som kan ha alvorlige
+konsekvenser for mor og det ufødte barnet. Kombinasjonsbehandling med flere antiepileptika kan
+være knyttet til høyere risiko for medfødte misdannelser enn monoterapi, avhengig av de assosierte
+antiepileptika. Monoterapi bør derfor foretrekkes når dette er mulig.
+
+Risiko relatert til lamotrigin
+
+Graviditet
+En stor mengde data om gravide kvinner eksponert for lamotrigin monoterapi i første trimester av
+svangerskapet (mer enn 8700) antyder ikke at risikoen for større medfødte misdannelser inkludert
+leppe/ganespalte er vesentlig økt. Dyrestudier har vist utviklingsmessig toksisitet (se pkt. 5.3).
+
+Hvis behandling med lamotrigin er nødvendig under graviditeten, anbefales bruk av lavest mulig
+terapeutiske dose.
+
+Lamotrigin har en svakt hemmende effekt på dihydrofolatreduktase, og kan teoretisk føre til en økt
+risiko for embryoføtale skader ved reduksjon av folsyrenivået. Folsyretilskudd kan vurderes før
+graviditet og tidlig i graviditeten.
+
+Fysiologiske endringer under graviditet kan påvirke lamotriginnivå og/eller terapeutisk effekt.
+Redusert plasmanivå av lamotrigin under graviditet med potensiell risiko for tap av anfallskontroll er
+rapportert. Etter fødsel kan lamotriginnivå øke raskt med risiko for doserelaterte bivirkninger.
+Serumkonsentrasjon av lamotrigin bør derfor monitoreres før, under og etter graviditet, samt like etter
+fødsel. Hvis nødvendig kan dosen justeres for å opprettholde serumkonsentrasjon av lamotrigin på
+samme nivå som før graviditet eller justert i henhold til klinisk respons. I tillegg bør doserelaterte
+bivirkninger monitoreres etter fødsel.
+
+                                                  17

@@ -1,0 +1,58 @@
+                             ‘Andel’ pasienter uten hendelser ved uke 76
+                                  SCAB2003-studien                     SCAB2006-studien
+                                      Bipolar I                            Bipolar I
+ Inklusjonskriterie          Omfattende depressiv episode          Omfattende manisk episode
+                          Lamotrigin    Litium      Placebo    Lamotrigin   Litium      Placebo
+ Ingen intervensjon          0,22        0,21         0,12        0,17        0,24        0,04
+ p-verdi Log rank test      0,004       0,006           -        0,023       0,006          -
+
+ Ingen depresjon             0,51           0,46         0,41           0,82          0,71         0,40
+ p-verdi Log rank test      0,047          0,209           -           0,015         0,167           -
+
+ Ingen mani                  0,70           0,86         0,67           0,53          0,64         0,37
+ p-verdi Log rank test      0,339          0,026           -           0,280         0,006           -
+
+I støtte-analyser av tid til første depressive episode og tid til første maniske/hypomaniske episode eller
+blandet episode hadde lamotriginbehandlede pasienter betydelig lengre tid til første depressive episode
+enn placebopasientene. Behandlingsforskjellen med hensyn på tid til første maniske/hypomaniske
+episode eller blandet episode var ikke statistisk signifikant.
+
+Effekt av lamotrigin i kombinasjon med stemningsstabiliserende legemidler har ikke blitt tilstrekkelig
+undersøkt.
+
+Pediatrisk populasjon
+Effekt og sikkerhet av kombinasjonsbehandling ved partielle anfall hos pasienter i alderen
+1-24 måneder har blitt utredet i en liten, dobbeltblindet, placebokontrollert seponeringsstudie.
+Behandling ble startet hos 177 personer med dosetitreringsskjema tilsvarende skjema brukt for barn 2-
+-12 år. Lamotrigin 2 mg tabletter er den laveste styrken tilgjengelig. Standard doseringsskjema ble
+derfor i enkelte tilfeller tilpasset i titreringsfasen (f.eks. administrasjon av 2 mg tablett annenhver dag
+når beregnet dose var mindre enn 2 mg). Serumkonsentrasjon ble målt etter 2 ukers titrering og videre
+dose ble enten redusert eller vedlikeholdt dersom konsentrasjon oversteg 0,41 mikrogram/ml, som er
+den forventede konsentrasjon hos voksne på dette tidspunktet. Dosereduksjon på opp til 90 % var
+påkrevd hos enkelte pasienter etter 2 ukers titrering. Trettiåtte respondenter (> 40 % nedgang i
+anfallshyppighet) ble randomisert til placebo eller fortsettelse av lamotrigin. Andel personer med
+behandlingssvikt var 84 % (16/19 personer) i placeboarmen og 58 % (11/19) i lamotriginarmen.
+Forskjellen var ikke statistisk signifikant: 26,3 % (95 % KI [-2,6 %; 50,2 %], p = 0,07).
+
+Totalt 256 personer i alderen 1 - 24 måneder har blitt eksponert for lamotrigin i doseringsområdet
+1-15 mg/kg/dag i inntil 72 uker. Sikkerhetsprofilen av lamotrigin hos barn i alderen 1 måned til 2 år
+var liknende profilen hos eldre barn, med unntak av klinisk forverring av anfall (> = 50 %) som ble
+rapportert oftere hos barn under 2 år (26 %) sammenlignet eldre barn (14 %).
+
+Lennox-Gastaut syndrom
+Det finnes ikke noe data for monoterapi ved anfall assosiert med Lennox-Gastaut syndrom.
+
+Forebygging av stemningsepisoder hos barn (10 - 12 år) og ungdom (13 - 17 år)
+Barn og ungdommer av begge kjønn (10 - 17 år) som var diagnostisert med bipolar I lidelse og som
+hadde gått i remisjon eller blitt forbedret etter en bipolar episode under behandling med lamotrigin i
+kombinasjoner med samtidig antipsykotiske legemidler eller andre stemningsstabiliserende legemidler
+ble inkludert i en multisenter, parallell gruppe, placebokontrollert, dobbeltblindet, randomisert
+seponeringsstudie. Studien evaluerte effekt og sikkerhet av lamotrigin med rask frigivelse som tillegg i
+vedlikeholdsbehandling for å forsinke stemningsepisoder. Resultatet av den primære effektanalysen
+(tid for forekomst av en bipolar hendelse - TOBE) nådde ikke statistisk signifikans (p = 0,0717), og
+effekt ble dermed ikke vist. I tillegg viste sikkerhetsresultater økt rapportering av selvmordsatferd hos
+lamotriginbehandlede pasienter: 5 % (4 pasienter) i lamotrigin armen sammenlignet med 0 i placebo
+(se pkt. 4.2).
+
+5.2     Farmakokinetiske egenskaper
+                                                    22

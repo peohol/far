@@ -1,0 +1,58 @@
+Absorpsjon
+
+Lamotrigin blir raskt og fullstendig absorbert uten signifikant first-pass metabolisme. Maksimal
+plasmakonsentrasjon oppnås ca. 2,5 timer etter oral administrasjon. Tid til maksimal konsentrasjon er
+noe forsinket etter mat, men grad av absorpsjon er ikke påvirket. Det er betydelig inter-individuell
+variasjon for maksimal ”steady-state" konsentrasjon, mens den individuelle konsentrasjonen varierer
+sjelden.
+
+Distribusjon
+
+Plasmaproteinbinding: ca. 55 %. Det er usannsynlig at fortrengning fra plasmaproteiner vil resultere i
+toksisitet.
+
+Distribusjonsvolum: 0,92 - 1,22 L/kg.
+
+Biotransformasjon
+
+Lamotrigin metaboliseres av UDP-glukuronyltransferaser.
+
+Lamotrigin har i begrenset omfang egeninduksjon av metabolisme, avhengig av dose. Imidlertid er det
+lite hold for at lamotrigin påvirker farmakokinetikken av andre antiepileptika. Data tyder på at
+interaksjoner mellom lamotrigin og legemidler metabolisert av cytokrom P450-enzymer er
+usannsynlige.
+
+Eliminasjon
+
+Plasmaclearance hos friske personer er ca. 30 mL/min. Lamotriginclearance er primært metabolsk
+med påfølgende eliminasjon av glukuronidkonjugert materiale i urin. Mindre enn
+10 % utskilles uendret i urin. Kun 2 % av lamotriginrelatert materiale utskilles i feces. Clearance og
+halveringstid er doseuavhengig. Halveringstid i plasma hos friske personer er anslått til ca. 33 timer
+(14 - 103 timer). I studier med personer med Gilberts Syndrom var den gjennomsnittlige clearance
+redusert med 32 % sammenlignet med normale kontroller, men verdiene var innen området for den
+generelle populasjonen.
+
+Halveringstid av lamotrigin er i stor grad påvirket av annen samtidig legemiddelbruk. Gjennomsnittlig
+halveringstid er redusert til ca. 14 timer når gitt samtidig med glukuronideringsinduserende legemidler
+som eksempelvis karbamazepin og fenytoin, og øker til gjennomsnittlig ca. 70 timer når gitt samtidig
+kun med valproat (se pkt. 4.2).
+
+Linearitet
+
+Farmakokinetikk av lamotrigin er lineær opp til 450 mg, som er den høyeste undersøkte enkeltdosen.
+
+Spesielle pasientgrupper
+
+Barn
+Clearance justert for kroppsvekt er høyere hos barn enn hos voksne. Den høyeste clearanceverdien er
+hos barn under fem år. Halveringstid for lamotrigin er generelt kortere hos barn enn hos voksne med
+en gjennomsnittlig verdi på ca. 7 timer når gitt sammen med et enzyminduserende legemiddel som
+karbamazepin eller fenytoin. Halveringstid øker til gjennomsnittlig verdi 45 - 50 timer når gitt
+samtidig kun med valproat (se pkt. 4.2).
+
+Spedbarn 2 - 26 måneder
+Hos 143 pediatriske pasienter i alderen 2 - 26 måneder med vekt 3 - 16 kg, som fikk samme orale
+doser per kg kroppsvekt som barn eldre enn 2 år, ble clearance redusert sammenlignet med eldre barn
+med samme kroppsvekt. Gjennomsnittlig halveringstid ble anslått til 23 timer hos spedbarn yngre enn
+
+                                                   23

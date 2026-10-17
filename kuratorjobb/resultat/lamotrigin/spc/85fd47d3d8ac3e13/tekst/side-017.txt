@@ -1,0 +1,59 @@
+Interaksjoner med hormonelle antikonseptiva
+
+Effekt av hormonelle antikonseptiva på farmakokinetikk av lamotrigin
+I en studie med 16 kvinnelige friske frivillige medførte administrasjon av kombinasjon 30 mikrogram
+etinyløstradiol/150 mikrogram levonorgestrel til en ca. 2 ganger økning i lamotriginclearance. Dette
+resulterte i gjennomsnittlig reduksjon i lamotrigin AUC og Cmax på henholdsvis 52 % og 39 %.
+Serumkonsentrasjon av lamotrigin økte i løpet av uken med ikke-aktiv behandling (”pillefri” uke).
+Før-dosering konsentrasjon ved slutten av uken av ikke-aktiv behandling var gjennomsnittlig ca. 2
+ganger så høy som ved samtidig behandling (se pkt. 4.4). Justering av anbefalt doseøkning av
+lamotrigin bør ikke gjøres på grunnlag av bruk av hormonelle antikonseptiva alene, men det vil i de
+fleste tilfeller være nødvendig å øke eller redusere vedlikeholdsdosen av lamotrigin ved oppstart eller
+seponering av hormonelle antikonseptiva (se pkt. 4.2).
+
+Effekt av lamotrigin på farmakokinetikk av hormonelle antikonseptiva
+I en studie med 16 kvinnelige friske frivillige hadde en ”steady-state” dose på 300 mg lamotrigin
+ingen påvirkning på farmakokinetikk av etinyløstradiolkomponenten av en oral kombinasjons p-pille.
+Det ble sett en begrenset økning i clearance av levonorgestrelkomponenten, som resulterte i
+gjennomsnittlig 19 % og 12 % reduksjon i henholdsvis levonorgestrel AUC og Cmax. Måling av serum
+FSH, LH og østradiol i løpet av studien indikerte noe tap av hemming av hormonell ovarieaktivitet hos
+noen kvinner, selv om måling av serumprogesteron indikerte ingen hormonelle tegn på eggløsning hos
+noen av de 16 personene. Påvirkning av begrenset økning i levonorgestelclearance og endringer i
+serum FSH og LH på eggløsning er ukjent (se pkt. 4.4). Effekt av andre lamotrigindoser enn 300
+mg/dag har ikke blitt undersøkt og undersøkelser med andre preparat med kvinnelige hormon har ikke
+blitt utført.
+
+Interaksjoner med andre legemidler
+
+I en studie med 10 mannlige frivillige økte rifampicin clearance og reduserte halveringstid av
+lamotrigin ved induksjon av glukuroniderende leverenzymer. Pasienter som anvender rifampicin
+samtidig med lamotrigin bør følge passende doseringsregime (se pkt. 4.2).
+
+I en studie med friske frivillige tilnærmet halverte lopinavir/ritonavir plasmakonsentrasjonen av
+lamotrigin, sannsynligvis ved induksjon av glukuronidering. Pasienter som anvender
+lopinavir/ritonavir samtidig med lamotrigin bør følge passende doseringsskjema (se pkt. 4.2).
+
+Atazanavir/ritonavir (300 mg/100 mg) administrert i 9 dager reduserte plasma AUC og Cmax av
+lamotrigin (enkeltdose på 100 mg) med hhv. gjennomsnittlig 32 % og 6 % i en studie med friske
+frivillige voksne. Hos pasienter som får samtidig behandling med atazanavir/ritonavir, bør et tilpasset
+behandlingsregime velges (se avsnitt 4.2).
+Paracetamol 1 g (fire ganger daglig) reduserte plasma AUC og Cmin av lamotrigin med henholdsvis 20
+% og 25 % i en studie med friske frivillige voksne.
+
+Data fra in vitro-studier viser at lamotrigin, men ikke N(2)-glukuronidmetabolitten, er en hemmer av
+Organisk Transporter 2 (OCT2) ved potensielt klinisk relevante konsentrasjoner. Disse dataene viser
+at lamotrigin er en hemmer av OCT 2, med en IC50-verdi på 53,8 μM. Samtidig administrering av
+lamotrigin med legemidler som utskilles renalt og som er substrater for OCT2 (f.eks. metformin,
+gabapentin og vareniklin) kan resultere i økte plasmanivåer av disse legemidlene. Den kliniske
+betydningen av dette er ikke enda klarlagt, men forsiktighet bør imidlertid utvises hos pasienter som
+bruker disse legemidlene samtidig.
+
+4.6     Fertilitet, graviditet og amming
+
+Risiko relatert til antiepileptika generelt
+
+Kvinner som kan bli gravide bør rådføre seg med spesialist. Den antiepileptiske behandlingen skal
+vurderes når en kvinne planlegger å bli gravid. Brå seponering av antiepileptika hos kvinner som blir
+behandlet for epilepsi bør unngås, da dette kan føre til gjennombruddsanfall som kan ha alvorlige
+
+                                                  17

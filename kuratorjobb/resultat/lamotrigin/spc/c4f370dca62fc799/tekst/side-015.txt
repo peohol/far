@@ -1,0 +1,58 @@
+Interaksjoner med antiepileptika
+
+Valproat, som hemmer glukuronidering av lamotrigin, reduserer metabolismen og øker
+gjennomsnittlig halveringstid av lamotrigin nesten to ganger. Pasienter som bruker valproat samtidig
+med lamotrigin bør anvende passende behandlingsregime (se pkt. 4.2).
+
+Enkelte antiepileptika (f.eks. fenytoin, karbamazepin, fenobarbital og primidon) som induserer
+cytokrom P450 enzymer, induserer også UGTer, og øker derfor lamotriginmetabolismen. Pasienter
+som bruker fenytoin, karbamazepin, fenobarbital eller primidon samtidig med lamotrigin bør anvende
+passende behandlingsregime (se pkt. 4.2).
+
+CNS-effekter er rapportert, inkludert svimmelhet, ataksi, dobbeltsyn, tåkesyn og kvalme, hos pasienter
+som bruker karbamazepin etter de har startet lamotrigin. Symptomene opphører vanligvis ved
+reduksjon av karbamazepindosen. Lignende effekter ble sett i en studie med lamotrigin og
+okskarbazepin hos voksne, friske frivillige, men dosereduksjon ble ikke undersøkt.
+
+I litteraturen er det rapportert reduserte lamotriginnivå når lamotrigin ble gitt samtidig med
+okskarbazepin. I en prospektiv studie med voksne, friske frivilllige med doser 200 mg lamotrigin og
+1200 mg okskarbazepin ble imidlertid metabolismen av verken lamotrigin eller okskarbazepin
+påvirket. Pasienter som blir behandlet samtidig med okskarbazepin bør derfor benytte
+behandlingsregime for lamotrigin i kombinasjonsbehandling uten valproat og uten legemidler som
+induserer lamotrigin-glukuronidering (se pkt. 4.2).
+
+I en studie med friske frivillige hadde samtidig bruk av felbamat (1200 mg 2 ganger daglig) med
+lamotrigin (100 mg 2 ganger daglig i 10 dager) ingen klinisk relevante effekter på farmakokinetikk av
+lamotrigin.
+
+En retrospektiv analyse av plasmanivå hos pasienter som brukte lamotrigin både med og uten
+gabapentin viste at gabapentin tilsynelatende ikke påvirker clearance av lamotrigin.
+
+Mulig interaksjon mellom levetiracetam og lamotrigin ble utredet ved evaluering av
+serumkonsentrasjon av begge stoffene ved placebokontrollerte studier. Dataene indikerer at
+farmakokinetikk av verken levetiracetam eller lamotrigin påvirkes.
+
+”Steady-state” laveste (trough) plasmakonsentrasjon av lamotrigin ble ikke påvirket av samtidig
+behandling med pregabalin (200 mg 3 ganger daglig). Det er ingen farmakokinetiske interaksjoner
+mellom lamotrigin og pregabalin.
+
+Topiramat gav ingen endring i plasmakonsentrasjon av lamotrigin. Bruk av lamotrigin gav en 15 %
+økning i topiramatkonsentrasjon.
+
+I en studie med epilepsipasienter hadde samtidig bruk av zonisamid (200-400 mg/dag) med lamotrigin
+(150-500 mg/dag) i 35 dager ingen signifikant effekt på farmakokinetikk av lamotrigin.
+
+I placebo-kontrollerte kliniske studier hos pasienter med partielle anfall ble ikke
+plasmakonsentrasjoner av lamotrigin påvirket av samtidig administrasjon av lakosamid (200, 400,
+eller 600 mg/daglig).
+
+I en samlet analyse av data fra tre placebo-kontrollerte kliniske studier som undersøkte
+tilleggsbehandling av perampanel hos pasienter med partielle og primært generaliserte tonisk-kloniske
+anfall, økte den høyeste dosen av perampanel evaluert (12 mg/daglig) lamotrigin-clearance med
+mindre enn 10 %.
+
+Selv om endringer i plasmakonsentrasjon av andre antiepileptika er rapportert, har kontrollerte studier
+ikke vist at lamotrigin påvirker plasmakonsentrasjonen av andre antiepileptika ved samtidig bruk.
+
+
+                                                  15

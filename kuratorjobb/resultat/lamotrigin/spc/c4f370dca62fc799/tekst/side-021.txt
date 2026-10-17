@@ -1,0 +1,56 @@
+5.1     Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Diverse antiepileptika, ATC-kode: N03A X09
+
+Virkningsmekanisme
+
+Resultat av farmakologiske studier tyder på at lamotrigin er en bruks- og spenningsavhengig hemmer
+av spenningsstyrte natriumkanaler. Lamotrigin hemmer varig gjentatt utladning av neuroner og
+hemmer frigjøring av glutamat (neurotransmittor som har en nøkkelrolle ved generering av epileptiske
+anfall). Det er sannsynlig at disse effektene bidrar til de krampestillende egenskapene av lamotrigin.
+
+Virkningsmekanisme for terapeutisk virkning av lamotrigin ved bipolar lidelse er ikke kjent, selv om
+interaksjon med spenningsstyrte natriumkanaler sannsynligvis er viktig.
+
+Farmakodynamiske effekter
+
+I tester utviklet for å evaluere effekt av legemidler på sentralnervesystemet viste resultatene ved dose
+240 mg lamotrigin gitt til friske frivillige ingen forskjell fra placebo. Både 1 000 mg fenytoin og 10
+mg diazepam gav signifikant nedsatt finmotorikk, øyebevegelser, kroppsholdning og fremkalte
+subjektiv sederende virkning.
+
+I en annen studie førte orale enkeltdoser på 600 mg karbamazepin til signifikant nedsatt finmotorikk
+og øyebevegelser, kroppsholdning og økt hjerterate, mens resultat av lamotrigin i dose 150 mg og 300
+mg var lik placebo.
+
+Studie på effekt av lamotrigin på hjertetsledningssystemt
+En studie på voksne, friske frivillige evaluerte effekten av gjentatt dosering av lamotrigin (opptil 400
+mg/dag) på hjertets ledningssystem, utredet med 12-lead EKG. Det var ingen klinisk signifikant effekt
+av lamotrigin på QT-intervallet sammenlignet med placebo
+
+Klinisk effekt og sikkerhet
+
+Forebygging av stemningsepisoder hos pasienter med bipolar lidelse
+Effekt av lamotrigin for forebygging av stemningsepisoder hos pasienter med bipolar I lidelse har blitt
+evaluert i to studier.
+
+SCAB2003-studien var en multisenter, dobbeltblind, placebo- og litiumkontrollert, randomisert,
+bestemt dose evaluering av langtidsforebygging av tilbakefall og gjentatt depresjon og/eller mani hos
+pasienter med bipolar I lidelse som nylig eller på daværende tidspunkt opplevde en omfattende
+depressiv episode. Etter stabilisering med lamotrigin monoterapi eller kombinasjonsterapi ble
+pasientene tilfeldig inndelt i en av fem behandlingsgrupper: lamotrigin (50, 200, 400 mg/dag), litium
+(serumnivå 0,8-1,1 mMol/l) eller placebo for maksimalt 76 uker (18 måneder). Det primære
+endepunktet var ”Tid til intervensjon for en stemningsepisode” (”Time to intervention for a Mood
+Episode”, TIME). Intervensjon var tillegg av farmakoterapi eller elektrokonvulsiv behandling (ECT).
+SCAB2006-studien hadde et liknende oppsett som SCAB2003-studien, men var forskjellig fra
+SCAB2003-studien ved evaluering av fleksibel lamotrigindose (100 - 400 mg/dag) og inkluderte
+pasienter med bipolar I lidelse som nylig eller på daværende tidspunkt opplevde en manisk episode.
+Resultatene er vist i Tabell 7.
+
+Tabell 7: Oppsummering av resultat fra studier hvor effekt av lamotrigin for forebygging av
+stemningsepisoder hos pasienter med bipolar I lidelse er undersøkt
+
+
+
+
+                                                   21

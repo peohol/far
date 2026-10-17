@@ -1,0 +1,719 @@
+{
+  "stoff": "lamotrigin",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-16T04:15:06.398225+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 15,
+    "hentet": 6,
+    "dokumenter": 2,
+    "mangler": [
+      {
+        "merkevare_id": "ID_05C30888-7B13-4FA3-88AF-91060D081367",
+        "varenavn": "Lamotrigin 1a pharma",
+        "navn_form_styrke": "Lamotrigin 1a pharma tab uten smak 200 mg",
+        "produsent": "1 A Pharma",
+        "atc": "N03AX09",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_1828F07E-4847-4AC2-8C38-897B42DE9A61",
+        "varenavn": "Lamictal",
+        "navn_form_styrke": "Lamictal tab 100 mg",
+        "produsent": "GlaxoSmithKline",
+        "atc": "N03AX09",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_29BFE27E-EE19-492F-8680-7F79C8D3F1AB",
+        "varenavn": "Lamictal",
+        "navn_form_styrke": "Lamictal tyggetab/disperg tab 25 mg",
+        "produsent": "GlaxoSmithKline",
+        "atc": "N03AX09",
+        "legemiddelform": "Tyggetablett/dispergerbar tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_3114F225-AF11-48D9-A79A-068B1A331D57",
+        "varenavn": "Lamotrigin 1a pharma",
+        "navn_form_styrke": "Lamotrigin 1a pharma tab uten smak 100 mg",
+        "produsent": "1 A Pharma",
+        "atc": "N03AX09",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_58807DBE-F683-422A-9D5A-20A9737421B4",
+        "varenavn": "Lamictal",
+        "navn_form_styrke": "Lamictal tab 100 mg",
+        "produsent": "GlaxoSmithKline (Ireland) Limited",
+        "atc": "N03AX09",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_C1AB9EDB-54A0-4519-A2E9-45825DFF5046",
+        "varenavn": "Lamictal",
+        "navn_form_styrke": "Lamictal tab 25 mg",
+        "produsent": "GlaxoSmithKline (Ireland) Limited",
+        "atc": "N03AX09",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_C6B0206B-041C-4A42-9A9D-3D1C8F46DA06",
+        "varenavn": "Lamictal",
+        "navn_form_styrke": "Lamictal tab 200 mg",
+        "produsent": "GlaxoSmithKline (Ireland) Limited",
+        "atc": "N03AX09",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_CC0193CC-424A-480B-BAD5-93AA77A9DCDE",
+        "varenavn": "Lamotrigin aurobindo",
+        "navn_form_styrke": "Lamotrigin aurobindo tab 25 mg",
+        "produsent": "Puren",
+        "atc": "N03AX09",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_FF73AFAE-2921-451E-9173-1FCB4BB45135",
+        "varenavn": "Lamictal",
+        "navn_form_styrke": "Lamictal tab 50 mg",
+        "produsent": "GlaxoSmithKline (Ireland) Limited",
+        "atc": "N03AX09",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 6 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 6,
+        "ikke_dmp": 0,
+        "uten_omtale": 9
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "9 av 15 preparater i FEST mangler en hentet preparatomtale fra DMP: 9 uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA). SPC-behovet er ikke dekket; se «dekning.mangler».",
+      "antall": {
+        "preparater": 15,
+        "hentet": 6,
+        "mangler": 9,
+        "dokumenter": 2
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08198.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08198.pdf",
+      "hentet_kl": "2026-10-17T02:47:13.226Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "581456",
+        "content-md5": "hSWmJxAz4XGELAni1a16SQ==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:55 GMT",
+        "etag": "0x8DE53793F9A36FA",
+        "date": "Sat, 17 Oct 2026 02:47:14 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_15282C9C-6518-4690-8FB3-4D6DDEDF5B9C",
+          "varenavn": "Lamictal",
+          "navn_form_styrke": "Lamictal tyggetab/disperg tab 5 mg",
+          "produsent": "GlaxoSmithKline AS",
+          "atc": "N03AX09",
+          "legemiddelform": "Tyggetablett/dispergerbar tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08198.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (581456 byte).",
+          "antall": {
+            "bytes": 581456
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "85fd47d3d8ac3e1310238c34f080f58b6276402b8333871e6cb0b31bdbd4529d"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-01877.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-01877.pdf",
+      "hentet_kl": "2026-10-17T02:47:21.828Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "580173",
+        "content-md5": "exPujLWfxdcTnzh+yGOpHA==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:43 GMT",
+        "etag": "0x8DE5379383B7671",
+        "date": "Sat, 17 Oct 2026 02:47:22 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_38E32F9A-A698-47B3-BB1E-96ECFEC692AF",
+          "varenavn": "Lamictal",
+          "navn_form_styrke": "Lamictal tyggetab/disperg tab 200 mg",
+          "produsent": "GlaxoSmithKline AS",
+          "atc": "N03AX09",
+          "legemiddelform": "Tyggetablett/dispergerbar tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-01877.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (580173 byte).",
+          "antall": {
+            "bytes": 580173
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "c4f370dca62fc7992fd37522915c3c39fd2db22f8f30c776c12a3ec4f577f299"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08200.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08200.pdf",
+      "hentet_kl": "2026-10-17T02:47:29.857Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "580173",
+        "content-md5": "exPujLWfxdcTnzh+yGOpHA==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:44 GMT",
+        "etag": "0x8DE537938EB250D",
+        "date": "Sat, 17 Oct 2026 02:47:30 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_7B4BC0DF-D251-447C-8AD0-0D34FDB83829",
+          "varenavn": "Lamictal",
+          "navn_form_styrke": "Lamictal tyggetab/disperg tab 100 mg",
+          "produsent": "GlaxoSmithKline AS",
+          "atc": "N03AX09",
+          "legemiddelform": "Tyggetablett/dispergerbar tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08200.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (580173 byte).",
+          "antall": {
+            "bytes": 580173
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "c4f370dca62fc7992fd37522915c3c39fd2db22f8f30c776c12a3ec4f577f299"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08199.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08199.pdf",
+      "hentet_kl": "2026-10-17T02:47:31.438Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "581456",
+        "content-md5": "hSWmJxAz4XGELAni1a16SQ==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:52 GMT",
+        "etag": "0x8DE53793D7F1EFB",
+        "date": "Sat, 17 Oct 2026 02:47:32 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_7EE2D7E5-558E-4E98-9891-2D82D2F7E5ED",
+          "varenavn": "Lamictal",
+          "navn_form_styrke": "Lamictal tyggetab/disperg tab 25 mg",
+          "produsent": "GlaxoSmithKline AS",
+          "atc": "N03AX09",
+          "legemiddelform": "Tyggetablett/dispergerbar tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08199.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (581456 byte).",
+          "antall": {
+            "bytes": 581456
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "85fd47d3d8ac3e1310238c34f080f58b6276402b8333871e6cb0b31bdbd4529d"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/2000-02581.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/2000-02581.pdf",
+      "hentet_kl": "2026-10-17T02:47:33.016Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "581456",
+        "content-md5": "hSWmJxAz4XGELAni1a16SQ==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:56 GMT",
+        "etag": "0x8DE53793FE4A2B5",
+        "date": "Sat, 17 Oct 2026 02:47:33 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_839B6B05-3D59-42FC-B051-111324056972",
+          "varenavn": "Lamictal",
+          "navn_form_styrke": "Lamictal tyggetab/disperg tab 2 mg",
+          "produsent": "GlaxoSmithKline AS",
+          "atc": "N03AX09",
+          "legemiddelform": "Tyggetablett/dispergerbar tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/2000-02581.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (581456 byte).",
+          "antall": {
+            "bytes": 581456
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "85fd47d3d8ac3e1310238c34f080f58b6276402b8333871e6cb0b31bdbd4529d"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-01876.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-01876.pdf",
+      "hentet_kl": "2026-10-17T02:47:33.319Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "581456",
+        "content-md5": "hSWmJxAz4XGELAni1a16SQ==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:47 GMT",
+        "etag": "0x8DE53793AA2CEB3",
+        "date": "Sat, 17 Oct 2026 02:47:33 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_A4254CCC-E90C-4CA3-BF6A-C8C8043AB4FC",
+          "varenavn": "Lamictal",
+          "navn_form_styrke": "Lamictal tyggetab/disperg tab 50 mg",
+          "produsent": "GlaxoSmithKline AS",
+          "atc": "N03AX09",
+          "legemiddelform": "Tyggetablett/dispergerbar tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-01876.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (581456 byte).",
+          "antall": {
+            "bytes": 581456
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "85fd47d3d8ac3e1310238c34f080f58b6276402b8333871e6cb0b31bdbd4529d"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "85fd47d3d8ac3e1310238c34f080f58b6276402b8333871e6cb0b31bdbd4529d",
+      "bytes": 581456,
+      "mappe": "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13",
+      "pdf": {
+        "sider": 27,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": null,
+        "laget": "Mon Jun 30 10:02:53 2025 UTC",
+        "endret": "Mon Jun 30 10:02:53 2025 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/original.pdf",
+        "tekst": "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-001.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-002.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-003.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-004.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-005.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-006.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-007.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-008.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-009.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-010.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-011.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-012.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-013.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-014.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-015.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-016.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-017.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-018.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-019.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-020.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-021.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-022.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-023.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-024.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-025.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-026.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/tekst/side-027.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-001.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-002.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-003.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-004.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-005.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-006.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-007.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-008.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-009.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-010.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-011.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-012.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-013.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-014.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-015.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-016.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-017.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-018.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-019.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-020.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-021.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-022.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-023.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-024.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-025.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-026.png",
+          "kuratorjobb/resultat/lamotrigin/spc/85fd47d3d8ac3e13/sider/side-027.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 18,
+        "til": 21
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (27 sider).",
+          "antall": {
+            "sider": 27
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 65355
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 18."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 27
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "c4f370dca62fc7992fd37522915c3c39fd2db22f8f30c776c12a3ec4f577f299",
+      "bytes": 580173,
+      "mappe": "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799",
+      "pdf": {
+        "sider": 27,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": null,
+        "laget": "Thu May  2 09:18:12 2024 UTC",
+        "endret": "Thu May  2 09:18:12 2024 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/original.pdf",
+        "tekst": "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-001.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-002.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-003.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-004.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-005.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-006.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-007.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-008.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-009.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-010.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-011.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-012.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-013.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-014.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-015.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-016.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-017.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-018.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-019.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-020.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-021.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-022.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-023.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-024.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-025.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-026.txt",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/tekst/side-027.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-001.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-002.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-003.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-004.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-005.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-006.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-007.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-008.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-009.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-010.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-011.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-012.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-013.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-014.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-015.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-016.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-017.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-018.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-019.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-020.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-021.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-022.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-023.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-024.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-025.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-026.png",
+          "kuratorjobb/resultat/lamotrigin/spc/c4f370dca62fc799/sider/side-027.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 18,
+        "til": 20
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (27 sider).",
+          "antall": {
+            "sider": 27
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 65044
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 18."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 27
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

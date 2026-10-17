@@ -1,0 +1,59 @@
+Mulig interaksjon mellom levetiracetam og lamotrigin ble utredet ved evaluering av
+serumkonsentrasjon av begge stoffene ved placebokontrollerte studier. Dataene indikerer at
+farmakokinetikk av verken levetiracetam eller lamotrigin påvirkes.
+
+”Steady-state” laveste (trough) plasmakonsentrasjon av lamotrigin ble ikke påvirket av samtidig
+behandling med pregabalin (200 mg 3 ganger daglig). Det er ingen farmakokinetiske interaksjoner
+mellom lamotrigin og pregabalin.
+
+Topiramat gav ingen endring i plasmakonsentrasjon av lamotrigin. Bruk av lamotrigin gav en 15 %
+økning i topiramatkonsentrasjon.
+
+I en studie med epilepsipasienter hadde samtidig bruk av zonisamid (200-400 mg/dag) med lamotrigin
+(150-500 mg/dag) i 35 dager ingen signifikant effekt på farmakokinetikk av lamotrigin.
+
+I placebo-kontrollerte kliniske studier hos pasienter med partielle anfall ble ikke
+plasmakonsentrasjoner av lamotrigin påvirket av samtidig administrasjon av lakosamid (200, 400,
+eller 600 mg/daglig).
+
+I en samlet analyse av data fra tre placebo-kontrollerte kliniske studier som undersøkte
+tilleggsbehandling av perampanel hos pasienter med partielle og primært generaliserte tonisk-kloniske
+anfall, økte den høyeste dosen av perampanel evaluert (12 mg/daglig) lamotrigin-clearance med
+mindre enn 10 %.
+
+Selv om endringer i plasmakonsentrasjon av andre antiepileptika er rapportert, har kontrollerte studier
+ikke vist at lamotrigin påvirker plasmakonsentrasjonen av andre antiepileptika ved samtidig bruk.
+Resultat fra in vitro studier indikerer at lamotrigin ikke fortrenger andre antiepileptika fra
+proteinbindingssteder.
+
+Interaksjoner med andre psykoaktive legemidler
+
+Farmakokinetikk av litium etter 2 g anhydrert litium-glukonat gitt 2 ganger daglig i 6 dager hos 20
+friske frivillige ble ikke endret ved samtidig bruk av 100 mg/dag lamotrigin.
+
+Flere orale doser av bupropion hadde ingen statistisk signifikant effekt på farmakokinetikk av
+enkeltdose lamotrigin hos 12 personer, og gav kun en liten økning i AUC av lamotriginglukuronid.
+
+I en studie med voksne, friske frivillige reduserte 15 mg olanzapin AUC og Cmax for lamotrigin med
+henholdsvis gjennomsnittlig 24 % og 20 %. Lamotrigin ved 200 mg påvirket ikke farmakokinetikk for
+olanzapin.
+
+Flere orale doser av lamotrigin 400 mg daglig hadde ingen klinisk signifikant effekt på
+farmakokinetikk av enkeltdoser 2 mg risperidon hos 14 voksne, friske frivillige. Etter samtidig bruk av
+risperidon 2 mg og lamotrigin rapporterte 12 av 14 frivillige om søvnighet sammenlignet med 1 av 20
+ved risperidon gitt alene og ingen når lamotrigin ble gitt alene.
+
+I en studie med 18 pasienter med bipolar lidelse type I, behandlet med lamotrigin (100 - 400 mg/dag),
+ble doser av aripiprazol økt fra 10 mg/dag til en måldose på 30 mg/dag over en 7-dagers periode og
+opprettholdt i ytterligere 7 dager. En gjennomsnittlig reduksjon i Cmax og AUC på omtrent 10 % ble
+observert.
+
+In vitro forsøk indikerte at dannelse av hovedmetabolitten av lamotrigin, 2-N-glukuronid, ble minimalt
+hemmet ved samtidig inkubasjon med amitriptylin, bupropion, klonazepam, haloperidol eller
+lorazepam. Disse forsøkene antyder også at det er usannsynlig at metabolismen av lamotrigin vil bli
+hemmet av klozapin, fluoxetin, fenelzin, risperidon, sertralin eller trazodon. En studie av
+bufuralolmetabolisme med human levermikrosomprøver viste at lamotrigin ikke ville redusere
+clearance av legemidler hovedsakelig metabolisert av CYP2D6.
+
+
+                                                  16

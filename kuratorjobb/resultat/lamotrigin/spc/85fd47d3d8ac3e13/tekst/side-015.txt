@@ -1,0 +1,57 @@
+       Legemidler som øker         Legemidler som reduserer          Legemidler som har liten
+       konsentrasjonen av          konsentrasjonen av                eller ingen effekt på
+       lamotrigin                  lamotrigin                        konsentrasjonen av
+                                                                     lamotrigin
+       Valproat                    Atazanavir/ritonavir*             Aripiprazol
+                                   Karbamazepin                      Bupropion
+                                   Etinyløstradiol/levonorgestrel    Felbamat
+                                   kombinasjon*
+                                   Lopinavir/ritonavir               Gabapentin
+                                   Fenobarbital                      Lakosamid
+                                   Fenytoin                          Levetiracetam
+                                   Primidon                          Litium
+                                   Rifampicin                        Olanzapin
+                                                                     Okskarbazepin
+                                                                     Paracetamol
+                                                                     Perampanel
+                                                                     Pregabalin
+                                                                     Topiramat
+                                                                     Zonisamid
+
+* For doseringsanbefaling se pkt. 4.2, og i tillegg for kvinner som bruker hormonelle antikonseptiva,
+se også pkt. 4.4
+
+Interaksjoner med antiepileptika
+
+Valproat, som hemmer glukuronidering av lamotrigin, reduserer metabolismen og øker
+gjennomsnittlig halveringstid av lamotrigin nesten to ganger. Pasienter som bruker valproat samtidig
+med lamotrigin bør anvende passende behandlingsregime (se pkt. 4.2).
+
+Enkelte antiepileptika (f.eks. fenytoin, karbamazepin, fenobarbital og primidon) som induserer
+cytokrom P450 enzymer, induserer også UGTer, og øker derfor lamotriginmetabolismen. Pasienter
+som bruker fenytoin, karbamazepin, fenobarbital eller primidon samtidig med lamotrigin bør anvende
+passende behandlingsregime (se pkt. 4.2).
+
+CNS-effekter er rapportert, inkludert svimmelhet, ataksi, dobbeltsyn, tåkesyn og kvalme, hos pasienter
+som bruker karbamazepin etter de har startet lamotrigin. Symptomene opphører vanligvis ved
+reduksjon av karbamazepindosen. Lignende effekter ble sett i en studie med lamotrigin og
+okskarbazepin hos voksne, friske frivillige, men dosereduksjon ble ikke undersøkt.
+
+I litteraturen er det rapportert reduserte lamotriginnivå når lamotrigin ble gitt samtidig med
+okskarbazepin. I en prospektiv studie med voksne, friske frivilllige med doser 200 mg lamotrigin og
+1200 mg okskarbazepin ble imidlertid metabolismen av verken lamotrigin eller okskarbazepin
+påvirket. Pasienter som blir behandlet samtidig med okskarbazepin bør derfor benytte
+behandlingsregime for lamotrigin i kombinasjonsbehandling uten valproat og uten legemidler som
+induserer lamotrigin-glukuronidering (se pkt. 4.2).
+
+I en studie med friske frivillige hadde samtidig bruk av felbamat (1200 mg 2 ganger daglig) med
+lamotrigin (100 mg 2 ganger daglig i 10 dager) ingen klinisk relevante effekter på farmakokinetikk av
+lamotrigin.
+
+En retrospektiv analyse av plasmanivå hos pasienter som brukte lamotrigin både med og uten
+gabapentin viste at gabapentin tilsynelatende ikke påvirker clearance av lamotrigin.
+
+
+
+
+                                                  15

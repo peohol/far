@@ -1,0 +1,58 @@
+Amming
+Det er rapportert at lamotrigin passerer over i morsmelk i høyst varierende konsentrasjoner, og det er
+observert lamotriginnivåer hos nyfødte på opptil 50 % av morens nivå. Hos noen nyfødte som ble
+ammet kan derfor serumkonsentrasjon av lamotrigin komme opp på et nivå hvor farmakologiske
+effekter kan forekomme.
+Potensiell nytte av amming bør vurderes mot mulig risiko for bivirkninger hos det nyfødte barnet. Det
+nyfødte barnet bør monitoreres for bivirkninger som sedasjon, utslett og dårlig vektøkning, dersom
+moren bestemmer seg for å amme samtidig med lamotriginbehandling.
+
+Fertilitet
+Dyrestudier viste ingen nedsatt fertilitet ved bruk av lamotrigin (se pkt. 5.3).
+
+4.7     Påvirkning av evnen til å kjøre bil og bruke maskiner
+
+Da det er individuelle variasjoner på reaksjon på all antiepileptikabehandling bør pasienter som bruker
+Lamictal ved behandling av epilepsi rådføre seg med lege når det gjelder bilkjøring og epilepsi.
+
+Det er ikke gjort undersøkelser vedrørende påvirkningen på evnen til å kjøre bil eller bruker maskiner.
+To studier med frivillige har vist at effekt av lamotrigin på finmotorikk, øyebevegelser,
+kroppsholdning og subjektiv sederende effekt var lik placebo. I kliniske studier med lamotrigin er det
+rapportert bivirkninger som svimmelhet og dobbeltsyn. Pasienter bør derfor vurdere hvordan
+Lamictalbehandling påvirker dem før kjøring eller bruk av maskiner.
+
+4.8     Bivirkninger
+
+Bivirkningene for indikasjonene epilepsi og bipolar lidelse er basert på tilgjengelig data fra
+kontrollerte kliniske studier og annen klinisk erfaring, og er listet opp i tabellen nedenfor.
+Frekvenskategorier er fremkommet fra kontrollerte kliniske studier (epilepsi monoterapi (identifisert
+ved †) og bipolar lidelse (identifisert ved §)). Der hvor frekvenser avviker mellom kliniske studier fra
+epilepsi og bipolar lidelse, er den mest konservative frekvensen vist. I tilfeller hvor ingen data fra
+kontrollerte kliniske studier er tilgjengelig, har imidlertid frekvenskategorier blitt ervervet fra annen
+klinisk erfaring.
+
+Følgende konvensjon er benyttet ved klassifikasjon av bivirkningene: Svært vanlige: (≥ 1/10); vanlige
+(≥ 1/100 til <1/10); mindre vanlige (≥ 1/1 000 til <1/100); sjeldne (≥ 1/10 000 til <1/1 000); svært
+sjeldne (<1/10 000), ikke kjent (kan ikke anslås utifra tilgjengelige data).
+
+
+Organklassesystem        Bivirkning                                                  Frekvens
+Sykdommer i blod og      Hematologiske abnormaliteter1 inkludert nøytropeni,
+lymfatiske organer       leukopeni, anemi, trombocytopeni, pancytopeni,              Svært sjeldne
+                         aplastisk anemi, agranulocytose
+
+                         Hemofagocyttisk lymfohistocytose (HLH)                      Svært sjeldne
+
+                         Lymfadenopati1, pseudolymfom                                Ikke kjent
+Forstyrrelser i          Hypersensitivitetssyndrom2                                  Svært sjeldne
+immunsystemet
+                         Hypogammaglobulinemi                                        Ikke kjent
+Psykiatriske lidelser    Aggresjon, irritabilitet                                    Vanlige
+
+                         Forvirring, hallusinasjoner, tics (motoriske og/eller       Svært sjeldne
+                         foniske tics)
+                                                                                     Ikke kjent
+                         Mareritt
+
+
+                                                    18

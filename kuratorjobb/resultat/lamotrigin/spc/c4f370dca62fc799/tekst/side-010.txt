@@ -1,0 +1,59 @@
+av lamotrigin, og som ikke bruker legemidler som induserer glukuronidering, kan det være nødvendig
+å øke lamotrigindosen hvis lopinavir/ritonavir legges til, eller redusere hvis lopinavir /ritonavir
+seponeres. Det bør gjennomføres monitorering av plasmanivå av lamotrigin både før og i løpet av
+2 uker etter oppstart eller seponering av lopinavir/ritonavir, for å se om justering av lamotrigindosen er
+nødvendig (se avsnitt 4.5).
+
+Eldre (over 65 år)
+Dosejustering av anbefalt dosering er ikke nødvendig. Farmakokinetikk av lamotrigin hos denne
+aldersgruppen er ikke signifikant forskjellig fra en yngre, voksen pasientgruppe (se pkt. 5.2).
+
+Nedsatt nyrefunksjon
+Forsiktighet bør utvises ved bruk av Lamictal hos pasienter med nyresvikt. Hos pasienter med
+nyresvikt i siste fase bør oppstartsdoser av lamotrigin være basert på pasientens samtidige bruk av
+andre legemidler. Redusert vedlikeholdsdose kan være effektivt hos pasienter med signifikant nedsatt
+nyrefunksjon (se pkt. 4.4 og 5.2).
+
+Nedsatt leverfunksjon
+Start-, opptrappings- og vedlikeholdsdoser bør generelt reduseres med ca. 50 % hos pasienter med
+moderat (Child-Pugh grad B) og 75 % ved alvorlig (Child-Pugh grad C) nedsatt leverfunksjon.
+Doseøkning og vedlikeholdsdoser skal justeres i samsvar med klinisk respons (se pkt. 5.2).
+
+Administrasjonsmåte
+
+Oral bruk.
+
+4.3       Kontraindikasjoner
+
+Overfølsomhet overfor virkestoffet eller overfor et eller flere av hjelpestoffene listet opp i pkt.6.1.
+
+4.4       Advarsler og forsiktighetsregler
+
+Hudutslett
+
+Hudutslett er rapportert, vanligvis i løpet av de første åtte ukene etter oppstart av
+lamotriginbehandling. De fleste hudutslett er milde og begrensede, men imidlertid er det også
+rapportert alvorlige utslett som krever sykehusinnleggelse og seponering av lamotrigin. Disse omfatter
+potensielt livstruende utslett som Stevens-Johnson syndrom (SJS), og toksisk epidermal nekrose
+(TEN) og ”Drug Reaction with Eosinophilia and Systemic Symptoms” (DRESS); også kjent som
+hypersensitivitetssyndrom (HSS) (se pkt. 4.8).
+
+Hos voksne inkludert i studier med nåværende doseanbefaling av lamotrigin er insidensen av alvorlige
+hudutslett ca. 1 av 500 epilepsipasienter. Omtrent halvparten av disse tilfellene har blitt rapportert som
+Stevens-Johnson syndrom (1 av 1 000). I kliniske studier hos pasienter med bipolar lidelse er
+forekomsten av alvorlig hudutslett ca. 1 av 1 000.
+
+Risiko for alvorlig hudutslett hos barn er større enn hos voksne. Tilgjengelig data fra flere studier
+foreslår at forekomst av hudutslett som medfører sykehusinnleggelse hos barn er fra 1 av 300 til 1 av
+100.
+
+Hos barn kan de første tegn på utslett forveksles med en infeksjon. Leger bør vurdere muligheten for
+en reaksjon på lamotriginbehandling hos barn som utvikler symptomer på utslett og feber i løpet av de
+første åtte behandlingsukene.
+
+I tillegg tyder den samlede risiko for utslett i stor grad å være assosiert med:
+
+      -   høye startdoser av lamotrigin og overstigning av anbefalt doseøkning av lamotriginbehandling
+          (se pkt. 4.2).
+
+                                                    10

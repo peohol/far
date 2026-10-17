@@ -1,0 +1,59 @@
+melde enhver mistenkt bivirkning. Dette gjøres via meldeskjema som finnes på nettsiden til
+Direktoratet for medisinske produkter: www.dmp.no/meldeskjema.
+
+4.9     Overdosering
+
+Symptomer og tegn
+
+Det er rapportert inntak av doser i overkant av 10 - 20 ganger maksimal terapeutisk dose, inkludert
+fatale tilfeller. Overdosering resulterte i symptomer som nystagmus, ataksi, nedsatt bevissthet, grand
+mal-anfall og koma. Utvidet QRS-varighet (forsinket intraventrikulær ledning) og QT-forlengelse har
+også blitt observert hos overdosepasienter. Utvidelse av QRS-varigheten til mer enn 100 msek kan
+være assosiert med mer alvorlig toksisitet.
+
+Behandling
+
+Ved overdose bør pasientene legges inn på sykehus og få egnet behandling. Behandling med hensikt å
+redusere absorpsjon (medisinsk kull) bør utføres dersom påkrevd. Videre tiltak tas ut fra en klinisk
+vurdering, tatt i betraktning potensielle effekter på hjertets ledningssystem (se pkt. 4.4). Bruk av
+intravenøs lipidterapi kan vurderes for behandling av kardiotoksisitet med utilstrekkelig respons til
+natriumbikarbonat. Det er ingen erfaring med hemodialyse som behandling ved overdose. Hos seks
+frivillige med nyresvikt ble 20 % av lamotriginet fjernet fra kroppen i løpet av 4 timers hemodialyse
+(se pkt. 5.2)
+
+
+5.      FARMAKOLOGISKE EGENSKAPER
+
+5.1     Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Diverse antiepileptika, ATC-kode: N03A X09
+
+Virkningsmekanisme
+
+Resultat av farmakologiske studier tyder på at lamotrigin er en bruks- og spenningsavhengig hemmer
+av spenningsstyrte natriumkanaler. Lamotrigin hemmer varig gjentatt utladning av neuroner og
+hemmer frigjøring av glutamat (neurotransmittor som har en nøkkelrolle ved generering av epileptiske
+anfall). Det er sannsynlig at disse effektene bidrar til de krampestillende egenskapene av lamotrigin.
+
+Virkningsmekanisme for terapeutisk virkning av lamotrigin ved bipolar lidelse er ikke kjent, selv om
+interaksjon med spenningsstyrte natriumkanaler sannsynligvis er viktig.
+
+Farmakodynamiske effekter
+
+I tester utviklet for å evaluere effekt av legemidler på sentralnervesystemet viste resultatene ved dose
+240 mg lamotrigin gitt til friske frivillige ingen forskjell fra placebo. Både 1 000 mg fenytoin og 10
+mg diazepam gav signifikant nedsatt finmotorikk, øyebevegelser, kroppsholdning og fremkalte
+subjektiv sederende virkning.
+
+I en annen studie førte orale enkeltdoser på 600 mg karbamazepin til signifikant nedsatt finmotorikk
+og øyebevegelser, kroppsholdning og økt hjerterate, mens resultat av lamotrigin i dose 150 mg og 300
+mg var lik placebo.
+
+Studie på effekt av lamotrigin på hjertetsledningssystemt
+En studie på voksne, friske frivillige evaluerte effekten av gjentatt dosering av lamotrigin (opptil 400
+mg/dag) på hjertets ledningssystem, utredet med 12-lead EKG. Det var ingen klinisk signifikant effekt
+av lamotrigin på QT-intervallet sammenlignet med placebo
+
+Klinisk effekt og sikkerhet
+
+                                                   21

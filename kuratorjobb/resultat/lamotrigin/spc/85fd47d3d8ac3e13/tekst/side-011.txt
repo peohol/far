@@ -1,0 +1,58 @@
+Hos barn kan de første tegn på utslett forveksles med en infeksjon. Leger bør vurdere muligheten for
+en reaksjon på lamotriginbehandling hos barn som utvikler symptomer på utslett og feber i løpet av de
+første åtte behandlingsukene.
+
+I tillegg tyder den samlede risiko for utslett i stor grad å være assosiert med:
+
+    -   høye startdoser av lamotrigin og overstigning av anbefalt doseøkning av lamotriginbehandling
+        (se pkt. 4.2).
+    -   samtidig bruk av valproat (se pkt. 4.2).
+
+Forsiktighet er også nødvendig ved behandling av pasienter med allergi eller utslett ved bruk av andre
+antiepileptika i anamnesen. Hyppigheten av ikke-alvorlig utslett etter lamotriginbehandling var
+omtrent tre ganger større hos disse pasientene enn hos de pasientene uten en slik anamnese.
+
+HLA-B*1502 allel hos individer av asiatisk (primært han-kinesisk og thailandsk) opphav har vist seg å
+være assosiert med risikoen for å utvikle SJS/TEN når de behandles med lamotrigin. Hvis disse
+pasientene er kjent for å være positive for HLA-B*1502, bør bruk av lamotrigin vurderes nøye.
+
+Alle pasienter (voksne og barn) som utvikler utslett skal utredes omgående. Lamictal skal seponeres
+omgående med mindre det er klart at utslettet ikke er relatert til lamotriginbehandlingen. Det anbefales
+at Lamotrigin ikke gjenopptas hos pasienter som tidligere har seponert lamotrigin p.g.a. hudutslett,
+med mindre potensiell nytte klart oppveier risiko. Dersom pasienten har utviklet Stevens-Johnson
+Syndrom (SJS), toksisk epidermal nekrolyse (TEN) eller ”Drug Reaction with Eosinophilia and
+Systemic Symptoms” (DRESS) ved bruk av lamotrigin, skal ikke lamotriginbehandlingen gjenopptas
+hos pasienten under noen omstendighet.
+
+Utslett har også blitt rapportert som en del av DRESS; også kjent som et hypersensitivitetssyndrom.
+Denne tilstanden er knyttet til et varierende mønster av systemiske symptomer som inkluderer feber,
+lymfadenopati, ødem i ansiktet, abnormaliteter i blod, lever, nyre og aseptisk meningitt (se pkt. 4.8).
+Syndromet viser et vidt spekter av klinisk alvorlighet. Det kan i sjeldne tilfeller føre til spredt
+intravaskulær koagulering og multiorgansvikt. Det er viktig å merke at tidlige tegn på hypersensitivitet
+(f.eks. feber, lymfadenopati) kan være til stede selv om utslett ikke er tydelig. Dersom slike tegn og
+symptomer er tilstede skal pasienten utredes øyeblikkelig, og Lamictal seponeres dersom en alternativ
+etiologi ikke kan grunngis.
+
+Aseptisk meningitt var reversibel ved seponering i de fleste tilfeller, men kom tilbake ved flere tilfeller
+ved gjenoppstart av lamotrigin. Gjenoppstarten førte til at symptomene hurtig kom tilbake, oftere i en
+alvorligere form. Lamotrigin skal ikke gjenoppstartes hos pasienter som har seponert behandlingen på
+grunn av aseptisk meningitt assosiert med tidligere behandling med lamotrigin.
+
+Det har også blitt rapportert om fotosensitivitetsreaksjoner ved bruk av lamotrigin (se pkt. 4.8). I flere
+tilfeller har reaksjonen oppstått ved en høy dose (400 mg eller mer), ved doseøkning eller ved rask
+opptrapping. Det bør vurderes behandlingsseponering ved mistanke om lamotrigin-assosiert
+fotosensitivitet hos en pasient som viser tegn på fotosensitivitet (slik som overdreven solforbrenning).
+Dersom videre behandling med lamotrigin er klinisk nødvendig, bør pasienten rådes til å unngå
+eksponering for sollys og kunstig UV-lys samt ekstra beskyttende tiltak (f.eks. beskyttende klær og
+solkrem).
+
+Hemofagocyttisk lymfohistocytose (HLH)
+
+HLH har blitt rapportert hos pasienter som tar lamotrigin (se pkt 4.8). HLH karakteriseres ved tegn og
+symptomer som feber, utslett, nevrologiske symptomer, hepatosplenomegali, lymfadenopati, cytopeni,
+høy serum ferritin, hypertriglyseridemi og unormal leverfunksjon og koagulering. Symptomer oppstår
+generelt innen 4 uker etter oppstart av behandling. HLH kan være livstruende.
+Pasienter bør informeres om symptomer som er assosiert med HLH, og bør rådes til å oppsøke lege
+øyeblikkelig dersom de opplever disse symptomene under lamotriginbehandling.
+
+                                                    11

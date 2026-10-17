@@ -1,0 +1,59 @@
+redusert med 32 % sammenlignet med normale kontroller, men verdiene var innen området for den
+generelle populasjonen.
+
+Halveringstid av lamotrigin er i stor grad påvirket av annen samtidig legemiddelbruk. Gjennomsnittlig
+halveringstid er redusert til ca. 14 timer når gitt samtidig med glukuronideringsinduserende legemidler
+som eksempelvis karbamazepin og fenytoin, og øker til gjennomsnittlig ca. 70 timer når gitt samtidig
+kun med valproat (se pkt. 4.2).
+
+Linearitet
+
+Farmakokinetikk av lamotrigin er lineær opp til 450 mg, som er den høyeste undersøkte enkeltdosen.
+
+Spesielle pasientgrupper
+
+Barn
+Clearance justert for kroppsvekt er høyere hos barn enn hos voksne. Den høyeste clearanceverdien er
+hos barn under fem år. Halveringstid for lamotrigin er generelt kortere hos barn enn hos voksne med
+en gjennomsnittlig verdi på ca. 7 timer når gitt sammen med et enzyminduserende legemiddel som
+karbamazepin eller fenytoin. Halveringstid øker til gjennomsnittlig verdi 45 - 50 timer når gitt
+samtidig kun med valproat (se pkt. 4.2).
+
+Spedbarn 2 - 26 måneder
+Hos 143 pediatriske pasienter i alderen 2 - 26 måneder med vekt 3 - 16 kg, som fikk samme orale
+doser per kg kroppsvekt som barn eldre enn 2 år, ble clearance redusert sammenlignet med eldre barn
+med samme kroppsvekt. Gjennomsnittlig halveringstid ble anslått til 23 timer hos spedbarn yngre enn
+26 måneder med enzyminduserende behandling, 136 timer når gitt samtidig med valproat og 38 timer
+hos personer uten enzyminduserende behandling. Den inter-individuelle variasjonen for clearance var
+større i gruppen av pediatriske pasienter i alderen 2 - 26 måneder (47 %). Den antatte
+serumkonsentrasjonen hos barn 2 - 26 måneder var generelt i samme område som hos eldre barn, selv
+om høyere Cmax nivå vil sannsynligvis bli observert hos noen barn med kroppsvekt under 10 kg.
+
+Eldre
+Resultat fra en farmakokinetisk populasjonsanalyse med både yngre og eldre epilepsipasienter i de
+samme studiene tydet på at clearance av lamotrigin ikke endres i klinisk relevant omfang. Etter
+enkeltdoser ble clearance redusert med 12 % fra 35 mL/min ved alder 20 år til 31 mL/min ved alder 70
+år. Reduksjon etter 48 behandlingsuker var 10 % fra 41 til 37 mL/min mellom de yngste og eldste
+gruppene. I tillegg ble farmakokinetikk av lamotrigin undersøkt hos 12 friske, eldre personer etter
+inntak av en enkeltdose på 150 mg. Gjennomsnittlig clearance hos eldre (0,39 mL/min/kg) ligger
+innenfor området av gjennomsnittlig clearanceverdi (0,31 - 0,65 mL/min/kg) funnet i ni studier med
+yngre voksne etter enkeltdoser på 30 til 450 mg.
+
+Nedsatt nyrefunksjon
+Tolv frivillige med kronisk nyresvikt og seks personer som gjennomgikk hemodialyse fikk en
+enkeltdose 100 mg lamotrigin. Gjennomsnittlig clearance var 0,42 mL/min/kg (kronisk nyresvikt),
+0,33 mL/min/kg (mellom hemodialyse) og 1,57 mL/min/kg (ved hemodialyse), sammenlignet med
+0,58 mL/min/kg hos friske frivillige. Gjennomsnittlig halveringstid var 42,9 timer (kronisk nyresvikt),
+57,4 timer (mellom hemodialyse) og 13,0 timer (ved hemodialyse), sammenlignet med 26,2 timer hos
+friske frivillige. Jevnt over ble omtrent 20 % (område = 5,6 - 35,1) av lamotriginmengden i kroppen
+eliminert i løpet av 4-timers hemodialyse. For denne pasientgruppen bør startdoser av lamotrigin være
+basert på andre legemidler pasienten bruker samtidig. Reduksjon av vedlikeholdsdose kan være
+effektivt hos pasienter med signifikant nedsatt nyrefunksjon (se pkt. 4.2 og 4.4).
+
+Nedsatt leverfunksjon
+Farmakokinetisk studie med enkeltdose ble utført hos 24 personer med varierende grad av nedsatt
+leverfunksjon og hos 12 friske frivillige som kontroller. Tilsynelatende median for clearance var 0,31,
+0,24 eller 0,10 mL/min/kg hos pasienter med henholdsvis Grad A, B eller C (Child-Pugh
+klassifisering) nedsatt leverfunksjon, sammenlignet med 0,34 mL/min/kg hos friske kontroller. Start-,
+
+                                                  24

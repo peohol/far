@@ -1,0 +1,60 @@
+3
+ Disse bivirkningene er rapportert under annen klinisk erfaring. Det er rapportert at lamotrigin kan
+forverre parkinsonske symptomer hos pasienter med Parkinsons sykdom, samt isolerte tilfeller av
+ekstrapyramidale effekter og choreoathetose hos pasienter uten Parkinsons sykdom.
+4
+ Leverdysfunksjon forekommer vanligvis ved hypersensitivitetsreaksjoner, men isolerte tilfeller er
+rapportert uten klare tegn på hypersensitivitet.
+5
+ Hudutslett forekom hos opptil 8 - 12 % av pasientene som brukte lamotrigin og hos 5 - 6 % av
+pasientene som fikk placebo i kliniske studier på voksne. Hudutslettene førte til seponering av
+lamotriginbehandlingen hos 2 % av pasientene. Utslettet, vanligvis makulopapulært av utseende,
+oppstår generelt innen åtte uker etter behandlingsstart og forsvinner ved seponering av Lamictal (se
+pkt. 4.4).
+
+Det er rapportert alvorlige og potensielt livstruende hudutslett, inkludert Stevens-Johnson syndrom,
+toksisk epidermal nekrolyse (Lyells syndrom) og ”Drug Reaction with Eosinophilia and Systemic
+Symptoms” (DRESS). Seponering av lamotriginbehandling fører i de fleste tilfeller til bedring, men
+noen pasienter får varige arr og det har vært sjeldne tilfeller av død (se pkt. 4.4).
+
+Samlet risiko for hudutslett synes i stor grad å være assosiert med:
+
+      -   høye startdoser av lamotrigin og overstigning av anbefalt doseøkning av lamotriginbehandling
+          (se pkt. 4.2).
+      -   samtidig bruk av valproat (se pkt. 4.2).
+
+Redusert bentetthet, osteopeni, osteoporose og benbrudd hos pasienter på langtidsbehandling med
+lamotrigin har vært rapportert. Mekanismen for effekten til lamotrigin på benmetabolismen er ikke
+identifisert.
+
+Melding av mistenkte bivirkninger
+Melding av mistenkte bivirkninger etter godkjenning av legemidlet er viktig. Det gjør det mulig å
+overvåke forholdet mellom nytte og risiko for legemidlet kontinuerlig. Helsepersonell oppfordres til å
+melde enhver mistenkt bivirkning. Dette gjøres via meldeskjema som finnes på nettsiden til
+Direktoratet for medisinske produkter: www.dmp.no/meldeskjema.
+
+4.9       Overdosering
+
+Symptomer og tegn
+
+Det er rapportert inntak av doser i overkant av 10 - 20 ganger maksimal terapeutisk dose, inkludert
+fatale tilfeller. Overdosering resulterte i symptomer som nystagmus, ataksi, nedsatt bevissthet, grand
+mal-anfall og koma. Utvidet QRS-varighet (forsinket intraventrikulær ledning) og QT-forlengelse har
+også blitt observert hos overdosepasienter. Utvidelse av QRS-varigheten til mer enn 100 msek kan
+være assosiert med mer alvorlig toksisitet.
+
+Behandling
+
+Ved overdose bør pasientene legges inn på sykehus og få egnet behandling. Behandling med hensikt å
+redusere absorpsjon (medisinsk kull) bør utføres dersom påkrevd. Videre tiltak tas ut fra en klinisk
+vurdering, tatt i betraktning potensielle effekter på hjertets ledningssystem (se pkt. 4.4). Bruk av
+intravenøs lipidterapi kan vurderes for behandling av kardiotoksisitet med utilstrekkelig respons til
+natriumbikarbonat. Det er ingen erfaring med hemodialyse som behandling ved overdose. Hos seks
+frivillige med nyresvikt ble 20 % av lamotriginet fjernet fra kroppen i løpet av 4 timers hemodialyse
+(se pkt. 5.2)
+
+
+5.        FARMAKOLOGISKE EGENSKAPER
+
+
+                                                   20

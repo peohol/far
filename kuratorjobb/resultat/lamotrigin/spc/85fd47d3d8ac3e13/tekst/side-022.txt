@@ -1,0 +1,58 @@
+Forebygging av stemningsepisoder hos pasienter med bipolar lidelse
+Effekt av lamotrigin for forebygging av stemningsepisoder hos pasienter med bipolar I lidelse har blitt
+evaluert i to studier.
+
+SCAB2003-studien var en multisenter, dobbeltblind, placebo- og litiumkontrollert, randomisert,
+bestemt dose evaluering av langtidsforebygging av tilbakefall og gjentatt depresjon og/eller mani hos
+pasienter med bipolar I lidelse som nylig eller på daværende tidspunkt opplevde en omfattende
+depressiv episode. Etter stabilisering med lamotrigin monoterapi eller kombinasjonsterapi ble
+pasientene tilfeldig inndelt i en av fem behandlingsgrupper: lamotrigin (50, 200, 400 mg/dag), litium
+(serumnivå 0,8-1,1 mMol/l) eller placebo for maksimalt 76 uker (18 måneder). Det primære
+endepunktet var ”Tid til intervensjon for en stemningsepisode” (”Time to intervention for a Mood
+Episode”, TIME). Intervensjon var tillegg av farmakoterapi eller elektrokonvulsiv behandling (ECT).
+SCAB2006-studien hadde et liknende oppsett som SCAB2003-studien, men var forskjellig fra
+SCAB2003-studien ved evaluering av fleksibel lamotrigindose (100 - 400 mg/dag) og inkluderte
+pasienter med bipolar I lidelse som nylig eller på daværende tidspunkt opplevde en manisk episode.
+Resultatene er vist i Tabell 7.
+
+Tabell 7: Oppsummering av resultat fra studier hvor effekt av lamotrigin for forebygging av
+stemningsepisoder hos pasienter med bipolar I lidelse er undersøkt
+
+                             ‘Andel’ pasienter uten hendelser ved uke 76
+                                  SCAB2003-studien                     SCAB2006-studien
+                                      Bipolar I                            Bipolar I
+ Inklusjonskriterie          Omfattende depressiv episode          Omfattende manisk episode
+                          Lamotrigin    Litium      Placebo    Lamotrigin   Litium      Placebo
+ Ingen intervensjon          0,22        0,21         0,12        0,17        0,24        0,04
+ p-verdi Log rank test      0,004       0,006           -        0,023       0,006          -
+
+ Ingen depresjon             0,51           0,46         0,41           0,82          0,71         0,40
+ p-verdi Log rank test      0,047          0,209           -           0,015         0,167           -
+
+ Ingen mani                  0,70           0,86         0,67           0,53          0,64         0,37
+ p-verdi Log rank test      0,339          0,026           -           0,280         0,006           -
+
+I støtte-analyser av tid til første depressive episode og tid til første maniske/hypomaniske episode eller
+blandet episode hadde lamotriginbehandlede pasienter betydelig lengre tid til første depressive episode
+enn placebopasientene. Behandlingsforskjellen med hensyn på tid til første maniske/hypomaniske
+episode eller blandet episode var ikke statistisk signifikant.
+
+Effekt av lamotrigin i kombinasjon med stemningsstabiliserende legemidler har ikke blitt tilstrekkelig
+undersøkt.
+
+Pediatrisk populasjon
+
+Barn i alderen 1 til 24 måneder
+Effekt og sikkerhet av kombinasjonsbehandling ved partielle anfall hos pasienter i alderen
+1-24 måneder har blitt utredet i en liten, dobbeltblindet, placebokontrollert seponeringsstudie.
+Behandling ble startet hos 177 personer med dosetitreringsskjema tilsvarende skjema brukt for barn 2-
+-12 år. Lamotrigin 2 mg tabletter er den laveste styrken tilgjengelig. Standard doseringsskjema ble
+derfor i enkelte tilfeller tilpasset i titreringsfasen (f.eks. administrasjon av 2 mg tablett annenhver dag
+når beregnet dose var mindre enn 2 mg). Serumkonsentrasjon ble målt etter 2 ukers titrering og videre
+dose ble enten redusert eller vedlikeholdt dersom konsentrasjon oversteg 0,41 mikrogram/ml, som er
+den forventede konsentrasjon hos voksne på dette tidspunktet. Dosereduksjon på opp til 90 % var
+påkrevd hos enkelte pasienter etter 2 ukers titrering. Trettiåtte respondenter (> 40 % nedgang i
+anfallshyppighet) ble randomisert til placebo eller fortsettelse av lamotrigin. Andel personer med
+
+
+                                                    22

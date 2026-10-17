@@ -1,0 +1,59 @@
+behandlingssvikt var 84 % (16/19 personer) i placeboarmen og 58 % (11/19) i lamotriginarmen.
+Forskjellen var ikke statistisk signifikant: 26,3 % (95 % KI [-2,6 %; 50,2 %], p = 0,07).
+
+Totalt 256 personer i alderen 1 - 24 måneder har blitt eksponert for lamotrigin i doseringsområdet
+1-15 mg/kg/dag i inntil 72 uker. Sikkerhetsprofilen av lamotrigin hos barn i alderen 1 måned til 2 år
+var liknende profilen hos eldre barn, med unntak av klinisk forverring av anfall (> = 50 %) som ble
+rapportert oftere hos barn under 2 år (26 %) sammenlignet eldre barn (14 %).
+
+Lennox-Gastaut syndrom
+Det finnes ikke noe data for monoterapi ved anfall assosiert med Lennox-Gastaut syndrom.
+
+Forebygging av stemningsepisoder hos barn (10 - 12 år) og ungdom (13 - 17 år)
+Barn og ungdommer av begge kjønn (10 - 17 år) som var diagnostisert med bipolar I lidelse og som
+hadde gått i remisjon eller blitt forbedret etter en bipolar episode under behandling med lamotrigin i
+kombinasjoner med samtidig antipsykotiske legemidler eller andre stemningsstabiliserende legemidler
+ble inkludert i en multisenter, parallell gruppe, placebokontrollert, dobbeltblindet, randomisert
+seponeringsstudie. Studien evaluerte effekt og sikkerhet av lamotrigin med rask frigivelse som tillegg i
+vedlikeholdsbehandling for å forsinke stemningsepisoder. Resultatet av den primære effektanalysen
+(tid for forekomst av en bipolar hendelse - TOBE) nådde ikke statistisk signifikans (p = 0,0717), og
+effekt ble dermed ikke vist. I tillegg viste sikkerhetsresultater økt rapportering av selvmordsatferd hos
+lamotriginbehandlede pasienter: 5 % (4 pasienter) i lamotrigin armen sammenlignet med 0 i placebo
+(se pkt. 4.2).
+
+5.2     Farmakokinetiske egenskaper
+
+Absorpsjon
+
+Lamotrigin blir raskt og fullstendig absorbert uten signifikant first-pass metabolisme. Maksimal
+plasmakonsentrasjon oppnås ca. 2,5 timer etter oral administrasjon. Tid til maksimal konsentrasjon er
+noe forsinket etter mat, men grad av absorpsjon er ikke påvirket. Det er betydelig inter-individuell
+variasjon for maksimal ”steady-state" konsentrasjon, mens den individuelle konsentrasjonen varierer
+sjelden.
+
+Distribusjon
+
+Plasmaproteinbinding: ca. 55 %. Det er usannsynlig at fortrengning fra plasmaproteiner vil resultere i
+toksisitet.
+
+Distribusjonsvolum: 0,92 - 1,22 L/kg.
+
+Biotransformasjon
+
+Lamotrigin metaboliseres av UDP-glukuronyltransferaser.
+
+Lamotrigin har i begrenset omfang egeninduksjon av metabolisme, avhengig av dose. Imidlertid er det
+lite hold for at lamotrigin påvirker farmakokinetikken av andre antiepileptika. Data tyder på at
+interaksjoner mellom lamotrigin og legemidler metabolisert av cytokrom P450-enzymer er
+usannsynlige.
+
+Eliminasjon
+
+Plasmaclearance hos friske personer er ca. 30 mL/min. Lamotriginclearance er primært metabolsk
+med påfølgende eliminasjon av glukuronidkonjugert materiale i urin. Mindre enn
+10 % utskilles uendret i urin. Kun 2 % av lamotriginrelatert materiale utskilles i feces. Clearance og
+halveringstid er doseuavhengig. Halveringstid i plasma hos friske personer er anslått til ca. 33 timer
+(14 - 103 timer). I studier med personer med Gilberts Syndrom var den gjennomsnittlige clearance
+
+
+                                                   23
