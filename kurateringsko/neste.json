@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-17T20:43:51.361Z",
+  "oppdatert_kl": "2026-10-17T20:44:41.075Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "antall": {
     "klar": 78,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 11,
+    "venter_godkjenning": 12,
     "sammenslatt": 0,
     "publisert": 4,
     "blokkert": 5,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "lamotrigin",
-      "oppgave": "lamotrigin-0053",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-17T23:43:51.361Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "neste": [
     {
       "stoff": "valproat",
@@ -202,6 +194,12 @@
     {
       "stoff": "ketobemidon",
       "gren": "030084b9-47c7-4ab5-8a71-11bfe76b6f5c",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    },
+    {
+      "stoff": "lamotrigin",
+      "gren": "48e10b1b-31b0-452d-9e29-8404e30aa989",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     },
