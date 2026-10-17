@@ -1,23 +1,23 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-202610170156",
-  "foresporsel_sha256": "ee37efcbddbf86138a8897951cdf37c5ab9ae2e3cc3db6976142a61406b022c3",
-  "handling": "reserver",
+  "foresporsel_id": "forny-ketobemidon-0018-gren",
+  "foresporsel_sha256": "22c115b30283fa2d09a4d7a9016438e33652d2e0a2fc2427226fd6125d1cab43",
+  "handling": "forny",
   "utfall": "ok",
-  "melding": "ketobemidon er reservert til 2026-10-17T04:56:32.104Z.",
-  "behandlet_kl": "2026-10-17T01:56:32.104Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38992922552",
+  "melding": "Reservasjonen av ketobemidon varer til 2026-10-17T05:19:08.808Z.",
+  "behandlet_kl": "2026-10-17T02:19:08.808Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38994424444",
   "oppgave": {
     "oppgave": "ketobemidon-0018",
     "stoff": "ketobemidon",
     "navn": "Ketobemidon",
     "modus": "de_novo",
     "forsok": 1,
-    "frist_kl": "2026-10-17T04:56:32.104Z",
+    "frist_kl": "2026-10-17T05:19:08.808Z",
     "jobbgren": "kuratorjobb/ketobemidon-0018",
     "kurateringsgren": "kuratering/ketobemidon-0018",
     "pr": null,
-    "gren": null,
+    "gren": "030084b9-47c7-4ab5-8a71-11bfe76b6f5c",
     "gjenoppta": null,
     "sist_kuratert": null,
     "maal": {
@@ -30,15 +30,8 @@
       "elementer_uten_kilde": 2
     },
     "prioritet": {
-      "poeng": 451.7,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "2 av 8 elementer har ingen kilde.",
-        "Bare 1 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
