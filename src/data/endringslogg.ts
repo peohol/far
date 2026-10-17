@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.103.4',
+    dato: '2026-10-17',
+    sammendrag: 'Kontrolløren gjør én kuratering ferdig om gangen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring for vanlige brukere. Kontrolløren tar nå én kuratering om gangen og gjør den ferdig, godkjent eller med endringer, før den begynner på neste, i stedet for å begynne på alle og bli ferdig med ingen. Den fortsetter der den slapp sist, og finner preparatomtalene og de automatiske kontrollene der kuratoren har lagt dem.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.103.3',
     dato: '2026-10-17',
     sammendrag: 'Kontrolløren får instruksen sin fra OUSFAR, så en kort beskjed er nok for en kontrollrunde',
