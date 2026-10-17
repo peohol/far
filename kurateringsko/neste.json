@@ -1,9 +1,9 @@
 {
-  "oppdatert_kl": "2026-10-17T10:14:38.296Z",
+  "oppdatert_kl": "2026-10-17T10:15:42.012Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
-    "klar": 82,
-    "reservert": 0,
+    "klar": 81,
+    "reservert": 1,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 10,
     "sammenslatt": 0,
@@ -11,22 +11,16 @@
     "blokkert": 4,
     "utenfor": 1
   },
-  "aktive": [],
-  "neste": [
+  "aktive": [
     {
       "stoff": "levetiracetam",
-      "modus": "de_novo",
-      "poeng": 447.6,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ],
-      "tidligst_kl": null
-    },
+      "oppgave": "levetiracetam-0038",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "frist_kl": "2026-10-17T13:15:42.012Z",
+      "fase": null
+    }
+  ],
+  "neste": [
     {
       "stoff": "okskarbazepin",
       "modus": "de_novo",
@@ -150,6 +144,20 @@
         "9 av 13 redaksjonelle seksjoner er tomme.",
         "1 av 8 elementer har ingen kilde.",
         "Bare 3 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "petidin",
+      "modus": "de_novo",
+      "poeng": 445.5,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 8 elementer har ingen kilde.",
+        "Bare 2 referanser."
       ],
       "tidligst_kl": null
     }
