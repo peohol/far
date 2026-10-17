@@ -1,10 +1,56 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-brekspiprazol-0033",
-  "foresporsel_sha256": "c9d9f77d29d609e80fe6d1837b5fbf9a2235aaad15924e578a1b4e25cc45654c",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-doksepin-074613",
+  "foresporsel_sha256": "7a965f2b55073400002b17bd90f174ca37076968a6669ace0895a693bb0c6b74",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "brekspiprazol er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-17T07:45:54.460Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39014833263"
+  "melding": "doksepin er reservert til 2026-10-17T10:46:36.917Z.",
+  "behandlet_kl": "2026-10-17T07:46:36.917Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39014882848",
+  "oppgave": {
+    "oppgave": "doksepin-0034",
+    "stoff": "doksepin",
+    "navn": "Doksepin",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-17T10:46:36.917Z",
+    "jobbgren": "kuratorjobb/doksepin-0028",
+    "kurateringsgren": "kuratering/doksepin-0034",
+    "pr": null,
+    "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
+    "gjenoppta": {
+      "oppgave": "doksepin-0028",
+      "okt": "kurateringsko/okt/20261017-retting",
+      "avbrutt_kl": "2026-10-17T07:01:58.764Z",
+      "grunn": "Kontrolløren har bedt om endringer i kontrollrunde 4.",
+      "fase": null,
+      "jobbgren": "kuratorjobb/doksepin-0028",
+      "kurateringsgren": null,
+      "pr": null,
+      "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
+      "kunnskapsgrense": "2026-10-16"
+    },
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-16T18:10:24.842Z",
+      "side": true,
+      "elementer": 19,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 6,
+      "referanser": 4,
+      "elementer_uten_kilde": 14
+    },
+    "prioritet": {
+      "poeng": 1460.7,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen doksepin-0028.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "7 av 13 redaksjonelle seksjoner er tomme.",
+        "14 av 19 elementer har ingen kilde.",
+        "Bare 4 referanser."
+      ]
+    }
+  }
 }
