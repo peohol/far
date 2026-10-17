@@ -1,23 +1,23 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-202610171453",
-  "foresporsel_sha256": "4b2f7d5f6d455256b6c6a3fc971e8a23bde906f97825585a1b65dd79b13d99ee",
-  "handling": "reserver",
+  "foresporsel_id": "forny-sertindol-0040-gren",
+  "foresporsel_sha256": "5a9f1093acadee7ce49b36288c5b7a058bc5722531258dc752c86b25a3d05eb2",
+  "handling": "forny",
   "utfall": "ok",
-  "melding": "sertindol er reservert til 2026-10-17T17:53:59.439Z.",
-  "behandlet_kl": "2026-10-17T14:53:59.439Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39042684387",
+  "melding": "Reservasjonen av sertindol varer til 2026-10-17T18:29:30.839Z.",
+  "behandlet_kl": "2026-10-17T15:29:30.839Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39045249208",
   "oppgave": {
     "oppgave": "sertindol-0040",
     "stoff": "sertindol",
     "navn": "Sertindol",
     "modus": "de_novo",
     "forsok": 1,
-    "frist_kl": "2026-10-17T17:53:59.439Z",
+    "frist_kl": "2026-10-17T18:29:30.839Z",
     "jobbgren": "kuratorjobb/sertindol-0040",
     "kurateringsgren": "kuratering/sertindol-0040",
     "pr": null,
-    "gren": null,
+    "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
     "gjenoppta": null,
     "sist_kuratert": null,
     "maal": {
@@ -30,15 +30,8 @@
       "elementer_uten_kilde": 1
     },
     "prioritet": {
-      "poeng": 447.6,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 2 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
