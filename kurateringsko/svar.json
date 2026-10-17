@@ -1,10 +1,56 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-doksepin-0044",
-  "foresporsel_sha256": "6f2766734aea129b91533892ab20f619e829438caf123a98b58e9d1a4f51a8ac",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-lamotrigin-191517",
+  "foresporsel_sha256": "5106219240211f4d16538570db778604eee1b481e54c566ac21dd90e7f3fb779",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "doksepin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-17T19:14:43.028Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39061588278"
+  "melding": "lamotrigin er reservert til 2026-10-17T22:15:46.479Z.",
+  "behandlet_kl": "2026-10-17T19:15:46.479Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39061671284",
+  "oppgave": {
+    "oppgave": "lamotrigin-0045",
+    "stoff": "lamotrigin",
+    "navn": "Lamotrigin",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-17T22:15:46.479Z",
+    "jobbgren": "kuratorjobb/lamotrigin-0019",
+    "kurateringsgren": "kuratering/lamotrigin-0045",
+    "pr": null,
+    "gren": "48e10b1b-31b0-452d-9e29-8404e30aa989",
+    "gjenoppta": {
+      "oppgave": "lamotrigin-0035",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "avbrutt_kl": "2026-10-17T19:13:54.813Z",
+      "grunn": "Grenen er tilbake hos kuratoren.",
+      "fase": null,
+      "jobbgren": "kuratorjobb/lamotrigin-0019",
+      "kurateringsgren": null,
+      "pr": null,
+      "gren": "48e10b1b-31b0-452d-9e29-8404e30aa989",
+      "kunnskapsgrense": "2026-10-17"
+    },
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-17T14:23:30.777Z",
+      "side": true,
+      "elementer": 18,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 7,
+      "referanser": 3,
+      "elementer_uten_kilde": 12
+    },
+    "prioritet": {
+      "poeng": 1449.5,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen lamotrigin-0035.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "6 av 13 redaksjonelle seksjoner er tomme.",
+        "12 av 18 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ]
+    }
+  }
 }
