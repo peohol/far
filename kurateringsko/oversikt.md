@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T14:29:33.378Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T14:52:49.441Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 80 · Reservert: 1 · Venter på godkjenning: 11 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
+Klar: 80 · Venter på godkjenning: 11 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-- **okskarbazepin** (okskarbazepin-0039), frist 2026-10-17T16:51:56.803Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
@@ -28,6 +28,7 @@ Klar: 80 · Reservert: 1 · Venter på godkjenning: 11 · Publisert: 3 · Blokke
 - **kokain**: Stoffet har ingen publisert fagside å kuratere.
 - **mdma**: Stoffet har ingen publisert fagside å kuratere.
 - **metamfetamin**: Stoffet har ingen publisert fagside å kuratere.
+- **okskarbazepin**: Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig.
 
 ## Køen
 

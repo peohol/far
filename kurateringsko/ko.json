@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T14:29:33.378Z",
+  "oppdatert_kl": "2026-10-17T14:52:49.441Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "teller": 39,
   "stoffer": {
@@ -4383,7 +4383,7 @@
     "okskarbazepin": {
       "stoff": "okskarbazepin",
       "navn": "Okskarbazepin",
-      "status": "reservert",
+      "status": "blokkert",
       "modus": "de_novo",
       "prioritet": {
         "poeng": 0,
@@ -4398,13 +4398,14 @@
         "referanser": 3,
         "elementer_uten_kilde": 1
       },
-      "reservasjon": {
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": {
         "oppgave": "okskarbazepin-0039",
         "okt": "kurateringsko/okt/20261016-125910",
-        "modus": "de_novo",
-        "reservert_kl": "2026-10-17T12:24:58.738Z",
-        "fornyet_kl": "2026-10-17T13:51:56.803Z",
-        "frist_kl": "2026-10-17T16:51:56.803Z",
+        "avbrutt_kl": "2026-10-17T14:52:49.441Z",
+        "grunn": "Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig.",
         "fase": null,
         "jobbgren": "kuratorjobb/okskarbazepin-0039",
         "kurateringsgren": "kuratering/okskarbazepin-0039",
@@ -4412,18 +4413,22 @@
         "gren": "6f7ecff9-99cd-491e-8998-be57844ac0ea",
         "kunnskapsgrense": null
       },
-      "forsok": 1,
-      "tidligst_kl": null,
-      "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [],
+      "blokkeringer": [
+        {
+          "kode": "agent",
+          "grunn": "Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig.",
+          "kl": "2026-10-17T14:52:49.441Z",
+          "kilde": "agent"
+        }
+      ],
       "sist_kuratert": null,
       "siste_kjoring": {
         "oppgave": "okskarbazepin-0039",
         "okt": "kurateringsko/okt/20261016-125910",
         "startet_kl": "2026-10-17T12:24:58.738Z",
-        "avsluttet_kl": null,
-        "utfall": "reservert"
+        "avsluttet_kl": "2026-10-17T14:52:49.441Z",
+        "utfall": "blokkert"
       },
       "aktiv": true,
       "historikk": [
@@ -4462,6 +4467,13 @@
           "hendelse": "fornyet",
           "oppgave": "okskarbazepin-0039",
           "okt": "kurateringsko/okt/20261016-125910"
+        },
+        {
+          "kl": "2026-10-17T14:52:49.441Z",
+          "hendelse": "blokkert",
+          "oppgave": "okskarbazepin-0039",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig."
         }
       ],
       "appgren": null
@@ -5821,6 +5833,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "blokkert-okskarbazepin-0039-b",
         "forny-okskarbazepin-0039-1351",
         "forny-okskarbazepin-0039-gren",
         "forny-okskarbazepin-0039-1251",
@@ -5869,25 +5882,24 @@
         "reserver-ketobemidon-0510",
         "reserver-flunitrazepam-0509",
         "reserver-cbd-0508",
-        "reserver-lamotrigin-0508",
-        "reserver-kariprazin-0507"
+        "reserver-lamotrigin-0508"
       ],
       "siste": {
-        "id": "",
-        "sha256": "58e5f8c6ed6af027b4962f13956971f947d13077be0bd894ebd255658d38ab4e",
+        "id": "blokkert-okskarbazepin-0039-b",
+        "sha256": "9ce42da5627d452e3b89677dae98153acd98125532404ee15b5a22ce0cc87b63",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": null,
-          "foresporsel_sha256": "58e5f8c6ed6af027b4962f13956971f947d13077be0bd894ebd255658d38ab4e",
-          "handling": null,
-          "utfall": "avvist",
-          "melding": "Forespørselen kan ikke brukes: Feltet gren hører ikke til handlingen blokkert.",
-          "behandlet_kl": "2026-10-17T14:23:30.223Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39040523122"
+          "foresporsel_id": "blokkert-okskarbazepin-0039-b",
+          "foresporsel_sha256": "9ce42da5627d452e3b89677dae98153acd98125532404ee15b5a22ce0cc87b63",
+          "handling": "blokkert",
+          "utfall": "ok",
+          "melding": "okskarbazepin er blokkert til et menneske har sett på det.",
+          "behandlet_kl": "2026-10-17T14:52:49.441Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39042608135"
         }
       },
       "besvart_commit": "ab55aace5d32fe90b685c0cf755742d0005c8372",
-      "sist_brukt_kl": "2026-10-17T14:23:30.223Z"
+      "sist_brukt_kl": "2026-10-17T14:52:49.441Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
