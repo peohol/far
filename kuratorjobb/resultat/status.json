@@ -1,0 +1,18 @@
+{
+  "versjon": 1,
+  "status": "kjorer",
+  "jobb": {
+    "gren": "kuratorjobb/sertindol-0040",
+    "foresporsel_commit": "b0e59f48b21369bf43493ebcc04ab089e0c1437f",
+    "foresporsel_sha256": "3448c4422ffd474ce8f0d0f88464063f0e6c791d266014ef2583e9fdebeff28b",
+    "kode_commit": "63a73d6d280aa61d787b268407acd4618ef59c72",
+    "kjoring": "https://github.com/peohol/far/actions/runs/39042774539",
+    "startet_kl": "2026-10-17T14:55:33.110Z",
+    "ferdig_kl": null
+  },
+  "foresporsel": null,
+  "referanse": null,
+  "feil": [],
+  "bruker": [],
+  "stoffer": {}
+}
