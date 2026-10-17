@@ -1,0 +1,18 @@
+{
+  "versjon": 1,
+  "status": "kjorer",
+  "jobb": {
+    "gren": "kuratorjobb/fenobarbital-0026",
+    "foresporsel_commit": "f1280427990d513b6fb9116ec1e031b3e6bc4021",
+    "foresporsel_sha256": "41d9466b4c805983c0e36d87dd637a28673e2d314cffed02fb9a896d69042c28",
+    "kode_commit": "6f98a682350a6ee06ea7507d46a29a3172f4d854",
+    "kjoring": "https://github.com/peohol/far/actions/runs/39007871634",
+    "startet_kl": "2026-10-17T05:53:28.385Z",
+    "ferdig_kl": null
+  },
+  "foresporsel": null,
+  "referanse": null,
+  "feil": [],
+  "bruker": [],
+  "stoffer": {}
+}
