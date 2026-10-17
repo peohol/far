@@ -12,8 +12,8 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.102.0',
-    dato: '2026-10-16',
+    versjon: '1.103.0',
+    dato: '2026-10-17',
     sammendrag: 'Varsler kan arkiveres, så lista ikke vokser seg lang',
     typer: ['Funksjonalitet'],
     omfang: 'Mindre omfang',
@@ -23,6 +23,30 @@ export const ENDRINGSLOGG: Endring[] = [
       'De arkiverte varslene ligger i skuffen «Arkivet» nederst i varselvinduet. Der kan de fortsatt åpnes, og hentes fram igjen med knappen ved hvert varsel.',
       'Skjer det noe nytt i det samme etter at et varsel er arkivert, kommer det som et nytt varsel.',
     ],
+  },
+  {
+    versjon: '1.102.2',
+    dato: '2026-10-17',
+    sammendrag: '«Følg agenten» åpner kortene agenten arbeider i, så endringene vises mens de skjer',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Mindre omfang',
+    gjelder: ['kuratering'],
+    punkter: [
+      'Med «Følg agenten» på åpnes nå seksjonen og kortet agenten arbeider i, og siden ruller dit. Før rullet den bare dit, og kortet kunne stå lukket.',
+      'Stedet som følges, har en ramme, og merket «Agenten arbeider her» mens agenten arbeider der.',
+      'Når agenten lagrer en ny revisjon, åpnes det som er endret, og det lyser opp en liten stund. Siden står som før mens innholdet byttes, med de samme kortene åpne.',
+    ],
+  },
+  {
+    versjon: '1.102.1',
+    dato: '2026-10-17',
+    sammendrag: 'Kurateringer som legger inn den samme nye kilden, stopper ikke lenger hverandre',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Når to kurateringer av ulike fagsider står til kontroll samtidig og begge har lagt inn den samme nye kilden, brukes kilden fra den som publiseres først, også av den neste. Før stoppet den neste med en teknisk feil og måtte rettes og kontrolleres på nytt bare for å fjerne kilden.',
+    ],
+    utenVarsel: true,
   },
   {
     versjon: '1.101.0',

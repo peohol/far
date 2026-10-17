@@ -28,7 +28,7 @@ import type { Innholdselementinnhold } from '../faginnhold/modell'
 import { sammenlignSider } from '../faginnhold/sidesammenligning'
 import type { Kurateringsklient, Sideutgavedata } from '../kuratering/klient'
 import { agenttilstand, type Agentinfo, type Grendetaljer, type Grensammendrag, type Grenstatusdata, type Versjonsinfo } from '../kuratering/modell'
-import { endredeKort } from '../components/kuratering/Folgagenten'
+import { endredeSteder } from '../components/kuratering/Folgagenten'
 import { GRUNNSTRUKTUR } from './hjelp/registerstruktur'
 
 beforeAll(() => {
@@ -408,19 +408,88 @@ describe('kommentartrådene', () => {
 describe('følg agenten', () => {
   const naa = () => new Date().toISOString()
 
-  it('viser hva agenten gjør, ruller til kortet når den følges, og slutter å følge når man ruller selv', async () => {
+  /** Kortet på siden, seksjonen det står i, og om seksjonen er åpen. */
+  const doseringen = () => {
+    const element = document.getElementById(`element-${DOSERING}`)
+    const seksjon = element?.closest('.skuff--seksjon')
+    return { element, apen: seksjon?.hasAttribute('data-apen') ?? false }
+  }
+
+  it('viser hva agenten gjør, åpner og merker kortet den arbeider med når den følges, og slutter å følge når man ruller selv', async () => {
     const gren = grendetaljer({ status: 'arbeid' })
     const k = klient(gren, { aktivitet: { tekst: 'Kontrollerer doseringen', objekt: DOSERING, kl: naa() } })
-    const rull = vi.spyOn(Element.prototype, 'scrollIntoView')
     vis(<Kurateringsside gren={GREN} onGaaTil={vi.fn()} {...felles} />, kilde(k))
     expect(await screen.findByText('Agenten arbeider')).toBeTruthy()
     expect(await screen.findByText(/Kontrollerer doseringen/)).toBeTruthy()
+    await waitFor(() => expect(doseringen().element).toBeTruthy())
+    expect(doseringen().apen).toBe(false)
     const bryter = screen.getByRole('switch', { name: 'Følg agenten' }) as HTMLInputElement
     await userEvent.click(bryter)
-    await waitFor(() => expect(rull.mock.contexts).toContain(document.getElementById(`element-${DOSERING}`)))
+    await waitFor(() => expect(doseringen().apen).toBe(true))
+    expect(doseringen().element!.classList.contains('utgave--agent')).toBe(true)
+    expect(doseringen().element!.getAttribute('data-agentmerke')).toBe('Agenten arbeider her')
     window.dispatchEvent(new WheelEvent('wheel'))
     await waitFor(() => expect(bryter.checked).toBe(false))
-    rull.mockRestore()
+    // Følges agenten ikke lenger, er merket borte; seksjonen står åpen.
+    expect(doseringen().element!.classList.contains('utgave--agent')).toBe(false)
+    expect(doseringen().apen).toBe(true)
+  })
+
+  it('åpner og lyser opp det som er endret når en ny revisjon kommer mens agenten følges, uten å tegne siden på nytt', async () => {
+    const forrige = grendetaljer({ status: 'arbeid' })
+    forrige.grenrevisjon = { ...forrige.grenrevisjon!, forhandsvisning: { stoff: GAMMEL.side, bivirkninger: { kilder: [], bivirkninger: [] } } }
+    const neste = grendetaljer({ status: 'arbeid', revisjon: 3 })
+    neste.grenrevisjon = { ...neste.grenrevisjon!, revisjon: 3 }
+    const k = klient(forrige)
+    vis(<Kurateringsside gren={GREN} onGaaTil={vi.fn()} {...felles} />, kilde(k))
+    await waitFor(() => expect(doseringen().element).toBeTruthy())
+    const siden = document.querySelector('.stoffside')
+    await userEvent.click(screen.getByRole('switch', { name: 'Følg agenten' }))
+    expect(doseringen().apen).toBe(false)
+
+    vi.mocked(k.les).mockResolvedValue(neste)
+    vi.mocked(k.status).mockResolvedValue(grenstatus(neste))
+    act(() => {
+      window.dispatchEvent(new Event('focus'))
+    })
+    await waitFor(() => expect(doseringen().apen).toBe(true))
+    expect(doseringen().element!.classList.contains('utgave--nylig')).toBe(true)
+    expect(doseringen().element!.classList.contains('utgave--agent')).toBe(true)
+    // Siden er den samme; bare innholdet er byttet.
+    expect(document.querySelector('.stoffside')).toBe(siden)
+  })
+
+  it('åpner kortet i seksjonen det er flyttet til, ikke der det sto', async () => {
+    const forrige = grendetaljer({ status: 'arbeid' })
+    forrige.grenrevisjon = { ...forrige.grenrevisjon!, forhandsvisning: { stoff: GAMMEL.side, bivirkninger: { kilder: [], bivirkninger: [] } } }
+    const flyttet = side([utgave(DOSERING, kort('indikasjon', 'Ny dosering'), 2), utgave(INDIKASJON, kort('fjernet', 'Gammel indikasjon'), 2)])
+    const neste = grendetaljer({ status: 'arbeid', revisjon: 3 })
+    neste.grenrevisjon = { ...neste.grenrevisjon!, revisjon: 3, forhandsvisning: { stoff: flyttet, bivirkninger: { kilder: [], bivirkninger: [] } } }
+    const k = klient(forrige)
+    vis(<Kurateringsside gren={GREN} onGaaTil={vi.fn()} {...felles} />, kilde(k))
+    await waitFor(() => expect(doseringen().element?.closest('#panel-dosering')).toBeTruthy())
+    await userEvent.click(screen.getByRole('switch', { name: 'Følg agenten' }))
+
+    vi.mocked(k.les).mockResolvedValue(neste)
+    vi.mocked(k.status).mockResolvedValue(grenstatus(neste))
+    act(() => {
+      window.dispatchEvent(new Event('focus'))
+    })
+    await waitFor(() => expect(doseringen().element?.closest('#panel-indikasjon')).toBeTruthy())
+    await waitFor(() => expect(doseringen().apen).toBe(true))
+    expect(doseringen().element!.classList.contains('utgave--agent')).toBe(true)
+  })
+
+  it('har rammen, men ikke merket «Agenten arbeider her», når agenten venter', async () => {
+    const gren = grendetaljer({ status: 'arbeid' })
+    // Siste aktivitet for en time siden: agenten venter.
+    const k = klient(gren, { aktivitet: { tekst: 'Kontrollerer doseringen', objekt: DOSERING, kl: new Date(Date.now() - 3_600_000).toISOString() } })
+    vis(<Kurateringsside gren={GREN} onGaaTil={vi.fn()} {...felles} />, kilde(k))
+    expect(await screen.findByText('Venter')).toBeTruthy()
+    await waitFor(() => expect(doseringen().element).toBeTruthy())
+    await userEvent.click(screen.getByRole('switch', { name: 'Følg agenten' }))
+    await waitFor(() => expect(doseringen().element!.classList.contains('utgave--agent')).toBe(true))
+    expect(doseringen().element!.hasAttribute('data-agentmerke')).toBe(false)
   })
 
   it('leser grenen på nytt når statusen sier at det er kommet en ny revisjon, men bare én gang', async () => {
@@ -459,9 +528,11 @@ describe('følg agenten', () => {
     expect(agenttilstand(s, true, t)).toBe('brutt')
   })
 
-  it('finner kortene som er endret fra én revisjon til den neste', () => {
-    expect(endredeKort(GAMMEL, NY)).toEqual([DOSERING])
-    expect(endredeKort(NY, NY)).toEqual([])
+  it('finner stedene som er endret fra én revisjon til den neste', () => {
+    expect(endredeSteder(GAMMEL, NY)).toEqual([{ kort: DOSERING, seksjon: 'dosering' }])
+    expect(endredeSteder(NY, NY)).toEqual([])
+    const bivirkninger: Sideutgavedata = { ...NY, bivirkninger: { ...INGEN_BIVIRKNINGER, kilder: [SPC] } }
+    expect(endredeSteder(NY, bivirkninger)).toEqual([{ seksjon: 'bivirkninger' }])
   })
 })
 

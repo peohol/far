@@ -197,6 +197,17 @@ rapporten og grenen (`innholdsendringer.gren`), og siden får én ny
 sideversjon. Stopper noe, er ingenting publisert: grenen blir `blokkert` med
 grunnen.
 
+En ny referanse som en annen gren har publisert i mellomtiden (samme kilde på
+to sider til kontroll samtidig), lages ikke på nytt, verken ved publiseringen
+eller prøvepubliseringen: med samme ID og lenke brukes den publiserte, og med
+samme lenke og en annen ID siterer grenens objekter den publiserte i stedet
+(ID-en byttes før grenen skrives inn). Den publiserte referansen står som den
+er. Lenken slås opp som i `intern.kuratering_referanse`, og låses på tvers av
+sidene mens grenen publiseres, så to grener ikke lager den samme samtidig. Det
+er en konflikt (`PT409`) når lenken står på flere referanser, når referansen
+med lenken har et upublisert utkast med en annen lenke eller en arkivering, og
+når ID-en er tatt av noe annet.
+
 Publiseringen stopper (konflikt, `PT409`) når siden er publisert på nytt etter
 grunnversjonen, også gjennom en delt referanse, og når noe grenen endrer har et
 upublisert utkast fra vanlig redigering. Det utkastet overtas ikke; det må
@@ -239,11 +250,14 @@ siden alt i den har vært publisert før. Sideversjonen den gir, har opphavet
   `kurator_sist_kl` i `status`). Siden spør etter `status` hvert
   halve minutt, og hvert femte sekund med «Følg agenten» på; er noe nytt
   (`endring` er større enn da grenen ble lest, eller statusen er en annen),
-  leses grenen på nytt og kortene som er endret, markeres en liten stund.
-  Slik vises også et nytt svar eller en ny merknad i en tråd.
-  «Følg agenten» ruller også til kortet eller seksjonen agenten melder at den
-  arbeider med, og slås av når man ruller selv
-  (`src/components/kuratering/Folgagenten.tsx`).
+  leses grenen på nytt og kortene som er endret, lyser opp en liten stund.
+  Siden står mens revisjonene skifter, med de samme skuffene åpne; bare
+  innholdet byttes. Slik vises også et nytt svar eller en ny merknad i en tråd.
+  «Følg agenten» åpner seksjonen og detaljkortet agenten melder at den
+  arbeider med — eller det som er endret, når en ny revisjon kommer — ruller
+  dit og rammer inn stedet, med merket «Agenten arbeider her» mens agenten
+  arbeider (som indikatoren). Et kort som er flyttet, åpnes i den nye seksjonen. Den
+  slås av når man ruller selv (`src/components/kuratering/Folgagenten.tsx`).
   «Kommentarer» viser trådene festet til kort og felt, og lar
   administratoren åpne nye (også sperrende), svare, lukke og åpne igjen
   (`src/components/kuratering/Kommentartrader.tsx`, ankrene i
