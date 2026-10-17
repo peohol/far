@@ -1,16 +1,17 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T19:17:20.424Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T19:18:04.291Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 81 · Reservert: 1 · Venter på godkjenning: 9 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
+Klar: 81 · Venter på godkjenning: 10 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-- **cbd** (cbd-0046), frist 2026-10-17T22:17:20.424Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
 - **brekspiprazol**: kurateringsgren i OUSFAR (klar), venter på godkjenning
+- **cbd**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **doksepin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **fenytoin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **flunitrazepam**: kurateringsgren i OUSFAR (klar), venter på godkjenning
