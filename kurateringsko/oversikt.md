@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T10:52:12.752Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T11:07:19.758Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
 Klar: 81 · Reservert: 1 · Venter på godkjenning: 10 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
 
 ## Pågår
 
-- **levetiracetam** (levetiracetam-0038), frist 2026-10-17T13:52:12.752Z
+- **levetiracetam** (levetiracetam-0038), frist 2026-10-17T14:07:19.758Z
 
 ## Til gjennomgang
 
