@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T04:01:23.084Z",
+  "oppdatert_kl": "2026-10-17T04:02:15.730Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 19,
   "stoffer": {
@@ -453,7 +453,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, klar); den må avsluttes først.",
-          "kl": "2026-10-17T04:01:23.084Z",
+          "kl": "2026-10-17T04:02:15.730Z",
           "kilde": "system"
         }
       ],
@@ -1022,7 +1022,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, klar); den må avsluttes først.",
-          "kl": "2026-10-17T04:01:23.084Z",
+          "kl": "2026-10-17T04:02:15.730Z",
           "kilde": "system"
         }
       ],
@@ -5178,6 +5178,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "reserver-brekspiprazol-bok2",
         "tilbakestill-doksepin-1",
         "tilbakestill-brekspiprazol-1",
         "reserver-brekspiprazol-bokforing",
@@ -5226,25 +5227,24 @@
         "fullfort-lurasidon-2",
         "reserver-lurasidon-2",
         "fullfort-ghb-2",
-        "reserver-ghb-2",
-        "fullfort-ghb-1"
+        "reserver-ghb-2"
       ],
       "siste": {
-        "id": "tilbakestill-doksepin-1",
-        "sha256": "6784f10d69d16fb66296adc19f1cd7799625b0560b8819e19da85e4057f3b84e",
+        "id": "reserver-brekspiprazol-bok2",
+        "sha256": "ed3e1e4eec737147b76a0bfb7f07e667e94c7b0a0d68e7828b6db02c047a113c",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "tilbakestill-doksepin-1",
-          "foresporsel_sha256": "6784f10d69d16fb66296adc19f1cd7799625b0560b8819e19da85e4057f3b84e",
-          "handling": "tilbakestill",
-          "utfall": "ok",
-          "melding": "doksepin er tilbakestilt.",
-          "behandlet_kl": "2026-10-17T04:01:23.084Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39000969666"
+          "foresporsel_id": "reserver-brekspiprazol-bok2",
+          "foresporsel_sha256": "ed3e1e4eec737147b76a0bfb7f07e667e94c7b0a0d68e7828b6db02c047a113c",
+          "handling": "reserver",
+          "utfall": "avvist",
+          "melding": "brekspiprazol kan ikke reserveres nå: blokkert.",
+          "behandlet_kl": "2026-10-17T04:02:15.730Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39001028010"
         }
       },
       "besvart_commit": "58b9d21bbc6d652d5ecece965470ef0f5c8961a4",
-      "sist_brukt_kl": "2026-10-17T04:01:23.084Z"
+      "sist_brukt_kl": "2026-10-17T04:02:15.730Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
