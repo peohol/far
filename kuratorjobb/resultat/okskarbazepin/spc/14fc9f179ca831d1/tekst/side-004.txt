@@ -1,0 +1,59 @@
+Hypersensitivitetsreaksjoner, inkludert multiorgan hypersensitivitetsreaksjoner, kan også forekomme
+hos pasienter som ikke tidligere har vært overfølsomme for karbamazepin. Slike reaksjoner kan
+påvirke hud, lever, blod, lymfesystem, eller andre organer, enten individuelt eller sammen i en
+systemisk reaksjon (se pkt. 4.8). Generelt skal Trileptal straks seponeres dersom tegn og symptomer
+på overfølsomhetsreaksjoner inntreffer (se pkt. 4.8).
+
+Dermatologiske effekter
+Det har i svært sjeldne tilfeller blitt rapportert om alvorlige hudreaksjoner, inkludert Stevens-Johnsons
+syndrom, toksisk epidermal nekrolyse (Lyells syndrom) og erythema multiforme, i forbindelse med
+bruk av Trileptal. Pasienter med slike alvorlige hudreaksjoner kan behøve sykehusinnleggelse, da
+reaksjonene kan være livstruende og, i svært sjeldne tilfeller, fatale. Det er rapportert om tilfeller hos
+både barn og voksne. Median tid til start av reaksjonene var 19 dager. Det ble rapportert flere isolerte
+tilfeller av tilbakefall av den alvorlige hudreaksjonen etter at behandling med Trileptal ble forsøkt
+startet opp igjen. Pasienter som utvikler en hudreaksjon ved bruk av Trileptal bør undersøkes straks,
+og Trileptal bør seponeres umiddelbart med mindre det er helt klart at utslettet ikke skyldes
+legemidlet. Ved seponering bør forskrivning av et alternativt antiepileptika vurderes for å unngå anfall
+pga. behandlingsstopp. Behandling med Trileptal bør ikke gjenopptas hos pasienter som avbrøt
+behandlingen pga. hypersensitivitetsreaksjoner (se pkt. 4.3).
+
+HLA-B*1502 allellet – i han kinesere, thailendere, og andre asiatiske befolkningsgrupper
+Ved behandling med karbamazepin har allelet HLA-B*1502 hos personer/pasienter av han-kinesisk og
+thailandsk opprinnelse vist seg å være sterkt assosiert med risiko for utvikling av alvorlige
+hudreaksjoner, kjent som Stevens-Johnson syndrom (SJS)/toksisk epidermal nekrolyse (TEN).
+Okskarbazepin og karbamazepin har liknende kjemiske struktur, det er derfor mulig at pasienter som
+har HLA-B*1502 allelet er i risikogruppen for å utvikle SJS/TEN ved behandling med okskarbazepin.
+Det finnes noe data som antyder en slik sammenheng for okskarbazepin. Frekvensen av HLA-B*1502
+allelet er omtrent 2-12 og 8 % i henholdsvis han-kinesiske og thailandske befolkningsgrupper. Når det
+er mulig skal disse pasientene screenes for HLA-B*1502 før behandlingsoppstart med karbamazepin
+eller virkestoffer med liknende kjemisk struktur. Dersom pasienter fra disse befolkningsgruppene har
+positiv test for HLA-B*1502 allelet kan bruk av Trileptal vurderes dersom det tenkes at fordelene
+oppveier risikoene.
+På bakgrunn av forekomsten av HLA-B*1502 allelet også i andre asiatiske populasjoner (f.eks. over
+15 % på Filipinene og i Malaysia) kan det vurderes å genteste også disse risikogruppene for forekomst
+av HLA-B*1502.
+Frekvensen av HLA-B*1502 allelet er ubetydelig hos f.eks befolkningsgrupper av europeisk,
+afrikansk og latinamerikansk avstamning som har blitt testet, og japanere og koreanere (<1 %).
+
+Allelfrekvensene oppført her representerer prosentandelen av kromosomer i den angitte populasjonen
+som bærer allelet av interesse, noe som betyr at prosentandelen av pasienter som bærer en kopi av
+allelet på minst ett av sine to kromosomer (dvs. bærerfrekvensen) er nesten dobbelt så høy som
+allelfrekvensen. Derfor er prosentandelen av pasienter som kan være i faresonen nesten dobbelt så høy
+som allelfrekvensen.HLA-B*1502 kan være en risikofaktor for utvikling av SJS/TEN hos kinesiske
+pasienter som bruker andre antiepileptika assosiert med SJS/TEN. Screening er ikke generelt anbefalt
+hos pasienter fra populasjoner hvor prevalensen av HLA-B*1502 er lav eller hos pasienter som
+allerede behandles med Trileptal, ettersom risikoen for SJS/TEN i stor grad er begrenset til de første
+månedene av behandlingen, uavhengig av HLA-B*1502 status.
+
+HLA-A*3101 allelet – personer av europeisk avstamming og japanere
+Hos personer av europeisk avstamming og japanere er det indikasjoner for at HLA-A*3101 allelet er
+forbundet med en økt risiko for karbamazepin induserte hudreaksjoner. Disse hudreaksjonene
+inkluderer SJS, TEN, legemiddelutslett med eosinofili og systemiske symptomer (DRESS), eller
+mindre alvorlig akutt generalisert eksematøs pustulose (AGEP) og makulopapulært utslett.
+Forekomsten av HLA-A*3101 allelet varierer mye mellom etniske populasjoner. Frekvensen av HLA-
+A*3101 allelet er 2-5 % i europeiske befolkningsgrupper og omtrent 10 % i japanske
+befolkningsgrupper. Frekvensen av dette allelet er estimert til å være mindre enn 5 % i de fleste
+australske, asiatiske, afrikanske og nordamerikanske populasjoner, med noen unntak innenfor 5 til
+12 %. Frekvens over 15 % har blitt anslått i enkelte etniske grupper i Sør-Amerika (Argentina og
+
+                                                    4

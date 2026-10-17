@@ -1,0 +1,59 @@
+5.3     Prekliniske sikkerhetsdata
+
+Prekliniske data tyder ikke på spesiell risiko for mennesker. Dette er basert på toksisitetsstudier med
+gjentatt dosering og sikkerhetsfarmakologiske- og gentoksisitetsstudier med okskarbazepin og den
+farmakologisk aktive metabolitten monohydroksyderivat (MHD).
+
+Immunotoksisitet
+Immunstimulerende forsøk hos mus, viste at MHD (og til en mindre grad okskarbazepin) kan indusere
+forsinket hypersensitivitet.
+
+Mutagenitet
+In vitro gentoksisitetsstudier har gitt motstridende resultater. Okskarbazepin økte mutasjonsfrekvensen
+i en in vitro Ames test i fravær av metabolsk aktivering i en av fem bakteriestammer. Okskarbazepin
+og MHD gav økning i kromosomavvik og/eller polyploiditet i et in vitro studie med CHO celler i
+fravær av metabolsk aktivering. MHD gav negativ resultat i Ames test, og ingen mutagen eller
+klastogen aktivitet ble funnet for hverken okskarbazepin eller MHD i V79 celler in vitro.
+Okskarbazepin og MHD var begge negative for klastogene eller aneugene effekter (dannelse av
+mikronukleus) i et in vivo rottebeinmargsassay.
+
+Reproduksjonstoksisitet
+Standard reproduksjonstoksisitetsstudier hos gnagere og kaniner avslørte effekter som økt insidens av
+embryoføtal mortalitet og/eller en viss forsinkelse i antenatal og/eller postnatal vekst av avkommet
+ved maternotoksiske doser. Det var en økning i føtale misdannelser hos rotter i én av de åtte
+embryoføtale toksisitetsstudiene, utført med enten okskarbazepin eller MHD, ved doser som også gav
+maternotoksisitet (se pkt. 4.6). Den samlede dokumentasjonen fra alle dyrestudier indikerer at
+okskarbazepin har lite teratogent potensial ved doser relevant for mennesker. Dyrestudiene var
+imidlertid utilstrekkelige til å utelukke en teratogen effekt av okskarbazepin.
+I studier på rotter var fertilitet hos begge kjønn upåvirket av okskarbazepin eller MHD ved orale doser
+opp til henholdsvis 150 og 450 mg/kg/dag. Forstyrrelser i østrogensyklusen og redusert antall gule
+legemer, implantasjoner og levende embryoer ble imidlertid observert hos hunndyr ved den høyeste
+dosen (450 mg/kg/dag) av MHD.
+
+Karsinogenitet
+I karsinogenitetsstudier ble det indusert levertumorer (hos rotter og mus), testikkeltumorer (hos rotter)
+og granulære celletumorer i genitaltraktus hos hunnrotter. Levertumorene var mest sannsynlig en
+konsekvens av induksjonen av mikrosomale leverenzymer; en induktiv effekt, som selv om den ikke
+kan utelukkes, er svak eller ikke-eksisterende hos pasienter som behandles med Trileptal. Tumorer i
+testiklene kan ha blitt indusert av økte konsentrasjoner av luteiniserende hormon. Da slike økninger
+ikke opptrer hos mennesker, ansees ikke disse tumorene å være av klinisk betydning. I en
+karsinogenitetsstudie med MHD hos rotter, ble det sett en doserelatert økning i insidensen av
+granulære celletumorer i hunnenes kjønnsorganer (cervix og vagina) etter eksponeringsnivåer
+tilsvarende kliniske eksponeringsnivåer. Mekanismen bak utviklingen av disse tumorene er ikke
+fullstendig klarlagt, men kan relateres til økte østradiolnivåer spesifikt for rotter. Den kliniske
+betydningen av disse tumorene er derfor uklar.
+
+
+6.      FARMASØYTISKE OPPLYSNINGER
+
+6.1     Hjelpestoffer
+
+Propylparahydroksybenzoat (E 216)
+Sakkarinnatrium
+Sorbinsyre (E 200)
+Makrogolstearat
+Metylparahydroksybenzoat (E 218)
+Gul plomme/sitronaroma (inneholder etanol)
+Askorbinsyre (E 300)
+
+                                                   15

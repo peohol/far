@@ -1,0 +1,59 @@
+Brasil), Nord-Amerika (USA Navajo og Sioux, og Mexico Sonora Seri) og Sør-India (Tamil Nadu) og
+mellom 10 % til 15 % i andre innfødte etnisiteter i de samme regionene.
+
+Risikoen for karbamazepin induserte hudreaksjoner (hovedsakelig mindre alvorlige) i den generelle
+befolkningen er 5.0 %. Hos personer av europeisk avstamming med HLA-A*3101 allelet øker risikoen
+til 26 %, mens fravær av allelet reduserer risikoen til 3.8 %.
+
+Allelfrekvensene oppført her representerer prosentandelen av kromosomer i den angitte populasjonen
+som bærer allelet av interesse, noe som betyr at prosentandelen av pasienter som bærer en kopi av
+allelt på minst ett av sine to kromosomer (dvs. bærefrekvensen) er nesten dobbelt så høy som
+allelfrekvensen. Derfor er prosentandelen av pasienter som kan være i faresonen nesten dobbelt så høy
+som allelfrekvensen.
+
+Det er ikke tilstrekkelig grunnlag for å anbefale screening for HLA-A*3101 før behandling med
+karbamazepin eller substanser med liknende kjemisk struktur igangsettes.
+Om pasienter av europeisk eller japansk avstamming er kjent å være positive for HLA-A*3101 allelet,
+kan bruk av karbamazepin eller substanser med liknende kjemisk struktur vurderes dersom det tenkes
+at fordelene oppveier risikoen.
+
+Begrensninger ved genetisk screening
+Resultater av genetisk screening må aldri erstatte klinisk årvåkenhet og god pasientoppfølging. Mange
+asiatiske pasienter som er positive for HLA-B*1502 og behandles med Trileptal vil ikke utvikle
+SJS/TEN og pasienter negative for HLA-B*1502 av enhver etnisitet kan fortsatt utvikle SJS/TEN.
+Tilsvarende vil mange pasienter som er positive for HLA-A*3101 og som behandles med Trileptal
+ikke utvikle SJS, TEN, DRESS, AGEP eller makulopapulært utslett, mens pasienter som er negative
+for HLA-A*3101 av enhver etnisitet fortsatt kan utvikle disse alvorlige hudbivirkningene.
+Betydningen av andre mulige faktorer i utviklingen av, og sykelighet fra, disse alvorlige
+hudbivirkningene, som for eksempel dosen av antiepileptika, compliance, samtidig medisinering,
+komorbiditet, og nivået av dermatologisk overvåking er ikke undersøkt.
+
+Informasjon til helsepersonell
+Hvis testing for tilstedeværelse av HLA-B*1502 allelet skal gjennomføres anbefales testing med høy
+oppløsnings HLA-B*1502 genotyping. Testen er positiv hvis enten ett eller to HLA-B*1502-alleler
+påvises og negativ om ingen HLA-B*1502-alleler påvises. Tilsvarende anbefales bruk av høy
+oppløsnings HLA-A*3101 genotyping hvis testing for tilstedeværelse av HLA-A*3101-allelet skal
+gjennomføres. Testen er positiv hvis enten ett eller to HLA-A*3101-alleler påvises og negativ om
+ingen HLA-A*3101-alleler påvises.
+
+Risiko for forverring av anfall
+Det er rapportert om risiko for forverring av anfall ved bruk av Trileptal. Denne risikoen er særlig sett
+hos barn men kan også forekomme hos voksne. Ved forverring av anfall bør Trileptal seponeres.
+
+Hyponatremi
+Serum natriumnivåer under 125 mmol/l har vært sett hos opptil 2,7 % av pasientene som behandles
+med Trileptal. Disse er vanligvis asymptomatiske og krever ingen dosejustering. Erfaring fra kliniske
+studier viser at serumnivået av natrium går tilbake til normalnivå når Trileptaldosen reduseres eller
+seponeres, eller ved konservativ behandling av pasienten (f.eks. begrenset væskeinntak). Hos pasienter
+med nyreforandringer forbundet med lavt natriumnivå (f.eks. uhensiktsmessig sekresjon av ADH
+(SIADH)) eller hos pasienter som samtidig behandles med legemidler som reduserer natriumnivået (f.
+eks. diuretika, desmopressin), såvel som NSAIDs (f. eks. indometacin), bør natriumnivået måles før
+behandlingen starter. Natriumnivået i serum bør deretter måles etter ca. to uker og senere hver måned
+de første tre måneder av behandlingen, eller i henhold til klinisk behov. Disse risikofaktorene gjelder
+spesielt eldre pasienter. Samme fremgangsmåte for kontroll av natriumnivået i serum bør følges hos
+pasienter som behandles med Trileptal og som skal starte behandling med legemidler som reduserer
+natriumnivået. Dersom kliniske symptomer på hyponatremi inntreffer under behandling med Trileptal
+(se pkt. 4.8), bør måling av serum natrium vurderes. Andre pasienter kan få fastsatt serum natrium som
+en del av deres rutinemessige laboratorieundersøkelser.
+
+                                                    5

@@ -1,0 +1,58 @@
+                     Dose i milligram                            Dose i milliliter
+                (fordelt på 2 daglige doser)               (fordelt på 2 daglige doser)
+                         316-345 mg                                   5,5 ml
+                         346-375 mg                                   6,0 ml
+                         376-405 mg                                   6,5 ml
+                         406-435 mg                                   7,0 ml
+                         436-465 mg                                   7,5 ml
+                         466-495 mg                                   8,0 ml
+                         496-525 mg                                   8,5 ml
+                         526-555 mg                                   9,0 ml
+                         556-585 mg                                   9,5 ml
+                         586-615 mg                                  10,0 ml
+                         616-645 mg                                  10,5 ml
+                         646-675 mg                                  11,0 ml
+                         676-705 mg                                  11,5 ml
+                         706-735 mg                                  12,0 ml
+                         736-765 mg                                  12,5 ml
+                         766-795 mg                                  13,0 ml
+                         796-825 mg                                  13,5 ml
+                         826-855 mg                                  14,0 ml
+                         856-885 mg                                  14,5 ml
+                         886-915 mg                                  15,0 ml
+                         916-945 mg                                  15,5 ml
+                         946-975 mg                                  16,0 ml
+                        976-1005 mg                                  16,5 ml
+                       1006-1035 mg                                  17,0 ml
+                       1036-1065 mg                                  17,5 ml
+                       1066-1095 mg                                  18,0 ml
+                       1096-1125 mg                                  18,5 ml
+                       1126-1155 mg                                  19,0 ml
+                       1156-1185 mg                                  19,5 ml
+                       1186-1215 mg                                  20,0 ml
+
+Terapeutisk legemiddelmonitorering
+Den terapeutiske effekten av okskarbazepin utøves primært gjennom den aktive metabolitten til
+okskarbazepin, 10-monohydroxyderivat (MHD) (se avsnitt 5).
+
+Overvåkning av plasmanivåer av okskarbazepin eller MDH er ikke rutinemessig påkrevd. Imidlertid
+kan overvåkning av plasmanivåer av MDH vurderes under Trileptalbehandling for å utelukke
+manglende compliance eller i situasjoner hvor endringer i MDH-clearance forventes, inkludert:
+     endringer i nyrefunksjon (se "Nedsatt nyrefunksjon")
+     graviditet (se pkt. 4.6 og 5.2)
+     samtidig bruk med leverenzyminduserende legemidler (se pkt. 4.5).
+Ved en av disse situasjonene kan Trileptaldosen justeres (basert på plasmanivåer målt 2-4 timer etter
+doseadministrasjon) for å opprettholde en makskonsentrasjon av MDH i plasma som ikke overstiger
+35 mg/l.
+
+Voksne
+Monoterapi
+Anbefalt initialdose
+Anbefalt initialdose av Trileptal er 600 mg/døgn (8-10 mg/kg/døgn) fordelt på 2 doser.
+
+Vedlikeholdsdose
+Dersom klinisk indisert, kan dosen økes gradvis med maksimalt 600 mg/døgn med ca. 1 ukes
+mellomrom fra behandlingsstart, inntil ønsket klinisk effekt er nådd. Terapeutisk effekt sees ved doser
+mellom 600 mg/døgn og 2400 mg/døgn.
+
+                                                   2

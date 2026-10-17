@@ -1,0 +1,537 @@
+{
+  "stoff": "okskarbazepin",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-17T04:15:05.944175+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 12,
+    "hentet": 7,
+    "dokumenter": 2,
+    "mangler": [
+      {
+        "merkevare_id": "ID_190414C4-559F-4144-9ACB-4DCC0D0BBDA7",
+        "varenavn": "Trileptal",
+        "navn_form_styrke": "Trileptal mikst susp 60 mg/ml",
+        "produsent": "Novartis",
+        "atc": "N03AF02",
+        "legemiddelform": "Mikstur, suspensjon",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_8A2AAF2E-E9CB-4166-A362-0D08AC2951DD",
+        "varenavn": "Trileptal orifarm",
+        "navn_form_styrke": "Trileptal orifarm mikst susp 60 mg/ml",
+        "produsent": "Orifarm",
+        "atc": "N03AF02",
+        "legemiddelform": "Mikstur, suspensjon",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_8BDC8034-362D-4C7C-BD03-EA82A7E03A46",
+        "varenavn": "Apydan",
+        "navn_form_styrke": "Apydan tab 300 mg",
+        "produsent": "Desitin",
+        "atc": "N03AF02",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_B3E8472F-F615-4B79-B4B8-C2F08523A7D4",
+        "varenavn": "Apydan",
+        "navn_form_styrke": "Apydan tab 600 mg",
+        "produsent": "Desitin",
+        "atc": "N03AF02",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_F505F47A-4998-4C3B-85C4-96C4FADE0EB4",
+        "varenavn": "Apydan extent",
+        "navn_form_styrke": "Apydan extent tab modif frisetting 300 mg",
+        "produsent": "Desitin",
+        "atc": "N03AF02",
+        "legemiddelform": "Tablett med modifisert frisetting",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 4 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 4,
+        "ikke_dmp": 0,
+        "uten_omtale": 5
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "5 av 12 preparater i FEST mangler en hentet preparatomtale fra DMP: 5 uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA). SPC-behovet er ikke dekket; se «dekning.mangler».",
+      "antall": {
+        "preparater": 12,
+        "hentet": 7,
+        "mangler": 5,
+        "dokumenter": 2
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/2000-08131.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/2000-08131.pdf",
+      "hentet_kl": "2026-10-17T12:26:14.386Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "257773",
+        "content-md5": "wxPr8MC49WN5x7J5tgPeiQ==",
+        "last-modified": "Thu, 19 Mar 2026 20:49:10 GMT",
+        "etag": "0x8DE85F8F8F7692D",
+        "date": "Sat, 17 Oct 2026 12:26:15 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_4AA3E671-7382-44ED-B675-C2EB422280CB",
+          "varenavn": "Trileptal",
+          "navn_form_styrke": "Trileptal mikst susp 60 mg/ml",
+          "produsent": "Orifarm AS",
+          "atc": "N03AF02",
+          "legemiddelform": "Mikstur, suspensjon"
+        },
+        {
+          "merkevare_id": "ID_4F975264-B139-4F64-AC24-AD5AE89FB6CD",
+          "varenavn": "Trileptal",
+          "navn_form_styrke": "Trileptal mikst susp 60 mg/ml",
+          "produsent": "Novartis Norge (2)",
+          "atc": "N03AF02",
+          "legemiddelform": "Mikstur, suspensjon"
+        },
+        {
+          "merkevare_id": "ID_67306AC0-44FC-4A19-ACC8-E8284C31F786",
+          "varenavn": "Trileptal",
+          "navn_form_styrke": "Trileptal mikst susp 60 mg/ml",
+          "produsent": "2care4 ApS",
+          "atc": "N03AF02",
+          "legemiddelform": "Mikstur, suspensjon"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/2000-08131.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (257773 byte).",
+          "antall": {
+            "bytes": 257773
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "17a0f40ad8ce82c962130b1470b3b26ecd2b3992c7f8f5125e0a9e8bb646e1cd"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1999-00317.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1999-00317.pdf",
+      "hentet_kl": "2026-10-17T12:26:22.598Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "293233",
+        "content-md5": "WNhHJq8TAf2nBqt0M6rZxA==",
+        "last-modified": "Thu, 19 Mar 2026 20:49:05 GMT",
+        "etag": "0x8DE85F8F5864344",
+        "date": "Sat, 17 Oct 2026 12:26:23 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_78E621EB-D2A7-49B1-831B-80CC814D3331",
+          "varenavn": "Trileptal",
+          "navn_form_styrke": "Trileptal tab 600 mg",
+          "produsent": "Novartis Norge (2)",
+          "atc": "N03AF02",
+          "legemiddelform": "Tablett, filmdrasjert"
+        },
+        {
+          "merkevare_id": "ID_EE29920C-D997-4EFB-99A7-E59ED1E99CB9",
+          "varenavn": "Trileptal",
+          "navn_form_styrke": "Trileptal tab 600 mg",
+          "produsent": "2care4 ApS",
+          "atc": "N03AF02",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1999-00317.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (293233 byte).",
+          "antall": {
+            "bytes": 293233
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "14fc9f179ca831d184f0cb012cce00a4bb76f97f26d80c208bbc9c1148250a4e"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1999-00315.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1999-00315.pdf",
+      "hentet_kl": "2026-10-17T12:26:30.056Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "293233",
+        "content-md5": "WNhHJq8TAf2nBqt0M6rZxA==",
+        "last-modified": "Thu, 19 Mar 2026 20:49:05 GMT",
+        "etag": "0x8DE85F8F57EF155",
+        "date": "Sat, 17 Oct 2026 12:26:30 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_8693835C-E038-4ADC-B06A-A0C520424DF6",
+          "varenavn": "Trileptal",
+          "navn_form_styrke": "Trileptal tab 150 mg",
+          "produsent": "Novartis Norge (2)",
+          "atc": "N03AF02",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1999-00315.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (293233 byte).",
+          "antall": {
+            "bytes": 293233
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "14fc9f179ca831d184f0cb012cce00a4bb76f97f26d80c208bbc9c1148250a4e"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1999-00316.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1999-00316.pdf",
+      "hentet_kl": "2026-10-17T12:26:31.072Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "293233",
+        "content-md5": "WNhHJq8TAf2nBqt0M6rZxA==",
+        "last-modified": "Thu, 19 Mar 2026 20:49:05 GMT",
+        "etag": "0x8DE85F8F582252C",
+        "date": "Sat, 17 Oct 2026 12:26:31 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_86C21A62-51B4-4990-BD8B-9F5C03805832",
+          "varenavn": "Trileptal",
+          "navn_form_styrke": "Trileptal tab 300 mg",
+          "produsent": "Novartis Norge (2)",
+          "atc": "N03AF02",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1999-00316.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (293233 byte).",
+          "antall": {
+            "bytes": 293233
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "14fc9f179ca831d184f0cb012cce00a4bb76f97f26d80c208bbc9c1148250a4e"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "17a0f40ad8ce82c962130b1470b3b26ecd2b3992c7f8f5125e0a9e8bb646e1cd",
+      "bytes": 257773,
+      "mappe": "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9",
+      "pdf": {
+        "sider": 16,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "Trileptal mikstur",
+        "laget": "Mon Aug 18 07:59:36 2025 UTC",
+        "endret": "Mon Aug 18 07:59:36 2025 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/original.pdf",
+        "tekst": "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-001.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-002.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-003.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-004.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-005.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-006.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-007.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-008.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-009.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-010.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-011.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-012.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-013.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-014.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-015.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/tekst/side-016.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-001.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-002.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-003.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-004.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-005.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-006.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-007.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-008.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-009.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-010.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-011.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-012.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-013.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-014.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-015.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/17a0f40ad8ce82c9/sider/side-016.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 10,
+        "til": 12
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (16 sider).",
+          "antall": {
+            "sider": 16
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 43021
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 10."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 16
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "14fc9f179ca831d184f0cb012cce00a4bb76f97f26d80c208bbc9c1148250a4e",
+      "bytes": 293233,
+      "mappe": "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1",
+      "pdf": {
+        "sider": 15,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "Trileptal tabletter",
+        "laget": "Mon Aug 18 07:59:37 2025 UTC",
+        "endret": "Mon Aug 18 07:59:37 2025 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/original.pdf",
+        "tekst": "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst/side-001.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst/side-002.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst/side-003.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst/side-004.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst/side-005.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst/side-006.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst/side-007.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst/side-008.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst/side-009.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst/side-010.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst/side-011.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst/side-012.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst/side-013.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst/side-014.txt",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/tekst/side-015.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/sider/side-001.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/sider/side-002.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/sider/side-003.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/sider/side-004.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/sider/side-005.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/sider/side-006.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/sider/side-007.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/sider/side-008.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/sider/side-009.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/sider/side-010.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/sider/side-011.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/sider/side-012.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/sider/side-013.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/sider/side-014.png",
+          "kuratorjobb/resultat/okskarbazepin/spc/14fc9f179ca831d1/sider/side-015.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 9,
+        "til": 11
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (15 sider).",
+          "antall": {
+            "sider": 15
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 42085
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 9."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 15
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

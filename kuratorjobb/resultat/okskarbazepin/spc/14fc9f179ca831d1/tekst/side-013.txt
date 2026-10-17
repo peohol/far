@@ -1,0 +1,59 @@
+metabolitter som raskt ble eliminert. Mat påvirket ikke hastighet eller grad av absorpsjon. Trileptal kan
+derfor gis med eller uten mat (se pkt. 4.2).
+
+Distribusjon
+Tilsynelatende distribusjonsvolum av MHD er 49 L. Ca. 40 % av MHD er bundet til plasmaproteiner,
+hovedsakelig til albumin. Bindingsgraden var uavhengig av serumkonsentrasjonen innen det
+terapeutisk relevante området. Hverken okskarbazepin eller MHD bindes til alfa-1-syreglykoprotein.
+Okskarbazepin og MHD krysser placenta. Neonatal og maternal plasmakonsentrasjon av MHD var
+ved ett tilfelle like.
+
+Biotransformasjon
+Okskarbazepin omdannes raskt til MHD via cytosoliske leverenzymer. MHD er primært ansvarlig for
+den farmakologiske effekten av Trileptal. MHD metaboliseres videre ved konjugering med
+glukuronsyre. Små mengder (4 % av dosen) oksyderes til den farmakologisk inaktive metabolitten
+(10,11-dihydroksyderivat, DHD).
+
+Eliminasjon
+Okskarbazepin utskilles fra kroppen overveiende i form av metabolitter, som hovedsakelig utskilles
+via nyrene. Mer enn 95 % av dosen gjenfinnes i urinen og mindre enn 1 % er uomdannet
+okskarbazepin. Fecal utskillelse utgjør mindre enn 4 % av den administrerte dosen. Ca. 80 % av dosen
+utskilles i urinen, enten som glukuronider av MHD (49 %) eller som uomdannet MHD (27 %).
+Inaktivt DHD utgjør ca. 3 % og konjugater av okskarbazepin utgjør 13 % av dosen. Okskarbazepin
+elimineres raskt fra plasma med en tilsynelatende halveringstid på mellom 1,3 og 2,3 timer. Den
+gjennomsnittlige tilsynelatende plasmahalveringstiden for MHD er 9,3  1,8 timer.
+
+Linearitet/ikke-linearitet
+Steady-state plasmakonsentrasjoner av MHD nås innen 2-3 dager når Trileptal gis 2 ganger daglig.
+Ved steady-state er farmakokinetikken av MHD lineær og viser doseproporsjonalitet i doseområdet
+300-2400 mg/døgn.
+
+Spesielle pasientpopulasjoner
+Nedsatt leverfunksjon: Farmakokinetikk og metabolisme av okskarbazepin og MHD ble undersøkt hos
+friske frivillige og pasienter med nedsatt leverfunksjon etter en enkel peroral dose på 900 mg. Mild til
+moderat grad av nedsatt leverfunksjon påvirket ikke farmakokinetikken av okskarbazepin og MHD.
+Trileptal er ikke undersøkt hos pasienter med alvorlig leversvikt.
+
+Nedsatt nyrefunksjon: Det er en lineær korrelasjon mellom kreatinin clearance og renal clearance av
+MHD. Når Trileptal gis som en enkel 300 mg dose til pasienter med nedsatt nyrefunksjon (kreatinin
+clearance < 30 ml/min), forlenges eliminasjonshalveringstiden av MHD med 60-90 % (16-19 timer),
+og AUC fordobles, sammenlignet med voksne med normal nyrefunksjon (10 timer).
+
+Barn: Farmakokinetikken til Trileptal ble undersøkt i kliniske studier hos pediatriske pasienter som
+fikk Trileptal i doseområdet 10-60 mg/kg/dag. Vektjustert MHD-clearance reduseres når alder og vekt
+nærmer seg alder og vekt hos voksne. Gjennomsnittlig vektjustert clearance hos barn i alderen 4 til
+12 år er ca. 40 % høyere enn hos voksne. MHD-eksponering hos disse barna forventes derfor å være
+ca. 2/3 sammenlignet med voksne som får en tilsvarende, vektjustert dose. Når vekten øker hos
+pasienter fra 13 år og oppover forventes vektjustert MHD-clearance å bli lik den som er observert hos
+voksne.
+
+Graviditet: Data fra et begrenset antall kvinner indikerer at plasmanivået av MHD kan minke gradvis
+gjennom en graviditet (se pkt. 4.2 og 4.6).
+
+Eldre: Etter administrasjon av enkle (300 mg) og gjentatte doser (600 mg/døgn) Trileptal til frivillige
+eldre (60-82 år), var maksimal plasmakonsentrasjon og AUC for MHD 30-60 % høyere enn hos yngre
+frivillige (18-32 år). Sammenligning av kreatinin clearance hos yngre og eldre frivillige, kan tyde på at
+denne forskjellen skyldes aldersrelaterte reduksjoner i kreatinin clearance. Det er ikke nødvendig med
+spesielle doseanbefalinger da de terapeutiske dosene tilpasses individuelt.
+
+                                                   13

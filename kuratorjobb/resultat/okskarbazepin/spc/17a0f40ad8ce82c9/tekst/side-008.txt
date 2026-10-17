@@ -1,0 +1,59 @@
+glukuronyltransferaser in vivo. Når behandling med Trileptal starter, eller ved doseendring, kan det ta
+2 til 3 uker før det nye induksjonsnivået nås.
+
+Ved seponering av Trileptal-behandlingen kan det være nødvendig å redusere dosen av samtidig
+administrerte legemidler. Dette bør avgjøres ved klinisk vurdering og/eller monitorering av
+plasmanivå. Induksjonen antas å reduseres gradvis i løpet av 2 til 3 uker etter seponering.
+
+Hormonelle antikonsepsjonsmidler: Det er vist at Trileptal påvirker de to komponentene
+etinyløstradiol (EE) og levonorgestrel (LNG) i et oralt antikonsepsjonsmiddel. De gjennomsnittlige
+AUC-nivåene av EE og LNG ble redusert med henholdsvis 48-52 % og 32-52 %. Samtidig bruk av
+Trileptal og hormonelle antikonsepsjonsmidler kan derfor føre til at disse antikonsepsjonsmidlene er
+uten effekt (se pkt. 4.4 og 4.6). Alternativ pålitelig prevensjonsmetode bør benyttes.
+
+Enzymhemming
+Okskarbazepin og MHD hemmer CYP2C19. Interaksjoner kan derfor forekomme når høye doser
+Trileptal gis sammen med legemidler som i hovedsak metaboliseres av CYP2C19 (f.eks. fenytoin).
+Plasmakonsentrasjonsnivåer av fenytoin økte med opptil 40 % ved samtidig bruk av Trileptal i doser
+over 1200 mg/dag (se tabellen under som oppsummerer resultater med andre antikonvulsiva). I slike
+tilfeller kan det være nødvendig å redusere dosen av samtidig administrert fenytoin (se pkt. 4.2).
+
+Antiepileptika og enzyminduserende legemidler
+Potensielle interaksjoner mellom okskarbazepin og andre antiepileptika ble undersøkt i kliniske
+studier. Innvirkning av disse interaksjonene på gjennomsnittlig AUC og Cmin er sammenfattet i
+følgende tabell:
+
+Sammendrag av interaksjoner mellom andre antiepileptika og Trileptal
+Antiepileptikum                 Innvirkning av Trileptal på        Innvirkning av
+                                andre antiepileptika               antiepileptika på MHD
+
+Samtidig administrert                Konsentrasjon                          Konsentrasjon
+Karbamazepin                         0-22 % nedgang                         40 % nedgang
+                                     (30 % økning av
+                                     karbamazepinepoxid)
+Klobazam                             Ikke undersøkt                         Ingen innvirkning
+Felbamat                             Ikke undersøkt                         Ingen innvirkning
+Lamotrigin                           Ingen innvirkning                      Ingen innvirkning
+Fenobarbital                         14-15 % økning                         30-31 % nedgang
+Fenytoin                             0-40 % økning                          29-35 % nedgang
+Valproinsyre                         Ingen innvirkning                      0-18 % nedgang
+
+Det er vist at legemidler med kraftig induserende effekt på cytokrom P450-enzymene og/eller UGT
+(f.eks. rifampicin, karbamazepin, fenytoin og fenobarbital) reduserer plasma-/serumnivået av MHD
+(29-49 %) hos voksne. Hos barn mellom 4 og 12 år økte MHD-clearance ca. 35 % ved inntak av ett av
+tre enzyminduserende antiepileptika, sammenlignet med monoterapi. Samtidig behandling med
+Trileptal og lamotrigin har vært forbundet med økt risiko for bivirkninger (kvalme, søvnighet,
+svimmelhet og hodepine). Ved samtidig administrering av ett eller flere antiepileptika og Trileptal, bør
+nøye dosetilpasning og/eller monitorering av plasmakonsentrasjonsnivå vurderes i hvert enkelt tilfelle,
+især hos pediatriske pasienter som får samtidig behandling med lamotrigin.
+
+Det er ikke sett autoinduksjon med Trileptal.
+
+Andre legemiddelinteraksjoner
+Cimetidin, erytromycin, viloksazin, warfarin og dekstropropoksyfen påvirket ikke farmakokinetikken
+av MHD.
+
+På grunnlag av et strukturelt slektskap mellom okskarbazepin og trisykliske antidepressiva er en
+interaksjon mellom okskarbazepin og MAO-hemmere teoretisk mulig.
+
+                                                   8

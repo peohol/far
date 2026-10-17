@@ -1,0 +1,59 @@
+5.      FARMAKOLOGISKE EGENSKAPER
+
+5.1     Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Antiepileptikum, ATC-kode: N03A F02
+
+Farmakodynamiske effekter
+Den farmakologiske aktiviteten av okskarbazepin utøves hovedsakelig av metabolitten (MHD) (se
+pkt. 5.2). Virkningsmekanismen av okskarbazepin og MHD er trolig hovedsakelig basert på blokade
+av spenningssensitive natriumkanaler. Dette fører til stabilisering av hypereksiterte nervemembraner,
+hemming av gjentatte neurale avfyringer og forminsket forplantning av synaptiske impulser. I tillegg
+kan økt kaliumkonduktans og modulering av høyspenningaktiverte kalsiumkanaler, også medvirke til
+den antikonvulsive effekten av legemidlet. Det er ikke funnet signifikante interaksjoner med hjernens
+neurotransmittorer eller modulator reseptorseter.
+
+Okskarbazepin og dets aktive metabolitt (MHD), er potente og effektive antikonvulsiva hos dyr.
+Gnagere ble beskyttet mot generaliserte tonisk-kloniske, og til en mindre grad, kloniske anfall. Hos
+Rhesusaper med aluminium implantater, opphevet eller reduserte legemidlet frekvensen av kronisk
+tilbakevennende partielle anfall. Det ble ikke observert toleranseutvikling (dvs. svekket antikonvulsiv
+aktivitet) mot tonisk-kloniske anfall når mus og rotter ble behandlet daglig med okskarbazepin eller
+MHD, i henholdsvis 5 dager og 4 uker.
+
+En prospektiv, åpen, multisenter, ikke-komparativ 24 ukers observasjonsstudie etter markedsføring har
+blitt gjennomført i India. Av en studiepopulasjon på 816 pasienter ble 256 pediatriske pasienter
+(1 måned til 19 år) med generaliserte tonisk-kloniske anfall (enten sekundære eller primære) behandlet
+med okskarbazepin monoterapi. Den første okskarbazepindosen for alle pasienter > 6 år var
+8-10 mg/kg/dag gitt i to delte doser. Hos de 27 pasientene i alderen 1 måned til 6 år var
+doseringsområdet for startdosen 4,62-27,27 mg/kg/dag og vedlikeholdsdosen 4,29-30,00 mg/kg/dag.
+Det primære endepunktet var reduksjon i anfallsfrekvens fra baseline ved uke 24. I aldersgruppen
+1 måned til 6 år (n = 27) ble anfallsfrekvensen endret fra 1 [intervall] [1-12] til 0 [0-2] , i
+aldersgruppen 7 år til 12 år (n = 77) ble frekvensen endret fra 1 [1-22] til 0 [0-1] og i aldersgruppen
+13-19 år (n = 152) ble frekvensen endret fra 1 [1-32] til 0 [0-3]. Det ble ikke identifisert noen spesielle
+sikkerhetsrisiko hos pediatriske pasienter. Data som støtter nytte/risiko fra studien vedrørende barn
+under 6 år er ikke tilstrekkelige (se pkt. 4.2). Basert på data fra randomiserte, kontrollerte studier er
+ikke sikkerhet og effekt tilstrekkelig demonstrert, og bruk av okskarbazepin hos barn under 6 år
+anbefales ikke (se pkt. 4.2).
+
+Pediatrisk populasjon
+To randomiserte, rater-blindede, dosekontrollerte effektstudier (studie 2339 og studie 2340) ble utført
+hos pediatriske pasienter i alderen 1 måned til < 17 år (n = 31 pasienter i alderen 6 til < 17 år;
+n = 189 pasienter i alderen < 6 år). I tillegg ble det utført flere åpne studier som inkluderte barn.
+Generelt var sikkerhetsprofilen for okskarbazepin hos yngre barn (< 6 år) lik som den hos eldre barn
+(≥ 6 år). Imidlertid ble det i noen studier på yngre barn (< 4 år) og eldre barn (≥ 4 år) observert en
+≥ 5 gangers forskjell i andelen pasienter med krampeanfall (henholdsvis 7,9 % og 1,0 %) og status
+epilepticus (henholdsvis 5 % og 1 %).
+
+5.2     Farmakokinetiske egenskaper
+
+Absorpsjon
+Etter oral administrasjon av Trileptal blir okskarbazepin fullstendig absorbert og i utstrakt grad
+metabolisert til dets farmakologisk aktive metabolitt (MHD). Etter en enkel dose på 600 mg Trileptal
+til friske, frivillige menn under fastende betingelser, var gjennomsnittlig Cmaks for MHD 34 mol/l,
+med en korresponderende median tmaks på 4,5 timer.
+
+I en massebalansestudie hos mennesker, skyldtes kun 2 % av den totale radioaktiviteten i plasma
+uomdannet okskarbazepin, mens ca. 70 % skyldtes MHD. Resten kunne tilskrives mindre sekundære
+
+
+                                                    12

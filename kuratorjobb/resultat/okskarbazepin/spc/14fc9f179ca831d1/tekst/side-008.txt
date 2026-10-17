@@ -1,0 +1,59 @@
+Andre legemiddelinteraksjoner
+Cimetidin, erytromycin, viloksazin, warfarin og dekstropropoksyfen påvirket ikke farmakokinetikken
+av MHD.
+
+På grunnlag av et strukturelt slektskap mellom okskarbazepin og trisykliske antidepressiva er en
+interaksjon mellom okskarbazepin og MAO-hemmere teoretisk mulig.
+
+Pasienter som ble behandlet med trisykliske antidepressiva ble inkludert i de kliniske studiene, uten at
+det ble sett klinisk relevante interaksjoner.
+
+Kombinasjon av litium og okskarbazepin kan gi økt neurotoksisitet.
+
+4.6     Fertilitet, graviditet og amming
+
+Kvinner i fertil alder og svangerskapsforebyggende tiltak
+Kvinner i fertil alder bør rådes til å bruke svært effektiv prevensjon (helst ikke-hormonell; f.eks.
+spiral) under behandling med Trileptal. Trileptal kan føre til svikt i den terapeutiske effekten av orale
+prevensjonsmidler som inneholder etinyløstradiol (EE) og levonorgestrel (LNG) (se pkt. 4.4 og 4.5).
+
+Graviditet
+
+Risiko knyttet til epilepsi og antiepileptika generelt
+Det er vist at prevalensen for misdannelser hos barn fra kvinner med epilepsi er to til tre ganger høyere
+enn prevalensen hos den generelle befolkning, som er på ca. 3%. Det har imidlertid ikke blitt klarlagt i
+hvilken grad behandlingen og/eller sykdommen er ansvarlig for dette. Monoterapi er foretrukket for
+behandling av epilepsi under graviditet når dette er mulig fordi behandling med flere antiepileptika
+kan være forbundet med en høyere risiko for medfødte misdannelser enn monoterapi.
+
+Effektiv behandling med antiepileptika må ikke avbrytes ettersom forverring av sykdommen er
+skadelig både for moren og fosteret.
+
+Risiko knyttet til okskarbazepin
+Det foreligger ikke tilstrekkelige kliniske data vedrørende eksponering under graviditet til å vurdere
+det teratogene potensialet til okskarbazepin. Tilfeller av medfødte misdannelser er rapportert ved
+behandling med okskarbazepin (ventrikkelseptumdefekt, atrioventrikulær septumdefekt, ganespalte
+med leppespalte, Downs syndrom, dysplastisk hofte (både unilateral og bilateral), tuberøs sklerose og
+medfødt misdannelse av øret). Data fra bruk hos et lite antall (198) gravide kvinner eksponert for
+okskarbazepin monoterapi i første trimester har derimot ikke vist noen signifikant økt forekomst av
+alvorlige medfødte misdannelser. Studieresultater knyttet til risikoen for utviklingsforstyrrelser hos
+barn eksponert for okskarbazepin under graviditeten er motstridende, og en risiko kan ikke utelukkes. I
+dyrestudier ble det observert økt embryomortalitet, forsinket fostervekst og misdannelser ved doser
+som var toksisk for mordyret (se pkt. 5.3). Data fra en populasjonsbasert observasjonsregisterstudie fra
+de nordiske landene antyder en økt risiko for at barn blir født små for gestasjonsalderen (SGA, definert
+som fødselsvekt under 10-prosentilen for deres kjønn og gestasjonsalder) etter prenatal eksponering
+for okskarbazepin. Risikoen for SGA hos barn av kvinner med epilepsi som fikk okskarbazepin, var
+15,2 % sammenlignet med 10,9 % hos barn av kvinner med epilepsi som ikke fikk anfallsdempende
+legemidler.
+
+Sett i lys av disse dataene:
+-       Dersom kvinner som behandles med Trileptal blir gravide eller planlegger å bli gravide, må
+        nødvendigheten av behandlingen revurderes nøye. Laveste effektive dose bør gis. Om mulig
+        bør behandlingen gis fortrinnsvis som monoterapi, i hvertfall de tre første månedene av
+        graviditeten.
+-       Pasientene bør informeres om mulig økt risiko for misdannelser og de bør få mulighet for
+        antenatal screening.
+-       Effektiv antiepilepika-behandling med okskarbazepin bør ikke avbrytes i løpet av graviditeten
+        ettersom en forverring av sykdommen er skadelig både for moren og fosteret.
+
+                                                    8

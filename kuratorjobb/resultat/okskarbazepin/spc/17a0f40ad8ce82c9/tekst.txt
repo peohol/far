@@ -1,0 +1,939 @@
+1.      LEGEMIDLETS NAVN
+
+Trileptal 60 mg/ml mikstur, suspensjon
+
+
+2.      KVALITATIV OG KVANTITATIV SAMMENSETNING
+
+1 ml inneholder:          Okskarbazepin 60 mg
+
+Hjelpestoffer med kjent effekt: 1 ml inneholder også 175 mg sorbitol (E420), 25 mg propylenglykol
+(E1520), 0,30 mg propylparahydroksybenzoat (E216), 1,20 mg metylparahydroksybenzoat (E218) og
+0,8 mg etanol.
+
+For fullstendig liste over hjelpestoffer, se pkt. 6.1.
+
+
+3.      LEGEMIDDELFORM
+
+Mikstur, suspensjon.
+
+Farge: Gråhvit til svak rødbrun.
+
+
+4.      KLINISKE OPPLYSNINGER
+
+4.1     Indikasjon
+
+Epilepsi: Behandling av partielle anfall med eller uten sekundære generaliserte tonisk-kloniske anfall,
+som monoterapi eller tilleggsbehandling hos voksne og barn over 6 år.
+
+4.2     Dosering og administrasjonsmåte
+
+Dosering
+Både ved monoterapi og ved tilleggsbehandling initieres Trileptal-behandlingen med en klinisk
+effektiv dose fordelt på 2 doser daglig. Dosen kan økes avhengig av pasientens kliniske respons. I
+tilfeller der Trileptal skal erstatte andre antiepileptika, bør dosen av disse reduseres gradvis når
+behandlingen med Trileptal starter. Ved tilleggsbehandling kan det være nødvendig å redusere dosen
+av de andre antiepileptika og/eller øke Trileptaldosen langsommere pga. at den totale antiepileptiske
+legemiddelbelastningen hos pasienten er øket (se pkt. 4.5).
+
+Dosering av Trileptal mikstur bør forskrives i milliliter (se omregningstabellen under, som angir
+milligram dose i milliliter). Forskrevet dose avrundes til nærmeste 0,5 ml.
+
+Dosene angitt i tabellen under skal kun benyttes til pasienter over 6 år. Dosene skal administreres to
+ganger daglig.
+
+                        Dose i milligram                           Dose i milliliter
+                   (fordelt på 2 daglige doser)              (fordelt på 2 daglige doser)
+                             45-75 mg                                   1,0 ml
+                            76-105 mg                                   1,5 ml
+                           106-135 mg                                   2,0 ml
+                           136-165 mg                                   2,5 ml
+                           166-195 mg                                   3,0 ml
+                           196-225 mg                                   3,5 ml
+                           226-255 mg                                   4,0 ml
+                           256-285 mg                                   4,5 ml
+                           286-315 mg                                   5,0 ml
+
+                                                         1
+                     Dose i milligram                            Dose i milliliter
+                (fordelt på 2 daglige doser)               (fordelt på 2 daglige doser)
+                         316-345 mg                                   5,5 ml
+                         346-375 mg                                   6,0 ml
+                         376-405 mg                                   6,5 ml
+                         406-435 mg                                   7,0 ml
+                         436-465 mg                                   7,5 ml
+                         466-495 mg                                   8,0 ml
+                         496-525 mg                                   8,5 ml
+                         526-555 mg                                   9,0 ml
+                         556-585 mg                                   9,5 ml
+                         586-615 mg                                  10,0 ml
+                         616-645 mg                                  10,5 ml
+                         646-675 mg                                  11,0 ml
+                         676-705 mg                                  11,5 ml
+                         706-735 mg                                  12,0 ml
+                         736-765 mg                                  12,5 ml
+                         766-795 mg                                  13,0 ml
+                         796-825 mg                                  13,5 ml
+                         826-855 mg                                  14,0 ml
+                         856-885 mg                                  14,5 ml
+                         886-915 mg                                  15,0 ml
+                         916-945 mg                                  15,5 ml
+                         946-975 mg                                  16,0 ml
+                        976-1005 mg                                  16,5 ml
+                       1006-1035 mg                                  17,0 ml
+                       1036-1065 mg                                  17,5 ml
+                       1066-1095 mg                                  18,0 ml
+                       1096-1125 mg                                  18,5 ml
+                       1126-1155 mg                                  19,0 ml
+                       1156-1185 mg                                  19,5 ml
+                       1186-1215 mg                                  20,0 ml
+
+Terapeutisk legemiddelmonitorering
+Den terapeutiske effekten av okskarbazepin utøves primært gjennom den aktive metabolitten til
+okskarbazepin, 10-monohydroxyderivat (MHD) (se avsnitt 5).
+
+Overvåkning av plasmanivåer av okskarbazepin eller MDH er ikke rutinemessig påkrevd. Imidlertid
+kan overvåkning av plasmanivåer av MDH vurderes under Trileptalbehandling for å utelukke
+manglende compliance eller i situasjoner hvor endringer i MDH-clearance forventes, inkludert:
+     endringer i nyrefunksjon (se "Nedsatt nyrefunksjon")
+     graviditet (se pkt. 4.6 og 5.2)
+     samtidig bruk med leverenzyminduserende legemidler (se pkt. 4.5).
+Ved en av disse situasjonene kan Trileptaldosen justeres (basert på plasmanivåer målt 2-4 timer etter
+doseadministrasjon) for å opprettholde en makskonsentrasjon av MDH i plasma som ikke overstiger
+35 mg/l.
+
+Voksne
+Monoterapi
+Anbefalt initialdose
+Anbefalt initialdose av Trileptal er 600 mg/døgn (8-10 mg/kg/døgn) fordelt på 2 doser.
+
+Vedlikeholdsdose
+Dersom klinisk indisert, kan dosen økes gradvis med maksimalt 600 mg/døgn med ca. 1 ukes
+mellomrom fra behandlingsstart, inntil ønsket klinisk effekt er nådd. Terapeutisk effekt sees ved doser
+mellom 600 mg/døgn og 2400 mg/døgn.
+
+                                                   2
+I kontrollerte monoterapistudier hos pasienter som ikke ble behandlet med antiepileptika, ble det vist
+at 1200 mg/døgn var en effektiv dose. Det er imidlertid vist at en dose på 2400 mg/døgn er effektiv
+hos refraktære pasienter som har skiftet fra andre antiepileptika til Trileptal monoterapi.
+
+Maksimalt anbefalt dose
+Under kontrollerte betingelser på sykehus, har doseøkninger på opp til 2400 mg/døgn vært gitt over 48
+timer.
+
+Tilleggsbehandling
+Anbefalt initialdose
+Anbefalt initialdose av Trileptal er 600 mg/døgn (8-10 mg/kg/døgn) fordelt på 2 doser.
+
+Vedlikeholdsdose
+Dersom klinisk indisert, kan dosen økes gradvis med maksimalt 600 mg/døgn med ca. 1 ukes
+mellomrom fra behandlingsstart, inntil ønsket klinisk effekt er nådd. Terapeutisk respons sees ved
+doser mellom 600 mg/døgn og 2400 mg/døgn.
+
+Maksimalt anbefalt dose
+I en kontrollert studie der Trileptal ble gitt som tilleggsbehandling, ble det vist at daglige doser fra
+600–2400 mg/døgn var effektive, selv om de fleste pasientene ikke tolererte dosen på 2400 mg/døgn
+uten at dosen av andre administrerte antiepileptika ble redusert. Dette skyldtes hovedsakelig CNS-
+relaterte bivirkninger. Daglige doser over 2400 mg/døgn er ikke systematisk undersøkt i kliniske
+studier.
+
+Spesielle populasjoner
+
+Barn
+Anbefalt initialdose
+Ved både monoterapi og tilleggsbehandling bør Trileptal initieres med en dose på 8-10 mg/kg/døgn
+fordelt på 2 doser.
+
+Vedlikeholdsdose
+Anbefalt vedlikeholdsdose av Trileptal til tilleggsbehandling er 30-46 mg/kg/dag og bør oppnås over
+to uker. Ved tilleggsbehandling ble terapeutisk effekt sett ved en median vedlikeholdsdose på ca.
+30 mg/kg/døgn.
+
+Maksimalt anbefalt dose
+Dersom det er klinisk indisert, kan dosen økes gradvis med maksimalt 10 mg/kg/døgn med ca. 1 ukes
+mellomrom fra behandlingsstart, til ønsket klinisk respons er nådd. Maksimal dose er 46 mg/kg/døgn
+(se pkt. 5.2).
+
+Trileptal anbefales til barn fra 6 år og oppover. Sikkerhet og effekt er undersøkt i kontrollerte, kliniske
+studier med ca. 230 barn yngre enn 6 år (ned til 1 måned). Trileptal anbefales ikke til barn under 6 år
+da sikkerhet og effekt ikke er tilfredsstillende dokumentert.
+
+For alle aldersgrupper er doseringsanbefalingene over (voksne, eldre og barn) basert på doser som ble
+undersøkt i kliniske studier. Lavere initialdoser kan imidlertid overveies når dette er hensiktsmessig.
+
+Eldre (65 år og over)
+Det er ikke behov for spesifikke doseanbefalinger for eldre fordi terapeutiske doser tilpasses
+individuelt. Dosetilpasninger anbefales hos eldre med nedsatt nyrefunksjon (kreatinin clearence
+<30 ml/min) (se ”Nedsatt nyrefunksjon”).
+Tett oppfølgning av natriumnivåene er nødvendig hos pasienter med risiko for hyponatremi (se
+pkt. 4.4).
+
+
+
+                                                     3
+Nedsatt leverfunksjon
+Dosetilpasning er ikke nødvendig hos pasienter med mild til moderat grad av nedsatt leverfunksjon.
+Bruk av Trileptal hos pasienter med alvorlig svekket leverfunksjon er ikke undersøkt, og forsiktighet
+bør derfor utvises ved behandling av disse pasientene (se pkt. 4.4 og 5.2).
+
+Nedsatt nyrefunksjon
+Hos pasienter med nedsatt nyrefunksjon (kreatinin clearance < 30 ml/min), bør initialdosen av
+okskarbazepin halveres (300 mg/døgn). Deretter bør dosen økes trinnvis, med minst én ukes
+mellomrom, til ønsket klinisk respons er oppnådd (se pkt. 4.4 og 5.2).
+
+Doseopptrapping hos pasienter med nedsatt nyrefunksjon kan kreve en mer nøye oppfølgning.
+
+Administrasjonsmåte
+Flasken med Trileptal mikstur bør ristes godt i minst 10 sekunder umiddelbart før dosen trekkes opp.
+Den forskrevne dosen trekkes opp fra flasken med den vedlagte doseringssprøyten. Miksturen kan
+inntas direkte fra sprøyten eller blandes i et lite glass vann rett før inntak (se pkt. 6.6). Etter bruk
+lukkes flasken, og utsiden av sprøyten tørkes med en tørr, ren klut.
+
+Trileptal kan tas med eller uten mat.
+
+4.3     Kontraindikasjoner
+
+Overfølsomhet overfor virkestoffet, eslikarbazepin eller overfor noen av hjelpestoffene listet opp i
+pkt. 6.1.
+
+4.4     Advarsler og forsiktighetsregler
+
+Hypersensitivitet
+Klasse I (umiddelbare) hypersensitivitetsreaksjoner inkludert utslett, kløe, urtikaria, angioødem og
+anafylakse er rapportert etter markedsføring. Tilfeller av anafylakse og angioødem i larynks, glottis,
+lepper og øyelokk er rapportert hos pasienter etter første eller etterfølgende doser av Trileptal. Dersom
+en pasient utvikler disse reaksjonene etter behandling med Trileptal skal legemidlet seponeres og
+alternativ behandling initieres.
+Pasienter som tidligere har fått hypersensitivitetsreaksjoner ved bruk av karbamazepin, bør informeres
+om at ca. 25-30 % av disse pasientene kan oppleve hypersensitivitetsreaksjoner (f.eks. alvorlige
+hudreaksjoner) ved bruk av Trileptal (se pkt. 4.8).
+
+Hypersensitivitetsreaksjoner, inkludert multiorgan hypersensitivitetsreaksjoner, kan også forekomme
+hos pasienter som ikke tidligere har vært overfølsomme for karbamazepin. Slike reaksjoner kan
+påvirke hud, lever, blod, lymfesystem, eller andre organer, enten individuelt eller sammen i en
+systemisk reaksjon (se pkt. 4.8). Generelt skal Trileptal straks seponeres dersom tegn og symptomer
+på hypersensitivitetsreaksjoner inntreffer.
+
+Dermatologiske effekter
+Det har i svært sjeldne tilfeller blitt rapportert om alvorlige hudreaksjoner, inkludert Stevens-Johnsons
+syndrom, toksisk epidermal nekrolyse (Lyells syndrom) og erythema multiforme, i forbindelse med
+bruk av Trileptal. Pasienter med slike alvorlige hudreaksjoner kan behøve sykehusinnleggelse, da
+reaksjonene kan være livstruende og, i svært sjeldne tilfeller, fatale. Det er rapportert om tilfeller hos
+både barn og voksne. Median tid til start av reaksjonene var 19 dager. Det ble rapportert flere isolerte
+tilfeller av tilbakefall av den alvorlige hudreaksjonen etter at behandling med Trileptal ble forsøkt
+startet opp igjen. Pasienter som utvikler en hudreaksjon ved bruk av Trileptal bør undersøkes straks,
+og Trileptal bør seponeres umiddelbart med mindre det er helt klart at utslettet ikke skyldes
+legemidlet. Ved seponering bør forskrivning av et alternativt antiepileptika vurderes for å unngå anfall
+pga. behandlingsstopp. Behandling med Trileptal bør ikke gjenopptas hos pasienter som avbrøt
+behandlingen pga. hypersensitivitetsreaksjoner (se pkt. 4.3).
+
+
+
+                                                    4
+HLA-B*1502 allellet – i han kinesere, thailendere, og andre asiatiske befolkningsgrupper
+Ved behandling med karbamazepin har allelet HLA-B*1502 hos personer/pasienter av han-kinesisk og
+thailandsk opprinnelse vist seg å være sterkt assosiert med risiko for utvikling av alvorlige
+hudreaksjoner, kjent som Stevens-Johnson syndrom (SJS)/toksisk epidermal nekrolyse (TEN).
+Okskarbazepin og karbamazepin har liknende kjemiske struktur, det er derfor mulig at pasienter som
+har HLA-B*1502 allelet er i risikogruppen for å utvikle SJS/TEN ved behandling med okskarbazepin.
+Det finnes noe data som antyder en slik sammenheng for okskarbazepin. Frekvensen av HLA-B*1502
+allelet er omtrent 2-12 og 8 % i henholdsvis han-kinesiske og thailandske befolkningsgrupper. Når det
+er mulig skal disse pasientene screenes for HLA-B*1502 før behandlingsoppstart med karbamazepin
+eller virkestoffer med liknende kjemisk struktur. Dersom pasienter fra disse befolkningsgruppene har
+positiv test for HLA-B*1502 allelet kan bruk av Trileptal vurderes dersom det tenkes at fordelene
+oppveier risikoene.
+På bakgrunn av forekomsten av HLA-B*1502 allelet også i andre asiatiske populasjoner (f.eks. over
+15 % på Filipinene og i Malaysia) kan det vurderes å genteste også disse risikogruppene for forekomst
+av HLA-B*1502.
+Frekvensen av HLA-B*1502 allelet er ubetydelig hos f.eks befolkningsgrupper av europeisk,
+afrikansk og latinamerikansk avstamning som har blitt testet, og japanere og koreanere (<1 %).
+
+Allelfrekvensene oppført her representerer prosentandelen av kromosomer i den angitte populasjonen
+som bærer allelet av interesse, noe som betyr at prosentandelen av pasienter som bærer en kopi av
+allelet på minst et av sine to kromosomer (dvs. bærerfrekvensen) er nesten dobbelt så høy som
+allelfrekvensen. Derfor er prosentandelen av pasienter som kan være i faresonen nesten dobbelt så høy
+som allelfrekvensen.
+
+HLA-B*1502 kan være en risikofaktor for utvikling av SJS/TEN hos kinesiske pasienter som bruker
+andre antiepileptika assosiert med SJS/TEN. Screening er ikke generelt anbefalt hos pasienter fra
+populasjoner hvor prevalensen av HLA-B*1502 er lav eller hos pasienter som allerede behandles med
+Trileptal, ettersom risikoen for SJS/TEN i stor grad er begrenset til de første månedene av
+behandlingen, uavhengig av HLA-B*1502 status.
+
+HLA-A*3101 allelet – personer av europeisk avstamming og japanere
+Hos personer av europeisk avstamming og japanere er det indikasjoner for at HLA-A*3101 allelet er
+forbundet med en økt risiko for karbamazepin induserte hudreaksjoner. Disse hudreaksjonene
+inkluderer SJS, TEN, legemiddelutslett med eosinofili og systemiske symptomer (DRESS), eller
+mindre alvorlig akutt generalisert eksematøs pustulose (AGEP) og makulopapulært utslett.
+Forekomsten av HLA-A*3101 allelet varierer mye mellom etniske populasjoner. Frekvensen av HLA-
+A*3101 allelet er 2-5 % i europeiske befolkningsgrupper og omtrent 10 % i japanske
+befolkningsgrupper. Frekvensen av dette allelet er estimert til å være mindre enn 5 % i de fleste
+australske, asiatiske, afrikanske og nordamerikanske populasjoner, med noen unntak innenfor 5 til
+12 %. Frekvens over 15 % har blitt anslått i enkelte etniske grupper i Sør-Amerika (Argentina og
+Brasil), Nord-Amerika (USA Navajo og Sioux, og Mexico Sonora Seri) og Sør-India (Tamil Nadu) og
+mellom 10 % til 15 % i andre innfødte etnisiteter i de samme regionene.
+
+Risikoen for karbamazepin induserte hudreaksjoner (hovedsakelig mindre alvorlige) i den generelle
+befolkningen er 5.0 %. Hos personer av europeisk avstamming med HLA-A*3101 allelet øker risikoen
+til 26 %, mens fravær av allelet reduserer risikoen til 3.8 %.
+
+Allelfrekvensene oppført her representerer prosentandelen av kromosomer i den angitte populasjonen
+som bærer allelet av interesse, noe som betyr at prosentandelen av pasienter som bærer en kopi av
+allelet på minst et av sine to kromosomer (dvs. bærerfrekvensen) er nesten dobbelt så høy som
+allelfrekvensen. Derfor er prosentandelen av pasienter som kan være i faresonen nesten dobbelt så høy
+som allelfrekvensen.
+
+Det er ikke tilstrekkelig grunnlag for å anbefale screening for HLA-A*3101 før behandling med
+karbamazepin eller substanser med liknende kjemisk struktur igangsettes.
+
+
+
+                                                  5
+Om pasienter av europeisk eller japansk avstamming er kjent å være positive for HLA-A*3101 allelet,
+kan bruk av karbamazepin eller substanser med liknende kjemisk struktur vurderes dersom det tenkes
+at fordelene oppveier risikoen.
+
+Begrensninger ved genetisk screening
+Resultater av genetisk screening må aldri erstatte klinisk årvåkenhet og god pasientoppfølging. Mange
+asiatiske pasienter som er positive for HLA-B*1502 og behandles med Trileptal vil ikke utvikle
+SJS/TEN og pasienter negative for HLA-B*1502 av enhver etnisitet kan fortsatt utvikle SJS/TEN.
+Tilsvarende vil mange pasienter som er positive for HLA-A*3101 og som behandles med Trileptal
+ikke utvikle SJS, TEN, DRESS, AGEP eller makulopapulært utslett, mens pasienter som er negative
+for HLA-A*3101 av enhver etnisitet fortsatt kan utvikle disse alvorlige hudbivirkningene.
+Betydningen av andre mulige faktorer i utviklingen av, og sykelighet fra, disse alvorlige
+hudbivirkningene, som for eksempel dosen av antiepileptika, compliance, samtidig medisinering,
+komorbiditet, og nivået av dermatologisk overvåking er ikke undersøkt.
+
+Informasjon til helsepersonell
+Hvis testing for tilstedeværelse av HLA-B*1502 allelet skal gjennomføres anbefales testing med høy
+oppløsnings HLA-B*1502 genotyping. Testen er positiv hvis enten ett eller to HLA-B*1502-alleler
+påvises og negativ om ingen HLA-B*1502-alleler påvises. Tilsvarende anbefales bruk av høy
+oppløsnings HLA-A*3101 genotyping hvis testing for tilstedeværelse av HLA-A*3101-allelet skal
+gjennomføres. Testen er positiv hvis enten ett eller to HLA-A*3101-alleler påvises og negativ om
+ingen HLA-A*3101-alleler påvises.
+
+Risiko for forverring av anfall
+Det er rapportert om risiko for forverring av anfall ved bruk av Trileptal. Denne risikoen er særlig sett
+hos barn men kan også forekomme hos voksne. Ved forverring av anfall bør Trileptal seponeres.
+
+Hyponatremi
+Serum natriumnivåer under 125 mmol/l har vært sett hos opptil 2,7 % av pasientene som behandles
+med Trileptal. Disse er vanligvis asymptomatiske og krever ingen dosejustering. Erfaring fra kliniske
+studier viser at serumnivået av natrium går tilbake til normalnivå når Trileptaldosen reduseres eller
+seponeres, eller ved konservativ behandling av pasienten (f.eks. begrenset væskeinntak). Hos pasienter
+med nyreforandringer forbundet med lavt natriumnivå (f.eks.uhensiktsmessig sekresjon av ADH
+(SIADH)) eller hos pasienter som samtidig behandles med legemidler som reduserer natriumnivået (f.
+eks. diuretika, desmopressin), såvel som NSAIDs (f. eks. indometacin), bør natriumnivået måles før
+behandlingen starter. Natriumnivået i serum bør deretter måles etter ca. to uker og senere hver måned
+de første tre måneder av behandlingen, eller i henhold til klinisk behov. Disse risikofaktorene gjelder
+spesielt eldre pasienter. Samme fremgangsmåte for kontroll av natriumnivået i serum bør følges hos
+pasienter som behandles med Trileptal og som skal starte behandling med legemidler som reduserer
+natriumnivået. Dersom kliniske symptomer på hyponatremi inntreffer under behandling med Trileptal
+(se pkt. 4.8), bør måling av serum natrium vurderes. Andre pasienter kan få fastsatt serum natrium som
+en del av deres rutinemessige laboratorieundersøkelser.
+
+Hos alle pasienter med hjerteinsuffisiens og sekundær hjertesvikt bør vekten bestemmes regelmessig
+for å fastslå evt. væskeretensjon. Dersom væskeretensjon oppstår eller hjertetilstanden forverres, bør
+serum natrium kontrolleres. Hvis hyponatremi observeres, er vannrestriksjon et viktig mottiltak. Da
+okskarbazepin i svært sjeldne tilfeller kan medføre nedsatt ledningsevne i hjertet, bør pasienter med
+tidligere forstyrrelser i ledningsevnen (f.eks. atrioventrikulært blokk, arytmi) overvåkes nøye.
+
+Hypotyreose
+Hypotyreose er en bivirkning (forekommer med frekvens «mindre vanlige», se avsnitt 4.8) av
+okskarbazepin. Med tanke på viktigheten av thyroideahormoner for et barns utvikling etter fødselen er
+det anbefalt å monitorere thyroideafunksjonen hos barn under behandling med Trileptal.
+
+Leverfunksjon
+Det har vært rapportert om svært sjeldne tilfeller av hepatitt, som i de fleste tilfeller fikk et positivt
+utfall. Dersom leverpåvirkning mistenkes, bør leverfunksjonen evalueres og seponering av Trileptal
+
+                                                      6
+bør vurderes. Det bør utvises forsiktighet ved behandling av pasienter med kraftig svekket
+leverfunksjon (se pkt. 4.2 og 5.2).
+
+Nyrefunksjon
+Forsiktighet bør utvises under behandling med Trileptal hos pasienter med nedsatt nyrefunksjon
+(kreatinin clearance under 30 ml/min) spesielt med tanke på startdosen og oppjustering av dosen (se
+pkt. 4.2 og 5.2).
+
+Hematologiske effekter
+Etter markedsføring er det rapportert om sjeldne tilfeller av agranulocytose, aplastisk anemi og
+pancytopeni hos pasienter behandlet med Trileptal (se pkt. 4.8). Ved tegn på utvikling av
+beinmargsdepresjon bør seponering av legemidlet vurderes.
+
+Hormonelle antikonsepsjonsmidler
+Kvinner i fertil alder bør advares om at samtidig bruk av Trileptal og orale antikonsepsjonsmidler kan
+nedsette effekten av denne typen prevensjonsmidler (se pkt. 4.5 og 4.6). Tillegg av et ikke-hormonelt
+prevensjonsmiddel anbefales ved behandling med Trileptal.
+
+Alkohol
+Forsiktighet bør utvises ved inntak av alkohol i kombinasjon med Trileptal, på grunn av mulig
+forsterket sedativ effekt.
+
+Selvmordstanker og selvmordsrelatert adferd
+Selvmordstanker og selvmordsrelatert adferd er rapportert hos pasienter behandlet med antiepileptiske
+legemidler for flere indikasjoner. En meta-analyse av randomiserte placebokontrollerte forsøk med
+antiepileptika har vist en liten økning i risiko for selvmordstanker og selvmordsrelatert adferd.
+Mekanismen bak denne risikoen er ikke kjent og tilgjengelige data kan ikke utelukke muligheten for
+økt risiko ved behandling med okskarbazepin.
+Pasientene bør derfor overvåkes for tegn på selvmordstanker eller selvmordsrelatert adferd, og
+nødvendig behandling bør vurderes. Pasienter (og pårørende) bør oppfordres til å kontakte medisinsk
+hjelp omgående dersom selvmordstanker eller selvmordsrelatert adferd oppstår.
+
+Seponering
+I likhet med alle andre antiepileptika, bør Trileptal seponeres gradvis for å minimalisere potensialet for
+økt anfallsfrekvens.
+
+Annet
+Trileptal mikstur inneholder etanol, mindre enn 100 mg/dose. Den inneholder parabener som kan
+forårsake allergiske reaksjoner (muligens forsinket). Den inneholder sorbitol og skal derfor ikke
+administreres til pasienter med sjeldne arvelige problemer med fruktoseintoleranse. Sorbitol kan
+forårsake ubehag i mage-tarmkanalen og kan virke lett avførende (lakserende).
+Dette legemidlet inneholder mindre enn 1 mmol natrium (23 mg) i 1 ml, og er så godt som
+«natriumfritt».
+
+4.5     Interaksjon med andre legemidler og andre former for interaksjon
+
+Enzyminduksjon
+Okskarbazepin og den farmakologisk aktive metabolitten (monohydroksyderivatet, MHD) er svake
+indusere in vitro og in vivo av cytokrom P450-enzymene CYP3A4 og CYP3A5, som er ansvarlige for
+metabolismen av et svært stort antall legemidler, f.eks. immunsuppressive legemidler (f.eks.
+ciklosporin, takrolimus), orale antikonsepsjonsmidler (se nedenfor) og enkelte andre antiepileptika
+(f.eks. karbamazepin). Dette resulterer i en lavere plasmakonsentrasjon av disse legemidlene (se
+tabellen under som oppsummerer resultater med andre antiepileptika).
+
+Okskarbazepin og MHD er svake indusere av UDP-glukuronyltransferaser in vitro (effekter på
+spesifikke enzymer i denne familien er ukjent). Okskarbazepin og MHD kan derfor ha en liten
+induserende effekt på legemidler som hovedsaklig elimineres ved konjugering via UDP-
+
+                                                    7
+glukuronyltransferaser in vivo. Når behandling med Trileptal starter, eller ved doseendring, kan det ta
+2 til 3 uker før det nye induksjonsnivået nås.
+
+Ved seponering av Trileptal-behandlingen kan det være nødvendig å redusere dosen av samtidig
+administrerte legemidler. Dette bør avgjøres ved klinisk vurdering og/eller monitorering av
+plasmanivå. Induksjonen antas å reduseres gradvis i løpet av 2 til 3 uker etter seponering.
+
+Hormonelle antikonsepsjonsmidler: Det er vist at Trileptal påvirker de to komponentene
+etinyløstradiol (EE) og levonorgestrel (LNG) i et oralt antikonsepsjonsmiddel. De gjennomsnittlige
+AUC-nivåene av EE og LNG ble redusert med henholdsvis 48-52 % og 32-52 %. Samtidig bruk av
+Trileptal og hormonelle antikonsepsjonsmidler kan derfor føre til at disse antikonsepsjonsmidlene er
+uten effekt (se pkt. 4.4 og 4.6). Alternativ pålitelig prevensjonsmetode bør benyttes.
+
+Enzymhemming
+Okskarbazepin og MHD hemmer CYP2C19. Interaksjoner kan derfor forekomme når høye doser
+Trileptal gis sammen med legemidler som i hovedsak metaboliseres av CYP2C19 (f.eks. fenytoin).
+Plasmakonsentrasjonsnivåer av fenytoin økte med opptil 40 % ved samtidig bruk av Trileptal i doser
+over 1200 mg/dag (se tabellen under som oppsummerer resultater med andre antikonvulsiva). I slike
+tilfeller kan det være nødvendig å redusere dosen av samtidig administrert fenytoin (se pkt. 4.2).
+
+Antiepileptika og enzyminduserende legemidler
+Potensielle interaksjoner mellom okskarbazepin og andre antiepileptika ble undersøkt i kliniske
+studier. Innvirkning av disse interaksjonene på gjennomsnittlig AUC og Cmin er sammenfattet i
+følgende tabell:
+
+Sammendrag av interaksjoner mellom andre antiepileptika og Trileptal
+Antiepileptikum                 Innvirkning av Trileptal på        Innvirkning av
+                                andre antiepileptika               antiepileptika på MHD
+
+Samtidig administrert                Konsentrasjon                          Konsentrasjon
+Karbamazepin                         0-22 % nedgang                         40 % nedgang
+                                     (30 % økning av
+                                     karbamazepinepoxid)
+Klobazam                             Ikke undersøkt                         Ingen innvirkning
+Felbamat                             Ikke undersøkt                         Ingen innvirkning
+Lamotrigin                           Ingen innvirkning                      Ingen innvirkning
+Fenobarbital                         14-15 % økning                         30-31 % nedgang
+Fenytoin                             0-40 % økning                          29-35 % nedgang
+Valproinsyre                         Ingen innvirkning                      0-18 % nedgang
+
+Det er vist at legemidler med kraftig induserende effekt på cytokrom P450-enzymene og/eller UGT
+(f.eks. rifampicin, karbamazepin, fenytoin og fenobarbital) reduserer plasma-/serumnivået av MHD
+(29-49 %) hos voksne. Hos barn mellom 4 og 12 år økte MHD-clearance ca. 35 % ved inntak av ett av
+tre enzyminduserende antiepileptika, sammenlignet med monoterapi. Samtidig behandling med
+Trileptal og lamotrigin har vært forbundet med økt risiko for bivirkninger (kvalme, søvnighet,
+svimmelhet og hodepine). Ved samtidig administrering av ett eller flere antiepileptika og Trileptal, bør
+nøye dosetilpasning og/eller monitorering av plasmakonsentrasjonsnivå vurderes i hvert enkelt tilfelle,
+især hos pediatriske pasienter som får samtidig behandling med lamotrigin.
+
+Det er ikke sett autoinduksjon med Trileptal.
+
+Andre legemiddelinteraksjoner
+Cimetidin, erytromycin, viloksazin, warfarin og dekstropropoksyfen påvirket ikke farmakokinetikken
+av MHD.
+
+På grunnlag av et strukturelt slektskap mellom okskarbazepin og trisykliske antidepressiva er en
+interaksjon mellom okskarbazepin og MAO-hemmere teoretisk mulig.
+
+                                                   8
+Pasienter som ble behandlet med trisykliske antidepressiva ble inkludert i de kliniske studiene, uten at
+det ble observert klinisk relevante interaksjoner.
+
+Kombinasjon av litium og okskarbazepin kan gi økt neurotoksisitet.
+
+4.6     Fertilitet, graviditet og amming
+
+Kvinner i fertil alder og svangerskapsforebyggende tiltak
+Kvinner i fertil alder bør rådes til å bruke svært effektiv prevensjon (helst ikke-hormonell; f.eks.
+spiral) under behandling med Trileptal. Trileptal kan føre til svikt i den terapeutiske effekten av orale
+prevensjonsmidler som inneholder etinyløstradiol (EE) og levonorgestrel (LNG) (se pkt. 4.4 og 4.5).
+
+Graviditet
+
+Risiko knyttet til epilepsi og antiepileptika generelt
+Det er vist at prevalensen for misdannelser hos barn fra kvinner med epilepsi er to til tre ganger høyere
+enn prevalensen hos den generelle befolkning, som er på ca. 3%. Det har imidlertid ikke blitt klarlagt i
+hvilken grad behandlingen og/eller sykdommen er ansvarlig for dette. Monoterapi er foretrukket for
+behandling av epilepsi under graviditet når dette er mulig fordi behandling med flere antiepileptika
+kan være forbundet med en høyere risiko for medfødte misdannelser enn monoterapi.
+
+Effektiv behandling med antiepileptika må ikke avbrytes ettersom forverring av sykdommen er
+skadelig både for mor og foster.
+
+Risiko knyttet til okskarbazepin
+Det foreligger ikke tilstrekkelige kliniske data vedrørende eksponering under graviditet til å vurdere
+det teratogene potensialet til okskarbazepin. Tilfeller av medfødte misdannelser er rapportert ved
+behandling med okskarbazepin (ventrikkelseptumdefekt, atrioventrikulær septumdefekt, ganespalte
+med leppespalte, Downs syndrom, dysplastisk hofte (både unilateral og bilateral), tuberøs sklerose og
+medfødt misdannelse av øret). Data fra bruk hos et lite antall (198) gravide kvinner eksponert for
+okskarbazepin monoterapi i første trimester har derimot ikke vist noen signifikant økt forekomst av
+alvorlige medfødte misdannelser. Studieresultater knyttet til risikoen for utviklingsforstyrrelser hos
+barn eksponert for okskarbazepin under graviditeten er motstridende, og en risiko kan ikke utelukkes. I
+dyrestudier ble det observert økt embryomortalitet, forsinket fostervekst og misdannelser ved doser
+som var toksisk for mordyret (se pkt. 5.3). Data fra en populasjonsbasert observasjonsregisterstudie fra
+de nordiske landene antyder en økt risiko for at barn blir født små for gestasjonsalderen (SGA, definert
+som fødselsvekt under 10-prosentilen for deres kjønn og gestasjonsalder) etter prenatal eksponering
+for okskarbazepin. Risikoen for SGA hos barn av kvinner med epilepsi som fikk okskarbazepin, var
+15,2 % sammenlignet med 10,9 % hos barn av kvinner med epilepsi som ikke fikk anfallsdempende
+legemidler.
+
+Sett i lys av disse dataene:
+-       Dersom kvinner som behandles med Trileptal blir gravide eller planlegger å bli gravide, må
+        nødvendigheten av behandlingen revurderes nøye. Laveste effektive dose bør gis. Om mulig
+        bør behandlingen gis fortrinnsvis som monoterapi, i hvertfall de tre første månedene av
+        graviditeten.
+-       Pasientene bør informeres om mulig økt risiko for misdannelser og de bør få mulighet for
+        antenatal screening.
+-       Effektiv antiepilepika-behandling med okskarbazepin bør ikke avbrytes i løpet av graviditeten
+        ettersom en forverring av sykdommen er skadelig både for moren og fosteret.
+
+Monitorering og forebygging
+Antiepileptika kan medvirke til folsyremangel, en mulig medvirkende årsak til føtale abnormaliteter.
+Tillegg av folsyre anbefales før og under svangerskapet.
+Ettersom effekten av et slik tilskudd ikke er vist, bør en spesifikk antenatal diagnose tilbys også for
+kvinner som har tatt folsyretilskudd.
+
+                                                    9
+Data fra et begrenset antall kvinner indikerer at plasmanivået av den aktive metabolitten til
+okskarbazepin, 10-monohydroksyderivatet (MHD), kan reduseres gradvis i løpet av graviditeten. Det
+anbefales at klinisk respons monitoreres nøye hos kvinner som behandles med Trileptal under
+graviditet for å sikre at adekvat anfallskontroll opprettholdes. Det bør vurderes om man skal måle
+endringer i plasmakonsentrasjonen av MHD (se pkt. 4.2 og 5.2). Det bør også vurderes om postpartum
+plasmanivåer av MHD skal monitoreres, spesielt i de tilfellene der doseringen har blitt økt under
+graviditet.
+
+Det nyfødte barnet
+Det er rapportert om blødningsforstyrrelser, som skyldes antiepileptika, hos nyfødte. Som en
+forsiktighetsregel, bør vitamin K1 gis preventivt de siste ukene av svangerskapet samt til den nyfødte.
+
+Amming
+Okskarbazepin og dets aktive metabolitt (MHD) utskilles i human brystmelk. Begrensede data
+indikerer at diende spedbarns plasmakonsentrasjon av MHD er på 0,2-0,8 mikrogram/ml. Dette
+tilsvarer opptil 5 % av den maternelle plasmakonsentrasjonen av MHD. Selv om eksponeringen virker
+lav, kan ikke en risiko for spedbarnet utelukkes. En beslutning om å amme mens man bruker Trileptal
+bør derfor ta hensyn til både nytten av ammingen og den potensielle risikoen for bivirkninger hos
+spedbarnet. Ved amming bør spedbarnet overvåkes for bivirkninger som døsighet og dårlig
+vektøkning.
+
+Fertilitet
+Det foreligger ingen humane data på fertilitet.
+I studier på rotter med oral administrering var fertilitet hos begge kjønn upåvirket av okskarbazepin
+eller MHD. Forstyrrelser i østrogensyklusen og redusert antall gule legemer, implantasjoner og
+levende embryoer ble imidlertid observert hos hunndyr ved den høyeste dosen av MHD (se punkt 5.3).
+
+4.7     Påvirkning av evnen til å kjøre bil og bruke maskiner
+
+Trileptal har moderat påvirkning på evnen til å kjøre bil og bruke maskiner. Bivirkninger slik som
+svimmelhet, søvnighet, ataksi, dobbeltsyn, tåkesyn, synsforstyrrelser, hyponatremi og redusert
+bevissthet er rapportert med Trileptal (for fullstendig oversikt over bivirkninger, se pkt. 4.8), særlig
+under oppstart av behandlingen eller ved dosejusteringer (hyppigere ved oppjusteringer av dosen).
+Pasientene bør derfor utvise særlig aktsomhet ved bilkjøring eller ved bruk av maskiner.
+
+4.8     Bivirkninger
+
+Sammendrag av sikkerhetsprofilen
+De hyppigst rapporterte bivirkningene er søvnighet, hodepine, svimmelhet, dobbeltsyn, kvalme,
+brekninger og tretthet som ble sett hos flere enn 10 % av pasientene. Uønskede effekter sett i kliniske
+studier, og som ble vurdert å ha en sammenheng med bruk av Trileptal, danner grunnlaget for
+bivirkningsprofilen. I tillegg er klinisk relevante bivirkningsrapporter fra navngitte
+pasientprogrammer, samt erfaringer etter at preparatet er markedsført, tatt med i vurderingen.
+
+Bivirkninger (tabell 1) fra kliniske utprøvninger er angitt etter MedDRA organklasse. Innenfor hver
+organklasse er bivirkninger presentert etter frekvens, med de hyppigst forekommende bivirkningene
+først. Innenfor hver frekvensgruppering er bivirkninger presentert etter synkende alvorlighetsgrad. I
+tillegg er den tilhørende frekvenskategorien til hver bivirkning basert på følgende inndeling
+(CIOMS III): Svært vanlige ( 1/10); vanlige ( 1/100 til < 1/10); mindre vanlige ( 1/1000 til
+< 1/100); sjeldne ( 1/10 000 til < 1/1000); svært sjeldne ( 1/10 000).
+
+Tabell 1 Bivirkninger
+
+Sykdommer i blod og lymfatiske organer
+Mindre vanlige leukopeni
+Sjeldne        beinmargsdepresjon, aplastisk anemi, agranulocytose, pancytopeni, nøytropeni
+
+                                                    10
+Svært sjeldne      trombocytopeni
+Forstyrrelser i immunsystemet
+Sjeldne            anafylaktiske reaksjoner
+Svært sjeldne      hypersensitivitet#
+Endokrine sykdommer
+Vanlige            vektøkning
+Mindre vanlige hypotyreose
+Stoffskifte- og ernæringsbetingede sykdommer
+Vanlige            hyponatremi†
+Sjeldne            uhensiktsmessig sekresjon av ADH med tegn og symptomer som letargi, kvalme,
+                   svimmelhet, redusert serum (blod)-osmolalitet, brekninger, hodepine,
+                   forvirringstilstander eller andre nevrologiske symptomer.
+Psykiatriske lidelser
+Vanlige            forvirringstilstander, depresjon, apati, agitasjon (f.eks. nervøsitet), affektlabilitet
+Nevrologiske sykdommer
+Svært vanlige      søvnighet, hodepine, svimmelhet
+Vanlige            ataksi, tremor, nystagmus, konsentrasjonsforstyrrelser, amnesi, taleforstyrrelser
+                   (inkludert dysartri); hyppigst under oppjustering av dosen.
+Øyesykdommer
+Svært vanlige      dobbeltsyn
+Vanlige            tåkesyn, synsforstyrrelser
+Sykdommer i øre og labyrint
+Vanlige            vertigo
+Hjertesykdommer
+Svært sjeldne      arytmi, atrioventrikulært blokk
+Karsykdommer
+Mindre vanlige hypertensjon
+Gastrointestinale sykdommer
+Svært vanlige      kvalme, brekninger
+Vanlige            diaré, konstipasjon, abdominale smerter
+Svært sjeldne      pankreatitt og/eller lipase- og/eller amylaseøkning
+Sykdommer i lever og galleveier
+Svært sjeldne      hepatitt
+Hud- og underhudssykdommer
+Vanlige            utslett, alopeci, akne
+Mindre vanlige urticaria
+Sjeldne            hudutslett med eosinofili og systemiske symptomer (DRESS), akutt generalisert
+                   eksantematøs pustulose (AGEP)
+Svært sjeldne      angioødem, Stevens-Johnsons syndrom, toksisk epidermal nekrolyse (Lyells
+                   syndrom), erythema multiforme (se pkt. 4.4)
+Sykdommer i muskler, bindevev og skjelett
+Sjeldne            det er rapportert tilfeller av redusert bentetthet, osteopeni, osteoporose og frakturer
+                   hos pasienter som har brukt Trileptal over lang tid. Mekanismen for hvordan
+                   Trileptal påvirker benmetabolismen er ikke identifisert.
+Svært sjeldne      systemisk lupus erythematosus (SLE)
+Generelle lidelser og reaksjoner på administrasjonsstedet
+Svært vanlige      tretthet
+Vanlige            asteni
+Undersøkelser
+Mindre vanlige forhøyede leverenzymverdier og økt alkalisk fosfatase i blod
+Sjeldne            reduksjon av T4 (den kliniske betydningen er usikker)
+Skader, forgiftninger og komplikasjoner ved medisinske prosedyrer
+Mindre vanlige fall
+
+Beskrivelse av utvalgte bivirkninger
+#
+  Hypersensitivitet (inkludert multiorgan hypersensitivitet) karakterisert ved tegn som utslett, feber.
+
+                                                    11
+Andre organer eller systemer kan påvirkes, slik som blod og lymfesystem (f.eks. eosinofili,
+trombocytopeni, leukopeni, lymfadenopati, splenomegali), lever (f.eks. hepatitt, unormale
+leverfunksjonsverdier), muskler og ledd (f.eks. hevelse i ledd, myalgi, artralgi), nervesystem (f.eks.
+hepatisk encefalopati), nyrer (f.eks. nyresvikt, interstitiell nefritt, proteinuri), lunger (f.eks. lungeødem,
+astma, bronkospasmer, interstitiell lungesykdom, dyspné), angioødem.
+†
+ Serum-natriumnivå under 125 mmol/l har blitt observert i opp til 2,7 % av pasienter i behandling med
+Trileptal med frekvens vanlige (se pkt. 4.4). I de fleste tilfeller er hyponatremi asymptomatisk og uten
+behov for dosejustering.
+
+I svært sjeldne tilfeller er hyponatremi assosiert med tegn og symptomer som krampeanfall, forvirring,
+nedsatt bevissthet, encefalopati, (se også Nevrologiske sykdommer for ytterligere bivirkninger),
+synsforstyrrelser (f.eks. tåkesyn), hypotyreose, brekninger og kvalme rapportert. Generelt oppstod lavt
+natriumnivå i løpet av de første 3 behandlingsmånedene, men det var også pasienter som utviklet
+serum-natriumnivå < 125 mmol/l mer enn ett år etter behandlingsstart (se pkt. 4.4).
+
+Pediatrisk populasjon
+Sikkerhetsprofilen hos barn var generelt lik den som ble observert i den voksne populasjonen (se
+pkt. 5.1).
+
+Melding av mistenkte bivirkninger
+Melding av mistenkte bivirkninger etter godkjenning av legemidlet er viktig. Det gjør det mulig å
+overvåke forholdet mellom nytte og risiko for legemidlet kontinuerlig. Helsepersonell oppfordres til å
+melde enhver mistenkt bivirkning. Dette gjøres via meldeskjema som finnes på nettsiden til
+Direktoratet for medisinske produkter: www.dmp.no/meldeskjema.
+
+4.9     Overdosering
+
+Det er rapportert om isolerte tilfeller av overdosering. Den maksimalt inntatte dosen var på ca.
+48 gram.
+
+Mulige symptomer som har blitt rapportert i forbindelse med overdosering med
+okskarbamazepin
+Elektrolytt- og væskebalanse: Hyponatremi.
+Øyesykdommer: Dobbeltsyn, forsnevring av pupillen, tåkesyn.
+Gastrointestinale sykdommer: Kvalme, brekninger, hyperkinesi.
+Generelle lidelser og reaksjoner på administrasjonsstedet: Tretthet (fatigue).
+Undersøkelser: Redusert respirasjonsfrekvens, forlenget QTc.
+Nevrologiske sykdommer: Døsighet og søvnighet, svimmelhet, ataksi, nystagmus, tremor,
+koordinasjonsforstyrrelser (unormal koordinasjon), kramper, hodepine, koma, bevissthetstap,
+dyskinesi.
+Psykiatriske lidelser: Aggresjon, agitasjon, forvirringstilstand.
+Karsykdommer: Hypotensjon.
+Sykdommer i respirasjonsorganer thorax og mediastinum: Dyspnè.
+
+Behandling
+Det finnes ingen spesifikk antidot. Symptomatisk og støttende behandling bør gis etter behov. Det bør
+vurderes magetømming og/eller inaktivering ved administrasjon av aktivt kull.
+
+
+5.      FARMAKOLOGISKE EGENSKAPER
+
+5.1     Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Antiepileptikum, ATC-kode: N03A F02
+
+
+
+                                                      12
+Farmakodynamiske effekter
+Den farmakologiske aktiviteten av okskarbazepin utøves hovedsakelig av metabolitten (MHD) (se
+pkt. 5.2). Virkningsmekanismen av okskarbazepin og MHD er trolig hovedsakelig basert på blokade
+av spenningssensitive natriumkanaler. Dette fører til stabilisering av hypereksiterte nervemembraner,
+hemming av gjentatte neurale avfyringer og forminsket forplantning av synaptiske impulser. I tillegg
+kan økt kaliumkonduktans og modulering av høyspenningaktiverte kalsiumkanaler, også medvirke til
+den antikonvulsive effekten av legemidlet. Det er ikke funnet signifikante interaksjoner med hjernens
+neurotransmittorer eller modulator reseptorseter.
+
+Okskarbazepin og dets aktive metabolitt (MHD), er potente og effektive antikonvulsiva hos dyr.
+Gnagere ble beskyttet mot generaliserte tonisk-kloniske, og til en mindre grad, kloniske anfall. Hos
+Rhesusaper med aluminium implantater, opphevet eller reduserte legemidlet frekvensen av kronisk
+tilbakevennende partielle anfall. Det ble ikke observert toleranseutvikling (dvs. svekket antikonvulsiv
+aktivitet) mot tonisk-kloniske anfall når mus og rotter ble behandlet daglig med okskarbazepin eller
+MHD, i henholdsvis 5 dager og 4 uker.
+
+En prospektiv, åpen, multisenter, ikke-komparativ 24 ukers observasjonsstudie etter markedsføring har
+blitt gjennomført i India. Av en studiepopulasjon på 816 pasienter ble 256 pediatriske pasienter
+(1 måned til 19 år) med generaliserte tonisk-kloniske anfall (enten sekundære eller primære) behandlet
+med okskarbazepin monoterapi. Den første okskarbazepindosen hos alle pasienter > 6 år var
+8-10 mg/kg/dag gitt i to delte doser. For de 27 pasientene i alderen 1 måned til 6 år var
+doseringsområdet for startdosen 4,62-27,27 mg/kg/dag og vedlikeholdsdosen 4,29-30,00 mg/kg/dag.
+Det primære endepunktet var reduksjon i anfallsfrekvens fra baseline ved uke 24. I aldersgruppen
+1 måned til 6 år (n = 27) ble anfallsfrekvensen endret fra 1 [intervall] [1-12] til 0 [0-2], i aldersgruppen
+7 år til 12 år (n = 77) ble frekvensen endret fra 1 [1-22] til 0 [0-1] og i aldersgruppen 13-19 år
+(n = 152) ble frekvensen endret fra 1 [1-32] til 0 [0-3]. Det ble ikke identifisert noen spesielle
+sikkerhetsrisiko hos pediatriske pasienter. Data som støtter nytte/risiko fra studien vedrørende barn
+under 6 år er ikke tilstrekkelige (se pkt. 4.2). Basert på data fra randomiserte, kontrollerte studier er
+ikke sikkerhet og effekt tilstrekkelig demonstrert, og bruk av okskarbazepin hos barn under 6 år
+anbefales ikke (se pkt. 4.2).
+
+Pediatrisk populasjon
+To randomiserte, rater-blindede, dosekontrollerte effektstudier (studie 2339 og studie 2340) ble utført
+hos pediatriske pasienter i alderen 1 måned til < 17 år (n = 31 pasienter i alderen 6 til < 17 år;
+n = 189 pasienter i alderen < 6 år). I tillegg ble det utført flere åpne studier som inkluderte barn.
+Generelt var sikkerhetsprofilen for okskarbazepin hos yngre barn (< 6 år) lik som den hos eldre barn
+(≥ 6 år). Imidlertid ble det i noen studier på yngre barn (< 4 år) og eldre barn (≥ 4 år) observert en
+≥ 5 gangers forskjell i andelen pasienter med krampeanfall (henholdsvis 7,9 % og 1,0 %) og status
+epilepticus (henholdsvis 5 % og 1 %).
+
+5.2     Farmakokinetiske egenskaper
+
+Absorpsjon
+Etter oral administrasjon av Trileptal tabletter blir okskarbazepin fullstendig absorbert og i utstrakt
+grad metabolisert til dets farmakologisk aktive metabolitt (MHD). Etter en enkel dose på 600 mg
+Trileptal mikstur til friske, frivillige menn under fastende betingelser, var gjennomsnittlig C maks for
+MHD 24,9 mol/l, med en korresponderende median tmaks på 6 timer.
+
+I en massebalansestudie hos mennesker, skyldtes kun 2 % av den totale radioaktiviteten i plasma
+uomdannet okskarbazepin, mens ca. 70 % skyldtes MHD. Resten kunne tilskrives mindre sekundære
+metabolitter som raskt ble eliminert. Mat påvirket ikke hastighet eller grad av absorpsjon. Trileptal kan
+derfor gis med eller uten mat (se pkt. 4.2).
+
+Distribusjon
+Tilsynelatende distribusjonsvolum av MHD er 49 L. Ca. 40 % av MHD er bundet til plasmaproteiner,
+hovedsakelig til albumin. Bindingsgraden var uavhengig av serumkonsentrasjonen innen det
+terapeutisk relevante området. Hverken okskarbazepin eller MHD bindes til alfa-1-syreglykoprotein.
+
+                                                     13
+Okskarbazepin og MHD krysser placenta. Neonatal og maternal plasmakonsentrasjon av MHD var
+ved ett tilfelle like.
+
+Biotransformasjon
+Okskarbazepin omdannes raskt til MHD via cytosoliske leverenzymer. MHD er primært ansvarlig for
+den farmakologiske effekten av Trileptal. MHD metaboliseres videre ved konjugering med
+glukuronsyre. Små mengder (4 % av dosen) oksyderes til den farmakologisk inaktive metabolitten
+(10,11-dihydroksyderivat (DHD)).
+
+Eliminasjon
+Okskarbazepin utskilles fra kroppen overveiende i form av metabolitter, som hovedsakelig utskilles
+via nyrene. Mer enn 95 % av dosen gjenfinnes i urinen og mindre enn 1 % er uomdannet
+okskarbazepin. Fecal utskillelse utgjør mindre enn 4 % av den administrerte dosen. Ca. 80 % av dosen
+utskilles i urinen, enten som glukuronider av MHD (49 %) eller som uomdannet MHD (27 %).
+Inaktivt DHD utgjør ca. 3 % og konjugater av okskarbazepin utgjør 13 % av dosen. Okskarbazepin
+elimineres raskt fra plasma med en tilsynelatende halveringstid på mellom 1,3 og 2,3 timer. Den
+gjennomsnittlige tilsynelatende plasmahalveringstiden for MHD er 9,3  1,8 timer.
+
+Linearitet/ikke-linearitet
+Steady-state plasmakonsentrasjoner av MHD nås innen 2-3 dager når Trileptal gis 2 ganger daglig.
+Ved steady-state er farmakokinetikken av MHD lineær og viser doseproporsjonalitet i doseområdet
+300-2400 mg/døgn.
+
+Spesielle pasientpopulasjoner
+Nedsatt leverfunksjon: Farmakokinetikk og metabolisme av okskarbazepin og MHD ble undersøkt hos
+friske frivillige og pasienter med nedsatt leverfunksjon etter en enkel peroral dose på 900 mg. Mild til
+moderat grad av nedsatt leverfunksjon påvirket ikke farmakokinetikken av okskarbazepin og MHD.
+Trileptal er ikke undersøkt hos pasienter med alvorlig leversvikt.
+
+Nedsatt nyrefunksjon: Det er en lineær korrelasjon mellom kreatinin clearance og renal clearance av
+MHD. Når Trileptal gis som en enkel 300 mg dose til pasienter med nedsatt nyrefunksjon (kreatinin
+clearance < 30 ml/min), forlenges eliminasjonshalveringstiden av MHD med 60-90 % (16-19 timer),
+og AUC fordobles, sammenlignet med voksne med normal nyrefunksjon (10 timer).
+
+Barn: Farmakokinetikken til Trileptal ble undersøkt i kliniske studier hos pediatriske pasienter som
+fikk Trileptal i doseområdet 10-60 mg/kg/dag. Vektjustert MHD-clearance reduseres når alder og vekt
+nærmer seg alder og vekt hos voksne. Gjennomsnittlig vektjustert clearance hos barn i alderen 4 til
+12 år er ca. 40 % høyere enn hos voksne. MHD-eksponering hos disse barna forventes derfor å være
+ca. 2/3 sammenlignet med voksne som får en tilsvarende, vektjustert dose. Når vekten øker hos
+pasienter fra 13 år og oppover forventes vektjustert MHD-clearance å bli lik den som er observert hos
+voksne.
+
+Graviditet: Data fra et begrenset antall kvinner indikerer at plasmanivået av MHD kan minke gradvis
+gjennom en graviditet (se pkt. 4.2 og 4.6).
+
+Eldre: Etter administrasjon av enkle (300 mg) og gjentatte doser (600 mg/døgn) Trileptal til frivillige
+eldre (60-82 år), var maksimal plasmakonsentrasjon og AUC for MHD 30-60 % høyere enn hos yngre
+frivillige (18-32 år). Sammenligning av kreatinin clearance hos yngre og eldre frivillige, kan tyde på at
+denne forskjellen skyldes aldersrelaterte reduksjoner i kreatinin clearance. Det er ikke nødvendig med
+spesielle doseanbefalinger da de terapeutiske dosene tilpasses individuelt.
+
+Kjønn: Det er ikke funnet kjønnsrelaterte farmakokinetiske forskjeller hos barn, voksne eller eldre.
+
+
+
+
+                                                   14
+5.3     Prekliniske sikkerhetsdata
+
+Prekliniske data tyder ikke på spesiell risiko for mennesker. Dette er basert på toksisitetsstudier med
+gjentatt dosering og sikkerhetsfarmakologiske- og gentoksisitetsstudier med okskarbazepin og den
+farmakologisk aktive metabolitten monohydroksyderivat (MHD).
+
+Immunotoksisitet
+Immunstimulerende forsøk hos mus, viste at MHD (og til en mindre grad okskarbazepin) kan indusere
+forsinket hypersensitivitet.
+
+Mutagenitet
+In vitro gentoksisitetsstudier har gitt motstridende resultater. Okskarbazepin økte mutasjonsfrekvensen
+i en in vitro Ames test i fravær av metabolsk aktivering i en av fem bakteriestammer. Okskarbazepin
+og MHD gav økning i kromosomavvik og/eller polyploiditet i et in vitro studie med CHO celler i
+fravær av metabolsk aktivering. MHD gav negativ resultat i Ames test, og ingen mutagen eller
+klastogen aktivitet ble funnet for hverken okskarbazepin eller MHD i V79 celler in vitro.
+Okskarbazepin og MHD var begge negative for klastogene eller aneugene effekter (dannelse av
+mikronukleus) i et in vivo rottebeinmargsassay.
+
+Reproduksjonstoksisitet
+Standard reproduksjonstoksisitetsstudier hos gnagere og kaniner avslørte effekter som økt insidens av
+embryoføtal mortalitet og/eller en viss forsinkelse i antenatal og/eller postnatal vekst av avkommet
+ved maternotoksiske doser. Det var en økning i føtale misdannelser hos rotter i én av de åtte
+embryoføtale toksisitetsstudiene, utført med enten okskarbazepin eller MHD, ved doser som også gav
+maternotoksisitet (se pkt. 4.6). Den samlede dokumentasjonen fra alle dyrestudier indikerer at
+okskarbazepin har lite teratogent potensial ved doser relevant for mennesker. Dyrestudiene var
+imidlertid utilstrekkelige til å utelukke en teratogen effekt av okskarbazepin.
+I studier på rotter var fertilitet hos begge kjønn upåvirket av okskarbazepin eller MHD ved orale doser
+opp til henholdsvis 150 og 450 mg/kg/dag. Forstyrrelser i østrogensyklusen og redusert antall gule
+legemer, implantasjoner og levende embryoer ble imidlertid observert hos hunndyr ved den høyeste
+dosen (450 mg/kg/dag) av MHD.
+
+Karsinogenitet
+I karsinogenitetsstudier ble det indusert levertumorer (hos rotter og mus), testikkeltumorer (hos rotter)
+og granulære celletumorer i genitaltraktus hos hunnrotter. Levertumorene var mest sannsynlig en
+konsekvens av induksjonen av mikrosomale leverenzymer; en induktiv effekt, som selv om den ikke
+kan utelukkes, er svak eller ikke-eksisterende hos pasienter som behandles med Trileptal. Tumorer i
+testiklene kan ha blitt indusert av økte konsentrasjoner av luteiniserende hormon. Da slike økninger
+ikke opptrer hos mennesker, ansees ikke disse tumorene å være av klinisk betydning. I en
+karsinogenitetsstudie med MHD hos rotter, ble det sett en doserelatert økning i insidensen av
+granulære celletumorer i hunnenes kjønnsorganer (cervix og vagina) etter eksponeringsnivåer
+tilsvarende kliniske eksponeringsnivåer. Mekanismen bak utviklingen av disse tumorene er ikke
+fullstendig klarlagt, men kan relateres til økte østradiolnivåer spesifikt for rotter. Den kliniske
+betydningen av disse tumorene er derfor uklar.
+
+
+6.      FARMASØYTISKE OPPLYSNINGER
+
+6.1     Hjelpestoffer
+
+Propylparahydroksybenzoat (E 216)
+Sakkarinnatrium
+Sorbinsyre (E 200)
+Makrogolstearat
+Metylparahydroksybenzoat (E 218)
+Gul plomme/sitronaroma (inneholder etanol)
+Askorbinsyre (E 300)
+
+                                                   15
+Cellulose, mikrokrystallinsk
+Karmellosenatrium
+Propylenglykol (E 1520)
+Sorbitol, flytende, ikke-krystalliserende (E 420)
+Renset vann
+
+6.2     Uforlikeligheter
+
+Ikke relevant.
+
+6.3     Holdbarhet
+
+3 år
+Åpnet flaske må brukes innen 7 uker.
+
+6.4     Oppbevaringsbetingelser
+
+Dette legemidlet krever ingen spesielle oppbevaringsbetingelser.
+
+6.5     Emballasje (type og innhold)
+
+Brun (amber) type III glassflaske med barnesikring. Flasken inneholder 250 ml mikstur, suspensjon.
+
+En doseringssprøyte (10 ml) og en plastpropp til sprøyten finnes også i pakningen. Doseringssprøyten
+er gradert per 0,5 ml.
+
+6.6     Spesielle forholdsregler for destruksjon og annen håndtering
+
+Trileptal mikstur skal oppbevares utilgjengelig for barn.
+
+Ryst flasken godt umiddelbart før dosen trekkes opp. Den forskrevne dosen trekkes opp fra flasken
+med den vedlagte doseringssprøyten. Skru flasken godt igjen etter bruk og tørk av sprøyten med en
+ren, tørr serviett etter bruk.
+
+
+7.      INNEHAVER AV MARKEDSFØRINGSTILLATELSEN
+
+Novartis Norge AS
+Postboks 4284 Nydalen
+0401 Oslo
+
+
+8.      MARKEDSFØRINGSTILLATELSESNUMMER (NUMRE)
+
+MTnr. 00-8131
+
+
+9.      DATO FOR FØRSTE MARKEDSFØRINGSTILLATELSE / SISTE FORNYELSE
+
+Dato for første markedsføringstillatelse:           31. oktober 2001
+Dato for siste fornyelse:                           10. juli 2009
+
+10.     OPPDATERINGSDATO
+
+15.07.2025
+
+
+
+                                                     16
+
