@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T17:51:59.565Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T18:26:32.826Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 79 · Reservert: 1 · Venter på godkjenning: 11 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
+Klar: 79 · Venter på godkjenning: 11 · Publisert: 3 · Blokkert: 6 · Utenfor køen: 1
 
 ## Pågår
 
-- **topiramat** (topiramat-0041), frist 2026-10-17T20:51:59.565Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
@@ -29,6 +29,7 @@ Klar: 79 · Reservert: 1 · Venter på godkjenning: 11 · Publisert: 3 · Blokke
 - **mdma**: Stoffet har ingen publisert fagside å kuratere.
 - **metamfetamin**: Stoffet har ingen publisert fagside å kuratere.
 - **okskarbazepin**: Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig.
+- **topiramat**: Krav 3: beskyttet norsk referanseområde i konflikt med nyere kilder; venter på avgjørelse fra fagansvarlig.
 
 ## Køen
 

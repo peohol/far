@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T17:51:59.565Z",
+  "oppdatert_kl": "2026-10-17T18:26:32.826Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "teller": 41,
   "stoffer": {
@@ -5184,7 +5184,7 @@
     "topiramat": {
       "stoff": "topiramat",
       "navn": "Topiramat",
-      "status": "reservert",
+      "status": "blokkert",
       "modus": "de_novo",
       "prioritet": {
         "poeng": 0,
@@ -5199,13 +5199,14 @@
         "referanser": 4,
         "elementer_uten_kilde": 1
       },
-      "reservasjon": {
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": {
         "oppgave": "topiramat-0041",
         "okt": "kurateringsko/okt/20261016-125910",
-        "modus": "de_novo",
-        "reservert_kl": "2026-10-17T16:21:46.892Z",
-        "fornyet_kl": "2026-10-17T17:51:59.565Z",
-        "frist_kl": "2026-10-17T20:51:59.565Z",
+        "avbrutt_kl": "2026-10-17T18:26:32.826Z",
+        "grunn": "Krav 3: beskyttet norsk referanseområde i konflikt med nyere kilder; venter på avgjørelse fra fagansvarlig.",
         "fase": null,
         "jobbgren": "kuratorjobb/topiramat-0041",
         "kurateringsgren": "kuratering/topiramat-0041",
@@ -5213,18 +5214,22 @@
         "gren": "6a91451c-9e4a-4712-a913-253546677b1e",
         "kunnskapsgrense": null
       },
-      "forsok": 1,
-      "tidligst_kl": null,
-      "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [],
+      "blokkeringer": [
+        {
+          "kode": "agent",
+          "grunn": "Krav 3: beskyttet norsk referanseområde i konflikt med nyere kilder; venter på avgjørelse fra fagansvarlig.",
+          "kl": "2026-10-17T18:26:32.826Z",
+          "kilde": "agent"
+        }
+      ],
       "sist_kuratert": null,
       "siste_kjoring": {
         "oppgave": "topiramat-0041",
         "okt": "kurateringsko/okt/20261016-125910",
         "startet_kl": "2026-10-17T16:21:46.892Z",
-        "avsluttet_kl": null,
-        "utfall": "reservert"
+        "avsluttet_kl": "2026-10-17T18:26:32.826Z",
+        "utfall": "blokkert"
       },
       "aktiv": true,
       "historikk": [
@@ -5263,6 +5268,13 @@
           "hendelse": "fornyet",
           "oppgave": "topiramat-0041",
           "okt": "kurateringsko/okt/20261016-125910"
+        },
+        {
+          "kl": "2026-10-17T18:26:32.826Z",
+          "hendelse": "blokkert",
+          "oppgave": "topiramat-0041",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Krav 3: beskyttet norsk referanseområde i konflikt med nyere kilder; venter på avgjørelse fra fagansvarlig."
         }
       ],
       "appgren": null
@@ -5944,6 +5956,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "blokkert-topiramat-0041",
         "forny-topiramat-0041-1751",
         "forny-topiramat-0041-gren",
         "forny-topiramat-0041-1651",
@@ -5992,52 +6005,24 @@
         "fullfort-flunitrazepam-0024",
         "reserver-flunitrazepam-052934",
         "fullfort-ketobemidon-0023",
-        "reserver-ketobemidon-052754",
-        "fullfort-cbd-0022"
+        "reserver-ketobemidon-052754"
       ],
       "siste": {
-        "id": "forny-topiramat-0041-1751",
-        "sha256": "7d7acbe90a7d400378a64ddc3fdc2fe0bbee666b87d57a7810e51c36c5631222",
+        "id": "blokkert-topiramat-0041",
+        "sha256": "e0584e1254e9fb0cf5ed833a79493473c57f6a7b01ba3026dbbbb2d173c41dc2",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "forny-topiramat-0041-1751",
-          "foresporsel_sha256": "7d7acbe90a7d400378a64ddc3fdc2fe0bbee666b87d57a7810e51c36c5631222",
-          "handling": "forny",
+          "foresporsel_id": "blokkert-topiramat-0041",
+          "foresporsel_sha256": "e0584e1254e9fb0cf5ed833a79493473c57f6a7b01ba3026dbbbb2d173c41dc2",
+          "handling": "blokkert",
           "utfall": "ok",
-          "melding": "Reservasjonen av topiramat varer til 2026-10-17T20:51:59.565Z.",
-          "behandlet_kl": "2026-10-17T17:51:59.565Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39055587424",
-          "oppgave": {
-            "oppgave": "topiramat-0041",
-            "stoff": "topiramat",
-            "navn": "Topiramat",
-            "modus": "de_novo",
-            "forsok": 1,
-            "frist_kl": "2026-10-17T20:51:59.565Z",
-            "jobbgren": "kuratorjobb/topiramat-0041",
-            "kurateringsgren": "kuratering/topiramat-0041",
-            "pr": null,
-            "gren": "6a91451c-9e4a-4712-a913-253546677b1e",
-            "gjenoppta": null,
-            "sist_kuratert": null,
-            "maal": {
-              "kl": "2026-10-17T14:23:30.777Z",
-              "side": true,
-              "elementer": 6,
-              "redaksjonelle_paneler": 13,
-              "paneler_med_innhold": 4,
-              "referanser": 4,
-              "elementer_uten_kilde": 1
-            },
-            "prioritet": {
-              "poeng": 0,
-              "grunner": []
-            }
-          }
+          "melding": "topiramat er blokkert til et menneske har sett på det.",
+          "behandlet_kl": "2026-10-17T18:26:32.826Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39058077651"
         }
       },
       "besvart_commit": "be21cd8868cfe8da092c84df655357ec2af9d917",
-      "sist_brukt_kl": "2026-10-17T17:51:59.565Z"
+      "sist_brukt_kl": "2026-10-17T18:26:32.826Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
