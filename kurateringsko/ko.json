@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T04:02:15.730Z",
+  "oppdatert_kl": "2026-10-17T04:03:00.158Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 19,
   "stoffer": {
@@ -453,7 +453,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, klar); den må avsluttes først.",
-          "kl": "2026-10-17T04:02:15.730Z",
+          "kl": "2026-10-17T04:03:00.158Z",
           "kilde": "system"
         }
       ],
@@ -1022,7 +1022,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, klar); den må avsluttes først.",
-          "kl": "2026-10-17T04:02:15.730Z",
+          "kl": "2026-10-17T04:03:00.158Z",
           "kilde": "system"
         }
       ],
@@ -5178,6 +5178,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "reserver-doksepin-bok2",
         "reserver-brekspiprazol-bok2",
         "tilbakestill-doksepin-1",
         "tilbakestill-brekspiprazol-1",
@@ -5226,25 +5227,24 @@
         "reserver-citalopram-2",
         "fullfort-lurasidon-2",
         "reserver-lurasidon-2",
-        "fullfort-ghb-2",
-        "reserver-ghb-2"
+        "fullfort-ghb-2"
       ],
       "siste": {
-        "id": "reserver-brekspiprazol-bok2",
-        "sha256": "ed3e1e4eec737147b76a0bfb7f07e667e94c7b0a0d68e7828b6db02c047a113c",
+        "id": "reserver-doksepin-bok2",
+        "sha256": "2954991340f12d74403dfca86b927f1903befc198586c51ad7ac0ed22d34612b",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "reserver-brekspiprazol-bok2",
-          "foresporsel_sha256": "ed3e1e4eec737147b76a0bfb7f07e667e94c7b0a0d68e7828b6db02c047a113c",
+          "foresporsel_id": "reserver-doksepin-bok2",
+          "foresporsel_sha256": "2954991340f12d74403dfca86b927f1903befc198586c51ad7ac0ed22d34612b",
           "handling": "reserver",
           "utfall": "avvist",
-          "melding": "brekspiprazol kan ikke reserveres nå: blokkert.",
-          "behandlet_kl": "2026-10-17T04:02:15.730Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39001028010"
+          "melding": "doksepin kan ikke reserveres nå: blokkert.",
+          "behandlet_kl": "2026-10-17T04:03:00.158Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39001075603"
         }
       },
       "besvart_commit": "58b9d21bbc6d652d5ecece965470ef0f5c8961a4",
-      "sist_brukt_kl": "2026-10-17T04:02:15.730Z"
+      "sist_brukt_kl": "2026-10-17T04:03:00.158Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
