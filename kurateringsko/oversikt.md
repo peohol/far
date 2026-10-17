@@ -1,16 +1,16 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T06:49:14.607Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T06:59:04.130Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 91 · Reservert: 1 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
+Klar: 91 · Venter på godkjenning: 1 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
 
 ## Pågår
 
-- **fenobarbital** (fenobarbital-0026), frist 2026-10-17T09:24:57.621Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
-Ingen kurateringer venter.
+- **fenobarbital**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 
 ## Blokkert
 
