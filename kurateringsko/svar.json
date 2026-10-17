@@ -1,37 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-flunitrazepam-0017-gren",
-  "foresporsel_sha256": "013f4037019a2d7c53c6124176934e6cc27125d54fc1f511a02366b8ec50b5eb",
-  "handling": "forny",
+  "foresporsel_id": "fullfort-flunitrazepam-0017",
+  "foresporsel_sha256": "a88608fbab431bf3aab1b3f72e5edac7a1e651bcc31b4a2d83e4c05d88432a6e",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "Reservasjonen av flunitrazepam varer til 2026-10-17T04:38:44.141Z.",
-  "behandlet_kl": "2026-10-17T01:38:44.141Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38991722127",
-  "oppgave": {
-    "oppgave": "flunitrazepam-0017",
-    "stoff": "flunitrazepam",
-    "navn": "Flunitrazepam",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T04:38:44.141Z",
-    "jobbgren": "kuratorjobb/flunitrazepam-0017",
-    "kurateringsgren": "kuratering/flunitrazepam-0017",
-    "pr": null,
-    "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
-    "gjenoppta": null,
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-16T18:10:24.842Z",
-      "side": true,
-      "elementer": 8,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 4,
-      "referanser": 1,
-      "elementer_uten_kilde": 2
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "melding": "flunitrazepam er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-17T01:55:48.526Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38992873050"
 }
