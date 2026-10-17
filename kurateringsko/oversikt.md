@@ -1,22 +1,23 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T05:22:31.898Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T05:23:12.494Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 87 · Reservert: 1 · Venter på godkjenning: 2 · Publisert: 3 · Blokkert: 6 · Utenfor køen: 1
+Klar: 87 · Venter på godkjenning: 3 · Publisert: 3 · Blokkert: 6 · Utenfor køen: 1
 
 ## Pågår
 
-- **cbd** (cbd-0022), frist 2026-10-17T08:22:31.898Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
+- **cbd**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **kariprazin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **vortioksetin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 
 ## Blokkert
 
-- **brekspiprazol**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.
-- **doksepin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.
+- **brekspiprazol**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, retting); den må avsluttes først.
+- **doksepin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, retting); den må avsluttes først.
 - **etanol**: Stoffet har ingen publisert fagside å kuratere.
 - **kokain**: Stoffet har ingen publisert fagside å kuratere.
 - **mdma**: Stoffet har ingen publisert fagside å kuratere.
