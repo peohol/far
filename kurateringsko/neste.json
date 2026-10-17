@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-17T07:49:49.848Z",
+  "oppdatert_kl": "2026-10-17T07:50:35.572Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
     "klar": 83,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 8,
+    "venter_godkjenning": 9,
     "sammenslatt": 0,
     "publisert": 3,
     "blokkert": 4,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "kariprazin",
-      "oppgave": "kariprazin-0036",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-17T10:49:49.848Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "neste": [
     {
       "stoff": "fenytoin",
@@ -190,6 +182,12 @@
     {
       "stoff": "flunitrazepam",
       "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    },
+    {
+      "stoff": "kariprazin",
+      "gren": "e2d4268c-247a-445f-9986-74e32400b738",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     },
