@@ -13,8 +13,9 @@
 --
 -- Stopper med PT409 når siden er publisert på nytt etter grunnversjonen, når
 -- noe grenen endrer har et upublisert utkast fra vanlig redigering (det
--- utkastet skal ikke overtas eller overskrives i stillhet), og når ID-en til en
--- ny referanse er tatt av noe annet enn en publisert referanse med samme lenke.
+-- utkastet skal ikke overtas eller overskrives i stillhet), og når en ny
+-- referanse ikke kan lages eller brukes: lenken står på en referanse under
+-- redigering eller på flere, eller ID-en er tatt av noe annet.
 --
 -- Med p_prov = true (prøvepubliseringen) stopper en feil i rapporten ikke
 -- publiseringen, men gis tilbake, så resten kan prøves.
@@ -41,6 +42,7 @@ declare
   agentnokkel text;
   grentilstand jsonb := p_tilstand;
   delt uuid;
+  treff uuid[];
   v_lenke text;
 begin
   perform pg_advisory_xact_lock(hashtextextended('sideversjon:' || side::text, 0));
@@ -57,23 +59,56 @@ begin
   -- objektene grenen skriver: siteringene (panelreferanser, kortenes
   -- referanser og siteringsnodene i dataene) er ID-en som en hel JSON-tekst,
   -- og en UUID står ikke for noe annet. Den publiserte referansen står som den
-  -- er; den kan ikke endres i en gren. Et objekt med samme ID som ikke er en
-  -- publisert referanse med samme lenke, er en konflikt.
+  -- er; den kan ikke endres i en gren.
+  --
+  -- Lenken slås opp etter samme regel som intern.kuratering_referanse (som
+  -- ikke kan brukes her, siden den lager referansen når den mangler): utkast og
+  -- publiserte sammen, og bare en referanse som er arkivert i begge, er lagt
+  -- bort. Den som brukes, må være publisert, og både utkastet og den publiserte
+  -- må ha lenken og ikke være arkivert; ellers er referansen under redigering.
+  -- Det, flere referanser med lenken, og en ID som er tatt av noe annet, er
+  -- konflikter.
+  --
+  -- Oppslaget og opprettelsen låses per lenke på tvers av sidene (låsen på
+  -- siden over gjelder bare én side), så to grener med den samme nye kilden
+  -- ikke kan publiseres samtidig og begge lage den. Låsene tas i sortert
+  -- rekkefølge, så to publiseringer ikke venter på hverandre.
+  for v_lenke in
+    select distinct lower(btrim(x.value -> 'innhold' ->> 'lenke'))
+    from jsonb_each(p_tilstand -> 'objekter') x
+    where x.value ->> 'type' = 'referanse' and (x.value ->> 'ny')::boolean
+      and nullif(btrim(x.value -> 'innhold' ->> 'lenke'), '') is not null
+    order by 1
+  loop
+    perform pg_advisory_xact_lock(hashtextextended('referanselenke:' || v_lenke, 0));
+  end loop;
+
   for o in
     select (x.key)::uuid as id, x.value as v
     from jsonb_each(p_tilstand -> 'objekter') x
     where x.value ->> 'type' = 'referanse' and (x.value ->> 'ny')::boolean
   loop
-    v_lenke := nullif(btrim(coalesce(o.v -> 'innhold' ->> 'lenke', '')), '');
-    delt := null;
-    select r.objekt_id into delt
+    v_lenke := nullif(btrim(o.v -> 'innhold' ->> 'lenke'), '');
+    select array_agg(distinct r.objekt_id) into treff
     from public.referanser r
-    where r.tilstand = 'publisert'
-      and r.lenke = v_lenke
-      and not r.arkivert
-      and not exists (select 1 from public.referanser u where u.objekt_id = r.objekt_id and u.arkivert)
-    order by r.objekt_id <> o.id, r.objekt_id
-    limit 1;
+    where btrim(r.lenke) = v_lenke
+      and exists (select 1 from public.referanser x where x.objekt_id = r.objekt_id and not x.arkivert);
+    delt := null;
+    if cardinality(treff) > 1 then
+      raise exception 'Lenken til den nye referansen % står alt på % referanser. Duplikatene må avklares før grenen kan publiseres.', o.id, cardinality(treff)
+        using errcode = 'PT409';
+    elsif cardinality(treff) = 1 then
+      if not exists (select 1 from public.referanser r where r.objekt_id = treff[1] and r.tilstand = 'publisert')
+        or exists (
+          select 1 from public.referanser r
+          where r.objekt_id = treff[1] and (r.arkivert or btrim(r.lenke) is distinct from v_lenke)
+        )
+      then
+        raise exception 'Lenken til den nye referansen % står på en referanse som er under redigering (et upublisert utkast med en annen lenke eller en arkivering). Utkastet må avklares før grenen kan publiseres.', o.id
+          using errcode = 'PT409';
+      end if;
+      delt := treff[1];
+    end if;
     if exists (select 1 from public.redigerbare_objekter x where x.id = o.id) and delt is distinct from o.id then
       raise exception 'Den nye referansen % i grenen har en ID som alt er i bruk, men ikke av en publisert referanse med samme lenke. Grenen må oppdateres med en ny ID for referansen.', o.id
         using errcode = 'PT409';

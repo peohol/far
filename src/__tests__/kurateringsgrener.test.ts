@@ -619,6 +619,60 @@ describe('delte referanser', () => {
     })
   }
 
+  const utkastrevisjon = async (objekt: string) =>
+    (await kall.fasit<{ revisjon: number }>('select revisjon from public.objektstatus where id = $1', [objekt]))[0]!.revisjon
+
+  for (const [hva, sammeId] of [
+    ['et upublisert utkast med en annen lenke', true],
+    ['et arkivert utkast', false],
+  ] as const) {
+    it(`bruker ikke en publisert referanse som har ${hva}, men stopper som en konflikt`, async () => {
+      const lenke = nyLenke()
+      const forste = crypto.randomUUID()
+      const a = await grenMedReferanse(forste, lenke)
+      const b = await grenMedReferanse(sammeId ? forste : crypto.randomUUID(), lenke)
+      expect((await adm<{ ok: boolean }>('publiser', { gren: a.gren, revisjon: 1 })).ok).toBe(true)
+
+      // Noen redigerer den publiserte referansen på vanlig måte uten å publisere.
+      const innhold = { tittel: 'Delt kilde', forfattere: 'C', aar: '2026', lenke }
+      if (sammeId) {
+        await kall.lagre(forste, await utkastrevisjon(forste), { ...innhold, lenke: nyLenke() })
+      } else {
+        // En sitert referanse kan ikke arkiveres; kortet slutter å sitere den i utkastet først.
+        await kall.lagre(a.dosering, await utkastrevisjon(a.dosering), kort(a.side, 'dosering', 'Uten kilden'))
+        await kall.lagre(forste, await utkastrevisjon(forste), { ...innhold, arkivert: true })
+      }
+
+      expect(await prov(b.gren)).toMatchObject({ ok: false, kode: 'PT409' })
+      const telt = await antall()
+      const svar = await adm<{ ok: boolean; status: string; kode: string; feil: string }>('publiser', { gren: b.gren, revisjon: 1 })
+      expect(svar).toMatchObject({ ok: false, status: 'blokkert', kode: 'PT409' })
+      expect(svar.feil).toContain('under redigering')
+      expect(await antall()).toEqual(telt)
+      expect(await medLenke(lenke)).toEqual([{ objekt_id: forste }])
+      expect(JSON.stringify(await publisert(b.slug))).toContain('Gammel dosering')
+    })
+  }
+
+  // PGlite kjører én transaksjon om gangen, så to samtidige publiseringer kan
+  // ikke prøves her; låsen per lenke de ville ventet på, kan det.
+  it('låser hver ny lenke på tvers av sidene mens grenen publiseres', async () => {
+    const lenke = nyLenke()
+    const b = await grenMedReferanse(crypto.randomUUID(), lenke)
+    const laaste = await db.transaction(async (tx) => {
+      await tx.query('select kuratering.utfor(g, kuratering.tilstand(g), kuratering.forfatter(g), true) from kuratering.grener g where g.id = $1', [b.gren])
+      const { rows } = await tx.query<{ n: number }>(
+        `select count(*)::int as n from pg_locks l
+         where l.locktype = 'advisory' and l.granted and l.pid = pg_backend_pid()
+           and ((l.classid::bigint << 32) | l.objid::bigint) = hashtextextended('referanselenke:' || lower(btrim($1)), 0)`,
+        [` ${lenke.toUpperCase()} `],
+      )
+      await tx.rollback()
+      return rows[0]!.n
+    })
+    expect(laaste).toBe(1)
+  })
+
   it('stopper som en konflikt når ID-en er tatt av en referanse med en annen lenke', async () => {
     const id = crypto.randomUUID()
     const a = await grenMedReferanse(id, nyLenke())
