@@ -1,10 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-brekspiprazol-bokforing",
-  "foresporsel_sha256": "a4b00139d4f3787f2c3f39102d99da673f2f86d0d17be0c7b9197cec36748bb8",
-  "handling": "reserver",
-  "utfall": "avvist",
-  "melding": "brekspiprazol kan ikke reserveres nå: blokkert.",
-  "behandlet_kl": "2026-10-17T03:59:40.858Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39000855985"
+  "foresporsel_id": "tilbakestill-brekspiprazol-1",
+  "foresporsel_sha256": "2c98934ebd1715d0ef9594952d5a7e452ceb0f573c6fc0082e621f415ef4dfa9",
+  "handling": "tilbakestill",
+  "utfall": "ok",
+  "melding": "brekspiprazol er tilbakestilt.",
+  "behandlet_kl": "2026-10-17T04:00:34.390Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39000916582"
 }
