@@ -1,0 +1,58 @@
+Merk: EKG monitorering kreves før og under behandling med sertindol; se pkt. 4.4.
+Kliniske studier har vist at sertindol forlenger QT-intervallet i større grad enn visse andre
+antipsykotika. Sertindol bør derfor bare brukes av pasienter som er intolerante overfor minst ett annet
+antipsykotisk legemiddel.
+Forskrivende lege bør følge forsiktighetsreglene nøye, se pkt. 4.3 og 4.4
+
+
+Titrering
+Alle pasienter bør gis en startdose på 4 mg/dag. Dosen økes med intervaller på 4 mg etter 4-5 dager på
+hver dose inntil man når optimal daglig vedlikeholdsdose i doseringsområdet 12-20 mg. På grunn av
+1-blokkerende aktivitet av sertindole kan symptomer på postural hypotensjon opptre i den initiale
+dosetitreringsfasen. En startdose på 8 mg eller rask doseøkning gir en betydelig økt risiko for postural
+hypotensjon.
+
+Vedlikeholdsbehandling
+Avhengig av individuell respons kan dosen økes til 20 mg/dag. Kun unntaksvis bør maksimaldosen på
+24 mg vurderes, da det i kliniske studier ikke er vist konsistent bedre effekt over 20 mg, og QT
+forlengelse kan øke i øvre del av doseområdet.
+
+Blodtrykket bør monitoreres i titreringsfasen og tidlig i vedlikeholdsfasen.
+
+Eldre
+En farmakokinetisk studie viste ingen forskjell mellom unge og eldre individer, men det foreligger
+begrenset dokumentasjon fra kliniske studier på pasienter over 65 år. Behandling skal bare påbegynnes
+etter grundig hjerte-karundersøkelse. Langsommere dosetitrering og lavere vedlikeholdsdose bør
+vurderes hos eldre (se pkt. 4.4).
+
+Pediatrisk populasjon
+Serdolect anbefales ikke brukt til barn pga. manglende data om sikkerhet og effekt.
+
+Redusert nyrefunksjon:
+Sertindol kan gis i vanlige doser til pasienter med redusert nyrefunksjon (se pkt 4.3). Sertindols
+farmakokinetikk påvirkes ikke av hemodialyse.
+
+Redusert leverfunksjon:
+Pasienter med mild til moderat nedsatt leverfunksjon trenger langsommere dosetitrering og lavere
+vedlikeholdsdose.
+
+Gjennopptak av avbrutt behandling:
+Pasienter som har hatt mindre enn én ukes opphold med sertindol behøver ikke gjennomgå en ny
+dosetitreringsfase, men kan begynne rett på den tidligere vedlikeholdsdosen. Lengre opphold krever
+ny dosetitrering. EKG skal tas før ny titrering av sertindol.
+
+Overgang fra andre antipsykotika:
+Behandling med sertindol kan påbegynnes med vanlig dosetitrering parallelt med seponering av andre
+orale antipsykotika. For pasienter behandlet med depot-antipsykotika kan sertindolbehandling
+påbegynnes istedenfor neste depot-injeksjon.
+
+4.3.    Kontraindikasjoner
+
+Overfølsomhet overfor sertindol eller overfor noen av hjelpestoffene listet opp i pkt. 6.1.
+
+Sertindol er kontraindisert hos pasienter med kjent ukorrigert hypokalemi, og hos pasienter med kjent
+ukorrigert hypomagnesemi.
+
+
+
+                                                                                                     2/12

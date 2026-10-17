@@ -1,0 +1,671 @@
+                                          PREPARATOMTALE
+
+
+1.      LEGEMIDLETS NAVN
+
+Serdolect 4 mg filmdrasjerte tabletter
+Serdolect 12 mg filmdrasjerte tabletter
+Serdolect 16 mg filmdrasjerte tabletter
+Serdolect 20 mg filmdrasjerte tabletter
+
+
+2.      KVALITATIV OG KVANTITATIV SAMMENSETNING
+
+Hver 4 mg tablett inneholder:                       sertindol 4 mg
+Hver 12 mg tablett inneholder:                      sertindol 12 mg
+Hver 16 mg tablett inneholder:                      sertindol 16 mg
+Hver 20 mg tablett inneholder:                      sertindol 20 mg
+
+Hjelpestoffer med kjent effekt:
+Hver 4 mg filmdrasjerte tablett inneholder 57,74 mg laktose
+Hver 12 mg filmdrasjerte tablett inneholder 80,29 mg laktose
+Hver 16 mg filmdrasjerte tablett inneholder 90,32 mg laktose
+Hver 20 mg filmdrasjerte tablett inneholder 112,90 mg laktose
+Se pkt. 4.4
+
+For fullstendig liste over hjelpestoffer, se pkt 6.1.
+
+
+3.      LEGEMIDDELFORM
+
+Tablett, filmdrasjert
+
+Beskrivelse av tablettene:
+
+4 mg: Ovale, gule bikonvekse filmdrasjerte tabletter merket med "S4" på den ene siden
+12 mg: Ovale, beige bikonvekse filmdrasjerte tabletter merket med "S12" på den ene siden
+16 mg: Ovale, rødbrune bikonvekse filmdrasjerte tabletter merket med "S16" på den ene siden
+20 mg: Ovale, rosa bikonvekse filmdrasjerte tabletter merket med "S20" på den ene siden
+
+
+4.      KLINISKE OPPLYSNINGER
+
+4.1.    Indikasjoner
+
+Sertindol er indisert for behandling av schizofreni.
+
+Av hensyn til kardiovaskulær sikkerhet bør sertindol kun brukes av pasienter som er intolerante
+overfor minst ett annet antipsykotisk legemiddel.
+
+Sertindol bør ikke brukes i situasjoner hvor hurtig lindring av symptomer hos akutt forstyrrede
+pasienter er nødvendig.
+
+4.2.    Dosering og administrasjonsmåte
+
+Sertindol gis peroralt som én daglig dose, med eller uten mat. Hos pasienter hvor det er ønskelig med
+sedasjon kan benzodiazepiner gis i tillegg.
+
+                                                                                                   1/12
+Merk: EKG monitorering kreves før og under behandling med sertindol; se pkt. 4.4.
+Kliniske studier har vist at sertindol forlenger QT-intervallet i større grad enn visse andre
+antipsykotika. Sertindol bør derfor bare brukes av pasienter som er intolerante overfor minst ett annet
+antipsykotisk legemiddel.
+Forskrivende lege bør følge forsiktighetsreglene nøye, se pkt. 4.3 og 4.4
+
+
+Titrering
+Alle pasienter bør gis en startdose på 4 mg/dag. Dosen økes med intervaller på 4 mg etter 4-5 dager på
+hver dose inntil man når optimal daglig vedlikeholdsdose i doseringsområdet 12-20 mg. På grunn av
+1-blokkerende aktivitet av sertindole kan symptomer på postural hypotensjon opptre i den initiale
+dosetitreringsfasen. En startdose på 8 mg eller rask doseøkning gir en betydelig økt risiko for postural
+hypotensjon.
+
+Vedlikeholdsbehandling
+Avhengig av individuell respons kan dosen økes til 20 mg/dag. Kun unntaksvis bør maksimaldosen på
+24 mg vurderes, da det i kliniske studier ikke er vist konsistent bedre effekt over 20 mg, og QT
+forlengelse kan øke i øvre del av doseområdet.
+
+Blodtrykket bør monitoreres i titreringsfasen og tidlig i vedlikeholdsfasen.
+
+Eldre
+En farmakokinetisk studie viste ingen forskjell mellom unge og eldre individer, men det foreligger
+begrenset dokumentasjon fra kliniske studier på pasienter over 65 år. Behandling skal bare påbegynnes
+etter grundig hjerte-karundersøkelse. Langsommere dosetitrering og lavere vedlikeholdsdose bør
+vurderes hos eldre (se pkt. 4.4).
+
+Pediatrisk populasjon
+Serdolect anbefales ikke brukt til barn pga. manglende data om sikkerhet og effekt.
+
+Redusert nyrefunksjon:
+Sertindol kan gis i vanlige doser til pasienter med redusert nyrefunksjon (se pkt 4.3). Sertindols
+farmakokinetikk påvirkes ikke av hemodialyse.
+
+Redusert leverfunksjon:
+Pasienter med mild til moderat nedsatt leverfunksjon trenger langsommere dosetitrering og lavere
+vedlikeholdsdose.
+
+Gjennopptak av avbrutt behandling:
+Pasienter som har hatt mindre enn én ukes opphold med sertindol behøver ikke gjennomgå en ny
+dosetitreringsfase, men kan begynne rett på den tidligere vedlikeholdsdosen. Lengre opphold krever
+ny dosetitrering. EKG skal tas før ny titrering av sertindol.
+
+Overgang fra andre antipsykotika:
+Behandling med sertindol kan påbegynnes med vanlig dosetitrering parallelt med seponering av andre
+orale antipsykotika. For pasienter behandlet med depot-antipsykotika kan sertindolbehandling
+påbegynnes istedenfor neste depot-injeksjon.
+
+4.3.    Kontraindikasjoner
+
+Overfølsomhet overfor sertindol eller overfor noen av hjelpestoffene listet opp i pkt. 6.1.
+
+Sertindol er kontraindisert hos pasienter med kjent ukorrigert hypokalemi, og hos pasienter med kjent
+ukorrigert hypomagnesemi.
+
+
+
+                                                                                                     2/12
+Sertindol er kontraindisert hos pasienter med klinisk signifikant hjerte-karsykdom, stuvningssvikt,
+hjertehypertrofi, arytmier eller bradykardier (<50 slag per minutt) i anamnesen.
+
+Sertindol skal ikke brukes hos pasienter med medfødt langt QT syndrom eller en familieanamnese
+med denne sykdommen, eller hos pasienter med kjent erhvervet forlenget QT-intervall (QTc over 450
+msek hos menn og 470 msek hos kvinner).
+
+Sertindol er kontraindisert hos pasienter som får legemidler som er kjent for å forlenge
+QT intervallet. Relevante klasser omfatter:
+-        klasse Ia og III antiarytmika (eks. kinidin, amiodaron, sotalol, dofetilid)
+-        visse antipsykotika (eks. tioridazin)
+-        visse makrolider (eks. erytromycin)
+-        visse antihistaminer (eks. terfenadin, astemizole)
+-        visse kinoloner (eks. gatifloxacin, moxifloxacin)
+Listen over er ikke utfyllende og andre enkeltstående legemidler som er kjent for å gi forlenget QT
+intervall (eks. cisaprid, litium) er også kontraindisert.
+
+Samtidig administrasjon av sertindol med legemidler kjent som potente hemmere av leverens
+cytokrom P450 3A enzymer er kontraindisert (se pkt 4.5). Relevante klasser omfatter:
+-      systemisk behandling med "azol" antisoppmidler (eks. ketokonazol, itrakonazol)
+-      makrolidantibiotika (eks. erytromycin, klaritromycin)
+-      HIV proteasehemmere (eks. indinavir)
+-      Noen kalsiumkanalblokkere (eks. diltiazem, verapamil)
+
+Listen over er ikke utfyllende og andre enkeltstående legemidler som er kjent for å være kraftige
+hemmere av CYP3A enzymer (eks. cimetidin) er også kontraindisert.
+
+Sertindol er kontraindisert hos pasienter med alvorlig nedsatt leverfunksjon.
+
+4.4.    Advarsler og forsiktighetsregler
+
+Hjerte-kar
+Kliniske studier har vist at sertindol forlenger QT intervallet i større grad enn visse andre
+antipsykotika. Gjennomsnittlig QT forlengelse er større i øvre del av det anbefalte doseringsområdet
+(20 og 24 mg). Forlengelse av QTc intervallet ved noen legemidler er assosiert med mulig utvikling av
+Torsade de Pointes (TdP) arytmier (en potensielt fatal polymorf ventrikulær takykardi), og plutselig
+død. Kliniske og pre-kliniske data har ikke kunnet vise om sertindol er mer arrytmogen enn andre
+antipsykotika. Sertindol bør derfor kun brukes av pasienter som er intolerante overfor minst ett annet
+antipsykotisk legemiddel.
+
+Forskrivende lege bør følge forsiktighetsreglene nøye:
+
+EKG monitorering:
+-     EKG monitorering er påkrevet før og under behandling med sertindol.
+-  Sertindol er kontraindisert hvis QTc intervallet er mer enn 450 msek hos menn og 470 msek hos
+   kvinner ved behandlingsstart.
+-  EKG monitorering skal utføres før behandlingsstart, ved ”steady state” etter ca. 3 uker eller når
+   man når 16 mg, og igjen etter 3 måneders behandling.
+-     Under vedlikeholdsbehandling er EKG påkrevet hver 3. måned.
+-     Under vedlikeholdsbehandling skal EKG monitoreres før og etter en eventuell doseøkning.
+-  EKG anbefales etter tillegg eller økning av dose av annen samtidig behandling som kan øke
+   konsentrasjonen av sertindol (se pkt. 4.5).
+-  Observeres ett QTc intervall på mer enn 500 msek under behandling med sertindol skal
+   behandlingen avsluttes.
+-  For pasienter som opplever symptomer som palpitasjoner, kramper eller synkoper som kan
+   indikere forekomst av arytmier, skal nødvendig evaluering initieres, inklusive EKG monitorering.
+
+
+                                                                                                      3/12
+-    EKG monitorering utføres ideelt sett om morgenen. Bazett eller Fridericia formlene for QTc
+     beregning foretrekkes.
+
+Risikoen for QT forlengelse øker hos pasienter som samtidig behandles med legemidler som forlenger
+QTc intervallet eller som hemmer sertindolmetabolismen (se pkt. 4.3)
+
+Før behandling med sertindol initieres bør serum kalium- og magnesiumnivåene bestemmes hos
+pasienter med risiko for betydelige elektrolyttforstyrrelser. Lav serum kalium og magnesium bør
+korrigeres før behandlingen starter. Bestemmelse av serum kalium anbefales hos pasienter som
+opplever oppkast, diare, behandling med diuretika som påvirker kaliumnivåene, eller andre
+elektrolyttforstyrrelser.
+
+På grunn av den 1-blokkerende effekten kan sertindol gi symptomer på ortostatisk hypotensjon under
+den initiale dosetitreringsfasen.
+
+Antipsykotiske legemidler kan hemme effekten av dopaminagonister. Sertindol bør brukes med
+forsiktighet hos pasienter med Parkinsons sykdom.
+
+Visse SSRI, som fluoxetin og paroxetin (potente hemmere av CYP2D6), kan øke plasmanivåene av
+sertindol med en faktor på 2 til 3. Sertindol bør derfor bare brukes sammen med disse legemidlene
+med stor forsiktighet, og bare hvis den potensielle fordelen oppveier risikoen. En lavere
+vedlikeholdsdose av sertindol kan være nødvendig, og nøye EKG monitorering bør utføres før og etter
+en doseendring av disse legemidlene (se pkt. 4.5).
+
+Serdindol bør brukes med forsiktighet hos pasienter som er langsomme omsettere av CYP2D6 (se
+pkt.4.5).
+
+Hyperglykemi eller forverring av allerede eksisterende diabetes er rapportert i svært sjeldne tilfeller
+under behandling med sertindol. Klinisk oppfølging anbefales for diabetikere og pasienter med
+risikofaktorer for utvikling av diabetes mellitus.
+
+Økt dødelighet hos eldre pasienter med demens
+Data fra to større observasjonsstudier har vist at eldre pasienter med demens behandlet med
+antipsykotika har litt økt risiko for død sammenlignet med de som ikke har fått denne behandlingen.
+Dataene er ikke tilstrekkelige til å gi et klart estimat av risikoomfanget og årsaken til økt risiko er ikke
+kjent.
+
+Sertindol er ikke godkjent til behandling av demens-relaterte adferdsforstyrrelser.
+
+Risiko for cerebrovaskulære hendelser
+Hos demente pasienter er det i randomiserte placebo-kontrollerte kliniske studier med noen atypiske
+antipsykotika, sett en tredobbel økning i risiko for cerebrovaskulære hendelser. Mekanismen for denne
+økte risikoen er ikke kjent. Økt risiko kan ikke utelukkes for andre antipsykotika eller andre
+pasientpopulasjoner. Serdolect bør brukes med forsiktighet hos pasienter som har risikofaktorer for
+hjerneslag.
+
+Med tanke på den økte risikoen for signifikant hjerte-karsykdom hos eldre bør sertindol brukes med
+forsiktighet hos pasienter over 65 år. Behandling skal bare påbegynnes etter grundig hjerte-
+karundersøkelse.
+
+Venøs tromboembolisme
+Det er rapportert tilfeller av venøs tromboembolisme (VTE) ved bruk av antipsykotika. Siden
+pasienter som er behandlet med antipsykotika ofte har risikofaktorer for VTE, bør alle mulige
+risikofaktorer for VTE identifiseres før og under behandling med sertindol, og forebyggende tiltak
+iverksettes.
+
+Redusert leverfunksjon
+
+                                                                                                        4/12
+Pasienter med lett til moderat nedsatt leverfunksjon bør følges nøye. Redusert dosetitreringshastighet
+og lavere vedlikeholdsdose kan være nødvendig.
+
+Tardive dyskinesier
+Tardive dyskinesier antas å skyldes dopaminreseptorhypersensitivitet i basalgangliene på grunn av
+kronisk reseptorblokade med antipsykotika. Sertindol viser lav insidens av ekstrapyramidale
+symptomer (på nivå med placebo) i kliniske studier. Langvarig behandling med antipsykotika (særlig i
+høye doser) kan være assosiert med risiko for tardive dyskinesier. Reduksjon av dosen eller
+seponering av legemiddel bør derfor vurderes hvis det skulle oppstå tegn på tardive dyskinesier.
+
+Kramper
+Sertindol bør brukes med forsiktighet hos pasienter med kjent tendens til kramper.
+
+Malignt neuroleptikasyndrom
+Malignt neuroleptikasyndrom er et potensielt fatalt symptomkompleks som har vært rapportert i
+sammenheng med antipsykotiske legemidler. Behandling av malignt neuroleptikasyndrom omfatter
+umiddelbar seponering av det antipsykotiske legemiddelet.
+
+Seponering
+Akutte seponeringssymptomer, inkludert kvalme, oppkast, svetting og insomni, er sett etter brå
+seponering av antipsykotiske legemidler. Tilbakefall av psykotiske symptomer kan forekomme, og
+ufrivillige bevegelser kan oppstå (slik som akatisi, dystoni og dyskinesi). Det anbefales derfor gradvis
+seponering.
+
+Hjelpestoffer
+Tablettene inneholder laktosemonohydrat. Pasienter med sjeldne arvelige problemer med
+galaktoseintoleranse, total laktasemangel eller glukose-galaktose malabsorpsjon bør ikke ta dette
+legemidlet.
+Dette legemidlet inneholder mindre enn 1 mmol natrium (23 mg) i hver tablett, og er så godt som
+«natriumfritt».
+
+4.5.    Interaksjoner med andre legemidler og andre former for interaksjoner
+
+Økning i QT intervallet som kan ses ved sertindolbehandling kan forsterkes av samtidig
+administrasjon av andre legemidler som kan forlenge QT intervallet. Samtidig administrasjon av slike
+legemidler er derfor kontraindisert (se pkt. 4.3). Slike interaksjoner kan f.eks.forekomme mellom
+kinidin og sertindol. I tillegg til effektene på forlenget QT intervall (se pkt. 4.3), inhiberes CYP2D6
+merkbart av kinidin.
+
+Sertindol metaboliseres i betydelig grad av CYP2D6 og CYP3A isoenzymene i cytokrom P450
+systemet. CYP2D6 er polymorf i befolkningen og begge isozymene kan hemmes av en rekke
+psykotrope legemidler og andre legemidler (se pkt. 4.4).
+
+CYP2D6
+Plasmakonsentrasjonen av sertindol øker med en faktor på 2-3 hos pasienter som samtidig behandles
+med fluoxetin eller paroxetin (potente hemmere av CYP2D6). Sertindol skal derfor bare brukes med
+stor forsiktighet sammen med disse eller andre CYP2D6 hemmere. En lavere vedlikeholdsdose av
+sertindol kan være nødvendig og nøye EKG monitorering bør utføres før og etter en doseendring av
+disse legemidlene (se pkt. 4.4).
+
+CYP3A
+Mindre økning (< 25 %) av sertindol plasmakonsentrasjonen er sett med makrolidantibiotika (e.g.
+erytromycin, en hemmer av CYP3A) og kalsiumkanalantagonister (diltiazem, verapamil). Den
+inhibitoriske effekten kan forsterkes hos sakte metaboliserere av CYP2D6 (siden eliminering av
+sertindol ved både CYP2D6 og CYP3A vil være påvirket). Fordi det ikke er mulig å identifisere
+pasienter som er sakte metaboliserere av CYP2D6 rutinemessig, er samtidig administrasjon av CYP3A
+hemmere kontraindisert da det kan medføre signifikant økning i sertindol nivåene (se pkt. 4.3).
+
+                                                                                                     5/12
+Metabolismen av sertindol økes betydelig av substanser som induserer CYP isoenzymer, særlig
+rifampicin, karbamazepin, fenytoin og fenobarbital. Disse kan redusere plasmakonsentrasjonen av
+sertindol med en faktor på 2-3. Redusert antipsykotisk effekt hos pasienter som samtidig behandles
+med disse eller andre enzyminduserende substanser kan gjøre det nødvendig å øke dosen med
+sertindol til øvre del av anbefalt doseområde.
+
+4.6.    Fertilitet, graviditet og amming
+
+Fertilitet
+Oral administrering av sertindol har vist svekket mannlig fertilitet i mus og rotter ved systemisk
+eksponering lik eller lavere enn det som forventes hos mennesker ved maksimal anbefalt klinisk dose.
+Nedsatt fertilitet hos voksne hanner, som var reversibel, er sannsynligvis pga. 1-adrenoceptor
+antagonisme.
+
+Hos mennesker er bivirkninger som hyperprolaktinemi, galaktore, erektil dysfunksjon, unormal
+ejakulasjon og ejakulasjonssvikt rapportert. Disse tilfellene kan ha negativ påvirkning på kvinnelig
+og/eller mannlig seksualfunksjon og fertilitet.
+
+Hvis klinisk signifikant hyperprolaktinemi, galaktore eller seksuell dysfunksjon oppstår, bør en
+dosereduksjon (hvis mulig) eller seponering vurderes.
+
+Effektene er reversible ved seponering.
+
+Graviditet
+Sikkerhet ved bruk under graviditet er ikke klarlagt.
+
+Sertindol var ikke teratogent i reproduksjonsstudier i dyr. En peri/postnatal studie hos rotter viste
+nedsatt fertilitet hos avkom ved doser innenfor det terapeutiske området for mennesker (se pkt. 5.3).
+
+Sertindol bør derfor ikke brukes under graviditet.
+
+Nyfødte eksponert for antipsykotika (inkludert Serdolect) i løpet av 3. trimester av svangerskapet har
+risiko for bivirkninger, inkludert ekstrapyramidale og/eller seponeringssymptomer som kan variere i
+alvorlighetsgrad og varighet etter fødsel. Det er rapportert uro, hypertoni, hypotoni, tremor, søvnighet,
+pustevansker og problemer med mating. Nyfødte bør derfor overvåkes nøye.
+
+Amming
+Det er ikke utført studier på kvinner som ammer, men det antas at sertindol utskilles i morsmelk.
+Hvis sertindolbehandling anses som nødvendig bør det vurderes å stoppe amming.
+
+4.7.     Påvirkning av evnen til å kjøre bil eller bruke maskiner
+
+Sertindol er ikke sedativt, men pasienter bør likevel frarådes å kjøre bil eller bruke maskiner inntil de
+vet hvordan de reagerer på behandlingen.
+
+4.8.    Bivirkninger
+
+Bivirkninger
+Bivirkninger assosiert med behandling med sertindol med en insidens over 1 % og signifikant
+forskjellig fra placebo i kliniske studier var (oppført etter avtagende frekvens): rhinitt/tett nese,
+unormal ejakulasjon (nedsatt ejakulasjonsvolum), svimmelhet, munntørrhet, postural hypotensjon,
+vektøkning, perifere ødem, tungpustethet, parestesier og forlenget QT-intervall (se pkt 4.4).
+
+Ekstrapyramidale symptomer (EPS)
+Insidensen av EPS-relaterte bivirkninger blant pasienter behandlet med sertindol var den samme som
+hos pasienter behandlet med placebo. Videre, i placebo-kontrollerte studier var det ingen forskjell
+
+                                                                                                        6/12
+mellom andelen av placebobehandlede og sertindolbehandlede pasienter som trengte anti-EPS
+behandling.
+
+Noen bivirkninger vil opptre i begynnelsen av behandlingen og avta ved fortsatt behandling, for
+eksempel postural hypotensjon.
+
+Tabellen under viser bivirkninger sortert etter organsystem og frekvens:
+Svært vanlige (≥1/10), Vanlige (≥1/100 til < 1/10), Mindre vanlige (≥ 1/1000 til < 1/100), Sjeldne
+(≥1/10000 til < 1/1000), Svært sjeldne (≤1/10000), Ikke kjent (kan ikke beregnes ut i fra tilgjengelige
+data).
+
+Organklassesystem                   Frekvens         Bivirkning
+
+Endokrine sykdommer                 Mindre           Hyperprolaktinemi
+                                    vanlige
+
+
+Stoffskifte- og                     Vanlige          Vektøkning
+ernæringsbetingede
+sykdommer                           Mindre           Hyperglykemi
+                                    vanlige
+
+
+Nevrologiske sykdommer              Vanlige          Svimmelhet, parestesi
+
+                                    Mindre           Synkope, kramper, bevegelsesfortyrrelser (særlig
+                                    vanlige          tardive dyskinesier, se pkt. 4.4)
+
+                                    Sjeldne          Tilfeller av malignt nevroleptikasyndrom (MNS)
+                                                     er sett ved bruk av sertindol (se pkt. 4.4)
+
+
+
+Hjertesykdommer                     Vanlige          Perifere ødem, forlenget QT-intervall (se pkt. 4.4)
+
+
+
+                                    Mindre           Torsade de Pointes (se pkt. 4.4)
+                                    vanlige
+
+
+Karsykdommer                        Vanlige          Postural hypotensjon (se pkt. 4.4)
+
+                                    Ukjent           Tilfeller av venøs tromboembolisme, inkludert
+                                                     tilfeller av lungeembolisme og dyp
+                                                     venetrombose, er rapportert for antipsykotika
+
+
+
+Sykdommer i                         Svært vanlige    Rhinitt/nesetetthet
+respirasjonsorganer, thorax og
+mediastinum                         Vanlige          Dyspnø
+
+Gastrointestinale sykdommer         Vanlige          Munntørrhet
+
+
+
+
+                                                                                                    7/12
+Graviditet, puerperale og           Ikke kjent        Seponeringssyndrom hos nyfødte (se pkt. 4.6)
+perinatale lidelser
+
+Lidelser i kjønnsorganer og         Svært vanlige     Ejakulasjonssvikt
+brystsykdommer
+
+
+                                    Vanlige           Ejakulasjonsforstyrrelser
+
+                                                      Erektil dysfunksjon
+
+
+
+                                    Mindre            Galaktore
+                                    vanlige
+
+
+Undersøkelser                       Vanlige           Røde blodlegemer i urin, hvite blodlegemer i urin
+
+
+
+Melding av mistenkte bivirkninger
+
+Melding av mistenkte bivirkninger etter godkjenning av legemidlet er viktig. Det gjør det mulig å
+overvåke forholdet mellom nytte og risiko for legemidlet kontinuerlig. Helsepersonell oppfordres til å
+melde enhver mistenkt bivirkning. Dette gjøres via meldeskjema som finnes på nettsiden til Statens
+legemiddelverk: www.legemiddelverket.no/meldeskjema
+
+
+4.9.    Overdosering
+
+Erfaring med sertindol i akutt overdose er begrenset. Fatale tilfellet har forekommet. Pasienter som har
+tatt doser anslått opp til 840 mg har blitt fullstendig restituert. Tegn og symptomer rapportert ved
+overdose er somnolens, uklar tale, takykardi, hypotensjon og forbigående forlengelse av QT-
+intervallet. Tilfeller med Torsade de Pointes er observert, ofte i kombinasjon med legemidler som er
+kjent for å indusere TdP.
+
+Behandling
+Ved overdose må åpen luftvei og adekvat oksygenering sikres.
+
+Kontinuerlig monitorering av EKG og vitale funksjoner bør startes umiddelbart. Hvis QTc intervallet
+er forlenget anbefales monitorering inntil QTc intervallet er normalisert. Det må tas hensyn til
+halveringstiden på sertindol på 2 til 4 dager.
+
+Intravenøs tilgang bør etableres, og administrasjon av aktivt kull og laksativer bør vurderes.
+Muligheten for at andre legemidler er involvert bør overveies.
+
+Det finnes ikke et spesifikt antidot til sertindol, og sertindol er ikke dialyserbart. Nødvendige
+stabiliserende tiltak må derfor institueres. Hypotensjon og sirkulatorisk kollaps bør behandles med
+passende metoder f.eks intravenøs væsketilførsel. Hvis sirkulatorisk stabilisering med
+sympatomimetika er ønskelig, bør adrenalin og dopamin anvendes med forsiktighet, da -
+reseptorstimulering kombinert med 1-reseptorantagonisme fra sertindol kan forverre hypotensjonen.
+
+Hvis det gis antiarrytmisk behandling, bør man være oppmerksom på at midler som f.eks. kinidin,
+disopyramid og prokainamid har en teoretisk risiko for å forlenge QT intervallet, som kan være additiv
+til sertindols potensielle QT-forlengende effekt.
+
+
+                                                                                                     8/12
+Ved alvorlige ekstrapyramidale symptomer bør antikolinerg behandling institueres. Medisinsk
+overvåkning og monitorering bør fortsette inntil pasienten er restituert.
+
+
+5.      FARMAKOLOGISKE EGENSKAPER
+
+5.1.    Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: limbisk selektiv antipsykotikum
+ATC-kode: N05A E03
+
+Det er foreslått at sertindols neurofarmakologiske profil som et antipsykotisk legemiddel skyldes dets
+selektive inhibitoriske effekt på mesolimbiske dopaminerge neuroner, og henger sammen med dets
+balanserte inhibitoriske effekt på sentrale dopamin D2 -, serotonin 5HT2 - og 1-adrenerge reseptorer.
+
+I dyrefarmakologiske studier hemmet sertindol spontant dopaminerge neuroner i det mesolimbiske
+ventrale tegmentale området (VTA) i hjernen med en selektivitetsratio på over 100 sammenlignet med
+dopaminerge neuroner i substantia nigra pars compacta (SNC). Hemming av aktiviteten i SNC antas å
+være involvert i de motoriske bivirkninger (EPS) som ses med mange antipsykotiske legemidler.
+
+Antipsykotiske legemidler kan føre til økt serum-prolaktinnivå via dopaminblokade. Prolaktinnivåene
+hos pasienter som fikk sertindol forble innenfor normale verdier, både i korttidsstudier og i
+langtidsbehandling (ett år).
+
+Etter markedsføring er det av og til rapportert hyperprolaktinemi og prolaktin-relaterte hendelser ved
+bruk av sertindol.
+
+Sertindol har ingen effekt på muskarine og H1 reseptorer. Dette bekreftes ved fravær av antikolinerge
+og sedative effekter relatert til disse reseptorene.
+
+Ytterligere informasjon om kliniske studier
+Sertindole Cohort Prospective Study (SCoP) var en multinasjonal, stor, enkel studie som vurderte
+normal legemiddelbruk, og som sammenlignet alle årsaker til mortalitet, hjertesikkerhet og suicidalitet
+av sertindol og risperidon. Studien var designet som en prospektiv, randomisert, delvis blindet studie
+med to parallelle grupper; sertindol (n=4930) og risperidon (n=4928) med behandlingsperioder på opp
+til 4 år.
+
+Alle årsaker til mortalitet (første primære endepunkt) var likt for både sertindol og risperidon.
+Dødsårsak var forskjellig for de to behandlingsgruppene. Viktigste årsak til død hos pasienter
+behandlet med sertindol var relatert til hjerte, med en signifikant høyere risiko for kardial dødelighet
+enn i risperidon-gruppen, Det var en lavere risiko for selvmordsforsøk hos pasienter behandlet med
+sertindol, selv om risiko for gjennomførte selvmord ikke var signifikant forskjellige i de to gruppene.
+
+5.2.    Farmakokinetiske egenskaper
+
+Sertindol elimineres via metabolisme i lever med en gjennomsnittlig terminal halveringstid på ca. 3
+dager. Clearance avtar etter gjentatt dosering til gjennomsnittlig 14 l/time. (kvinner har ca. 20% lavere
+tilsynelatende clearance enn menn, men verdiene er sammenlignbare når man korrigerer for
+forskjeller i mengden fettvev). Etter gjentatt dosering er derfor akkumuleringen større enn forutsett ut
+fra enkel dose, p.g.a. en økning i den systemiske biotilgjengeligheten. Ved steady-state er likevel
+clearance uavhengig av dosen og plasmakonsentrasjonen proporsjonal med dosen. Moderat
+interindividuell variabilitet i sertindols farmakokinetikk skyldes polymorfisme i cytokrom P450 2D6
+(CYP2D6). Hos pasienter som mangler dette leverenzymet (sakte metaboliserere) nedsettes clearance
+av sertindol til mellom 1/2 til 1/3 i forhold til raske metaboliserere. Sakte metaboliserere (opp til 10%
+av befolkningen) kan derfor ha opptil 2-3 ganger høyere plasmakonsentrasjon enn normalt. Det er
+ingen klar sammenheng mellom konsentrasjonen av sertindol hos den enkelte pasient og den
+
+
+                                                                                                      9/12
+terapeutiske effekten. Doseringen er derfor individuell og baseres på vurdering av terapeutisk effekt og
+tolerabilitet.
+
+Absorpsjon
+Sertindol absorberes godt med tmax etter oral administrasjon på ca. 10 timer. De forskjellige
+tablettstyrkene er bioekvivalente. Mat og aluminium-magnesium antacida har ingen klinisk signifikant
+effekt på hastighet eller grad av sertindol absorpsjonen.
+
+Distribusjon
+Tilsynelatende distribusjonsvolum (V/F) etter gjentatt dosering er ca. 20 l/kg. Sertindol har en
+plasma-proteinbindingsgrad på ca. 99,5%, primært til albumin og 1-surt glykoprotein. Hos pasienter
+på normal dosering er 90% av de målte konsentrasjonene under 140 ng/ml (ca 320 nmol/L). Sertindol
+penetrerer til røde blodlegemer med en blod/plasma ratio på 1.0. Sertindol passerer lett blod-hjerne
+barrieren og placentabarrieren.
+
+Metabolisme
+To metabolitter er identifisert i humant plasma: dehydrosertindol (oksidasjon av imidazolidinon-
+ringen) og norsertindol (N-dealkylering). Ved steady state er konsentrasjonen av dehydrosertindol og
+norsertindol henholdsvis ca. 80% og 40% av modersubstansen. Sertindols aktivitet skyldes i hovedsak
+modersubstansen, og metabolittene har tilsynelatende ingen signifikante farmakologiske effekter i
+mennesker.
+
+Ekskresjon
+Både sertindol og dens metabolitter elimineres svært sakte, totalt gjenfinnes ca. 50-60% av
+radiomerket dose 14 dager etter administrasjon. Omtrent 4% av dosen skilles ut i urin som
+modersubstans og metabolitter, av dette utgjør modersubstansen mindre enn 1%. Fekal ekskresjon er
+viktigste ekskresjonsvei og er ansvarlig for utskillelse av resten av modersubstansen og dens
+metabolitter.
+
+5.3.    Prekliniske sikkerhetsdata
+
+QT forlengelse på EKG, muligens på grunn av hemming av ensrettede kaliumkanaler (Ikr, HERG), er
+observert i dyrestudier. Sertindol viser likevel fravær av tidlig etter- depolarisering i Purkinje fibre fra
+kanin- og rottehjerter. Tidlig etter-depolarisering antas å være essensiell for å utløse Torsade de
+Pointes. Sertindol induserte ikke Torsade de Pointes ventrikulære arrytmier i isolerte kanin hjerter
+hvor den atrioventrikulære knuten var fjernet, tross eksperimentell introduksjon av alvorlig
+hypokalemi (1.5 mmol) og bradykardi. Ekstrapolering av funn i dyremodeller til mennesket med
+hensyn på QT forlengelse og arrytmier, må likevel gjøres med forsiktighet da betydelige artsforskjeller
+kan forekomme.
+
+Sertindol har lav akutt toksisitet. I kroniske toksisitetsstudier i rotte og hund (3-5 ganger klinisk
+eksponering) ble flere effekter observert. Disse effektene er i tråd med legemidlets farmakologiske
+egenskaper.
+
+Dyrereproduksjonsstudier har ikke vist teratogene effekter.
+
+En peri-/postnatal studie hos rotte viste økt mortalitet hos avkom, redusert vekst og forsinket utvikling
+ved doser som ga maternell effekt og var lik eller lavere enn maksimalt anbefalt dose på en mg/m2
+basis. Parring og fertilitet hos avkom etter sertindol-behandlede hunnrotter var redusert.
+
+Parring og fertilitet ble påvirket hos voksne hannrotter ved doser på 0,14 mg/kg/dag og over. Den
+nedsatte fertilitet hos voksne dyr var reversibel og tilskrives sertindols farmakologiske profil.
+
+Sertindol var ikke toksisk i ett utvalg av in vitro og in vivo gentoksiske studier. Karsinogenstudier
+utført i mus og rotte indikerte ikke utvikling av svulster relevant for den kliniske bruken av sertindol.
+
+
+
+                                                                                                       10/12
+6.      FARMASØYTISKE OPPLYSNINGER
+
+6.1.    Fortegnelse over hjelpestoffer
+
+Tablettkjerne
+Maisstivelse,
+laktosemonohydrat,
+hydroksypropylcellulose,
+mikrokrystallinsk cellulose,
+krysskarmellosenatrium,
+magnesiumstearat.
+
+Drasjélag:
+Hypromellose,
+titandioksid (E171),
+makrogol 400 og
+
+4 mg: Jernoksid, gult (E 172)
+12 mg: Jernoksid, gult og rødt (E 172)
+16 mg: Jernoksid, rødt (E 172)
+20 mg: Jernoksid, gult, rødt og svart (E 172)
+
+6.2.    Uforlikeligheter
+
+Ikke relevant.
+
+6.3.    Holdbarhet
+
+5 år
+
+6.4.    Oppbevaringsbetingelser
+
+Oppbevares i originalemballasjen for å beskyttes mot lys.
+Dette legemidlet krever ingen spesielle oppbevaringsbetingelser vedrørende temperatur.
+
+6.5.    Emballasje
+
+PVC/PVdC-laminatblister (klar eller hvit) med aluminiumsfolie i en kartong: inneholder 7, 10, 14, 20,
+28, 30, 50, 98 eller 100 tabletter.
+
+Polyetylenbeholder (HDPE) med 100 tabletter.
+
+Ikke alle pakningsstørrelser vil nødvendigvis bli markedsført.
+
+6.6.    Spesielle forholdsregler for destruksjon og annen håndtering
+
+Ingen spesielle forholdsregler.
+
+
+7.      INNEHAVER AV MARKEDSFØRINGSTILLATELSEN
+
+H. Lundbeck A/S
+Ottiliavej 9
+2500 Valby
+DANMARK
+
+
+
+                                                                                                 11/12
+8.     MARKEDSFØRINGSTILLATELSESNUMRE
+
+4 mg: 96-0271
+12 mg: 96-0273
+16 mg: 96-0274
+20 mg: 96-0275
+
+
+9.     DATO FOR FØRSTE MARKEDSFØRINGSTILLATELSE/SISTE FORNYELSE
+
+4 mg: 03.11.1997/07.06.2013
+12 mg: 03.11.1997/07.06.2013
+16 mg: 03.11.1997/07.06.2013
+20 mg: 03.11.1997/07.06.2013
+
+
+10.    OPPDATERINGSDATO
+
+23.04.2021
+
+
+
+
+                                                                  12/12
+

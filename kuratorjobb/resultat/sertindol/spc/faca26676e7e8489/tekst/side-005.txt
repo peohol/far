@@ -1,0 +1,59 @@
+Pasienter med lett til moderat nedsatt leverfunksjon bør følges nøye. Redusert dosetitreringshastighet
+og lavere vedlikeholdsdose kan være nødvendig.
+
+Tardive dyskinesier
+Tardive dyskinesier antas å skyldes dopaminreseptorhypersensitivitet i basalgangliene på grunn av
+kronisk reseptorblokade med antipsykotika. Sertindol viser lav insidens av ekstrapyramidale
+symptomer (på nivå med placebo) i kliniske studier. Langvarig behandling med antipsykotika (særlig i
+høye doser) kan være assosiert med risiko for tardive dyskinesier. Reduksjon av dosen eller
+seponering av legemiddel bør derfor vurderes hvis det skulle oppstå tegn på tardive dyskinesier.
+
+Kramper
+Sertindol bør brukes med forsiktighet hos pasienter med kjent tendens til kramper.
+
+Malignt neuroleptikasyndrom
+Malignt neuroleptikasyndrom er et potensielt fatalt symptomkompleks som har vært rapportert i
+sammenheng med antipsykotiske legemidler. Behandling av malignt neuroleptikasyndrom omfatter
+umiddelbar seponering av det antipsykotiske legemiddelet.
+
+Seponering
+Akutte seponeringssymptomer, inkludert kvalme, oppkast, svetting og insomni, er sett etter brå
+seponering av antipsykotiske legemidler. Tilbakefall av psykotiske symptomer kan forekomme, og
+ufrivillige bevegelser kan oppstå (slik som akatisi, dystoni og dyskinesi). Det anbefales derfor gradvis
+seponering.
+
+Hjelpestoffer
+Tablettene inneholder laktosemonohydrat. Pasienter med sjeldne arvelige problemer med
+galaktoseintoleranse, total laktasemangel eller glukose-galaktose malabsorpsjon bør ikke ta dette
+legemidlet.
+Dette legemidlet inneholder mindre enn 1 mmol natrium (23 mg) i hver tablett, og er så godt som
+«natriumfritt».
+
+4.5.    Interaksjoner med andre legemidler og andre former for interaksjoner
+
+Økning i QT intervallet som kan ses ved sertindolbehandling kan forsterkes av samtidig
+administrasjon av andre legemidler som kan forlenge QT intervallet. Samtidig administrasjon av slike
+legemidler er derfor kontraindisert (se pkt. 4.3). Slike interaksjoner kan f.eks.forekomme mellom
+kinidin og sertindol. I tillegg til effektene på forlenget QT intervall (se pkt. 4.3), inhiberes CYP2D6
+merkbart av kinidin.
+
+Sertindol metaboliseres i betydelig grad av CYP2D6 og CYP3A isoenzymene i cytokrom P450
+systemet. CYP2D6 er polymorf i befolkningen og begge isozymene kan hemmes av en rekke
+psykotrope legemidler og andre legemidler (se pkt. 4.4).
+
+CYP2D6
+Plasmakonsentrasjonen av sertindol øker med en faktor på 2-3 hos pasienter som samtidig behandles
+med fluoxetin eller paroxetin (potente hemmere av CYP2D6). Sertindol skal derfor bare brukes med
+stor forsiktighet sammen med disse eller andre CYP2D6 hemmere. En lavere vedlikeholdsdose av
+sertindol kan være nødvendig og nøye EKG monitorering bør utføres før og etter en doseendring av
+disse legemidlene (se pkt. 4.4).
+
+CYP3A
+Mindre økning (< 25 %) av sertindol plasmakonsentrasjonen er sett med makrolidantibiotika (e.g.
+erytromycin, en hemmer av CYP3A) og kalsiumkanalantagonister (diltiazem, verapamil). Den
+inhibitoriske effekten kan forsterkes hos sakte metaboliserere av CYP2D6 (siden eliminering av
+sertindol ved både CYP2D6 og CYP3A vil være påvirket). Fordi det ikke er mulig å identifisere
+pasienter som er sakte metaboliserere av CYP2D6 rutinemessig, er samtidig administrasjon av CYP3A
+hemmere kontraindisert da det kan medføre signifikant økning i sertindol nivåene (se pkt. 4.3).
+
+                                                                                                     5/12

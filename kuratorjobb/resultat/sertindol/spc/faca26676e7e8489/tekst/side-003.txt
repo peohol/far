@@ -1,0 +1,59 @@
+Sertindol er kontraindisert hos pasienter med klinisk signifikant hjerte-karsykdom, stuvningssvikt,
+hjertehypertrofi, arytmier eller bradykardier (<50 slag per minutt) i anamnesen.
+
+Sertindol skal ikke brukes hos pasienter med medfødt langt QT syndrom eller en familieanamnese
+med denne sykdommen, eller hos pasienter med kjent erhvervet forlenget QT-intervall (QTc over 450
+msek hos menn og 470 msek hos kvinner).
+
+Sertindol er kontraindisert hos pasienter som får legemidler som er kjent for å forlenge
+QT intervallet. Relevante klasser omfatter:
+-        klasse Ia og III antiarytmika (eks. kinidin, amiodaron, sotalol, dofetilid)
+-        visse antipsykotika (eks. tioridazin)
+-        visse makrolider (eks. erytromycin)
+-        visse antihistaminer (eks. terfenadin, astemizole)
+-        visse kinoloner (eks. gatifloxacin, moxifloxacin)
+Listen over er ikke utfyllende og andre enkeltstående legemidler som er kjent for å gi forlenget QT
+intervall (eks. cisaprid, litium) er også kontraindisert.
+
+Samtidig administrasjon av sertindol med legemidler kjent som potente hemmere av leverens
+cytokrom P450 3A enzymer er kontraindisert (se pkt 4.5). Relevante klasser omfatter:
+-      systemisk behandling med "azol" antisoppmidler (eks. ketokonazol, itrakonazol)
+-      makrolidantibiotika (eks. erytromycin, klaritromycin)
+-      HIV proteasehemmere (eks. indinavir)
+-      Noen kalsiumkanalblokkere (eks. diltiazem, verapamil)
+
+Listen over er ikke utfyllende og andre enkeltstående legemidler som er kjent for å være kraftige
+hemmere av CYP3A enzymer (eks. cimetidin) er også kontraindisert.
+
+Sertindol er kontraindisert hos pasienter med alvorlig nedsatt leverfunksjon.
+
+4.4.    Advarsler og forsiktighetsregler
+
+Hjerte-kar
+Kliniske studier har vist at sertindol forlenger QT intervallet i større grad enn visse andre
+antipsykotika. Gjennomsnittlig QT forlengelse er større i øvre del av det anbefalte doseringsområdet
+(20 og 24 mg). Forlengelse av QTc intervallet ved noen legemidler er assosiert med mulig utvikling av
+Torsade de Pointes (TdP) arytmier (en potensielt fatal polymorf ventrikulær takykardi), og plutselig
+død. Kliniske og pre-kliniske data har ikke kunnet vise om sertindol er mer arrytmogen enn andre
+antipsykotika. Sertindol bør derfor kun brukes av pasienter som er intolerante overfor minst ett annet
+antipsykotisk legemiddel.
+
+Forskrivende lege bør følge forsiktighetsreglene nøye:
+
+EKG monitorering:
+-     EKG monitorering er påkrevet før og under behandling med sertindol.
+-  Sertindol er kontraindisert hvis QTc intervallet er mer enn 450 msek hos menn og 470 msek hos
+   kvinner ved behandlingsstart.
+-  EKG monitorering skal utføres før behandlingsstart, ved ”steady state” etter ca. 3 uker eller når
+   man når 16 mg, og igjen etter 3 måneders behandling.
+-     Under vedlikeholdsbehandling er EKG påkrevet hver 3. måned.
+-     Under vedlikeholdsbehandling skal EKG monitoreres før og etter en eventuell doseøkning.
+-  EKG anbefales etter tillegg eller økning av dose av annen samtidig behandling som kan øke
+   konsentrasjonen av sertindol (se pkt. 4.5).
+-  Observeres ett QTc intervall på mer enn 500 msek under behandling med sertindol skal
+   behandlingen avsluttes.
+-  For pasienter som opplever symptomer som palpitasjoner, kramper eller synkoper som kan
+   indikere forekomst av arytmier, skal nødvendig evaluering initieres, inklusive EKG monitorering.
+
+
+                                                                                                      3/12

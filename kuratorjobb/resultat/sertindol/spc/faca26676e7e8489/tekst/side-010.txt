@@ -1,0 +1,59 @@
+terapeutiske effekten. Doseringen er derfor individuell og baseres på vurdering av terapeutisk effekt og
+tolerabilitet.
+
+Absorpsjon
+Sertindol absorberes godt med tmax etter oral administrasjon på ca. 10 timer. De forskjellige
+tablettstyrkene er bioekvivalente. Mat og aluminium-magnesium antacida har ingen klinisk signifikant
+effekt på hastighet eller grad av sertindol absorpsjonen.
+
+Distribusjon
+Tilsynelatende distribusjonsvolum (V/F) etter gjentatt dosering er ca. 20 l/kg. Sertindol har en
+plasma-proteinbindingsgrad på ca. 99,5%, primært til albumin og 1-surt glykoprotein. Hos pasienter
+på normal dosering er 90% av de målte konsentrasjonene under 140 ng/ml (ca 320 nmol/L). Sertindol
+penetrerer til røde blodlegemer med en blod/plasma ratio på 1.0. Sertindol passerer lett blod-hjerne
+barrieren og placentabarrieren.
+
+Metabolisme
+To metabolitter er identifisert i humant plasma: dehydrosertindol (oksidasjon av imidazolidinon-
+ringen) og norsertindol (N-dealkylering). Ved steady state er konsentrasjonen av dehydrosertindol og
+norsertindol henholdsvis ca. 80% og 40% av modersubstansen. Sertindols aktivitet skyldes i hovedsak
+modersubstansen, og metabolittene har tilsynelatende ingen signifikante farmakologiske effekter i
+mennesker.
+
+Ekskresjon
+Både sertindol og dens metabolitter elimineres svært sakte, totalt gjenfinnes ca. 50-60% av
+radiomerket dose 14 dager etter administrasjon. Omtrent 4% av dosen skilles ut i urin som
+modersubstans og metabolitter, av dette utgjør modersubstansen mindre enn 1%. Fekal ekskresjon er
+viktigste ekskresjonsvei og er ansvarlig for utskillelse av resten av modersubstansen og dens
+metabolitter.
+
+5.3.    Prekliniske sikkerhetsdata
+
+QT forlengelse på EKG, muligens på grunn av hemming av ensrettede kaliumkanaler (Ikr, HERG), er
+observert i dyrestudier. Sertindol viser likevel fravær av tidlig etter- depolarisering i Purkinje fibre fra
+kanin- og rottehjerter. Tidlig etter-depolarisering antas å være essensiell for å utløse Torsade de
+Pointes. Sertindol induserte ikke Torsade de Pointes ventrikulære arrytmier i isolerte kanin hjerter
+hvor den atrioventrikulære knuten var fjernet, tross eksperimentell introduksjon av alvorlig
+hypokalemi (1.5 mmol) og bradykardi. Ekstrapolering av funn i dyremodeller til mennesket med
+hensyn på QT forlengelse og arrytmier, må likevel gjøres med forsiktighet da betydelige artsforskjeller
+kan forekomme.
+
+Sertindol har lav akutt toksisitet. I kroniske toksisitetsstudier i rotte og hund (3-5 ganger klinisk
+eksponering) ble flere effekter observert. Disse effektene er i tråd med legemidlets farmakologiske
+egenskaper.
+
+Dyrereproduksjonsstudier har ikke vist teratogene effekter.
+
+En peri-/postnatal studie hos rotte viste økt mortalitet hos avkom, redusert vekst og forsinket utvikling
+ved doser som ga maternell effekt og var lik eller lavere enn maksimalt anbefalt dose på en mg/m2
+basis. Parring og fertilitet hos avkom etter sertindol-behandlede hunnrotter var redusert.
+
+Parring og fertilitet ble påvirket hos voksne hannrotter ved doser på 0,14 mg/kg/dag og over. Den
+nedsatte fertilitet hos voksne dyr var reversibel og tilskrives sertindols farmakologiske profil.
+
+Sertindol var ikke toksisk i ett utvalg av in vitro og in vivo gentoksiske studier. Karsinogenstudier
+utført i mus og rotte indikerte ikke utvikling av svulster relevant for den kliniske bruken av sertindol.
+
+
+
+                                                                                                       10/12

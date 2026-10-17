@@ -1,0 +1,59 @@
+Ved alvorlige ekstrapyramidale symptomer bør antikolinerg behandling institueres. Medisinsk
+overvåkning og monitorering bør fortsette inntil pasienten er restituert.
+
+
+5.      FARMAKOLOGISKE EGENSKAPER
+
+5.1.    Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: limbisk selektiv antipsykotikum
+ATC-kode: N05A E03
+
+Det er foreslått at sertindols neurofarmakologiske profil som et antipsykotisk legemiddel skyldes dets
+selektive inhibitoriske effekt på mesolimbiske dopaminerge neuroner, og henger sammen med dets
+balanserte inhibitoriske effekt på sentrale dopamin D2 -, serotonin 5HT2 - og 1-adrenerge reseptorer.
+
+I dyrefarmakologiske studier hemmet sertindol spontant dopaminerge neuroner i det mesolimbiske
+ventrale tegmentale området (VTA) i hjernen med en selektivitetsratio på over 100 sammenlignet med
+dopaminerge neuroner i substantia nigra pars compacta (SNC). Hemming av aktiviteten i SNC antas å
+være involvert i de motoriske bivirkninger (EPS) som ses med mange antipsykotiske legemidler.
+
+Antipsykotiske legemidler kan føre til økt serum-prolaktinnivå via dopaminblokade. Prolaktinnivåene
+hos pasienter som fikk sertindol forble innenfor normale verdier, både i korttidsstudier og i
+langtidsbehandling (ett år).
+
+Etter markedsføring er det av og til rapportert hyperprolaktinemi og prolaktin-relaterte hendelser ved
+bruk av sertindol.
+
+Sertindol har ingen effekt på muskarine og H1 reseptorer. Dette bekreftes ved fravær av antikolinerge
+og sedative effekter relatert til disse reseptorene.
+
+Ytterligere informasjon om kliniske studier
+Sertindole Cohort Prospective Study (SCoP) var en multinasjonal, stor, enkel studie som vurderte
+normal legemiddelbruk, og som sammenlignet alle årsaker til mortalitet, hjertesikkerhet og suicidalitet
+av sertindol og risperidon. Studien var designet som en prospektiv, randomisert, delvis blindet studie
+med to parallelle grupper; sertindol (n=4930) og risperidon (n=4928) med behandlingsperioder på opp
+til 4 år.
+
+Alle årsaker til mortalitet (første primære endepunkt) var likt for både sertindol og risperidon.
+Dødsårsak var forskjellig for de to behandlingsgruppene. Viktigste årsak til død hos pasienter
+behandlet med sertindol var relatert til hjerte, med en signifikant høyere risiko for kardial dødelighet
+enn i risperidon-gruppen, Det var en lavere risiko for selvmordsforsøk hos pasienter behandlet med
+sertindol, selv om risiko for gjennomførte selvmord ikke var signifikant forskjellige i de to gruppene.
+
+5.2.    Farmakokinetiske egenskaper
+
+Sertindol elimineres via metabolisme i lever med en gjennomsnittlig terminal halveringstid på ca. 3
+dager. Clearance avtar etter gjentatt dosering til gjennomsnittlig 14 l/time. (kvinner har ca. 20% lavere
+tilsynelatende clearance enn menn, men verdiene er sammenlignbare når man korrigerer for
+forskjeller i mengden fettvev). Etter gjentatt dosering er derfor akkumuleringen større enn forutsett ut
+fra enkel dose, p.g.a. en økning i den systemiske biotilgjengeligheten. Ved steady-state er likevel
+clearance uavhengig av dosen og plasmakonsentrasjonen proporsjonal med dosen. Moderat
+interindividuell variabilitet i sertindols farmakokinetikk skyldes polymorfisme i cytokrom P450 2D6
+(CYP2D6). Hos pasienter som mangler dette leverenzymet (sakte metaboliserere) nedsettes clearance
+av sertindol til mellom 1/2 til 1/3 i forhold til raske metaboliserere. Sakte metaboliserere (opp til 10%
+av befolkningen) kan derfor ha opptil 2-3 ganger høyere plasmakonsentrasjon enn normalt. Det er
+ingen klar sammenheng mellom konsentrasjonen av sertindol hos den enkelte pasient og den
+
+
+                                                                                                      9/12

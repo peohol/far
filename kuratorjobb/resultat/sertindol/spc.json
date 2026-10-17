@@ -1,0 +1,366 @@
+{
+  "stoff": "sertindol",
+  "status": "ok",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-17T04:15:05.944175+00:00"
+  },
+  "dekning": {
+    "dekket": true,
+    "preparater": 4,
+    "hentet": 4,
+    "dokumenter": 1,
+    "mangler": []
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 4 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 4,
+        "ikke_dmp": 0,
+        "uten_omtale": 0
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "ok",
+      "melding": "Alle 4 preparatene FEST oppgir, har en hentet preparatomtale fra DMP.",
+      "antall": {
+        "preparater": 4,
+        "hentet": 4,
+        "mangler": 0,
+        "dokumenter": 1
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-00273.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-00273.pdf",
+      "hentet_kl": "2026-10-17T14:55:41.021Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "196571",
+        "content-md5": "oju5E58/+M60nlqLaCvy5g==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:53 GMT",
+        "etag": "0x8DE53793E444E4C",
+        "date": "Sat, 17 Oct 2026 14:55:41 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_515362B7-D224-4323-9FBA-CCD3938EAF2B",
+          "varenavn": "Serdolect",
+          "navn_form_styrke": "Serdolect tab 12 mg",
+          "produsent": "H. Lundbeck A/S",
+          "atc": "N05AE03",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-00273.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (196571 byte).",
+          "antall": {
+            "bytes": 196571
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "faca26676e7e8489b9007a7e3bd1c0c98989208410638f903f5682b97d381687"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-00271.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-00271.pdf",
+      "hentet_kl": "2026-10-17T14:55:46.317Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "196571",
+        "content-md5": "oju5E58/+M60nlqLaCvy5g==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:51 GMT",
+        "etag": "0x8DE53793D6817E9",
+        "date": "Sat, 17 Oct 2026 14:55:46 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_72B53B89-0005-4D4E-8F84-E1A3392F239C",
+          "varenavn": "Serdolect",
+          "navn_form_styrke": "Serdolect tab 4 mg",
+          "produsent": "H. Lundbeck A/S",
+          "atc": "N05AE03",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-00271.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (196571 byte).",
+          "antall": {
+            "bytes": 196571
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "faca26676e7e8489b9007a7e3bd1c0c98989208410638f903f5682b97d381687"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-00274.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-00274.pdf",
+      "hentet_kl": "2026-10-17T14:55:47.347Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "196571",
+        "content-md5": "oju5E58/+M60nlqLaCvy5g==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:43 GMT",
+        "etag": "0x8DE537938A6AC4F",
+        "date": "Sat, 17 Oct 2026 14:55:47 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_99625467-98DD-43B9-AFA5-D4DCB0C0F8CC",
+          "varenavn": "Serdolect",
+          "navn_form_styrke": "Serdolect tab 16 mg",
+          "produsent": "H. Lundbeck A/S",
+          "atc": "N05AE03",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-00274.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (196571 byte).",
+          "antall": {
+            "bytes": 196571
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "faca26676e7e8489b9007a7e3bd1c0c98989208410638f903f5682b97d381687"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-00275.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-00275.pdf",
+      "hentet_kl": "2026-10-17T14:55:48.240Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "196571",
+        "content-md5": "oju5E58/+M60nlqLaCvy5g==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:57 GMT",
+        "etag": "0x8DE537940AA6E35",
+        "date": "Sat, 17 Oct 2026 14:55:48 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_AF914F55-A965-47AD-9353-9EEB263B0011",
+          "varenavn": "Serdolect",
+          "navn_form_styrke": "Serdolect tab 20 mg",
+          "produsent": "H. Lundbeck A/S",
+          "atc": "N05AE03",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-00275.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (196571 byte).",
+          "antall": {
+            "bytes": 196571
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "faca26676e7e8489b9007a7e3bd1c0c98989208410638f903f5682b97d381687"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "faca26676e7e8489b9007a7e3bd1c0c98989208410638f903f5682b97d381687",
+      "bytes": 196571,
+      "mappe": "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489",
+      "pdf": {
+        "sider": 12,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "Portrait SmPC",
+        "laget": "Mon Apr 26 08:48:53 2021 UTC",
+        "endret": "Mon Apr 26 08:48:53 2021 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/original.pdf",
+        "tekst": "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/tekst/side-001.txt",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/tekst/side-002.txt",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/tekst/side-003.txt",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/tekst/side-004.txt",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/tekst/side-005.txt",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/tekst/side-006.txt",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/tekst/side-007.txt",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/tekst/side-008.txt",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/tekst/side-009.txt",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/tekst/side-010.txt",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/tekst/side-011.txt",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/tekst/side-012.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/sider/side-001.png",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/sider/side-002.png",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/sider/side-003.png",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/sider/side-004.png",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/sider/side-005.png",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/sider/side-006.png",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/sider/side-007.png",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/sider/side-008.png",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/sider/side-009.png",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/sider/side-010.png",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/sider/side-011.png",
+          "kuratorjobb/resultat/sertindol/spc/faca26676e7e8489/sider/side-012.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 6,
+        "til": 8
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (12 sider).",
+          "antall": {
+            "sider": 12
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 25437
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 6."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 12
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

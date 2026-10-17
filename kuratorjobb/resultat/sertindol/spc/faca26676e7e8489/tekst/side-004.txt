@@ -1,0 +1,59 @@
+-    EKG monitorering utføres ideelt sett om morgenen. Bazett eller Fridericia formlene for QTc
+     beregning foretrekkes.
+
+Risikoen for QT forlengelse øker hos pasienter som samtidig behandles med legemidler som forlenger
+QTc intervallet eller som hemmer sertindolmetabolismen (se pkt. 4.3)
+
+Før behandling med sertindol initieres bør serum kalium- og magnesiumnivåene bestemmes hos
+pasienter med risiko for betydelige elektrolyttforstyrrelser. Lav serum kalium og magnesium bør
+korrigeres før behandlingen starter. Bestemmelse av serum kalium anbefales hos pasienter som
+opplever oppkast, diare, behandling med diuretika som påvirker kaliumnivåene, eller andre
+elektrolyttforstyrrelser.
+
+På grunn av den 1-blokkerende effekten kan sertindol gi symptomer på ortostatisk hypotensjon under
+den initiale dosetitreringsfasen.
+
+Antipsykotiske legemidler kan hemme effekten av dopaminagonister. Sertindol bør brukes med
+forsiktighet hos pasienter med Parkinsons sykdom.
+
+Visse SSRI, som fluoxetin og paroxetin (potente hemmere av CYP2D6), kan øke plasmanivåene av
+sertindol med en faktor på 2 til 3. Sertindol bør derfor bare brukes sammen med disse legemidlene
+med stor forsiktighet, og bare hvis den potensielle fordelen oppveier risikoen. En lavere
+vedlikeholdsdose av sertindol kan være nødvendig, og nøye EKG monitorering bør utføres før og etter
+en doseendring av disse legemidlene (se pkt. 4.5).
+
+Serdindol bør brukes med forsiktighet hos pasienter som er langsomme omsettere av CYP2D6 (se
+pkt.4.5).
+
+Hyperglykemi eller forverring av allerede eksisterende diabetes er rapportert i svært sjeldne tilfeller
+under behandling med sertindol. Klinisk oppfølging anbefales for diabetikere og pasienter med
+risikofaktorer for utvikling av diabetes mellitus.
+
+Økt dødelighet hos eldre pasienter med demens
+Data fra to større observasjonsstudier har vist at eldre pasienter med demens behandlet med
+antipsykotika har litt økt risiko for død sammenlignet med de som ikke har fått denne behandlingen.
+Dataene er ikke tilstrekkelige til å gi et klart estimat av risikoomfanget og årsaken til økt risiko er ikke
+kjent.
+
+Sertindol er ikke godkjent til behandling av demens-relaterte adferdsforstyrrelser.
+
+Risiko for cerebrovaskulære hendelser
+Hos demente pasienter er det i randomiserte placebo-kontrollerte kliniske studier med noen atypiske
+antipsykotika, sett en tredobbel økning i risiko for cerebrovaskulære hendelser. Mekanismen for denne
+økte risikoen er ikke kjent. Økt risiko kan ikke utelukkes for andre antipsykotika eller andre
+pasientpopulasjoner. Serdolect bør brukes med forsiktighet hos pasienter som har risikofaktorer for
+hjerneslag.
+
+Med tanke på den økte risikoen for signifikant hjerte-karsykdom hos eldre bør sertindol brukes med
+forsiktighet hos pasienter over 65 år. Behandling skal bare påbegynnes etter grundig hjerte-
+karundersøkelse.
+
+Venøs tromboembolisme
+Det er rapportert tilfeller av venøs tromboembolisme (VTE) ved bruk av antipsykotika. Siden
+pasienter som er behandlet med antipsykotika ofte har risikofaktorer for VTE, bør alle mulige
+risikofaktorer for VTE identifiseres før og under behandling med sertindol, og forebyggende tiltak
+iverksettes.
+
+Redusert leverfunksjon
+
+                                                                                                        4/12
