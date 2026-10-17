@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T03:58:41.179Z",
+  "oppdatert_kl": "2026-10-17T03:59:40.858Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 19,
   "stoffer": {
@@ -5188,6 +5188,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "reserver-brekspiprazol-bokforing",
         "status-0430",
         "fullfort-lamotrigin-0019",
         "forny-lamotrigin-0019-gren",
@@ -5236,278 +5237,24 @@
         "reserver-ghb-2",
         "fullfort-ghb-1",
         "forny-ghb-1",
-        "reserver-ghb-1",
-        "fullfort-lurasidon-1"
+        "reserver-ghb-1"
       ],
       "siste": {
-        "id": "status-0430",
-        "sha256": "00d2ba92613e572241ea21bdd7920d9cde4a0e051f1cac39d5a41c258a40af81",
+        "id": "reserver-brekspiprazol-bokforing",
+        "sha256": "a4b00139d4f3787f2c3f39102d99da673f2f86d0d17be0c7b9197cec36748bb8",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "status-0430",
-          "foresporsel_sha256": "00d2ba92613e572241ea21bdd7920d9cde4a0e051f1cac39d5a41c258a40af81",
-          "handling": "status",
-          "utfall": "ok",
-          "melding": "Oversikten over køen.",
-          "behandlet_kl": "2026-10-17T03:58:41.179Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39000799122",
-          "ko": {
-            "oppdatert_kl": "2026-10-17T03:58:41.179Z",
-            "malt_kl": "2026-10-16T18:10:24.195Z",
-            "antall": {
-              "klar": 86,
-              "reservert": 0,
-              "fagarbeid_ferdig": 0,
-              "venter_godkjenning": 4,
-              "sammenslatt": 0,
-              "publisert": 3,
-              "blokkert": 6,
-              "utenfor": 1
-            },
-            "aktive": [],
-            "neste": [
-              {
-                "stoff": "kariprazin",
-                "modus": "de_novo",
-                "poeng": 1464.8,
-                "grunner": [
-                  "Fortsetter den avbrutte kurateringen kariprazin-0012.",
-                  "De novo-kuratering i runden som gjelder.",
-                  "Aldri kuratert.",
-                  "Ingen kuratering å regne alderen fra.",
-                  "7 av 13 redaksjonelle seksjoner er tomme.",
-                  "18 av 22 elementer har ingen kilde.",
-                  "Bare 2 referanser."
-                ],
-                "tidligst_kl": null
-              },
-              {
-                "stoff": "vortioksetin",
-                "modus": "de_novo",
-                "poeng": 1455.7,
-                "grunner": [
-                  "Fortsetter den avbrutte kurateringen vortioksetin-0015.",
-                  "De novo-kuratering i runden som gjelder.",
-                  "Aldri kuratert.",
-                  "Ingen kuratering å regne alderen fra.",
-                  "6 av 13 redaksjonelle seksjoner er tomme.",
-                  "19 av 24 elementer har ingen kilde.",
-                  "Bare 4 referanser."
-                ],
-                "tidligst_kl": null
-              },
-              {
-                "stoff": "fenobarbital",
-                "modus": "de_novo",
-                "poeng": 447.6,
-                "grunner": [
-                  "De novo-kuratering i runden som gjelder.",
-                  "Aldri kuratert.",
-                  "Ingen kuratering å regne alderen fra.",
-                  "9 av 13 redaksjonelle seksjoner er tomme.",
-                  "1 av 6 elementer har ingen kilde.",
-                  "Bare 3 referanser."
-                ],
-                "tidligst_kl": null
-              },
-              {
-                "stoff": "fenytoin",
-                "modus": "de_novo",
-                "poeng": 447.6,
-                "grunner": [
-                  "De novo-kuratering i runden som gjelder.",
-                  "Aldri kuratert.",
-                  "Ingen kuratering å regne alderen fra.",
-                  "9 av 13 redaksjonelle seksjoner er tomme.",
-                  "1 av 6 elementer har ingen kilde.",
-                  "Bare 3 referanser."
-                ],
-                "tidligst_kl": null
-              },
-              {
-                "stoff": "levetiracetam",
-                "modus": "de_novo",
-                "poeng": 447.6,
-                "grunner": [
-                  "De novo-kuratering i runden som gjelder.",
-                  "Aldri kuratert.",
-                  "Ingen kuratering å regne alderen fra.",
-                  "9 av 13 redaksjonelle seksjoner er tomme.",
-                  "1 av 6 elementer har ingen kilde.",
-                  "Bare 3 referanser."
-                ],
-                "tidligst_kl": null
-              },
-              {
-                "stoff": "okskarbazepin",
-                "modus": "de_novo",
-                "poeng": 447.6,
-                "grunner": [
-                  "De novo-kuratering i runden som gjelder.",
-                  "Aldri kuratert.",
-                  "Ingen kuratering å regne alderen fra.",
-                  "9 av 13 redaksjonelle seksjoner er tomme.",
-                  "1 av 6 elementer har ingen kilde.",
-                  "Bare 3 referanser."
-                ],
-                "tidligst_kl": null
-              },
-              {
-                "stoff": "sertindol",
-                "modus": "de_novo",
-                "poeng": 447.6,
-                "grunner": [
-                  "De novo-kuratering i runden som gjelder.",
-                  "Aldri kuratert.",
-                  "Ingen kuratering å regne alderen fra.",
-                  "9 av 13 redaksjonelle seksjoner er tomme.",
-                  "1 av 6 elementer har ingen kilde.",
-                  "Bare 2 referanser."
-                ],
-                "tidligst_kl": null
-              },
-              {
-                "stoff": "topiramat",
-                "modus": "de_novo",
-                "poeng": 447.6,
-                "grunner": [
-                  "De novo-kuratering i runden som gjelder.",
-                  "Aldri kuratert.",
-                  "Ingen kuratering å regne alderen fra.",
-                  "9 av 13 redaksjonelle seksjoner er tomme.",
-                  "1 av 6 elementer har ingen kilde.",
-                  "Bare 4 referanser."
-                ],
-                "tidligst_kl": null
-              },
-              {
-                "stoff": "valproat",
-                "modus": "de_novo",
-                "poeng": 447.6,
-                "grunner": [
-                  "De novo-kuratering i runden som gjelder.",
-                  "Aldri kuratert.",
-                  "Ingen kuratering å regne alderen fra.",
-                  "9 av 13 redaksjonelle seksjoner er tomme.",
-                  "1 av 6 elementer har ingen kilde.",
-                  "Bare 3 referanser."
-                ],
-                "tidligst_kl": null
-              },
-              {
-                "stoff": "atomoksetin",
-                "modus": "de_novo",
-                "poeng": 446.4,
-                "grunner": [
-                  "De novo-kuratering i runden som gjelder.",
-                  "Aldri kuratert.",
-                  "Ingen kuratering å regne alderen fra.",
-                  "9 av 13 redaksjonelle seksjoner er tomme.",
-                  "1 av 7 elementer har ingen kilde.",
-                  "Bare 3 referanser."
-                ],
-                "tidligst_kl": null
-              }
-            ],
-            "til_gjennomgang": [
-              {
-                "stoff": "cbd",
-                "gren": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
-                "grenstatus": "klar",
-                "status": "venter_godkjenning"
-              },
-              {
-                "stoff": "flunitrazepam",
-                "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
-                "grenstatus": "klar",
-                "status": "venter_godkjenning"
-              },
-              {
-                "stoff": "ketobemidon",
-                "gren": "030084b9-47c7-4ab5-8a71-11bfe76b6f5c",
-                "grenstatus": "klar",
-                "status": "venter_godkjenning"
-              },
-              {
-                "stoff": "lamotrigin",
-                "gren": "48e10b1b-31b0-452d-9e29-8404e30aa989",
-                "grenstatus": "klar",
-                "status": "venter_godkjenning"
-              }
-            ],
-            "blokkert": [
-              {
-                "stoff": "brekspiprazol",
-                "blokkeringer": [
-                  {
-                    "kode": "agent",
-                    "grunn": "Krav 3: beskyttet norsk referanseomraade avviker fra AGNP 2026; et menneske avgjoer. Se merknad i grenen.",
-                    "kl": "2026-10-16T20:55:02.710Z",
-                    "kilde": "agent"
-                  }
-                ]
-              },
-              {
-                "stoff": "doksepin",
-                "blokkeringer": [
-                  {
-                    "kode": "agent",
-                    "grunn": "Krav 3: steady state i viktige data maa avgjoeres av et menneske (sperrende traad). Rev 5 klar.",
-                    "kl": "2026-10-17T01:06:42.830Z",
-                    "kilde": "agent"
-                  }
-                ]
-              },
-              {
-                "stoff": "etanol",
-                "blokkeringer": [
-                  {
-                    "kode": "uten_fagside",
-                    "grunn": "Stoffet har ingen publisert fagside å kuratere.",
-                    "kl": "2026-10-14T04:50:43.758Z",
-                    "kilde": "system"
-                  }
-                ]
-              },
-              {
-                "stoff": "kokain",
-                "blokkeringer": [
-                  {
-                    "kode": "uten_fagside",
-                    "grunn": "Stoffet har ingen publisert fagside å kuratere.",
-                    "kl": "2026-10-14T04:50:43.758Z",
-                    "kilde": "system"
-                  }
-                ]
-              },
-              {
-                "stoff": "mdma",
-                "blokkeringer": [
-                  {
-                    "kode": "uten_fagside",
-                    "grunn": "Stoffet har ingen publisert fagside å kuratere.",
-                    "kl": "2026-10-14T04:50:43.758Z",
-                    "kilde": "system"
-                  }
-                ]
-              },
-              {
-                "stoff": "metamfetamin",
-                "blokkeringer": [
-                  {
-                    "kode": "uten_fagside",
-                    "grunn": "Stoffet har ingen publisert fagside å kuratere.",
-                    "kl": "2026-10-14T04:50:43.758Z",
-                    "kilde": "system"
-                  }
-                ]
-              }
-            ]
-          }
+          "foresporsel_id": "reserver-brekspiprazol-bokforing",
+          "foresporsel_sha256": "a4b00139d4f3787f2c3f39102d99da673f2f86d0d17be0c7b9197cec36748bb8",
+          "handling": "reserver",
+          "utfall": "avvist",
+          "melding": "brekspiprazol kan ikke reserveres nå: blokkert.",
+          "behandlet_kl": "2026-10-17T03:59:40.858Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39000855985"
         }
       },
       "besvart_commit": "58b9d21bbc6d652d5ecece965470ef0f5c8961a4",
-      "sist_brukt_kl": "2026-10-17T03:58:41.179Z"
+      "sist_brukt_kl": "2026-10-17T03:59:40.858Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
