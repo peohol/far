@@ -1,19 +1,19 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-202610170751",
-  "foresporsel_sha256": "ccb09a4bf43d242e8c0ee2220592ab405b3acd5b84e17749d1baf952bdff075c",
-  "handling": "reserver",
+  "foresporsel_id": "forny-fenytoin-0037-0852",
+  "foresporsel_sha256": "7f559b25ea91ff79589de5b61bbd326c440e9a651b460a64c6dfe8dacc6a65c4",
+  "handling": "forny",
   "utfall": "ok",
-  "melding": "fenytoin er reservert til 2026-10-17T10:52:23.938Z.",
-  "behandlet_kl": "2026-10-17T07:52:23.938Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39015237809",
+  "melding": "Reservasjonen av fenytoin varer til 2026-10-17T11:52:45.185Z.",
+  "behandlet_kl": "2026-10-17T08:52:45.185Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39019001449",
   "oppgave": {
     "oppgave": "fenytoin-0037",
     "stoff": "fenytoin",
     "navn": "Fenytoin",
     "modus": "de_novo",
     "forsok": 1,
-    "frist_kl": "2026-10-17T10:52:23.938Z",
+    "frist_kl": "2026-10-17T11:52:45.185Z",
     "jobbgren": "kuratorjobb/fenytoin-0037",
     "kurateringsgren": "kuratering/fenytoin-0037",
     "pr": null,
@@ -30,15 +30,8 @@
       "elementer_uten_kilde": 1
     },
     "prioritet": {
-      "poeng": 447.6,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
