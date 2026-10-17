@@ -1,37 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-sertindol-0040-1551",
-  "foresporsel_sha256": "f45237fb6f7d337cd369e2620c6082aa0eab1a40995cf18bae5abae6e8e93681",
-  "handling": "forny",
+  "foresporsel_id": "fullfort-sertindol-0040",
+  "foresporsel_sha256": "8f253f4ee1df95a10700a5589ac0f990288496934e6db8f26f927c33dcc53dc6",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "Reservasjonen av sertindol varer til 2026-10-17T18:52:25.854Z.",
-  "behandlet_kl": "2026-10-17T15:52:25.854Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39046934162",
-  "oppgave": {
-    "oppgave": "sertindol-0040",
-    "stoff": "sertindol",
-    "navn": "Sertindol",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T18:52:25.854Z",
-    "jobbgren": "kuratorjobb/sertindol-0040",
-    "kurateringsgren": "kuratering/sertindol-0040",
-    "pr": null,
-    "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
-    "gjenoppta": null,
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-17T14:23:30.777Z",
-      "side": true,
-      "elementer": 6,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 4,
-      "referanser": 2,
-      "elementer_uten_kilde": 1
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "melding": "sertindol er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-17T16:20:50.041Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39048981451"
 }
