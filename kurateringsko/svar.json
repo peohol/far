@@ -1,10 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-brekspiprazol-bok2",
-  "foresporsel_sha256": "ed3e1e4eec737147b76a0bfb7f07e667e94c7b0a0d68e7828b6db02c047a113c",
+  "foresporsel_id": "reserver-doksepin-bok2",
+  "foresporsel_sha256": "2954991340f12d74403dfca86b927f1903befc198586c51ad7ac0ed22d34612b",
   "handling": "reserver",
   "utfall": "avvist",
-  "melding": "brekspiprazol kan ikke reserveres nå: blokkert.",
-  "behandlet_kl": "2026-10-17T04:02:15.730Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39001028010"
+  "melding": "doksepin kan ikke reserveres nå: blokkert.",
+  "behandlet_kl": "2026-10-17T04:03:00.158Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39001075603"
 }
