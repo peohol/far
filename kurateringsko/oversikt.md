@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T15:52:25.854Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T16:20:50.041Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 79 · Reservert: 1 · Venter på godkjenning: 11 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
+Klar: 79 · Venter på godkjenning: 12 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-- **sertindol** (sertindol-0040), frist 2026-10-17T18:52:25.854Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
@@ -20,6 +20,7 @@ Klar: 79 · Reservert: 1 · Venter på godkjenning: 11 · Publisert: 3 · Blokke
 - **ketobemidon**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **lamotrigin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **levetiracetam**: kurateringsgren i OUSFAR (klar), venter på godkjenning
+- **sertindol**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **vortioksetin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 
 ## Blokkert
