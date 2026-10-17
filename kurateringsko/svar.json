@@ -1,37 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-fenobarbital-0026-gren",
-  "foresporsel_sha256": "82a6d3ed70a911b7a4ffed9c65393c8a8f5bde37d71918baf15db1e6cf1b6040",
-  "handling": "forny",
+  "foresporsel_id": "tilbakestill-brekspiprazol-0645",
+  "foresporsel_sha256": "eb9a3e48e0a8044d6c1ee80abff9c0806bc85159ee7d77add6eea3aba35a8c9e",
+  "handling": "tilbakestill",
   "utfall": "ok",
-  "melding": "Reservasjonen av fenobarbital varer til 2026-10-17T09:24:57.621Z.",
-  "behandlet_kl": "2026-10-17T06:24:57.621Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39009802382",
-  "oppgave": {
-    "oppgave": "fenobarbital-0026",
-    "stoff": "fenobarbital",
-    "navn": "Fenobarbital",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T09:24:57.621Z",
-    "jobbgren": "kuratorjobb/fenobarbital-0026",
-    "kurateringsgren": "kuratering/fenobarbital-0026",
-    "pr": null,
-    "gren": "f99c5bb5-b7f1-4038-b5ab-0cab1a706f97",
-    "gjenoppta": null,
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-16T18:10:24.842Z",
-      "side": true,
-      "elementer": 6,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 4,
-      "referanser": 3,
-      "elementer_uten_kilde": 1
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "melding": "brekspiprazol er tilbakestilt og gis tilbake til kuratoren med kurateringsgrenen 65e21273-dd2c-408b-b987-9ef8adf219c9.",
+  "behandlet_kl": "2026-10-17T06:46:12.505Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39011116194"
 }
