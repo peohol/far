@@ -1,18 +1,19 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T18:45:55.091Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T18:46:50.304Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 78 · Reservert: 1 · Venter på godkjenning: 12 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
+Klar: 78 · Venter på godkjenning: 13 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-- **fenobarbital** (fenobarbital-0043), frist 2026-10-17T21:45:55.091Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
 - **brekspiprazol**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **cbd**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **doksepin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
+- **fenobarbital**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **fenytoin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **flunitrazepam**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **kariprazin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
