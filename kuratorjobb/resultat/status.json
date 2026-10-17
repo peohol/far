@@ -1,0 +1,18 @@
+{
+  "versjon": 1,
+  "status": "kjorer",
+  "jobb": {
+    "gren": "kuratorjobb/ketobemidon-0018",
+    "foresporsel_commit": "fffc419225be29d6811b283c8674de672e80fec7",
+    "foresporsel_sha256": "3508f88899f5df5cc6ea94fd805e2ec65c7b5ac5b0ec508319a140aef4dd76e4",
+    "kode_commit": "548dba55e6654e91eba4e7467891d32c39cfb506",
+    "kjoring": "https://github.com/peohol/far/actions/runs/38992991199",
+    "startet_kl": "2026-10-17T01:57:47.154Z",
+    "ferdig_kl": null
+  },
+  "foresporsel": null,
+  "referanse": null,
+  "feil": [],
+  "bruker": [],
+  "stoffer": {}
+}
