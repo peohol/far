@@ -1,10 +1,56 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-cbd-0029",
-  "foresporsel_sha256": "8ba2dc2aee020ae03a5d3eff145b6ddf9478931be8d8d7af3f6bdd6a769ed514",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-ketobemidon-073939",
+  "foresporsel_sha256": "ee782829899c5bf2e0ef2f92e75d7f382fe0196926549040e7c529d35f076e6a",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "cbd er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-17T07:39:19.320Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39014421016"
+  "melding": "ketobemidon er reservert til 2026-10-17T10:40:06.451Z.",
+  "behandlet_kl": "2026-10-17T07:40:06.451Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39014464744",
+  "oppgave": {
+    "oppgave": "ketobemidon-0030",
+    "stoff": "ketobemidon",
+    "navn": "Ketobemidon",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-17T10:40:06.451Z",
+    "jobbgren": "kuratorjobb/ketobemidon-0018",
+    "kurateringsgren": "kuratering/ketobemidon-0030",
+    "pr": null,
+    "gren": "030084b9-47c7-4ab5-8a71-11bfe76b6f5c",
+    "gjenoppta": {
+      "oppgave": "ketobemidon-0023",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "avbrutt_kl": "2026-10-17T06:24:57.621Z",
+      "grunn": "Kontrolløren har bedt om endringer i kontrollrunde 3.",
+      "fase": null,
+      "jobbgren": "kuratorjobb/ketobemidon-0018",
+      "kurateringsgren": null,
+      "pr": null,
+      "gren": "030084b9-47c7-4ab5-8a71-11bfe76b6f5c",
+      "kunnskapsgrense": "2026-10-17"
+    },
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-16T18:10:24.842Z",
+      "side": true,
+      "elementer": 8,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 4,
+      "referanser": 1,
+      "elementer_uten_kilde": 2
+    },
+    "prioritet": {
+      "poeng": 1451.7,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen ketobemidon-0023.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "2 av 8 elementer har ingen kilde.",
+        "Bare 1 referanser."
+      ]
+    }
+  }
 }
