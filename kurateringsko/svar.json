@@ -1,10 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "tilbakestill-brekspiprazol-1",
-  "foresporsel_sha256": "2c98934ebd1715d0ef9594952d5a7e452ceb0f573c6fc0082e621f415ef4dfa9",
+  "foresporsel_id": "tilbakestill-doksepin-1",
+  "foresporsel_sha256": "6784f10d69d16fb66296adc19f1cd7799625b0560b8819e19da85e4057f3b84e",
   "handling": "tilbakestill",
   "utfall": "ok",
-  "melding": "brekspiprazol er tilbakestilt.",
-  "behandlet_kl": "2026-10-17T04:00:34.390Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39000916582"
+  "melding": "doksepin er tilbakestilt.",
+  "behandlet_kl": "2026-10-17T04:01:23.084Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39000969666"
 }
