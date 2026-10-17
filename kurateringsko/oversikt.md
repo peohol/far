@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T09:30:48.929Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T10:14:38.296Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 82 · Reservert: 1 · Venter på godkjenning: 9 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
+Klar: 82 · Venter på godkjenning: 10 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
 
 ## Pågår
 
-- **fenytoin** (fenytoin-0037), frist 2026-10-17T12:17:08.292Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
@@ -14,6 +14,7 @@ Klar: 82 · Reservert: 1 · Venter på godkjenning: 9 · Publisert: 3 · Blokker
 - **cbd**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **doksepin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **fenobarbital**: kurateringsgren i OUSFAR (klar), venter på godkjenning
+- **fenytoin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **flunitrazepam**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **kariprazin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **ketobemidon**: kurateringsgren i OUSFAR (klar), venter på godkjenning
