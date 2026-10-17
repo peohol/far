@@ -119,7 +119,7 @@ a.utgaveliste__rad:focus-visible {
   color: var(--blekk-dempet);
 }
 
-/* --- «Følg agenten»: der agenten arbeider, og det den nettopp endret ---------- */
+/* --- «Følg agenten»: stedet som følges, og det agenten nettopp endret --------- */
 .utgave--agent {
   position: relative;
   outline: 2px solid var(--aksent);
@@ -128,7 +128,7 @@ a.utgaveliste__rad:focus-visible {
 }
 
 /* Merket står på kanten øverst, så det ikke dekker tittelen eller knappene. */
-.utgave--agent::before {
+.utgave--agent[data-agentmerke]::before {
   content: attr(data-agentmerke);
   position: absolute;
   z-index: 1;

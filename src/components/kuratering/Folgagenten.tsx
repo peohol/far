@@ -100,11 +100,33 @@ export function useEndringene(visning: Sideutgave | null): Endringene | null {
   return spor.endringene
 }
 
-/** Elementet stedet er på siden: kortet når det står der, ellers seksjonen. */
-function elementFor(sted: Sted): HTMLElement | null {
-  const kort = sted.kort ? document.getElementById(elementAnker(sted.kort)) : null
-  return kort ?? (sted.seksjon ? document.getElementById(panelAnker(sted.seksjon)) : null)
+/** Kortet og seksjonen stedet peker på, slik de står på siden nå. */
+function paSiden(sted: Sted) {
+  return {
+    kort: sted.kort ? document.getElementById(elementAnker(sted.kort)) : null,
+    seksjon: sted.seksjon ? document.getElementById(panelAnker(sted.seksjon)) : null,
+  }
 }
+
+/**
+ * Elementet stedet er på siden: kortet når det står i seksjonen sin, eller
+ * seksjonen når stedet ikke har noe kort. Et kort som er flyttet til en annen
+ * seksjon, står i den gamle til den nye utgaven er tegnet; da er det ikke funnet ennå.
+ */
+function elementFor(sted: Sted): HTMLElement | null {
+  const { kort, seksjon } = paSiden(sted)
+  if (!sted.kort) return seksjon
+  return kort && (!seksjon || seksjon.contains(kort)) ? kort : null
+}
+
+/** Det som vises når kortet ikke står der det skal: kortet der det står, ellers seksjonen. */
+function reserveFor(sted: Sted): HTMLElement | null {
+  const { kort, seksjon } = paSiden(sted)
+  return kort ?? seksjon
+}
+
+/** Om siden henter innholdet sitt (se `Stoffside`). */
+const henter = () => document.querySelector('.stoffside__paneler[aria-busy="true"]') !== null
 
 /** Flaten som merkes og rulles fram: detaljkortet elementet står i, eller elementet selv. */
 function flatenFor(element: HTMLElement): HTMLElement {
@@ -116,7 +138,9 @@ const VENT_I = 10_000
 
 /**
  * Kjører `gjor` med elementet til stedet så snart det står på siden: straks,
- * eller når innholdet er tegnet, innen `VENT_I`. Gir tilbake opprydningen.
+ * eller når den nye utgaven er tegnet. Står kortet ikke der det skal når
+ * siden er ferdig tegnet — eller innen `VENT_I` — vises det som står nærmest
+ * (`reserveFor`). Gir tilbake opprydningen.
  */
 function naarDetStar(sted: Sted, gjor: (element: HTMLElement) => void): () => void {
   const funnet = elementFor(sted)
@@ -124,23 +148,26 @@ function naarDetStar(sted: Sted, gjor: (element: HTMLElement) => void): () => vo
     gjor(funnet)
     return () => {}
   }
+  const ferdig = (element: HTMLElement | null) => {
+    stopp()
+    if (element) gjor(element)
+  }
+  // Den første endringen kan komme før siden har sagt at den henter, så reserven brukes ikke før noe er endret.
   const vakt = new MutationObserver(() => {
     const element = elementFor(sted)
-    if (!element) return
-    stopp()
-    gjor(element)
+    if (element || !henter()) ferdig(element ?? reserveFor(sted))
   })
-  const frist = window.setTimeout(() => stopp(), VENT_I)
+  const frist = window.setTimeout(() => ferdig(reserveFor(sted)), VENT_I)
   const stopp = () => {
     vakt.disconnect()
     window.clearTimeout(frist)
   }
-  vakt.observe(document.body, { childList: true, subtree: true })
+  vakt.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-busy'] })
   return stopp
 }
 
-/** Klassen, attributtet og teksten som merker stedet agenten arbeider. */
-const AGENT = 'utgave--agent'
+/** Klassen stedet som følges har, og attributtet og teksten som sier at agenten arbeider der. */
+const FULGT = 'utgave--agent'
 const AGENTMERKE = 'data-agentmerke'
 const AGENTTEKST = 'Agenten arbeider her'
 
@@ -164,22 +191,27 @@ function hvorHen(endringene: Endringene | null, nye: boolean, aktivitet: Aktivit
 /**
  * «Følg agenten», inne på siden: åpner seksjonen og detaljkortet agenten
  * arbeider i — eller det den nettopp endret, når en ny revisjon kommer — og
- * ruller dit, og merker stedet så lenge agenten er der. Kortene som er endret,
- * lyser opp en liten stund når en ny revisjon vises, så den som følger med ser
- * hva agenten nettopp gjorde. Står i sidens `SeksjonsstyringKilde`, så den kan
- * åpne skuffene.
+ * ruller dit. Stedet har en ramme så lenge det følges, og merket «Agenten
+ * arbeider her» bare mens agenten faktisk arbeider (`arbeider`, som
+ * indikatoren i banneret). Kortene som er endret, lyser opp en liten stund
+ * når en ny revisjon vises, så den som følger med ser hva agenten nettopp
+ * gjorde. Står i sidens `SeksjonsstyringKilde`, så den kan åpne skuffene.
  */
 export function Agentfolging({
   pa,
+  arbeider,
   aktivitet,
   endringene,
 }: {
   pa: boolean
+  arbeider: boolean
   aktivitet: Aktivitet | undefined
   endringene: Endringene | null
 }) {
   const apneTil = useSeksjonsstyring()?.apneTil
   useNyligEndret(endringene)
+  /** Stedet som følges nå, så merket kan skifte uten at siden ruller dit på nytt. */
+  const [flate, setFlate] = useState<HTMLElement | null>(null)
 
   // Endringene som er vist fram; slås følgingen på, er det agenten som vises, ikke det som alt er endret.
   const vist = useRef<Endringene | null>(null)
@@ -191,18 +223,23 @@ export function Agentfolging({
     if (!sted) return
     let merket: HTMLElement | null = null
     const stopp = naarDetStar(sted, (element) => {
-      const flate = flatenFor(element)
-      apneTil(flate, TILPASSET)
-      flate.classList.add(AGENT)
-      flate.setAttribute(AGENTMERKE, AGENTTEKST)
-      merket = flate
+      merket = flatenFor(element)
+      apneTil(merket, TILPASSET)
+      merket.classList.add(FULGT)
+      setFlate(merket)
     })
     return () => {
       stopp()
-      merket?.classList.remove(AGENT)
-      merket?.removeAttribute(AGENTMERKE)
+      merket?.classList.remove(FULGT)
+      setFlate(null)
     }
   }, [pa, apneTil, endringene, aktivitet?.kl, aktivitet?.objekt, aktivitet?.seksjon]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!flate || !arbeider) return
+    flate.setAttribute(AGENTMERKE, AGENTTEKST)
+    return () => flate.removeAttribute(AGENTMERKE)
+  }, [flate, arbeider])
   return null
 }
 

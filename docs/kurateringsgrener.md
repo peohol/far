@@ -255,7 +255,8 @@ siden alt i den har vært publisert før. Sideversjonen den gir, har opphavet
   innholdet byttes. Slik vises også et nytt svar eller en ny merknad i en tråd.
   «Følg agenten» åpner seksjonen og detaljkortet agenten melder at den
   arbeider med — eller det som er endret, når en ny revisjon kommer — ruller
-  dit og merker stedet («Agenten arbeider her») så lenge agenten er der. Den
+  dit og rammer inn stedet, med merket «Agenten arbeider her» mens agenten
+  arbeider (som indikatoren). Et kort som er flyttet, åpnes i den nye seksjonen. Den
   slås av når man ruller selv (`src/components/kuratering/Folgagenten.tsx`).
   «Kommentarer» viser trådene festet til kort og felt, og lar
   administratoren åpne nye (også sperrende), svare, lukke og åpne igjen

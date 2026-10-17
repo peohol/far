@@ -20,7 +20,7 @@ export const ENDRINGSLOGG: Endring[] = [
     gjelder: ['kuratering'],
     punkter: [
       'Med «Følg agenten» på åpnes nå seksjonen og kortet agenten arbeider i, og siden ruller dit. Før rullet den bare dit, og kortet kunne stå lukket.',
-      'Stedet agenten arbeider, har en ramme og merket «Agenten arbeider her» så lenge den er der.',
+      'Stedet som følges, har en ramme, og merket «Agenten arbeider her» mens agenten arbeider der.',
       'Når agenten lagrer en ny revisjon, åpnes det som er endret, og det lyser opp en liten stund. Siden står som før mens innholdet byttes, med de samme kortene åpne.',
     ],
   },

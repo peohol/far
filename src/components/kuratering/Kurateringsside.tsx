@@ -5,6 +5,7 @@ import { forhandsvisningen, type Kurateringsklient } from '../../kuratering/klie
 import {
   ARTSNAVN,
   STATUSNAVN,
+  agenttilstand,
   erAktiv,
   grenenErEndret,
   kanPubliseres,
@@ -130,7 +131,12 @@ function Grenvisning({ gren: id, klient: kuratering, onGaaTil, ...props }: Utgav
   const banner = (
     <>
       {/* En gren som er publisert eller forkastet, har ingen agent å følge. */}
-      <Agentfolging pa={folg && erAktiv(gren.status)} aktivitet={aktivitet} endringene={endringene} />
+      <Agentfolging
+        pa={folg && erAktiv(gren.status)}
+        arbeider={agenttilstand(status, brutt) === 'aktiv'}
+        aktivitet={aktivitet}
+        endringene={endringene}
+      />
       <Grenbanner
         // Vurderingen og meldingene gjelder revisjonen som vises; en ny revisjon gir et nytt banner.
         key={vist}
