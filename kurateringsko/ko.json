@@ -1,8 +1,8 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T19:26:56.841Z",
+  "oppdatert_kl": "2026-10-17T20:28:09.821Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
-  "teller": 49,
+  "teller": 50,
   "stoffer": {
     "alprazolam": {
       "stoff": "alprazolam",
@@ -1835,7 +1835,7 @@
     "flunitrazepam": {
       "stoff": "flunitrazepam",
       "navn": "Flunitrazepam",
-      "status": "venter_godkjenning",
+      "status": "reservert",
       "modus": "de_novo",
       "prioritet": {
         "poeng": 0,
@@ -1850,19 +1850,43 @@
         "referanser": 1,
         "elementer_uten_kilde": 2
       },
-      "reservasjon": null,
+      "reservasjon": {
+        "oppgave": "flunitrazepam-0050",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "modus": "de_novo",
+        "reservert_kl": "2026-10-17T20:28:09.821Z",
+        "fornyet_kl": "2026-10-17T20:28:09.821Z",
+        "frist_kl": "2026-10-17T23:28:09.821Z",
+        "fase": null,
+        "jobbgren": "kuratorjobb/flunitrazepam-0017",
+        "kurateringsgren": "kuratering/flunitrazepam-0050",
+        "pr": null,
+        "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
+        "kunnskapsgrense": "2026-10-17"
+      },
       "forsok": 1,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "flunitrazepam-0032",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-17T20:28:09.821Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/flunitrazepam-0017",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
+        "kunnskapsgrense": "2026-10-17"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
       "siste_kjoring": {
-        "oppgave": "flunitrazepam-0032",
+        "oppgave": "flunitrazepam-0050",
         "okt": "kurateringsko/okt/20261016-125910",
-        "startet_kl": "2026-10-17T07:43:33.742Z",
-        "avsluttet_kl": "2026-10-17T07:44:18.316Z",
-        "utfall": "fullfort"
+        "startet_kl": "2026-10-17T20:28:09.821Z",
+        "avsluttet_kl": null,
+        "utfall": "reservert"
       },
       "aktiv": true,
       "historikk": [
@@ -1972,20 +1996,28 @@
           "hendelse": "gren_klar",
           "oppgave": "flunitrazepam-0032",
           "melding": "Grenen: klar, revisjon 6, kontrollrunde 4."
+        },
+        {
+          "kl": "2026-10-17T20:28:09.821Z",
+          "hendelse": "gren_retting",
+          "oppgave": "flunitrazepam-0032",
+          "melding": "Grenen: retting, revisjon 6, kontrollrunde 3."
+        },
+        {
+          "kl": "2026-10-17T20:28:09.821Z",
+          "hendelse": "retting",
+          "oppgave": "flunitrazepam-0032",
+          "melding": "Grenen er tilbake hos kuratoren."
+        },
+        {
+          "kl": "2026-10-17T20:28:09.821Z",
+          "hendelse": "reservert",
+          "oppgave": "flunitrazepam-0050",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Forsøk 1, de_novo, fortsetter flunitrazepam-0032."
         }
       ],
-      "appgren": {
-        "id": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
-        "oppgave": "flunitrazepam-0032",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-17",
-        "jobbgren": "kuratorjobb/flunitrazepam-0017",
-        "registrert_kl": "2026-10-17T07:44:18.316Z",
-        "status": "klar",
-        "revisjon": 6,
-        "kontrollrunde": 4
-      }
+      "appgren": null
     },
     "fluoksetin": {
       "stoff": "fluoksetin",
@@ -3572,11 +3604,19 @@
     "levetiracetam": {
       "stoff": "levetiracetam",
       "navn": "Levetiracetam",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1447.6,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen levetiracetam-0047.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-17T14:23:30.777Z",
@@ -3588,9 +3628,20 @@
         "elementer_uten_kilde": 1
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "levetiracetam-0047",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-17T20:28:09.821Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/levetiracetam-0038",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
+        "kunnskapsgrense": "2026-10-17"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -3683,20 +3734,21 @@
           "hendelse": "gren_klar",
           "oppgave": "levetiracetam-0047",
           "melding": "Grenen: klar, revisjon 8, kontrollrunde 1."
+        },
+        {
+          "kl": "2026-10-17T20:28:09.821Z",
+          "hendelse": "gren_arbeid",
+          "oppgave": "levetiracetam-0047",
+          "melding": "Grenen: arbeid, revisjon 8, kontrollrunde 0."
+        },
+        {
+          "kl": "2026-10-17T20:28:09.821Z",
+          "hendelse": "retting",
+          "oppgave": "levetiracetam-0047",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
-        "oppgave": "levetiracetam-0047",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-17",
-        "jobbgren": "kuratorjobb/levetiracetam-0038",
-        "registrert_kl": "2026-10-17T19:20:11.793Z",
-        "status": "klar",
-        "revisjon": 8,
-        "kontrollrunde": 1
-      }
+      "appgren": null
     },
     "levomepromazin": {
       "stoff": "levomepromazin",
@@ -5000,11 +5052,19 @@
     "sertindol": {
       "stoff": "sertindol",
       "navn": "Sertindol",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1447.6,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen sertindol-0048.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde.",
+          "Bare 2 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-17T14:23:30.777Z",
@@ -5016,9 +5076,20 @@
         "elementer_uten_kilde": 1
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "sertindol-0048",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-17T20:28:09.821Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/sertindol-0040",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
+        "kunnskapsgrense": "2026-10-17"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -5105,20 +5176,21 @@
           "hendelse": "gren_klar",
           "oppgave": "sertindol-0048",
           "melding": "Grenen: klar, revisjon 7, kontrollrunde 1."
+        },
+        {
+          "kl": "2026-10-17T20:28:09.821Z",
+          "hendelse": "gren_arbeid",
+          "oppgave": "sertindol-0048",
+          "melding": "Grenen: arbeid, revisjon 7, kontrollrunde 0."
+        },
+        {
+          "kl": "2026-10-17T20:28:09.821Z",
+          "hendelse": "retting",
+          "oppgave": "sertindol-0048",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
-        "oppgave": "sertindol-0048",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-17",
-        "jobbgren": "kuratorjobb/sertindol-0040",
-        "registrert_kl": "2026-10-17T19:21:42.689Z",
-        "status": "klar",
-        "revisjon": 7,
-        "kontrollrunde": 1
-      }
+      "appgren": null
     },
     "sertralin": {
       "stoff": "sertralin",
@@ -6169,6 +6241,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "reserver-flunitrazepam-202741",
         "fullfort-fenobarbital-pub-202610171925",
         "reserver-fenobarbital-pub-202610171924",
         "fullfort-sertindol-0048",
@@ -6217,25 +6290,70 @@
         "reserver-doksepin-074613",
         "fullfort-brekspiprazol-0033",
         "reserver-brekspiprazol-074439",
-        "fullfort-flunitrazepam-0032",
-        "reserver-flunitrazepam-074306"
+        "fullfort-flunitrazepam-0032"
       ],
       "siste": {
-        "id": "fullfort-fenobarbital-pub-202610171925",
-        "sha256": "2a776b11428be36d639d46a32b5235ffa3fa5c4cd46fb4718a9d0a5518a86f4a",
+        "id": "reserver-flunitrazepam-202741",
+        "sha256": "acbe89cde3fc74ff56c968abae7519c49501206338d201791fe1b1ae38ac5d4d",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "fullfort-fenobarbital-pub-202610171925",
-          "foresporsel_sha256": "2a776b11428be36d639d46a32b5235ffa3fa5c4cd46fb4718a9d0a5518a86f4a",
-          "handling": "fullfort",
+          "foresporsel_id": "reserver-flunitrazepam-202741",
+          "foresporsel_sha256": "acbe89cde3fc74ff56c968abae7519c49501206338d201791fe1b1ae38ac5d4d",
+          "handling": "reserver",
           "utfall": "ok",
-          "melding": "fenobarbital er alt ført som publisert fra kurateringsgrenen f99c5bb5-b7f1-4038-b5ab-0cab1a706f97.",
-          "behandlet_kl": "2026-10-17T19:26:18.057Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39062441999"
+          "melding": "flunitrazepam er reservert til 2026-10-17T23:28:09.821Z.",
+          "behandlet_kl": "2026-10-17T20:28:09.821Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39066811066",
+          "oppgave": {
+            "oppgave": "flunitrazepam-0050",
+            "stoff": "flunitrazepam",
+            "navn": "Flunitrazepam",
+            "modus": "de_novo",
+            "forsok": 1,
+            "frist_kl": "2026-10-17T23:28:09.821Z",
+            "jobbgren": "kuratorjobb/flunitrazepam-0017",
+            "kurateringsgren": "kuratering/flunitrazepam-0050",
+            "pr": null,
+            "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
+            "gjenoppta": {
+              "oppgave": "flunitrazepam-0032",
+              "okt": "kurateringsko/okt/20261016-125910",
+              "avbrutt_kl": "2026-10-17T20:28:09.821Z",
+              "grunn": "Grenen er tilbake hos kuratoren.",
+              "fase": null,
+              "jobbgren": "kuratorjobb/flunitrazepam-0017",
+              "kurateringsgren": null,
+              "pr": null,
+              "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
+              "kunnskapsgrense": "2026-10-17"
+            },
+            "sist_kuratert": null,
+            "maal": {
+              "kl": "2026-10-17T14:23:30.777Z",
+              "side": true,
+              "elementer": 8,
+              "redaksjonelle_paneler": 13,
+              "paneler_med_innhold": 4,
+              "referanser": 1,
+              "elementer_uten_kilde": 2
+            },
+            "prioritet": {
+              "poeng": 1451.7,
+              "grunner": [
+                "Fortsetter den avbrutte kurateringen flunitrazepam-0032.",
+                "De novo-kuratering i runden som gjelder.",
+                "Aldri kuratert.",
+                "Ingen kuratering å regne alderen fra.",
+                "9 av 13 redaksjonelle seksjoner er tomme.",
+                "2 av 8 elementer har ingen kilde.",
+                "Bare 1 referanser."
+              ]
+            }
+          }
         }
       },
       "besvart_commit": "ffda83f7839056e5e35a30fdd6d359a28a7e998a",
-      "sist_brukt_kl": "2026-10-17T19:26:18.057Z"
+      "sist_brukt_kl": "2026-10-17T20:28:09.821Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
