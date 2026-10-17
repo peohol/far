@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T14:53:59.439Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T15:29:30.839Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
 Klar: 79 · Reservert: 1 · Venter på godkjenning: 11 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-- **sertindol** (sertindol-0040), frist 2026-10-17T17:53:59.439Z
+- **sertindol** (sertindol-0040), frist 2026-10-17T18:29:30.839Z
 
 ## Til gjennomgang
 
