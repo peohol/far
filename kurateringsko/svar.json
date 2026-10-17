@@ -1,10 +1,44 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-doksepin-1",
-  "foresporsel_sha256": "f4c7788932815ace9afb3a69752f96d0165ea15e6811f4c3d0ee618d55608315",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-neste-4",
+  "foresporsel_sha256": "ffea0165205e0319232a545c5601a7c8f99bb416cf5468cb3ed3e30323332125",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "doksepin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-17T00:03:17.016Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38984523129"
+  "melding": "vortioksetin er reservert til 2026-10-17T03:04:01.092Z.",
+  "behandlet_kl": "2026-10-17T00:04:01.092Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38984583016",
+  "oppgave": {
+    "oppgave": "vortioksetin-0015",
+    "stoff": "vortioksetin",
+    "navn": "Vortioksetin",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-17T03:04:01.092Z",
+    "jobbgren": "kuratorjobb/vortioksetin-0015",
+    "kurateringsgren": "kuratering/vortioksetin-0015",
+    "pr": null,
+    "gren": null,
+    "gjenoppta": null,
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-16T18:10:24.842Z",
+      "side": true,
+      "elementer": 24,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 7,
+      "referanser": 4,
+      "elementer_uten_kilde": 19
+    },
+    "prioritet": {
+      "poeng": 455.7,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "6 av 13 redaksjonelle seksjoner er tomme.",
+        "19 av 24 elementer har ingen kilde.",
+        "Bare 4 referanser."
+      ]
+    }
+  }
 }
