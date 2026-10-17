@@ -1,12 +1,12 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-vortioksetin-0506",
-  "foresporsel_sha256": "b13ddbb8f154d153c532684d6404db7f842024a0620f1456329285d8480f7563",
+  "foresporsel_id": "reserver-kariprazin-0507",
+  "foresporsel_sha256": "7cb453ac6069ce6bafd426648c5575495611dbe352d7272c417097d96c4ca0b0",
   "handling": "reserver",
   "utfall": "ok",
-  "melding": "vortioksetin er reservert til 2026-10-17T08:07:11.984Z.",
-  "behandlet_kl": "2026-10-17T05:07:11.984Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39005069252",
+  "melding": "Økten har allerede reservert vortioksetin; fortsett med den.",
+  "behandlet_kl": "2026-10-17T05:07:55.150Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39005113520",
   "oppgave": {
     "oppgave": "vortioksetin-0020",
     "stoff": "vortioksetin",
@@ -41,16 +41,8 @@
       "elementer_uten_kilde": 19
     },
     "prioritet": {
-      "poeng": 1455.7,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen vortioksetin-0015.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "6 av 13 redaksjonelle seksjoner er tomme.",
-        "19 av 24 elementer har ingen kilde.",
-        "Bare 4 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
