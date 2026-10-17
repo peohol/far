@@ -1,10 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "tilbakestill-doksepin-0646",
-  "foresporsel_sha256": "6fe9935dabc54bda032719dcb39a35fa2bd1248d20434cbe8ded8af5a97a12db",
-  "handling": "tilbakestill",
+  "foresporsel_id": "fullfort-fenobarbital-0026",
+  "foresporsel_sha256": "cfc848f069c2e1bfdec95fa19254b9ec9c6c43f4b2469e8066af6f09a46132a4",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "doksepin er tilbakestilt og gis tilbake til kuratoren med kurateringsgrenen 14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f.",
-  "behandlet_kl": "2026-10-17T06:46:59.176Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39011160498"
+  "melding": "fenobarbital er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-17T06:59:04.130Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39011904847"
 }
