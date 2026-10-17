@@ -1,10 +1,56 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-fenobarbital-pub-202610171925",
-  "foresporsel_sha256": "2a776b11428be36d639d46a32b5235ffa3fa5c4cd46fb4718a9d0a5518a86f4a",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-flunitrazepam-202741",
+  "foresporsel_sha256": "acbe89cde3fc74ff56c968abae7519c49501206338d201791fe1b1ae38ac5d4d",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "fenobarbital er alt ført som publisert fra kurateringsgrenen f99c5bb5-b7f1-4038-b5ab-0cab1a706f97.",
-  "behandlet_kl": "2026-10-17T19:26:18.057Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39062441999"
+  "melding": "flunitrazepam er reservert til 2026-10-17T23:28:09.821Z.",
+  "behandlet_kl": "2026-10-17T20:28:09.821Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39066811066",
+  "oppgave": {
+    "oppgave": "flunitrazepam-0050",
+    "stoff": "flunitrazepam",
+    "navn": "Flunitrazepam",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-17T23:28:09.821Z",
+    "jobbgren": "kuratorjobb/flunitrazepam-0017",
+    "kurateringsgren": "kuratering/flunitrazepam-0050",
+    "pr": null,
+    "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
+    "gjenoppta": {
+      "oppgave": "flunitrazepam-0032",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "avbrutt_kl": "2026-10-17T20:28:09.821Z",
+      "grunn": "Grenen er tilbake hos kuratoren.",
+      "fase": null,
+      "jobbgren": "kuratorjobb/flunitrazepam-0017",
+      "kurateringsgren": null,
+      "pr": null,
+      "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
+      "kunnskapsgrense": "2026-10-17"
+    },
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-17T14:23:30.777Z",
+      "side": true,
+      "elementer": 8,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 4,
+      "referanser": 1,
+      "elementer_uten_kilde": 2
+    },
+    "prioritet": {
+      "poeng": 1451.7,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen flunitrazepam-0032.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "2 av 8 elementer har ingen kilde.",
+        "Bare 1 referanser."
+      ]
+    }
+  }
 }
