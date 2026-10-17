@@ -1,11 +1,12 @@
 # Instruks for kontrolløren
 
 Leses av ChatGPT-kontrolløren ved hver kjøring (verktøyet `instruks` i
-koblingen gir denne teksten), og av en administrator som kontrollerer en
-kuratering. Kontrolløren kontrollerer kurateringene Claude-monografkuratoren
+koblingen gir denne teksten, med kuratorprotokollen etter), og av en
+administrator som kontrollerer en kuratering. Kontrolløren kontrollerer kurateringene Claude-monografkuratoren
 har sendt til kontroll, uavhengig og adversarialt, og godkjenner eller ber om
-endringer. Hva som skal kontrolleres, står i `docs/kuratorprotokoll.md`;
-hvordan grenene virker, i `docs/kurateringsgrener.md`.
+endringer. Hva som skal kontrolleres, står i `docs/kuratorprotokoll.md` (de
+ufravikelige kravene og «Erfaringer fra kontrollen»), som `instruks` gir etter
+denne teksten; hvordan grenene virker, i `docs/kurateringsgrener.md`.
 
 Grunnreglene:
 
@@ -32,7 +33,8 @@ ChatGPT er koblet til OUSFAR som en MCP-kobling (connector) med adressen en
 administrator har laget under «Kurateringer» → «Agentene» i appen
 (`https://ousfar.vercel.app/api/kuratering-mcp?nokkel=…`). Verktøyene er de
 samme handlingene som i `docs/kurateringsgrener.md`, og `instruks`, som gir
-denne instruksen slik den står i den utlagte versjonen av OUSFAR (fra `main`).
+denne instruksen og kuratorprotokollen slik de står i den utlagte versjonen av
+OUSFAR (fra `main`).
 Svaret på `oversikt` har den samme teksten først. Da når den fram selv om
 ChatGPT husker en eldre verktøyliste uten `instruks`; «Oppdater» på koblingen
 i ChatGPT henter den nye.

@@ -93,18 +93,24 @@ const rpcSvar = (id: Rpc['id'], result: unknown) => ({ jsonrpc: '2.0', id: id ??
 const rpcFeil = (id: Rpc['id'], code: number, message: string) => ({ jsonrpc: '2.0', id: id ?? null, error: { code, message } })
 
 /**
- * Kontrollørinstruksen er én fil i repoet. Den tas med i funksjonen med
- * `includeFiles` i `vercel.json`, og leses der den ligger, så verktøyet
+ * Kontrollørinstruksen og kuratorprotokollen, som er det kontrolløren
+ * kontrollerer mot, er filer i repoet. De tas med i funksjonen med
+ * `includeFiles` i `vercel.json`, og leses der de ligger, så verktøyet
  * `instruks` alltid gir teksten i den utlagte versjonen. Ingen kopi i koden.
  */
 export const INSTRUKSFIL = 'docs/kontrollorinstruks.md'
+export const PROTOKOLLFIL = 'docs/kuratorprotokoll.md'
+export const INSTRUKSFILER = [INSTRUKSFIL, PROTOKOLLFIL] as const
 
+const lesFil = (fil: string) => readFile(join(process.cwd(), fil), 'utf8').catch(() => null)
+
+// Uten instruksen er det ingenting å gi. Mangler bare protokollen, gis
+// instruksen med en beskjed om hvor protokollen står, så kontrolløren ikke
+// tror den har alt.
 export async function lesKontrollorinstruks(): Promise<string | null> {
-  try {
-    return await readFile(join(process.cwd(), INSTRUKSFIL), 'utf8')
-  } catch {
-    return null
-  }
+  const [instruks, protokoll] = await Promise.all(INSTRUKSFILER.map(lesFil))
+  if (instruks === null) return null
+  return `${instruks}\n\n---\n\n${protokoll ?? `${PROTOKOLLFIL} kunne ikke leses i OUSFAR nå. Les den på main i repoet peohol/far, og si fra om feilen.`}`
 }
 
 // Bare den offentlige instruksteksten: verktøyet spør ikke databasen og tar
@@ -112,7 +118,7 @@ export async function lesKontrollorinstruks(): Promise<string | null> {
 const INSTRUKSVERKTOY = {
   name: 'instruks',
   description:
-    'Instruksen for kontrolløren, slik den gjelder nå (docs/kontrollorinstruks.md). Kontrolløren leser den før noe annet i hver kjøring, og følger den. Bare den offentlige teksten; ingen fagtekst.',
+    'Instruksen for kontrolløren, slik den gjelder nå (docs/kontrollorinstruks.md), og kuratorprotokollen den kontrollerer mot (docs/kuratorprotokoll.md). Kontrolløren leser den før noe annet i hver kjøring, og følger den. Bare den offentlige teksten; ingen fagtekst.',
   inputSchema: { type: 'object', properties: {}, additionalProperties: false },
   annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
 }
@@ -133,7 +139,7 @@ const INSTRUKSER =
 // ChatGPT husker verktøylisten og `instructions` fra da koblingen ble lagt
 // til, men henter hvert svar på nytt. Svaret på `oversikt`, som kontrolløren
 // kaller først, har derfor instruksen med, foran svaret fra databasen.
-export const INSTRUKSINNLEDNING = 'Instruksen for kontrolløren (docs/kontrollorinstruks.md). Følg den i denne kjøringen.'
+export const INSTRUKSINNLEDNING = 'Instruksen for kontrolløren (docs/kontrollorinstruks.md), med kuratorprotokollen (docs/kuratorprotokoll.md) etter. Følg dem i denne kjøringen.'
 
 const tekstsvar = (id: Rpc['id'], innhold: unknown, feil: boolean, foran?: string) =>
   rpcSvar(id, {
@@ -167,7 +173,7 @@ async function behandleRpc(melding: Rpc, db: SupabaseClient | null, nokkel: stri
       if (navn === INSTRUKSVERKTOY.name) {
         const instruks = await lesInstruks()
         if (instruks === null) {
-          return tekstsvar(id, { feil: 'Instruksen kunne ikke leses i OUSFAR nå. Les docs/kontrollorinstruks.md på main i repoet peohol/far, og si fra om feilen.' }, true)
+          return tekstsvar(id, { feil: 'Instruksen kunne ikke leses i OUSFAR nå. Les docs/kontrollorinstruks.md og docs/kuratorprotokoll.md på main i repoet peohol/far, og si fra om feilen.' }, true)
         }
         return rpcSvar(id, { content: [{ type: 'text', text: instruks }], isError: false })
       }

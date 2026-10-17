@@ -261,3 +261,6 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
   kontrollen» i `docs/kuratorprotokoll.md`. Kurateringene bruker nå
   Giftinformasjonens anbefalinger, aldersgrensene er rettet, og
   nøkkeltallene i viktige data endres bare med en avgjørelse fra fagansvarlig.
+  Kontrolløren får nå hele kuratorprotokollen, også disse reglene, med
+  verktøyet `instruks`. Før fikk den bare en henvisning til protokollen, og
+  koblingen har ingen måte å lese repoet på.

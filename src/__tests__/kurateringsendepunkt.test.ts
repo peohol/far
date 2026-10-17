@@ -3,9 +3,11 @@
  * at nøkkelen bare sendes videre til databasen, at feilene blir riktige
  * HTTP-statuser uten å si noe om databasen utad, og at MCP-endepunktet svarer
  * på protokollen, gir de samme handlingene som verktøy, og gir
- * kontrollørinstruksen med verktøyet `instruks`.
+ * kontrollørinstruksen og kuratorprotokollen med verktøyet `instruks`.
  */
-import { readFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join, matchesGlob } from 'node:path'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { describe, expect, it, vi } from 'vitest'
 import { AGENTHANDLINGER } from '../kuratering/handlinger'
@@ -14,10 +16,12 @@ import {
   behandleKurateringMcp,
   behandleKurateringsko,
   INSTRUKSFIL,
+  INSTRUKSFILER,
   INSTRUKSINNLEDNING,
   KO_ARBEIDSFLYT,
   lesKontrollorinstruks,
   MCP_PROTOKOLL,
+  PROTOKOLLFIL,
 } from '../kuratering/endepunkt'
 
 const NOKKEL = 'far_' + 'a'.repeat(64)
@@ -129,15 +133,36 @@ describe('kontrollørinstruksen i MCP-koblingen', () => {
   const rpc = (method: string, params?: unknown) => ({ jsonrpc: '2.0', id: 1, method, params })
   const kall = async (kropp: unknown, avhengigheter: Parameters<typeof behandleKurateringMcp>[2]) =>
     (await behandleKurateringMcp(post('https://x/api/kuratering-mcp', kropp), {}, avhengigheter)).json()
-  const FILA = readFileSync(new URL(`../../${INSTRUKSFIL}`, import.meta.url), 'utf8')
+  const les = (fil: string) => readFileSync(new URL(`../../${fil}`, import.meta.url), 'utf8')
+  const INSTRUKSEN = les(INSTRUKSFIL)
+  const PROTOKOLLEN = les(PROTOKOLLFIL)
+  const FILA = `${INSTRUKSEN}\n\n---\n\n${PROTOKOLLEN}`
 
-  it('gir den gjeldende teksten i docs/kontrollorinstruks.md, uten å spørre databasen', async () => {
+  it('gir den gjeldende instruksen med kuratorprotokollen etter, uten å spørre databasen', async () => {
     const k = klient()
     const svar = await kall(rpc('tools/call', { name: 'instruks', arguments: {} }), k)
     expect(svar.result).toEqual({ content: [{ type: 'text', text: FILA }], isError: false })
     expect(FILA).toMatch(/^# Instruks for kontrolløren/)
+    // Kravene og erfaringene kontrolløren kontrollerer mot, står i svaret, ikke bare som en henvisning.
+    expect(FILA).toContain('## De ufravikelige kravene')
+    expect(FILA).toContain('## Erfaringer fra kontrollen')
     expect(await lesKontrollorinstruks()).toBe(FILA)
     expect(k.rpc).not.toHaveBeenCalled()
+  })
+
+  it('gir instruksen med beskjed om hvor protokollen står når bare protokollen mangler, og ingenting uten instruksen', async () => {
+    const mappe = mkdtempSync(join(tmpdir(), 'instruks-'))
+    mkdirSync(join(mappe, 'docs'))
+    const cwd = vi.spyOn(process, 'cwd').mockReturnValue(mappe)
+    try {
+      expect(await lesKontrollorinstruks()).toBeNull()
+      writeFileSync(join(mappe, INSTRUKSFIL), INSTRUKSEN)
+      const tekst = await lesKontrollorinstruks()
+      expect(tekst?.startsWith(INSTRUKSEN)).toBe(true)
+      expect(tekst).toContain('docs/kuratorprotokoll.md kunne ikke leses')
+    } finally {
+      cwd.mockRestore()
+    }
   })
 
   it('står først i tools/list, bare lesende og uten argumenter', async () => {
@@ -199,11 +224,12 @@ describe('kontrollørinstruksen i MCP-koblingen', () => {
     expect(k.rpc).not.toHaveBeenCalled()
   })
 
-  it('fila tas med i funksjonen i produksjonen (includeFiles i vercel.json)', () => {
+  it('filene tas med i funksjonen i produksjonen (includeFiles i vercel.json)', () => {
     const vercel = JSON.parse(readFileSync(new URL('../../vercel.json', import.meta.url), 'utf8')) as {
       functions: Record<string, { includeFiles?: string }>
     }
-    expect(vercel.functions['api/kuratering-mcp.ts']?.includeFiles).toBe(INSTRUKSFIL)
+    const monster = vercel.functions['api/kuratering-mcp.ts']?.includeFiles ?? ''
+    for (const fil of INSTRUKSFILER) expect(matchesGlob(fil, monster), fil).toBe(true)
   })
 })
 
