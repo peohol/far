@@ -1,17 +1,18 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T07:43:33.742Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T07:44:18.316Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 87 · Reservert: 1 · Venter på godkjenning: 4 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
+Klar: 87 · Venter på godkjenning: 5 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
 
 ## Pågår
 
-- **flunitrazepam** (flunitrazepam-0032), frist 2026-10-17T10:43:33.742Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
 - **cbd**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **fenobarbital**: kurateringsgren i OUSFAR (klar), venter på godkjenning
+- **flunitrazepam**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **ketobemidon**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **vortioksetin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 
