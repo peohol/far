@@ -1,37 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-lamotrigin-0019-gren",
-  "foresporsel_sha256": "d25dd091516f38edddaf975763f4c700cb81235bd2b1d298cc76222bbfa9b2dc",
-  "handling": "forny",
+  "foresporsel_id": "fullfort-lamotrigin-0019",
+  "foresporsel_sha256": "9ae53d9cb7de365b3742ff7b3710be8c1508224d8e860da13c32f705c574d030",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "Reservasjonen av lamotrigin varer til 2026-10-17T06:17:21.217Z.",
-  "behandlet_kl": "2026-10-17T03:17:21.217Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38998183581",
-  "oppgave": {
-    "oppgave": "lamotrigin-0019",
-    "stoff": "lamotrigin",
-    "navn": "Lamotrigin",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T06:17:21.217Z",
-    "jobbgren": "kuratorjobb/lamotrigin-0019",
-    "kurateringsgren": "kuratering/lamotrigin-0019",
-    "pr": null,
-    "gren": "48e10b1b-31b0-452d-9e29-8404e30aa989",
-    "gjenoppta": null,
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-16T18:10:24.842Z",
-      "side": true,
-      "elementer": 18,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 7,
-      "referanser": 3,
-      "elementer_uten_kilde": 12
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "melding": "lamotrigin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-17T03:57:26.550Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39000722712"
 }
