@@ -1,0 +1,389 @@
+1.      LEGEMIDLETS NAVN
+
+Fenemal 50 mg tabletter
+
+
+2.      KVALITATIV OG KVANTITATIV SAMMENSETNING
+
+1 tablett inneholder fenobarbital 50 mg.
+
+Hjelpestoffer med kjent effekt: laktose (20 mg).
+
+For fullstendig liste over hjelpestoffer, se pkt. 6.1.
+
+
+3.      LEGEMIDDELFORM
+
+Tabletter
+
+Hvite tabletter med delestrek på en side og merket ”N5” på den andre siden.
+
+
+4.      KLINISKE OPPLYSNINGER
+
+4.1     Indikasjoner
+
+Epilepsi, ved grand mal særlig oppvåknings- og innsovningsanfall, fokalmotoriske og fokalsensoriske
+anfall.
+
+4.2     Dosering og administrasjonsmåte
+
+Tilpasses individuelt. Dosen økes gradvis til anfallskontroll nås.
+
+Veiledende vedlikeholdsdoser:
+1-3 mg/kg kroppsvekt/døgn. Kan vanligvis tas som en enkeltdose.
+
+Med vanlig dosering tar det 2-3 uker før stabile serumkonsentrasjoner oppnås og effekten kan
+vurderes. Når serumkonsentrasjonen skal bestemmes, er det nødvendig med opplysninger om all
+medikasjon, nøyaktig dosering og pasientens vekt.
+
+Tilfredsstillende effekt oppnås i konsentrasjonsområdet 45-130 mikromol (10-30 mikrogram/ml), men
+hensyn må tas til pasientens totale kliniske situasjon (anfallskontroll og bivirkninger).
+Ved epilepsi må effekten vurderes kontinuerlig når dosen økes. Serumkonsentrasjonen bør følges nøye
+inntil terapeutisk nivå er nådd, og videre med kontroll hver 3. måned. Dersom den kliniske tilstand er
+tilfredsstillende, kan kontroll av serumnivået senere begrenses til 1 gang årlig. Brå seponering kan gi
+alvorlige reaksjoner hos epileptikere og må unngås unntatt ved sikre tegn på intoksikasjon eller ved
+alvorlige allergiske reaksjoner.
+
+Pediatrisk populasjon
+Inntil 5 mg/kg kroppsvekt/døgn, ev. høyere dose avhengig av serumkonsentrasjonen. Døgndosen
+fordeles på 2 enkeltdoser.
+
+4.3     Kontraindikasjoner
+
+     Overfølsomhet overfor virkestoffet, andre barbiturater, eller overfor noen av hjelpestoffene
+      listet opp i pkt. 6.1.
+       Porfyri
+4.4     Advarsler og forsiktighetsregler
+
+Forsiktighet ved nedsatt lever- eller nyrefunksjon, redusert respirasjonskapasitet og ved behandling av
+eldre.
+
+Vedvarende bruk kan gi toleranseutvikling og fare for kumulasjon og kronisk forgiftning. Bør ikke gis
+til alkohol- eller narkotikamisbrukere eller pasienter som er disponert for misbruk.
+
+Ved oppstart og seponering av tilleggsmedikasjon som kan gi interaksjoner, bør pasienten overvåkes
+nøye, kontroll av serumkonsentrasjonen tilrådes ved epilepsi og feberkramper.
+
+Selvmordstanker og selvmordsrelatert adferd er rapportert hos pasienter behandlet med antiepileptiske
+legemidler for flere indikasjoner. En meta-analyse av randomiserte placebokontrollerte studier med
+antiepileptika har vist en liten økning i risiko for selvmordstanker og selvmordsrelatert adferd.
+Mekanismen bak denne risikoen er ikke kjent og tilgjengelige data kan ikke utelukke muligheten for
+økt risiko ved behandling med fenobarbital. Pasientene bør derfor overvåkes for tegn på
+selvmordstanker eller selvmordsrelatert adferd, og nødvendig behandling bør vurderes. Pasienter (og
+pårørende) bør oppfordres til å kontakte medisinsk hjelp omgående dersom selvmordstanker eller
+selvmordsrelatert adferd oppstår.
+
+For å unngå tannskade på grunn av munntørrhet bør tennene børstes med fluortannkrem 2 ganger
+daglig.
+
+Urtepreparater som inneholder johannesurt (Hypericum perforatum) bør ikke brukes sammen med
+fenobarbital på grunn av risiko for redusert plasmakonsentrasjon og redusert klinisk effekt av
+fenobarbital (se pkt. 4.5).
+
+Alvorlige hudreaksjoner
+Livstruende hudreaksjoner som Stevens-Johnsons syndrom og toksisk epidermal nekrolyse er
+rapportert ved bruk av fenobarbital.
+
+Pasienter bør informeres om tegn og symptomer og nøye overvåkes for hudreaksjoner. Risikoen for
+Stevens-Johnsons syndrom eller toksisk epidermal nekrolyse er størst i løpet av de første ukene etter
+behandlingsstart.
+
+Ved symptomer eller tegn på Stevens-Johnsons syndrom eller toksisk epidermal nekrolyse (f.eks.
+progressive hudutslett ofte med blemmer eller lesjoner i slimhinnene) bør behandlingen med
+fenobarbital seponeres.
+
+Tidlig diagnose og øyeblikkelig seponering av legemidlet som er mistenkt å forårsake Stevens-
+Johnsons syndrom eller toksisk epidermal nekrolyse gis best behandlingsresultat og prognose.
+
+Hos pasienter som har utviklet Stevens-Johnsons syndrom eller toksisk epidermal nekrolyse ved bruk
+av fenobarbital, må behandling med fenobarbital ikke startes opp igjen på noe tidspunkt.
+
+Pasienter med sjeldne arvelige problemer med galaktoseintoleranse, total laktasemangel eller glukose-
+galaktose malabsorpsjon bør ikke ta dette legemidlet.
+
+4.5     Interaksjon med andre legemidler og andre former for interaksjon
+
+Fenobarbital kan påvirke eliminasjon/effekt av samtidige legemidler ved enzyminduksjon
+(fenobarbital er en potent CYP 3A4-induser) og kan nedsette effekten av f.eks. perorale
+antikoagulantia og antikonsepsjonsmidler. CNS-depresjon kan forsterkes hvis fenobarbital kombineres
+med f.eks. alkohol, analgetika, sedativa/hypnotika.
+
+Legemidler som påvirker fenobarbital:
+Fenobarbital        Mulige kliniske følger
+kombinert med
+Alkohol                Fare for tung sedasjon og alvorlig CNS-depresjon og respirasjonsdepresjon
+                       selv ved lavt inntak av alkohol
+Antiepileptika         Felbamat, valproinsyre, fenytoin og karbamazepin – økt konsentrasjon av
+                       fenobarbital
+Vitaminer              Pyridoksin – nedsatt effekt av fenobarbital
+                       Folsyre – fenobarbital kan redusere serumnivået av folsyre. Mangel på
+                       folsyre kan på sin side redusere metabolismen av fenobarbital. Ved samtidig
+                       behandling med folsyre kan dosebehovet av fenobarbital øke.
+                       Serumkonsentrasjon av fenobarbital bør monitoreres.
+Antineoplastiske       Dabrafenib - nedsatt konsentrasjon av fenobarbital
+midler
+Sentralt virkende      Metylfenidat - økt effekt av fenobarbital
+sympatomimetika
+Johannesurt            Nedsatt effekt av fenobarbital ved samtidig bruk av urtepreparater som
+(Hypericum             inneholder johannesurt (Hypericum perforatum). Dette skyldes at johannesurt
+perforatum)            induserer enzymer som metaboliserer legemidler. Urtepreparater som
+                       inneholder johannesurt bør derfor ikke kombineres med fenobarbital.
+                       Enzyminduksjonen kan vare i minst 2 uker etter at behandlingen med
+                       johannesurt er avsluttet. Hvis en pasient allerede bruker johannesurt bør
+                       konsentrasjonen av fenobarbital måles og behandlingen med johannesurt
+                       avsluttes. Fenobarbitalnivået kan øke når johannesurtbehandling avsluttes.
+                       Justering av fenobarbitaldosen kan være påkrevet
+Midler ved             Metadon - økt effekt av fenobarbital
+opiatavhengighet
+Midler som             Kalsiumfolinat og kalsium levofolinat - redusert konsentrasjon av
+motvirker toksisitet   fenobarbital
+av antineoplastiske
+midler
+
+Legemidler som fenobarbital påvirker:
+Fenobarbital        Mulige kliniske følger
+kombinert med
+Antiinfektiver      Nedsatt konsentrasjon av noen antibiotika (doksysyklin, kloramfenikol og
+                    metronidazol), antimykotika (itrakonazol, vorikonazol og posakonazol) og
+                    antivirale legemidler (sakinavir, indinavir, amprenavir, fosamprenavir,
+                    telaprevir, boceprevir, simeprevir, etravirin, rilpivirin, maraviroc,
+                    dolutegravir, daklatasvir, sofosbuvir, ritonavir, kobicistat, elvitegravir).
+Vitaminer           Nedsatt effekt av vitamin D
+Antitrombotiske        Redusert effekt av warfarin, rivaroksaban og apiksaban
+midler
+Legemidler for         Nedsatt konsentrasjon av digitalisglykosider, selektive kalsiumkanalblokkere
+hjerte-og              og kinidin
+karsykdommer
+Diuretika              Nedsatt konsentrasjon av eplerenon og tolvaptan
+Hormonpreparater       Nedsatt konsentrasjon av progestogener, østrogener, steroider, ulipristal,
+                       dienogest og tyreoideapreparater
+Antineoplastiske       Redusert konsentrasjon av paklitaksel, kabazitaxel, etoposid, bortezomib,
+midler                 idelalisib og flere tyrosinkinase hemmere (imatinib, gefitinib, erlotinib,
+                       sunitinib, sorafenib, dasatinib, lapatinib, nilotinib, temsirolimus, pazopanib,
+                       vandetanib, bosutinib, vemurafenib, krizotinib, aksitinib, ruksolitinib,
+                       regorafenib og dabrafenib).
+Immunsuppressiver      Nedsatt konsentrasjon av apremilast, ciklosporin og takrolimus
+Sedativa, analgetika   Opioider - vanligvis vil samtidig administrasjon av fenobarbital med opioider
+Fenobarbital            Mulige kliniske følger
+kombinert med
+og anestetika           øke risiko for sedasjon og CNS-depresjon.
+                        Paracetamol - nedsatt konsentrasjon av paracetamol og økt konsentrasjon av
+                        den levertoksiske metabolitten NAPQI
+Legemidler mot          Natriumoksybat - økt sedasjon/CNS-depresjon. Unngå samtidig bruk.
+narkolepsi
+Antiepileptika          Nedsatt konsentrasjon, eller svært sjeldent økt konsentrasjon, av
+                        fenytoin/karbamazepin
+                        Nedsatt konsentrasjon av lamotrigin, stiripentol, topiramat, valproinsyre og
+                        zonisamid
+Preparater med          Nedsatt konsentrasjon av ivakaftor, roflumilast og teofyllin
+virkning på
+respirasjonssystemet
+Antipsykotika           Nedsatt konsentrasjon av aripiprazol, haloperidol, lurasidon og risperidon
+Antidepressiva          Nedsatt konsentrasjon av mianserin og trisykliske antidepressiva
+Midler ved              Nedsatt konsentrasjon av metadon
+opiatavhengighet
+
+4.6     Fertilitet, graviditet og amming
+
+Graviditet
+Fenobarbital er vist å forårsake misdannelser (kraniofaciale-, distale ekstremitets- og
+hjertemisdannelser) og mentale- og motoriske utviklingsforstyrrelser; det såkalte føtale
+hydantoinsyndromet.
+
+Ved bruk av antiepileptika generelt er det vist en overhyppighet av misdannelser hos barn på 2-3
+ganger sammenlignet med ikke-epileptikere. Et bredt spekter av misdannelser er rapportert, hvorav de
+hyppigst forekommende er defekter i sentralnervesystemet (anencefali, hydrocefali, mikrocefali, spina
+bifida), hjerte- og skjelettmisdannelser, hypospadi og leppe/ganespalte. Varig mental hemming
+og/eller forsinket mental og motorisk utvikling hos barnet kan oppstå.
+
+Hvis forebyggelse av anfall svekkes eller opphører, kan dette føre til betydelig risiko for både mor og
+det ufødte barnet og denne risikoen kan være alvorligere enn risikoen for misdannelser. Generelt
+gjelder det at risiko for fosterskader er minst når monoterapi benyttes, når lavest mulig dose velges og
+når folattilskudd gis før og under graviditeten. Økt blødningsrisiko hos den nyfødte tilsier av vitamin
+K1 bør gis profylaktisk til moren siste måned før fødsel. Hos nyfødte bør protrombinnivået bestemmes
+og behandling med vitamin K1 vurderes.
+
+Enkelte tilfeller av neonatal sedasjon og abstinenssymptomer (kan oppstå inntil 10-14 dager etter
+fødsel) hos barnet er rapportert ved bruk av fenobarbital sent i svangerskapet. Fenobarbital skal brukes
+hvis fordelen oppveier risikoen.
+
+Amming
+Beregnet dose barnet får i seg er gjennomsnittlig 43,2 - 93,6 % og maksimalt 297 % av morens
+vektjusterte daglige dose. Fenobarbital akkumuleres i barnet. Det er sannsynlig at barn som ammes
+påvirkes. Legemidlet skal derfor ikke brukes under amming.
+
+4.7     Påvirkning av evnen til å kjøre bil og bruke maskiner
+
+På grunn av sedativ effekt av fenobarbital kan reaksjonsevnen påvirkes. Legemidlet kan påvirke evnen
+til å kjøre bil og bruke maskiner.
+4.8       Bivirkninger
+
+Bivirkninger er klassifisert etter organklassesystem. Innenfor hver organklasse er frekvensen definert
+som følger:
+
+Organklasse-         Vanlige               Mindre                Sjeldne               Svært sjeldne         Ikke kjent
+system               (≥ 1/100 til          vanlige               (≥ 1/10 000 til       (< 1/10 000)          frekvens (kan
+                     < 1/10)               (≥ 1/1000 til         < 1/1000)                                   ikke beregnes
+                                           < 1/100)                                                          ut fra
+                                                                                                             tilgjengelige
+                                                                                                             data)
+Sykdommer i          Makrocytose                                 Megaloblastisk
+blod og                                                          anemi
+lymfatiske                                                       (folsyrereduksj
+organer                                                          on)
+Forstyrrelser                                                    Antikonvulsivt
+i                                                                hypersensitivit
+immunsystem                                                      etssyndrom*
+et
+Endokrine                                  Osteomalasi**                               Porfyri
+sykdommer
+Psykiatriske         Nedsatt
+lidelser***          våkenhet,
+                     Konsentrasjon
+                     s-forstyrrelser
+Nevrologiske         Hyperirritabilit      Svimmelhet                                                        Abstinens-
+sykdommer**          et (barn),                                                                              symptomer
+*                    Forvirring
+                     (eldre),
+                     Nystagmus,
+                     Ataksi
+Gastro-                                    Munntørrhet
+intestinale
+sykdommer
+Hud- og              Utslett (evt.                               Eksfoliativ           Alvorlige
+underhuds-           med feber)                                  dermatitt             hudreaksjoner:
+sykdommer                                                                              Stevens-
+                                                                                       Johnson-
+                                                                                       syndrom og
+                                                                                       Toksisk
+                                                                                       epidermal
+                                                                                       nekrose (se
+                                                                                       pkt. 4.4)
+Undersøkelse                                                                                                 Hyperlipidemi
+r
+* Karakterisert ved eosinofili, pyreksi, utslett, lymfadenopati, hepatitt, nyresvikt og noen ganger disseminert intravaskulær
+koagulasjon, i tillegg til andre multiorganpatologier.
+** Etter langtidsbehandling. Har innvirkning på D-vitaminmetabolismen (se pkt. 4.5). Det er også rapportert om osteopeni,
+osteoporose og frakturer etter langtidsbehandling.
+*** Nevrologiske og psykiatriske bivirkninger er konsentrasjonsavhengige, risikoen øker med økende plasmakonsentrasjon.
+Nedsatt våkenhet forsvinner vanligvis etter noen ukers behandling.
+
+Melding av mistenkte bivirkninger
+Melding av mistenkte bivirkninger etter godkjenning av legemidler er viktig. Det gjør det mulig å
+overvåke forholdet mellom nytte og risiko for legemidlet kontinuerlig. Helsepersonell oppfordres til å
+melde enhver mistenkt bivirkning. Dette gjøres via meldeskjema som finnes på nettsiden til Statens
+legemiddelverk: www.legemiddelverket.no/meldeskjema.
+4.9     Overdosering
+
+Toksisitet
+Toleranseutvikling. Toksisiteten potenseres av alkohol og CNS-depressive legemidler (se pkt. 4.5).
+Barn: Toksisk dose ca. 10 mg/kg. 180 mg til 3-åring ga moderat og 270 mg til 3-åring ga moderat til
+alvorlig forgiftning.
+Voksne: Toksisk dose ca. 1 g. 2 g ga lett til moderat forgiftning. Potensiell letal dose 5–10 g.
+Serumkonsentrasjoner: > 200 mol/liter forventes lett, > 400 mol/liter moderat og > 600 mol/liter
+alvorlig forgiftning.
+
+Symptomer
+Eksitasjon (tidlig i forløpet, særlig hos barn), deretter tiltagende CNS-depresjon til dypt koma med
+utslukkede reflekser og lang varighet. Ataksi og nystagmus. Respirasjonsdepresjon, hypotensjon og
+sirkulasjonssvikt. Hypotermi. Nedsatt GI-motilitet. Evt. bulløst eksantem og rabdomyolyse.
+
+Behandling
+Ventrikkeltømming og gjentatt kulldosering hvis indisert. Symptomatisk behandling. Følg ev.
+serumkonsentrasjonen. Alkalisk diurese dersom gjentatt kulldosering ikke kan gjennomføres.
+Intubering og evt. respiratorbehandling på vid indikasjon. Vasopressor (noradrenalin) er da oftest
+nødvendig. Hemodialyse (CVVHD) kan unntaksvis være indisert ved alvorlig forgiftning og nedsatt
+nyrefunksjon.
+
+
+5.      FARMAKOLOGISKE EGENSKAPER
+
+5.1     Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Antiepileptika. Barbiturater og derivater, ATC-kode: N03A A02
+
+Virkningsmekanisme
+Fenobarbital hemmer spenningssensitive natriumkanaler og stabiliserer dermed membraner i
+nevronale celler.
+
+Farmakodynamiske effekter
+Krampedempende, svak sedativ effekt.
+
+5.2     Farmakokinetiske egenskaper
+
+Absorpsjon
+Nesten fullstendig, men noe langsom absorpsjon. Maks serumkonsentrasjon etter ca. 4 timer.
+
+Distribusjon
+Proteinbinding 40-60 %. Fordeles til alle vev og kroppsvæsker. Terapeutisk serumkonsentrasjon: 45 –
+130 mikromol/liter (10-30 mikrogram/ml).
+
+Biotransformasjon
+Omdannes i lever til inaktiv metabolitt parahydroksyfenylderivat som utskilles som glukuronid.
+Omdannes også til N-glukuronid.
+
+Eliminasjon
+Halveringstid 2-6 døgn hos voksne, mye lengre halveringstid hos nyfødte, noe kortere hos barn
+(65-70 timer, svært varierende). Metaboliseres i lever, men utskilles også uomdannet i urinen (ca.
+25 %). Urinutskillelsen øker ved alkalisering. Ved nyreinsuffisiens foreligger risiko for forlenget
+eliminasjonstid.
+5.3     Prekliniske sikkerhetsdata
+
+Dyrestudier har vist økt forekomst av misdannelser, inkludert leppe/ganespalte, kardiovaskulære og
+urogenitale misdannelser, hos avkom av dyr behandlet med store doser fenobarbital i
+drektighetsperioden. Forstyrrelser i sentralnervesystemet og/eller atferdsendringer er også sett.
+
+6.      FARMASØYTISKE OPPLYSNINGER
+
+6.1     Hjelpestoffer
+
+Laktose,
+Maisstivelse,
+Gelatin,
+Mikrokrystallinsk cellulose,
+Magnesiumstearat,
+Vannfri kolloidal silika.
+
+6.2     Uforlikeligheter
+
+Ikke relevant.
+
+6.3     Holdbarhet
+
+3 år.
+
+6.4     Oppbevaringsbetingelser
+
+Oppbevares ved høyst 25 ºC.
+
+6.5     Emballasje (type og innhold)
+
+Polyetylen plastboks med 100 tabletter.
+
+6.6     Spesielle forholdsregler for destruksjon
+
+Ikke relevant.
+
+
+7.      INNEHAVER AV MARKEDSFØRINGSTILLATELSE
+
+Orifarm Healthcare A/S
+Energivej 15
+5260 Odense S
+Danmark
+
+
+8.      MARKEDSFØRINGSTILLATELSESNUMMER
+
+MTnr: 6349
+
+
+9.      DATO FOR FØRSTE MARKEDSFØRINGSTILLATELSE / SISTE FORNYELSE
+
+Dato for første markedsføringstillatelse: 28. juni 1978
+Dato for siste fornyelse: 28. juni 2008
+10.    OPPDATERINGSDATO
+
+31.07.2021
+

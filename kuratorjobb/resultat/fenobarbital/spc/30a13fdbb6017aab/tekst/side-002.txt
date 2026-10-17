@@ -1,0 +1,57 @@
+4.4     Advarsler og forsiktighetsregler
+
+Forsiktighet ved nedsatt lever- eller nyrefunksjon, redusert respirasjonskapasitet og ved behandling av
+eldre.
+
+Vedvarende bruk kan gi toleranseutvikling og fare for kumulasjon og kronisk forgiftning. Bør ikke gis
+til alkohol- eller narkotikamisbrukere eller pasienter som er disponert for misbruk.
+
+Ved oppstart og seponering av tilleggsmedikasjon som kan gi interaksjoner, bør pasienten overvåkes
+nøye, kontroll av serumkonsentrasjonen tilrådes ved epilepsi og feberkramper.
+
+Selvmordstanker og selvmordsrelatert adferd er rapportert hos pasienter behandlet med antiepileptiske
+legemidler for flere indikasjoner. En meta-analyse av randomiserte placebokontrollerte studier med
+antiepileptika har vist en liten økning i risiko for selvmordstanker og selvmordsrelatert adferd.
+Mekanismen bak denne risikoen er ikke kjent og tilgjengelige data kan ikke utelukke muligheten for
+økt risiko ved behandling med fenobarbital. Pasientene bør derfor overvåkes for tegn på
+selvmordstanker eller selvmordsrelatert adferd, og nødvendig behandling bør vurderes. Pasienter (og
+pårørende) bør oppfordres til å kontakte medisinsk hjelp omgående dersom selvmordstanker eller
+selvmordsrelatert adferd oppstår.
+
+For å unngå tannskade på grunn av munntørrhet bør tennene børstes med fluortannkrem 2 ganger
+daglig.
+
+Urtepreparater som inneholder johannesurt (Hypericum perforatum) bør ikke brukes sammen med
+fenobarbital på grunn av risiko for redusert plasmakonsentrasjon og redusert klinisk effekt av
+fenobarbital (se pkt. 4.5).
+
+Alvorlige hudreaksjoner
+Livstruende hudreaksjoner som Stevens-Johnsons syndrom og toksisk epidermal nekrolyse er
+rapportert ved bruk av fenobarbital.
+
+Pasienter bør informeres om tegn og symptomer og nøye overvåkes for hudreaksjoner. Risikoen for
+Stevens-Johnsons syndrom eller toksisk epidermal nekrolyse er størst i løpet av de første ukene etter
+behandlingsstart.
+
+Ved symptomer eller tegn på Stevens-Johnsons syndrom eller toksisk epidermal nekrolyse (f.eks.
+progressive hudutslett ofte med blemmer eller lesjoner i slimhinnene) bør behandlingen med
+fenobarbital seponeres.
+
+Tidlig diagnose og øyeblikkelig seponering av legemidlet som er mistenkt å forårsake Stevens-
+Johnsons syndrom eller toksisk epidermal nekrolyse gis best behandlingsresultat og prognose.
+
+Hos pasienter som har utviklet Stevens-Johnsons syndrom eller toksisk epidermal nekrolyse ved bruk
+av fenobarbital, må behandling med fenobarbital ikke startes opp igjen på noe tidspunkt.
+
+Pasienter med sjeldne arvelige problemer med galaktoseintoleranse, total laktasemangel eller glukose-
+galaktose malabsorpsjon bør ikke ta dette legemidlet.
+
+4.5     Interaksjon med andre legemidler og andre former for interaksjon
+
+Fenobarbital kan påvirke eliminasjon/effekt av samtidige legemidler ved enzyminduksjon
+(fenobarbital er en potent CYP 3A4-induser) og kan nedsette effekten av f.eks. perorale
+antikoagulantia og antikonsepsjonsmidler. CNS-depresjon kan forsterkes hvis fenobarbital kombineres
+med f.eks. alkohol, analgetika, sedativa/hypnotika.
+
+Legemidler som påvirker fenobarbital:
+Fenobarbital        Mulige kliniske følger

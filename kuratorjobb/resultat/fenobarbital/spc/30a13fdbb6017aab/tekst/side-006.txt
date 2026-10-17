@@ -1,0 +1,54 @@
+4.9     Overdosering
+
+Toksisitet
+Toleranseutvikling. Toksisiteten potenseres av alkohol og CNS-depressive legemidler (se pkt. 4.5).
+Barn: Toksisk dose ca. 10 mg/kg. 180 mg til 3-åring ga moderat og 270 mg til 3-åring ga moderat til
+alvorlig forgiftning.
+Voksne: Toksisk dose ca. 1 g. 2 g ga lett til moderat forgiftning. Potensiell letal dose 5–10 g.
+Serumkonsentrasjoner: > 200 mol/liter forventes lett, > 400 mol/liter moderat og > 600 mol/liter
+alvorlig forgiftning.
+
+Symptomer
+Eksitasjon (tidlig i forløpet, særlig hos barn), deretter tiltagende CNS-depresjon til dypt koma med
+utslukkede reflekser og lang varighet. Ataksi og nystagmus. Respirasjonsdepresjon, hypotensjon og
+sirkulasjonssvikt. Hypotermi. Nedsatt GI-motilitet. Evt. bulløst eksantem og rabdomyolyse.
+
+Behandling
+Ventrikkeltømming og gjentatt kulldosering hvis indisert. Symptomatisk behandling. Følg ev.
+serumkonsentrasjonen. Alkalisk diurese dersom gjentatt kulldosering ikke kan gjennomføres.
+Intubering og evt. respiratorbehandling på vid indikasjon. Vasopressor (noradrenalin) er da oftest
+nødvendig. Hemodialyse (CVVHD) kan unntaksvis være indisert ved alvorlig forgiftning og nedsatt
+nyrefunksjon.
+
+
+5.      FARMAKOLOGISKE EGENSKAPER
+
+5.1     Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Antiepileptika. Barbiturater og derivater, ATC-kode: N03A A02
+
+Virkningsmekanisme
+Fenobarbital hemmer spenningssensitive natriumkanaler og stabiliserer dermed membraner i
+nevronale celler.
+
+Farmakodynamiske effekter
+Krampedempende, svak sedativ effekt.
+
+5.2     Farmakokinetiske egenskaper
+
+Absorpsjon
+Nesten fullstendig, men noe langsom absorpsjon. Maks serumkonsentrasjon etter ca. 4 timer.
+
+Distribusjon
+Proteinbinding 40-60 %. Fordeles til alle vev og kroppsvæsker. Terapeutisk serumkonsentrasjon: 45 –
+130 mikromol/liter (10-30 mikrogram/ml).
+
+Biotransformasjon
+Omdannes i lever til inaktiv metabolitt parahydroksyfenylderivat som utskilles som glukuronid.
+Omdannes også til N-glukuronid.
+
+Eliminasjon
+Halveringstid 2-6 døgn hos voksne, mye lengre halveringstid hos nyfødte, noe kortere hos barn
+(65-70 timer, svært varierende). Metaboliseres i lever, men utskilles også uomdannet i urinen (ca.
+25 %). Urinutskillelsen øker ved alkalisering. Ved nyreinsuffisiens foreligger risiko for forlenget
+eliminasjonstid.

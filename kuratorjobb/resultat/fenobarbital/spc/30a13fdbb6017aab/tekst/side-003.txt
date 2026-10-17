@@ -1,0 +1,54 @@
+kombinert med
+Alkohol                Fare for tung sedasjon og alvorlig CNS-depresjon og respirasjonsdepresjon
+                       selv ved lavt inntak av alkohol
+Antiepileptika         Felbamat, valproinsyre, fenytoin og karbamazepin – økt konsentrasjon av
+                       fenobarbital
+Vitaminer              Pyridoksin – nedsatt effekt av fenobarbital
+                       Folsyre – fenobarbital kan redusere serumnivået av folsyre. Mangel på
+                       folsyre kan på sin side redusere metabolismen av fenobarbital. Ved samtidig
+                       behandling med folsyre kan dosebehovet av fenobarbital øke.
+                       Serumkonsentrasjon av fenobarbital bør monitoreres.
+Antineoplastiske       Dabrafenib - nedsatt konsentrasjon av fenobarbital
+midler
+Sentralt virkende      Metylfenidat - økt effekt av fenobarbital
+sympatomimetika
+Johannesurt            Nedsatt effekt av fenobarbital ved samtidig bruk av urtepreparater som
+(Hypericum             inneholder johannesurt (Hypericum perforatum). Dette skyldes at johannesurt
+perforatum)            induserer enzymer som metaboliserer legemidler. Urtepreparater som
+                       inneholder johannesurt bør derfor ikke kombineres med fenobarbital.
+                       Enzyminduksjonen kan vare i minst 2 uker etter at behandlingen med
+                       johannesurt er avsluttet. Hvis en pasient allerede bruker johannesurt bør
+                       konsentrasjonen av fenobarbital måles og behandlingen med johannesurt
+                       avsluttes. Fenobarbitalnivået kan øke når johannesurtbehandling avsluttes.
+                       Justering av fenobarbitaldosen kan være påkrevet
+Midler ved             Metadon - økt effekt av fenobarbital
+opiatavhengighet
+Midler som             Kalsiumfolinat og kalsium levofolinat - redusert konsentrasjon av
+motvirker toksisitet   fenobarbital
+av antineoplastiske
+midler
+
+Legemidler som fenobarbital påvirker:
+Fenobarbital        Mulige kliniske følger
+kombinert med
+Antiinfektiver      Nedsatt konsentrasjon av noen antibiotika (doksysyklin, kloramfenikol og
+                    metronidazol), antimykotika (itrakonazol, vorikonazol og posakonazol) og
+                    antivirale legemidler (sakinavir, indinavir, amprenavir, fosamprenavir,
+                    telaprevir, boceprevir, simeprevir, etravirin, rilpivirin, maraviroc,
+                    dolutegravir, daklatasvir, sofosbuvir, ritonavir, kobicistat, elvitegravir).
+Vitaminer           Nedsatt effekt av vitamin D
+Antitrombotiske        Redusert effekt av warfarin, rivaroksaban og apiksaban
+midler
+Legemidler for         Nedsatt konsentrasjon av digitalisglykosider, selektive kalsiumkanalblokkere
+hjerte-og              og kinidin
+karsykdommer
+Diuretika              Nedsatt konsentrasjon av eplerenon og tolvaptan
+Hormonpreparater       Nedsatt konsentrasjon av progestogener, østrogener, steroider, ulipristal,
+                       dienogest og tyreoideapreparater
+Antineoplastiske       Redusert konsentrasjon av paklitaksel, kabazitaxel, etoposid, bortezomib,
+midler                 idelalisib og flere tyrosinkinase hemmere (imatinib, gefitinib, erlotinib,
+                       sunitinib, sorafenib, dasatinib, lapatinib, nilotinib, temsirolimus, pazopanib,
+                       vandetanib, bosutinib, vemurafenib, krizotinib, aksitinib, ruksolitinib,
+                       regorafenib og dabrafenib).
+Immunsuppressiver      Nedsatt konsentrasjon av apremilast, ciklosporin og takrolimus
+Sedativa, analgetika   Opioider - vanligvis vil samtidig administrasjon av fenobarbital med opioider

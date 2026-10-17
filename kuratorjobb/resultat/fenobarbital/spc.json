@@ -1,0 +1,249 @@
+{
+  "stoff": "fenobarbital",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-17T04:15:05.944175+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 8,
+    "hentet": 1,
+    "dokumenter": 1,
+    "mangler": [
+      {
+        "merkevare_id": "ID_17A52EBD-A0AA-4E97-BD10-2F42359D8E49",
+        "varenavn": "Fenobarbital SA",
+        "navn_form_styrke": "Fenobarbital SA mikst susp 10 mg/ml",
+        "produsent": "Sykehusapotekene HF",
+        "atc": "N03AA02",
+        "legemiddelform": "Mikstur, suspensjon",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_1AA7F071-9A47-4A7F-AF3A-015DD7D9BDBE",
+        "varenavn": "Fenemal dlf",
+        "navn_form_styrke": "Fenemal dlf tab 100 mg",
+        "produsent": "Dansk Lægemiddelforsyning",
+        "atc": "N03AA02",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_1C0DD49C-F02E-405A-8107-8DA577D4DF72",
+        "varenavn": "Fenobarbitalnatrium NAF",
+        "navn_form_styrke": "Fenobarbitalnatrium NAF inj, oppl 100 mg/ml",
+        "produsent": "Sykehusapoteket Oslo, Rikshospitalet",
+        "atc": "N03AA02",
+        "legemiddelform": "Injeksjonsvæske, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_78516146-0407-4F0C-B734-55C78166E0F9",
+        "varenavn": "Fenemal NAF",
+        "navn_form_styrke": "Fenemal NAF tab 15 mg",
+        "produsent": "Kragerø Tablettproduksjon AS",
+        "atc": "N03AA02",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_81AAAB11-5411-42C7-8687-4DC2C3A3D63D",
+        "varenavn": "Fenobarbital SA",
+        "navn_form_styrke": "Fenobarbital SA inj, oppl 10 mg/ml",
+        "produsent": "Sykehusapoteket Oslo, Rikshospitalet",
+        "atc": "N03AA02",
+        "legemiddelform": "Injeksjonsvæske, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_A5889878-E1D9-41AF-AA12-E10D23A4D87B",
+        "varenavn": "Fenobarbital SA",
+        "navn_form_styrke": "Fenobarbital SA mikst susp 5 mg/ml",
+        "produsent": "Sykehusapotekene HF",
+        "atc": "N03AA02",
+        "legemiddelform": "Mikstur, suspensjon",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_DDE9F737-F637-470E-B761-6BE5AFDFFFDA",
+        "varenavn": "Fenobarbital SA",
+        "navn_form_styrke": "Fenobarbital SA inj, oppl 10 mg/ml",
+        "produsent": "Sykehusapoteket Oslo, Rikshospitalet",
+        "atc": "N03AA02",
+        "legemiddelform": "Injeksjonsvæske, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 1 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 1,
+        "ikke_dmp": 0,
+        "uten_omtale": 7
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "7 av 8 preparater i FEST mangler en hentet preparatomtale fra DMP: 7 uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA). SPC-behovet er ikke dekket; se «dekning.mangler».",
+      "antall": {
+        "preparater": 8,
+        "hentet": 1,
+        "mangler": 7,
+        "dokumenter": 1
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06349.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06349.pdf",
+      "hentet_kl": "2026-10-17T05:53:40.478Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "195394",
+        "content-md5": "IaER5bTT5SxtHqLIvUNBkw==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:50 GMT",
+        "etag": "0x8DE53793CC7A94A",
+        "date": "Sat, 17 Oct 2026 05:53:41 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_4B1C1643-ACD2-490E-9D19-81EE0B8CE46B",
+          "varenavn": "Fenemal",
+          "navn_form_styrke": "Fenemal tab 50 mg",
+          "produsent": "Orifarm Healthcare A/S",
+          "atc": "N03AA02",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06349.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (195394 byte).",
+          "antall": {
+            "bytes": 195394
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "30a13fdbb6017aabb9599623105a97f674af00145f051aee2727621b14053203"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "30a13fdbb6017aabb9599623105a97f674af00145f051aee2727621b14053203",
+      "bytes": 195394,
+      "mappe": "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab",
+      "pdf": {
+        "sider": 8,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "1",
+        "laget": "Mon Aug  2 12:56:22 2021 UTC",
+        "endret": "Mon Aug  2 12:56:22 2021 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/original.pdf",
+        "tekst": "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/tekst/side-001.txt",
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/tekst/side-002.txt",
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/tekst/side-003.txt",
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/tekst/side-004.txt",
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/tekst/side-005.txt",
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/tekst/side-006.txt",
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/tekst/side-007.txt",
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/tekst/side-008.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/sider/side-001.png",
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/sider/side-002.png",
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/sider/side-003.png",
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/sider/side-004.png",
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/sider/side-005.png",
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/sider/side-006.png",
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/sider/side-007.png",
+          "kuratorjobb/resultat/fenobarbital/spc/30a13fdbb6017aab/sider/side-008.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 5,
+        "til": 6
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (8 sider).",
+          "antall": {
+            "sider": 8
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 13983
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 5."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 8
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

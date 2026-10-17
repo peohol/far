@@ -1,0 +1,57 @@
+4.8       Bivirkninger
+
+Bivirkninger er klassifisert etter organklassesystem. Innenfor hver organklasse er frekvensen definert
+som følger:
+
+Organklasse-         Vanlige               Mindre                Sjeldne               Svært sjeldne         Ikke kjent
+system               (≥ 1/100 til          vanlige               (≥ 1/10 000 til       (< 1/10 000)          frekvens (kan
+                     < 1/10)               (≥ 1/1000 til         < 1/1000)                                   ikke beregnes
+                                           < 1/100)                                                          ut fra
+                                                                                                             tilgjengelige
+                                                                                                             data)
+Sykdommer i          Makrocytose                                 Megaloblastisk
+blod og                                                          anemi
+lymfatiske                                                       (folsyrereduksj
+organer                                                          on)
+Forstyrrelser                                                    Antikonvulsivt
+i                                                                hypersensitivit
+immunsystem                                                      etssyndrom*
+et
+Endokrine                                  Osteomalasi**                               Porfyri
+sykdommer
+Psykiatriske         Nedsatt
+lidelser***          våkenhet,
+                     Konsentrasjon
+                     s-forstyrrelser
+Nevrologiske         Hyperirritabilit      Svimmelhet                                                        Abstinens-
+sykdommer**          et (barn),                                                                              symptomer
+*                    Forvirring
+                     (eldre),
+                     Nystagmus,
+                     Ataksi
+Gastro-                                    Munntørrhet
+intestinale
+sykdommer
+Hud- og              Utslett (evt.                               Eksfoliativ           Alvorlige
+underhuds-           med feber)                                  dermatitt             hudreaksjoner:
+sykdommer                                                                              Stevens-
+                                                                                       Johnson-
+                                                                                       syndrom og
+                                                                                       Toksisk
+                                                                                       epidermal
+                                                                                       nekrose (se
+                                                                                       pkt. 4.4)
+Undersøkelse                                                                                                 Hyperlipidemi
+r
+* Karakterisert ved eosinofili, pyreksi, utslett, lymfadenopati, hepatitt, nyresvikt og noen ganger disseminert intravaskulær
+koagulasjon, i tillegg til andre multiorganpatologier.
+** Etter langtidsbehandling. Har innvirkning på D-vitaminmetabolismen (se pkt. 4.5). Det er også rapportert om osteopeni,
+osteoporose og frakturer etter langtidsbehandling.
+*** Nevrologiske og psykiatriske bivirkninger er konsentrasjonsavhengige, risikoen øker med økende plasmakonsentrasjon.
+Nedsatt våkenhet forsvinner vanligvis etter noen ukers behandling.
+
+Melding av mistenkte bivirkninger
+Melding av mistenkte bivirkninger etter godkjenning av legemidler er viktig. Det gjør det mulig å
+overvåke forholdet mellom nytte og risiko for legemidlet kontinuerlig. Helsepersonell oppfordres til å
+melde enhver mistenkt bivirkning. Dette gjøres via meldeskjema som finnes på nettsiden til Statens
+legemiddelverk: www.legemiddelverket.no/meldeskjema.
