@@ -1,14 +1,14 @@
 {
-  "oppdatert_kl": "2026-10-17T06:46:12.505Z",
+  "oppdatert_kl": "2026-10-17T06:46:59.176Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
-    "klar": 90,
+    "klar": 91,
     "reservert": 1,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 0,
     "sammenslatt": 0,
     "publisert": 3,
-    "blokkert": 5,
+    "blokkert": 4,
     "utenfor": 1
   },
   "aktive": [
@@ -62,6 +62,21 @@
         "Ingen kuratering å regne alderen fra.",
         "12 av 13 redaksjonelle seksjoner er tomme.",
         "Bare 1 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "doksepin",
+      "modus": "de_novo",
+      "poeng": 1460.7,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen doksepin-0016.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "7 av 13 redaksjonelle seksjoner er tomme.",
+        "14 av 19 elementer har ingen kilde.",
+        "Bare 4 referanser."
       ],
       "tidligst_kl": null
     },
@@ -152,35 +167,10 @@
         "Bare 3 referanser."
       ],
       "tidligst_kl": null
-    },
-    {
-      "stoff": "okskarbazepin",
-      "modus": "de_novo",
-      "poeng": 447.6,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ],
-      "tidligst_kl": null
     }
   ],
   "til_gjennomgang": [],
   "blokkert": [
-    {
-      "stoff": "doksepin",
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.",
-          "kl": "2026-10-17T06:46:12.505Z",
-          "kilde": "system"
-        }
-      ]
-    },
     {
       "stoff": "etanol",
       "blokkeringer": [

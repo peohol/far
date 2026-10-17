@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T06:46:12.505Z",
+  "oppdatert_kl": "2026-10-17T06:46:59.176Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 26,
   "stoffer": {
@@ -1067,11 +1067,19 @@
     "doksepin": {
       "stoff": "doksepin",
       "navn": "Doksepin",
-      "status": "blokkert",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1460.7,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen doksepin-0016.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "7 av 13 redaksjonelle seksjoner er tomme.",
+          "14 av 19 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-16T18:10:24.842Z",
@@ -1085,16 +1093,20 @@
       "reservasjon": null,
       "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "doksepin-0016",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-17T06:46:59.176Z",
+        "grunn": "Tilbakestilt med kurateringsgrenen 14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f: Fagansvarlig har avgjort; grenen følges igjen.",
+        "fase": null,
+        "jobbgren": null,
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
+        "kunnskapsgrense": null
+      },
       "pr": null,
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.",
-          "kl": "2026-10-17T06:46:12.505Z",
-          "kilde": "system"
-        }
-      ],
+      "blokkeringer": [],
       "sist_kuratert": null,
       "siste_kjoring": {
         "oppgave": "doksepin-0016",
@@ -1173,6 +1185,12 @@
           "hendelse": "tilbakestilt",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Menneskelig avgjoerelse 2026-10-17; grenen er sendt til kontroll."
+        },
+        {
+          "kl": "2026-10-17T06:46:59.176Z",
+          "hendelse": "tilbakestilt",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Fagansvarlig har avgjort; grenen følges igjen. Gitt tilbake med kurateringsgrenen 14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f."
         }
       ],
       "appgren": null
@@ -5498,6 +5516,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "tilbakestill-doksepin-0646",
         "tilbakestill-brekspiprazol-0645",
         "forny-fenobarbital-0026-gren",
         "reserver-202610170551",
@@ -5546,25 +5565,24 @@
         "fullfort-cbd-1",
         "forny-cbd-1",
         "reserver-neste-2",
-        "fullfort-kariprazin-1",
-        "forny-kariprazin-1"
+        "fullfort-kariprazin-1"
       ],
       "siste": {
-        "id": "tilbakestill-brekspiprazol-0645",
-        "sha256": "eb9a3e48e0a8044d6c1ee80abff9c0806bc85159ee7d77add6eea3aba35a8c9e",
+        "id": "tilbakestill-doksepin-0646",
+        "sha256": "6fe9935dabc54bda032719dcb39a35fa2bd1248d20434cbe8ded8af5a97a12db",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "tilbakestill-brekspiprazol-0645",
-          "foresporsel_sha256": "eb9a3e48e0a8044d6c1ee80abff9c0806bc85159ee7d77add6eea3aba35a8c9e",
+          "foresporsel_id": "tilbakestill-doksepin-0646",
+          "foresporsel_sha256": "6fe9935dabc54bda032719dcb39a35fa2bd1248d20434cbe8ded8af5a97a12db",
           "handling": "tilbakestill",
           "utfall": "ok",
-          "melding": "brekspiprazol er tilbakestilt og gis tilbake til kuratoren med kurateringsgrenen 65e21273-dd2c-408b-b987-9ef8adf219c9.",
-          "behandlet_kl": "2026-10-17T06:46:12.505Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39011116194"
+          "melding": "doksepin er tilbakestilt og gis tilbake til kuratoren med kurateringsgrenen 14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f.",
+          "behandlet_kl": "2026-10-17T06:46:59.176Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39011160498"
         }
       },
       "besvart_commit": "3a1898a7d12b7fcb09f952cd5e1529468bccde34",
-      "sist_brukt_kl": "2026-10-17T06:46:12.505Z"
+      "sist_brukt_kl": "2026-10-17T06:46:59.176Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
