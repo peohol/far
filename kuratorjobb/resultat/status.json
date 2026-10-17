@@ -1,18 +1,55 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/fenytoin-0037",
     "foresporsel_commit": "012bf3ccde63959bf651b274ec6d82d4521e88c2",
     "foresporsel_sha256": "32ef156cb27f05334b89473a8696c8fcc6660a2a1d12d0113d11a75654465c7c",
     "kode_commit": "159c33d2817f3f7a4ddc0149df17f5205287d6c0",
     "kjoring": "https://github.com/peohol/far/actions/runs/39015294354",
-    "startet_kl": "2026-10-17T07:53:48.725Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-17T07:53:50.739Z",
+    "ferdig_kl": "2026-10-17T07:53:59.752Z"
   },
-  "foresporsel": null,
-  "referanse": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "fenytoin"
+    ],
+    "oppgaver": [
+      "funksjonstest",
+      "spc"
+    ],
+    "referanse": "fenytoin-0037-0752"
+  },
+  "referanse": "fenytoin-0037-0752",
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 757
+    }
+  ],
+  "stoffer": {
+    "fenytoin": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/fenytoin/funksjonstest.json"
+        },
+        "spc": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/fenytoin/spc.json"
+        }
+      }
+    }
+  }
 }

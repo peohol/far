@@ -1,0 +1,133 @@
+{
+  "stoff": "fenytoin",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-17T04:15:05.944175+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 9,
+    "hentet": 0,
+    "dokumenter": 0,
+    "mangler": [
+      {
+        "merkevare_id": "ID_3D984773-F1F7-499E-95A1-FB129F553CEA",
+        "varenavn": "Phenhydan",
+        "navn_form_styrke": "Phenhydan inj, oppl 50 mg/ml",
+        "produsent": "Desitin",
+        "atc": "N03AB02",
+        "legemiddelform": "Injeksjonsvæske, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_71276E0A-DEFB-4DEF-86E2-52350156B4F4",
+        "varenavn": "Epanutin",
+        "navn_form_styrke": "Epanutin kaps 100 mg",
+        "produsent": "Pfizer",
+        "atc": "N03AB02",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_7865FD25-F97E-438F-B476-D02DECC38D40",
+        "varenavn": "Phenytoin AWD teva",
+        "navn_form_styrke": "Phenytoin AWD teva tab 100 mg",
+        "produsent": "Teva",
+        "atc": "N03AB02",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_93A78994-652A-4C52-A248-E54813CAC909",
+        "varenavn": "Phenhydan",
+        "navn_form_styrke": "Phenhydan tab 100 mg",
+        "produsent": "Desitin",
+        "atc": "N03AB02",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_B17034C6-E66B-4FB9-9B7D-1FA2F772A474",
+        "varenavn": "Phenhydan",
+        "navn_form_styrke": "Phenhydan tab 100 mg",
+        "produsent": "Desitin",
+        "atc": "N03AB02",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_BEB89B48-D501-4DF0-A9CF-6FC27BDCFFA1",
+        "varenavn": "Fenytoin NAF",
+        "navn_form_styrke": "Fenytoin NAF tab 100 mg",
+        "produsent": "Kragerø Tablettproduksjon AS",
+        "atc": "N03AB02",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_DEAEC7A7-461E-4B9C-873F-ADFD414310FB",
+        "varenavn": "Phenytoin Sodium mercury",
+        "navn_form_styrke": "Phenytoin Sodium mercury inj, oppl 50 mg/ml",
+        "produsent": "Mercury",
+        "atc": "N03AB02",
+        "legemiddelform": "Injeksjonsvæske, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_E19A8CA0-9B4F-4E8E-87B3-9B260EB6763C",
+        "varenavn": "Phenytoin AWD teva",
+        "navn_form_styrke": "Phenytoin AWD teva tab 100 mg",
+        "produsent": "Teva GmbH",
+        "atc": "N03AB02",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_FBDE73F3-B2F0-4200-B7FA-8828C2A5F3E4",
+        "varenavn": "Fenytoin NAF",
+        "navn_form_styrke": "Fenytoin NAF tab 25 mg",
+        "produsent": "Kragerø Tablettproduksjon AS",
+        "atc": "N03AB02",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 0 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 0,
+        "ikke_dmp": 0,
+        "uten_omtale": 9
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "Ingen preparatomtale ble hentet. SPC-behovet er ikke dekket; se «dekning».",
+      "antall": {
+        "preparater": 9,
+        "hentet": 0,
+        "mangler": 9,
+        "dokumenter": 0
+      }
+    }
+  ],
+  "adresser": [],
+  "dokumenter": [],
+  "utelatt": []
+}
