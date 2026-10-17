@@ -1,10 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": null,
-  "foresporsel_sha256": "e54ac2a768a9a34671b25508e75a453adc7a5f3428bea1be2bc686371ae37ab5",
-  "handling": null,
-  "utfall": "avvist",
-  "melding": "Forespørselen kan ikke brukes: tilbakestill krever feltet grunn.",
-  "behandlet_kl": "2026-10-17T18:42:30.266Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39059265638"
+  "foresporsel_id": "tilbakestill-topiramat-2",
+  "foresporsel_sha256": "776ff1974efc00041c2410c4e89cfc88adaf59a9a2985bfd4474df5c6d150fd3",
+  "handling": "tilbakestill",
+  "utfall": "ok",
+  "melding": "topiramat er tilbakestilt og gis tilbake til kuratoren med kurateringsgrenen 6a91451c-9e4a-4712-a913-253546677b1e.",
+  "behandlet_kl": "2026-10-17T18:43:26.780Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39059328748"
 }
