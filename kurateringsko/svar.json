@@ -1,10 +1,44 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-sertindol-0040",
-  "foresporsel_sha256": "8f253f4ee1df95a10700a5589ac0f990288496934e6db8f26f927c33dcc53dc6",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-202610171621",
+  "foresporsel_sha256": "2f3bf876441dd9b4ff9df275ec0619ddc5d1724b2f1c9ec33451c7ac412a600f",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "sertindol er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-17T16:20:50.041Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39048981451"
+  "melding": "topiramat er reservert til 2026-10-17T19:21:46.892Z.",
+  "behandlet_kl": "2026-10-17T16:21:46.892Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39049049639",
+  "oppgave": {
+    "oppgave": "topiramat-0041",
+    "stoff": "topiramat",
+    "navn": "Topiramat",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-17T19:21:46.892Z",
+    "jobbgren": "kuratorjobb/topiramat-0041",
+    "kurateringsgren": "kuratering/topiramat-0041",
+    "pr": null,
+    "gren": null,
+    "gjenoppta": null,
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-17T14:23:30.777Z",
+      "side": true,
+      "elementer": 6,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 4,
+      "referanser": 4,
+      "elementer_uten_kilde": 1
+    },
+    "prioritet": {
+      "poeng": 447.6,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 4 referanser."
+      ]
+    }
+  }
 }
