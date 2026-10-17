@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.102.1',
+    dato: '2026-10-17',
+    sammendrag: 'Kurateringer som legger inn den samme nye kilden, stopper ikke lenger hverandre',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Når to kurateringer av ulike fagsider står til kontroll samtidig og begge har lagt inn den samme nye kilden, brukes kilden fra den som publiseres først, også av den neste. Før stoppet den neste med en teknisk feil og måtte rettes og kontrolleres på nytt bare for å fjerne kilden.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.101.0',
     dato: '2026-10-16',
     sammendrag: 'Piloten er bestått, og kurateringskøen går videre gjennom hele stoffregisteret',
