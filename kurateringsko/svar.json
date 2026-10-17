@@ -1,56 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-fenobarbital-184532",
-  "foresporsel_sha256": "1f573d9658006b5a2b7e3bdf061cedc1fc2755a1611d1a55ac0b2da56c923ace",
-  "handling": "reserver",
+  "foresporsel_id": "fullfort-fenobarbital-0043",
+  "foresporsel_sha256": "f6869c3129031f2e3dfd01d4ff41e127aeb24a42996ad32d6e799c50864e1b5f",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "fenobarbital er reservert til 2026-10-17T21:45:55.091Z.",
-  "behandlet_kl": "2026-10-17T18:45:55.091Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39059515251",
-  "oppgave": {
-    "oppgave": "fenobarbital-0043",
-    "stoff": "fenobarbital",
-    "navn": "Fenobarbital",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T21:45:55.091Z",
-    "jobbgren": "kuratorjobb/fenobarbital-0026",
-    "kurateringsgren": "kuratering/fenobarbital-0043",
-    "pr": null,
-    "gren": "f99c5bb5-b7f1-4038-b5ab-0cab1a706f97",
-    "gjenoppta": {
-      "oppgave": "fenobarbital-0026",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "avbrutt_kl": "2026-10-17T17:51:59.565Z",
-      "grunn": "Kontrolløren har bedt om endringer i kontrollrunde 1.",
-      "fase": null,
-      "jobbgren": "kuratorjobb/fenobarbital-0026",
-      "kurateringsgren": null,
-      "pr": null,
-      "gren": "f99c5bb5-b7f1-4038-b5ab-0cab1a706f97",
-      "kunnskapsgrense": "2026-10-17"
-    },
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-17T14:23:30.777Z",
-      "side": true,
-      "elementer": 6,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 4,
-      "referanser": 3,
-      "elementer_uten_kilde": 1
-    },
-    "prioritet": {
-      "poeng": 1447.6,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen fenobarbital-0026.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ]
-    }
-  }
+  "melding": "fenobarbital er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-17T18:46:50.304Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39059574868"
 }
