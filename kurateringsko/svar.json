@@ -1,56 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-lamotrigin-074746",
-  "foresporsel_sha256": "3b09620f4ea53f0d7e8138a0b30f15a530ac9653cb2bbd41762586f4f69b73cb",
-  "handling": "reserver",
+  "foresporsel_id": "fullfort-lamotrigin-0035",
+  "foresporsel_sha256": "c4f3d5111b3df4b4b6845ff1f3f5095da1374585fa3dca645cfe2d51f2110b3e",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "lamotrigin er reservert til 2026-10-17T10:48:08.816Z.",
-  "behandlet_kl": "2026-10-17T07:48:08.816Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39014975078",
-  "oppgave": {
-    "oppgave": "lamotrigin-0035",
-    "stoff": "lamotrigin",
-    "navn": "Lamotrigin",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T10:48:08.816Z",
-    "jobbgren": "kuratorjobb/lamotrigin-0019",
-    "kurateringsgren": "kuratering/lamotrigin-0035",
-    "pr": null,
-    "gren": "48e10b1b-31b0-452d-9e29-8404e30aa989",
-    "gjenoppta": {
-      "oppgave": "lamotrigin-0025",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "avbrutt_kl": "2026-10-17T06:24:57.621Z",
-      "grunn": "Kontrolløren har bedt om endringer i kontrollrunde 2.",
-      "fase": null,
-      "jobbgren": "kuratorjobb/lamotrigin-0019",
-      "kurateringsgren": null,
-      "pr": null,
-      "gren": "48e10b1b-31b0-452d-9e29-8404e30aa989",
-      "kunnskapsgrense": "2026-10-17"
-    },
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-16T18:10:24.842Z",
-      "side": true,
-      "elementer": 18,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 7,
-      "referanser": 3,
-      "elementer_uten_kilde": 12
-    },
-    "prioritet": {
-      "poeng": 1449.5,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen lamotrigin-0025.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "6 av 13 redaksjonelle seksjoner er tomme.",
-        "12 av 18 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ]
-    }
-  }
+  "melding": "lamotrigin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-17T07:49:06.118Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39015025160"
 }
