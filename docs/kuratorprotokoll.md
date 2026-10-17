@@ -161,6 +161,7 @@ kontrolløren forventer; felt kan legges til.
 {
   "modus": "de_novo",
   "kunnskapsgrense": "ÅÅÅÅ-MM-DD",
+  "kuratorjobber": ["kuratorjobb/<oppgave>"],
   "hovedkilder": [{ "omrade": "…", "kilde": "…, DOI/PMID/URL", "kontrollert": "ÅÅÅÅ-MM-DD", "merknad": "…" }],
   "sok": [{ "domene": "…", "hva": "søkene og databasene", "funn": "…" }],
   "pastander": [{ "pastand": "…", "grunnlag": "…", "evidensstyrke": "høy | moderat | lav" }],
@@ -172,6 +173,10 @@ kontrolløren forventer; felt kan legges til.
   "neste_overvaking": ["Hva som bør utløse en ny kontroll"]
 }
 ```
+
+`kuratorjobber` er grenene i repoet med kuratorjobbene preparatomtalene og
+funksjonstesten kommer fra (`docs/kuratorjobber.md`), så kontrolløren finner
+de samme filene.
 
 **`dekningsmatrise`**: `{modus, modell_sha256, omrader}`, ett område per
 kontrollpunkt, med `nokkel`, `status`, `begrunnelse`, `kilder`, `sok`,
