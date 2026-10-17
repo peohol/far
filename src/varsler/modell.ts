@@ -167,11 +167,13 @@ export function erValgt(kategori: Varselkategori, valg: Varselvalg): boolean {
 
 /**
  * Hvor langt brukeren er kommet i endringsloggen: føringene til og med `fra`
- * er ikke varsler, og `lest` er de nyere som er lest.
+ * er ikke varsler, `lest` er de nyere som er lest, og `arkivert` de av dem
+ * som er lagt i arkivet.
  */
 export interface Endringsloggstatus {
   fra: string
   lest: string[]
+  arkivert: string[]
 }
 
 /** Nøkkelen statusen lagres under i brukerinnstillingene. */
@@ -186,8 +188,8 @@ function erVersjon(verdi: unknown): verdi is string {
 
 export function lesEndringsloggstatus(verdi: unknown): Endringsloggstatus | null {
   if (!erObjekt(verdi) || !erVersjon(verdi.fra)) return null
-  const lest = Array.isArray(verdi.lest) ? verdi.lest.filter(erVersjon) : []
-  return { fra: verdi.fra, lest }
+  const versjoner = (liste: unknown) => (Array.isArray(liste) ? liste.filter(erVersjon) : [])
+  return { fra: verdi.fra, lest: versjoner(verdi.lest), arkivert: versjoner(verdi.arkivert) }
 }
 
 /**
@@ -196,7 +198,7 @@ export function lesEndringsloggstatus(verdi: unknown): Endringsloggstatus | null
  * hele loggen.
  */
 export function startstatus(logg: readonly Endring[]): Endringsloggstatus {
-  return { fra: logg.filter(varsles)[1]?.versjon ?? '0.0.0', lest: [] }
+  return { fra: logg.filter(varsles)[1]?.versjon ?? '0.0.0', lest: [], arkivert: [] }
 }
 
 /** En føring som endrer fortolkningen, varsles som det; resten som funksjonalitet. */
@@ -220,6 +222,7 @@ export interface Endringsvarsel {
   endring: Endring
   oppdatert_kl: string
   lest: boolean
+  arkivert: boolean
 }
 
 /**
@@ -236,13 +239,15 @@ export function endringsvarsler(logg: readonly Endring[], status: Endringsloggst
       endring,
       oppdatert_kl: endringstid(endring),
       lest: status.lest.includes(endring.versjon),
+      arkivert: status.arkivert.includes(endring.versjon),
     }))
     .filter((varsel) => !varsel.lest || !erGammel(varsel.endring, naa))
 }
 
 /**
  * Statusen med `versjoner` merket lest. `fra` flyttes forbi de eldste leste (og
- * de som ikke varsles) som har passert fristen, så lista over leste ikke vokser.
+ * de som ikke varsles) som har passert fristen, så lista over leste og
+ * arkiverte ikke vokser.
  */
 export function merkEndringerLest(
   logg: readonly Endring[],
@@ -257,10 +262,24 @@ export function merkEndringerLest(
     if ((varsles(endring) && !lest.has(endring.versjon)) || !erGammel(endring, naa)) break
     fra = endring.versjon
   }
-  return {
-    fra,
-    lest: logg.filter((e) => lest.has(e.versjon) && sammenlignVersjon(e.versjon, fra) > 0).map((e) => e.versjon),
-  }
+  const beholdt = (versjoner: Set<string>) =>
+    logg.filter((e) => versjoner.has(e.versjon) && sammenlignVersjon(e.versjon, fra) > 0).map((e) => e.versjon)
+  return { fra, lest: beholdt(lest), arkivert: beholdt(new Set(status.arkivert.filter((v) => lest.has(v)))) }
+}
+
+/** Statusen med `versjoner` lagt i arkivet, og dermed lest. */
+export function arkiverEndringer(
+  logg: readonly Endring[],
+  status: Endringsloggstatus,
+  versjoner: readonly string[],
+  naa: Date = new Date(),
+): Endringsloggstatus {
+  return merkEndringerLest(logg, { ...status, arkivert: [...new Set([...status.arkivert, ...versjoner])] }, versjoner, naa)
+}
+
+/** Statusen med `versjoner` hentet fram fra arkivet. De står som leste. */
+export function gjenopprettEndringer(status: Endringsloggstatus, versjoner: readonly string[]): Endringsloggstatus {
+  return { ...status, arkivert: status.arkivert.filter((v) => !versjoner.includes(v)) }
 }
 
 /* --- Varslene fra databasen ------------------------------------------------ */
@@ -307,6 +326,7 @@ export interface Databasevarsel {
   hendelser: Hendelse[]
   oppdatert_kl: string
   lest: boolean
+  arkivert: boolean
 }
 
 /** En tråd slik et varsel viser den: overskriften, og siden den står på. */
@@ -383,6 +403,7 @@ function lesDatabasevarsel(verdi: unknown): Databasevarsel | null {
     hendelser,
     oppdatert_kl: tekst(verdi.oppdatert_kl),
     lest: verdi.lest_kl != null,
+    arkivert: verdi.arkivert_kl != null,
   }
 }
 
@@ -417,6 +438,14 @@ export function samleVarsler(varsler: readonly Varsel[], valg: Varselvalg): Vars
   return varsler
     .filter((v) => erValgt(v.kategori, valg))
     .sort((a, b) => Number(a.lest) - Number(b.lest) || Date.parse(b.oppdatert_kl) - Date.parse(a.oppdatert_kl))
+}
+
+/** Versjonene til føringene og ID-ene til varslene fra databasen, hver for seg. */
+export function etterKilde(varsler: readonly Varsel[]): { versjoner: string[]; ider: string[] } {
+  return {
+    versjoner: varsler.flatMap((v) => (v.kilde === 'endringslogg' ? [v.endring.versjon] : [])),
+    ider: varsler.flatMap((v) => (v.kilde === 'database' ? [v.id] : [])),
+  }
 }
 
 /** Tallet på bjella: de uleste i kategoriene brukeren har valgt. */

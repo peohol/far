@@ -16,7 +16,7 @@ import {
 } from '../../ideer/modell'
 import { Ikon } from '../ikon/Ikon'
 import { Forfatterbilde, useForfatternavn, useForfatterkontekst } from '../traad/Forfatterkontekst'
-import { Ideskuff } from './Ideskuff'
+import { Skuff } from '../Skuff'
 import { Kategorimerke, Oppgavekode, Oppgavestatusmerke } from './Merker'
 import { Tidspunkt, Valgrad } from '../traad/Smadeler'
 
@@ -75,7 +75,7 @@ export function Ideliste({
         ))
       )}
       {overforte.length > 0 && (
-        <Ideskuff
+        <Skuff
           tittel="Planlagte oppgaver"
           ikon="oppgaver"
           antall={overforte.length}
@@ -84,10 +84,10 @@ export function Ideliste({
           onVeksle={() => onVeksleSkuff(SKUFF_OVERFORT)}
         >
           <Kortliste ideer={overforte} onApne={(ide) => onOppgave(ide.oppgave!.id)} />
-        </Ideskuff>
+        </Skuff>
       )}
       {arkiverte.length > 0 && (
-        <Ideskuff
+        <Skuff
           tittel="Ikke aktuelt"
           ikon="arkiv"
           antall={arkiverte.length}
@@ -96,7 +96,7 @@ export function Ideliste({
           onVeksle={() => onVeksleSkuff(SKUFF_ARKIV)}
         >
           <Kortliste ideer={arkiverte} onApne={(ide) => onApne(ide.id)} />
-        </Ideskuff>
+        </Skuff>
       )}
     </div>
   )

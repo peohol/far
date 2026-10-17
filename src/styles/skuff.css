@@ -1,0 +1,89 @@
+/* Skuffen (`Skuff`): arkivet og de overførte i Idéer og Planlagte oppgaver,
+   og arkivet i varslene. */
+
+/* En trekkspillskuff nederst i laget: lukket er den en rad med hårlinje over. */
+.skuff {
+  display: flex;
+  flex-direction: column;
+  border-top: var(--kant) solid var(--linje);
+}
+
+.skuff__hode {
+  margin: 0;
+  font: inherit;
+}
+
+.skuff__knapp {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  width: 100%;
+  min-height: var(--hoyde-felt);
+  padding: var(--rom-3) var(--rom-1);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-style: italic;
+  text-align: left;
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: color var(--fart-rask) var(--kurve);
+}
+
+.skuff__knapp:hover,
+.skuff[data-apen] .skuff__knapp {
+  color: var(--blekk);
+}
+
+.skuff__antall {
+  margin-left: auto;
+  padding: var(--rom-1) var(--rom-2);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-merke);
+  font-style: normal;
+  font-weight: var(--vekt-halvfet);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+}
+
+.skuff__pil {
+  display: grid;
+  place-items: center;
+  font-size: var(--tekst-liten);
+  transition: transform var(--fart-glid) var(--kurve);
+}
+
+.skuff[data-apen] .skuff__pil {
+  transform: rotate(90deg);
+}
+
+.skuff__kropp {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--fart-glid) var(--kurve);
+}
+
+.skuff[data-apen] > .skuff__kropp {
+  grid-template-rows: 1fr;
+}
+
+.skuff:not([data-apen]) > .skuff__kropp,
+.skuff__kropp[data-glir] {
+  overflow: hidden;
+}
+
+.skuff__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  min-height: 0;
+  padding: var(--rom-1) 0 var(--rom-3);
+}
+
+.skuff__forklaring {
+  margin: 0;
+  padding-inline: var(--rom-1);
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}

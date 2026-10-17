@@ -51,6 +51,7 @@ const LISTE: Varselliste = {
       hendelser: [{ kl: '2026-09-29T11:00:00Z', av: 'ola', kommentar: 'k1', svarTil: null }],
       oppdatert_kl: '2026-09-29T11:00:00Z',
       lest: false,
+      arkivert: false,
     },
     {
       kilde: 'database',
@@ -60,6 +61,7 @@ const LISTE: Varselliste = {
       hendelser: [{ kl: '2026-09-29T10:00:00Z', av: 'ola', kommentar: 'k2', svarTil: null }],
       oppdatert_kl: '2026-09-29T10:00:00Z',
       lest: false,
+      arkivert: false,
     },
     {
       kilde: 'database',
@@ -75,6 +77,7 @@ const LISTE: Varselliste = {
       ],
       oppdatert_kl: '2026-09-28T10:00:00Z',
       lest: true,
+      arkivert: false,
     },
     {
       kilde: 'database',
@@ -84,6 +87,7 @@ const LISTE: Varselliste = {
       hendelser: [{ kl: '2026-09-29T08:00:00Z', av: 'ola' }],
       oppdatert_kl: '2026-09-29T08:00:00Z',
       lest: false,
+      arkivert: false,
     },
     {
       kilde: 'database',
@@ -96,6 +100,7 @@ const LISTE: Varselliste = {
       ],
       oppdatert_kl: '2026-09-29T09:30:00Z',
       lest: false,
+      arkivert: false,
     },
   ],
 }
@@ -104,6 +109,8 @@ const api = vi.hoisted(() => ({
   hentVarsler: vi.fn(),
   hentUleste: vi.fn(),
   merkVarslerLest: vi.fn(async (_ider: readonly string[] | null, _til: string) => {}),
+  arkiverVarsler: vi.fn(async (ider: readonly string[], _til: string) => [...ider]),
+  gjenopprettVarsler: vi.fn(async (_ider: readonly string[]) => {}),
   hentVarselvalg: vi.fn(),
   lagreVarselvalg: vi.fn(async (_valg: Varselvalg) => {}),
   hentEndringsloggstatus: vi.fn(),
@@ -165,7 +172,7 @@ describe('bjella', () => {
     render(<Varselknapp />)
     await waitFor(() => expect(bjella().getAttribute('aria-label')).toBe('Varsler (3 uleste)'))
     expect(screen.getByText('3')).toBeTruthy()
-    expect(api.lagreEndringsloggstatus).toHaveBeenCalledWith({ fra: '2.0.0', lest: [] })
+    expect(api.lagreEndringsloggstatus).toHaveBeenCalledWith({ fra: '2.0.0', lest: [], arkivert: [] })
   })
 
   it('teller ikke det brukeren har slått av', async () => {
@@ -176,7 +183,7 @@ describe('bjella', () => {
 
   it('har ikke noe tall uten uleste', async () => {
     api.hentUleste.mockResolvedValue({})
-    api.hentEndringsloggstatus.mockResolvedValue({ fra: '2.1.0', lest: [] })
+    api.hentEndringsloggstatus.mockResolvedValue({ fra: '2.1.0', lest: [], arkivert: [] })
     render(<Varselknapp />)
     await waitFor(() => expect(api.hentUleste).toHaveBeenCalled())
     expect(bjella().getAttribute('aria-label')).toBe('Varsler')
@@ -209,7 +216,7 @@ describe('vinduet', () => {
     const { bruker, vindu } = await apne()
     await bruker.click(within(vindu).getByRole('button', { name: 'Varsler i toppmenyen' }))
     expect(visEndringslogg).toHaveBeenCalledWith('2.1.0')
-    expect(api.lagreEndringsloggstatus).toHaveBeenLastCalledWith({ fra: '2.0.0', lest: ['2.1.0'] })
+    expect(api.lagreEndringsloggstatus).toHaveBeenLastCalledWith({ fra: '2.0.0', lest: ['2.1.0'], arkivert: [] })
   })
 
   it('merker ett eller alle lest', async () => {
@@ -222,9 +229,49 @@ describe('vinduet', () => {
     await bruker.click(within(vindu).getByRole('button', { name: 'Merk alle som lest' }))
     // Bare det brukeren ser: favorittene er av og står urørt.
     expect(api.merkVarslerLest).toHaveBeenLastCalledWith(['v-ide'], LISTE.lest_kl)
-    expect(api.lagreEndringsloggstatus).toHaveBeenLastCalledWith({ fra: '2.0.0', lest: ['2.1.0'] })
+    expect(api.lagreEndringsloggstatus).toHaveBeenLastCalledWith({ fra: '2.0.0', lest: ['2.1.0'], arkivert: [] })
     expect(within(vindu).queryByRole('region', { name: 'Nye' })).toBeNull()
     expect((within(vindu).getByRole('button', { name: 'Merk alle som lest' }) as HTMLButtonElement).disabled).toBe(true)
+  })
+
+  it('arkiverer ett eller alle leste, og henter dem fram fra arkivet', async () => {
+    const { bruker, vindu } = await apne()
+    const tidligere = () => within(vindu).getByRole('region', { name: 'Tidligere' })
+    const arkivet = () => within(vindu).getByRole('button', { name: /^Arkivet/ })
+
+    // Et ulest varsel arkiveres og er dermed lest.
+    const aktiv = within(vindu).getByText(/kommenterte en idé du har kommentert/).closest('li')!
+    await bruker.click(within(aktiv).getByRole('button', { name: 'Arkiver' }))
+    expect(api.arkiverVarsler).toHaveBeenCalledWith(['v-aktiv'], LISTE.lest_kl)
+    expect(within(within(vindu).getByRole('region', { name: 'Nye' })).queryByText(/kommenterte en idé du har kommentert/)).toBeNull()
+    expect(within(within(vindu).getByRole('region', { name: 'Arkivet' })).getByText(/kommenterte en idé du har kommentert/)).toBeTruthy()
+    expect(arkivet().textContent).toContain('1')
+
+    await bruker.click(within(tidligere()).getByRole('button', { name: 'Arkiver alle' }))
+    expect(api.arkiverVarsler).toHaveBeenLastCalledWith(['v-fortolkning'], LISTE.lest_kl)
+    expect(within(vindu).queryByRole('region', { name: 'Tidligere' })).toBeNull()
+    expect(arkivet().textContent).toContain('2')
+
+    // Føringen i endringsloggen arkiveres i brukerinnstillingene.
+    const foring = within(vindu).getByRole('button', { name: 'Varsler i toppmenyen' }).closest('li')!
+    await bruker.click(within(foring).getByRole('button', { name: 'Arkiver' }))
+    expect(api.lagreEndringsloggstatus).toHaveBeenLastCalledWith({ fra: '2.0.0', lest: ['2.1.0'], arkivert: ['2.1.0'] })
+
+    await bruker.click(arkivet())
+    expect(arkivet().getAttribute('aria-expanded')).toBe('true')
+    const fortolkning = within(vindu).getByText('Fortolkningen er endret').closest('li')!
+    await bruker.click(within(fortolkning).getByRole('button', { name: 'Hent fram fra arkivet' }))
+    expect(api.gjenopprettVarsler).toHaveBeenCalledWith(['v-fortolkning'])
+    expect(within(tidligere()).getByText('Fortolkningen er endret')).toBeTruthy()
+  })
+
+  it('henter lista på nytt når et varsel har fått noe nytt og ikke ble arkivert', async () => {
+    api.arkiverVarsler.mockResolvedValueOnce([])
+    const { bruker, vindu } = await apne()
+    const aktiv = within(vindu).getByText(/kommenterte en idé du har kommentert/).closest('li')!
+    await bruker.click(within(aktiv).getByRole('button', { name: 'Arkiver' }))
+    await waitFor(() => expect(api.hentVarsler).toHaveBeenCalledTimes(2))
+    expect(within(within(vindu).getByRole('region', { name: 'Nye' })).getByText(/kommenterte en idé du har kommentert/)).toBeTruthy()
   })
 
   it('viser endringene på favorittsidene når brukeren har slått dem på, og leder til siden', async () => {
@@ -253,6 +300,7 @@ describe('vinduet', () => {
       hendelser: [{ kl: '2026-09-29T11:30:00Z', av: 'ola', kommentar: 'k9', svarTil: null }],
       oppdatert_kl: '2026-09-29T11:30:00Z',
       lest: false,
+      arkivert: false,
     }
     api.hentVarsler.mockResolvedValue({ ...LISTE, varsler: [traad, ...LISTE.varsler] })
     api.hentUleste.mockResolvedValue({ mine_ideer: 1, aktive_ideer: 1, mine_diskusjoner: 1 })

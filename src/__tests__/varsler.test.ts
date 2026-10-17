@@ -26,6 +26,7 @@ interface Varsel {
   ide: { id: string; tittel: string; forfatter_id: string } | null
   hendelser: Hendelse[]
   lest_kl: string | null
+  arkivert_kl: string | null
 }
 
 describe('varslene', () => {
@@ -54,6 +55,8 @@ describe('varslene', () => {
   const uleste = (bruker: string) => en<Record<string, number>>(bruker, 'select public.uleste_varsler()')
   const merkLest = (bruker: string, ider: string[] | null, til: string) =>
     sql(bruker, 'select public.merk_varsler_lest($1, $2)', [ider, til])
+  const arkiver = (bruker: string, ider: string[], til: string) => en<string[]>(bruker, 'select public.arkiver_varsler($1, $2)', [ider, til])
+  const gjenopprett = (bruker: string, ider: string[]) => sql(bruker, 'select public.gjenopprett_varsler($1)', [ider])
   /** Varslene om kommentarene på idéen; varselet om at den er ny, testes for seg. */
   const omIde = async (bruker: string, ide: string) =>
     (await varsler(bruker)).filter((v) => v.ide?.id === ide && v.kategori !== 'nye_ideer')
@@ -149,6 +152,43 @@ describe('varslene', () => {
     await db.query(`update public.varsler set oppdatert_kl = $2::timestamptz + interval '1 second' where id = $1`, [id, lest_kl])
     await merkLest(ada, null, lest_kl)
     expect((await omIde(ada, ide))[0]!.lest_kl).toBeNull()
+  })
+
+  it('arkiverer et varsel som lest, henter det fram igjen, og begynner på et nytt når noe skjer', async () => {
+    const ide = await nyIde(ada)
+    await nyKommentar(bo, ide)
+    const { lest_kl, varsler: alle } = await mine(ada)
+    const id = alle.find((v) => v.ide?.id === ide && v.kategori === 'mine_ideer')!.id
+
+    // Bare egne varsler kan arkiveres.
+    expect(await arkiver(bo, [id], lest_kl)).toEqual([])
+    expect((await omIde(ada, ide))[0]).toMatchObject({ lest_kl: null, arkivert_kl: null })
+
+    expect(await arkiver(ada, [id], lest_kl)).toEqual([id])
+    const [arkivert] = await omIde(ada, ide)
+    expect(arkivert!.arkivert_kl).toEqual(expect.any(String))
+    expect(arkivert!.lest_kl).toEqual(expect.any(String))
+
+    await nyKommentar(cy, ide)
+    expect((await omIde(ada, ide)).map((v) => [v.lest_kl === null, v.arkivert_kl === null])).toEqual([
+      [true, true],
+      [false, false],
+    ])
+
+    await gjenopprett(bo, [id])
+    expect((await omIde(ada, ide)).find((v) => v.id === id)!.arkivert_kl).toEqual(expect.any(String))
+    await gjenopprett(ada, [id])
+    expect((await omIde(ada, ide)).find((v) => v.id === id)).toMatchObject({ arkivert_kl: null, lest_kl: expect.any(String) })
+  })
+
+  it('arkiverer ikke et ulest varsel som har fått noe nytt etter at lista ble lest', async () => {
+    const ide = await nyIde(ada)
+    await nyKommentar(bo, ide)
+    const { lest_kl, varsler: alle } = await mine(ada)
+    const id = alle.find((v) => v.ide?.id === ide && v.kategori === 'mine_ideer')!.id
+    await db.query(`update public.varsler set oppdatert_kl = $2::timestamptz + interval '1 second' where id = $1`, [id, lest_kl])
+    expect(await arkiver(ada, [id], lest_kl)).toEqual([])
+    expect((await omIde(ada, ide))[0]).toMatchObject({ lest_kl: null, arkivert_kl: null })
   })
 
   it('merker varslene om en idé lest når idéen åpnes', async () => {
