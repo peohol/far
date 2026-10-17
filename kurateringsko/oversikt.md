@@ -1,17 +1,18 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T00:52:44.469Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T00:53:41.651Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 88 · Reservert: 1 · Venter på godkjenning: 2 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
+Klar: 88 · Venter på godkjenning: 3 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-- **vortioksetin** (vortioksetin-0015), frist 2026-10-17T03:29:29.910Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
 - **cbd**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **kariprazin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
+- **vortioksetin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 
 ## Blokkert
 
