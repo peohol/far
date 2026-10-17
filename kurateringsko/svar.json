@@ -1,37 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-doksepin-1",
-  "foresporsel_sha256": "4d7b0d6757590f206c1ad37a09ea5d7a0b88bcb72cd9a561a930422a065c83cd",
-  "handling": "forny",
+  "foresporsel_id": "fullfort-doksepin-1",
+  "foresporsel_sha256": "f4c7788932815ace9afb3a69752f96d0165ea15e6811f4c3d0ee618d55608315",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "Reservasjonen av doksepin varer til 2026-10-17T02:39:35.018Z.",
-  "behandlet_kl": "2026-10-16T23:39:35.018Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38982561566",
-  "oppgave": {
-    "oppgave": "doksepin-0014",
-    "stoff": "doksepin",
-    "navn": "Doksepin",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T02:39:35.018Z",
-    "jobbgren": "kuratorjobb/doksepin-0014",
-    "kurateringsgren": "kuratering/doksepin-0014",
-    "pr": null,
-    "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
-    "gjenoppta": null,
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-16T18:10:24.842Z",
-      "side": true,
-      "elementer": 19,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 6,
-      "referanser": 4,
-      "elementer_uten_kilde": 14
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "melding": "doksepin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-17T00:03:17.016Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38984523129"
 }
