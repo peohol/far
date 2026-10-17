@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T12:52:04.563Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T13:18:37.486Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
 Klar: 80 · Reservert: 1 · Venter på godkjenning: 11 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
 
 ## Pågår
 
-- **okskarbazepin** (okskarbazepin-0039), frist 2026-10-17T15:52:04.563Z
+- **okskarbazepin** (okskarbazepin-0039), frist 2026-10-17T16:18:37.486Z
 
 ## Til gjennomgang
 
