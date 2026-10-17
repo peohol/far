@@ -130,9 +130,14 @@ export const MCP_VERKTOY = [
 const INSTRUKSER =
   'OUSFARs kurateringsgrener: isolerte arbeidsversjoner av fagsidene. Kontrolløren kaller verktøyet instruks før noe annet i hver kjøring, og følger instruksen det gir; en kort beskjed som «Kjør en kontrollrunde i OUSFAR» er nok. Grunnreglene: kontrolløren skriver aldri i grenen, men leser (oversikt, les, les_dokument, kommentarer), kommenterer med ankre (kommenter), lukker sine egne løste tråder (lukk_kommentar) og vurderer nøyaktig den siste revisjonen (vurder). Fagteksten er bak innloggingen: gjengi den aldri utenfor OUSFAR. Kjøringen avsluttes med en kort oversikt per gren til den som startet den, med ethvert kall som ble stoppet og feilmeldingen.'
 
-const tekstsvar = (id: Rpc['id'], innhold: unknown, feil: boolean) =>
+// ChatGPT husker verktøylisten og `instructions` fra da koblingen ble lagt
+// til, men henter hvert svar på nytt. Svaret på `oversikt`, som kontrolløren
+// kaller først, har derfor instruksen med, foran svaret fra databasen.
+export const INSTRUKSINNLEDNING = 'Instruksen for kontrolløren (docs/kontrollorinstruks.md). Følg den i denne kjøringen.'
+
+const tekstsvar = (id: Rpc['id'], innhold: unknown, feil: boolean, foran?: string) =>
   rpcSvar(id, {
-    content: [{ type: 'text', text: JSON.stringify(innhold) }],
+    content: [...(foran ? [{ type: 'text', text: foran }] : []), { type: 'text', text: JSON.stringify(innhold) }],
     structuredContent: innhold !== null && typeof innhold === 'object' && !Array.isArray(innhold) ? innhold : { resultat: innhold },
     isError: feil,
   })
@@ -170,7 +175,9 @@ async function behandleRpc(melding: Rpc, db: SupabaseClient | null, nokkel: stri
       if (!db) return rpcFeil(id, -32603, 'Mangler oppkoblingen mot databasen.')
       const utfall = await utforHandling(db, nokkel, navn, melding.params?.arguments ?? {})
       if (!utfall.ok && utfall.status === 403) return rpcFeil(id, -32001, utfall.feil)
-      return tekstsvar(id, utfall.ok ? utfall.data : { feil: utfall.feil, kode: utfall.kode }, !utfall.ok)
+      const instruks = navn === 'oversikt' ? await lesInstruks() : null
+      const foran = instruks === null ? undefined : `${INSTRUKSINNLEDNING}\n\n${instruks}`
+      return tekstsvar(id, utfall.ok ? utfall.data : { feil: utfall.feil, kode: utfall.kode }, !utfall.ok, foran)
     }
     default:
       return rpcFeil(id, -32601, `Ukjent metode «${method}».`)

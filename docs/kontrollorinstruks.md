@@ -33,6 +33,9 @@ administrator har laget under «Kurateringer» → «Agentene» i appen
 (`https://ousfar.vercel.app/api/kuratering-mcp?nokkel=…`). Verktøyene er de
 samme handlingene som i `docs/kurateringsgrener.md`, og `instruks`, som gir
 denne instruksen slik den står i den utlagte versjonen av OUSFAR (fra `main`).
+Svaret på `oversikt` har den samme teksten først. Da når den fram selv om
+ChatGPT husker en eldre verktøyliste uten `instruks`; «Oppdater» på koblingen
+i ChatGPT henter den nye.
 
 ## Hver kjøring
 

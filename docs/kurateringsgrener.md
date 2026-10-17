@@ -78,7 +78,11 @@ nøkkelen (`src/kuratering/endepunkt.ts`); nøkkelen kontrolleres i databasen:
   kommet på avveie. I tillegg har koblingen verktøyet `instruks`, som gir
   kontrollørinstruksen (`docs/kontrollorinstruks.md`) slik den står i den
   utlagte versjonen; `initialize` og beskrivelsen av `oversikt` sier at den
-  leses først. Fila er den eneste kilden: den tas med i funksjonen med
+  leses først. ChatGPT husker verktøylisten og `initialize` fra da koblingen
+  ble lagt til (til noen trykker «Oppdater» på den), men henter hvert svar på
+  nytt, så svaret på `oversikt` gjennom MCP har instruksen som første
+  tekstelement, foran svaret fra databasen (`structuredContent` er det samme
+  som før). Fila er den eneste kilden: den tas med i funksjonen med
   `includeFiles` i `vercel.json` og leses derfra, uten databasen. `instruks`
   tar ingen argumenter og gir ikke noe annet, og er ingen handling i
   databasen eller i `/api/kuratering`. Flyttes fila, følger `INSTRUKSFIL` i

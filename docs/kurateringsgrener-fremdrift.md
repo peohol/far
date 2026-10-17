@@ -240,7 +240,8 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 - 2026-10-17: Kontrollørinstruksen gjennom koblingen (1.103.3): kontrolløren
   trengte en lang beskjed for hver kjøring. MCP-koblingen har nå verktøyet
   `instruks` med teksten i `docs/kontrollorinstruks.md` (fila tas med i
-  funksjonen), og instruksen har fått de generelle reglene fra beskjedene:
+  funksjonen, og svaret på `oversikt` har den først, siden ChatGPT husker en
+  gammel verktøyliste), og instruksen har fått de generelle reglene fra beskjedene:
   avgjørelser merket «Avgjort av fagansvarlig:» står, kildestedene i
   evidensjournalen brukes, og kjøringen avsluttes med en oversikt per gren.
   Tester i `kurateringsendepunkt.test.ts` («kontrollørinstruksen i
