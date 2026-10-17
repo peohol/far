@@ -1,37 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-ketobemidon-0018-gren",
-  "foresporsel_sha256": "22c115b30283fa2d09a4d7a9016438e33652d2e0a2fc2427226fd6125d1cab43",
-  "handling": "forny",
+  "foresporsel_id": "fullfort-ketobemidon-0018",
+  "foresporsel_sha256": "1bde8710985b06a3e3b9a583fcb3868adf3cddf3bca6de2660cce40f55756c17",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "Reservasjonen av ketobemidon varer til 2026-10-17T05:19:08.808Z.",
-  "behandlet_kl": "2026-10-17T02:19:08.808Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38994424444",
-  "oppgave": {
-    "oppgave": "ketobemidon-0018",
-    "stoff": "ketobemidon",
-    "navn": "Ketobemidon",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T05:19:08.808Z",
-    "jobbgren": "kuratorjobb/ketobemidon-0018",
-    "kurateringsgren": "kuratering/ketobemidon-0018",
-    "pr": null,
-    "gren": "030084b9-47c7-4ab5-8a71-11bfe76b6f5c",
-    "gjenoppta": null,
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-16T18:10:24.842Z",
-      "side": true,
-      "elementer": 8,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 4,
-      "referanser": 1,
-      "elementer_uten_kilde": 2
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "melding": "ketobemidon er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-17T02:45:25.493Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38996139531"
 }
