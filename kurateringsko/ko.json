@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T16:31:02.201Z",
+  "oppdatert_kl": "2026-10-17T16:52:21.115Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "teller": 41,
   "stoffer": {
@@ -3139,7 +3139,7 @@
       "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 63.6,
+        "poeng": 63.9,
         "grunner": [
           "De novo-kuratering i runden som gjelder.",
           "Sist kuratert 2026-10-05.",
@@ -5184,8 +5184,8 @@
         "okt": "kurateringsko/okt/20261016-125910",
         "modus": "de_novo",
         "reservert_kl": "2026-10-17T16:21:46.892Z",
-        "fornyet_kl": "2026-10-17T16:21:46.892Z",
-        "frist_kl": "2026-10-17T19:21:46.892Z",
+        "fornyet_kl": "2026-10-17T16:52:21.115Z",
+        "frist_kl": "2026-10-17T19:52:21.115Z",
         "fase": null,
         "jobbgren": "kuratorjobb/topiramat-0041",
         "kurateringsgren": "kuratering/topiramat-0041",
@@ -5219,6 +5219,12 @@
           "oppgave": "topiramat-0041",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Forsøk 1, de_novo."
+        },
+        {
+          "kl": "2026-10-17T16:52:21.115Z",
+          "hendelse": "fornyet",
+          "oppgave": "topiramat-0041",
+          "okt": "kurateringsko/okt/20261016-125910"
         }
       ],
       "appgren": null
@@ -5900,6 +5906,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "forny-topiramat-0041-1651",
         "reserver-202610171621",
         "fullfort-sertindol-0040",
         "forny-sertindol-0040-1551",
@@ -5948,28 +5955,27 @@
         "reserver-ketobemidon-052754",
         "fullfort-cbd-0022",
         "reserver-cbd-052201",
-        "fullfort-kariprazin-0021",
-        "reserver-kariprazin-0530"
+        "fullfort-kariprazin-0021"
       ],
       "siste": {
-        "id": "reserver-202610171621",
-        "sha256": "2f3bf876441dd9b4ff9df275ec0619ddc5d1724b2f1c9ec33451c7ac412a600f",
+        "id": "forny-topiramat-0041-1651",
+        "sha256": "4eca05514b9a946588a834fe64f4d3296629406316726524dde0dc1ccf77f76f",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "reserver-202610171621",
-          "foresporsel_sha256": "2f3bf876441dd9b4ff9df275ec0619ddc5d1724b2f1c9ec33451c7ac412a600f",
-          "handling": "reserver",
+          "foresporsel_id": "forny-topiramat-0041-1651",
+          "foresporsel_sha256": "4eca05514b9a946588a834fe64f4d3296629406316726524dde0dc1ccf77f76f",
+          "handling": "forny",
           "utfall": "ok",
-          "melding": "topiramat er reservert til 2026-10-17T19:21:46.892Z.",
-          "behandlet_kl": "2026-10-17T16:21:46.892Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39049049639",
+          "melding": "Reservasjonen av topiramat varer til 2026-10-17T19:52:21.115Z.",
+          "behandlet_kl": "2026-10-17T16:52:21.115Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39051267865",
           "oppgave": {
             "oppgave": "topiramat-0041",
             "stoff": "topiramat",
             "navn": "Topiramat",
             "modus": "de_novo",
             "forsok": 1,
-            "frist_kl": "2026-10-17T19:21:46.892Z",
+            "frist_kl": "2026-10-17T19:52:21.115Z",
             "jobbgren": "kuratorjobb/topiramat-0041",
             "kurateringsgren": "kuratering/topiramat-0041",
             "pr": null,
@@ -5986,21 +5992,14 @@
               "elementer_uten_kilde": 1
             },
             "prioritet": {
-              "poeng": 447.6,
-              "grunner": [
-                "De novo-kuratering i runden som gjelder.",
-                "Aldri kuratert.",
-                "Ingen kuratering å regne alderen fra.",
-                "9 av 13 redaksjonelle seksjoner er tomme.",
-                "1 av 6 elementer har ingen kilde.",
-                "Bare 4 referanser."
-              ]
+              "poeng": 0,
+              "grunner": []
             }
           }
         }
       },
       "besvart_commit": "f318b738c31e6c6f966f5946941f3b7a21060c96",
-      "sist_brukt_kl": "2026-10-17T16:21:46.892Z"
+      "sist_brukt_kl": "2026-10-17T16:52:21.115Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
