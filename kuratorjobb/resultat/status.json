@@ -1,0 +1,18 @@
+{
+  "versjon": 1,
+  "status": "kjorer",
+  "jobb": {
+    "gren": "kuratorjobb/vortioksetin-0015",
+    "foresporsel_commit": "88e8624fa30af377b57559ad42e0e99b94999a1f",
+    "foresporsel_sha256": "2741dd19d539722f3f974c43aaeaaf6ca1cc55d427e57457af4fa39eeb1ab48d",
+    "kode_commit": "548dba55e6654e91eba4e7467891d32c39cfb506",
+    "kjoring": "https://github.com/peohol/far/actions/runs/38984692939",
+    "startet_kl": "2026-10-17T00:05:33.041Z",
+    "ferdig_kl": null
+  },
+  "foresporsel": null,
+  "referanse": null,
+  "feil": [],
+  "bruker": [],
+  "stoffer": {}
+}
