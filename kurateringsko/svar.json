@@ -1,19 +1,19 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-202610171015",
-  "foresporsel_sha256": "658c08b4da2c011648713ee71a4662aaca4f0ab7f7412c0709e1c15b589c2e2d",
-  "handling": "reserver",
+  "foresporsel_id": "forny-levetiracetam-0038-1051",
+  "foresporsel_sha256": "9f05168ba9c875e78b86cbd6035ed98bd894265ea5df3399d0f23e5974c8839e",
+  "handling": "forny",
   "utfall": "ok",
-  "melding": "levetiracetam er reservert til 2026-10-17T13:15:42.012Z.",
-  "behandlet_kl": "2026-10-17T10:15:42.012Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39024195478",
+  "melding": "Reservasjonen av levetiracetam varer til 2026-10-17T13:52:12.752Z.",
+  "behandlet_kl": "2026-10-17T10:52:12.752Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39026518937",
   "oppgave": {
     "oppgave": "levetiracetam-0038",
     "stoff": "levetiracetam",
     "navn": "Levetiracetam",
     "modus": "de_novo",
     "forsok": 1,
-    "frist_kl": "2026-10-17T13:15:42.012Z",
+    "frist_kl": "2026-10-17T13:52:12.752Z",
     "jobbgren": "kuratorjobb/levetiracetam-0038",
     "kurateringsgren": "kuratering/levetiracetam-0038",
     "pr": null,
@@ -30,15 +30,8 @@
       "elementer_uten_kilde": 1
     },
     "prioritet": {
-      "poeng": 447.6,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
