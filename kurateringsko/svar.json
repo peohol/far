@@ -1,10 +1,44 @@
 {
   "versjon": 1,
-  "foresporsel_id": "blokkert-doksepin-1",
-  "foresporsel_sha256": "df78643dc49493d7767c08f96b599fe29788b48876e08643474785e0e0e78dca",
-  "handling": "blokkert",
+  "foresporsel_id": "reserver-202610170107",
+  "foresporsel_sha256": "dddda5bceb33ae518f4dba0280e5ffc8d228a5047f4a55f035d2206368cdc86b",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "doksepin er blokkert til et menneske har sett på det.",
-  "behandlet_kl": "2026-10-17T01:06:42.830Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38989411441"
+  "melding": "flunitrazepam er reservert til 2026-10-17T04:07:36.681Z.",
+  "behandlet_kl": "2026-10-17T01:07:36.681Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38989485492",
+  "oppgave": {
+    "oppgave": "flunitrazepam-0017",
+    "stoff": "flunitrazepam",
+    "navn": "Flunitrazepam",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-17T04:07:36.681Z",
+    "jobbgren": "kuratorjobb/flunitrazepam-0017",
+    "kurateringsgren": "kuratering/flunitrazepam-0017",
+    "pr": null,
+    "gren": null,
+    "gjenoppta": null,
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-16T18:10:24.842Z",
+      "side": true,
+      "elementer": 8,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 4,
+      "referanser": 1,
+      "elementer_uten_kilde": 2
+    },
+    "prioritet": {
+      "poeng": 451.7,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "2 av 8 elementer har ingen kilde.",
+        "Bare 1 referanser."
+      ]
+    }
+  }
 }
