@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.102.3',
+    dato: '2026-10-17',
+    sammendrag: 'En kuratering som stoppet for en menneskelig avgjørelse, kan fortsette i samme kurateringsgren',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Når kuratoren må stoppe en kuratering for at et menneske skal avgjøre noe, kan kurateringskøen nå gi stoffet tilbake til kuratoren med den samme kurateringsgrenen når avgjørelsen er tatt. Kuratoren fortsetter der, sender grenen til kontroll, og køen følger den til den er publisert. Før ble stoffet stående blokkert fordi køen ikke lenger kjente grenen.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.102.1',
     dato: '2026-10-17',
     sammendrag: 'Kurateringer som legger inn den samme nye kilden, stopper ikke lenger hverandre',

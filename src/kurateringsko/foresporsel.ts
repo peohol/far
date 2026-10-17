@@ -28,7 +28,8 @@ const FELTER: Record<Handling, { krever: readonly string[]; tar: readonly string
   feilet: { krever: ['oppgave', 'grunn'], tar: ['fase'] },
   blokkert: { krever: ['oppgave', 'grunn'], tar: ['fase'] },
   frigi: { krever: ['oppgave'], tar: ['grunn'] },
-  tilbakestill: { krever: ['stoff', 'grunn'], tar: [] },
+  // `gren`: kurateringsgrenen i OUSFAR stoffet gis tilbake til kuratoren med (f.eks. etter en menneskelig avgjørelse).
+  tilbakestill: { krever: ['stoff', 'grunn'], tar: ['gren'] },
 }
 
 function gyldigDato(t: string): boolean {

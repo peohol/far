@@ -273,7 +273,7 @@ function brytKobling(s: Kostoff, oppgave: string, grunn: string, na: string) {
 }
 
 /** Oppgaven gis tilbake til kuratoren, med grenen å fortsette i (eller ingen). */
-function tilKuratoren(s: Kostoff, a: Kurateringsappgren, grunn: string, gren: string | null, na: string) {
+function tilKuratoren(s: Kostoff, a: Pick<Kurateringsappgren, 'oppgave' | 'jobbgren'> & { kunnskapsgrense?: string | null }, grunn: string, gren: string | null, na: string) {
   s.gjenoppta = {
     oppgave: a.oppgave,
     okt: s.siste_kjoring?.okt ?? '',
@@ -284,7 +284,7 @@ function tilKuratoren(s: Kostoff, a: Kurateringsappgren, grunn: string, gren: st
     kurateringsgren: null,
     pr: null,
     gren,
-    kunnskapsgrense: a.kunnskapsgrense,
+    kunnskapsgrense: a.kunnskapsgrense ?? null,
   }
   s.appgren = null
 }
@@ -820,12 +820,27 @@ function utfor(t: Kotilstand, f: Foresporsel, k: Behandlingskontekst, svar: (u: 
       if (s.reservasjon) return svar('avvist', `${s.stoff} er reservert av ${s.reservasjon.okt}; frigi reservasjonen, eller vent til ${s.reservasjon.frist_kl}.`)
       if (s.pr && s.pr.tilstand !== 'lukket') return svar('avvist', `${s.stoff} har PR #${s.pr.nummer}, som køen følger til den er slått sammen eller lukket.`)
       if (s.appgren) return svar('avvist', `${s.stoff} har en kurateringsgren i OUSFAR, som køen følger til den er publisert eller forkastet.`)
+      // Med `gren`: stoffet gis tilbake til kuratoren med grenen, f.eks. etter en menneskelig avgjørelse.
+      const g = f.gren ? k.grener?.find((x) => x.id === f.gren) : undefined
+      if (f.gren) {
+        const uendret = `${s.stoff} er ikke tilbakestilt.`
+        if (!k.grener) return svar('avvist', `Kurateringsgrenene i OUSFAR kunne ikke leses nå; prøv igjen senere. ${uendret}`)
+        if (!g) return svar('avvist', `Kurateringsgrenen ${f.gren} finnes ikke. ${uendret}`)
+        if (!erAktivGren(g.status)) return svar('avvist', `Kurateringsgrenen ${g.id} er ikke aktiv (${g.status}). ${uendret}`)
+        if (!s.modus) return svar('avvist', `Ingen kuratering av ${s.stoff} er forfalt. ${uendret}`)
+        const feil = koblingsfeil(s.stoff, g, s.modus)
+        if (feil) return svar('avvist', `${feil} ${uendret}`)
+      }
+      // Et avbrutt forsøk i samme gren beholder oppgaven, jobbgrenen og kunnskapsgrensen.
+      const holdt = g && s.gjenoppta?.gren === g.id ? s.gjenoppta : null
       s.blokkeringer = []
       s.forsok = 0
       s.tidligst_kl = null
       s.gjenoppta = null
-      logg(s, { kl: na, hendelse: 'tilbakestilt', okt: k.gren, melding: f.grunn })
-      return svar('ok', `${s.stoff} er tilbakestilt.`)
+      logg(s, { kl: na, hendelse: 'tilbakestilt', okt: k.gren, melding: g ? `${f.grunn} Gitt tilbake med kurateringsgrenen ${g.id}.` : f.grunn })
+      if (!g) return svar('ok', `${s.stoff} er tilbakestilt.`)
+      tilKuratoren(s, holdt ?? { oppgave: s.siste_kjoring?.oppgave ?? `${s.stoff}-tilbakestilt`, jobbgren: null }, `Tilbakestilt med kurateringsgrenen ${g.id}: ${f.grunn}`, g.id, na)
+      return svar('ok', `${s.stoff} er tilbakestilt og gis tilbake til kuratoren med kurateringsgrenen ${g.id}.`)
     }
 
     default: {
