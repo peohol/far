@@ -250,5 +250,6 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
   korte beskjeden gjorde kontrolløren en delkontroll av alle ni grenene og
   ferdig med ingen. Instruksen sier nå at den gjør én gren ferdig før neste,
   fortsetter der forrige delkontroll av den samme revisjonen slapp, finner
-  preparatomtalene på kuratorjobbens gren, og kontrollerer de automatiske
-  lagene med funksjonstesten (krav 8) i stedet for mot originalkildene.
+  preparatomtalene på kuratorjobbens gren (evidensjournalen har fått feltet
+  `kuratorjobber`), og kontrollerer de automatiske lagene med funksjonstesten
+  (krav 8) i stedet for mot originalkildene.

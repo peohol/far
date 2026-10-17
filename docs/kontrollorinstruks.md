@@ -59,11 +59,12 @@ i ChatGPT henter den nye.
    evidensstyrken og dekningsmatrisen. Bruk kildestedene evidensjournalen
    gir (side, punkt, tabell og åpen lenke), og slå opp påstandene og
    bivirkningsradene der. Les særlig det som er endret fra grunnversjonen.
-   - **Preparatomtalene fra DMP** ligger på kuratorjobbens gren i repoet,
-     `kuratorjobb/<oppgave>` (oppgaven står i grenens formål):
-     `kuratorjobb/resultat/<stoff>/spc.json` sier hvilket preparat som er
-     hvilken mappe, og under `spc/<sha>/` ligger `original.pdf`, sidebildene
-     `sider/side-NN.png` og teksten per side `tekst/side-NN.txt`.
+   - **Preparatomtalene fra DMP** ligger på kuratorjobbens gren i repoet.
+     Grenen står i evidensjournalen (`kuratorjobber`), eller i en merknad fra
+     kuratoren på den. `kuratorjobb/resultat/<stoff>/spc.json` sier hvilket
+     preparat som er hvilken mappe, og under `spc/<sha>/` ligger
+     `original.pdf`, sidebildene (`sider/`) og teksten per side (`tekst/`).
+     Funksjonstesten står i `kuratorjobb/resultat/<stoff>/funksjonstest.json`.
    - **De automatiske lagene** (krav 8: FEST, ClinPGx, CPIC, PubChem,
      Farmakologiportalen og de strukturerte bivirkningene) kontrolleres med
      funksjonstesten, ikke mot originalkildene. Se at den er bestått, og at
