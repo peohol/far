@@ -75,7 +75,18 @@ nøkkelen (`src/kuratering/endepunkt.ts`); nøkkelen kontrolleres i databasen:
   Nøkkelen i `Authorization: Bearer`, eller i adressen (`?nokkel=`) for en
   klient som ikke kan sende overskrifter. En nøkkel i adressen kan havne i
   Vercels forespørselslogg; lag en ny med `ny_agentnokkel` hvis den kan ha
-  kommet på avveie.
+  kommet på avveie. I tillegg har koblingen verktøyet `instruks`, som gir
+  kontrollørinstruksen (`docs/kontrollorinstruks.md`) slik den står i den
+  utlagte versjonen; `initialize` og beskrivelsen av `oversikt` sier at den
+  leses først. ChatGPT husker verktøylisten og `initialize` fra da koblingen
+  ble lagt til (til noen trykker «Oppdater» på den), men henter hvert svar på
+  nytt, så svaret på `oversikt` gjennom MCP har instruksen som første
+  tekstelement, foran svaret fra databasen (`structuredContent` er det samme
+  som før). Fila er den eneste kilden: den tas med i funksjonen med
+  `includeFiles` i `vercel.json` og leses derfra, uten databasen. `instruks`
+  tar ingen argumenter og gir ikke noe annet, og er ingen handling i
+  databasen eller i `/api/kuratering`. Flyttes fila, følger `INSTRUKSFIL` i
+  `endepunkt.ts` og `vercel.json` med (en test holder dem i takt).
 - `POST /api/kuratering-ko`: grenene uten fagtekst (`public.kuratering_kostatus`),
   bare for kurateringskøen, med GitHubs OIDC-token for arbeidsflyten på `main`
   (`docs/kurateringsko.md`), og for administratorene.

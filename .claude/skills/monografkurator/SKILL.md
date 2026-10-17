@@ -77,6 +77,7 @@ kontroll før den har `ok` og `rapport_ok`; feilen sier hva som må rettes.
 - En konflikt bare et menneske kan avgjøre (krav 3, eller en kilde som ikke
   kan skaffes): skriv det i en tråd i grenen, og send `blokkert` til køen med
   en kort, teknisk grunn. Når mennesket har avgjort, gir `tilbakestill` med
-  `"gren"` deg stoffet og grenen tilbake (`docs/kurateringsko-instruks.md`).
+  `"gren"` deg stoffet og grenen tilbake (`docs/kurateringsko-instruks.md`),
+  og du fører avgjørelsen inn i tråden med merkingen i protokollen (fase 9).
 - En teknisk feil: `feilet` til køen. Tiden strekker ikke til: lagre i grenen,
   så `frigi`. Neste økt fortsetter i samme gren.

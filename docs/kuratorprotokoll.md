@@ -47,7 +47,8 @@ Hvert krav kontrolleres i selvtesten og av kontrolløren.
    internasjonale områder (som AGNP), som har en annen populasjon, et annet
    formål og en annen metode. Tyder en kilde på at en slik verdi er feil,
    stopper kuratoren og blokkerer stoffet i køen (`blokkert`) med en kort,
-   teknisk grunn; detaljene står i en tråd i grenen. Et menneske avgjør.
+   teknisk grunn; detaljene står i en tråd i grenen. Et menneske avgjør, og
+   avgjørelsen føres inn i tråden (fase 9).
 4. **Påstand og kilde henger sammen på det smaleste nivået som gjør det
    entydig.** En lengre eller kildeheterogen tekst får inline-siteringer ved
    hver påstand; en regulatorisk påstand og en klinisk påstand som bygger på
@@ -136,8 +137,14 @@ Kuratoren melder hva den gjør med `aktivitet` (med seksjonen og kortet), så
    noe å rette (kontrolløren var ikke ferdig, eller kildene viser at
    innvendingen ikke holder), lages ingen ny revisjon: kuratoren svarer i
    trådene eller i en merknad og sender den samme revisjonen til en ny
-   kontrollrunde (`til_kontroll`). Kuratoren kan
-   foreslå at en tråd er løst, men lukker aldri en sperrende tråd selv.
+   kontrollrunde (`til_kontroll`). Kuratoren kan foreslå at en tråd er løst,
+   men lukker aldri en sperrende tråd selv. En avgjørelse fra fagansvarlig
+   (krav 3, eller noe annet bare et menneske kan avgjøre) føres inn i tråden
+   saken står i, eller i en ny merknad, med en kommentar som begynner med
+   «Avgjort av fagansvarlig:», hva som er avgjort, og revisjonen grenen
+   følger den i. Kontrolløren holder seg til en slik avgjørelse
+   (`docs/kontrollorinstruks.md`). Merkingen brukes bare for en avgjørelse et
+   menneske faktisk har gitt.
 10. **Publiseringen.** Når den siste revisjonen er godkjent og ingenting
     hindrer det, publiserer kuratoren (`publiser`). Etterpå kjøres
     funksjonstesten mot den publiserte siden, og det som gjensto, står i

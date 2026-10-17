@@ -2,12 +2,23 @@
  * Serverendepunktene for kurateringsgrenene (`docs/kurateringsgrener.md`):
  * at nøkkelen bare sendes videre til databasen, at feilene blir riktige
  * HTTP-statuser uten å si noe om databasen utad, og at MCP-endepunktet svarer
- * på protokollen og gir de samme handlingene som verktøy.
+ * på protokollen, gir de samme handlingene som verktøy, og gir
+ * kontrollørinstruksen med verktøyet `instruks`.
  */
+import { readFileSync } from 'node:fs'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { describe, expect, it, vi } from 'vitest'
 import { AGENTHANDLINGER } from '../kuratering/handlinger'
-import { behandleKuratering, behandleKurateringMcp, behandleKurateringsko, KO_ARBEIDSFLYT, MCP_PROTOKOLL } from '../kuratering/endepunkt'
+import {
+  behandleKuratering,
+  behandleKurateringMcp,
+  behandleKurateringsko,
+  INSTRUKSFIL,
+  INSTRUKSINNLEDNING,
+  KO_ARBEIDSFLYT,
+  lesKontrollorinstruks,
+  MCP_PROTOKOLL,
+} from '../kuratering/endepunkt'
 
 const NOKKEL = 'far_' + 'a'.repeat(64)
 
@@ -83,7 +94,7 @@ describe('/api/kuratering-mcp', () => {
     expect((await (await behandleKurateringMcp(post('https://x/api/kuratering-mcp', rpc('ping')), {}, k)).json()).result).toEqual({})
 
     const liste = await (await behandleKurateringMcp(post('https://x/api/kuratering-mcp', rpc('tools/list')), {}, k)).json()
-    expect(liste.result.tools.map((t: { name: string }) => t.name)).toEqual(AGENTHANDLINGER.map((h) => h.navn))
+    expect(liste.result.tools.map((t: { name: string }) => t.name)).toEqual(['instruks', ...AGENTHANDLINGER.map((h) => h.navn)])
     for (const t of liste.result.tools) expect(t.inputSchema).toMatchObject({ type: 'object' })
     expect(k.rpc).not.toHaveBeenCalled()
   })
@@ -111,6 +122,88 @@ describe('/api/kuratering-mcp', () => {
     const varsel = await behandleKurateringMcp(post('https://x/api/kuratering-mcp', rpc('notifications/initialized', undefined, null)), {}, klient())
     expect(varsel.status).toBe(202)
     expect((await behandleKurateringMcp(post('https://x/api/kuratering-mcp', rpc('tools/list'), null), {}, klient())).status).toBe(401)
+  })
+})
+
+describe('kontrollørinstruksen i MCP-koblingen', () => {
+  const rpc = (method: string, params?: unknown) => ({ jsonrpc: '2.0', id: 1, method, params })
+  const kall = async (kropp: unknown, avhengigheter: Parameters<typeof behandleKurateringMcp>[2]) =>
+    (await behandleKurateringMcp(post('https://x/api/kuratering-mcp', kropp), {}, avhengigheter)).json()
+  const FILA = readFileSync(new URL(`../../${INSTRUKSFIL}`, import.meta.url), 'utf8')
+
+  it('gir den gjeldende teksten i docs/kontrollorinstruks.md, uten å spørre databasen', async () => {
+    const k = klient()
+    const svar = await kall(rpc('tools/call', { name: 'instruks', arguments: {} }), k)
+    expect(svar.result).toEqual({ content: [{ type: 'text', text: FILA }], isError: false })
+    expect(FILA).toMatch(/^# Instruks for kontrolløren/)
+    expect(await lesKontrollorinstruks()).toBe(FILA)
+    expect(k.rpc).not.toHaveBeenCalled()
+  })
+
+  it('står først i tools/list, bare lesende og uten argumenter', async () => {
+    const liste = await kall(rpc('tools/list'), klient())
+    const [instruks] = liste.result.tools
+    expect(instruks).toMatchObject({
+      name: 'instruks',
+      inputSchema: { type: 'object', properties: {}, additionalProperties: false },
+      annotations: { readOnlyHint: true, destructiveHint: false },
+    })
+    const oversikt = liste.result.tools.find((t: { name: string }) => t.name === 'oversikt')
+    expect(oversikt.description).toContain('instruks')
+  })
+
+  it('initialize ber kontrolløren lese instruksen med verktøyet før noe annet', async () => {
+    const init = await kall(rpc('initialize', { protocolVersion: MCP_PROTOKOLL }), klient())
+    expect(init.result.instructions).toMatch(/kaller verktøyet instruks før noe annet/)
+    expect(init.result.instructions).not.toContain('github')
+  })
+
+  it('svarer med protokollen og instruksen også uten databasen, men ikke med handlingene', async () => {
+    const utenDb = { klient: null }
+    expect((await kall(rpc('initialize'), utenDb)).result.instructions).toBeTruthy()
+    expect((await kall(rpc('tools/call', { name: 'instruks' }), utenDb)).result.content[0].text).toBe(FILA)
+    expect((await kall(rpc('tools/call', { name: 'oversikt', arguments: {} }), utenDb)).error).toMatchObject({ code: -32603 })
+  })
+
+  it('sier fra, med veien til instruksen, når fila ikke kan leses', async () => {
+    const svar = await kall(rpc('tools/call', { name: 'instruks' }), { ...klient(), lesInstruks: async () => null })
+    expect(svar.result.isError).toBe(true)
+    expect(svar.result.content[0].text).toContain('docs/kontrollorinstruks.md')
+  })
+
+  it('står først i svaret på oversikt, foran svaret fra databasen, for en klient med en gammel verktøyliste', async () => {
+    const GRENER = [{ id: 'g', status: 'klar' }]
+    const k = klient({ data: GRENER })
+    const svar = await kall(rpc('tools/call', { name: 'oversikt', arguments: {} }), k)
+    expect(svar.result.content).toEqual([
+      { type: 'text', text: `${INSTRUKSINNLEDNING}\n\n${FILA}` },
+      { type: 'text', text: JSON.stringify(GRENER) },
+    ])
+    expect(svar.result).toMatchObject({ isError: false, structuredContent: { resultat: GRENER } })
+    expect(k.rpc).toHaveBeenCalledWith('kuratering_agent', { nokkel: NOKKEL, handling: 'oversikt', data: {} })
+
+    // Kan instruksen ikke leses, er svaret som før; de andre verktøyene har den ikke.
+    const uten = await kall(rpc('tools/call', { name: 'oversikt', arguments: {} }), { ...klient({ data: GRENER }), lesInstruks: async () => null })
+    expect(uten.result.content).toEqual([{ type: 'text', text: JSON.stringify(GRENER) }])
+    const les = await kall(rpc('tools/call', { name: 'les', arguments: { gren: 'g' } }), klient({ data: { status: 'klar' } }))
+    expect(les.result.content).toHaveLength(1)
+
+    // /api/kuratering gir bare svaret fra databasen.
+    const http = await behandleKuratering(post('https://x/api/kuratering', { handling: 'oversikt' }), {}, klient({ data: GRENER }))
+    expect(await http.json()).toEqual(GRENER)
+  })
+
+  it('er bare et MCP-verktøy, ikke en handling i /api/kuratering', async () => {
+    const k = klient()
+    expect((await behandleKuratering(post('https://x/api/kuratering', { handling: 'instruks' }), {}, k)).status).toBe(400)
+    expect(k.rpc).not.toHaveBeenCalled()
+  })
+
+  it('fila tas med i funksjonen i produksjonen (includeFiles i vercel.json)', () => {
+    const vercel = JSON.parse(readFileSync(new URL('../../vercel.json', import.meta.url), 'utf8')) as {
+      functions: Record<string, { includeFiles?: string }>
+    }
+    expect(vercel.functions['api/kuratering-mcp.ts']?.includeFiles).toBe(INSTRUKSFIL)
   })
 })
 

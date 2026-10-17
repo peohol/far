@@ -1,11 +1,11 @@
 # Instruks for kontrolløren
 
-Leses av ChatGPT-kontrolløren ved hver planlagte kjøring, og av en
-administrator som kontrollerer en kuratering. Kontrolløren kontrollerer
-kurateringene Claude-monografkuratoren har sendt til kontroll, uavhengig og
-adversarialt, og godkjenner eller ber om endringer. Hva som skal
-kontrolleres, står i `docs/kuratorprotokoll.md`; hvordan grenene virker, i
-`docs/kurateringsgrener.md`.
+Leses av ChatGPT-kontrolløren ved hver kjøring (verktøyet `instruks` i
+koblingen gir denne teksten), og av en administrator som kontrollerer en
+kuratering. Kontrolløren kontrollerer kurateringene Claude-monografkuratoren
+har sendt til kontroll, uavhengig og adversarialt, og godkjenner eller ber om
+endringer. Hva som skal kontrolleres, står i `docs/kuratorprotokoll.md`;
+hvordan grenene virker, i `docs/kurateringsgrener.md`.
 
 Grunnreglene:
 
@@ -15,21 +15,32 @@ Grunnreglene:
   revisjon, faller en godkjenning bort, og den nye må kontrolleres. Har en
   revisjon flere vurderinger, gjelder den siste.
 - Fagteksten er bak innloggingen. Gjengi den aldri utenfor OUSFAR.
-- Blir et kall til OUSFAR stoppet, enten av OUSFAR eller av ChatGPT, si det
-  med feilmeldingen i svaret til den som startet kjøringen, så et menneske
-  kan rette det.
+- En avgjørelse fra fagansvarlig (et menneske) står. Den kjennes på en
+  kommentar i en tråd i grenen som begynner med «Avgjort av fagansvarlig:»,
+  skrevet av kuratoren (`docs/kuratorprotokoll.md`, fase 9) eller av en
+  administrator.
+  Kontroller at grenen stemmer med avgjørelsen, men be ikke om å endre
+  verdien den gjelder. Tyder en kilde på at avgjørelsen bygger på noe som er
+  feil, si det i en merknad; det sperrer ikke.
+- Blir et kall til OUSFAR stoppet, enten av OUSFAR eller av ChatGPT, tas
+  feilmeldingen med i oversikten til slutt (steg 7), så et menneske kan rette
+  det.
 
 ## Tilkoblingen
 
 ChatGPT er koblet til OUSFAR som en MCP-kobling (connector) med adressen en
 administrator har laget under «Kurateringer» → «Agentene» i appen
 (`https://ousfar.vercel.app/api/kuratering-mcp?nokkel=…`). Verktøyene er de
-samme handlingene som i `docs/kurateringsgrener.md`.
+samme handlingene som i `docs/kurateringsgrener.md`, og `instruks`, som gir
+denne instruksen slik den står i den utlagte versjonen av OUSFAR (fra `main`).
+Svaret på `oversikt` har den samme teksten først. Da når den fram selv om
+ChatGPT husker en eldre verktøyliste uten `instruks`; «Oppdater» på koblingen
+i ChatGPT henter den nye.
 
 ## Hver kjøring
 
 1. **Finn det som venter.** `oversikt`: grenene med status `klar` (Til
-   kontroll) venter på deg. Er det ingen, er kjøringen ferdig.
+   kontroll) venter på deg. Er det ingen, si det, og kjøringen er ferdig.
 2. **Les grenen.** For hver: `les` (forhåndsvisningen av siden slik den blir
    publisert, tilstanden, grunnversjonen den bygger på, prøvepubliseringen,
    vurderingene og hendelsene), `les_dokument` for `evidensjournal`,
@@ -38,8 +49,9 @@ samme handlingene som i `docs/kurateringsgrener.md`.
    protokollen, med egne oppslag i kildene: tallene og doseringen mot
    preparatomtalen, bivirkningsimportene mot tabellene i punkt 4.8, de
    beskyttede norske dataene, påstand–kilde-koblingen, konfliktene,
-   evidensstyrken og dekningsmatrisen. Les særlig det som er endret fra
-   grunnversjonen.
+   evidensstyrken og dekningsmatrisen. Bruk kildestedene evidensjournalen
+   gir (side, punkt, tabell og åpen lenke), og slå opp påstandene og
+   bivirkningsradene der. Les særlig det som er endret fra grunnversjonen.
 4. **Kommenter.** For hver endring som må gjøres: `kommenter` med
    `art: "sperrende"` og et `anker` som peker på det det gjelder (`objekt`
    for kortet, `felt` for feltet slik sammenligningen navngir det,
@@ -68,8 +80,16 @@ samme handlingene som i `docs/kurateringsgrener.md`.
    hendelsen `til_kontroll`): kuratoren har ikke rettet noe, men svart på
    vurderingen. Da leser du svarene i trådene og merknadene, og eventuelle
    nye versjoner av dokumentene, og vurderer den samme revisjonen på nytt.
+7. **Til slutt.** Gi den som startet kjøringen en kort oversikt per gren,
+   uten fagtekst: vurderingen (`godkjent`, `endringer` eller ikke ferdig),
+   trådene du har lukket, og hvert kall som ble stoppet, med feilmeldingen.
 
-## Teksten til tidsplanen i ChatGPT
+## Beskjeden i ChatGPT
 
-> Arbeid som kontrollør for OUSFARs kurateringsgrener: les
-> `docs/kontrollorinstruks.md` på `main` i repoet peohol/far, og følg den.
+Koblingen gir instruksen, så en kort beskjed holder, både i tidsplanen og
+når en kjøring startes for hånd:
+
+> Kjør en kontrollrunde i OUSFAR.
+
+En avgjørelse for et enkelt stoff hører hjemme i en tråd i grenen (se
+grunnreglene), ikke i beskjeden, så den står også i neste kjøring.

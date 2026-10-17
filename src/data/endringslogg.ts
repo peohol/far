@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.103.3',
+    dato: '2026-10-17',
+    sammendrag: 'Kontrolløren får instruksen sin fra OUSFAR, så en kort beskjed er nok for en kontrollrunde',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring for vanlige brukere. Kontrolløren leser nå instruksen sin direkte fra OUSFAR før hver kjøring, i stedet for å måtte hente den et annet sted. «Kjør en kontrollrunde i OUSFAR» er nok; den lange, detaljerte beskjeden trengs ikke lenger.',
+      'Instruksen har fått reglene som før måtte stå i beskjeden: en avgjørelse fra fagansvarlig står når den er ført inn i kurateringsgrenen med «Avgjort av fagansvarlig:», kildestedene i evidensjournalen brukes i kontrollen, og hver kjøring avsluttes med en kort oversikt per kuratering — vurderingen, trådene som er lukket og eventuelle feil underveis.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.103.2',
     dato: '2026-10-17',
     sammendrag: 'En kuratering uten noe å rette kan sendes til en ny kontrollrunde uten en ny revisjon',

@@ -28,7 +28,8 @@ export interface Agenthandling {
 export const AGENTHANDLINGER: readonly Agenthandling[] = [
   {
     navn: 'oversikt',
-    beskrivelse: 'Grenene agenten kan se: kuratoren sine egne, kontrolløren alle aktive. Status, revisjon og om de venter på kontroll. Ingen fagtekst.',
+    beskrivelse:
+      'Grenene agenten kan se: kuratoren sine egne, kontrolløren alle aktive. Status, revisjon og om de venter på kontroll. Ingen fagtekst. Kontrolløren leser instruksen med verktøyet instruks før dette, i hver kjøring, og følger den.',
     argumenter: objekt({ stoff: tekst('Bare grenen for denne fagsiden (nøkkelen)'), alle: { type: 'boolean', description: 'Også avsluttede grener' } }),
     leser: true,
   },
