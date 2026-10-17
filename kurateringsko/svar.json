@@ -1,12 +1,12 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-kariprazin-0507",
-  "foresporsel_sha256": "7cb453ac6069ce6bafd426648c5575495611dbe352d7272c417097d96c4ca0b0",
+  "foresporsel_id": "reserver-lamotrigin-0508",
+  "foresporsel_sha256": "021bd3ea07e783f919e3ed76a5412a72bc5680b82da778409b80de974a832d8f",
   "handling": "reserver",
   "utfall": "ok",
   "melding": "Økten har allerede reservert vortioksetin; fortsett med den.",
-  "behandlet_kl": "2026-10-17T05:07:55.150Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39005113520",
+  "behandlet_kl": "2026-10-17T05:08:41.522Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39005158263",
   "oppgave": {
     "oppgave": "vortioksetin-0020",
     "stoff": "vortioksetin",
