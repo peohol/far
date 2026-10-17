@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T19:15:46.479Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T19:16:30.152Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 82 · Reservert: 1 · Venter på godkjenning: 8 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
+Klar: 82 · Venter på godkjenning: 9 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-- **lamotrigin** (lamotrigin-0045), frist 2026-10-17T22:15:46.479Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
@@ -16,6 +16,7 @@ Klar: 82 · Reservert: 1 · Venter på godkjenning: 8 · Publisert: 3 · Blokker
 - **flunitrazepam**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **kariprazin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **ketobemidon**: kurateringsgren i OUSFAR (klar), venter på godkjenning
+- **lamotrigin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **topiramat**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **vortioksetin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 
