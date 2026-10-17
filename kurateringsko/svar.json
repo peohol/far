@@ -1,19 +1,19 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-202610171224",
-  "foresporsel_sha256": "8c641012945fc05e7357ef8f1db8da834b36ec776153f7ac2fe36e63069ad35c",
-  "handling": "reserver",
+  "foresporsel_id": "forny-okskarbazepin-0039-1251",
+  "foresporsel_sha256": "2ff13e8b3f79c0d1ba6c46b7ae772e69b76980faf056a9c802b6edcd69b359f0",
+  "handling": "forny",
   "utfall": "ok",
-  "melding": "okskarbazepin er reservert til 2026-10-17T15:24:58.738Z.",
-  "behandlet_kl": "2026-10-17T12:24:58.738Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39032407725",
+  "melding": "Reservasjonen av okskarbazepin varer til 2026-10-17T15:52:04.563Z.",
+  "behandlet_kl": "2026-10-17T12:52:04.563Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39034213670",
   "oppgave": {
     "oppgave": "okskarbazepin-0039",
     "stoff": "okskarbazepin",
     "navn": "Okskarbazepin",
     "modus": "de_novo",
     "forsok": 1,
-    "frist_kl": "2026-10-17T15:24:58.738Z",
+    "frist_kl": "2026-10-17T15:52:04.563Z",
     "jobbgren": "kuratorjobb/okskarbazepin-0039",
     "kurateringsgren": "kuratering/okskarbazepin-0039",
     "pr": null,
@@ -30,15 +30,8 @@
       "elementer_uten_kilde": 1
     },
     "prioritet": {
-      "poeng": 447.6,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
