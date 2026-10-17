@@ -1,5 +1,6 @@
 /* Varselvinduet (`Varsler`): varslene i to grupper, «Nye» og «Tidligere»,
-   og innstillingene, gruppert etter hva de gjelder. Tallet på bjella står i `toppmeny.css`. */
+   arkivet i en skuff under dem (`skuff.css`), og innstillingene, gruppert
+   etter hva de gjelder. Tallet på bjella står i `toppmeny.css`. */
 
 .varsler {
   display: flex;
@@ -16,6 +17,13 @@
 .varselgruppe {
   display: flex;
   flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.varselgruppe__hode {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: var(--rom-3);
 }
 
@@ -63,6 +71,12 @@
   height: var(--hoyde-liten);
   background: var(--flate-hevet);
   border-radius: 50%;
+}
+
+/* «Merk som lest» og «Arkiver» side om side, øverst til høyre i varselet. */
+.varsel__handlinger {
+  display: flex;
+  gap: var(--rom-1);
 }
 
 .varsel__innhold {

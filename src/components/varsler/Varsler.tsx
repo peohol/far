@@ -5,7 +5,9 @@ import { useProfil } from '../../auth/okt'
 import { fortolkningsadresseForAnalytt } from '../../domain/koblinger'
 import { stoffadresse } from '../../domain/rute'
 import { formaterDato } from '../../domain/versjon'
+import { useBevart } from '../../oppdatering/Bevaring'
 import {
+  VARSELFRIST_DAGER,
   VARSELGRUPPER,
   VARSELKATEGORIER,
   aktorer,
@@ -38,6 +40,7 @@ import { Ikon } from '../ikon/Ikon'
 import type { Ikonnavn } from '../ikon/register'
 import { Ikonknapp } from '../Ikonknapp'
 import { Modallag } from '../Modallag'
+import { Skuff } from '../Skuff'
 import type { Varselstatus } from './useVarsler'
 import '../../styles/varsler.css'
 
@@ -48,7 +51,8 @@ type Side = 'liste' | 'innstillinger'
 
 /**
  * Varselvinduet, fra bjella i toppmenyen: varslene brukeren har valgt, de
- * uleste først, og innstillingene for hvilke kategorier som varsles.
+ * uleste først, arkivet nederst, og innstillingene for hvilke kategorier som
+ * varsles.
  *
  * Et varsel leder dit det gjelder — idéen, tråden i diskusjonene på siden
  * den står på, stoffsiden med reglene eller føringen i endringsloggen — og
@@ -97,6 +101,7 @@ export function Varsler({ apen, onLukk, status }: { apen: boolean; onLukk: () =>
 
 function Varselliste({ status, profiler, onLukk }: { status: Varselstatus; profiler: Profil[]; onLukk: () => void }) {
   const meg = useProfil()
+  const [arkivApent, setArkivApent] = useBevart('varsler/arkiv', false)
   const navn = useMemo(() => {
     const oppslag = new Map([...profiler, meg].map((p) => [p.id, visningsnavn(p)]))
     return (id: string) => oppslag.get(id) ?? 'Ukjent bruker'
@@ -112,8 +117,9 @@ function Varselliste({ status, profiler, onLukk }: { status: Varselstatus; profi
   if (!status.varsler) return <p className="varsler__tom">Henter varslene …</p>
   if (status.varsler.length === 0) return <p className="varsler__tom">Ingen varsler ennå.</p>
 
-  const nye = status.varsler.filter((v) => !v.lest)
-  const tidligere = status.varsler.filter((v) => v.lest)
+  const nye = status.varsler.filter((v) => !v.lest && !v.arkivert)
+  const tidligere = status.varsler.filter((v) => v.lest && !v.arkivert)
+  const arkiverte = status.varsler.filter((v) => v.arkivert)
 
   /** Går dit varselet gjelder: merker det lest og lukker vinduet først. */
   const ga = (varsel: Varsel, videre?: () => void) => {
@@ -123,24 +129,60 @@ function Varselliste({ status, profiler, onLukk }: { status: Varselstatus; profi
   }
 
   const rad = (varsel: Varsel) => (
-    <Varselrad key={varsel.id} varsel={varsel} meg={meg.id} navn={navn} onGa={ga} onLest={() => status.merkLest(varsel)} />
+    <Varselrad
+      key={varsel.id}
+      varsel={varsel}
+      meg={meg.id}
+      navn={navn}
+      onGa={ga}
+      onLest={() => status.merkLest(varsel)}
+      onArkiver={() => status.arkiver([varsel])}
+      onGjenopprett={() => status.gjenopprett([varsel])}
+    />
   )
 
   return (
     <div className="varsler">
+      {nye.length === 0 && tidligere.length === 0 && <p className="varsler__tom">Ingen varsler utenom arkivet.</p>}
       {nye.length > 0 && <Varselgruppe tittel="Nye">{nye.map(rad)}</Varselgruppe>}
-      {tidligere.length > 0 && <Varselgruppe tittel="Tidligere">{tidligere.map(rad)}</Varselgruppe>}
+      {tidligere.length > 0 && (
+        <Varselgruppe
+          tittel="Tidligere"
+          handling={
+            <Button variant="subtle" className="knapp--kompakt" icon={<Ikon navn="arkiv" />} onClick={() => status.arkiver(tidligere)}>
+              Arkiver alle
+            </Button>
+          }
+        >
+          {tidligere.map(rad)}
+        </Varselgruppe>
+      )}
+      {arkiverte.length > 0 && (
+        <Skuff
+          tittel="Arkivet"
+          ikon="arkiv"
+          antall={arkiverte.length}
+          forklaring={`Varslene slettes automatisk ${VARSELFRIST_DAGER} dager etter at de ble lest.`}
+          apen={arkivApent}
+          onVeksle={() => setArkivApent((apen) => !apen)}
+        >
+          <ul className="varselliste">{arkiverte.map(rad)}</ul>
+        </Skuff>
+      )}
     </div>
   )
 }
 
-function Varselgruppe({ tittel, children }: { tittel: string; children: React.ReactNode }) {
+function Varselgruppe({ tittel, handling, children }: { tittel: string; handling?: React.ReactNode; children: React.ReactNode }) {
   const id = useId()
   return (
     <section className="varselgruppe" aria-labelledby={id}>
-      <h3 id={id} className="varselgruppe__navn">
-        {tittel}
-      </h3>
+      <div className="varselgruppe__hode">
+        <h3 id={id} className="varselgruppe__navn">
+          {tittel}
+        </h3>
+        {handling}
+      </div>
       <ul className="varselliste">{children}</ul>
     </section>
   )
@@ -164,11 +206,16 @@ interface RadProps {
   navn: (id: string) => string
   onGa: (varsel: Varsel, videre?: () => void) => void
   onLest: () => void
+  onArkiver: () => void
+  onGjenopprett: () => void
 }
 
-/** Ett varsel: ikonet for kategorien, hva som har skjedd, når, og «Merk som lest» mens det er ulest. */
+/**
+ * Ett varsel: ikonet for kategorien, hva som har skjedd, når, «Merk som lest»
+ * mens det er ulest, og «Arkiver», eller «Hent fram» når det er i arkivet.
+ */
 function Varselrad(props: RadProps) {
-  const { varsel, onLest } = props
+  const { varsel, onLest, onArkiver, onGjenopprett } = props
   return (
     <li className="varsel" data-ulest={!varsel.lest || undefined} data-kategori={varsel.kategori}>
       <span className="varsel__ikon" aria-hidden="true">
@@ -177,9 +224,16 @@ function Varselrad(props: RadProps) {
       <div className="varsel__innhold">
         {varsel.kilde === 'endringslogg' ? <Endringsinnhold {...props} varsel={varsel} /> : <Databaseinnhold {...props} varsel={varsel} />}
       </div>
-      {!varsel.lest && (
-        <Ikonknapp ikon="done" etikett="Merk som lest" variant="stille" storrelse="liten" utenTips onClick={onLest} />
-      )}
+      <div className="varsel__handlinger">
+        {!varsel.lest && (
+          <Ikonknapp ikon="done" etikett="Merk som lest" variant="stille" storrelse="liten" utenTips onClick={onLest} />
+        )}
+        {varsel.arkivert ? (
+          <Ikonknapp ikon="reset" etikett="Hent fram fra arkivet" variant="stille" storrelse="liten" utenTips onClick={onGjenopprett} />
+        ) : (
+          <Ikonknapp ikon="arkiv" etikett="Arkiver" variant="stille" storrelse="liten" utenTips onClick={onArkiver} />
+        )}
+      </div>
     </li>
   )
 }

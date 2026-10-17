@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.102.3',
+    versjon: '1.103.1',
     dato: '2026-10-17',
     sammendrag: 'En kuratering som stoppet for en menneskelig avgjørelse, kan fortsette i samme kurateringsgren',
     typer: ['Funksjonalitet'],
@@ -22,6 +22,19 @@ export const ENDRINGSLOGG: Endring[] = [
       'Kontrolløren ber ikke lenger om endringer bare fordi den ikke rakk å kontrollere alt. Den lar kurateringen stå til kontroll, skriver hva som er kontrollert, og fortsetter neste gang.',
     ],
     utenVarsel: true,
+  },
+  {
+    versjon: '1.103.0',
+    dato: '2026-10-17',
+    sammendrag: 'Varsler kan arkiveres, så lista ikke vokser seg lang',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    gjelder: ['vinduer'],
+    punkter: [
+      'Hvert varsel har en arkivknapp, og «Arkiver alle» ved «Tidligere» rydder bort alle de leste på én gang. Et ulest varsel som arkiveres, regnes som lest.',
+      'De arkiverte varslene ligger i skuffen «Arkivet» nederst i varselvinduet. Der kan de fortsatt åpnes, og hentes fram igjen med knappen ved hvert varsel.',
+      'Skjer det noe nytt i det samme etter at et varsel er arkivert, kommer det som et nytt varsel.',
+    ],
   },
   {
     versjon: '1.102.2',

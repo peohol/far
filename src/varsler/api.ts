@@ -39,6 +39,20 @@ export async function merkVarslerLest(ider: readonly string[] | null, til: strin
   sjekk(await klient().rpc('merk_varsler_lest', { varsler: ider, til }))
 }
 
+/**
+ * Legger varslene i arkivet og merker dem lest, slik de var da lista ble
+ * lest. Gir ID-ene til dem som ble arkivert.
+ */
+export async function arkiverVarsler(ider: readonly string[], til: string): Promise<string[]> {
+  const arkiverte: unknown = sjekk(await klient().rpc('arkiver_varsler', { varsler: ider, til }))
+  return Array.isArray(arkiverte) ? arkiverte.filter((id): id is string => typeof id === 'string') : []
+}
+
+/** Henter varslene fram fra arkivet. */
+export async function gjenopprettVarsler(ider: readonly string[]): Promise<void> {
+  sjekk(await klient().rpc('gjenopprett_varsler', { varsler: ider }))
+}
+
 export async function hentVarselvalg(): Promise<Varselvalg> {
   return lesVarselvalg(await hentInnstilling(VALGNOKKEL))
 }
