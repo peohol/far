@@ -233,6 +233,47 @@ nøyaktig én gang med belegg; i selvtesten stopper også alt som ikke er bestå
 `npm run kurator -- dekning-gren`. Kontrollen hindrer at portene omgås med
 plassholdere; den erstatter ikke fagkontrollen.
 
+## Erfaringer fra kontrollen
+
+Funn kontrolløren har gjort som kan gå igjen i andre stoffer. Kuratoren unngår
+dem i nye kurateringer. Finner kontrolløren et nytt slikt funn, ser kuratoren
+etter det samme i grenene som venter på kontroll, og retter det der før
+kontrolløren kommer dit. Reglene presiserer kravene over; de erstatter dem ikke.
+
+- **Retningslinjer med flere utgaver** (krav 6): hvert tall, område,
+  varslingsnivå og anbefalingsnivå får årstallet for utgaven det kommer fra, og
+  der den nyeste utgaven sier noe annet, vises begge. AGNP-konsensusen for TDM
+  finnes i 2017-utgaven (publisert 2018) og 2026-utgaven; i 2026-utgaven står de
+  farmakokinetiske parameterne i en tilleggstabell på nett, ikke i
+  hovedtabellene.
+- **Behandling ved forgiftning** (krav 6 og 9): Giftinformasjonens
+  behandlingsanbefaling på helsebiblioteket.no, også gruppesiden når den nevner
+  stoffet, er den norske kliniske kilden for dose, observasjonstid og
+  behandling, med året den sist er vurdert. Et råd i preparatomtalen (pkt. 4.9)
+  som avviker, tilskrives preparatomtalen og står ved siden av, med konflikten i
+  evidensjournalen. Finnes ingen side, står adressen som ble prøvd i
+  evidensjournalen.
+- **Aldersgrenser:** norske preparatomtaler skriver ofte «over 13 år» der den
+  engelske teksten har «13 years and above». Teksten sier «fra 13 år» og viser
+  den norske ordlyden, og grensen rettes i alle kortene der den står.
+- **Påstander om at noe mangler** (krav 5) gjelder det som er søkt, og det står
+  hvilke kilder som er søkt (også LactMed og Giftinformasjonen).
+  Ammingskortet skiller «ingen mistenkte bivirkninger» fra plager som er
+  rapportert hos barnet.
+- **Nøkkeltallene i viktige data** (også tid til steady state og
+  halveringstiden) endres ikke uten en avgjørelse fra fagansvarlig, selv om
+  preparatomtalen sier noe annet. Et nytt referanseområde eller en ny grense
+  fra et forslag eller en enkelt studie legges ikke inn før et menneske har
+  avgjort det. Kortet viser hvem som sier hva, og saken går som etter krav 3.
+- **AGNPs varslingsgrense** er laboratoriets alarmgrense, ikke en dokumentert
+  toksisk terskel, og omtales slik.
+- **En referanse fjernes** fra kortet eller panelet når innholdet den støttet,
+  er tatt ut (krav 4).
+- **Dokumentene følger avgjørelsene:** en avgjørelse fra fagansvarlig føres inn
+  i evidensjournalen, dekningsmatrisen, selvtesten og rapporten, og alt som sier
+  at saken venter, fjernes. Selvtesten kvitterer aldri ut det evidensjournalen
+  sier er ukontrollert (krav 8).
+
 ## Kontrollen
 
 Kontrolløren følger `docs/kontrollorinstruks.md`: den kontrollerer de
@@ -255,3 +296,7 @@ kontrollpunktene er de samme som piloten dekket (testen
   Den opprinnelige teksten i ChatGPT-kuratorskillen står ikke i repoet; når
   den finnes, sammenlignes den med protokollen, og det strengeste kravet
   gjelder.
+- 2026-10-17: «Erfaringer fra kontrollen», fra kontrollørens funn i piloten og
+  de novo-runde 2. Ingen krav er svekket. Nøkkeltallene i viktige data
+  behandles som beskyttede, slik kontrolløren og fagansvarlig allerede har gjort
+  i flere grener.
