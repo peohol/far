@@ -1,17 +1,18 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T07:40:06.451Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T07:40:52.715Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 89 · Reservert: 1 · Venter på godkjenning: 2 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
+Klar: 89 · Venter på godkjenning: 3 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
 
 ## Pågår
 
-- **ketobemidon** (ketobemidon-0030), frist 2026-10-17T10:40:06.451Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
 - **cbd**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **fenobarbital**: kurateringsgren i OUSFAR (klar), venter på godkjenning
+- **ketobemidon**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 
 ## Blokkert
 
