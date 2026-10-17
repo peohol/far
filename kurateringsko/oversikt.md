@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T16:52:21.115Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T17:28:29.450Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
 Klar: 78 · Reservert: 1 · Venter på godkjenning: 12 · Publisert: 3 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-- **topiramat** (topiramat-0041), frist 2026-10-17T19:52:21.115Z
+- **topiramat** (topiramat-0041), frist 2026-10-17T20:28:29.450Z
 
 ## Til gjennomgang
 
