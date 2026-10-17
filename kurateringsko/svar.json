@@ -1,37 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-levetiracetam-0038-1151",
-  "foresporsel_sha256": "100d35e570a2d0e14dd3113495db0b006a8e71f2600e2399052fb2af21d1c5fc",
-  "handling": "forny",
+  "foresporsel_id": "fullfort-levetiracetam-0038",
+  "foresporsel_sha256": "d1f3a34314725705337c19bf69fea562f443ca8cac93e0cc645766d9b24daac3",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "Reservasjonen av levetiracetam varer til 2026-10-17T14:52:24.923Z.",
-  "behandlet_kl": "2026-10-17T11:52:24.923Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39030318976",
-  "oppgave": {
-    "oppgave": "levetiracetam-0038",
-    "stoff": "levetiracetam",
-    "navn": "Levetiracetam",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T14:52:24.923Z",
-    "jobbgren": "kuratorjobb/levetiracetam-0038",
-    "kurateringsgren": "kuratering/levetiracetam-0038",
-    "pr": null,
-    "gren": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
-    "gjenoppta": null,
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-16T18:10:24.842Z",
-      "side": true,
-      "elementer": 6,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 4,
-      "referanser": 3,
-      "elementer_uten_kilde": 1
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "melding": "levetiracetam er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-17T12:24:07.862Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39032346813"
 }
