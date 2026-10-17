@@ -1,56 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-doksepin-191325",
-  "foresporsel_sha256": "3542043bbaae4d14488f552e2c6cb988d2e460fd6b606234e70029497063a9b9",
-  "handling": "reserver",
+  "foresporsel_id": "fullfort-doksepin-0044",
+  "foresporsel_sha256": "6f2766734aea129b91533892ab20f619e829438caf123a98b58e9d1a4f51a8ac",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "doksepin er reservert til 2026-10-17T22:13:54.813Z.",
-  "behandlet_kl": "2026-10-17T19:13:54.813Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39061526816",
-  "oppgave": {
-    "oppgave": "doksepin-0044",
-    "stoff": "doksepin",
-    "navn": "Doksepin",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T22:13:54.813Z",
-    "jobbgren": "kuratorjobb/doksepin-0028",
-    "kurateringsgren": "kuratering/doksepin-0044",
-    "pr": null,
-    "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
-    "gjenoppta": {
-      "oppgave": "doksepin-0034",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "avbrutt_kl": "2026-10-17T19:13:54.813Z",
-      "grunn": "Grenen er tilbake hos kuratoren.",
-      "fase": null,
-      "jobbgren": "kuratorjobb/doksepin-0028",
-      "kurateringsgren": null,
-      "pr": null,
-      "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
-      "kunnskapsgrense": "2026-10-16"
-    },
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-17T14:23:30.777Z",
-      "side": true,
-      "elementer": 19,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 6,
-      "referanser": 4,
-      "elementer_uten_kilde": 14
-    },
-    "prioritet": {
-      "poeng": 1460.7,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen doksepin-0034.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "7 av 13 redaksjonelle seksjoner er tomme.",
-        "14 av 19 elementer har ingen kilde.",
-        "Bare 4 referanser."
-      ]
-    }
-  }
+  "melding": "doksepin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-17T19:14:43.028Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39061588278"
 }
