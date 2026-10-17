@@ -1,0 +1,18 @@
+{
+  "versjon": 1,
+  "status": "kjorer",
+  "jobb": {
+    "gren": "kuratorjobb/lamotrigin-0019",
+    "foresporsel_commit": "021596090be9a77ca9b3675aeda041540e40b553",
+    "foresporsel_sha256": "b75a4e007b894c298312c89795ddde9feed1f6b74c23b5bcf3a645833f9ba4cc",
+    "kode_commit": "548dba55e6654e91eba4e7467891d32c39cfb506",
+    "kjoring": "https://github.com/peohol/far/actions/runs/38996243300",
+    "startet_kl": "2026-10-17T02:47:02.768Z",
+    "ferdig_kl": null
+  },
+  "foresporsel": null,
+  "referanse": null,
+  "feil": [],
+  "bruker": [],
+  "stoffer": {}
+}
