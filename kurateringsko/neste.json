@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-17T07:38:33.861Z",
+  "oppdatert_kl": "2026-10-17T07:39:19.320Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
     "klar": 90,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 1,
+    "venter_godkjenning": 2,
     "sammenslatt": 0,
     "publisert": 3,
     "blokkert": 4,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "cbd",
-      "oppgave": "cbd-0029",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-17T10:38:33.861Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "neste": [
     {
       "stoff": "brekspiprazol",
@@ -170,6 +162,12 @@
     }
   ],
   "til_gjennomgang": [
+    {
+      "stoff": "cbd",
+      "gren": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    },
     {
       "stoff": "fenobarbital",
       "gren": "f99c5bb5-b7f1-4038-b5ab-0cab1a706f97",

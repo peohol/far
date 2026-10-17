@@ -1,15 +1,16 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T07:38:33.861Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T07:39:19.320Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 90 · Reservert: 1 · Venter på godkjenning: 1 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
+Klar: 90 · Venter på godkjenning: 2 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
 
 ## Pågår
 
-- **cbd** (cbd-0029), frist 2026-10-17T10:38:33.861Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
+- **cbd**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **fenobarbital**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 
 ## Blokkert
