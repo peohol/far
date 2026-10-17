@@ -1,9 +1,9 @@
 {
-  "oppdatert_kl": "2026-10-17T00:53:41.651Z",
+  "oppdatert_kl": "2026-10-17T00:54:25.901Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
-    "klar": 88,
-    "reservert": 0,
+    "klar": 87,
+    "reservert": 1,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 3,
     "sammenslatt": 0,
@@ -11,23 +11,16 @@
     "blokkert": 5,
     "utenfor": 1
   },
-  "aktive": [],
-  "neste": [
+  "aktive": [
     {
       "stoff": "doksepin",
-      "modus": "de_novo",
-      "poeng": 1460.7,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen doksepin-0014.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "7 av 13 redaksjonelle seksjoner er tomme.",
-        "14 av 19 elementer har ingen kilde.",
-        "Bare 4 referanser."
-      ],
-      "tidligst_kl": null
-    },
+      "oppgave": "doksepin-0016",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "frist_kl": "2026-10-17T03:54:25.901Z",
+      "fase": null
+    }
+  ],
+  "neste": [
     {
       "stoff": "flunitrazepam",
       "modus": "de_novo",
@@ -151,6 +144,20 @@
         "9 av 13 redaksjonelle seksjoner er tomme.",
         "1 av 6 elementer har ingen kilde.",
         "Bare 4 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "valproat",
+      "modus": "de_novo",
+      "poeng": 447.6,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 3 referanser."
       ],
       "tidligst_kl": null
     }
