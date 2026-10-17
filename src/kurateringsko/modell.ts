@@ -288,7 +288,7 @@ export interface Foresporsel {
   jobbgren?: string
   kurateringsgren?: string
   pr?: number
-  /** `forny`, `fullfort`: kurateringsgrenen i OUSFAR (ID-en). */
+  /** `forny`, `fullfort`: kurateringsgrenen i OUSFAR (ID-en). `tilbakestill`: grenen stoffet gis tilbake til kuratoren med. */
   gren?: string
   /** `fullfort`: datoen kildesøket gjelder til (ÅÅÅÅ-MM-DD). */
   kunnskapsgrense?: string

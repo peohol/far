@@ -14,6 +14,9 @@ Grunnreglene:
 - En vurdering gjelder nøyaktig den siste revisjonen. Kommer det en ny
   revisjon, faller en godkjenning bort, og den nye må kontrolleres.
 - Fagteksten er bak innloggingen. Gjengi den aldri utenfor OUSFAR.
+- Blir et kall til OUSFAR stoppet, enten av OUSFAR eller av ChatGPT, si det
+  med feilmeldingen i svaret til den som startet kjøringen, så et menneske
+  kan rette det.
 
 ## Tilkoblingen
 
@@ -47,6 +50,14 @@ samme handlingene som i `docs/kurateringsgrener.md`.
      sier hva som er kontrollert og mot hvilke kilder.
    - Ellers: `vurder` med `beslutning: "endringer"` og en kort begrunnelse
      som viser til trådene.
+   - **Ikke ferdig kontrollert.** Rekker du ikke å kontrollere alt i denne
+     kjøringen, eller kan en kilde ikke hentes nå, og har du ikke funnet noe
+     som må rettes, vurderer du ikke: grenen står som `klar`, og du fortsetter
+     i neste kjøring. Skriv hva du har kontrollert, mot hvilke kilder, og hva
+     som gjenstår, i en `merknad` festet til dokumentet `evidensjournal`
+     (`anker: {"dokument": "evidensjournal"}`), og svar i den samme tråden
+     neste gang, så du fortsetter der du slapp. `endringer` er for det
+     kuratoren kan rette.
 6. **Neste runde.** Når kuratoren har rettet og sendt grenen til kontroll
    igjen, leser du svarene i trådene og den nye revisjonen. En tråd som er
    løst, lukker du (`lukk_kommentar`); en som ikke er det, svarer du i. En

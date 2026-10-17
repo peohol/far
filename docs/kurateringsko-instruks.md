@@ -109,6 +109,19 @@ Send én av disse på øktgrenen, og avslutt kjøringen når svaret har kommet:
 
 Alle forespørsler har også `"versjon": 1` og en ny `"id"`.
 
+**Når mennesket har avgjort** det som stoppet deg, og ber deg fortsette:
+send `tilbakestill` med stoffet og grenen du arbeidet i, på en ny øktgren:
+
+```json
+{ "versjon": 1, "id": "tilbakestill-1", "handling": "tilbakestill", "stoff": "<nøkkel>", "gren": "<grenens ID>", "grunn": "Avgjort av et menneske" }
+```
+
+Køen gir deg da stoffet igjen med grenen: reserver det (steg 2, gjerne med
+`"stoff"`), fortsett i `oppgave.gren`, og send `fullfort` med grenen som
+vanlig. Uten `gren` glemmer køen grenen, og stoffet blir stående blokkert
+(`annen_gren`) så lenge grenen er åpen. Svarer køen `avvist`, står grunnen i
+`melding` (grenen finnes ikke, er ikke aktiv eller hører til et annet stoff).
+
 ## Den eldre veien
 
 Før kurateringsgrenene ble en kuratering levert som en migrasjon i en

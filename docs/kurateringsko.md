@@ -179,6 +179,16 @@ neste time.
   kjenner, blir stoffet blokkert (`annen_gren`) til et menneske har sett på
   det, så samme stoff aldri kurateres i to grener samtidig. `tilbakestill`
   avvises så lenge køen følger en gren.
+- **Etter en menneskelig avgjørelse.** Har kuratoren sendt `blokkert` med en
+  åpen gren (f.eks. for krav 3 i protokollen), avsluttes reservasjonen. Når
+  mennesket har avgjort, gir `tilbakestill` med `gren` stoffet tilbake til
+  kuratoren med grenen: blokkeringene fjernes, grenen står i `gjenoppta`, og
+  neste `reserver` gir stoffet med grenen, som etter en kontrollrunde. Står et
+  avbrutt forsøk i samme gren, beholdes det (oppgaven, jobbgrenen og
+  kunnskapsgrensen). Grenen må finnes, være aktiv (ikke stanset) og høre til stoffet med
+  arten kurateringen krever; ellers, eller når grenene ikke kan leses,
+  avvises forespørselen, og ingenting endres. Uten `gren` glemmer
+  `tilbakestill` grenen, og en åpen gren gir da `annen_gren`.
 
 `neste.json` og `oversikt.md` viser grenen og statusen dens under
 `til_gjennomgang`.
@@ -199,7 +209,7 @@ neste time.
 | `feilet` | `oppgave`, `grunn` | `fase` | Noe gikk galt; stoffet kan prøves igjen etter ventetiden |
 | `blokkert` | `oppgave`, `grunn` | `fase` | Kurateringen kan ikke gjøres før et menneske har sett på noe |
 | `frigi` | `oppgave` | `grunn` | Gir stoffet tilbake uten feil, f.eks. når tiden ikke strekker til |
-| `tilbakestill` | `stoff`, `grunn` | | Fjerner blokkeringene og forsøkene for et stoff som ikke er reservert. For et menneske, eller kuratoren når et menneske har bedt om det |
+| `tilbakestill` | `stoff`, `grunn` | `gren` | Fjerner blokkeringene og forsøkene for et stoff som ikke er reservert. Med `gren` gis stoffet tilbake til kuratoren med den åpne grenen (se «Etter en menneskelig avgjørelse»). For et menneske, eller kuratoren når et menneske har bedt om det |
 
 `kunnskapsgrense` er datoen kildesøket gjelder til (`ÅÅÅÅ-MM-DD`). `gren` er
 kurateringsgrenens ID i OUSFAR. `pr` er nummeret. `jobbgren` må være under `kuratorjobb/`, `kurateringsgren` under
@@ -217,6 +227,10 @@ Eksempler:
 
 ```json
 { "versjon": 1, "id": "fullfort-1", "handling": "fullfort", "oppgave": "amitriptylin-0001", "gren": "0b5f…", "kunnskapsgrense": "2026-10-20" }
+```
+
+```json
+{ "versjon": 1, "id": "tilbakestill-1", "handling": "tilbakestill", "stoff": "amitriptylin", "gren": "0b5f…", "grunn": "Avgjort av et menneske" }
 ```
 
 ## Svaret

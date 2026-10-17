@@ -399,6 +399,71 @@ describe('kurateringsgrenene i OUSFAR', () => {
     expect(steg(t, [], om(T0, 7)).status).toBe('klar')
   })
 
+  it('gir stoffet tilbake til kuratoren med grenen når et menneske har avgjort, og følger grenen til den er publisert', () => {
+    const t = ny()
+    const { oppgave } = behandle(t, f('reserver', { stoff: 'beta' }), kontekst('kurateringsko/okt/a')).oppgave!
+    // Kuratoren har åpnet grenen, men må stoppe for en menneskelig avgjørelse før fullfort.
+    behandle(t, f('blokkert', { oppgave, grunn: 'Krav 3: trenger en avgjørelse' }), kontekst('kurateringsko/okt/a', om(T0, 1)))
+    expect(steg(t, [gren('klar')], om(T0, 1))).toMatchObject({ status: 'blokkert', gjenoppta: { oppgave, gren: GREN }, blokkeringer: [{ kode: 'agent' }] })
+    // En vanlig tilbakestilling glemmer grenen, og da holder grenen stoffet ute av køen.
+    expect(behandle(t, f('tilbakestill', { stoff: 'beta', grunn: 'Avgjort' }), kontekst('kurateringsko/okt/admin', om(T0, 2)))).toMatchObject({ utfall: 'ok' })
+    expect(steg(t, [gren('klar')], om(T0, 2))).toMatchObject({ status: 'blokkert', gjenoppta: null, blokkeringer: [{ kode: 'annen_gren' }] })
+    expect(behandle(t, f('reserver', { stoff: 'beta' }), kontekst('kurateringsko/okt/b', om(T0, 2))).utfall).toBe('avvist')
+
+    // En gren som ikke finnes, ikke er aktiv, gjelder et annet stoff eller har feil art, avvises, og ingenting endres.
+    const grener = [gren('klar'), gren('arbeid', { id: ANNEN, stoff: 'gamma' })]
+    const avvist = (gid: string, liste: Greninfo[] | null, melding: string) =>
+      expect(behandle(t, f('tilbakestill', { stoff: 'beta', grunn: 'Avgjort', gren: gid }), { ...kontekst('kurateringsko/okt/admin', om(T0, 3)), grener: liste })).toMatchObject({
+        utfall: 'avvist',
+        melding: expect.stringContaining(melding),
+      })
+    avvist('0b6f3c1e-3333-4000-8000-000000000003', grener, 'finnes ikke')
+    avvist(ANNEN, grener, 'gjelder gamma, ikke beta')
+    avvist(GREN, [gren('arkivert')], 'er ikke aktiv (arkivert)')
+    avvist(GREN, [gren('stanset')], 'er stanset av en administrator')
+    avvist(GREN, [gren('klar', { art: 'kuratering' })], 'en de_novo-kuratering må gjøres i en de_novo-gren')
+    avvist(GREN, null, 'kunne ikke leses')
+    expect(t.stoffer.beta).toMatchObject({ status: 'blokkert', gjenoppta: null, blokkeringer: [{ kode: 'annen_gren' }] })
+
+    // Med grenen: neste kjøring ser grenen som stoffets, og stoffet gis ut igjen med den.
+    expect(behandle(t, f('tilbakestill', { stoff: 'beta', grunn: 'Avgjort', gren: GREN }), { ...kontekst('kurateringsko/okt/admin', om(T0, 3)), grener })).toMatchObject({ utfall: 'ok' })
+    expect(steg(t, grener, om(T0, 3))).toMatchObject({ status: 'klar', blokkeringer: [], forsok: 0, gjenoppta: { oppgave, gren: GREN } })
+    expect(rekkefolge(t, om(T0, 3), INNST)[0]!.stoff).toBe('beta')
+    const igjen = behandle(t, f('reserver', { stoff: 'beta' }), kontekst('kurateringsko/okt/b', om(T0, 3))).oppgave!
+    expect(igjen).toMatchObject({ stoff: 'beta', gren: GREN, gjenoppta: { oppgave, gren: GREN } })
+    expect(steg(t, grener, om(T0, 3.5))).toMatchObject({ status: 'reservert', blokkeringer: [] })
+    expect(behandle(t, f('fullfort', { oppgave: igjen.oppgave, gren: GREN, kunnskapsgrense: '2026-11-01' }), { ...kontekst('kurateringsko/okt/b', om(T0, 4)), grener })).toMatchObject({
+      utfall: 'ok',
+    })
+    expect(steg(t, grener, om(T0, 4))).toMatchObject({ status: 'venter_godkjenning', appgren: { id: GREN, status: 'klar' }, blokkeringer: [] })
+    // Så lenge køen følger grenen, avvises tilbakestill, også med grenen.
+    expect(behandle(t, f('tilbakestill', { stoff: 'beta', grunn: 'Avgjort', gren: GREN }), { ...kontekst('kurateringsko/okt/admin', om(T0, 4)), grener }).utfall).toBe('avvist')
+    expect(steg(t, [gren('publisert', { publisert_kl: om(T0, 5) })], om(T0, 5))).toMatchObject({
+      status: 'publisert',
+      appgren: null,
+      gjenoppta: null,
+      sist_kuratert: { kl: om(T0, 5), modus: 'de_novo', kunnskapsgrense: '2026-11-01', gren: GREN, kilde: 'ko' },
+    })
+  })
+
+  it('beholder det avbrutte forsøket og kunnskapsgrensen når et stoff blokkert under rettingen gis tilbake med grenen', () => {
+    const t = ny()
+    const a = behandle(t, f('reserver', { stoff: 'beta' }), kontekst('kurateringsko/okt/a')).oppgave!
+    behandle(t, f('fullfort', { oppgave: a.oppgave, gren: GREN, kunnskapsgrense: '2026-11-01' }), kontekst('kurateringsko/okt/a', om(T0, 1)))
+    steg(t, [gren('tilbakemelding', { runde: 1 })], om(T0, 2))
+    const b = behandle(t, f('reserver'), kontekst('kurateringsko/okt/b', om(T0, 2))).oppgave!
+    behandle(t, f('blokkert', { oppgave: b.oppgave, grunn: 'Krav 3: trenger en avgjørelse' }), kontekst('kurateringsko/okt/b', om(T0, 3)))
+    expect(steg(t, [gren('retting', { runde: 1 })], om(T0, 3))).toMatchObject({ status: 'blokkert', gjenoppta: { oppgave: b.oppgave, gren: GREN, kunnskapsgrense: '2026-11-01' } })
+    const grener = [gren('retting', { runde: 1 })]
+    expect(behandle(t, f('tilbakestill', { stoff: 'beta', grunn: 'Avgjort', gren: GREN }), { ...kontekst('kurateringsko/okt/admin', om(T0, 4)), grener })).toMatchObject({ utfall: 'ok' })
+    expect(steg(t, grener, om(T0, 4))).toMatchObject({ status: 'klar', blokkeringer: [], gjenoppta: { oppgave: b.oppgave, gren: GREN, kunnskapsgrense: '2026-11-01' } })
+    expect(behandle(t, f('reserver'), kontekst('kurateringsko/okt/c', om(T0, 4))).oppgave).toMatchObject({ stoff: 'beta', gren: GREN })
+    expect(
+      lesForesporsel(JSON.stringify({ versjon: 1, id: 'x', handling: 'tilbakestill', stoff: 'beta', grunn: 'Avgjort', gren: GREN })).foresporsel,
+    ).toMatchObject({ gren: GREN })
+    expect(lesForesporsel(JSON.stringify({ versjon: 1, id: 'x', handling: 'tilbakestill', stoff: 'beta', grunn: 'Avgjort', gren: 'ikke-en-id' })).feil).toBeTruthy()
+  })
+
   it('avviser en gren som hører til et annet stoff, og fullfort uten verken PR eller gren', () => {
     const t = ny()
     const a = behandle(t, f('reserver', { stoff: 'beta' }), kontekst('kurateringsko/okt/a')).oppgave!

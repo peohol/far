@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.103.1',
+    dato: '2026-10-17',
+    sammendrag: 'En kuratering som stoppet for en menneskelig avgjørelse, kan fortsette i samme kurateringsgren',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Når kuratoren må stoppe en kuratering for at et menneske skal avgjøre noe, kan kurateringskøen nå gi stoffet tilbake til kuratoren med den samme kurateringsgrenen når avgjørelsen er tatt. Kuratoren fortsetter der, sender grenen til kontroll, og køen følger den til den er publisert. Før ble stoffet stående blokkert fordi køen ikke lenger kjente grenen.',
+      'Kontrolløren ber ikke lenger om endringer bare fordi den ikke rakk å kontrollere alt. Den lar kurateringen stå til kontroll, skriver hva som er kontrollert, og fortsetter neste gang.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.103.0',
     dato: '2026-10-17',
     sammendrag: 'Varsler kan arkiveres, så lista ikke vokser seg lang',
