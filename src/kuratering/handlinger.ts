@@ -57,7 +57,7 @@ export const AGENTHANDLINGER: readonly Agenthandling[] = [
   {
     navn: 'vurder',
     beskrivelse:
-      'Den faglige vurderingen av nøyaktig én revisjon av en gren som er klar til kontroll: «godkjent» eller «endringer», med begrunnelsen. Bare kontrolløren, og aldri for en gren agenten selv kuraterer.',
+      'Den faglige vurderingen av nøyaktig én revisjon av en gren som er klar til kontroll: «godkjent» eller «endringer», med begrunnelsen. Bare kontrolløren, og aldri for en gren agenten selv kuraterer. En ny kontrollrunde kan ha samme revisjon som den forrige; da gjelder den siste vurderingen.',
     argumenter: objekt(
       {
         gren,
@@ -153,7 +153,8 @@ export const AGENTHANDLINGER: readonly Agenthandling[] = [
   },
   {
     navn: 'til_kontroll',
-    beskrivelse: 'Sender revisjonen til faglig kontroll. Krever bestått prøvepublisering, en rapport som stemmer og dokumentene.',
+    beskrivelse:
+      'Sender den siste revisjonen til faglig kontroll. Krever bestått prøvepublisering, en rapport som stemmer, dokumentene, og at kuratoren har svart i hver sperrende tråd som venter på den. Etter «endringer» kan den samme revisjonen sendes til en ny runde uten endringer når det ikke er noe å rette, men først når kuratoren har svart på vurderingen (et svar i en tråd eller en merknad etter den); hendelsen får da uten_endringer.',
     argumenter: objekt({ gren, revisjon: heltall('Revisjonen') }, ['gren', 'revisjon']),
   },
   {

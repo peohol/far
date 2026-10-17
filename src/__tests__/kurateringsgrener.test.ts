@@ -8,6 +8,8 @@
  * - grenen endrer bare sin egen side, og aldri en referanse som finnes;
  * - statusovergangene, rollene, at ingen godkjenner sitt eget arbeid, og at en
  *   godkjenning gjelder nøyaktig én revisjon;
+ * - en ny kontrollrunde for den samme revisjonen når kuratoren har svart på
+ *   vurderingen uten å rette, der den siste vurderingen er den som gjelder;
  * - publiseringen er samlet: alt eller ingenting, med rapporten i
  *   endringsloggen og én ny sideversjon;
  * - konflikter med hovedversjonen og upubliserte utkast stopper publiseringen;
@@ -916,6 +918,126 @@ describe('kommentarene', () => {
     expect(await adm<Traad[]>('kommentarer', { gren: k.gren, apne: true })).toEqual([])
     const [rad] = await kall.fasit<{ id: string }>('select id from kuratering.kommentarer where traad = $1 limit 1', [merknad.traad])
     expect((await feilFra(() => db.query('update kuratering.kommentarer set tekst = $1 where id = $2', ['x', rad!.id])))?.code).toBe('42501')
+  })
+})
+
+describe('en ny kontrollrunde uten endringer', () => {
+  interface Lest {
+    status: string
+    hindringer: string[]
+    vurderinger: { revisjon: number; beslutning: string; gjelder_denne: boolean }[]
+    hendelser: { hendelse: string; fra?: string; revisjon: number; data?: Json }[]
+  }
+  const les = (gren: string) => agent<Lest>(chatgpt, 'les', { gren })
+  const tilKontroll = (gren: string, revisjon = 1) => agent<Sammendrag>(claude, 'til_kontroll', { gren, revisjon })
+  const avvist = (gren: string, revisjon = 1) => feilFra(() => tilKontroll(gren, revisjon))
+  const vurder = (gren: string, beslutning: string, revisjon = 1) =>
+    agent<Sammendrag>(chatgpt, 'vurder', { gren, revisjon, beslutning, begrunnelse: `Syntetisk vurdering: ${beslutning}.` })
+  const runder = async (gren: string) =>
+    (await les(gren)).hendelser.filter((h) => h.hendelse === 'til_kontroll').map((h) => [h.fra, h.revisjon, h.data])
+
+  it('sender den samme revisjonen fra tilbakemelding til en ny runde når kuratoren har svart, og en godkjenning da kan publiseres', async () => {
+    const k = await kuratertGren()
+    await medDokumenter(k.gren)
+    await tilKontroll(k.gren)
+    // En merknad fra før vurderingen er ikke et svar på den.
+    const merknad = await agent<{ traad: string }>(claude, 'kommenter', { gren: k.gren, tekst: 'Doseringen bygger på preparatomtalen.' })
+    expect((await vurder(k.gren, 'endringer')).status).toBe('tilbakemelding')
+    expect(await avvist(k.gren)).toMatchObject({ code: '22023', message: expect.stringContaining('Svar på vurderingen') })
+    // Heller ikke å lukke en tråd, eller en kommentar fra kontrolløren.
+    await agent(claude, 'lukk_kommentar', { gren: k.gren, kommentar: merknad.traad })
+    await agent(chatgpt, 'kommenter', { gren: k.gren, tekst: 'Kilden er ikke kontrollert ferdig.' })
+    expect((await avvist(k.gren))?.message).toContain('Svar på vurderingen')
+    expect((await feilFra(() => agent(chatgpt, 'til_kontroll', { gren: k.gren, revisjon: 1 })))?.code).toBe('42501')
+
+    await agent(claude, 'kommenter', { gren: k.gren, anker: { dokument: 'evidensjournal' }, tekst: 'Ingenting å rette: kilden står i evidensjournalen.' })
+    expect(await tilKontroll(k.gren)).toMatchObject({ status: 'klar', revisjon: 1, runde: 2 })
+    // Hendelsen viser at runden er uten endringer; den første runden er det ikke.
+    expect(await runder(k.gren)).toEqual([
+      ['tilbakemelding', 1, { runde: 2, uten_endringer: true }],
+      ['arbeid', 1, { runde: 1 }],
+    ])
+    expect((await feilFra(() => agent(claude, 'publiser', { gren: k.gren, revisjon: 1 })))?.message).toContain('Bare en godkjent gren')
+
+    // Godkjenningen i den nye runden er den som gjelder, og grenen kan publiseres.
+    expect((await vurder(k.gren, 'godkjent')).status).toBe('godkjent')
+    const godkjent = await les(k.gren)
+    expect(godkjent.hindringer).toEqual([])
+    expect(godkjent.vurderinger.map((v) => [v.revisjon, v.beslutning, v.gjelder_denne])).toEqual([
+      [1, 'endringer', false],
+      [1, 'godkjent', true],
+    ])
+    expect((await agent<{ ok: boolean }>(claude, 'publiser', { gren: k.gren, revisjon: 1 })).ok).toBe(true)
+    expect(JSON.stringify(await publisert(k.slug))).toContain('Ny kinetikk')
+  })
+
+  it('avvises mens en sperrende tråd venter på svar fra kuratoren', async () => {
+    const k = await kuratertGren()
+    await medDokumenter(k.gren)
+    await tilKontroll(k.gren)
+    const traad = await agent<{ traad: string }>(chatgpt, 'kommenter', {
+      gren: k.gren,
+      art: 'sperrende',
+      anker: { objekt: k.dosering, felt: 'Tekst' },
+      tekst: 'Maksdosen mangler kilde.',
+    })
+    await vurder(k.gren, 'endringer')
+    // En merknad svarer på vurderingen, men ikke i tråden som venter.
+    await agent(claude, 'kommenter', { gren: k.gren, tekst: 'Svar følger i tråden.' })
+    expect(await avvist(k.gren)).toMatchObject({ code: '22023', message: expect.stringMatching(/1 sperrende kommentar\(er\) venter på svar/) })
+    await agent(claude, 'kommenter', { gren: k.gren, svar_pa: traad.traad, tekst: 'Maksdosen står i preparatomtalen; ingenting å rette.' })
+    expect(await tilKontroll(k.gren)).toMatchObject({ status: 'klar', revisjon: 1, runde: 2 })
+    // Tråden sperrer godkjenningen til kontrolløren har lukket den.
+    expect((await feilFra(() => vurder(k.gren, 'godkjent')))?.message).toMatch(/Sperrende kommentar er åpen/)
+  })
+
+  it('stiller de samme kravene som ellers: den siste revisjonen, dokumentene og den siste versjonen av fagsiden', async () => {
+    const k = await kuratertGren()
+    await agent(claude, 'skriv', {
+      gren: k.gren,
+      forventet_revisjon: 1,
+      endringer: [{ sett: k.dosering, innhold: kort(k.side, 'dosering', 'Ny dosering, andre utkast', { referanser: [k.nyRef] }) }],
+    })
+    await medDokumenter(k.gren)
+    await tilKontroll(k.gren, 2)
+    await vurder(k.gren, 'endringer', 2)
+    await agent(claude, 'kommenter', { gren: k.gren, tekst: 'Ingenting å rette.' })
+    expect(await avvist(k.gren, 1)).toMatchObject({ code: 'PT409', message: expect.stringContaining('Grenen er på revisjon 2, ikke 1') })
+    await agent(claude, 'dokument', { gren: k.gren, art: 'selvtest', innhold: {} })
+    expect((await avvist(k.gren, 2))?.message).toContain('selvtest: krav må være en liste')
+    await medDokumenter(k.gren, ['selvtest'])
+    // Noen publiserer siden på vanlig måte i mellomtiden: grenen må oppdateres først.
+    await kall.lagre(k.dosering, 1, kort(k.side, 'dosering', 'Manuell dosering'))
+    await kall.publiser(k.dosering, 2)
+    expect(await avvist(k.gren, 2)).toMatchObject({ code: 'PT409', message: expect.stringContaining('publisert på nytt') })
+    expect((await les(k.gren)).status).toBe('tilbakemelding')
+  })
+
+  it('lar aldri en eldre godkjenning gjelde etter en senere «endringer» av samme revisjon', async () => {
+    const k = await kuratertGren()
+    await tilGodkjent(k.gren)
+    // En administrator stanser og gjenopptar den godkjente grenen, og den samme revisjonen kontrolleres på nytt.
+    await adm('stans', { gren: k.gren, grunn: 'Ny kontroll' })
+    expect((await adm<Sammendrag>('gjenoppta', { gren: k.gren })).status).toBe('retting')
+    expect(await tilKontroll(k.gren)).toMatchObject({ status: 'klar', revisjon: 1, runde: 2 })
+    expect((await runder(k.gren))[0]).toEqual(['retting', 1, { runde: 2, uten_endringer: true }])
+    await vurder(k.gren, 'endringer')
+
+    const etter = await les(k.gren)
+    expect(etter.vurderinger.map((v) => [v.beslutning, v.gjelder_denne])).toEqual([
+      ['godkjent', false],
+      ['endringer', true],
+    ])
+    expect(etter.hindringer).toContain('Revisjon 1 er ikke faglig godkjent.')
+    expect((await feilFra(() => adm('publiser', { gren: k.gren, revisjon: 1 })))?.message).toContain('Bare en godkjent gren')
+
+    // Heller ikke etter en ny runde uten endringer gjelder den eldre godkjenningen.
+    await agent(claude, 'kommenter', { gren: k.gren, tekst: 'Kontrollert på nytt; ingenting å rette.' })
+    expect(await tilKontroll(k.gren)).toMatchObject({ status: 'klar', runde: 3 })
+    expect((await les(k.gren)).hindringer).toContain('Revisjon 1 er ikke faglig godkjent.')
+    expect((await feilFra(() => agent(claude, 'publiser', { gren: k.gren, revisjon: 1 })))?.message).toContain('Bare en godkjent gren')
+    expect((await vurder(k.gren, 'godkjent')).status).toBe('godkjent')
+    expect((await adm<{ ok: boolean }>('publiser', { gren: k.gren, revisjon: 1 })).ok).toBe(true)
   })
 })
 

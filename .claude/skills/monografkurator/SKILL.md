@@ -65,7 +65,8 @@ kontroll før den har `ok` og `rapport_ok`; feilen sier hva som må rettes.
    reservasjonen omtrent hver time.
 3. **Kontrollen.** `til_kontroll`, så `fullfort` i køen med `"gren"` og
    kunnskapsgrensen. Køen gir deg stoffet igjen når kontrolløren har vurdert
-   det: med endringer svarer du i trådene og retter (protokollen, fase 9);
+   det: med endringer svarer du i trådene og retter, eller sender den samme
+   revisjonen til en ny runde når det ikke er noe å rette (protokollen, fase 9);
    godkjent publiserer du (fase 10).
 4. **Til brukeren.** Si kort hva som er gjort, hvor kurateringen står (lenke
    til `https://ousfar.vercel.app/#/kuratering/<gren>`), og hva som venter på

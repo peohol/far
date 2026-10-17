@@ -353,7 +353,8 @@ function folgGren(s: Kostoff, a: Kurateringsappgren, g: Greninfo | null, na: str
     return
   }
   fjernBlokkering(s, 'gren_feil_kobling')
-  if (g.status !== a.status || g.revisjon !== a.revisjon) {
+  // En ny kontrollrunde kan ha samme revisjon som den forrige (kuratoren har svart uten å rette).
+  if (g.status !== a.status || g.revisjon !== a.revisjon || g.runde !== a.kontrollrunde) {
     logg(s, { kl: na, hendelse: `gren_${g.status}`, oppgave: a.oppgave, melding: `Grenen: ${g.status}, revisjon ${g.revisjon}, kontrollrunde ${g.runde}.` })
   }
   a.status = g.status

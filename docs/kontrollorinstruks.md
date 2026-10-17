@@ -12,7 +12,8 @@ Grunnreglene:
 - Kontrolløren skriver aldri i grenen. Den leser, kommenterer, lukker sine
   egne tråder og vurderer.
 - En vurdering gjelder nøyaktig den siste revisjonen. Kommer det en ny
-  revisjon, faller en godkjenning bort, og den nye må kontrolleres.
+  revisjon, faller en godkjenning bort, og den nye må kontrolleres. Har en
+  revisjon flere vurderinger, gjelder den siste.
 - Fagteksten er bak innloggingen. Gjengi den aldri utenfor OUSFAR.
 - Blir et kall til OUSFAR stoppet, enten av OUSFAR eller av ChatGPT, si det
   med feilmeldingen i svaret til den som startet kjøringen, så et menneske
@@ -63,6 +64,10 @@ samme handlingene som i `docs/kurateringsgrener.md`.
    løst, lukker du (`lukk_kommentar`); en som ikke er det, svarer du i. En
    lukket tråd som viser seg ikke å være løst, åpnes igjen
    (`gjenapne_kommentar`). Så vurderer du den nye revisjonen som over.
+   En ny runde kan ha samme revisjon som den forrige (`uten_endringer` i
+   hendelsen `til_kontroll`): kuratoren har ikke rettet noe, men svart på
+   vurderingen. Da leser du svarene i trådene og merknadene, og eventuelle
+   nye versjoner av dokumentene, og vurderer den samme revisjonen på nytt.
 
 ## Teksten til tidsplanen i ChatGPT
 
