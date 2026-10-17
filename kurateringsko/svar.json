@@ -1,10 +1,44 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-levetiracetam-0038",
-  "foresporsel_sha256": "d1f3a34314725705337c19bf69fea562f443ca8cac93e0cc645766d9b24daac3",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-202610171224",
+  "foresporsel_sha256": "8c641012945fc05e7357ef8f1db8da834b36ec776153f7ac2fe36e63069ad35c",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "levetiracetam er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-17T12:24:07.862Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39032346813"
+  "melding": "okskarbazepin er reservert til 2026-10-17T15:24:58.738Z.",
+  "behandlet_kl": "2026-10-17T12:24:58.738Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39032407725",
+  "oppgave": {
+    "oppgave": "okskarbazepin-0039",
+    "stoff": "okskarbazepin",
+    "navn": "Okskarbazepin",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-17T15:24:58.738Z",
+    "jobbgren": "kuratorjobb/okskarbazepin-0039",
+    "kurateringsgren": "kuratering/okskarbazepin-0039",
+    "pr": null,
+    "gren": null,
+    "gjenoppta": null,
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-16T18:10:24.842Z",
+      "side": true,
+      "elementer": 6,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 4,
+      "referanser": 3,
+      "elementer_uten_kilde": 1
+    },
+    "prioritet": {
+      "poeng": 447.6,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ]
+    }
+  }
 }
