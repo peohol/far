@@ -1,10 +1,44 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-flunitrazepam-0017",
-  "foresporsel_sha256": "a88608fbab431bf3aab1b3f72e5edac7a1e651bcc31b4a2d83e4c05d88432a6e",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-202610170156",
+  "foresporsel_sha256": "ee37efcbddbf86138a8897951cdf37c5ab9ae2e3cc3db6976142a61406b022c3",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "flunitrazepam er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-17T01:55:48.526Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38992873050"
+  "melding": "ketobemidon er reservert til 2026-10-17T04:56:32.104Z.",
+  "behandlet_kl": "2026-10-17T01:56:32.104Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38992922552",
+  "oppgave": {
+    "oppgave": "ketobemidon-0018",
+    "stoff": "ketobemidon",
+    "navn": "Ketobemidon",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-17T04:56:32.104Z",
+    "jobbgren": "kuratorjobb/ketobemidon-0018",
+    "kurateringsgren": "kuratering/ketobemidon-0018",
+    "pr": null,
+    "gren": null,
+    "gjenoppta": null,
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-16T18:10:24.842Z",
+      "side": true,
+      "elementer": 8,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 4,
+      "referanser": 1,
+      "elementer_uten_kilde": 2
+    },
+    "prioritet": {
+      "poeng": 451.7,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "2 av 8 elementer har ingen kilde.",
+        "Bare 1 referanser."
+      ]
+    }
+  }
 }
