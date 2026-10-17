@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T07:46:36.917Z",
+  "oppdatert_kl": "2026-10-17T07:47:29.840Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 34,
   "stoffer": {
@@ -1118,7 +1118,7 @@
     "doksepin": {
       "stoff": "doksepin",
       "navn": "Doksepin",
-      "status": "reservert",
+      "status": "venter_godkjenning",
       "modus": "de_novo",
       "prioritet": {
         "poeng": 0,
@@ -1133,34 +1133,10 @@
         "referanser": 4,
         "elementer_uten_kilde": 14
       },
-      "reservasjon": {
-        "oppgave": "doksepin-0034",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "modus": "de_novo",
-        "reservert_kl": "2026-10-17T07:46:36.917Z",
-        "fornyet_kl": "2026-10-17T07:46:36.917Z",
-        "frist_kl": "2026-10-17T10:46:36.917Z",
-        "fase": null,
-        "jobbgren": "kuratorjobb/doksepin-0028",
-        "kurateringsgren": "kuratering/doksepin-0034",
-        "pr": null,
-        "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
-        "kunnskapsgrense": "2026-10-16"
-      },
+      "reservasjon": null,
       "forsok": 1,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "doksepin-0028",
-        "okt": "kurateringsko/okt/20261017-retting",
-        "avbrutt_kl": "2026-10-17T07:01:58.764Z",
-        "grunn": "Kontrolløren har bedt om endringer i kontrollrunde 4.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/doksepin-0028",
-        "kurateringsgren": null,
-        "pr": null,
-        "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
-        "kunnskapsgrense": "2026-10-16"
-      },
+      "gjenoppta": null,
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -1168,8 +1144,8 @@
         "oppgave": "doksepin-0034",
         "okt": "kurateringsko/okt/20261016-125910",
         "startet_kl": "2026-10-17T07:46:36.917Z",
-        "avsluttet_kl": null,
-        "utfall": "reservert"
+        "avsluttet_kl": "2026-10-17T07:47:29.840Z",
+        "utfall": "fullfort"
       },
       "aktiv": true,
       "historikk": [
@@ -1280,9 +1256,33 @@
           "oppgave": "doksepin-0034",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Forsøk 1, de_novo, fortsetter doksepin-0028."
+        },
+        {
+          "kl": "2026-10-17T07:47:29.840Z",
+          "hendelse": "fullfort",
+          "oppgave": "doksepin-0034",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Kurateringsgrenen 14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f, kunnskapsgrense 2026-10-16."
+        },
+        {
+          "kl": "2026-10-17T07:47:29.840Z",
+          "hendelse": "gren_klar",
+          "oppgave": "doksepin-0034",
+          "melding": "Grenen: klar, revisjon 7, kontrollrunde 5."
         }
       ],
-      "appgren": null
+      "appgren": {
+        "id": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
+        "oppgave": "doksepin-0034",
+        "modus": "de_novo",
+        "runde": 2,
+        "kunnskapsgrense": "2026-10-16",
+        "jobbgren": "kuratorjobb/doksepin-0028",
+        "registrert_kl": "2026-10-17T07:47:29.840Z",
+        "status": "klar",
+        "revisjon": 7,
+        "kontrollrunde": 5
+      }
     },
     "duloksetin": {
       "stoff": "duloksetin",
@@ -5652,6 +5652,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "fullfort-doksepin-0034",
         "reserver-doksepin-074613",
         "fullfort-brekspiprazol-0033",
         "reserver-brekspiprazol-074439",
@@ -5700,71 +5701,24 @@
         "reserver-202610170156",
         "fullfort-flunitrazepam-0017",
         "forny-flunitrazepam-0017-gren",
-        "reserver-202610170107",
-        "blokkert-doksepin-1"
+        "reserver-202610170107"
       ],
       "siste": {
-        "id": "reserver-doksepin-074613",
-        "sha256": "7a965f2b55073400002b17bd90f174ca37076968a6669ace0895a693bb0c6b74",
+        "id": "fullfort-doksepin-0034",
+        "sha256": "0e4a4b0dadbf5c15cc0252a6e76c4a82ce6602b02a8894aa460e06264a08eb71",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "reserver-doksepin-074613",
-          "foresporsel_sha256": "7a965f2b55073400002b17bd90f174ca37076968a6669ace0895a693bb0c6b74",
-          "handling": "reserver",
+          "foresporsel_id": "fullfort-doksepin-0034",
+          "foresporsel_sha256": "0e4a4b0dadbf5c15cc0252a6e76c4a82ce6602b02a8894aa460e06264a08eb71",
+          "handling": "fullfort",
           "utfall": "ok",
-          "melding": "doksepin er reservert til 2026-10-17T10:46:36.917Z.",
-          "behandlet_kl": "2026-10-17T07:46:36.917Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39014882848",
-          "oppgave": {
-            "oppgave": "doksepin-0034",
-            "stoff": "doksepin",
-            "navn": "Doksepin",
-            "modus": "de_novo",
-            "forsok": 1,
-            "frist_kl": "2026-10-17T10:46:36.917Z",
-            "jobbgren": "kuratorjobb/doksepin-0028",
-            "kurateringsgren": "kuratering/doksepin-0034",
-            "pr": null,
-            "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
-            "gjenoppta": {
-              "oppgave": "doksepin-0028",
-              "okt": "kurateringsko/okt/20261017-retting",
-              "avbrutt_kl": "2026-10-17T07:01:58.764Z",
-              "grunn": "Kontrolløren har bedt om endringer i kontrollrunde 4.",
-              "fase": null,
-              "jobbgren": "kuratorjobb/doksepin-0028",
-              "kurateringsgren": null,
-              "pr": null,
-              "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
-              "kunnskapsgrense": "2026-10-16"
-            },
-            "sist_kuratert": null,
-            "maal": {
-              "kl": "2026-10-16T18:10:24.842Z",
-              "side": true,
-              "elementer": 19,
-              "redaksjonelle_paneler": 13,
-              "paneler_med_innhold": 6,
-              "referanser": 4,
-              "elementer_uten_kilde": 14
-            },
-            "prioritet": {
-              "poeng": 1460.7,
-              "grunner": [
-                "Fortsetter den avbrutte kurateringen doksepin-0028.",
-                "De novo-kuratering i runden som gjelder.",
-                "Aldri kuratert.",
-                "Ingen kuratering å regne alderen fra.",
-                "7 av 13 redaksjonelle seksjoner er tomme.",
-                "14 av 19 elementer har ingen kilde.",
-                "Bare 4 referanser."
-              ]
-            }
-          }
+          "melding": "doksepin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+          "behandlet_kl": "2026-10-17T07:47:29.840Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39014929337"
         }
       },
       "besvart_commit": "10518051e0ff69c400f1dab11cac16ea0a3d9b88",
-      "sist_brukt_kl": "2026-10-17T07:46:36.917Z"
+      "sist_brukt_kl": "2026-10-17T07:47:29.840Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
