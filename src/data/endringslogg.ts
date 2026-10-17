@@ -19,8 +19,22 @@ export const ENDRINGSLOGG: Endring[] = [
     omfang: 'Minimalt omfang',
     punkter: [
       'Ingen endring i appen. Når kuratoren må stoppe en kuratering for at et menneske skal avgjøre noe, kan kurateringskøen nå gi stoffet tilbake til kuratoren med den samme kurateringsgrenen når avgjørelsen er tatt. Kuratoren fortsetter der, sender grenen til kontroll, og køen følger den til den er publisert. Før ble stoffet stående blokkert fordi køen ikke lenger kjente grenen.',
+      'Kontrolløren ber ikke lenger om endringer bare fordi den ikke rakk å kontrollere alt. Den lar kurateringen stå til kontroll, skriver hva som er kontrollert, og fortsetter neste gang.',
     ],
     utenVarsel: true,
+  },
+  {
+    versjon: '1.102.2',
+    dato: '2026-10-17',
+    sammendrag: '«Følg agenten» åpner kortene agenten arbeider i, så endringene vises mens de skjer',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Mindre omfang',
+    gjelder: ['kuratering'],
+    punkter: [
+      'Med «Følg agenten» på åpnes nå seksjonen og kortet agenten arbeider i, og siden ruller dit. Før rullet den bare dit, og kortet kunne stå lukket.',
+      'Stedet som følges, har en ramme, og merket «Agenten arbeider her» mens agenten arbeider der.',
+      'Når agenten lagrer en ny revisjon, åpnes det som er endret, og det lyser opp en liten stund. Siden står som før mens innholdet byttes, med de samme kortene åpne.',
+    ],
   },
   {
     versjon: '1.102.1',
