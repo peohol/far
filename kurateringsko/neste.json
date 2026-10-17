@@ -1,9 +1,9 @@
 {
-  "oppdatert_kl": "2026-10-17T06:59:04.130Z",
+  "oppdatert_kl": "2026-10-17T06:59:47.238Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
-    "klar": 91,
-    "reservert": 0,
+    "klar": 90,
+    "reservert": 1,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 1,
     "sammenslatt": 0,
@@ -11,23 +11,16 @@
     "blokkert": 4,
     "utenfor": 1
   },
-  "aktive": [],
-  "neste": [
+  "aktive": [
     {
       "stoff": "brekspiprazol",
-      "modus": "de_novo",
-      "poeng": 1466.3,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen brekspiprazol-0011.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "7 av 13 redaksjonelle seksjoner er tomme.",
-        "17 av 20 elementer har ingen kilde.",
-        "Bare 1 referanser."
-      ],
-      "tidligst_kl": null
-    },
+      "oppgave": "brekspiprazol-0027",
+      "okt": "kurateringsko/okt/20261017-retting",
+      "frist_kl": "2026-10-17T09:59:47.238Z",
+      "fase": null
+    }
+  ],
+  "neste": [
     {
       "stoff": "kariprazin",
       "modus": "de_novo",
@@ -148,6 +141,20 @@
     },
     {
       "stoff": "levetiracetam",
+      "modus": "de_novo",
+      "poeng": 447.6,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "okskarbazepin",
       "modus": "de_novo",
       "poeng": 447.6,
       "grunner": [
