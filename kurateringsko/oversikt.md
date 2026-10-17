@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-17T08:34:30.643Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-17T08:52:45.185Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
 Klar: 82 · Reservert: 1 · Venter på godkjenning: 9 · Publisert: 3 · Blokkert: 4 · Utenfor køen: 1
 
 ## Pågår
 
-- **fenytoin** (fenytoin-0037), frist 2026-10-17T10:52:23.938Z
+- **fenytoin** (fenytoin-0037), frist 2026-10-17T11:52:45.185Z
 
 ## Til gjennomgang
 
