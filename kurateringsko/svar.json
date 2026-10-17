@@ -1,10 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": null,
-  "foresporsel_sha256": "58e5f8c6ed6af027b4962f13956971f947d13077be0bd894ebd255658d38ab4e",
-  "handling": null,
-  "utfall": "avvist",
-  "melding": "Forespørselen kan ikke brukes: Feltet gren hører ikke til handlingen blokkert.",
-  "behandlet_kl": "2026-10-17T14:23:30.223Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39040523122"
+  "foresporsel_id": "blokkert-okskarbazepin-0039-b",
+  "foresporsel_sha256": "9ce42da5627d452e3b89677dae98153acd98125532404ee15b5a22ce0cc87b63",
+  "handling": "blokkert",
+  "utfall": "ok",
+  "melding": "okskarbazepin er blokkert til et menneske har sett på det.",
+  "behandlet_kl": "2026-10-17T14:52:49.441Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39042608135"
 }
