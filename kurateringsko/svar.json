@@ -1,10 +1,44 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-lamotrigin-0025",
-  "foresporsel_sha256": "4c439c9ef35176f769a61cb9953de1020d5f622e6d810d1600c3f75ca73100ea",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-202610170551",
+  "foresporsel_sha256": "d28cc01c75c6d8bc2f8f61adad9e6b78398a66d9eb6726f56dcd551e4a9fcb13",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "lamotrigin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-17T05:32:32.189Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39006621580"
+  "melding": "fenobarbital er reservert til 2026-10-17T08:52:23.058Z.",
+  "behandlet_kl": "2026-10-17T05:52:23.058Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39007821455",
+  "oppgave": {
+    "oppgave": "fenobarbital-0026",
+    "stoff": "fenobarbital",
+    "navn": "Fenobarbital",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-17T08:52:23.058Z",
+    "jobbgren": "kuratorjobb/fenobarbital-0026",
+    "kurateringsgren": "kuratering/fenobarbital-0026",
+    "pr": null,
+    "gren": null,
+    "gjenoppta": null,
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-16T18:10:24.842Z",
+      "side": true,
+      "elementer": 6,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 4,
+      "referanser": 3,
+      "elementer_uten_kilde": 1
+    },
+    "prioritet": {
+      "poeng": 447.6,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ]
+    }
+  }
 }
