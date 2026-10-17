@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T07:52:23.938Z",
+  "oppdatert_kl": "2026-10-17T08:34:30.643Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 37,
   "stoffer": {
@@ -4930,7 +4930,7 @@
       "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 51.6,
+        "poeng": 51.9,
         "grunner": [
           "De novo-kuratering i runden som gjelder.",
           "Sist kuratert 2026-10-10."
@@ -5794,7 +5794,7 @@
           }
         }
       },
-      "besvart_commit": "10518051e0ff69c400f1dab11cac16ea0a3d9b88",
+      "besvart_commit": "f5767a08fe163ace9c030a5f4397f7e55475ad43",
       "sist_brukt_kl": "2026-10-17T07:52:23.938Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
