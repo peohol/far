@@ -1,56 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-vortioksetin-074112",
-  "foresporsel_sha256": "56deb00748091bc62297dfe60381dc38fb6f1d9d1ef179af758972fd568683dd",
-  "handling": "reserver",
+  "foresporsel_id": "fullfort-vortioksetin-0031",
+  "foresporsel_sha256": "439196fe55f08462a990c1bda7d1077cc292c218898b826cd30d50f2cb00c612",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "vortioksetin er reservert til 2026-10-17T10:41:45.587Z.",
-  "behandlet_kl": "2026-10-17T07:41:45.587Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39014564283",
-  "oppgave": {
-    "oppgave": "vortioksetin-0031",
-    "stoff": "vortioksetin",
-    "navn": "Vortioksetin",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T10:41:45.587Z",
-    "jobbgren": "kuratorjobb/vortioksetin-0015",
-    "kurateringsgren": "kuratering/vortioksetin-0031",
-    "pr": null,
-    "gren": "afab07ef-a24e-485e-b31f-9f38498a61af",
-    "gjenoppta": {
-      "oppgave": "vortioksetin-0020",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "avbrutt_kl": "2026-10-17T06:24:57.621Z",
-      "grunn": "Kontrolløren har bedt om endringer i kontrollrunde 2.",
-      "fase": null,
-      "jobbgren": "kuratorjobb/vortioksetin-0015",
-      "kurateringsgren": null,
-      "pr": null,
-      "gren": "afab07ef-a24e-485e-b31f-9f38498a61af",
-      "kunnskapsgrense": "2026-10-17"
-    },
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-16T18:10:24.842Z",
-      "side": true,
-      "elementer": 24,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 7,
-      "referanser": 4,
-      "elementer_uten_kilde": 19
-    },
-    "prioritet": {
-      "poeng": 1455.7,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen vortioksetin-0020.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "6 av 13 redaksjonelle seksjoner er tomme.",
-        "19 av 24 elementer har ingen kilde.",
-        "Bare 4 referanser."
-      ]
-    }
-  }
+  "melding": "vortioksetin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-17T07:42:46.644Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39014633170"
 }
