@@ -1,37 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-okskarbazepin-0039-1351",
-  "foresporsel_sha256": "dbab1a570ed555f473f876f6f9706a4a2105e85fb518bab9cbb4708d43a18e0e",
-  "handling": "forny",
-  "utfall": "ok",
-  "melding": "Reservasjonen av okskarbazepin varer til 2026-10-17T16:51:56.803Z.",
-  "behandlet_kl": "2026-10-17T13:51:56.803Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39038301029",
-  "oppgave": {
-    "oppgave": "okskarbazepin-0039",
-    "stoff": "okskarbazepin",
-    "navn": "Okskarbazepin",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-17T16:51:56.803Z",
-    "jobbgren": "kuratorjobb/okskarbazepin-0039",
-    "kurateringsgren": "kuratering/okskarbazepin-0039",
-    "pr": null,
-    "gren": "6f7ecff9-99cd-491e-8998-be57844ac0ea",
-    "gjenoppta": null,
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-16T18:10:24.842Z",
-      "side": true,
-      "elementer": 6,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 4,
-      "referanser": 3,
-      "elementer_uten_kilde": 1
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "foresporsel_id": null,
+  "foresporsel_sha256": "58e5f8c6ed6af027b4962f13956971f947d13077be0bd894ebd255658d38ab4e",
+  "handling": null,
+  "utfall": "avvist",
+  "melding": "Forespørselen kan ikke brukes: Feltet gren hører ikke til handlingen blokkert.",
+  "behandlet_kl": "2026-10-17T14:23:30.223Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39040523122"
 }
