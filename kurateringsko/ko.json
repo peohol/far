@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T05:07:55.150Z",
+  "oppdatert_kl": "2026-10-17T05:08:41.522Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 20,
   "stoffer": {
@@ -453,7 +453,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.",
-          "kl": "2026-10-17T05:07:55.150Z",
+          "kl": "2026-10-17T05:08:41.522Z",
           "kilde": "system"
         }
       ],
@@ -1041,7 +1041,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.",
-          "kl": "2026-10-17T05:07:55.150Z",
+          "kl": "2026-10-17T05:08:41.522Z",
           "kilde": "system"
         }
       ],
@@ -5269,6 +5269,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "reserver-lamotrigin-0508",
         "reserver-kariprazin-0507",
         "reserver-vortioksetin-0506",
         "reserver-doksepin-bok2",
@@ -5317,21 +5318,20 @@
         "status-1",
         "fullfort-citalopram-pub",
         "forny-citalopram-pub",
-        "reserver-citalopram-2",
-        "fullfort-lurasidon-2"
+        "reserver-citalopram-2"
       ],
       "siste": {
-        "id": "reserver-kariprazin-0507",
-        "sha256": "7cb453ac6069ce6bafd426648c5575495611dbe352d7272c417097d96c4ca0b0",
+        "id": "reserver-lamotrigin-0508",
+        "sha256": "021bd3ea07e783f919e3ed76a5412a72bc5680b82da778409b80de974a832d8f",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "reserver-kariprazin-0507",
-          "foresporsel_sha256": "7cb453ac6069ce6bafd426648c5575495611dbe352d7272c417097d96c4ca0b0",
+          "foresporsel_id": "reserver-lamotrigin-0508",
+          "foresporsel_sha256": "021bd3ea07e783f919e3ed76a5412a72bc5680b82da778409b80de974a832d8f",
           "handling": "reserver",
           "utfall": "ok",
           "melding": "Økten har allerede reservert vortioksetin; fortsett med den.",
-          "behandlet_kl": "2026-10-17T05:07:55.150Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39005113520",
+          "behandlet_kl": "2026-10-17T05:08:41.522Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39005158263",
           "oppgave": {
             "oppgave": "vortioksetin-0020",
             "stoff": "vortioksetin",
@@ -5373,7 +5373,7 @@
         }
       },
       "besvart_commit": "6cd7292c3d48f09bc5b937ed663c9b4d6aa304aa",
-      "sist_brukt_kl": "2026-10-17T05:07:55.150Z"
+      "sist_brukt_kl": "2026-10-17T05:08:41.522Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
