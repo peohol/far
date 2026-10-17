@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T03:59:40.858Z",
+  "oppdatert_kl": "2026-10-17T04:00:34.390Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 19,
   "stoffer": {
@@ -447,25 +447,14 @@
       "reservasjon": null,
       "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "brekspiprazol-0011",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-16T20:55:02.710Z",
-        "grunn": "Krav 3: beskyttet norsk referanseomraade avviker fra AGNP 2026; et menneske avgjoer. Se merknad i grenen.",
-        "fase": "retting",
-        "jobbgren": "kuratorjobb/brekspiprazol-0011",
-        "kurateringsgren": "kuratering/brekspiprazol-0011",
-        "pr": null,
-        "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
-        "kunnskapsgrense": null
-      },
+      "gjenoppta": null,
       "pr": null,
       "blokkeringer": [
         {
-          "kode": "agent",
-          "grunn": "Krav 3: beskyttet norsk referanseomraade avviker fra AGNP 2026; et menneske avgjoer. Se merknad i grenen.",
-          "kl": "2026-10-16T20:55:02.710Z",
-          "kilde": "agent"
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, klar); den må avsluttes først.",
+          "kl": "2026-10-17T04:00:34.390Z",
+          "kilde": "system"
         }
       ],
       "sist_kuratert": null,
@@ -516,6 +505,12 @@
           "oppgave": "brekspiprazol-0011",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Krav 3: beskyttet norsk referanseomraade avviker fra AGNP 2026; et menneske avgjoer. Se merknad i grenen."
+        },
+        {
+          "kl": "2026-10-17T04:00:34.390Z",
+          "hendelse": "tilbakestilt",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Menneskelig avgjoerelse 2026-10-17; grenen er sendt til kontroll."
         }
       ],
       "appgren": null
@@ -2314,7 +2309,7 @@
       "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 101.2,
+        "poeng": 101.5,
         "grunner": [
           "De novo-kuratering i runden som gjelder.",
           "Sist kuratert 2026-10-04.",
@@ -5188,6 +5183,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "tilbakestill-brekspiprazol-1",
         "reserver-brekspiprazol-bokforing",
         "status-0430",
         "fullfort-lamotrigin-0019",
@@ -5236,25 +5232,24 @@
         "fullfort-ghb-2",
         "reserver-ghb-2",
         "fullfort-ghb-1",
-        "forny-ghb-1",
-        "reserver-ghb-1"
+        "forny-ghb-1"
       ],
       "siste": {
-        "id": "reserver-brekspiprazol-bokforing",
-        "sha256": "a4b00139d4f3787f2c3f39102d99da673f2f86d0d17be0c7b9197cec36748bb8",
+        "id": "tilbakestill-brekspiprazol-1",
+        "sha256": "2c98934ebd1715d0ef9594952d5a7e452ceb0f573c6fc0082e621f415ef4dfa9",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "reserver-brekspiprazol-bokforing",
-          "foresporsel_sha256": "a4b00139d4f3787f2c3f39102d99da673f2f86d0d17be0c7b9197cec36748bb8",
-          "handling": "reserver",
-          "utfall": "avvist",
-          "melding": "brekspiprazol kan ikke reserveres nå: blokkert.",
-          "behandlet_kl": "2026-10-17T03:59:40.858Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39000855985"
+          "foresporsel_id": "tilbakestill-brekspiprazol-1",
+          "foresporsel_sha256": "2c98934ebd1715d0ef9594952d5a7e452ceb0f573c6fc0082e621f415ef4dfa9",
+          "handling": "tilbakestill",
+          "utfall": "ok",
+          "melding": "brekspiprazol er tilbakestilt.",
+          "behandlet_kl": "2026-10-17T04:00:34.390Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39000916582"
         }
       },
       "besvart_commit": "58b9d21bbc6d652d5ecece965470ef0f5c8961a4",
-      "sist_brukt_kl": "2026-10-17T03:59:40.858Z"
+      "sist_brukt_kl": "2026-10-17T04:00:34.390Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
