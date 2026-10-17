@@ -1,23 +1,23 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-202610170107",
-  "foresporsel_sha256": "dddda5bceb33ae518f4dba0280e5ffc8d228a5047f4a55f035d2206368cdc86b",
-  "handling": "reserver",
+  "foresporsel_id": "forny-flunitrazepam-0017-gren",
+  "foresporsel_sha256": "013f4037019a2d7c53c6124176934e6cc27125d54fc1f511a02366b8ec50b5eb",
+  "handling": "forny",
   "utfall": "ok",
-  "melding": "flunitrazepam er reservert til 2026-10-17T04:07:36.681Z.",
-  "behandlet_kl": "2026-10-17T01:07:36.681Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38989485492",
+  "melding": "Reservasjonen av flunitrazepam varer til 2026-10-17T04:38:44.141Z.",
+  "behandlet_kl": "2026-10-17T01:38:44.141Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38991722127",
   "oppgave": {
     "oppgave": "flunitrazepam-0017",
     "stoff": "flunitrazepam",
     "navn": "Flunitrazepam",
     "modus": "de_novo",
     "forsok": 1,
-    "frist_kl": "2026-10-17T04:07:36.681Z",
+    "frist_kl": "2026-10-17T04:38:44.141Z",
     "jobbgren": "kuratorjobb/flunitrazepam-0017",
     "kurateringsgren": "kuratering/flunitrazepam-0017",
     "pr": null,
-    "gren": null,
+    "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
     "gjenoppta": null,
     "sist_kuratert": null,
     "maal": {
@@ -30,15 +30,8 @@
       "elementer_uten_kilde": 2
     },
     "prioritet": {
-      "poeng": 451.7,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "2 av 8 elementer har ingen kilde.",
-        "Bare 1 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
