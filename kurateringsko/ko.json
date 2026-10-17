@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-17T05:07:11.984Z",
+  "oppdatert_kl": "2026-10-17T05:07:55.150Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 20,
   "stoffer": {
@@ -453,7 +453,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.",
-          "kl": "2026-10-17T05:07:11.984Z",
+          "kl": "2026-10-17T05:07:55.150Z",
           "kilde": "system"
         }
       ],
@@ -1041,7 +1041,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.",
-          "kl": "2026-10-17T05:07:11.984Z",
+          "kl": "2026-10-17T05:07:55.150Z",
           "kilde": "system"
         }
       ],
@@ -5269,6 +5269,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "reserver-kariprazin-0507",
         "reserver-vortioksetin-0506",
         "reserver-doksepin-bok2",
         "reserver-brekspiprazol-bok2",
@@ -5317,21 +5318,20 @@
         "fullfort-citalopram-pub",
         "forny-citalopram-pub",
         "reserver-citalopram-2",
-        "fullfort-lurasidon-2",
-        "reserver-lurasidon-2"
+        "fullfort-lurasidon-2"
       ],
       "siste": {
-        "id": "reserver-vortioksetin-0506",
-        "sha256": "b13ddbb8f154d153c532684d6404db7f842024a0620f1456329285d8480f7563",
+        "id": "reserver-kariprazin-0507",
+        "sha256": "7cb453ac6069ce6bafd426648c5575495611dbe352d7272c417097d96c4ca0b0",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "reserver-vortioksetin-0506",
-          "foresporsel_sha256": "b13ddbb8f154d153c532684d6404db7f842024a0620f1456329285d8480f7563",
+          "foresporsel_id": "reserver-kariprazin-0507",
+          "foresporsel_sha256": "7cb453ac6069ce6bafd426648c5575495611dbe352d7272c417097d96c4ca0b0",
           "handling": "reserver",
           "utfall": "ok",
-          "melding": "vortioksetin er reservert til 2026-10-17T08:07:11.984Z.",
-          "behandlet_kl": "2026-10-17T05:07:11.984Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39005069252",
+          "melding": "Økten har allerede reservert vortioksetin; fortsett med den.",
+          "behandlet_kl": "2026-10-17T05:07:55.150Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39005113520",
           "oppgave": {
             "oppgave": "vortioksetin-0020",
             "stoff": "vortioksetin",
@@ -5366,22 +5366,14 @@
               "elementer_uten_kilde": 19
             },
             "prioritet": {
-              "poeng": 1455.7,
-              "grunner": [
-                "Fortsetter den avbrutte kurateringen vortioksetin-0015.",
-                "De novo-kuratering i runden som gjelder.",
-                "Aldri kuratert.",
-                "Ingen kuratering å regne alderen fra.",
-                "6 av 13 redaksjonelle seksjoner er tomme.",
-                "19 av 24 elementer har ingen kilde.",
-                "Bare 4 referanser."
-              ]
+              "poeng": 0,
+              "grunner": []
             }
           }
         }
       },
       "besvart_commit": "6cd7292c3d48f09bc5b937ed663c9b4d6aa304aa",
-      "sist_brukt_kl": "2026-10-17T05:07:11.984Z"
+      "sist_brukt_kl": "2026-10-17T05:07:55.150Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
