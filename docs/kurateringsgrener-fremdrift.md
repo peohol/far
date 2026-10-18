@@ -9,7 +9,7 @@ prosjektet, så en ny økt kan fortsette herfra alene.
 
 | Dato | Punkt |
 | --- | --- |
-| 2026-10-18 | F3 pågår som før. Den planlagte kontrollørkjøringen i ChatGPT er slått av: OpenAI stopper skrivekallene fra planlagte oppgaver før de når OUSFAR («Når et kall ikke blir lagret» i `docs/kurateringsgrener.md`). Kontrollrundene startes for hånd i en vanlig samtale. `kommenter` lagres nå nøyaktig én gang med `klient_id`, og hvert verktøykall gir én linje uten innhold i serverloggen (1.103.6). |
+| 2026-10-18 | F3 pågår som før. Den planlagte kontrollørkjøringen i ChatGPT er slått av: OpenAI stopper skrivekallene fra planlagte oppgaver før de når OUSFAR («Når et kall ikke blir lagret» i `docs/kurateringsgrener.md`). Kontrollrundene startes for hånd i en vanlig samtale. `kommenter` lagres nå nøyaktig én gang med `klient_id`, og hvert verktøykall gir én linje uten innhold i serverloggen (1.103.6). Køen holder selv bufferen: et nytt stoff gis ut bare når færre enn fem grener venter på kontrolløren (`maks_til_kontroll`), og rettinger gis ut før nye stoffer. Skrivekallene som endrer status, er trygge å gjenta (`alt_lagret`), og «Kurateringer» viser hvem som har neste handling (1.103.7). |
 | 2026-10-17 | F3 pågår: de novo-runde 2 går gjennom registeret med én reservasjon om gangen (`maks_aktive` 1). Claude holder en buffer på færre enn fem grener hos kontrolløren. Over det retter Claude det kontrolløren sender tilbake, og ser etter samme feil i grenene som venter («Erfaringer fra kontrollen» i `docs/kuratorprotokoll.md`). Kjøringen følges i `/mnt/project-files/kuratering/runde.md` (utenfor repoet, siden den viser til fagtekst og tråder), med en planlagt kuratorkjøring hver time. Kontrolløren kjøres av Peder med den korte beskjeden. |
 | 2026-10-16 | B1–F2 ferdige: piloten er bestått (citalopram, lurasidon og GHB kuratert i grener, godkjent av ChatGPT, publisert, funksjonstesten grønn). F3 (1.101.0): `bare_forrang` av og `forrang` tom, så køen går gjennom hele registeret; de planlagte kjøringene startes når PR-en er i produksjonen. |
 
@@ -160,7 +160,7 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
    oppgaver (2026-10-18). Til OpenAI har rettet det, ber Peder ChatGPT om hver
    kontrollrunde i en vanlig samtale, med den korte beskjeden i
    `docs/kontrollorinstruks.md`. Kjøringen slås på igjen først når en planlagt
-   kjøring har lagret en kommentar i en tråd.
+   kjøring har lagret en kommentar i en tråd; ingenting i OUSFAR slår den på.
 3. Publisering til produksjonen krever Peders uttrykkelige ja i Claude-økten
    (sikkerhetssperren); han ga det for piloten 2026-10-16.
 
@@ -286,3 +286,35 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
   vurdering av en gren med noe som ikke er lagret. Tester i
   `kurateringsgrener.test.ts` (MCP-koblingen fra lesing til svar i en
   eksisterende tråd) og `kurateringsendepunkt.test.ts`.
+- 2026-10-18: Sikringer i køen og kontrollflyten (1.103.7). Gjennomgått mot
+  køen, grenene og kontrollørinstruksen. Dette holdt fra før: én reservasjon
+  om gangen (`maks_aktive`), samme svar på en forespørsel som behandles to
+  ganger, én aktiv gren per fagside, en godkjenning som gjelder nøyaktig én
+  revisjon og faller bort ved en ny, og publisering bare av en godkjent gren.
+  Dette manglet, og er rettet:
+  - bufferen hos kontrolløren og «rettinger først» var bare en arbeidsregel.
+    Nå holder køen et nytt stoff tilbake mens en retting, en godkjent gren
+    eller et avbrutt forsøk står klar, mens fem grener eller flere venter på
+    kontrolløren, og når grenene i OUSFAR ikke kunne leses, også når et stoff
+    bes om ved navn. Oversikten (`holdes_tilbake`) regner med de samme
+    grenene;
+  - et skrivekall som ble gjentatt etter et tapt svar, fikk en feil som så ut
+    som om det ikke var lagret. `vurder`, `til_kontroll`, `publiser`,
+    `lukk_kommentar` og `gjenapne_kommentar` svarer nå `alt_lagret: true`, og
+    lagrer ingenting to ganger. Lukking og gjenåpning krever `klient_id` fra
+    agentene, så et forsinket forsøk aldri lukker en tråd som er åpnet igjen
+    siden (eller omvendt);
+  - en forsinket vurdering fra en tidligere kontrollrunde med den samme
+    revisjonen kunne lande i en ny runde. `vurder` krever nå `runde`, og et
+    kall fra en annen runde avvises; appen sender den alltid, og
+    kontrollørinstruksen ber om den;
+  - «Kurateringer» i Adminmenyen grupperer de aktive grenene etter hvem som
+    har neste handling (kontrolløren, kuratoren, en administrator), med hvor
+    mange som venter på kontroll mot grensen, trådene som venter på
+    kuratoren, de sperrende trådene, grunnen og siden når.
+  «Én kuratering om gangen» er tolket som én reservasjon i køen. Korte
+  rettinger i ulike grener kan gjøres side om side, men hver sendes til
+  kontroll gjennom køen med en egen kort reservasjon. Den planlagte
+  kontrollørkjøringen i ChatGPT er fortsatt av. Tester i
+  `kurateringsko.test.ts`, `kurateringsgrener.test.ts` og
+  `kurateringsvisning.test.tsx`.

@@ -38,7 +38,7 @@ nytt).
 
 | Handling | Hvem | `data` |
 | --- | --- | --- |
-| `oversikt` | alle | `{stoff?, alle?}` |
+| `oversikt` | alle | `{stoff?, alle?}`: sammendragene, uten fagtekst, med når grenen fikk statusen sin (`status_kl`), og for en aktiv gren de åpne sperrende trådene (`apne_sperrer`) og de åpne trådene som venter på svar fra kuratoren (`venter_pa_kurator`) |
 | `apne` | kurator | `{stoff, formaal, art?: "kuratering" \| "de_novo"}` |
 | `les` | kurator (egen), kontrollør, admin | `{gren, revisjon?}` |
 | `status` | kurator (egen), kontrollør, admin | `{gren}`: status, revisjon, runde, aktiviteten, når kuratoren sist kalte inn, antallet åpne sperrende tråder og `endring` (den siste hendelsen utenom aktiviteten); ingen fagtekst |
@@ -48,7 +48,7 @@ nytt).
 | `les_dokument` | kurator (egen), kontrollør, admin | `{gren, art, versjon?}` |
 | `avslutt_blindfase` | kurator | `{gren}` |
 | `til_kontroll` / `trekk_fra_kontroll` | kurator | `{gren, revisjon}` (den siste; fra `tilbakemelding` også uten en ny revisjon, se [Statusene](#statusene)) / `{gren}` |
-| `vurder` | kontrollør, admin | `{gren, revisjon, beslutning, begrunnelse}`; begrunnelsen kreves også ved `godkjent` (hva som er kontrollert) |
+| `vurder` | kontrollør, admin | `{gren, revisjon, runde, beslutning, begrunnelse}`; begrunnelsen kreves også ved `godkjent` (hva som er kontrollert). Et kall fra en annen kontrollrunde avvises (`PT409`) |
 | `oppdater_grunnlag` | kurator | `{gren}` |
 | `publiser` | kurator (egen), admin | `{gren, revisjon}` |
 | `stans` / `gjenoppta` | admin | `{gren, grunn?}` / `{gren}` |
@@ -57,8 +57,8 @@ nytt).
 | `gjenopprett_versjon` | admin | `{stoff, nr, grunn?}` |
 | `kommentarer` | kurator (egen), kontrollør, admin | `{gren, apne?}` |
 | `kommenter` | kurator (egen), kontrollør, admin | `{gren, tekst, art?: "merknad" \| "sperrende", anker?, klient_id?}` eller `{gren, tekst, svar_pa, klient_id?}`; svarer `{id, traad, kl, lagret: true}` (se [Kommentarene](#kommentarene)) |
-| `lukk_kommentar` | se [Kommentarene](#kommentarene) | `{gren, kommentar, tekst?}` |
-| `gjenapne_kommentar` | kontrollør, admin | `{gren, kommentar, tekst}` |
+| `lukk_kommentar` | se [Kommentarene](#kommentarene) | `{gren, kommentar, tekst?, klient_id}`; svarer `{traad, status, klient_id}`. En agent må sende `klient_id` (se [Et kall som gjentas](#et-kall-som-gjentas)) |
+| `gjenapne_kommentar` | kontrollør, admin | `{gren, kommentar, tekst, klient_id}`, som `lukk_kommentar` |
 
 Handlingene og hvem som har dem, står i `kuratering.handlingsliste`; en ny
 handling er en funksjon `kuratering.h_<navn>` og en rad der, og for agentene
@@ -221,6 +221,34 @@ arkivert, står trådene som de var: de kan ikke kommenteres, lukkes eller
   der (`alt_lagret: true`), også om grenen er avsluttet siden. Den samme
   ID-en for noe annet avvises (`PT409`).
   ID-en gjelder per agent og gren, og står på kommentaren i trådene.
+  `kommenter`, `lukk_kommentar` og `gjenapne_kommentar` deler ID-ene.
+
+### Et kall som gjentas
+
+Et svar kan forsvinne etter at kallet er utført. De andre skrivekallene som
+endrer statusen, er derfor trygge å gjenta: gjentar den samme agenten eller
+personen et kall som alt har virket, lagres ingenting nytt, og svaret er det
+samme som første gang med `alt_lagret: true`
+(`supabase/migrations/20261018043244_trygge_gjentakelser.sql`):
+
+- `vurder`: den siste vurderingen av revisjonen har den samme beslutningen og
+  begrunnelsen, og statusen er den vurderingen satte. En annen vurdering av
+  en revisjon som alt er vurdert, også fra en annen, avvises (`PT409`, «er
+  alt vurdert»), og et kall med en eldre `runde` likeså. Kontrolløren sender
+  derfor `runde` fra `les`, så en vurdering aldri lander i en runde den ikke
+  gjaldt;
+- `til_kontroll`: grenen er alt til kontroll med revisjonen;
+- `publiser`: grenen er alt publisert;
+- `lukk_kommentar` og `gjenapne_kommentar`: en lukking eller gjenåpning med
+  den samme `klient_id` er alt lagret. Agentene må sende en, valgt før det
+  første forsøket som for `kommenter`: et forsinket forsøk på å lukke en tråd
+  som er åpnet igjen siden, lukker den da ikke (og omvendt). `status` i
+  svaret er trådens status nå. Uten `klient_id` (en administrator i appen)
+  avgjør trådens status, som før: «Tråden er alt lukket» eller «Tråden er
+  åpen».
+
+Alt som ellers ville blitt avvist (en annen revisjon, en annen rolle, en
+hindring), avvises fortsatt.
 
 ### Når et kall ikke blir lagret
 

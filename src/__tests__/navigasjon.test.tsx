@@ -217,7 +217,8 @@ describe('sidemenyen', { timeout: 20_000 }, () => {
   })
 })
 
-describe('stoffene uten analyttkode', () => {
+// Som sidemenyen: hele appen tegnes opp og klikkes gjennom.
+describe('stoffene uten analyttkode', { timeout: 20_000 }, () => {
   it('står i registeret, og fører til siden etter nøkkelen', async () => {
     const user = userEvent.setup()
     visApp()

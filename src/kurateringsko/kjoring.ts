@@ -52,6 +52,7 @@ import {
   OVERSIKTSFIL,
   SVARFIL,
   type Greninfo,
+  type Kooversikt,
   type Kotilstand,
   type Svar,
 } from './modell'
@@ -93,6 +94,15 @@ const json = (v: unknown) => `${JSON.stringify(v, null, 2)}\n`
 /** Køen uten tidspunktet den sist ble vurdert: det som avgjør om noe er endret. */
 const innhold = (t: Kotilstand) => JSON.stringify({ ...t, oppdatert_kl: null })
 
+/** Hvorfor neste stoff ikke gis ut, slik den sist skrevne oversikten sa det. */
+function holdtTilbake(fil: Buffer | null): string | null {
+  try {
+    return fil ? ((JSON.parse(fil.toString('utf8')) as Partial<Kooversikt>).holdes_tilbake ?? null) : null
+  } catch {
+    return null
+  }
+}
+
 export async function kjorKo(v: Kjoringsvalg): Promise<Kjoringsresultat> {
   const { git, github } = v
   const innst = v.innst ?? INNSTILLINGER
@@ -105,8 +115,9 @@ export async function kjorKo(v: Kjoringsvalg): Promise<Kjoringsresultat> {
   const maling = v.maling && (v.tvingMaling || gammel) ? await v.maling() : null
   const repospor = kurateringerIRepo(v.repo.migrasjoner, v.repo.journaler)
   const apne = github ? await github.apnePr() : []
-  // Kan ikke grenene leses nå, står det køen vet om dem, til neste kjøring.
-  const grener = v.grener ? await v.grener().catch((e: unknown) => (console.log(`Kurateringsgrenene kunne ikke leses: ${e instanceof Error ? e.message : String(e)}`), null)) : null
+  // Kan ikke grenene leses nå (`null`), står det køen vet om dem, til neste kjøring, og ingen nye stoffer gis ut.
+  // Uten en leser (lokalt) brukes det køen vet.
+  const grener = v.grener ? await v.grener().catch((e: unknown) => (console.log(`Kurateringsgrenene kunne ikke leses: ${e instanceof Error ? e.message : String(e)}`), null)) : undefined
   const prer = new Map<number, Promise<{ info: Prinfo | null; utrulling: Utrulling | null }>>()
   const slaOppPr = (nummer: number) => {
     if (!prer.has(nummer)) {
@@ -141,7 +152,7 @@ export async function kjorKo(v: Kjoringsvalg): Promise<Kjoringsresultat> {
     oppdaterRepohistorikk(t, repospor, na)
     await synkPr(t)
     kobleApnePr(t, apne, na)
-    oppdaterGrener(t, grener, na, innst)
+    oppdaterGrener(t, grener ?? null, na, innst)
     const utlopt = utlop(t, na, innst)
     vurder(t, na, innst)
 
@@ -184,7 +195,7 @@ export async function kjorKo(v: Kjoringsvalg): Promise<Kjoringsresultat> {
     }
     if (ventende.length > 0) {
       await synkPr(t)
-      oppdaterGrener(t, grener, na, innst)
+      oppdaterGrener(t, grener ?? null, na, innst)
       vurder(t, na, innst)
     }
 
@@ -192,12 +203,13 @@ export async function kjorKo(v: Kjoringsvalg): Promise<Kjoringsresultat> {
     const slettes = utdaterteOkter(t, okter, na, innst)
     for (const gren of Object.keys(t.okter)) if (!(gren in okter) && !Object.values(t.stoffer).some((s) => s.reservasjon?.okt === gren)) delete t.okter[gren]
 
-    const skrevet = for_ === null || innhold(t) !== for_
+    // Oversikten kan endre seg uten køen: når grenene i OUSFAR ikke kan leses, eller kan leses igjen.
+    const o = oversikt(t, na, innst, grener)
+    const skrevet = !kocommit || innhold(t) !== for_ || holdtTilbake(git.les(kocommit, NESTEFIL)) !== o.holdes_tilbake
     if (skrevet) {
-      const o = oversikt(t, na, innst)
       const ny = git.commit(
         kocommit,
-        { [KOFIL]: json(t), [NESTEFIL]: json(o), [OVERSIKTSFIL]: oversiktMarkdown(t, na, innst) },
+        { [KOFIL]: json(t), [NESTEFIL]: json(o), [OVERSIKTSFIL]: oversiktMarkdown(t, na, innst, grener) },
         `Kurateringskø: ${behandlet.length > 0 ? behandlet.map((b) => `${b.handling ?? 'ugyldig'} ${b.utfall}`).join(', ') : 'oppdatert'}${kjoring ? `\n\n${kjoring}` : ''}`,
       )
       if (!git.skyv(ny, KOGREN)) continue

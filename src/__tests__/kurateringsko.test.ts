@@ -30,6 +30,7 @@ import {
   oppdaterRepohistorikk,
   oppdaterStoffer,
   oversikt,
+  oversiktMarkdown,
   rekkefolge,
   tomTilstand,
   utlop,
@@ -342,6 +343,61 @@ describe('kurateringsgrenene i OUSFAR', () => {
       sist_kuratert: { kl: om(T0, 6), modus: 'de_novo', kunnskapsgrense: '2026-11-01', runde: 1, pr: null, gren: GREN, kilde: 'ko' },
     })
     expect(oversikt(t, om(T0, 6), INNST).til_gjennomgang).toEqual([])
+  })
+
+  it('gir rettinger ut før nye stoffer, og et nytt stoff bare når færre grener enn grensen venter på kontroll', () => {
+    const innst = { ...INNST, maks_til_kontroll: 2 }
+    const k = (okt: string, timer: number, grener?: Greninfo[] | null) => ({ ...kontekst(`kurateringsko/okt/${okt}`, om(T0, timer), innst), grener })
+    const tilKontroll = (stoff: string, nr: number, status: Greninfo['status'] = 'klar') => gren(status, { id: `0b6f3c1e-4444-4000-8000-00000000000${nr}`, stoff, runde: 1 })
+
+    // To grener venter på kontrolløren (også grener køen ikke følger, teller): ingen nye stoffer.
+    const t = ny()
+    const fulle = [tilKontroll('alfa', 1), tilKontroll('gamma', 2)]
+    expect(behandle(t, f('reserver'), k('a', 0, fulle))).toMatchObject({ utfall: 'ingen_oppgave', melding: expect.stringContaining('2 kurateringsgrener venter på kontroll') })
+    expect(behandle(t, f('reserver', { stoff: 'beta' }), k('a', 0, fulle))).toMatchObject({ utfall: 'avvist', melding: expect.stringContaining('færre enn 2') })
+    // Kan grenene ikke leses, vet køen ikke hvor mange som venter, og gir ikke ut et nytt stoff.
+    expect(behandle(t, f('reserver'), k('a', 0, null))).toMatchObject({ utfall: 'ingen_oppgave', melding: expect.stringContaining('kunne ikke leses') })
+    // En gren som rettes, venter ikke på kontrolløren.
+    const { oppgave } = behandle(t, f('reserver'), k('a', 0, [tilKontroll('alfa', 1), tilKontroll('gamma', 2, 'retting')])).oppgave!
+    expect(t.stoffer.beta!.reservasjon).toMatchObject({ oppgave })
+    behandle(t, f('fullfort', { oppgave, gren: GREN, kunnskapsgrense: '2026-11-01' }), k('a', 1))
+
+    // Uten grenene fra OUSFAR (lokalt) teller grenene køen følger.
+    steg(t, [gren('klar', { runde: 1 })], om(T0, 2))
+    expect(behandle(t, f('reserver'), { ...kontekst('kurateringsko/okt/b', om(T0, 2), { ...innst, maks_til_kontroll: 1 }) })).toMatchObject({
+      utfall: 'ingen_oppgave',
+      melding: expect.stringContaining('1 kurateringsgren venter på kontroll'),
+    })
+
+    // Kontrolløren ber om endringer i beta: et nytt stoff venter til beta er rettet, også når det er bedt om ved navn, og når grenene ikke kan leses.
+    steg(t, [gren('tilbakemelding', { runde: 1 })], om(T0, 3))
+    expect(behandle(t, f('reserver', { stoff: 'gamma' }), k('c', 3, []))).toMatchObject({ utfall: 'avvist', melding: expect.stringContaining('beta skal rettes eller fortsettes først') })
+    expect(behandle(t, f('forhandsvis', { stoff: 'alfa' }), k('c', 3, [])).utfall).toBe('avvist')
+    expect(oversikt(t, om(T0, 3), innst).holdes_tilbake).toBeNull()
+    const retting = behandle(t, f('reserver'), k('c', 3, null)).oppgave!
+    expect(retting).toMatchObject({ stoff: 'beta', gren: GREN })
+    behandle(t, f('fullfort', { oppgave: retting.oppgave, gren: GREN, kunnskapsgrense: '2026-11-01' }), k('c', 4))
+    expect(behandle(t, f('reserver', { stoff: 'gamma' }), k('d', 4, [gren('klar', { runde: 2 })]))).toMatchObject({ utfall: 'ok', oppgave: { stoff: 'gamma' } })
+  })
+
+  it('sier i oversikten hvorfor neste stoff ikke gis ut', () => {
+    const t = ny()
+    const innst = { ...INNST, maks_til_kontroll: 1 }
+    const { oppgave } = behandle(t, f('reserver', { stoff: 'beta' }), kontekst('kurateringsko/okt/a')).oppgave!
+    behandle(t, f('fullfort', { oppgave, gren: GREN, kunnskapsgrense: '2026-11-01' }), kontekst('kurateringsko/okt/a', om(T0, 1)))
+    steg(t, [gren('klar', { runde: 1 })], om(T0, 1))
+    expect(oversikt(t, om(T0, 1), innst).holdes_tilbake).toContain('1 kurateringsgren venter på kontroll')
+    expect(oversiktMarkdown(t, om(T0, 1), innst)).toContain('Neste stoff gis ikke ut nå: 1 kurateringsgren venter på kontroll')
+    expect(oversikt(t, om(T0, 1), INNST).holdes_tilbake).toBeNull()
+    // Med grenene fra OUSFAR teller de som står der, også de køen ikke følger, og en lesing som feilet sies.
+    const annen = gren('klar', { id: '0b6f3c1e-4444-4000-8000-000000000009', stoff: 'gamma', runde: 1 })
+    expect(oversikt(t, om(T0, 1), innst, []).holdes_tilbake).toBeNull()
+    expect(oversikt(t, om(T0, 1), { ...innst, maks_til_kontroll: 2 }, [gren('klar', { runde: 1 }), annen]).holdes_tilbake).toContain('2 kurateringsgrener')
+    expect(oversikt(t, om(T0, 1), INNST, null).holdes_tilbake).toContain('kunne ikke leses')
+    expect(oversiktMarkdown(t, om(T0, 1), INNST, null)).toContain('Neste stoff gis ikke ut nå: kurateringsgrenene i OUSFAR kunne ikke leses')
+    const status = (grener: Greninfo[] | null) => behandle(t, f('status'), { ...kontekst('kurateringsko/okt/b', om(T0, 1)), grener }).ko!.holdes_tilbake
+    expect(status(null)).toContain('kunne ikke leses')
+    expect(status([])).toBeNull()
   })
 
   it('følger en ny kontrollrunde med samme revisjon som den forrige, når kuratoren har svart uten å rette', () => {
@@ -891,6 +947,25 @@ describe('livsløpet gjennom git', () => {
     expect(ko(o).stoffer.beta).toMatchObject({ status: 'publisert', sist_kuratert: { pr: 77, kunnskapsgrense: '2026-11-01', modus: 'de_novo', kilde: 'ko' } })
     expect(vis(o, KOGREN, NESTEFIL).antall).toMatchObject({ publisert: 1, klar: 2 })
   }, 120_000)
+
+  it('gir ikke ut et nytt stoff når grenene i OUSFAR ikke kunne leses', async () => {
+    const o = oppsett()
+    const med = (grener: () => Promise<Greninfo[]>) =>
+      kjorKo({ git: o.git, github: null, maling: async () => ({ stoffer: REGISTER, feilet: 0 }), grener, reserveregister: [], repo: { migrasjoner: [], journaler: [] }, na: () => T0, innst: INNST })
+    sporr(o, 'kurateringsko/okt/en', { id: '1', handling: 'reserver' })
+    await med(async () => {
+      throw new Error('Syntetisk: OUSFAR svarer ikke.')
+    })
+    expect(svar(o, 'kurateringsko/okt/en')).toMatchObject({ utfall: 'ingen_oppgave', melding: expect.stringContaining('kunne ikke leses') })
+    expect(vis(o, KOGREN, NESTEFIL).holdes_tilbake).toContain('kunne ikke leses')
+    // Kan grenene leses igjen, skrives oversikten på nytt, også når køen ellers er uendret.
+    expect(await med(async () => [])).toMatchObject({ behandlet: [], skrevet: true })
+    expect(vis(o, KOGREN, NESTEFIL).holdes_tilbake).toBeNull()
+    expect(await med(async () => [])).toMatchObject({ skrevet: false })
+    sporr(o, 'kurateringsko/okt/en', { id: '2', handling: 'reserver' })
+    await med(async () => [])
+    expect(svar(o, 'kurateringsko/okt/en')).toMatchObject({ utfall: 'ok', oppgave: { stoff: 'beta' } })
+  }, 60_000)
 
   it('skriver svaret på nytt når kjøringen stoppet etter at køen var lagret', async () => {
     const o = oppsett()

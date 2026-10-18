@@ -30,6 +30,14 @@ aldri innhold fra fagsidene eller annet som står bak innloggingen der.
 - En reservasjon gir kuratoren et stoff, en oppgave-ID, en jobbgren og en
   kurateringsgren. Høyst én kuratering er reservert om gangen
   (`maks_aktive`). Grener og PR-er som venter på faglig kontroll, teller ikke.
+- **Rettinger først, og en buffer hos kontrolløren.** En kuratering som skal
+  fortsettes (en retting etter kontrollen, en godkjent gren som skal
+  publiseres, et avbrutt forsøk), gis alltid ut før et nytt stoff. Et nytt
+  stoff gis bare ut når ingen slik står klar, og når færre enn
+  `maks_til_kontroll` grener i OUSFAR venter på kontrolløren (`klar`). Kan
+  grenene ikke leses, gis ingen nye stoffer ut, siden køen da ikke vet hvor
+  mange som venter. Det gjelder også når et nytt stoff bes om ved navn.
+  Grunnen står i svaret, og i oversikten (`holdes_tilbake`).
 - Køen følger kurateringsgrenen i OUSFAR til den er publisert (eller PR-en til
   den er slått sammen og rullet ut). Da er kurateringen publisert, og stoffet
   får den som sin siste kuratering.
@@ -147,7 +155,7 @@ Ved hver kjøring leser køen alle kurateringsgrenene i OUSFAR, uten fagtekst
 `/api/kuratering-ko`. Arbeidsflyten logger inn med GitHubs OIDC-token, så det
 finnes ingen hemmelighet å lagre; serveren slipper bare inn «Kurateringskø» på
 `main`. Svarer OUSFAR ikke, går kjøringen videre uten grenene og prøver igjen
-neste time.
+neste time; imens gis bare kurateringer som fortsettes, ut.
 
 - **Riktig stoff og art.** En gren hører bare til et stoff når den gjelder
   det samme stoffet og har arten kurateringen krever: `de_novo` for en de
@@ -243,7 +251,7 @@ Eksempler:
 | `utfall` | `ok`, `ingen_oppgave` (ingenting å reservere nå) eller `avvist` (forespørselen kunne ikke brukes; grunnen står i `melding`) |
 | `melding` | På norsk |
 | `oppgave` | Etter `reserver`, `forhandsvis` og `forny`: `oppgave`, `stoff`, `navn`, `modus`, `forsok`, `frist_kl`, `jobbgren`, `kurateringsgren`, `gren`, `pr`, `gjenoppta`, `sist_kuratert`, `maal` (tallene) og `prioritet` |
-| `ko` | Etter `status` og `ingen_oppgave`: oversikten |
+| `ko` | Etter `status` og `ingen_oppgave`: oversikten, med `holdes_tilbake` (hvorfor neste stoff ikke gis ut nå, eller `null`) |
 | `kjoring` | Lenken til kjøringen i Actions |
 
 Svaret er en commit fra arbeidsflyten på øktgrenen. Neste forespørsel
@@ -256,6 +264,7 @@ committes oppå den, på samme gren.
 | Innstilling | Nå | Hva |
 | --- | --- | --- |
 | `maks_aktive` | 1 | Flest reserverte kurateringer samtidig |
+| `maks_til_kontroll` | 5 | Et nytt stoff gis ut bare når færre grener enn dette venter på kontrolløren. Rettinger gis ut uansett |
 | `reservasjon_minutter`, `maks_reservasjon_timer` | 180, 24 | Fristene |
 | `maks_forsok`, `ventetid_etter_feil_minutter` | 3, 360 | Nye forsøk |
 | `aktive_modi` | `de_novo` | Legg til `evidensovervaking` for å la køen gi ut evidensovervåkning |

@@ -7,6 +7,12 @@ import type { Modus } from './modell'
 export interface Koinnstillinger {
   /** Flest kurateringer som kan være reservert samtidig. PR-er som venter på gjennomgang, teller ikke. */
   maks_aktive: number
+  /**
+   * Et nytt stoff gis ut bare når færre kurateringsgrener enn dette venter på
+   * kontrolløren. Rettinger og avbrutte kurateringer gis ut uansett, og før et
+   * nytt stoff.
+   */
+  maks_til_kontroll: number
   /** Hvor lenge en reservasjon varer uten at den fornyes. */
   reservasjon_minutter: number
   /** Lengst en reservasjon kan fornyes til, regnet fra den ble gjort. */
@@ -48,6 +54,9 @@ export interface Koinnstillinger {
 
 export const INNSTILLINGER: Koinnstillinger = {
   maks_aktive: 1,
+  // Nok til at kontrolløren alltid har noe, få nok til at en feil som går igjen
+  // oppdages før den spres (docs/kurateringsgrener-fremdrift.md, fase F3).
+  maks_til_kontroll: 5,
   reservasjon_minutter: 180,
   maks_reservasjon_timer: 24,
   maks_forsok: 3,
