@@ -1,26 +1,18 @@
 {
-  "oppdatert_kl": "2026-10-18T18:06:13.864Z",
+  "oppdatert_kl": "2026-10-18T18:07:03.493Z",
   "malt_kl": "2026-10-18T10:30:22.628Z",
   "antall": {
     "klar": 78,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 11,
+    "venter_godkjenning": 12,
     "sammenslatt": 0,
     "publisert": 4,
     "blokkert": 5,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "fenytoin",
-      "oppgave": "fenytoin-0075",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-18T21:06:13.864Z",
-      "fase": null
-    }
-  ],
-  "holdes_tilbake": "11 kurateringsgrener venter på kontroll; et nytt stoff gis ut når færre enn 5 gjør det.",
+  "aktive": [],
+  "holdes_tilbake": "12 kurateringsgrener venter på kontroll; et nytt stoff gis ut når færre enn 5 gjør det.",
   "neste": [
     {
       "stoff": "valproat",
@@ -179,6 +171,12 @@
     {
       "stoff": "doksepin",
       "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    },
+    {
+      "stoff": "fenytoin",
+      "gren": "40ecac1a-e908-4cb8-a62e-94546263372b",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     },
