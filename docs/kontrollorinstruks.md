@@ -15,7 +15,8 @@ Grunnreglene:
 - En vurdering gjelder nøyaktig den siste revisjonen. Kommer det en ny
   revisjon, faller en godkjenning bort, og den nye må kontrolleres. Har en
   revisjon flere vurderinger, gjelder den siste.
-- Fagteksten er bak innloggingen. Gjengi den aldri utenfor OUSFAR.
+- Fagteksten er bak innloggingen. Gjengi den aldri utenfor OUSFAR, heller
+  ikke i en melding til kuratoren («Når skrivekallene stoppes»).
 - En avgjørelse fra fagansvarlig (et menneske) står. Den kjennes på en
   kommentar i en tråd i grenen som begynner med «Avgjort av fagansvarlig:»,
   skrevet av kuratoren (`docs/kuratorprotokoll.md`, fase 9) eller av en
@@ -168,8 +169,11 @@ grenen, svarer på hvert punkt og retter (`docs/kuratorprotokoll.md`, fase 9).
 - **Se etter først.** Ta bare med det som ikke står i grenen: se i
   `kommentarer` og `les` etter hvert kall med usikkert utfall.
 - **Én melding for kjøringen**, i én kodeblokk så den kan kopieres, med én del
-  per gren. Skriv bare så mye av fagteksten som trengs for å peke på feilen;
-  ankeret og kildestedet er nok.
+  per gren.
+- **Ingen fagtekst i meldingen.** Ankeret viser hva funnet gjelder, og
+  kuratoren leser teksten selv i grenen. Si med egne ord hva som er galt, og
+  vis til kildestedet; det en offentlig kilde sier, som preparatomtalen, kan
+  gjengis kort.
 - **Meldingen er ikke en vurdering.** Grenen står som `klar` til kuratoren
   trekker den tilbake og retter. Ville du ha godkjent, skriv det, med
   begrunnelsen: en godkjenning kan ikke gis videre til kuratoren, som bare
@@ -188,7 +192,7 @@ Begrunnelse: <hva som er kontrollert, og mot hvilke kilder>
 
 Funn:
 1. <sperrende | merknad>. Anker: <objekt-id, felt, referanse, kilde eller dokument>.
-   Hva er galt: <…> Kilde: <kildested, med åpen lenke> Hva må til: <…>
+   Hva er galt: <med egne ord, uten fagteksten> Kilde: <kildested, med åpen lenke> Hva må til: <…>
 2. …
 
 Tråder jeg ville ha lukket: <tråd-id> (løst fordi …), eller ingen
