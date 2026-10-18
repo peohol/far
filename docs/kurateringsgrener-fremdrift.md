@@ -9,6 +9,7 @@ prosjektet, så en ny økt kan fortsette herfra alene.
 
 | Dato | Punkt |
 | --- | --- |
+| 2026-10-17 | F3 pågår: de novo-runde 2 går gjennom registeret med én reservasjon om gangen (`maks_aktive` 1). Claude holder en buffer på færre enn fem grener hos kontrolløren. Over det retter Claude det kontrolløren sender tilbake, og ser etter samme feil i grenene som venter («Erfaringer fra kontrollen» i `docs/kuratorprotokoll.md`). Kjøringen følges i `/mnt/project-files/kuratering/runde.md` (utenfor repoet, siden den viser til fagtekst og tråder), med en planlagt kuratorkjøring hver time. Kontrolløren kjøres av Peder med den korte beskjeden. |
 | 2026-10-16 | B1–F2 ferdige: piloten er bestått (citalopram, lurasidon og GHB kuratert i grener, godkjent av ChatGPT, publisert, funksjonstesten grønn). F3 (1.101.0): `bare_forrang` av og `forrang` tom, så køen går gjennom hele registeret; de planlagte kjøringene startes når PR-en er i produksjonen. |
 
 Neste steg står øverst i [Fasene](#fasene) med status `pågår` eller `neste`.
@@ -253,3 +254,13 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
   preparatomtalene på kuratorjobbens gren (evidensjournalen har fått feltet
   `kuratorjobber`), og kontrollerer de automatiske lagene med funksjonstesten
   (krav 8) i stedet for mot originalkildene.
+- 2026-10-17: Erfaringer fra kontrollen. ChatGPT fant at AGNP-tall sto uten
+  årstall i én gren, og den samme feilen fantes i fem andre grener som ventet. Claude retter nå
+  slike funn i grenene som venter, før kontrolløren kommer dit. En gjennomgang av alle
+  kontrollørfunnene til nå (20 funn i 9 stoffer) ga reglene i «Erfaringer fra
+  kontrollen» i `docs/kuratorprotokoll.md`. Kurateringene bruker nå
+  Giftinformasjonens anbefalinger, aldersgrensene er rettet, og
+  nøkkeltallene i viktige data endres bare med en avgjørelse fra fagansvarlig.
+  Kontrolløren får nå hele kuratorprotokollen, også disse reglene, med
+  verktøyet `instruks`. Før fikk den bare en henvisning til protokollen, og
+  koblingen har ingen måte å lese repoet på.

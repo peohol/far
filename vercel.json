@@ -12,6 +12,6 @@
     "api/cpic-synk.ts": { "maxDuration": 300 },
     "api/pubchem-synk.ts": { "maxDuration": 300 },
     "api/farmakologiportalen-synk.ts": { "maxDuration": 300 },
-    "api/kuratering-mcp.ts": { "includeFiles": "docs/kontrollorinstruks.md" }
+    "api/kuratering-mcp.ts": { "includeFiles": "docs/{kontrollorinstruks,kuratorprotokoll}.md" }
   }
 }

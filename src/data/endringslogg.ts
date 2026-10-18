@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.103.5',
+    dato: '2026-10-17',
+    sammendrag: 'Kuratoren lærer av det kontrolløren finner, og retter det samme i kurateringene som venter',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Den faglige protokollen for kurateringene har fått reglene fra feilene kontrolløren har funnet så langt. Retningslinjer med flere utgaver oppgis alltid med årstall. Behandling ved forgiftning bygger på Giftinformasjonens anbefalinger, med preparatomtalens råd ved siden av når de er uenige. Aldersgrenser skrives «fra 13 år» der preparatomtalen mener det. Nøkkeltallene i viktige data endres bare etter en avgjørelse fra fagansvarlig.',
+      'Når kontrolløren finner en feil som kan gå igjen, ser kuratoren etter den samme feilen i kurateringene som venter på kontroll, og retter den der først.',
+      'Kontrolløren får nå hele den faglige protokollen sammen med instruksen sin, og ikke bare en henvisning til den. Da kontrollerer den mot de samme kravene og reglene som kuratoren følger.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.103.4',
     dato: '2026-10-17',
     sammendrag: 'Kontrolløren gjør én kuratering ferdig om gangen',
