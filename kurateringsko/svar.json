@@ -1,55 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-cbd-034014",
-  "foresporsel_sha256": "1e17149200b1c76f76cb5d69a8bc1f26aab1bbc9e443af293b81cd0c2b22b7e0",
-  "handling": "reserver",
+  "foresporsel_id": "fullfort-cbd-0061",
+  "foresporsel_sha256": "e616dd523973b61281b8e9ef3658c61cf02fc6a385c11d03b1152dfdc34456aa",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "cbd er reservert til 2026-10-18T06:40:42.077Z.",
-  "behandlet_kl": "2026-10-18T03:40:42.077Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39094444013",
-  "oppgave": {
-    "oppgave": "cbd-0061",
-    "stoff": "cbd",
-    "navn": "CBD",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-18T06:40:42.077Z",
-    "jobbgren": "kuratorjobb/cbd-0013",
-    "kurateringsgren": "kuratering/cbd-0061",
-    "pr": null,
-    "gren": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
-    "gjenoppta": {
-      "oppgave": "cbd-0046",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "avbrutt_kl": "2026-10-18T03:35:27.892Z",
-      "grunn": "Grenen er tilbake hos kuratoren.",
-      "fase": null,
-      "jobbgren": "kuratorjobb/cbd-0013",
-      "kurateringsgren": null,
-      "pr": null,
-      "gren": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
-      "kunnskapsgrense": "2026-10-16"
-    },
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-17T14:23:30.777Z",
-      "side": true,
-      "elementer": 2,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 1,
-      "referanser": 1,
-      "elementer_uten_kilde": 0
-    },
-    "prioritet": {
-      "poeng": 1462.3,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen cbd-0046.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "12 av 13 redaksjonelle seksjoner er tomme.",
-        "Bare 1 referanser."
-      ]
-    }
-  }
+  "melding": "cbd er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-18T03:41:26.363Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39094487504"
 }
