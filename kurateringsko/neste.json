@@ -1,39 +1,47 @@
 {
-  "oppdatert_kl": "2026-10-18T03:42:58.801Z",
+  "oppdatert_kl": "2026-10-18T03:59:20.586Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "antall": {
     "klar": 80,
-    "reservert": 0,
+    "reservert": 1,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 10,
+    "venter_godkjenning": 9,
     "sammenslatt": 0,
     "publisert": 4,
     "blokkert": 5,
     "utenfor": 1
   },
-  "aktive": [],
+  "aktive": [
+    {
+      "stoff": "levetiracetam",
+      "oppgave": "levetiracetam-0063",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "frist_kl": "2026-10-18T06:59:20.586Z",
+      "fase": null
+    }
+  ],
   "neste": [
+    {
+      "stoff": "flunitrazepam",
+      "modus": "de_novo",
+      "poeng": 1451.7,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen flunitrazepam-0058.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "2 av 8 elementer har ingen kilde.",
+        "Bare 1 referanser."
+      ],
+      "tidligst_kl": null
+    },
     {
       "stoff": "fenytoin",
       "modus": "de_novo",
       "poeng": 1447.6,
       "grunner": [
         "Fortsetter den avbrutte kurateringen fenytoin-0037.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "levetiracetam",
-      "modus": "de_novo",
-      "poeng": 1447.6,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen levetiracetam-0051.",
         "De novo-kuratering i runden som gjelder.",
         "Aldri kuratert.",
         "Ingen kuratering å regne alderen fra.",
@@ -172,12 +180,6 @@
     {
       "stoff": "doksepin",
       "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
-      "stoff": "flunitrazepam",
-      "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     },

@@ -1,19 +1,18 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-18T03:42:58.801Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-18T03:59:20.586Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 80 · Venter på godkjenning: 10 · Publisert: 4 · Blokkert: 5 · Utenfor køen: 1
+Klar: 80 · Reservert: 1 · Venter på godkjenning: 9 · Publisert: 4 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-Ingen kurateringer er reservert nå.
+- **levetiracetam** (levetiracetam-0063), frist 2026-10-18T06:59:20.586Z
 
 ## Til gjennomgang
 
 - **brekspiprazol**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **cbd**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **doksepin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
-- **flunitrazepam**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **kariprazin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **ketobemidon**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **lamotrigin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
@@ -33,8 +32,8 @@ Ingen kurateringer er reservert nå.
 
 | # | Stoff | Modus | Poeng | Hvorfor |
 | --- | --- | --- | --- | --- |
-| 1 | fenytoin | de_novo | 1447.6 | Fortsetter den avbrutte kurateringen fenytoin-0037. De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 6 elementer har ingen kilde. Bare 3 referanser. |
-| 2 | levetiracetam | de_novo | 1447.6 | Fortsetter den avbrutte kurateringen levetiracetam-0051. De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 6 elementer har ingen kilde. Bare 3 referanser. |
+| 1 | flunitrazepam | de_novo | 1451.7 | Fortsetter den avbrutte kurateringen flunitrazepam-0058. De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 2 av 8 elementer har ingen kilde. Bare 1 referanser. |
+| 2 | fenytoin | de_novo | 1447.6 | Fortsetter den avbrutte kurateringen fenytoin-0037. De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 6 elementer har ingen kilde. Bare 3 referanser. |
 | 3 | valproat | de_novo | 447.6 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 6 elementer har ingen kilde. Bare 3 referanser. |
 | 4 | atomoksetin | de_novo | 446.4 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 7 elementer har ingen kilde. Bare 3 referanser. |
 | 5 | alprazolam | de_novo | 445.5 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 8 elementer har ingen kilde. Bare 2 referanser. |
