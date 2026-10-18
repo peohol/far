@@ -1,56 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-flunitrazepam-180021",
-  "foresporsel_sha256": "d6f20edf218339b641aecd7c66e1bb0adf67e0589fcdb0b4d4f1f6918e403e73",
-  "handling": "reserver",
+  "foresporsel_id": "fullfort-flunitrazepam-0072",
+  "foresporsel_sha256": "7f9c09a14b959f8b958fb92fb6177371c4e99d7ea8178107116b2c48108bb729",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "flunitrazepam er reservert til 2026-10-18T21:00:45.626Z.",
-  "behandlet_kl": "2026-10-18T18:00:45.626Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39152157368",
-  "oppgave": {
-    "oppgave": "flunitrazepam-0072",
-    "stoff": "flunitrazepam",
-    "navn": "Flunitrazepam",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-18T21:00:45.626Z",
-    "jobbgren": "kuratorjobb/flunitrazepam-0017",
-    "kurateringsgren": "kuratering/flunitrazepam-0072",
-    "pr": null,
-    "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
-    "gjenoppta": {
-      "oppgave": "flunitrazepam-0065",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "avbrutt_kl": "2026-10-18T17:46:42.690Z",
-      "grunn": "Grenen er tilbake hos kuratoren.",
-      "fase": null,
-      "jobbgren": "kuratorjobb/flunitrazepam-0017",
-      "kurateringsgren": null,
-      "pr": null,
-      "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
-      "kunnskapsgrense": "2026-10-17"
-    },
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-18T10:30:23.208Z",
-      "side": true,
-      "elementer": 8,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 4,
-      "referanser": 1,
-      "elementer_uten_kilde": 2
-    },
-    "prioritet": {
-      "poeng": 1451.7,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen flunitrazepam-0065.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "2 av 8 elementer har ingen kilde.",
-        "Bare 1 referanser."
-      ]
-    }
-  }
+  "melding": "flunitrazepam er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-18T18:01:36.746Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39152230098"
 }
