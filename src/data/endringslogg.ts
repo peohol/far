@@ -19,7 +19,7 @@ export const ENDRINGSLOGG: Endring[] = [
     omfang: 'Minimalt omfang',
     punkter: [
       'Ingen endring for vanlige brukere. Når kontrolløren prøver å skrive en kommentar på nytt etter at et forsøk ble stoppet, blir den lagret bare én gang, og svaret sier tydelig at den er lagret. Kontrolløren kan også se i trådene hva som faktisk står der.',
-      'Blir et skrivekall stoppet før det når OUSFAR, prøver kontrolløren én gang til. Blir det stoppet igjen, slutter den å skrive i den kjøringen, godkjenner ingen kuratering der noe ikke er lagret, og sier fra om hva som mangler.',
+      'Blir et skrivekall stoppet før det når OUSFAR, prøver kontrolløren én gang til. Blir det stoppet igjen, slutter den å skrive i den kjøringen, godkjenner ingen kuratering der noe ikke er lagret, og sier fra om hva som mangler. Kommer det ikke noe svar, ser den etter i kurateringen om det ble lagret før den prøver igjen.',
     ],
     utenVarsel: true,
   },

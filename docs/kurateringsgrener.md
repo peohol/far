@@ -210,8 +210,10 @@ arkivert, står trådene som de var: de kan ikke kommenteres, lukkes eller
   svart etter gjenåpningen.
 - `les` gir trådene med `traader`: status, om tråden venter på kuratoren, og
   kommentarene.
-- En kommentar er lagret når `kommenter` svarer med `lagret: true` og `id`;
-  alt annet betyr at ingenting er lagret. Med `klient_id` (8–100 tegn:
+- En kommentar er lagret når `kommenter` svarer med `lagret: true` og `id`,
+  og ikke lagret når svaret er en feil fra OUSFAR. Uten et svar kan den være
+  lagret likevel: se i `kommentarer`, eller prøv igjen med den samme
+  `klient_id`. Med `klient_id` (8–100 tegn:
   bokstaver, sifre og `. _ : -`), som agenten velger før det første forsøket,
   lagres den nøyaktig én gang: et nytt forsøk med den samme ID-en og den
   samme teksten i den samme tråden (for en ny tråd også den samme arten og
@@ -222,14 +224,18 @@ arkivert, står trådene som de var: de kan ikke kommenteres, lukkes eller
 
 ### Når et kall ikke blir lagret
 
-MCP-endepunktet skriver én linje i serverloggen (Vercel) per verktøykall:
-`{"kuratering_mcp": <verktøy>, "utfall": "ok" | <feilkode>, "ms", "klient_id"?}`,
-uten nøkkel, argumenter eller fagtekst (`loggKall` i `endepunkt.ts`). Et kall
-som nådde OUSFAR, står der, og OUSFAR svarte kontrolløren med en feil med
-`feil` og `kode`. Et kall ChatGPT stoppet før det ble sendt, står ikke der, og
-ingenting er lagret; svaret kontrolløren får, er da ChatGPTs egen melding,
-som «This tool call was blocked by OpenAI's safety checks». Hva kontrolløren
-gjør da, står i `docs/kontrollorinstruks.md` («Når et kall ikke blir
+MCP-endepunktet skriver én linje i serverloggen (Vercel) for hvert
+verktøykall som når det, også når kallet feiler:
+`{"kuratering_mcp": <verktøy> | "ukjent", "utfall": "ok" | <feilkode>, "ms", "klient_id"?}`,
+uten nøkkel, argumenter eller fagtekst (`loggKall` i `endepunkt.ts`). Utfallet
+er databasens feilkode, eller `uten_database`, `ukjent_verktoy`,
+`uten_instruks` eller `unntak` (et uventet brudd underveis, der kallet kan
+være utført; kontrolløren får da beskjed om å se etter i grenen). Et kall
+ChatGPT stoppet før det ble sendt, står ikke der, og ingenting er lagret;
+svaret kontrolløren får, er da ChatGPTs egen melding, som «This tool call was
+blocked by OpenAI's safety checks». Et tidsavbrudd eller en brutt tilkobling
+etter at kallet nådde OUSFAR, kan ha lagret det. Hva kontrolløren gjør i hvert
+tilfelle, står i `docs/kontrollorinstruks.md` («Når et kall ikke blir
 lagret»).
 
 Natten 17.–18. oktober 2026 ble kontrollørens skrivekall (`kommenter`) i de

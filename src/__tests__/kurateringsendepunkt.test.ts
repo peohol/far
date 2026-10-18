@@ -150,6 +150,24 @@ describe('/api/kuratering-mcp', () => {
     for (const hemmelig of [NOKKEL, 'fagtekst', '"g"', 'alt brukt']) expect(alt).not.toContain(hemmelig)
   })
 
+  it('logger også kallene som feiler i OUSFAR: uten database, ukjent verktøy og et unntak', async () => {
+    const logg = vi.mocked(console.info)
+    const kall = (name: string, avh: Parameters<typeof behandleKurateringMcp>[2]) =>
+      behandleKurateringMcp(post('https://x/api/kuratering-mcp', rpc('tools/call', { name, arguments: { gren: 'g', tekst: 'Syntetisk fagtekst.' } })), {}, avh)
+    expect((await (await kall('les', { klient: null })).json()).error).toMatchObject({ code: -32603 })
+    expect((await (await kall('Syntetisk fagtekst', klient())).json()).error).toMatchObject({ code: -32602 })
+    const brutt = { klient: { rpc: vi.fn().mockRejectedValue(new Error('fetch failed')) } as unknown as SupabaseClient }
+    const unntak = await (await kall('kommenter', brutt)).json()
+    expect(unntak.error).toMatchObject({ code: -32603 })
+    expect(unntak.error.message).toMatch(/kan likevel være utført/)
+    expect(logg.mock.calls.map(([linje]) => JSON.parse(String(linje)))).toEqual([
+      { kuratering_mcp: 'les', utfall: 'uten_database', ms: expect.any(Number) },
+      { kuratering_mcp: 'ukjent', utfall: 'ukjent_verktoy', ms: expect.any(Number) },
+      { kuratering_mcp: 'kommenter', utfall: 'unntak', ms: expect.any(Number) },
+    ])
+    expect(JSON.stringify(logg.mock.calls)).not.toContain('fagtekst')
+  })
+
   it('tilbyr klient_id i kommenter, med samme form som databasen krever', () => {
     const kommenter = AGENTHANDLINGER.find((h) => h.navn === 'kommenter')!
     const egenskaper = (kommenter.argumenter as { properties: Record<string, { pattern?: string }> }).properties

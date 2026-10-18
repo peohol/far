@@ -276,10 +276,13 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
   for planlagte oppgaver siden slutten av september, og OpenAIs kundestøtte
   har bekreftet at de undersøker den. I OUSFAR: `kommenter` tar en valgfri `klient_id` og lagrer kommentaren
   nøyaktig én gang (`alt_lagret` ved et nytt forsøk, `PT409` om ID-en er brukt
-  for noe annet), svaret sier `lagret: true`, trådene viser ID-en, og hvert
-  verktøykall gir én linje i serverloggen uten nøkkel eller tekst.
+  for noe annet: en annen tekst, art, et annet anker, en annen tråd, eller et svar i stedet
+  for en ny tråd), svaret sier `lagret: true`, trådene viser ID-en, og hvert
+  verktøykall som når OUSFAR, gir én linje i serverloggen uten nøkkel eller
+  tekst, også når det feiler.
   Kontrollørinstruksen har fått «Når et kall ikke blir lagret»: ett nytt
-  forsøk med den samme ID-en, kontrollert stans etter to stopp, og ingen
+  forsøk med den samme ID-en, kontrollert stans etter to stopp, et usikkert
+  utfall (intet svar) kontrolleres i grenen før et nytt forsøk, og ingen
   vurdering av en gren med noe som ikke er lagret. Tester i
   `kurateringsgrener.test.ts` (MCP-koblingen fra lesing til svar i en
   eksisterende tråd) og `kurateringsendepunkt.test.ts`.

@@ -24,10 +24,10 @@ Grunnreglene:
   verdien den gjelder. Tyder en kilde på at avgjørelsen bygger på noe som er
   feil, si det i en merknad; det sperrer ikke.
 - Det du skriver (`kommenter`, `lukk_kommentar`, `gjenapne_kommentar`,
-  `vurder`), er bare gjort når OUSFAR har svart med resultatet. Blir et kall
-  stoppet, er ingenting lagret, og arbeidet er ikke dokumentert; se «Når et
-  kall ikke blir lagret». Feilmeldingen tas med i oversikten til slutt
-  (steg 7), så et menneske kan rette det.
+  `vurder`), er gjort når OUSFAR har svart med resultatet. Uten et slikt svar
+  er det ikke dokumentert før du har sett etter i grenen; se «Når et kall ikke
+  blir lagret». Feilmeldingen tas med i oversikten til slutt (steg 7), så et
+  menneske kan rette det.
 
 ## Tilkoblingen
 
@@ -108,27 +108,36 @@ i ChatGPT henter den nye.
    nye versjoner av dokumentene, og vurderer den samme revisjonen på nytt.
 7. **Til slutt.** Gi den som startet kjøringen en kort oversikt per gren,
    uten fagtekst: vurderingen (`godkjent`, `endringer` eller ikke ferdig),
-   trådene du har lukket, og hvert kall som ble stoppet, med feilmeldingen og
-   om det var OUSFAR eller ChatGPT som stoppet det.
+   trådene du har lukket, og hvert kall som ikke ble lagret eller hadde et
+   usikkert utfall, med feilmeldingen, om det var OUSFAR eller ChatGPT som
+   stoppet det, og hva du fant da du så etter.
 
 ## Når et kall ikke blir lagret
 
 - **Lagret.** `kommenter` svarer med `lagret: true` og `id` (eller
   `alt_lagret: true` når den samme `klient_id` alt var lagret). `vurder`,
   `lukk_kommentar` og `gjenapne_kommentar` svarer med grenen eller tråden.
-  Alt annet betyr at ingenting er lagret.
-- **Avvist av OUSFAR.** Svaret har `feil` og `kode`, på norsk. Les det, og
-  rett kallet hvis det går (for eksempel feil revisjon eller et anker som
-  ikke finnes). «Tråden er alt lukket» betyr at den er lukket.
-- **Stoppet av ChatGPT.** En melding som «This tool call was blocked by
-  OpenAI's safety checks» betyr at kallet aldri nådde OUSFAR. Ingenting er
-  lagret. Prøv én gang til med nøyaktig de samme argumentene og den samme
-  `klient_id`. Blir det stoppet igjen, ikke prøv flere ganger.
+- **Avvist av OUSFAR.** Svaret har `feil` og `kode`, på norsk. Ingenting er
+  lagret. Les det, og rett kallet hvis det går (for eksempel feil revisjon
+  eller et anker som ikke finnes). «Tråden er alt lukket» betyr at den er
+  lukket.
+- **Stoppet av ChatGPT før det ble sendt.** En melding som «This tool call
+  was blocked by OpenAI's safety checks» betyr at kallet aldri nådde OUSFAR.
+  Ingenting er lagret. Prøv én gang til med nøyaktig de samme argumentene og
+  den samme `klient_id`. Blir det stoppet igjen, ikke prøv flere ganger.
+- **Usikkert utfall.** Kom det ikke noe svar (et tidsavbrudd eller en brutt
+  tilkobling), eller sier OUSFAR at kallet kan være utført, kan det være
+  lagret selv om du ikke fikk vite det. Se etter før du prøver igjen eller
+  sier at noe ikke er lagret: `kommentarer` for `kommenter`,
+  `lukk_kommentar` og `gjenapne_kommentar`, og `les` (vurderingene) for
+  `vurder`. Står det der, er det gjort. Står det ikke der, prøv igjen, med
+  den samme `klient_id` for en kommentar.
 - **Kontrollert stans.** Blir to skrivekall stoppet av ChatGPT i den samme
-  kjøringen, skriver du ikke mer i kjøringen. Vurder ingen gren der det du
-  skulle skrive, ikke er lagret: godkjenn aldri en gren med en kommentar,
-  lukking eller begrunnelse som ikke er lagret. Gå til steg 7, og si per gren
-  hva som ikke ble lagret (tråden eller ankeret, og arten), uten fagtekst.
+  kjøringen, skriver du ikke mer i kjøringen. Vurder ingen gren der noe du
+  skulle skrive, ikke er lagret eller ikke er sett i grenen: godkjenn aldri en
+  gren med en kommentar, lukking eller begrunnelse du ikke vet er lagret. Gå
+  til steg 7, og si per gren hva som ikke ble lagret (tråden eller ankeret,
+  og arten), uten fagtekst.
 - **Neste kjøring.** Se i `kommentarer` hva som faktisk står der (trådene
   viser `klient_id`), og skriv det som mangler. Skriv ikke det som alt står
   der, på nytt.

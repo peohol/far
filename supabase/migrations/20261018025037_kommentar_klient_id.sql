@@ -2,13 +2,14 @@
 -- svaret aldri kommer fram (docs/kurateringsgrener.md, «Kommentarene»).
 --
 -- Agenten kan gi kommentaren en `klient_id`, som den velger før det første
--- forsøket. Et nytt forsøk med den samme ID-en og den samme teksten lagrer
--- ingenting nytt, men svarer med kommentaren som alt er lagret
--- (`alt_lagret: true`). Den samme ID-en for en annen tekst, en annen tråd, eller
--- en ny tråd med en annen art eller et annet anker er en feil, så ingenting
--- forsvinner i stillhet. Svaret på `kommenter` sier nå
--- også uttrykkelig at kommentaren er lagret, og når; trådene viser ID-en, så
--- kontrolløren kan se etter i neste kjøring hva som faktisk står der.
+-- forsøket. Et nytt forsøk med den samme ID-en for den samme kommentaren
+-- lagrer ingenting nytt, men svarer med kommentaren som alt er lagret
+-- (`alt_lagret: true`). Den samme ID-en for noe annet (en annen tekst, et svar
+-- i stedet for en ny tråd eller omvendt, en annen tråd, eller en ny tråd med en
+-- annen art eller et annet anker) er en feil, så ingenting forsvinner i
+-- stillhet. Svaret på `kommenter` sier nå også uttrykkelig at kommentaren er
+-- lagret, og når; trådene viser ID-en, så kontrolløren kan se etter i neste
+-- kjøring hva som faktisk står der.
 --
 -- Bare kuratering.ny_kommentar, kuratering.traader, kuratering.les_anker og
 -- kuratering.h_kommenter endres, og kuratering.anker_form er ny; resten står
@@ -197,8 +198,8 @@ $$;
 -- En ny tråd ({gren, tekst, art?, anker?, klient_id?}) eller et svar ({gren,
 -- svar_pa, tekst, klient_id?}). Kuratoren skriver merknader og svar; bare
 -- kontrolløren og administratorene åpner sperrende tråder. Med en klient-ID
--- som alt er lagret for den samme teksten og tråden (og for en ny tråd den
--- samme arten og det samme ankeret), svarer den med
+-- som alt er lagret for den samme kommentaren (den samme teksten, og den samme
+-- nye tråden eller det samme svaret), svarer den med
 -- kommentaren som står der, også om grenen er avsluttet siden.
 create or replace function kuratering.h_kommenter(p_aktor kuratering.aktor, p_data jsonb)
 returns jsonb
@@ -225,13 +226,19 @@ begin
     where k.gren = g.id and k.klient_id = v_klient
       and coalesce(k.agent, k.profil) = coalesce(p_aktor.agent, (p_aktor.profil).id);
     if tidligere.id is not null then
+      -- Forsøket må beskrive den samme kommentaren: den samme teksten, og en ny
+      -- tråd med den samme arten og det samme ankeret, eller et svar i den
+      -- samme tråden.
       if tidligere.tekst is distinct from btrim(coalesce(p_data ->> 'tekst', ''))
-        or tidligere.traad is distinct from (case
-          when p_data ->> 'svar_pa' is null then tidligere.id
-          else (kuratering.traaden(g, (p_data ->> 'svar_pa')::uuid)).id
+        or (case
+          when p_data ->> 'svar_pa' is null then
+            tidligere.id is distinct from tidligere.traad
+            or tidligere.art is distinct from art
+            or tidligere.anker is distinct from kuratering.anker_form(p_data -> 'anker')
+          else
+            tidligere.id = tidligere.traad
+            or tidligere.traad is distinct from (kuratering.traaden(g, (p_data ->> 'svar_pa')::uuid)).id
         end)
-        or (p_data ->> 'svar_pa' is null
-          and (tidligere.art is distinct from art or tidligere.anker is distinct from kuratering.anker_form(p_data -> 'anker')))
       then
         raise exception 'klient_id % er alt brukt for en annen kommentar i grenen. Velg en ny for en ny kommentar.', v_klient using errcode = 'PT409';
       end if;
