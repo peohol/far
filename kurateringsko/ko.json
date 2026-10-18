@@ -1,8 +1,8 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-18T04:00:08.177Z",
+  "oppdatert_kl": "2026-10-18T04:22:41.550Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
-  "teller": 63,
+  "teller": 64,
   "stoffer": {
     "alprazolam": {
       "stoff": "alprazolam",
@@ -429,7 +429,7 @@
     "brekspiprazol": {
       "stoff": "brekspiprazol",
       "navn": "Brekspiprazol",
-      "status": "venter_godkjenning",
+      "status": "reservert",
       "modus": "de_novo",
       "prioritet": {
         "poeng": 0,
@@ -444,19 +444,43 @@
         "referanser": 1,
         "elementer_uten_kilde": 17
       },
-      "reservasjon": null,
+      "reservasjon": {
+        "oppgave": "brekspiprazol-0064",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "modus": "de_novo",
+        "reservert_kl": "2026-10-18T04:22:41.550Z",
+        "fornyet_kl": "2026-10-18T04:22:41.550Z",
+        "frist_kl": "2026-10-18T07:22:41.550Z",
+        "fase": null,
+        "jobbgren": "kuratorjobb/brekspiprazol-0027",
+        "kurateringsgren": "kuratering/brekspiprazol-0064",
+        "pr": null,
+        "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
+        "kunnskapsgrense": "2026-10-16"
+      },
       "forsok": 1,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "brekspiprazol-0054",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-18T04:22:41.550Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/brekspiprazol-0027",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
+        "kunnskapsgrense": "2026-10-16"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
       "siste_kjoring": {
-        "oppgave": "brekspiprazol-0054",
+        "oppgave": "brekspiprazol-0064",
         "okt": "kurateringsko/okt/20261016-125910",
-        "startet_kl": "2026-10-18T03:00:16.376Z",
-        "avsluttet_kl": "2026-10-18T03:00:58.291Z",
-        "utfall": "fullfort"
+        "startet_kl": "2026-10-18T04:22:41.550Z",
+        "avsluttet_kl": null,
+        "utfall": "reservert"
       },
       "aktiv": true,
       "historikk": [
@@ -588,20 +612,28 @@
           "hendelse": "gren_klar",
           "oppgave": "brekspiprazol-0054",
           "melding": "Grenen: klar, revisjon 8, kontrollrunde 4."
+        },
+        {
+          "kl": "2026-10-18T04:22:41.550Z",
+          "hendelse": "gren_retting",
+          "oppgave": "brekspiprazol-0054",
+          "melding": "Grenen: retting, revisjon 9, kontrollrunde 3."
+        },
+        {
+          "kl": "2026-10-18T04:22:41.550Z",
+          "hendelse": "retting",
+          "oppgave": "brekspiprazol-0054",
+          "melding": "Grenen er tilbake hos kuratoren."
+        },
+        {
+          "kl": "2026-10-18T04:22:41.550Z",
+          "hendelse": "reservert",
+          "oppgave": "brekspiprazol-0064",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Forsøk 1, de_novo, fortsetter brekspiprazol-0054."
         }
       ],
-      "appgren": {
-        "id": "65e21273-dd2c-408b-b987-9ef8adf219c9",
-        "oppgave": "brekspiprazol-0054",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-16",
-        "jobbgren": "kuratorjobb/brekspiprazol-0027",
-        "registrert_kl": "2026-10-18T03:00:58.291Z",
-        "status": "klar",
-        "revisjon": 8,
-        "kontrollrunde": 4
-      }
+      "appgren": null
     },
     "bumetanid": {
       "stoff": "bumetanid",
@@ -5797,11 +5829,19 @@
     "topiramat": {
       "stoff": "topiramat",
       "navn": "Topiramat",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1447.6,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen topiramat-0062.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-17T14:23:30.777Z",
@@ -5813,9 +5853,20 @@
         "elementer_uten_kilde": 1
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "topiramat-0062",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-18T04:22:41.550Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/topiramat-0041",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "6a91451c-9e4a-4712-a913-253546677b1e",
+        "kunnskapsgrense": "2026-10-17"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -5928,20 +5979,21 @@
           "hendelse": "gren_klar",
           "oppgave": "topiramat-0062",
           "melding": "Grenen: klar, revisjon 8, kontrollrunde 1."
+        },
+        {
+          "kl": "2026-10-18T04:22:41.550Z",
+          "hendelse": "gren_arbeid",
+          "oppgave": "topiramat-0062",
+          "melding": "Grenen: arbeid, revisjon 9, kontrollrunde 0."
+        },
+        {
+          "kl": "2026-10-18T04:22:41.550Z",
+          "hendelse": "retting",
+          "oppgave": "topiramat-0062",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "6a91451c-9e4a-4712-a913-253546677b1e",
-        "oppgave": "topiramat-0062",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-17",
-        "jobbgren": "kuratorjobb/topiramat-0041",
-        "registrert_kl": "2026-10-18T03:42:58.801Z",
-        "status": "klar",
-        "revisjon": 8,
-        "kontrollrunde": 1
-      }
+      "appgren": null
     },
     "tramadol": {
       "stoff": "tramadol",
@@ -6199,11 +6251,19 @@
     "vortioksetin": {
       "stoff": "vortioksetin",
       "navn": "Vortioksetin",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1455.7,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen vortioksetin-0059.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "6 av 13 redaksjonelle seksjoner er tomme.",
+          "19 av 24 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-17T14:23:30.777Z",
@@ -6215,9 +6275,20 @@
         "elementer_uten_kilde": 19
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "vortioksetin-0059",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-18T04:22:41.550Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/vortioksetin-0015",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "afab07ef-a24e-485e-b31f-9f38498a61af",
+        "kunnskapsgrense": "2026-10-17"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -6362,20 +6433,21 @@
           "hendelse": "gren_klar",
           "oppgave": "vortioksetin-0059",
           "melding": "Grenen: klar, revisjon 7, kontrollrunde 3."
+        },
+        {
+          "kl": "2026-10-18T04:22:41.550Z",
+          "hendelse": "gren_retting",
+          "oppgave": "vortioksetin-0059",
+          "melding": "Grenen: retting, revisjon 8, kontrollrunde 2."
+        },
+        {
+          "kl": "2026-10-18T04:22:41.550Z",
+          "hendelse": "retting",
+          "oppgave": "vortioksetin-0059",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "afab07ef-a24e-485e-b31f-9f38498a61af",
-        "oppgave": "vortioksetin-0059",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-17",
-        "jobbgren": "kuratorjobb/vortioksetin-0015",
-        "registrert_kl": "2026-10-18T03:38:09.260Z",
-        "status": "klar",
-        "revisjon": 7,
-        "kontrollrunde": 3
-      }
+      "appgren": null
     },
     "ziprasidon": {
       "stoff": "ziprasidon",
@@ -6652,6 +6724,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "reserver-brekspiprazol-042214",
         "fullfort-levetiracetam-0063",
         "reserver-levetiracetam-035856",
         "fullfort-topiramat-0062",
@@ -6700,25 +6773,70 @@
         "blokkert-topiramat-0041",
         "forny-topiramat-0041-1751",
         "forny-topiramat-0041-gren",
-        "forny-topiramat-0041-1651",
-        "reserver-202610171621"
+        "forny-topiramat-0041-1651"
       ],
       "siste": {
-        "id": "fullfort-levetiracetam-0063",
-        "sha256": "3eaac58a03558370a1815c8d11c71a1088cd4e2e08fcc0cd5aea8e2d1ef97d00",
+        "id": "reserver-brekspiprazol-042214",
+        "sha256": "0a0b33e04ae6cebd1cea27a2b4c4176fb7c76c746d0a1d8c2c40870e3dbb0fce",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "fullfort-levetiracetam-0063",
-          "foresporsel_sha256": "3eaac58a03558370a1815c8d11c71a1088cd4e2e08fcc0cd5aea8e2d1ef97d00",
-          "handling": "fullfort",
+          "foresporsel_id": "reserver-brekspiprazol-042214",
+          "foresporsel_sha256": "0a0b33e04ae6cebd1cea27a2b4c4176fb7c76c746d0a1d8c2c40870e3dbb0fce",
+          "handling": "reserver",
           "utfall": "ok",
-          "melding": "levetiracetam er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-          "behandlet_kl": "2026-10-18T04:00:08.177Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39095547337"
+          "melding": "brekspiprazol er reservert til 2026-10-18T07:22:41.550Z.",
+          "behandlet_kl": "2026-10-18T04:22:41.550Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39096857810",
+          "oppgave": {
+            "oppgave": "brekspiprazol-0064",
+            "stoff": "brekspiprazol",
+            "navn": "Brekspiprazol",
+            "modus": "de_novo",
+            "forsok": 1,
+            "frist_kl": "2026-10-18T07:22:41.550Z",
+            "jobbgren": "kuratorjobb/brekspiprazol-0027",
+            "kurateringsgren": "kuratering/brekspiprazol-0064",
+            "pr": null,
+            "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
+            "gjenoppta": {
+              "oppgave": "brekspiprazol-0054",
+              "okt": "kurateringsko/okt/20261016-125910",
+              "avbrutt_kl": "2026-10-18T04:22:41.550Z",
+              "grunn": "Grenen er tilbake hos kuratoren.",
+              "fase": null,
+              "jobbgren": "kuratorjobb/brekspiprazol-0027",
+              "kurateringsgren": null,
+              "pr": null,
+              "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
+              "kunnskapsgrense": "2026-10-16"
+            },
+            "sist_kuratert": null,
+            "maal": {
+              "kl": "2026-10-17T14:23:30.777Z",
+              "side": true,
+              "elementer": 20,
+              "redaksjonelle_paneler": 13,
+              "paneler_med_innhold": 6,
+              "referanser": 1,
+              "elementer_uten_kilde": 17
+            },
+            "prioritet": {
+              "poeng": 1466.3,
+              "grunner": [
+                "Fortsetter den avbrutte kurateringen brekspiprazol-0054.",
+                "De novo-kuratering i runden som gjelder.",
+                "Aldri kuratert.",
+                "Ingen kuratering å regne alderen fra.",
+                "7 av 13 redaksjonelle seksjoner er tomme.",
+                "17 av 20 elementer har ingen kilde.",
+                "Bare 1 referanser."
+              ]
+            }
+          }
         }
       },
       "besvart_commit": "3e3a715c7cd5d65c020ce8cff564fa926d3bf70f",
-      "sist_brukt_kl": "2026-10-18T04:00:08.177Z"
+      "sist_brukt_kl": "2026-10-18T04:22:41.550Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
