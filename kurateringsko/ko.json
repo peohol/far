@@ -1,8 +1,8 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-18T18:00:08.616Z",
+  "oppdatert_kl": "2026-10-18T18:00:45.626Z",
   "malt_kl": "2026-10-18T10:30:22.628Z",
-  "teller": 71,
+  "teller": 72,
   "stoffer": {
     "alprazolam": {
       "stoff": "alprazolam",
@@ -2035,19 +2035,11 @@
     "flunitrazepam": {
       "stoff": "flunitrazepam",
       "navn": "Flunitrazepam",
-      "status": "klar",
+      "status": "reservert",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 1451.7,
-        "grunner": [
-          "Fortsetter den avbrutte kurateringen flunitrazepam-0065.",
-          "De novo-kuratering i runden som gjelder.",
-          "Aldri kuratert.",
-          "Ingen kuratering å regne alderen fra.",
-          "9 av 13 redaksjonelle seksjoner er tomme.",
-          "2 av 8 elementer har ingen kilde.",
-          "Bare 1 referanser."
-        ]
+        "poeng": 0,
+        "grunner": []
       },
       "maal": {
         "kl": "2026-10-18T10:30:23.208Z",
@@ -2058,8 +2050,21 @@
         "referanser": 1,
         "elementer_uten_kilde": 2
       },
-      "reservasjon": null,
-      "forsok": 0,
+      "reservasjon": {
+        "oppgave": "flunitrazepam-0072",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "modus": "de_novo",
+        "reservert_kl": "2026-10-18T18:00:45.626Z",
+        "fornyet_kl": "2026-10-18T18:00:45.626Z",
+        "frist_kl": "2026-10-18T21:00:45.626Z",
+        "fase": null,
+        "jobbgren": "kuratorjobb/flunitrazepam-0017",
+        "kurateringsgren": "kuratering/flunitrazepam-0072",
+        "pr": null,
+        "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
+        "kunnskapsgrense": "2026-10-17"
+      },
+      "forsok": 1,
       "tidligst_kl": null,
       "gjenoppta": {
         "oppgave": "flunitrazepam-0065",
@@ -2077,21 +2082,14 @@
       "blokkeringer": [],
       "sist_kuratert": null,
       "siste_kjoring": {
-        "oppgave": "flunitrazepam-0065",
+        "oppgave": "flunitrazepam-0072",
         "okt": "kurateringsko/okt/20261016-125910",
-        "startet_kl": "2026-10-18T04:24:24.846Z",
-        "avsluttet_kl": "2026-10-18T04:25:13.513Z",
-        "utfall": "fullfort"
+        "startet_kl": "2026-10-18T18:00:45.626Z",
+        "avsluttet_kl": null,
+        "utfall": "reservert"
       },
       "aktiv": true,
       "historikk": [
-        {
-          "kl": "2026-10-17T01:55:48.526Z",
-          "hendelse": "fullfort",
-          "oppgave": "flunitrazepam-0017",
-          "okt": "kurateringsko/okt/20261016-125910",
-          "melding": "Kurateringsgrenen 1c60dd4d-6dde-407f-a53d-c4649a83193b, kunnskapsgrense 2026-10-17."
-        },
         {
           "kl": "2026-10-17T01:55:48.526Z",
           "hendelse": "gren_klar",
@@ -2275,6 +2273,13 @@
           "hendelse": "retting",
           "oppgave": "flunitrazepam-0065",
           "melding": "Grenen er tilbake hos kuratoren."
+        },
+        {
+          "kl": "2026-10-18T18:00:45.626Z",
+          "hendelse": "reservert",
+          "oppgave": "flunitrazepam-0072",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Forsøk 1, de_novo, fortsetter flunitrazepam-0065."
         }
       ],
       "appgren": null
@@ -6880,6 +6885,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "reserver-flunitrazepam-180021",
         "fullfort-cbd-0071",
         "reserver-cbd-174747",
         "fullfort-lamotrigin-0070",
@@ -6928,25 +6934,70 @@
         "reserver-fenobarbital-pub-202610171924",
         "fullfort-sertindol-0048",
         "reserver-sertindol-192029",
-        "fullfort-levetiracetam-0047",
-        "reserver-levetiracetam-191858"
+        "fullfort-levetiracetam-0047"
       ],
       "siste": {
-        "id": "fullfort-cbd-0071",
-        "sha256": "4a51e81f1a16839bafec92d8282c034d9d48c780087220369be30cc032944e5e",
+        "id": "reserver-flunitrazepam-180021",
+        "sha256": "d6f20edf218339b641aecd7c66e1bb0adf67e0589fcdb0b4d4f1f6918e403e73",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "fullfort-cbd-0071",
-          "foresporsel_sha256": "4a51e81f1a16839bafec92d8282c034d9d48c780087220369be30cc032944e5e",
-          "handling": "fullfort",
+          "foresporsel_id": "reserver-flunitrazepam-180021",
+          "foresporsel_sha256": "d6f20edf218339b641aecd7c66e1bb0adf67e0589fcdb0b4d4f1f6918e403e73",
+          "handling": "reserver",
           "utfall": "ok",
-          "melding": "cbd er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-          "behandlet_kl": "2026-10-18T18:00:08.616Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39152095364"
+          "melding": "flunitrazepam er reservert til 2026-10-18T21:00:45.626Z.",
+          "behandlet_kl": "2026-10-18T18:00:45.626Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39152157368",
+          "oppgave": {
+            "oppgave": "flunitrazepam-0072",
+            "stoff": "flunitrazepam",
+            "navn": "Flunitrazepam",
+            "modus": "de_novo",
+            "forsok": 1,
+            "frist_kl": "2026-10-18T21:00:45.626Z",
+            "jobbgren": "kuratorjobb/flunitrazepam-0017",
+            "kurateringsgren": "kuratering/flunitrazepam-0072",
+            "pr": null,
+            "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
+            "gjenoppta": {
+              "oppgave": "flunitrazepam-0065",
+              "okt": "kurateringsko/okt/20261016-125910",
+              "avbrutt_kl": "2026-10-18T17:46:42.690Z",
+              "grunn": "Grenen er tilbake hos kuratoren.",
+              "fase": null,
+              "jobbgren": "kuratorjobb/flunitrazepam-0017",
+              "kurateringsgren": null,
+              "pr": null,
+              "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
+              "kunnskapsgrense": "2026-10-17"
+            },
+            "sist_kuratert": null,
+            "maal": {
+              "kl": "2026-10-18T10:30:23.208Z",
+              "side": true,
+              "elementer": 8,
+              "redaksjonelle_paneler": 13,
+              "paneler_med_innhold": 4,
+              "referanser": 1,
+              "elementer_uten_kilde": 2
+            },
+            "prioritet": {
+              "poeng": 1451.7,
+              "grunner": [
+                "Fortsetter den avbrutte kurateringen flunitrazepam-0065.",
+                "De novo-kuratering i runden som gjelder.",
+                "Aldri kuratert.",
+                "Ingen kuratering å regne alderen fra.",
+                "9 av 13 redaksjonelle seksjoner er tomme.",
+                "2 av 8 elementer har ingen kilde.",
+                "Bare 1 referanser."
+              ]
+            }
+          }
         }
       },
       "besvart_commit": "280fd0a59912f8f5cf55a6035b6d8f75a8417af0",
-      "sist_brukt_kl": "2026-10-18T18:00:08.616Z"
+      "sist_brukt_kl": "2026-10-18T18:00:45.626Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
