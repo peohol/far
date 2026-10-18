@@ -102,7 +102,10 @@ i ChatGPT henter den nye.
    igjen, leser du svarene i trådene og den nye revisjonen. En tråd som er
    løst, lukker du (`lukk_kommentar`); en som ikke er det, svarer du i. En
    lukket tråd som viser seg ikke å være løst, åpnes igjen
-   (`gjenapne_kommentar`). Så vurderer du den nye revisjonen som over.
+   (`gjenapne_kommentar`). Gi hver lukking og gjenåpning en ny `klient_id`,
+   som en kommentar (for eksempel `<gren>-r<revisjon>-lukk-<løpenummer>`),
+   og bruk den samme hvis du må prøve igjen. Så vurderer du den nye
+   revisjonen som over.
    En ny runde kan ha samme revisjon som den forrige (`uten_endringer` i
    hendelsen `til_kontroll`): kuratoren har ikke rettet noe, men svart på
    vurderingen. Da leser du svarene i trådene og merknadene, og eventuelle
@@ -116,9 +119,11 @@ i ChatGPT henter den nye.
 ## Når et kall ikke blir lagret
 
 - **Lagret.** `kommenter` svarer med `lagret: true` og `id` (eller
-  `alt_lagret: true` når den samme `klient_id` alt var lagret). `vurder`,
-  `lukk_kommentar` og `gjenapne_kommentar` svarer med grenen eller tråden, og
-  med `alt_lagret: true` når det samme kallet alt var lagret.
+  `alt_lagret: true` når den samme `klient_id` alt var lagret). `vurder`
+  svarer med grenen, og med `alt_lagret: true` når den samme vurderingen alt
+  var lagret. `lukk_kommentar` og `gjenapne_kommentar` svarer med tråden og
+  statusen den har nå, og med `alt_lagret: true` når den samme `klient_id`
+  alt var lagret.
 - **Avvist av OUSFAR.** Svaret har `feil` og `kode`, på norsk. Ingenting er
   lagret. Les det, og rett kallet hvis det går (for eksempel feil revisjon
   eller et anker som ikke finnes). «Tråden er alt lukket» betyr at den er
@@ -133,7 +138,8 @@ i ChatGPT henter den nye.
   sier at noe ikke er lagret: `kommentarer` for `kommenter`,
   `lukk_kommentar` og `gjenapne_kommentar`, og `les` (vurderingene) for
   `vurder`. Står det der, er det gjort. Står det ikke der, prøv igjen med
-  nøyaktig de samme argumentene (den samme `klient_id` for en kommentar). Et
+  nøyaktig de samme argumentene (den samme `klient_id` for en kommentar, en
+  lukking og en gjenåpning). Et
   kall som likevel var lagret, svarer da `alt_lagret: true`, og ingenting
   lagres to ganger. Sier OUSFAR at revisjonen «er alt vurdert», står en annen
   vurdering der: les grenen, og vurder ikke på nytt.

@@ -628,7 +628,8 @@ function holdesTilbake(t: Kotilstand, s: Kostoff, k: Pick<Behandlingskontekst, '
 
 /* --- Oversikten ---------------------------------------------------------- */
 
-export function oversikt(t: Kotilstand, na: string, innst: Koinnstillinger, antallNeste = 10): Kooversikt {
+/** `grener` som i `Behandlingskontekst`: grenene i OUSFAR, `null` når de ikke kunne leses, utelatt uten leser. */
+export function oversikt(t: Kotilstand, na: string, innst: Koinnstillinger, grener?: readonly Greninfo[] | null, antallNeste = 10): Kooversikt {
   const stoffer = Object.values(t.stoffer).sort((a, b) => a.stoff.localeCompare(b.stoff))
   const antall = Object.fromEntries(KOSTATUSER.map((s) => [s, 0])) as Record<Kostatus, number>
   for (const s of stoffer) antall[s.status] += 1
@@ -641,7 +642,7 @@ export function oversikt(t: Kotilstand, na: string, innst: Koinnstillinger, anta
     aktive: stoffer.flatMap((s) =>
       s.reservasjon ? [{ stoff: s.stoff, oppgave: s.reservasjon.oppgave, okt: s.reservasjon.okt, frist_kl: s.reservasjon.frist_kl, fase: s.reservasjon.fase }] : [],
     ),
-    holdes_tilbake: forste ? holdesTilbake(t, forste, { na, innst }) : null,
+    holdes_tilbake: forste ? holdesTilbake(t, forste, { na, innst, grener }) : null,
     neste: koen
       .slice(0, antallNeste)
       .map((s) => ({ stoff: s.stoff, modus: s.modus!, poeng: s.prioritet.poeng, grunner: s.prioritet.grunner, tidligst_kl: s.tidligst_kl })),
@@ -665,8 +666,8 @@ const STATUSNAVN: Record<Kostatus, string> = {
 }
 
 /** Køen som en tabell i Markdown, for folk. */
-export function oversiktMarkdown(t: Kotilstand, na: string, innst: Koinnstillinger): string {
-  const o = oversikt(t, na, innst, 1000)
+export function oversiktMarkdown(t: Kotilstand, na: string, innst: Koinnstillinger, grener?: readonly Greninfo[] | null): string {
+  const o = oversikt(t, na, innst, grener, 1000)
   const celle = (v: string) => v.replace(/\|/g, '\\|')
   const linjer = [
     '# Kurateringskøen',
@@ -828,14 +829,14 @@ function utfor(t: Kotilstand, f: Foresporsel, k: Behandlingskontekst, svar: (u: 
   const { na, innst } = k
   switch (f.handling) {
     case 'status':
-      return svar('ok', 'Oversikten over køen.', { ko: oversikt(t, na, k.innst) })
+      return svar('ok', 'Oversikten over køen.', { ko: oversikt(t, na, innst, k.grener) })
 
     case 'forhandsvis':
     case 'reserver': {
       const egen = Object.values(t.stoffer).find((s) => s.reservasjon?.okt === k.gren)
       if (egen) return svar('ok', `Økten har allerede reservert ${egen.stoff}; fortsett med den.`, { oppgave: oppgavesvar(egen, egen.reservasjon!) })
       const valg = velg(t, f, k)
-      if (!('stoff' in valg)) return svar(valg.utfall, valg.melding, valg.utfall === 'ingen_oppgave' ? { ko: oversikt(t, na, k.innst) } : {})
+      if (!('stoff' in valg)) return svar(valg.utfall, valg.melding, valg.utfall === 'ingen_oppgave' ? { ko: oversikt(t, na, innst, k.grener) } : {})
       const s = valg.stoff
       const frist_kl = pluss(na, innst.reservasjon_minutter * MINUTT)
       if (f.handling === 'forhandsvis') {

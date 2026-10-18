@@ -10,12 +10,17 @@
 -- - `vurder`: den siste vurderingen av revisjonen er den samme (beslutning og
 --   begrunnelse), av den samme, og statusen er den vurderingen satte. En
 --   annen vurdering av en revisjon som alt er vurdert, avvises som en
---   konflikt. Med `runde` avvises også et kall fra en eldre kontrollrunde, så
---   en vurdering aldri lander i en runde den ikke gjaldt;
+--   konflikt. `vurder` krever nå `runde`, og et kall fra en annen
+--   kontrollrunde avvises, så en vurdering aldri lander i en runde den ikke
+--   gjaldt;
 -- - `til_kontroll`: grenen er alt til kontroll med den revisjonen;
 -- - `publiser`: grenen er alt publisert;
--- - `lukk_kommentar` og `gjenapne_kommentar`: tråden ble sist lukket eller
---   åpnet igjen av den samme, med den samme teksten.
+-- - `lukk_kommentar` og `gjenapne_kommentar`: en lukking eller gjenåpning med
+--   den samme `klient_id` er alt lagret. En agent må sende `klient_id`, så et
+--   forsinket forsøk aldri lukker en tråd som er åpnet igjen siden (eller
+--   åpner en som er lukket), slik en sammenligning med trådens siste handling
+--   ville gjort. De tre kommentarhandlingene deler ID-ene, så en ID som alt
+--   er brukt for noe annet, er en konflikt.
 --
 -- Ingenting lagres to ganger, og ingen kontroll faller bort: det som ellers
 -- ville blitt avvist, avvises fortsatt.
@@ -58,7 +63,10 @@ begin
   if (p_data ->> 'revisjon')::integer is distinct from g.revisjon then
     raise exception 'Grenen er på revisjon %, ikke %. Vurder den siste.', g.revisjon, p_data ->> 'revisjon' using errcode = 'PT409';
   end if;
-  if p_data ? 'runde' and (p_data ->> 'runde')::integer is distinct from g.runde then
+  if coalesce(p_data ->> 'runde', '') !~ '^[0-9]{1,9}$' then
+    raise exception 'Kontrollrunden mangler: send runde fra les eller status.' using errcode = '22023';
+  end if;
+  if (p_data ->> 'runde')::integer is distinct from g.runde then
     raise exception 'Grenen er i kontrollrunde %, ikke %. Les grenen på nytt før du vurderer.', g.runde, p_data ->> 'runde' using errcode = 'PT409';
   end if;
 
@@ -195,17 +203,134 @@ begin
 end;
 $$;
 
--- Den siste lukkingen eller gjenåpningen av tråden.
-create function kuratering.siste_traadhandling(p_traad uuid)
-returns kuratering.kommentarer
+-- Om tråden er åpen eller lukket nå: den siste lukkingen eller gjenåpningen
+-- avgjør, som i `traader`.
+create function kuratering.traadstatus(p_traad uuid)
+returns text
 language sql
 stable
 set search_path = ''
 as $$
-  select x.* from kuratering.kommentarer x
-  where x.traad = p_traad and x.handling in ('lukket', 'gjenapnet')
-  order by x.opprettet_kl desc, x.id desc
-  limit 1
+  select coalesce((
+    select case x.handling when 'lukket' then 'lukket' else 'apen' end
+    from kuratering.kommentarer x
+    where x.traad = p_traad and x.handling in ('lukket', 'gjenapnet')
+    order by x.opprettet_kl desc, x.id desc
+    limit 1
+  ), 'apen')
+$$;
+
+-- Kommentaren den samme agenten eller personen alt har lagret med klient-ID-en
+-- i grenen, eller ingen. Samtidige forsøk med den samme ID-en venter på
+-- hverandre, så bare det første lagres. Brukes av `kommenter`,
+-- `lukk_kommentar` og `gjenapne_kommentar`, som deler ID-ene.
+create function kuratering.med_klient_id(p_gren kuratering.grener, p_aktor kuratering.aktor, p_klient text)
+returns kuratering.kommentarer
+language plpgsql
+set search_path = ''
+as $$
+declare
+  k kuratering.kommentarer;
+begin
+  if p_klient !~ '^[A-Za-z0-9._:-]{8,100}$' then
+    raise exception 'klient_id må ha 8 til 100 tegn: bokstavene a–z og A–Z, sifre og . _ : -' using errcode = '22023';
+  end if;
+  perform pg_advisory_xact_lock(hashtextextended('kommentar:' || p_gren.id::text || ':' || p_klient, 0));
+  select x.* into k
+  from kuratering.kommentarer x
+  where x.gren = p_gren.id and x.klient_id = p_klient
+    and coalesce(x.agent, x.profil) = coalesce(p_aktor.agent, (p_aktor.profil).id);
+  return k;
+end;
+$$;
+
+-- Om den samme lukkingen eller gjenåpningen alt er lagret med klient-ID-en.
+-- Agentene må sende en; uten den (en administrator i appen) gjelder trådens
+-- status som før. Svaret på et forsøk som alt er lagret, gir trådens status
+-- nå: den kan være åpnet eller lukket igjen siden.
+create function kuratering.traadhandling_lagret(
+  p_gren kuratering.grener, p_aktor kuratering.aktor, p_traad uuid, p_handling text, p_tekst text, p_klient text
+)
+returns boolean
+language plpgsql
+set search_path = ''
+as $$
+declare
+  k kuratering.kommentarer;
+begin
+  if p_klient is null then
+    if p_aktor.agent is not null then
+      raise exception 'klient_id mangler: velg en før det første forsøket, og bruk den samme om du prøver igjen.' using errcode = '22023';
+    end if;
+    return false;
+  end if;
+  k := kuratering.med_klient_id(p_gren, p_aktor, p_klient);
+  if k.id is null then
+    return false;
+  end if;
+  if k.traad is distinct from p_traad or k.handling is distinct from p_handling or k.tekst is distinct from p_tekst then
+    raise exception 'klient_id % er alt brukt for noe annet i grenen. Velg en ny.', p_klient using errcode = 'PT409';
+  end if;
+  return true;
+end;
+$$;
+
+-- `kommenter` som før (20261018025037_kommentar_klient_id.sql), men en
+-- klient-ID som alt er brukt for en lukking eller gjenåpning, er en konflikt.
+create or replace function kuratering.h_kommenter(p_aktor kuratering.aktor, p_data jsonb)
+returns jsonb
+language plpgsql
+set search_path = ''
+as $$
+declare
+  g kuratering.grener := kuratering.gren_fra(p_data);
+  traad kuratering.kommentarer;
+  art text := coalesce(p_data ->> 'art', 'merknad');
+  v_klient text := nullif(btrim(p_data ->> 'klient_id'), '');
+  tidligere kuratering.kommentarer;
+  v_id uuid;
+begin
+  perform kuratering.krev_leser(p_aktor, g);
+  if v_klient is not null then
+    tidligere := kuratering.med_klient_id(g, p_aktor, v_klient);
+    if tidligere.id is not null then
+      -- Forsøket må beskrive den samme kommentaren: den samme teksten, og en ny
+      -- tråd med den samme arten og det samme ankeret, eller et svar i den
+      -- samme tråden.
+      if tidligere.handling <> 'kommentar'
+        or tidligere.tekst is distinct from btrim(coalesce(p_data ->> 'tekst', ''))
+        or (case
+          when p_data ->> 'svar_pa' is null then
+            tidligere.id is distinct from tidligere.traad
+            or tidligere.art is distinct from art
+            or tidligere.anker is distinct from kuratering.anker_form(p_data -> 'anker')
+          else
+            tidligere.id = tidligere.traad
+            or tidligere.traad is distinct from (kuratering.traaden(g, (p_data ->> 'svar_pa')::uuid)).id
+        end)
+      then
+        raise exception 'klient_id % er alt brukt for en annen kommentar i grenen. Velg en ny for en ny kommentar.', v_klient using errcode = 'PT409';
+      end if;
+      return jsonb_build_object('id', tidligere.id, 'traad', tidligere.traad, 'kl', tidligere.opprettet_kl, 'klient_id', v_klient,
+        'lagret', true, 'alt_lagret', true);
+    end if;
+  end if;
+  perform kuratering.krev_aktiv_traad(g);
+  if p_data ->> 'svar_pa' is not null then
+    traad := kuratering.traaden(g, (p_data ->> 'svar_pa')::uuid);
+    v_id := kuratering.ny_kommentar(g, p_aktor, traad.id, 'kommentar', null, null, p_data ->> 'tekst', v_klient);
+  else
+    if art not in ('merknad', 'sperrende') then
+      raise exception 'Arten må være merknad eller sperrende.' using errcode = '22023';
+    end if;
+    if art = 'sperrende' and not p_aktor.admin and not ('kontrollor' = any (p_aktor.roller) and p_aktor.agent is distinct from g.kurator) then
+      raise exception 'Bare kontrolløren og administratorene åpner en sperrende tråd.' using errcode = '42501';
+    end if;
+    v_id := kuratering.ny_kommentar(g, p_aktor, null, 'kommentar', art, kuratering.les_anker(g, p_data -> 'anker'), p_data ->> 'tekst', v_klient);
+  end if;
+  return jsonb_strip_nulls(jsonb_build_object('id', v_id, 'traad', coalesce(traad.id, v_id), 'kl', now(), 'klient_id', v_klient,
+    'lagret', true));
+end;
 $$;
 
 create or replace function kuratering.h_lukk_kommentar(p_aktor kuratering.aktor, p_data jsonb)
@@ -216,26 +341,25 @@ as $$
 declare
   g kuratering.grener := kuratering.gren_fra(p_data);
   traad kuratering.kommentarer;
-  siste kuratering.kommentarer;
   tekst text := coalesce(nullif(btrim(p_data ->> 'tekst'), ''), 'Lukket.');
+  v_klient text := nullif(btrim(p_data ->> 'klient_id'), '');
 begin
   perform kuratering.krev_leser(p_aktor, g);
-  perform kuratering.krev_aktiv_traad(g);
   traad := kuratering.traaden(g, (p_data ->> 'kommentar')::uuid);
   if traad.art = 'sperrende' and not p_aktor.admin
     and (p_aktor.agent is null or traad.agent is distinct from p_aktor.agent)
   then
     raise exception 'En sperrende tråd lukkes av den som åpnet den, eller en administrator.' using errcode = '42501';
   end if;
-  siste := kuratering.siste_traadhandling(traad.id);
-  if siste.handling = 'lukket' then
-    if siste.tekst = tekst and kuratering.av_samme(siste.agent, siste.profil, p_aktor) then
-      return jsonb_build_object('traad', traad.id, 'status', 'lukket', 'alt_lagret', true);
-    end if;
+  if kuratering.traadhandling_lagret(g, p_aktor, traad.id, 'lukket', tekst, v_klient) then
+    return jsonb_build_object('traad', traad.id, 'status', kuratering.traadstatus(traad.id), 'klient_id', v_klient, 'alt_lagret', true);
+  end if;
+  perform kuratering.krev_aktiv_traad(g);
+  if kuratering.traadstatus(traad.id) = 'lukket' then
     raise exception 'Tråden er alt lukket.' using errcode = '22023';
   end if;
-  perform kuratering.ny_kommentar(g, p_aktor, traad.id, 'lukket', null, null, tekst);
-  return jsonb_build_object('traad', traad.id, 'status', 'lukket');
+  perform kuratering.ny_kommentar(g, p_aktor, traad.id, 'lukket', null, null, tekst, v_klient);
+  return jsonb_strip_nulls(jsonb_build_object('traad', traad.id, 'status', 'lukket', 'klient_id', v_klient));
 end;
 $$;
 
@@ -247,22 +371,19 @@ as $$
 declare
   g kuratering.grener := kuratering.gren_fra(p_data);
   traad kuratering.kommentarer;
-  siste kuratering.kommentarer;
+  v_klient text := nullif(btrim(p_data ->> 'klient_id'), '');
 begin
   perform kuratering.krev_rolle(p_aktor, 'kontrollor');
-  perform kuratering.krev_aktiv_traad(g);
   traad := kuratering.traaden(g, (p_data ->> 'kommentar')::uuid);
-  siste := kuratering.siste_traadhandling(traad.id);
-  if siste.handling is distinct from 'lukket' then
-    if siste.handling = 'gjenapnet' and siste.tekst = btrim(coalesce(p_data ->> 'tekst', ''))
-      and kuratering.av_samme(siste.agent, siste.profil, p_aktor)
-    then
-      return jsonb_build_object('traad', traad.id, 'status', 'apen', 'alt_lagret', true);
-    end if;
+  if kuratering.traadhandling_lagret(g, p_aktor, traad.id, 'gjenapnet', btrim(coalesce(p_data ->> 'tekst', '')), v_klient) then
+    return jsonb_build_object('traad', traad.id, 'status', kuratering.traadstatus(traad.id), 'klient_id', v_klient, 'alt_lagret', true);
+  end if;
+  perform kuratering.krev_aktiv_traad(g);
+  if kuratering.traadstatus(traad.id) <> 'lukket' then
     raise exception 'Tråden er åpen.' using errcode = '22023';
   end if;
-  perform kuratering.ny_kommentar(g, p_aktor, traad.id, 'gjenapnet', null, null, p_data ->> 'tekst');
-  return jsonb_build_object('traad', traad.id, 'status', 'apen');
+  perform kuratering.ny_kommentar(g, p_aktor, traad.id, 'gjenapnet', null, null, p_data ->> 'tekst', v_klient);
+  return jsonb_strip_nulls(jsonb_build_object('traad', traad.id, 'status', 'apen', 'klient_id', v_klient));
 end;
 $$;
 

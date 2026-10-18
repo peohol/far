@@ -296,14 +296,18 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
     Nå holder køen et nytt stoff tilbake mens en retting, en godkjent gren
     eller et avbrutt forsøk står klar, mens fem grener eller flere venter på
     kontrolløren, og når grenene i OUSFAR ikke kunne leses, også når et stoff
-    bes om ved navn;
+    bes om ved navn. Oversikten (`holdes_tilbake`) regner med de samme
+    grenene;
   - et skrivekall som ble gjentatt etter et tapt svar, fikk en feil som så ut
     som om det ikke var lagret. `vurder`, `til_kontroll`, `publiser`,
     `lukk_kommentar` og `gjenapne_kommentar` svarer nå `alt_lagret: true`, og
-    lagrer ingenting to ganger;
+    lagrer ingenting to ganger. Lukking og gjenåpning krever `klient_id` fra
+    agentene, så et forsinket forsøk aldri lukker en tråd som er åpnet igjen
+    siden (eller omvendt);
   - en forsinket vurdering fra en tidligere kontrollrunde med den samme
-    revisjonen kunne lande i en ny runde. Med `runde` avvises den; appen
-    sender den alltid, og kontrollørinstruksen ber om den;
+    revisjonen kunne lande i en ny runde. `vurder` krever nå `runde`, og et
+    kall fra en annen runde avvises; appen sender den alltid, og
+    kontrollørinstruksen ber om den;
   - «Kurateringer» i Adminmenyen grupperer de aktive grenene etter hvem som
     har neste handling (kontrolløren, kuratoren, en administrator), med hvor
     mange som venter på kontroll mot grensen, trådene som venter på

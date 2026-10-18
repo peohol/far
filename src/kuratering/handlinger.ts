@@ -7,12 +7,14 @@
 
 type Skjema = Record<string, unknown>
 
-/** Formen på `klient_id` i `kommenter`; den samme står i databasen (`kuratering.kommentarer`). */
+/** Formen på `klient_id` i `kommenter`, `lukk_kommentar` og `gjenapne_kommentar`; den samme står i databasen (`kuratering.kommentarer`). */
 export const KLIENT_ID = '^[A-Za-z0-9._:-]{8,100}$'
 
 const tekst = (beskrivelse: string, maks?: number): Skjema => ({ type: 'string', description: beskrivelse, ...(maks ? { maxLength: maks } : {}) })
 const heltall = (beskrivelse: string): Skjema => ({ type: 'integer', minimum: 0, description: beskrivelse })
 const gren = tekst('ID-en til kurateringsgrenen')
+const klientId = (beskrivelse: string): Skjema => ({ type: 'string', pattern: KLIENT_ID, description: beskrivelse })
+const KLIENT_ID_LUKKING = 'ID du velger før det første forsøket, som «<gren>-r<revisjon>-<nr>»; bruk den samme når du prøver igjen'
 const objekt = (egenskaper: Record<string, Skjema>, pakrevd: string[] = []): Skjema => ({
   type: 'object',
   properties: egenskaper,
@@ -70,7 +72,7 @@ export const AGENTHANDLINGER: readonly Agenthandling[] = [
         beslutning: { type: 'string', enum: ['godkjent', 'endringer'] },
         begrunnelse: tekst('Hva som er kontrollert, og hva som må rettes', 4000),
       },
-      ['gren', 'revisjon', 'beslutning', 'begrunnelse'],
+      ['gren', 'revisjon', 'runde', 'beslutning', 'begrunnelse'],
     ),
   },
   {
@@ -98,11 +100,7 @@ export const AGENTHANDLINGER: readonly Agenthandling[] = [
           dokument: { type: 'string', enum: ['kildeplan', 'evidensjournal', 'dekningsmatrise', 'blindprotokoll', 'selvtest', 'notat'] },
         }),
         svar_pa: tekst('En kommentar i tråden som besvares'),
-        klient_id: {
-          type: 'string',
-          pattern: KLIENT_ID,
-          description: 'Valgfri ID du velger før det første forsøket, som «<gren>-r<revisjon>-<nr>»; bruk den samme når du prøver igjen',
-        },
+        klient_id: klientId('Valgfri ID du velger før det første forsøket, som «<gren>-r<revisjon>-<nr>»; bruk den samme når du prøver igjen'),
       },
       ['gren', 'tekst'],
     ),
@@ -110,13 +108,20 @@ export const AGENTHANDLINGER: readonly Agenthandling[] = [
   {
     navn: 'lukk_kommentar',
     beskrivelse:
-      'Lukker en tråd. En sperrende tråd lukkes bare av den som åpnet den, når rettingen er kontrollert. Et nytt forsøk med den samme teksten etter at tråden er lukket, svarer alt_lagret: true.',
-    argumenter: objekt({ gren, kommentar: tekst('En kommentar i tråden'), tekst: tekst('Hva som er kontrollert', 10000) }, ['gren', 'kommentar']),
+      'Lukker en tråd. En sperrende tråd lukkes bare av den som åpnet den, når rettingen er kontrollert. Med klient_id lagres lukkingen nøyaktig én gang: et nytt forsøk med de samme argumentene og samme klient_id svarer alt_lagret: true, også om tråden er åpnet igjen siden.',
+    argumenter: objekt(
+      { gren, kommentar: tekst('En kommentar i tråden'), tekst: tekst('Hva som er kontrollert', 10000), klient_id: klientId(KLIENT_ID_LUKKING) },
+      ['gren', 'kommentar', 'klient_id'],
+    ),
   },
   {
     navn: 'gjenapne_kommentar',
-    beskrivelse: 'Åpner en lukket tråd igjen. Bare kontrolløren. Et nytt forsøk med den samme teksten etter at tråden er åpnet, svarer alt_lagret: true.',
-    argumenter: objekt({ gren, kommentar: tekst('En kommentar i tråden'), tekst: tekst('Hvorfor', 10000) }, ['gren', 'kommentar', 'tekst']),
+    beskrivelse:
+      'Åpner en lukket tråd igjen. Bare kontrolløren. Med klient_id lagres det nøyaktig én gang: et nytt forsøk med de samme argumentene og samme klient_id svarer alt_lagret: true, også om tråden er lukket igjen siden.',
+    argumenter: objekt(
+      { gren, kommentar: tekst('En kommentar i tråden'), tekst: tekst('Hvorfor', 10000), klient_id: klientId(KLIENT_ID_LUKKING) },
+      ['gren', 'kommentar', 'tekst', 'klient_id'],
+    ),
   },
   {
     navn: 'apne',

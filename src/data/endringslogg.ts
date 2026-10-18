@@ -19,7 +19,7 @@ export const ENDRINGSLOGG: Endring[] = [
     omfang: 'Mindre omfang',
     punkter: [
       'Ingen endring for vanlige brukere. Kurateringskøen gir ut et nytt stoff bare når færre enn fem kurateringer venter på kontroll, og en kuratering som skal rettes, gis alltid ut før et nytt stoff. Vet ikke køen hvor mange som venter, gir den ikke ut noe nytt.',
-      'Gjentar kontrolløren eller kuratoren en vurdering, en innsending til kontroll, en publisering eller en lukking etter at svaret ble borte, lagres den bare én gang, og svaret sier at den alt er lagret. En vurdering fra en tidligere kontrollrunde kan ikke lenger lande i en ny.',
+      'Gjentar kontrolløren eller kuratoren en vurdering, en innsending til kontroll, en publisering eller en lukking eller gjenåpning av en tråd etter at svaret ble borte, lagres den bare én gang, og svaret sier at den alt er lagret. En vurdering fra en tidligere kontrollrunde kan ikke lenger lande i en ny, og et gammelt forsøk på å lukke en tråd lukker den ikke etter at den er åpnet igjen.',
       '«Kurateringer» i Adminmenyen ordner kurateringene som pågår, etter hvem som har neste handling: kontrolløren, kuratoren eller en administrator. Hver viser hva som venter og siden når, hvor mange tråder som venter på svar, og hvor mange som venter på kontroll mot grensen på fem.',
     ],
     utenVarsel: true,

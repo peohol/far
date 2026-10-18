@@ -389,6 +389,15 @@ describe('kurateringsgrenene i OUSFAR', () => {
     expect(oversikt(t, om(T0, 1), innst).holdes_tilbake).toContain('1 kurateringsgren venter på kontroll')
     expect(oversiktMarkdown(t, om(T0, 1), innst)).toContain('Neste stoff gis ikke ut nå: 1 kurateringsgren venter på kontroll')
     expect(oversikt(t, om(T0, 1), INNST).holdes_tilbake).toBeNull()
+    // Med grenene fra OUSFAR teller de som står der, også de køen ikke følger, og en lesing som feilet sies.
+    const annen = gren('klar', { id: '0b6f3c1e-4444-4000-8000-000000000009', stoff: 'gamma', runde: 1 })
+    expect(oversikt(t, om(T0, 1), innst, []).holdes_tilbake).toBeNull()
+    expect(oversikt(t, om(T0, 1), { ...innst, maks_til_kontroll: 2 }, [gren('klar', { runde: 1 }), annen]).holdes_tilbake).toContain('2 kurateringsgrener')
+    expect(oversikt(t, om(T0, 1), INNST, null).holdes_tilbake).toContain('kunne ikke leses')
+    expect(oversiktMarkdown(t, om(T0, 1), INNST, null)).toContain('Neste stoff gis ikke ut nå: kurateringsgrenene i OUSFAR kunne ikke leses')
+    const status = (grener: Greninfo[] | null) => behandle(t, f('status'), { ...kontekst('kurateringsko/okt/b', om(T0, 1)), grener }).ko!.holdes_tilbake
+    expect(status(null)).toContain('kunne ikke leses')
+    expect(status([])).toBeNull()
   })
 
   it('følger en ny kontrollrunde med samme revisjon som den forrige, når kuratoren har svart uten å rette', () => {
@@ -948,6 +957,11 @@ describe('livsløpet gjennom git', () => {
       throw new Error('Syntetisk: OUSFAR svarer ikke.')
     })
     expect(svar(o, 'kurateringsko/okt/en')).toMatchObject({ utfall: 'ingen_oppgave', melding: expect.stringContaining('kunne ikke leses') })
+    expect(vis(o, KOGREN, NESTEFIL).holdes_tilbake).toContain('kunne ikke leses')
+    // Kan grenene leses igjen, skrives oversikten på nytt, også når køen ellers er uendret.
+    expect(await med(async () => [])).toMatchObject({ behandlet: [], skrevet: true })
+    expect(vis(o, KOGREN, NESTEFIL).holdes_tilbake).toBeNull()
+    expect(await med(async () => [])).toMatchObject({ skrevet: false })
     sporr(o, 'kurateringsko/okt/en', { id: '2', handling: 'reserver' })
     await med(async () => [])
     expect(svar(o, 'kurateringsko/okt/en')).toMatchObject({ utfall: 'ok', oppgave: { stoff: 'beta' } })
