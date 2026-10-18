@@ -1,10 +1,56 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-brekspiprazol-0054",
-  "foresporsel_sha256": "69ca8f7ae27f5f462ddb1036b5a5ed47cbde5bffb3a2dd8dd029770a077832d2",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-sertindol-030131",
+  "foresporsel_sha256": "eae5160b895fe89e903be9ffc2bd9de4aa97908013f3b767f3986de2db92a30c",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "brekspiprazol er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-18T03:00:58.291Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39092096914"
+  "melding": "sertindol er reservert til 2026-10-18T06:01:56.424Z.",
+  "behandlet_kl": "2026-10-18T03:01:56.424Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39092156958",
+  "oppgave": {
+    "oppgave": "sertindol-0055",
+    "stoff": "sertindol",
+    "navn": "Sertindol",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-18T06:01:56.424Z",
+    "jobbgren": "kuratorjobb/sertindol-0040",
+    "kurateringsgren": "kuratering/sertindol-0055",
+    "pr": null,
+    "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
+    "gjenoppta": {
+      "oppgave": "sertindol-0052",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "avbrutt_kl": "2026-10-18T03:00:16.376Z",
+      "grunn": "Grenen er tilbake hos kuratoren.",
+      "fase": null,
+      "jobbgren": "kuratorjobb/sertindol-0040",
+      "kurateringsgren": null,
+      "pr": null,
+      "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
+      "kunnskapsgrense": "2026-10-17"
+    },
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-17T14:23:30.777Z",
+      "side": true,
+      "elementer": 6,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 4,
+      "referanser": 2,
+      "elementer_uten_kilde": 1
+    },
+    "prioritet": {
+      "poeng": 1447.6,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen sertindol-0052.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 2 referanser."
+      ]
+    }
+  }
 }
