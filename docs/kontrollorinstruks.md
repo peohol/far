@@ -81,7 +81,8 @@ i ChatGPT henter den nye.
    kommentar en `klient_id` før du sender den, for eksempel
    `<gren>-r<revisjon>-<løpenummer>`, og bruk den samme hvis du må prøve
    igjen. Se så i svaret at den er lagret (`lagret: true`).
-5. **Vurder.**
+5. **Vurder.** Send alltid `revisjon` og `runde` fra `les`, så vurderingen
+   gjelder nøyaktig den runden du har kontrollert.
    - Er alt i orden og ingen sperrende tråd åpen: `vurder` med
      `beslutning: "godkjent"` for den siste revisjonen, og en begrunnelse som
      sier hva som er kontrollert og mot hvilke kilder.
@@ -116,7 +117,8 @@ i ChatGPT henter den nye.
 
 - **Lagret.** `kommenter` svarer med `lagret: true` og `id` (eller
   `alt_lagret: true` når den samme `klient_id` alt var lagret). `vurder`,
-  `lukk_kommentar` og `gjenapne_kommentar` svarer med grenen eller tråden.
+  `lukk_kommentar` og `gjenapne_kommentar` svarer med grenen eller tråden, og
+  med `alt_lagret: true` når det samme kallet alt var lagret.
 - **Avvist av OUSFAR.** Svaret har `feil` og `kode`, på norsk. Ingenting er
   lagret. Les det, og rett kallet hvis det går (for eksempel feil revisjon
   eller et anker som ikke finnes). «Tråden er alt lukket» betyr at den er
@@ -130,8 +132,11 @@ i ChatGPT henter den nye.
   lagret selv om du ikke fikk vite det. Se etter før du prøver igjen eller
   sier at noe ikke er lagret: `kommentarer` for `kommenter`,
   `lukk_kommentar` og `gjenapne_kommentar`, og `les` (vurderingene) for
-  `vurder`. Står det der, er det gjort. Står det ikke der, prøv igjen, med
-  den samme `klient_id` for en kommentar.
+  `vurder`. Står det der, er det gjort. Står det ikke der, prøv igjen med
+  nøyaktig de samme argumentene (den samme `klient_id` for en kommentar). Et
+  kall som likevel var lagret, svarer da `alt_lagret: true`, og ingenting
+  lagres to ganger. Sier OUSFAR at revisjonen «er alt vurdert», står en annen
+  vurdering der: les grenen, og vurder ikke på nytt.
 - **Kontrollert stans.** Blir to skrivekall stoppet av ChatGPT i den samme
   kjøringen, skriver du ikke mer i kjøringen. Vurder ingen gren der noe du
   skulle skrive, ikke er lagret eller ikke er sett i grenen: godkjenn aldri en

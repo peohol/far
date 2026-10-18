@@ -347,7 +347,7 @@ describe('kurateringssiden', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Be om endringer' }))
     await userEvent.type(screen.getByRole('textbox', { name: 'Hva må endres' }), 'Doseringen mangler kilde.')
     await userEvent.click(screen.getByRole('button', { name: 'Send tilbake til kuratoren' }))
-    await waitFor(() => expect(k.vurder).toHaveBeenCalledWith(GREN, 2, 'endringer', 'Doseringen mangler kilde.'))
+    await waitFor(() => expect(k.vurder).toHaveBeenCalledWith(GREN, 2, 1, 'endringer', 'Doseringen mangler kilde.'))
   })
 
   it('krever en begrunnelse også for å godkjenne', async () => {
@@ -363,7 +363,7 @@ describe('kurateringssiden', () => {
     expect(k.vurder).not.toHaveBeenCalled()
     await userEvent.type(felt, 'Dosering og kilder kontrollert mot preparatomtalen.')
     await userEvent.click(screen.getByRole('button', { name: 'Godkjenn revisjon 2' }))
-    await waitFor(() => expect(k.vurder).toHaveBeenCalledWith(GREN, 2, 'godkjent', 'Dosering og kilder kontrollert mot preparatomtalen.'))
+    await waitFor(() => expect(k.vurder).toHaveBeenCalledWith(GREN, 2, 1, 'godkjent', 'Dosering og kilder kontrollert mot preparatomtalen.'))
   })
 
   it('viser at kontrollrunden gjelder den samme revisjonen som den forrige', async () => {
@@ -621,5 +621,30 @@ describe('på fagsiden', () => {
     render(<Kurateringsoversikt apen klient={klient()} onLukk={vi.fn()} />)
     const lenke = await screen.findByRole('link', { name: /Citalopram · Til kontroll/ })
     expect(lenke.getAttribute('href')).toBe(`#/kuratering/${GREN}`)
+  })
+
+  it('ordner de aktive grenene etter hvem som har neste handling, med det som venter og siden når', async () => {
+    const k = klient()
+    const gren = (id: number, overstyr: Partial<Grensammendrag>): Grensammendrag => ({ ...(grendetaljer() as Grensammendrag), id: `44444444-0000-4000-8000-00000000010${id}`, ...overstyr })
+    vi.mocked(k.oversikt).mockResolvedValue([
+      gren(1, { navn: 'Alfa', status: 'tilbakemelding', status_kl: '2026-10-02T12:00:00Z', venter_pa_kurator: 2, apne_sperrer: 1 }),
+      ...[2, 3, 4, 5, 6].map((i) => gren(i, { navn: `Til kontroll ${i}`, status: 'klar', runde: 2, status_kl: `2026-10-0${i}T12:00:00Z` })),
+      gren(7, { navn: 'Stoppet', status: 'stanset', status_grunn: 'Venter på en avgjørelse.' }),
+      gren(8, { navn: 'Ferdig', status: 'publisert' }),
+    ])
+    render(<Kurateringsoversikt apen klient={k} onLukk={vi.fn()} />)
+    const kontroll = await screen.findByRole('region', { name: 'Venter på kontrolløren' })
+    expect(within(kontroll).getByRole('heading', { name: 'Venter på kontrolløren (5)' })).toBeTruthy()
+    expect(within(kontroll).getByText(/5 venter på kontroll, så køen gir ikke ut nye stoffer før færre enn 5 gjør det/)).toBeTruthy()
+    // Den som har ventet lengst, står først.
+    expect(within(kontroll).getAllByRole('link').map((a) => a.textContent?.split(' · ')[0])).toEqual([2, 3, 4, 5, 6].map((i) => `Til kontroll ${i}`))
+    expect(within(kontroll).getAllByText(/Neste: kontrolløren vurderer runde 2 \(siden /)).toHaveLength(5)
+
+    const kurator = screen.getByRole('region', { name: 'Venter på kuratoren' })
+    expect(within(kurator).getByText(/2 tråder venter på svar fra kuratoren · 1 sperrende tråd hindrer godkjenning/)).toBeTruthy()
+    const admin = screen.getByRole('region', { name: 'Venter på en administrator' })
+    expect(within(admin).getByText('Grunn: Venter på en avgjørelse.')).toBeTruthy()
+    expect(screen.getByRole('link', { name: /Ferdig · Publisert/ })).toBeTruthy()
+    expect(screen.queryByText(/Ingen kurateringer pågår/)).toBeNull()
   })
 })

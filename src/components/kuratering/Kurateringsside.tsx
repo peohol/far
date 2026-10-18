@@ -263,7 +263,7 @@ function Grenbanner({
       return
     }
     return utfor(
-      () => klient.vurder(gren.id, gren.revisjon, beslutning, begrunnelse.trim()),
+      () => klient.vurder(gren.id, gren.revisjon, gren.runde, beslutning, begrunnelse.trim()),
       () => {
         setVurderer(null)
         setBegrunnelse('')

@@ -338,6 +338,8 @@ export interface Kooversikt {
   malt_kl: string | null
   antall: Record<Kostatus, number>
   aktive: { stoff: string; oppgave: string; okt: string; frist_kl: string; fase: string | null }[]
+  /** Hvorfor det neste stoffet ikke gis ut nå (en annen kuratering skal fortsettes først, eller for mange venter på kontroll), ellers `null`. */
+  holdes_tilbake: string | null
   /** De neste stoffene køen gir ut, i rekkefølge. */
   neste: { stoff: string; modus: Modus; poeng: number; grunner: string[]; tidligst_kl: string | null }[]
   /** Kurateringene som venter på kontroll, godkjenning eller utrulling: PR-en, eller grenen i OUSFAR med statusen der. */

@@ -38,7 +38,7 @@ nytt).
 
 | Handling | Hvem | `data` |
 | --- | --- | --- |
-| `oversikt` | alle | `{stoff?, alle?}` |
+| `oversikt` | alle | `{stoff?, alle?}`: sammendragene, uten fagtekst, med når grenen fikk statusen sin (`status_kl`), og for en aktiv gren de åpne sperrende trådene (`apne_sperrer`) og de åpne trådene som venter på svar fra kuratoren (`venter_pa_kurator`) |
 | `apne` | kurator | `{stoff, formaal, art?: "kuratering" \| "de_novo"}` |
 | `les` | kurator (egen), kontrollør, admin | `{gren, revisjon?}` |
 | `status` | kurator (egen), kontrollør, admin | `{gren}`: status, revisjon, runde, aktiviteten, når kuratoren sist kalte inn, antallet åpne sperrende tråder og `endring` (den siste hendelsen utenom aktiviteten); ingen fagtekst |
@@ -48,7 +48,7 @@ nytt).
 | `les_dokument` | kurator (egen), kontrollør, admin | `{gren, art, versjon?}` |
 | `avslutt_blindfase` | kurator | `{gren}` |
 | `til_kontroll` / `trekk_fra_kontroll` | kurator | `{gren, revisjon}` (den siste; fra `tilbakemelding` også uten en ny revisjon, se [Statusene](#statusene)) / `{gren}` |
-| `vurder` | kontrollør, admin | `{gren, revisjon, beslutning, begrunnelse}`; begrunnelsen kreves også ved `godkjent` (hva som er kontrollert) |
+| `vurder` | kontrollør, admin | `{gren, revisjon, runde?, beslutning, begrunnelse}`; begrunnelsen kreves også ved `godkjent` (hva som er kontrollert). Med `runde` avvises et kall fra en annen kontrollrunde (`PT409`) |
 | `oppdater_grunnlag` | kurator | `{gren}` |
 | `publiser` | kurator (egen), admin | `{gren, revisjon}` |
 | `stans` / `gjenoppta` | admin | `{gren, grunn?}` / `{gren}` |
@@ -221,6 +221,29 @@ arkivert, står trådene som de var: de kan ikke kommenteres, lukkes eller
   der (`alt_lagret: true`), også om grenen er avsluttet siden. Den samme
   ID-en for noe annet avvises (`PT409`).
   ID-en gjelder per agent og gren, og står på kommentaren i trådene.
+
+### Et kall som gjentas
+
+Et svar kan forsvinne etter at kallet er utført. De andre skrivekallene som
+endrer statusen, er derfor trygge å gjenta: gjentar den samme agenten eller
+personen et kall som alt har virket, lagres ingenting nytt, og svaret er det
+samme som første gang med `alt_lagret: true`
+(`supabase/migrations/20261018043244_trygge_gjentakelser.sql`):
+
+- `vurder`: den siste vurderingen av revisjonen har den samme beslutningen og
+  begrunnelsen, og statusen er den vurderingen satte. En annen vurdering av
+  en revisjon som alt er vurdert, også fra en annen, avvises (`PT409`, «er
+  alt vurdert»), og et kall med en eldre `runde` likeså. Kontrolløren sender
+  derfor `runde` fra `les`, så en vurdering aldri lander i en runde den ikke
+  gjaldt;
+- `til_kontroll`: grenen er alt til kontroll med revisjonen;
+- `publiser`: grenen er alt publisert;
+- `lukk_kommentar` og `gjenapne_kommentar`: tråden ble sist lukket eller åpnet
+  igjen av den samme, med den samme teksten. Med en annen tekst er svaret
+  som før, «Tråden er alt lukket» eller «Tråden er åpen».
+
+Alt som ellers ville blitt avvist (en annen revisjon, en annen rolle, en
+hindring), avvises fortsatt.
 
 ### Når et kall ikke blir lagret
 

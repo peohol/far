@@ -29,7 +29,8 @@ export interface Kurateringsklient {
   les(gren: string, revisjon?: number): Promise<Grendetaljer>
   /** Den lille statusen, til å se om noe er nytt. */
   status(gren: string): Promise<Grenstatusdata>
-  vurder(gren: string, revisjon: number, beslutning: 'godkjent' | 'endringer', begrunnelse: string): Promise<Grensammendrag>
+  /** `runde` er kontrollrunden som er vurdert, så vurderingen aldri lander i en senere runde. */
+  vurder(gren: string, revisjon: number, runde: number, beslutning: 'godkjent' | 'endringer', begrunnelse: string): Promise<Grensammendrag>
   publiser(gren: string, revisjon: number): Promise<Publiseringssvar>
   stans(gren: string, grunn?: string): Promise<Grensammendrag>
   gjenoppta(gren: string): Promise<Grensammendrag>
@@ -82,7 +83,7 @@ export function lagKurateringsklient(klient: SupabaseClient): Kurateringsklient 
     oversikt: (valg = {}) => admin<Grensammendrag[]>('oversikt', valg).then((r) => r ?? []),
     les: (gren, revisjon) => admin('les', revisjon === undefined ? { gren } : { gren, revisjon }),
     status: (gren) => admin('status', { gren }),
-    vurder: (gren, revisjon, beslutning, begrunnelse) => admin('vurder', { gren, revisjon, beslutning, begrunnelse }),
+    vurder: (gren, revisjon, runde, beslutning, begrunnelse) => admin('vurder', { gren, revisjon, runde, beslutning, begrunnelse }),
     publiser: (gren, revisjon) => admin('publiser', { gren, revisjon }),
     stans: (gren, grunn) => admin('stans', { gren, ...(grunn && { grunn }) }),
     gjenoppta: (gren) => admin('gjenoppta', { gren }),

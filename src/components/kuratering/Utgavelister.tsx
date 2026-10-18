@@ -4,13 +4,16 @@ import { tidspunkt } from '../../faginnhold/historikk'
 import { useJevnligSjekk } from '../../hooks/useJevnligSjekk'
 import { klient as supabase } from '../../auth/klient'
 import { lagKurateringsklient, type Kurateringsklient } from '../../kuratering/klient'
+import { INNSTILLINGER } from '../../kurateringsko/innstillinger'
 import {
+  ANSVARLIGNAVN,
   ARTSNAVN,
-  NESTE_HANDLING,
   ROLLENAVN,
   STATUSNAVN,
   agentadresser,
   erAktiv,
+  etterAnsvar,
+  hvaSomVenter,
   versjonslinje,
   type Agentinfo,
   type Grensammendrag,
@@ -81,8 +84,9 @@ export function Versjonsliste({ apen, stoff, navn, onLukk }: { apen: boolean; st
   )
 }
 
-/** Én gren i en liste: hva, hvor langt den er kommet, og lenken til den. */
+/** Én gren i en liste: hva, hvor langt den er kommet, hva som venter, og lenken til den. */
 function Grenrad({ gren, onApne }: { gren: Grensammendrag; onApne?: () => void }) {
+  const venter = [...hvaSomVenter(gren), gren.aktivitet && erAktiv(gren.status) ? `Nå: ${gren.aktivitet.tekst}` : '']
   return (
     <a className="utgaveliste__rad" href={kurateringsadresse(gren.id)} onClick={onApne}>
       <span className="utgaveliste__hode">
@@ -92,14 +96,21 @@ function Grenrad({ gren, onApne }: { gren: Grensammendrag; onApne?: () => void }
         {[ARTSNAVN[gren.art], gren.formaal, `revisjon ${gren.revisjon}`, tidspunkt(gren.oppdatert_kl)].join(' · ')}
       </span>
       {gren.konflikt && <span className="utgaveliste__meta">Fagsiden er publisert på nytt etter at grenen ble laget.</span>}
-      {erAktiv(gren.status) && (
-        <span className="utgaveliste__meta">
-          {[NESTE_HANDLING[gren.status] && `Neste: ${NESTE_HANDLING[gren.status]}`, gren.aktivitet && `Nå: ${gren.aktivitet.tekst}`]
-            .filter(Boolean)
-            .join(' · ')}
-        </span>
-      )}
+      {venter.some(Boolean) && <span className="utgaveliste__meta">{venter.filter(Boolean).join(' · ')}</span>}
+      {gren.status_grunn && erAktiv(gren.status) && <span className="utgaveliste__meta">Grunn: {gren.status_grunn}</span>}
     </a>
+  )
+}
+
+/** Hvor mange som venter på kontrolløren, og om køen da gir ut nye stoffer (`maks_til_kontroll`). */
+function Kontrollbuffer({ antall }: { antall: number }) {
+  const grense = INNSTILLINGER.maks_til_kontroll
+  return (
+    <p className="utgaveliste__tomt">
+      {antall >= grense
+        ? `${antall} venter på kontroll, så køen gir ikke ut nye stoffer før færre enn ${grense} gjør det. Rettinger gis ut som før.`
+        : `${antall} venter på kontroll. Køen gir ut nye stoffer så lenge færre enn ${grense} venter.`}
+    </p>
   )
 }
 
@@ -115,7 +126,7 @@ export function Kurateringsoversikt({ apen, klient: egen, onLukk }: { apen: bool
   const tilstand = useApenHenting<Grensammendrag[]>(apen, hent)
   const grupper = useMemo(() => {
     const liste = tilstand.status === 'klar' ? tilstand.data : []
-    return { aktive: liste.filter((g) => erAktiv(g.status)), avsluttede: liste.filter((g) => !erAktiv(g.status)) }
+    return { aktive: etterAnsvar(liste), avsluttede: liste.filter((g) => !erAktiv(g.status)) }
   }, [tilstand])
   return (
     <Modallag
@@ -132,18 +143,27 @@ export function Kurateringsoversikt({ apen, klient: egen, onLukk }: { apen: bool
       <Lastestatus tilstand={tilstand} />
       {tilstand.status === 'klar' && (
         <>
-          <h3 className="historikk__gruppetittel">Pågår</h3>
-          {grupper.aktive.length === 0 ? (
-            <p className="utgaveliste__tomt">Ingen kurateringer pågår.</p>
-          ) : (
-            <ul className="utgaveliste">
-              {grupper.aktive.map((g) => (
-                <li key={g.id}>
-                  <Grenrad gren={g} onApne={onLukk} />
-                </li>
-              ))}
-            </ul>
+          {grupper.aktive.length === 0 && (
+            <>
+              <h3 className="historikk__gruppetittel">Pågår</h3>
+              <p className="utgaveliste__tomt">Ingen kurateringer pågår.</p>
+            </>
           )}
+          {grupper.aktive.map((gruppe) => (
+            <section key={gruppe.ansvarlig} aria-label={ANSVARLIGNAVN[gruppe.ansvarlig]}>
+              <h3 className="historikk__gruppetittel">
+                {ANSVARLIGNAVN[gruppe.ansvarlig]} ({gruppe.grener.length})
+              </h3>
+              {gruppe.ansvarlig === 'kontrolloren' && <Kontrollbuffer antall={gruppe.grener.length} />}
+              <ul className="utgaveliste">
+                {gruppe.grener.map((g) => (
+                  <li key={g.id}>
+                    <Grenrad gren={g} onApne={onLukk} />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
           {grupper.avsluttede.length > 0 && (
             <>
               <h3 className="historikk__gruppetittel">Avsluttet</h3>

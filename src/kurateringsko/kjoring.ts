@@ -105,8 +105,9 @@ export async function kjorKo(v: Kjoringsvalg): Promise<Kjoringsresultat> {
   const maling = v.maling && (v.tvingMaling || gammel) ? await v.maling() : null
   const repospor = kurateringerIRepo(v.repo.migrasjoner, v.repo.journaler)
   const apne = github ? await github.apnePr() : []
-  // Kan ikke grenene leses nå, står det køen vet om dem, til neste kjøring.
-  const grener = v.grener ? await v.grener().catch((e: unknown) => (console.log(`Kurateringsgrenene kunne ikke leses: ${e instanceof Error ? e.message : String(e)}`), null)) : null
+  // Kan ikke grenene leses nå (`null`), står det køen vet om dem, til neste kjøring, og ingen nye stoffer gis ut.
+  // Uten en leser (lokalt) brukes det køen vet.
+  const grener = v.grener ? await v.grener().catch((e: unknown) => (console.log(`Kurateringsgrenene kunne ikke leses: ${e instanceof Error ? e.message : String(e)}`), null)) : undefined
   const prer = new Map<number, Promise<{ info: Prinfo | null; utrulling: Utrulling | null }>>()
   const slaOppPr = (nummer: number) => {
     if (!prer.has(nummer)) {
@@ -141,7 +142,7 @@ export async function kjorKo(v: Kjoringsvalg): Promise<Kjoringsresultat> {
     oppdaterRepohistorikk(t, repospor, na)
     await synkPr(t)
     kobleApnePr(t, apne, na)
-    oppdaterGrener(t, grener, na, innst)
+    oppdaterGrener(t, grener ?? null, na, innst)
     const utlopt = utlop(t, na, innst)
     vurder(t, na, innst)
 
@@ -184,7 +185,7 @@ export async function kjorKo(v: Kjoringsvalg): Promise<Kjoringsresultat> {
     }
     if (ventende.length > 0) {
       await synkPr(t)
-      oppdaterGrener(t, grener, na, innst)
+      oppdaterGrener(t, grener ?? null, na, innst)
       vurder(t, na, innst)
     }
 

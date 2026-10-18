@@ -1118,6 +1118,99 @@ describe('en ny kontrollrunde uten endringer', () => {
   })
 })
 
+describe('et kall som gjentas etter et tapt svar', () => {
+  interface Lest {
+    vurderinger: unknown[]
+    hendelser: { hendelse: string }[]
+  }
+  const les = (gren: string) => agent<Lest>(chatgpt, 'les', { gren })
+
+  it('lagrer en innsending, en vurdering og en publisering nøyaktig én gang, og avviser en annen vurdering og en eldre runde', async () => {
+    const k = await kuratertGren()
+    await medDokumenter(k.gren)
+    const inn = await agent<Json>(claude, 'til_kontroll', { gren: k.gren, revisjon: 1 })
+    expect(inn).toMatchObject({ status: 'klar', runde: 1 })
+    expect(inn.alt_lagret).toBeUndefined()
+    expect(await agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 1 })).toMatchObject({ status: 'klar', runde: 1, alt_lagret: true })
+
+    const endringer = { gren: k.gren, revisjon: 1, runde: 1, beslutning: 'endringer', begrunnelse: 'Doseringen trenger kilde.' }
+    expect(await feilFra(() => agent(chatgpt, 'vurder', { ...endringer, runde: 0 }))).toMatchObject({ code: 'PT409', message: expect.stringContaining('kontrollrunde 1, ikke 0') })
+    expect(await agent(chatgpt, 'vurder', endringer)).toMatchObject({ status: 'tilbakemelding' })
+    expect(await agent(chatgpt, 'vurder', endringer)).toMatchObject({ status: 'tilbakemelding', alt_lagret: true })
+    expect(await agent(chatgpt, 'vurder', { ...endringer, begrunnelse: `  ${endringer.begrunnelse} ` })).toMatchObject({ alt_lagret: true })
+    // En annen vurdering av den samme revisjonen, eller den samme fra en annen, avvises, og ingenting lagres.
+    for (const [hvem, data] of [
+      [() => agent(chatgpt, 'vurder', { ...endringer, beslutning: 'godkjent' }), 'en annen beslutning'],
+      [() => agent(chatgpt, 'vurder', { ...endringer, begrunnelse: 'Noe annet.' }), 'en annen begrunnelse'],
+      [() => adm('vurder', endringer), 'en annen'],
+    ] as const) {
+      expect(await feilFra(hvem), data).toMatchObject({ code: 'PT409', message: expect.stringContaining('er alt vurdert i kontrollrunde 1') })
+    }
+    expect((await les(k.gren)).vurderinger).toHaveLength(1)
+
+    // En ny runde med samme revisjon: et kall fra den forrige runden lander ikke i den nye.
+    await agent(claude, 'kommenter', { gren: k.gren, tekst: 'Kilden står i evidensjournalen.' })
+    expect(await agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 1 })).toMatchObject({ status: 'klar', runde: 2 })
+    expect(await feilFra(() => agent(chatgpt, 'vurder', endringer))).toMatchObject({ code: 'PT409', message: expect.stringContaining('kontrollrunde 2, ikke 1') })
+    const godkjenning = { ...endringer, runde: 2, beslutning: 'godkjent', begrunnelse: 'Kontrollert mot kildene.' }
+    expect(await agent(chatgpt, 'vurder', godkjenning)).toMatchObject({ status: 'godkjent' })
+    expect(await agent(chatgpt, 'vurder', godkjenning)).toMatchObject({ status: 'godkjent', alt_lagret: true })
+    expect((await les(k.gren)).vurderinger).toHaveLength(2)
+
+    const versjoner = (await antall()).versjoner
+    const publisering = await agent<Json>(claude, 'publiser', { gren: k.gren, revisjon: 1 })
+    expect(publisering).toMatchObject({ ok: true, status: 'publisert' })
+    expect(await agent(claude, 'publiser', { gren: k.gren, revisjon: 1 })).toEqual({ ...publisering, alt_lagret: true })
+    expect((await antall()).versjoner).toBe(versjoner + 1)
+    expect((await les(k.gren)).hendelser.filter((h) => h.hendelse === 'publisert')).toHaveLength(1)
+    // Også etter publiseringen gjelder det ellers: en annen revisjon avvises.
+    expect((await feilFra(() => agent(claude, 'publiser', { gren: k.gren, revisjon: 2 })))?.code).toBe('PT409')
+  })
+
+  it('lukker og åpner en tråd igjen nøyaktig én gang', async () => {
+    const k = await kuratertGren()
+    await medDokumenter(k.gren)
+    await agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 1 })
+    const { traad } = await agent<{ traad: string }>(chatgpt, 'kommenter', {
+      gren: k.gren,
+      art: 'sperrende',
+      anker: { objekt: k.dosering, felt: 'Tekst' },
+      tekst: 'Maksdosen mangler kilde.',
+    })
+    const lukk = { gren: k.gren, kommentar: traad, tekst: 'Kilden er kontrollert.' }
+    expect(await agent(chatgpt, 'lukk_kommentar', lukk)).toEqual({ traad, status: 'lukket' })
+    expect(await agent(chatgpt, 'lukk_kommentar', lukk)).toEqual({ traad, status: 'lukket', alt_lagret: true })
+    expect(await feilFra(() => agent(chatgpt, 'lukk_kommentar', { ...lukk, tekst: 'Noe annet.' }))).toMatchObject({ code: '22023', message: 'Tråden er alt lukket.' })
+
+    const apne = { gren: k.gren, kommentar: traad, tekst: 'Kilden sier noe annet.' }
+    expect(await agent(chatgpt, 'gjenapne_kommentar', apne)).toEqual({ traad, status: 'apen' })
+    expect(await agent(chatgpt, 'gjenapne_kommentar', apne)).toEqual({ traad, status: 'apen', alt_lagret: true })
+    expect(await feilFra(() => agent(chatgpt, 'gjenapne_kommentar', { ...apne, tekst: 'Igjen.' }))).toMatchObject({ code: '22023', message: 'Tråden er åpen.' })
+
+    const [tråden] = await agent<{ id: string; status: string; kommentarer: { handling: string }[] }[]>(chatgpt, 'kommentarer', { gren: k.gren })
+    expect(tråden).toMatchObject({ id: traad, status: 'apen' })
+    expect(tråden!.kommentarer.map((x) => x.handling)).toEqual(['kommentar', 'lukket', 'gjenapnet'])
+  })
+
+  it('sier i oversikten hva som venter på hvem, og siden når', async () => {
+    const k = await kuratertGren()
+    await medDokumenter(k.gren)
+    await agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 1 })
+    await agent(chatgpt, 'kommenter', { gren: k.gren, art: 'sperrende', anker: { objekt: k.dosering, felt: 'Tekst' }, tekst: 'Maksdosen mangler kilde.' })
+    await agent(chatgpt, 'kommenter', { gren: k.gren, tekst: 'Ellers ser det bra ut.' })
+    await agent(chatgpt, 'vurder', { gren: k.gren, revisjon: 1, beslutning: 'endringer', begrunnelse: 'Se trådene.' })
+    const [gren] = await adm<(Sammendrag & Json)[]>('oversikt', { stoff: k.slug })
+    expect(gren).toMatchObject({ status: 'tilbakemelding', apne_sperrer: 1, venter_pa_kurator: 2 })
+    const vurdert = (await les(k.gren)).hendelser.find((h) => h.hendelse === 'vurdert') as { kl?: string } | undefined
+    expect(gren!.status_kl).toBe(vurdert?.kl)
+    // En avsluttet gren har ingen tråder som venter.
+    await adm('forkast', { gren: k.gren, grunn: 'Syntetisk' })
+    const [forkastet] = await adm<Json[]>('oversikt', { stoff: k.slug, alle: true })
+    expect(forkastet).toMatchObject({ status: 'arkivert' })
+    expect(forkastet).not.toHaveProperty('apne_sperrer')
+  })
+})
+
 describe('statusen og agentene', () => {
   it('gir en liten status uten fagtekst til den som kan lese grenen, med det kuratoren gjør nå', async () => {
     const k = await kuratertGren('Statusstoff')

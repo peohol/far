@@ -55,6 +55,48 @@ export function erAktiv(status: Grenstatus): boolean {
   return AKTIVE.includes(status)
 }
 
+/** Hvem som har neste handling i en aktiv gren. */
+export type Ansvarlig = 'kontrolloren' | 'kuratoren' | 'administrator'
+
+export const ANSVARLIGNAVN: Record<Ansvarlig, string> = {
+  kontrolloren: 'Venter på kontrolløren',
+  kuratoren: 'Venter på kuratoren',
+  administrator: 'Venter på en administrator',
+}
+
+export function ansvarlig(status: Grenstatus): Ansvarlig | null {
+  if (!erAktiv(status)) return null
+  return status === 'klar' ? 'kontrolloren' : status === 'stanset' ? 'administrator' : 'kuratoren'
+}
+
+/**
+ * De aktive grenene etter hvem som har neste handling, i rekkefølgen over, og
+ * den som har ventet lengst først i hver gruppe. Grupper uten grener er ikke med.
+ */
+export function etterAnsvar(grener: readonly Grensammendrag[]): { ansvarlig: Ansvarlig; grener: Grensammendrag[] }[] {
+  const siden = (g: Grensammendrag) => Date.parse(g.status_kl ?? g.oppdatert_kl) || 0
+  return (Object.keys(ANSVARLIGNAVN) as Ansvarlig[])
+    .map((a) => ({ ansvarlig: a, grener: grener.filter((g) => ansvarlig(g.status) === a).sort((x, y) => siden(x) - siden(y)) }))
+    .filter((g) => g.grener.length > 0)
+}
+
+const antallTekst = (n: number, entall: string, flertall: string) => `${n} ${n === 1 ? entall : flertall}`
+
+/**
+ * Hva som venter i en aktiv gren, i ord: neste handling og siden når, trådene
+ * som venter på kuratoren, og de sperrende trådene som hindrer godkjenning.
+ */
+export function hvaSomVenter(gren: Grensammendrag): string[] {
+  const neste = NESTE_HANDLING[gren.status]
+  if (!erAktiv(gren.status) || !neste) return []
+  const kl = gren.status_kl ? tidspunkt(gren.status_kl) : ''
+  return [
+    `Neste: ${neste}${gren.status === 'klar' ? ` runde ${gren.runde}` : ''}${kl ? ` (siden ${kl})` : ''}`,
+    gren.venter_pa_kurator ? `${antallTekst(gren.venter_pa_kurator, 'tråd venter', 'tråder venter')} på svar fra kuratoren` : '',
+    gren.apne_sperrer ? `${antallTekst(gren.apne_sperrer, 'sperrende tråd', 'sperrende tråder')} hindrer godkjenning` : '',
+  ].filter(Boolean)
+}
+
 /** Det kuratoren sist sa den gjorde. */
 export interface Aktivitet {
   tekst: string
@@ -156,9 +198,14 @@ export interface Grensammendrag {
   formaal: string
   status: Grenstatus
   status_grunn?: string
+  /** Når grenen fikk statusen den har. */
+  status_kl?: string
   runde: number
   revisjon: number
   blindfase: boolean
+  /** Åpne sperrende tråder, og åpne tråder som venter på svar fra kuratoren; bare i aktive grener. */
+  apne_sperrer?: number
+  venter_pa_kurator?: number
   kurator?: string
   opprettet_av?: string
   grunnversjon: number

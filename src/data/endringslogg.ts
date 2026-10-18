@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.103.7',
+    dato: '2026-10-18',
+    sammendrag: 'Kurateringskøen holder nye stoffer tilbake når kontrollen hoper seg opp, og et kall som gjentas, lagres bare én gang',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Ingen endring for vanlige brukere. Kurateringskøen gir ut et nytt stoff bare når færre enn fem kurateringer venter på kontroll, og en kuratering som skal rettes, gis alltid ut før et nytt stoff. Vet ikke køen hvor mange som venter, gir den ikke ut noe nytt.',
+      'Gjentar kontrolløren eller kuratoren en vurdering, en innsending til kontroll, en publisering eller en lukking etter at svaret ble borte, lagres den bare én gang, og svaret sier at den alt er lagret. En vurdering fra en tidligere kontrollrunde kan ikke lenger lande i en ny.',
+      '«Kurateringer» i Adminmenyen ordner kurateringene som pågår, etter hvem som har neste handling: kontrolløren, kuratoren eller en administrator. Hver viser hva som venter og siden når, hvor mange tråder som venter på svar, og hvor mange som venter på kontroll mot grensen på fem.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.103.6',
     dato: '2026-10-18',
     sammendrag: 'Kontrollørens kommentarer lagres nøyaktig én gang, og et stoppet kall telles aldri som gjort',

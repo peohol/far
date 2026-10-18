@@ -61,11 +61,12 @@ export const AGENTHANDLINGER: readonly Agenthandling[] = [
   {
     navn: 'vurder',
     beskrivelse:
-      'Den faglige vurderingen av nøyaktig én revisjon av en gren som er klar til kontroll: «godkjent» eller «endringer», med begrunnelsen. Bare kontrolløren, og aldri for en gren agenten selv kuraterer. En ny kontrollrunde kan ha samme revisjon som den forrige; da gjelder den siste vurderingen.',
+      'Den faglige vurderingen av nøyaktig én revisjon av en gren som er klar til kontroll: «godkjent» eller «endringer», med begrunnelsen. Bare kontrolløren, og aldri for en gren agenten selv kuraterer. En ny kontrollrunde kan ha samme revisjon som den forrige; da gjelder den siste vurderingen. Send runde fra les, så et kall fra en eldre runde aldri lander i en ny. Et nytt forsøk med de samme argumentene etter at vurderingen er lagret, svarer alt_lagret: true; en annen vurdering av en revisjon som alt er vurdert, avvises.',
     argumenter: objekt(
       {
         gren,
         revisjon: heltall('Revisjonen som er vurdert; må være den siste'),
+        runde: heltall('Kontrollrunden som er vurdert (runde i les eller status); et kall fra en annen runde avvises'),
         beslutning: { type: 'string', enum: ['godkjent', 'endringer'] },
         begrunnelse: tekst('Hva som er kontrollert, og hva som må rettes', 4000),
       },
@@ -108,12 +109,13 @@ export const AGENTHANDLINGER: readonly Agenthandling[] = [
   },
   {
     navn: 'lukk_kommentar',
-    beskrivelse: 'Lukker en tråd. En sperrende tråd lukkes bare av den som åpnet den, når rettingen er kontrollert.',
+    beskrivelse:
+      'Lukker en tråd. En sperrende tråd lukkes bare av den som åpnet den, når rettingen er kontrollert. Et nytt forsøk med den samme teksten etter at tråden er lukket, svarer alt_lagret: true.',
     argumenter: objekt({ gren, kommentar: tekst('En kommentar i tråden'), tekst: tekst('Hva som er kontrollert', 10000) }, ['gren', 'kommentar']),
   },
   {
     navn: 'gjenapne_kommentar',
-    beskrivelse: 'Åpner en lukket tråd igjen. Bare kontrolløren.',
+    beskrivelse: 'Åpner en lukket tråd igjen. Bare kontrolløren. Et nytt forsøk med den samme teksten etter at tråden er åpnet, svarer alt_lagret: true.',
     argumenter: objekt({ gren, kommentar: tekst('En kommentar i tråden'), tekst: tekst('Hvorfor', 10000) }, ['gren', 'kommentar', 'tekst']),
   },
   {
@@ -163,7 +165,7 @@ export const AGENTHANDLINGER: readonly Agenthandling[] = [
   {
     navn: 'til_kontroll',
     beskrivelse:
-      'Sender den siste revisjonen til faglig kontroll. Krever bestått prøvepublisering, en rapport som stemmer, dokumentene, og at kuratoren har svart i hver sperrende tråd som venter på den. Etter «endringer» kan den samme revisjonen sendes til en ny runde uten endringer når det ikke er noe å rette, men først når kuratoren har svart på vurderingen (et svar i en tråd eller en merknad etter den); hendelsen får da uten_endringer.',
+      'Sender den siste revisjonen til faglig kontroll. Krever bestått prøvepublisering, en rapport som stemmer, dokumentene, og at kuratoren har svart i hver sperrende tråd som venter på den. Etter «endringer» kan den samme revisjonen sendes til en ny runde uten endringer når det ikke er noe å rette, men først når kuratoren har svart på vurderingen (et svar i en tråd eller en merknad etter den); hendelsen får da uten_endringer. Et nytt forsøk mens grenen alt er til kontroll med revisjonen, svarer alt_lagret: true.',
     argumenter: objekt({ gren, revisjon: heltall('Revisjonen') }, ['gren', 'revisjon']),
   },
   {
@@ -178,7 +180,8 @@ export const AGENTHANDLINGER: readonly Agenthandling[] = [
   },
   {
     navn: 'publiser',
-    beskrivelse: 'Publiserer en godkjent gren samlet. Bare kuratoren av grenen, og bare når siste revisjon er godkjent av en annen.',
+    beskrivelse:
+      'Publiserer en godkjent gren samlet. Bare kuratoren av grenen, og bare når siste revisjon er godkjent av en annen. Et nytt forsøk etter at grenen er publisert, svarer alt_lagret: true.',
     argumenter: objekt({ gren, revisjon: heltall('Revisjonen som er godkjent') }, ['gren', 'revisjon']),
   },
   {
