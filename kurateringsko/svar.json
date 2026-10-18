@@ -1,10 +1,56 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-fenytoin-0066",
-  "foresporsel_sha256": "e9d305757e2135a7c2849d41602693596059ea2b0c01761c77b60e42a4cd33ec",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-topiramat-042719",
+  "foresporsel_sha256": "8226c1091a7c6e1b353bdf1d6b8d5f2f496c49426fe433c07fe5f7c04e756710",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "fenytoin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-18T04:26:47.427Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39097093738"
+  "melding": "topiramat er reservert til 2026-10-18T07:27:51.710Z.",
+  "behandlet_kl": "2026-10-18T04:27:51.710Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39097154840",
+  "oppgave": {
+    "oppgave": "topiramat-0067",
+    "stoff": "topiramat",
+    "navn": "Topiramat",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-18T07:27:51.710Z",
+    "jobbgren": "kuratorjobb/topiramat-0041",
+    "kurateringsgren": "kuratering/topiramat-0067",
+    "pr": null,
+    "gren": "6a91451c-9e4a-4712-a913-253546677b1e",
+    "gjenoppta": {
+      "oppgave": "topiramat-0062",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "avbrutt_kl": "2026-10-18T04:22:41.550Z",
+      "grunn": "Grenen er tilbake hos kuratoren.",
+      "fase": null,
+      "jobbgren": "kuratorjobb/topiramat-0041",
+      "kurateringsgren": null,
+      "pr": null,
+      "gren": "6a91451c-9e4a-4712-a913-253546677b1e",
+      "kunnskapsgrense": "2026-10-17"
+    },
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-17T14:23:30.777Z",
+      "side": true,
+      "elementer": 6,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 4,
+      "referanser": 4,
+      "elementer_uten_kilde": 1
+    },
+    "prioritet": {
+      "poeng": 1447.6,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen topiramat-0062.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 4 referanser."
+      ]
+    }
+  }
 }
