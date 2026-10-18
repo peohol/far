@@ -15,7 +15,8 @@ Grunnreglene:
 - En vurdering gjelder nøyaktig den siste revisjonen. Kommer det en ny
   revisjon, faller en godkjenning bort, og den nye må kontrolleres. Har en
   revisjon flere vurderinger, gjelder den siste.
-- Fagteksten er bak innloggingen. Gjengi den aldri utenfor OUSFAR.
+- Fagteksten er bak innloggingen. Gjengi den aldri utenfor OUSFAR, heller
+  ikke i en melding til kuratoren («Når skrivekallene stoppes»).
 - En avgjørelse fra fagansvarlig (et menneske) står. Den kjennes på en
   kommentar i en tråd i grenen som begynner med «Avgjort av fagansvarlig:»,
   skrevet av kuratoren (`docs/kuratorprotokoll.md`, fase 9) eller av en
@@ -114,7 +115,9 @@ i ChatGPT henter den nye.
    uten fagtekst: vurderingen (`godkjent`, `endringer` eller ikke ferdig),
    trådene du har lukket, og hvert kall som ikke ble lagret eller hadde et
    usikkert utfall, med feilmeldingen, om det var OUSFAR eller ChatGPT som
-   stoppet det, og hva du fant da du så etter.
+   stoppet det, og hva du fant da du så etter. Ble noe stoppet av ChatGPT,
+   kommer meldingen til kuratoren etter oversikten («Når skrivekallene
+   stoppes»).
 
 ## Når et kall ikke blir lagret
 
@@ -146,12 +149,56 @@ i ChatGPT henter den nye.
 - **Kontrollert stans.** Blir to skrivekall stoppet av ChatGPT i den samme
   kjøringen, skriver du ikke mer i kjøringen. Vurder ingen gren der noe du
   skulle skrive, ikke er lagret eller ikke er sett i grenen: godkjenn aldri en
-  gren med en kommentar, lukking eller begrunnelse du ikke vet er lagret. Gå
-  til steg 7, og si per gren hva som ikke ble lagret (tråden eller ankeret,
-  og arten), uten fagtekst.
+  gren med en kommentar, lukking eller begrunnelse du ikke vet er lagret.
+  Gjør likevel ferdig kontrollen av grenen du er i (lesing virker), og gi det
+  du skulle ha skrevet, som en melding til kuratoren (under). Gå så til
+  steg 7.
 - **Neste kjøring.** Se i `kommentarer` hva som faktisk står der (trådene
   viser `klient_id`), og skriv det som mangler. Skriv ikke det som alt står
-  der, på nytt.
+  der, på nytt. Har kuratoren ført inn en melding fra deg (en merknad som
+  begynner med «Kontrollørens funn, gitt videre av fagansvarlig:»), er det
+  den som gjelder: les svarene der som svar på dine egne kommentarer.
+
+## Når skrivekallene stoppes: melding til kuratoren
+
+Får du ikke lagret det du skulle skrive fordi ChatGPT stopper kallene, går
+ikke kontrollen tapt: gi den som startet kjøringen en melding til kuratoren,
+som hen limer inn i samtalen med Claude-kuratoren. Kuratoren fører den inn i
+grenen, svarer på hvert punkt og retter (`docs/kuratorprotokoll.md`, fase 9).
+
+- **Se etter først.** Ta bare med det som ikke står i grenen: se i
+  `kommentarer` og `les` etter hvert kall med usikkert utfall.
+- **Én melding for kjøringen**, i én kodeblokk så den kan kopieres, med én del
+  per gren.
+- **Ingen fagtekst i meldingen.** Ankeret viser hva funnet gjelder, og
+  kuratoren leser teksten selv i grenen. Si med egne ord hva som er galt, og
+  vis til kildestedet; det en offentlig kilde sier, som preparatomtalen, kan
+  gjengis kort.
+- **Meldingen er ikke en vurdering.** Grenen står som `klar` til kuratoren
+  trekker den tilbake og retter. Ville du ha godkjent, skriv det, med
+  begrunnelsen: en godkjenning kan ikke gis videre til kuratoren, som bare
+  publiserer det som er godkjent i OUSFAR. Fagansvarlig kan godkjenne
+  revisjonen selv i appen («Godkjenn» på kurateringssiden) hvis hen er enig,
+  eller be deg om å prøve igjen.
+
+Meldingen har denne formen:
+
+```text
+Melding fra kontrolløren til kuratoren i OUSFAR (skrivekallene ble stoppet i ChatGPT)
+
+Gren: <gren-id> (<stoff>), revisjon <n>, kontrollrunde <r>, kontrollert <dato og klokkeslett>
+Vurdering jeg ville ha lagret: endringer | godkjent | ikke ferdig
+Begrunnelse: <hva som er kontrollert, og mot hvilke kilder>
+
+Funn:
+1. <sperrende | merknad>. Anker: <objekt-id, felt, referanse, kilde eller dokument>.
+   Hva er galt: <med egne ord, uten fagteksten> Kilde: <kildested, med åpen lenke> Hva må til: <…>
+2. …
+
+Tråder jeg ville ha lukket: <tråd-id> (løst fordi …), eller ingen
+Tråder jeg ville ha åpnet igjen: <tråd-id> (fordi …), eller ingen
+Kall som ble stoppet: <handling og klient_id>, …
+```
 
 ## Beskjeden i ChatGPT
 
