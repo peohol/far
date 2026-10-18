@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-18T04:34:17.280Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-18T04:34:44.794Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 78 · Reservert: 1 · Venter på godkjenning: 11 · Publisert: 4 · Blokkert: 5 · Utenfor køen: 1
+Klar: 78 · Venter på godkjenning: 12 · Publisert: 4 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-- **vortioksetin** (vortioksetin-0068), frist 2026-10-18T07:34:17.280Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
@@ -21,6 +21,7 @@ Klar: 78 · Reservert: 1 · Venter på godkjenning: 11 · Publisert: 4 · Blokke
 - **levetiracetam**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **sertindol**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **topiramat**: kurateringsgren i OUSFAR (klar), venter på godkjenning
+- **vortioksetin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 
 ## Blokkert
 

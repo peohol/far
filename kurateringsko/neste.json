@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-18T04:34:17.280Z",
+  "oppdatert_kl": "2026-10-18T04:34:44.794Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "antall": {
     "klar": 78,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 11,
+    "venter_godkjenning": 12,
     "sammenslatt": 0,
     "publisert": 4,
     "blokkert": 5,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "vortioksetin",
-      "oppgave": "vortioksetin-0068",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-18T07:34:17.280Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "neste": [
     {
       "stoff": "valproat",
@@ -226,6 +218,12 @@
     {
       "stoff": "topiramat",
       "gren": "6a91451c-9e4a-4712-a913-253546677b1e",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    },
+    {
+      "stoff": "vortioksetin",
+      "gren": "afab07ef-a24e-485e-b31f-9f38498a61af",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     }
