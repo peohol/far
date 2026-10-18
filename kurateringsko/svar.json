@@ -1,10 +1,56 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-flunitrazepam-0058",
-  "foresporsel_sha256": "9bcfa57d16082367a73a18c6acda0ea3de66de0ed253e0fbe55e14d4170a88bf",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-vortioksetin-033654",
+  "foresporsel_sha256": "0b0c45baa71d712f50b017b385a0b475568a96873c3262ae8399865948f22794",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "flunitrazepam er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-18T03:36:16.881Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39094192459"
+  "melding": "vortioksetin er reservert til 2026-10-18T06:37:22.119Z.",
+  "behandlet_kl": "2026-10-18T03:37:22.119Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39094253970",
+  "oppgave": {
+    "oppgave": "vortioksetin-0059",
+    "stoff": "vortioksetin",
+    "navn": "Vortioksetin",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-18T06:37:22.119Z",
+    "jobbgren": "kuratorjobb/vortioksetin-0015",
+    "kurateringsgren": "kuratering/vortioksetin-0059",
+    "pr": null,
+    "gren": "afab07ef-a24e-485e-b31f-9f38498a61af",
+    "gjenoppta": {
+      "oppgave": "vortioksetin-0031",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "avbrutt_kl": "2026-10-18T03:35:27.892Z",
+      "grunn": "Grenen er tilbake hos kuratoren.",
+      "fase": null,
+      "jobbgren": "kuratorjobb/vortioksetin-0015",
+      "kurateringsgren": null,
+      "pr": null,
+      "gren": "afab07ef-a24e-485e-b31f-9f38498a61af",
+      "kunnskapsgrense": "2026-10-17"
+    },
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-17T14:23:30.777Z",
+      "side": true,
+      "elementer": 24,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 7,
+      "referanser": 4,
+      "elementer_uten_kilde": 19
+    },
+    "prioritet": {
+      "poeng": 1455.7,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen vortioksetin-0031.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "6 av 13 redaksjonelle seksjoner er tomme.",
+        "19 av 24 elementer har ingen kilde.",
+        "Bare 4 referanser."
+      ]
+    }
+  }
 }
