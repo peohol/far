@@ -1,15 +1,16 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-18T03:00:16.376Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-18T03:00:58.291Z. Stoffene sist lest fra databasen 2026-10-17T14:23:30.223Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 82 · Reservert: 1 · Venter på godkjenning: 7 · Publisert: 4 · Blokkert: 5 · Utenfor køen: 1
+Klar: 82 · Venter på godkjenning: 8 · Publisert: 4 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-- **brekspiprazol** (brekspiprazol-0054), frist 2026-10-18T06:00:16.376Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
+- **brekspiprazol**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **cbd**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **fenytoin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **flunitrazepam**: kurateringsgren i OUSFAR (klar), venter på godkjenning
