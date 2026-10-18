@@ -1,56 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-brekspiprazol-042214",
-  "foresporsel_sha256": "0a0b33e04ae6cebd1cea27a2b4c4176fb7c76c746d0a1d8c2c40870e3dbb0fce",
-  "handling": "reserver",
+  "foresporsel_id": "fullfort-brekspiprazol-0064",
+  "foresporsel_sha256": "dce794cc3af972c2f4de7b1ef139057ec87fbd742744f4b4089e65876675892d",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "brekspiprazol er reservert til 2026-10-18T07:22:41.550Z.",
-  "behandlet_kl": "2026-10-18T04:22:41.550Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39096857810",
-  "oppgave": {
-    "oppgave": "brekspiprazol-0064",
-    "stoff": "brekspiprazol",
-    "navn": "Brekspiprazol",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-18T07:22:41.550Z",
-    "jobbgren": "kuratorjobb/brekspiprazol-0027",
-    "kurateringsgren": "kuratering/brekspiprazol-0064",
-    "pr": null,
-    "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
-    "gjenoppta": {
-      "oppgave": "brekspiprazol-0054",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "avbrutt_kl": "2026-10-18T04:22:41.550Z",
-      "grunn": "Grenen er tilbake hos kuratoren.",
-      "fase": null,
-      "jobbgren": "kuratorjobb/brekspiprazol-0027",
-      "kurateringsgren": null,
-      "pr": null,
-      "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
-      "kunnskapsgrense": "2026-10-16"
-    },
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-17T14:23:30.777Z",
-      "side": true,
-      "elementer": 20,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 6,
-      "referanser": 1,
-      "elementer_uten_kilde": 17
-    },
-    "prioritet": {
-      "poeng": 1466.3,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen brekspiprazol-0054.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "7 av 13 redaksjonelle seksjoner er tomme.",
-        "17 av 20 elementer har ingen kilde.",
-        "Bare 1 referanser."
-      ]
-    }
-  }
+  "melding": "brekspiprazol er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-18T04:23:27.779Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39096902761"
 }
