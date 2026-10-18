@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-18T03:59:20.586Z",
+  "oppdatert_kl": "2026-10-18T04:00:08.177Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "teller": 63,
   "stoffer": {
@@ -3028,7 +3028,7 @@
       "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 101.5,
+        "poeng": 101.8,
         "grunner": [
           "De novo-kuratering i runden som gjelder.",
           "Sist kuratert 2026-10-04.",
@@ -3863,7 +3863,7 @@
     "levetiracetam": {
       "stoff": "levetiracetam",
       "navn": "Levetiracetam",
-      "status": "reservert",
+      "status": "venter_godkjenning",
       "modus": "de_novo",
       "prioritet": {
         "poeng": 0,
@@ -3878,34 +3878,10 @@
         "referanser": 3,
         "elementer_uten_kilde": 1
       },
-      "reservasjon": {
-        "oppgave": "levetiracetam-0063",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "modus": "de_novo",
-        "reservert_kl": "2026-10-18T03:59:20.586Z",
-        "fornyet_kl": "2026-10-18T03:59:20.586Z",
-        "frist_kl": "2026-10-18T06:59:20.586Z",
-        "fase": null,
-        "jobbgren": "kuratorjobb/levetiracetam-0038",
-        "kurateringsgren": "kuratering/levetiracetam-0063",
-        "pr": null,
-        "gren": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
-        "kunnskapsgrense": "2026-10-17"
-      },
+      "reservasjon": null,
       "forsok": 1,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "levetiracetam-0051",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-18T03:35:27.892Z",
-        "grunn": "Grenen er tilbake hos kuratoren.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/levetiracetam-0038",
-        "kurateringsgren": null,
-        "pr": null,
-        "gren": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
-        "kunnskapsgrense": "2026-10-17"
-      },
+      "gjenoppta": null,
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -3913,8 +3889,8 @@
         "oppgave": "levetiracetam-0063",
         "okt": "kurateringsko/okt/20261016-125910",
         "startet_kl": "2026-10-18T03:59:20.586Z",
-        "avsluttet_kl": null,
-        "utfall": "reservert"
+        "avsluttet_kl": "2026-10-18T04:00:08.177Z",
+        "utfall": "fullfort"
       },
       "aktiv": true,
       "historikk": [
@@ -4049,9 +4025,33 @@
           "oppgave": "levetiracetam-0063",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Forsøk 1, de_novo, fortsetter levetiracetam-0051."
+        },
+        {
+          "kl": "2026-10-18T04:00:08.177Z",
+          "hendelse": "fullfort",
+          "oppgave": "levetiracetam-0063",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Kurateringsgrenen f238bd0d-4ee0-4bef-8b76-ec07076d2ae1, kunnskapsgrense 2026-10-17."
+        },
+        {
+          "kl": "2026-10-18T04:00:08.177Z",
+          "hendelse": "gren_klar",
+          "oppgave": "levetiracetam-0063",
+          "melding": "Grenen: klar, revisjon 11, kontrollrunde 1."
         }
       ],
-      "appgren": null
+      "appgren": {
+        "id": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
+        "oppgave": "levetiracetam-0063",
+        "modus": "de_novo",
+        "runde": 2,
+        "kunnskapsgrense": "2026-10-17",
+        "jobbgren": "kuratorjobb/levetiracetam-0038",
+        "registrert_kl": "2026-10-18T04:00:08.177Z",
+        "status": "klar",
+        "revisjon": 11,
+        "kontrollrunde": 1
+      }
     },
     "levomepromazin": {
       "stoff": "levomepromazin",
@@ -6652,6 +6652,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "fullfort-levetiracetam-0063",
         "reserver-levetiracetam-035856",
         "fullfort-topiramat-0062",
         "reserver-topiramat-034145",
@@ -6700,71 +6701,24 @@
         "forny-topiramat-0041-1751",
         "forny-topiramat-0041-gren",
         "forny-topiramat-0041-1651",
-        "reserver-202610171621",
-        "fullfort-sertindol-0040"
+        "reserver-202610171621"
       ],
       "siste": {
-        "id": "reserver-levetiracetam-035856",
-        "sha256": "a1c63fd1d94c049a9d56a5a22b54652ac5e44e64a5c8e6176b8e3715138d780c",
+        "id": "fullfort-levetiracetam-0063",
+        "sha256": "3eaac58a03558370a1815c8d11c71a1088cd4e2e08fcc0cd5aea8e2d1ef97d00",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "reserver-levetiracetam-035856",
-          "foresporsel_sha256": "a1c63fd1d94c049a9d56a5a22b54652ac5e44e64a5c8e6176b8e3715138d780c",
-          "handling": "reserver",
+          "foresporsel_id": "fullfort-levetiracetam-0063",
+          "foresporsel_sha256": "3eaac58a03558370a1815c8d11c71a1088cd4e2e08fcc0cd5aea8e2d1ef97d00",
+          "handling": "fullfort",
           "utfall": "ok",
-          "melding": "levetiracetam er reservert til 2026-10-18T06:59:20.586Z.",
-          "behandlet_kl": "2026-10-18T03:59:20.586Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39095506635",
-          "oppgave": {
-            "oppgave": "levetiracetam-0063",
-            "stoff": "levetiracetam",
-            "navn": "Levetiracetam",
-            "modus": "de_novo",
-            "forsok": 1,
-            "frist_kl": "2026-10-18T06:59:20.586Z",
-            "jobbgren": "kuratorjobb/levetiracetam-0038",
-            "kurateringsgren": "kuratering/levetiracetam-0063",
-            "pr": null,
-            "gren": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
-            "gjenoppta": {
-              "oppgave": "levetiracetam-0051",
-              "okt": "kurateringsko/okt/20261016-125910",
-              "avbrutt_kl": "2026-10-18T03:35:27.892Z",
-              "grunn": "Grenen er tilbake hos kuratoren.",
-              "fase": null,
-              "jobbgren": "kuratorjobb/levetiracetam-0038",
-              "kurateringsgren": null,
-              "pr": null,
-              "gren": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
-              "kunnskapsgrense": "2026-10-17"
-            },
-            "sist_kuratert": null,
-            "maal": {
-              "kl": "2026-10-17T14:23:30.777Z",
-              "side": true,
-              "elementer": 6,
-              "redaksjonelle_paneler": 13,
-              "paneler_med_innhold": 4,
-              "referanser": 3,
-              "elementer_uten_kilde": 1
-            },
-            "prioritet": {
-              "poeng": 1447.6,
-              "grunner": [
-                "Fortsetter den avbrutte kurateringen levetiracetam-0051.",
-                "De novo-kuratering i runden som gjelder.",
-                "Aldri kuratert.",
-                "Ingen kuratering å regne alderen fra.",
-                "9 av 13 redaksjonelle seksjoner er tomme.",
-                "1 av 6 elementer har ingen kilde.",
-                "Bare 3 referanser."
-              ]
-            }
-          }
+          "melding": "levetiracetam er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+          "behandlet_kl": "2026-10-18T04:00:08.177Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39095547337"
         }
       },
       "besvart_commit": "3e3a715c7cd5d65c020ce8cff564fa926d3bf70f",
-      "sist_brukt_kl": "2026-10-18T03:59:20.586Z"
+      "sist_brukt_kl": "2026-10-18T04:00:08.177Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
