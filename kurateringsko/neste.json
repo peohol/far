@@ -1,9 +1,9 @@
 {
-  "oppdatert_kl": "2026-10-18T18:01:36.746Z",
+  "oppdatert_kl": "2026-10-18T18:02:21.429Z",
   "malt_kl": "2026-10-18T10:30:22.628Z",
   "antall": {
-    "klar": 81,
-    "reservert": 0,
+    "klar": 80,
+    "reservert": 1,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 9,
     "sammenslatt": 0,
@@ -11,7 +11,15 @@
     "blokkert": 5,
     "utenfor": 1
   },
-  "aktive": [],
+  "aktive": [
+    {
+      "stoff": "topiramat",
+      "oppgave": "topiramat-0073",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "frist_kl": "2026-10-18T21:02:21.429Z",
+      "fase": null
+    }
+  ],
   "holdes_tilbake": null,
   "neste": [
     {
@@ -41,21 +49,6 @@
         "9 av 13 redaksjonelle seksjoner er tomme.",
         "1 av 6 elementer har ingen kilde.",
         "Bare 3 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "topiramat",
-      "modus": "de_novo",
-      "poeng": 1447.6,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen topiramat-0067.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 4 referanser."
       ],
       "tidligst_kl": null
     },
@@ -145,6 +138,20 @@
     },
     {
       "stoff": "petidin",
+      "modus": "de_novo",
+      "poeng": 445.5,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 8 elementer har ingen kilde.",
+        "Bare 2 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "zolpidem",
       "modus": "de_novo",
       "poeng": 445.5,
       "grunner": [
