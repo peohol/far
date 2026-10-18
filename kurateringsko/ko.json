@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-18T03:01:56.424Z",
+  "oppdatert_kl": "2026-10-18T03:02:53.853Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "teller": 55,
   "stoffer": {
@@ -5188,7 +5188,7 @@
     "sertindol": {
       "stoff": "sertindol",
       "navn": "Sertindol",
-      "status": "reservert",
+      "status": "venter_godkjenning",
       "modus": "de_novo",
       "prioritet": {
         "poeng": 0,
@@ -5203,34 +5203,10 @@
         "referanser": 2,
         "elementer_uten_kilde": 1
       },
-      "reservasjon": {
-        "oppgave": "sertindol-0055",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "modus": "de_novo",
-        "reservert_kl": "2026-10-18T03:01:56.424Z",
-        "fornyet_kl": "2026-10-18T03:01:56.424Z",
-        "frist_kl": "2026-10-18T06:01:56.424Z",
-        "fase": null,
-        "jobbgren": "kuratorjobb/sertindol-0040",
-        "kurateringsgren": "kuratering/sertindol-0055",
-        "pr": null,
-        "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
-        "kunnskapsgrense": "2026-10-17"
-      },
+      "reservasjon": null,
       "forsok": 1,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "sertindol-0052",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-18T03:00:16.376Z",
-        "grunn": "Grenen er tilbake hos kuratoren.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/sertindol-0040",
-        "kurateringsgren": null,
-        "pr": null,
-        "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
-        "kunnskapsgrense": "2026-10-17"
-      },
+      "gjenoppta": null,
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -5238,8 +5214,8 @@
         "oppgave": "sertindol-0055",
         "okt": "kurateringsko/okt/20261016-125910",
         "startet_kl": "2026-10-18T03:01:56.424Z",
-        "avsluttet_kl": null,
-        "utfall": "reservert"
+        "avsluttet_kl": "2026-10-18T03:02:53.853Z",
+        "utfall": "fullfort"
       },
       "aktiv": true,
       "historikk": [
@@ -5368,9 +5344,33 @@
           "oppgave": "sertindol-0055",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Forsøk 1, de_novo, fortsetter sertindol-0052."
+        },
+        {
+          "kl": "2026-10-18T03:02:53.853Z",
+          "hendelse": "fullfort",
+          "oppgave": "sertindol-0055",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Kurateringsgrenen 96b6c9d3-2611-42f0-8b42-9392cc134ad2, kunnskapsgrense 2026-10-17."
+        },
+        {
+          "kl": "2026-10-18T03:02:53.853Z",
+          "hendelse": "gren_klar",
+          "oppgave": "sertindol-0055",
+          "melding": "Grenen: klar, revisjon 9, kontrollrunde 1."
         }
       ],
-      "appgren": null
+      "appgren": {
+        "id": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
+        "oppgave": "sertindol-0055",
+        "modus": "de_novo",
+        "runde": 2,
+        "kunnskapsgrense": "2026-10-17",
+        "jobbgren": "kuratorjobb/sertindol-0040",
+        "registrert_kl": "2026-10-18T03:02:53.853Z",
+        "status": "klar",
+        "revisjon": 9,
+        "kontrollrunde": 1
+      }
     },
     "sertralin": {
       "stoff": "sertralin",
@@ -6421,6 +6421,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "fullfort-sertindol-0055",
         "reserver-sertindol-030131",
         "fullfort-brekspiprazol-0054",
         "reserver-brekspiprazol-025945",
@@ -6469,71 +6470,24 @@
         "forny-levetiracetam-0038-1051",
         "reserver-202610171015",
         "fullfort-fenytoin-0037",
-        "forny-fenytoin-0037-gren",
-        "forny-fenytoin-0037-0852"
+        "forny-fenytoin-0037-gren"
       ],
       "siste": {
-        "id": "reserver-sertindol-030131",
-        "sha256": "eae5160b895fe89e903be9ffc2bd9de4aa97908013f3b767f3986de2db92a30c",
+        "id": "fullfort-sertindol-0055",
+        "sha256": "5e06a67b69197cb09fd59cc0a96d580325d1c9069d8bfbb3df895d92af888d91",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "reserver-sertindol-030131",
-          "foresporsel_sha256": "eae5160b895fe89e903be9ffc2bd9de4aa97908013f3b767f3986de2db92a30c",
-          "handling": "reserver",
+          "foresporsel_id": "fullfort-sertindol-0055",
+          "foresporsel_sha256": "5e06a67b69197cb09fd59cc0a96d580325d1c9069d8bfbb3df895d92af888d91",
+          "handling": "fullfort",
           "utfall": "ok",
-          "melding": "sertindol er reservert til 2026-10-18T06:01:56.424Z.",
-          "behandlet_kl": "2026-10-18T03:01:56.424Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39092156958",
-          "oppgave": {
-            "oppgave": "sertindol-0055",
-            "stoff": "sertindol",
-            "navn": "Sertindol",
-            "modus": "de_novo",
-            "forsok": 1,
-            "frist_kl": "2026-10-18T06:01:56.424Z",
-            "jobbgren": "kuratorjobb/sertindol-0040",
-            "kurateringsgren": "kuratering/sertindol-0055",
-            "pr": null,
-            "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
-            "gjenoppta": {
-              "oppgave": "sertindol-0052",
-              "okt": "kurateringsko/okt/20261016-125910",
-              "avbrutt_kl": "2026-10-18T03:00:16.376Z",
-              "grunn": "Grenen er tilbake hos kuratoren.",
-              "fase": null,
-              "jobbgren": "kuratorjobb/sertindol-0040",
-              "kurateringsgren": null,
-              "pr": null,
-              "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
-              "kunnskapsgrense": "2026-10-17"
-            },
-            "sist_kuratert": null,
-            "maal": {
-              "kl": "2026-10-17T14:23:30.777Z",
-              "side": true,
-              "elementer": 6,
-              "redaksjonelle_paneler": 13,
-              "paneler_med_innhold": 4,
-              "referanser": 2,
-              "elementer_uten_kilde": 1
-            },
-            "prioritet": {
-              "poeng": 1447.6,
-              "grunner": [
-                "Fortsetter den avbrutte kurateringen sertindol-0052.",
-                "De novo-kuratering i runden som gjelder.",
-                "Aldri kuratert.",
-                "Ingen kuratering å regne alderen fra.",
-                "9 av 13 redaksjonelle seksjoner er tomme.",
-                "1 av 6 elementer har ingen kilde.",
-                "Bare 2 referanser."
-              ]
-            }
-          }
+          "melding": "sertindol er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+          "behandlet_kl": "2026-10-18T03:02:53.853Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39092206436"
         }
       },
       "besvart_commit": "5b690076e50a30c2db78bca6d7afd19a6185fd1f",
-      "sist_brukt_kl": "2026-10-18T03:01:56.424Z"
+      "sist_brukt_kl": "2026-10-18T03:02:53.853Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
