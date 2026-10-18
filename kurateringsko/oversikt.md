@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-18T18:04:37.916Z. Stoffene sist lest fra databasen 2026-10-18T10:30:22.628Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-18T18:05:30.106Z. Stoffene sist lest fra databasen 2026-10-18T10:30:22.628Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 79 · Reservert: 1 · Venter på godkjenning: 10 · Publisert: 4 · Blokkert: 5 · Utenfor køen: 1
+Klar: 79 · Venter på godkjenning: 11 · Publisert: 4 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-- **levetiracetam** (levetiracetam-0074), frist 2026-10-18T21:04:37.916Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
@@ -17,6 +17,7 @@ Klar: 79 · Reservert: 1 · Venter på godkjenning: 10 · Publisert: 4 · Blokke
 - **kariprazin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **ketobemidon**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **lamotrigin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
+- **levetiracetam**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **sertindol**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **topiramat**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **vortioksetin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
