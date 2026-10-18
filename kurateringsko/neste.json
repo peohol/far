@@ -1,19 +1,101 @@
 {
-  "oppdatert_kl": "2026-10-18T17:28:59.050Z",
+  "oppdatert_kl": "2026-10-18T17:46:42.690Z",
   "malt_kl": "2026-10-18T10:30:22.628Z",
   "antall": {
-    "klar": 78,
-    "reservert": 0,
+    "klar": 83,
+    "reservert": 1,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 12,
+    "venter_godkjenning": 6,
     "sammenslatt": 0,
     "publisert": 4,
     "blokkert": 5,
     "utenfor": 1
   },
-  "aktive": [],
-  "holdes_tilbake": "12 kurateringsgrener venter på kontroll; et nytt stoff gis ut når færre enn 5 gjør det.",
+  "aktive": [
+    {
+      "stoff": "lamotrigin",
+      "oppgave": "lamotrigin-0070",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "frist_kl": "2026-10-18T20:46:42.690Z",
+      "fase": null
+    }
+  ],
+  "holdes_tilbake": null,
   "neste": [
+    {
+      "stoff": "cbd",
+      "modus": "de_novo",
+      "poeng": 1462.3,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen cbd-0061.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "12 av 13 redaksjonelle seksjoner er tomme.",
+        "Bare 1 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "flunitrazepam",
+      "modus": "de_novo",
+      "poeng": 1451.7,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen flunitrazepam-0065.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "2 av 8 elementer har ingen kilde.",
+        "Bare 1 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "fenytoin",
+      "modus": "de_novo",
+      "poeng": 1447.6,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen fenytoin-0066.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "levetiracetam",
+      "modus": "de_novo",
+      "poeng": 1447.6,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen levetiracetam-0063.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "topiramat",
+      "modus": "de_novo",
+      "poeng": 1447.6,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen topiramat-0067.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 4 referanser."
+      ],
+      "tidligst_kl": null
+    },
     {
       "stoff": "valproat",
       "modus": "de_novo",
@@ -83,76 +165,6 @@
         "Bare 2 referanser."
       ],
       "tidligst_kl": null
-    },
-    {
-      "stoff": "oksazepam",
-      "modus": "de_novo",
-      "poeng": 445.5,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 8 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "petidin",
-      "modus": "de_novo",
-      "poeng": 445.5,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 8 elementer har ingen kilde.",
-        "Bare 2 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "zolpidem",
-      "modus": "de_novo",
-      "poeng": 445.5,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 8 elementer har ingen kilde.",
-        "Bare 2 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "zopiklon",
-      "modus": "de_novo",
-      "poeng": 445.5,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 8 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "litium",
-      "modus": "de_novo",
-      "poeng": 444.8,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 9 elementer har ingen kilde.",
-        "Bare 4 referanser."
-      ],
-      "tidligst_kl": null
     }
   ],
   "til_gjennomgang": [
@@ -163,26 +175,8 @@
       "status": "venter_godkjenning"
     },
     {
-      "stoff": "cbd",
-      "gren": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
       "stoff": "doksepin",
       "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
-      "stoff": "fenytoin",
-      "gren": "40ecac1a-e908-4cb8-a62e-94546263372b",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
-      "stoff": "flunitrazepam",
-      "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     },
@@ -199,26 +193,8 @@
       "status": "venter_godkjenning"
     },
     {
-      "stoff": "lamotrigin",
-      "gren": "48e10b1b-31b0-452d-9e29-8404e30aa989",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
-      "stoff": "levetiracetam",
-      "gren": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
       "stoff": "sertindol",
       "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
-      "stoff": "topiramat",
-      "gren": "6a91451c-9e4a-4712-a913-253546677b1e",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     },
