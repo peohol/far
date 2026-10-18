@@ -1,10 +1,56 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-lamotrigin-0053",
-  "foresporsel_sha256": "6c4feff3a84ed35a6c22ff3606aef2468603ef40dc80a2a46bb5db5681fae9c6",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-brekspiprazol-025945",
+  "foresporsel_sha256": "0876d9556eb5f47bc3ba218c1351b5c82c6c3ae6b3bec7ea48967183dd00a71b",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "lamotrigin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-17T20:44:41.075Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39067984456"
+  "melding": "brekspiprazol er reservert til 2026-10-18T06:00:16.376Z.",
+  "behandlet_kl": "2026-10-18T03:00:16.376Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39092042600",
+  "oppgave": {
+    "oppgave": "brekspiprazol-0054",
+    "stoff": "brekspiprazol",
+    "navn": "Brekspiprazol",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-18T06:00:16.376Z",
+    "jobbgren": "kuratorjobb/brekspiprazol-0027",
+    "kurateringsgren": "kuratering/brekspiprazol-0054",
+    "pr": null,
+    "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
+    "gjenoppta": {
+      "oppgave": "brekspiprazol-0033",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "avbrutt_kl": "2026-10-18T03:00:16.376Z",
+      "grunn": "Grenen er tilbake hos kuratoren.",
+      "fase": null,
+      "jobbgren": "kuratorjobb/brekspiprazol-0027",
+      "kurateringsgren": null,
+      "pr": null,
+      "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
+      "kunnskapsgrense": "2026-10-16"
+    },
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-17T14:23:30.777Z",
+      "side": true,
+      "elementer": 20,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 6,
+      "referanser": 1,
+      "elementer_uten_kilde": 17
+    },
+    "prioritet": {
+      "poeng": 1466.3,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen brekspiprazol-0033.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "7 av 13 redaksjonelle seksjoner er tomme.",
+        "17 av 20 elementer har ingen kilde.",
+        "Bare 1 referanser."
+      ]
+    }
+  }
 }
