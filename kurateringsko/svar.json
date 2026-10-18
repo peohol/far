@@ -1,56 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-levetiracetam-180414",
-  "foresporsel_sha256": "acbfb49d97deaadaacbfe8157ac38c90b7558f49bd9fc48ef27b54a3226d61f7",
-  "handling": "reserver",
+  "foresporsel_id": "fullfort-levetiracetam-0074",
+  "foresporsel_sha256": "139067af2b56764ccd8f16a5396d8bb02b67d8a0fefe0fb2446aec66d5982dde",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "levetiracetam er reservert til 2026-10-18T21:04:37.916Z.",
-  "behandlet_kl": "2026-10-18T18:04:37.916Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39152473936",
-  "oppgave": {
-    "oppgave": "levetiracetam-0074",
-    "stoff": "levetiracetam",
-    "navn": "Levetiracetam",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-18T21:04:37.916Z",
-    "jobbgren": "kuratorjobb/levetiracetam-0038",
-    "kurateringsgren": "kuratering/levetiracetam-0074",
-    "pr": null,
-    "gren": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
-    "gjenoppta": {
-      "oppgave": "levetiracetam-0063",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "avbrutt_kl": "2026-10-18T17:46:42.690Z",
-      "grunn": "Grenen er tilbake hos kuratoren.",
-      "fase": null,
-      "jobbgren": "kuratorjobb/levetiracetam-0038",
-      "kurateringsgren": null,
-      "pr": null,
-      "gren": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
-      "kunnskapsgrense": "2026-10-17"
-    },
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-18T10:30:23.208Z",
-      "side": true,
-      "elementer": 6,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 4,
-      "referanser": 3,
-      "elementer_uten_kilde": 1
-    },
-    "prioritet": {
-      "poeng": 1447.6,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen levetiracetam-0063.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ]
-    }
-  }
+  "melding": "levetiracetam er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-18T18:05:30.106Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39152535973"
 }
