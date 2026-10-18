@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-18T04:25:52.899Z",
+  "oppdatert_kl": "2026-10-18T04:26:47.427Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "antall": {
     "klar": 80,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 9,
+    "venter_godkjenning": 10,
     "sammenslatt": 0,
     "publisert": 4,
     "blokkert": 5,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "fenytoin",
-      "oppgave": "fenytoin-0066",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-18T07:25:52.899Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "neste": [
     {
       "stoff": "vortioksetin",
@@ -180,6 +172,12 @@
     {
       "stoff": "doksepin",
       "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    },
+    {
+      "stoff": "fenytoin",
+      "gren": "40ecac1a-e908-4cb8-a62e-94546263372b",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     },
