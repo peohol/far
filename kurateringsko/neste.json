@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-18T04:27:51.710Z",
+  "oppdatert_kl": "2026-10-18T04:28:31.759Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "antall": {
     "klar": 79,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 10,
+    "venter_godkjenning": 11,
     "sammenslatt": 0,
     "publisert": 4,
     "blokkert": 5,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "topiramat",
-      "oppgave": "topiramat-0067",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-18T07:27:51.710Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "neste": [
     {
       "stoff": "vortioksetin",
@@ -221,6 +213,12 @@
     {
       "stoff": "sertindol",
       "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    },
+    {
+      "stoff": "topiramat",
+      "gren": "6a91451c-9e4a-4712-a913-253546677b1e",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     }
