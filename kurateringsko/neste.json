@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-18T04:22:41.550Z",
+  "oppdatert_kl": "2026-10-18T04:23:27.779Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "antall": {
     "klar": 82,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 7,
+    "venter_godkjenning": 8,
     "sammenslatt": 0,
     "publisert": 4,
     "blokkert": 5,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "brekspiprazol",
-      "oppgave": "brekspiprazol-0064",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-18T07:22:41.550Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "neste": [
     {
       "stoff": "vortioksetin",
@@ -167,6 +159,12 @@
     }
   ],
   "til_gjennomgang": [
+    {
+      "stoff": "brekspiprazol",
+      "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    },
     {
       "stoff": "cbd",
       "gren": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
