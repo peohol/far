@@ -1,10 +1,56 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-lamotrigin-0057",
-  "foresporsel_sha256": "60acc22388db0caff1bf979fd500037588d57de85034bc5b0751304c62d583ee",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-flunitrazepam-033502",
+  "foresporsel_sha256": "44f33301f16f877e27703deacc0694da1a61a442c5ad8817bd2d8f5150c68a30",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "lamotrigin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-18T03:06:34.528Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39092436129"
+  "melding": "flunitrazepam er reservert til 2026-10-18T06:35:27.892Z.",
+  "behandlet_kl": "2026-10-18T03:35:27.892Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39094145184",
+  "oppgave": {
+    "oppgave": "flunitrazepam-0058",
+    "stoff": "flunitrazepam",
+    "navn": "Flunitrazepam",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-18T06:35:27.892Z",
+    "jobbgren": "kuratorjobb/flunitrazepam-0017",
+    "kurateringsgren": "kuratering/flunitrazepam-0058",
+    "pr": null,
+    "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
+    "gjenoppta": {
+      "oppgave": "flunitrazepam-0050",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "avbrutt_kl": "2026-10-18T03:35:27.892Z",
+      "grunn": "Grenen er tilbake hos kuratoren.",
+      "fase": null,
+      "jobbgren": "kuratorjobb/flunitrazepam-0017",
+      "kurateringsgren": null,
+      "pr": null,
+      "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
+      "kunnskapsgrense": "2026-10-17"
+    },
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-17T14:23:30.777Z",
+      "side": true,
+      "elementer": 8,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 4,
+      "referanser": 1,
+      "elementer_uten_kilde": 2
+    },
+    "prioritet": {
+      "poeng": 1451.7,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen flunitrazepam-0050.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "2 av 8 elementer har ingen kilde.",
+        "Bare 1 referanser."
+      ]
+    }
+  }
 }
