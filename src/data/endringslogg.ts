@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.103.8',
+    dato: '2026-10-18',
+    sammendrag: 'Kontrollørens funn går ikke tapt når ChatGPT stopper skrivingen',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Når ChatGPT stopper kontrollørens kommentarer før de når OUSFAR, gir kontrolløren i stedet en ferdig melding til kuratoren, som fagansvarlig kan kopiere og lime inn hos Claude. Kuratoren fører funnene inn i kurateringen, så de er sporbare, og retter dem som vanlig.',
+      'En slik melding er ikke en godkjenning: kuratoren publiserer bare det som er godkjent i OUSFAR. Ville kontrolløren ha godkjent, kan fagansvarlig godkjenne selv på kurateringssiden.',
+      'Et nytt nøkkeltall i viktige data, som halveringstid eller tid til steady state, legges bare inn etter en avgjørelse fra fagansvarlig. Tallene står med kilde i farmakokinetikken.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.103.7',
     dato: '2026-10-18',
     sammendrag: 'Kurateringskøen holder nye stoffer tilbake når kontrollen hoper seg opp, og et kall som gjentas, lagres bare én gang',

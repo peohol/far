@@ -145,6 +145,17 @@ Kuratoren melder hva den gjør med `aktivitet` (med seksjonen og kortet), så
    følger den i. Kontrolløren holder seg til en slik avgjørelse
    (`docs/kontrollorinstruks.md`). Merkingen brukes bare for en avgjørelse et
    menneske faktisk har gitt.
+   Fikk kontrolløren ikke lagret det den skulle skrive, gir den en melding til
+   kuratoren som fagansvarlig limer inn (kontrollørinstruksen, «Når
+   skrivekallene stoppes»). Kuratoren fører den først inn i grenen, som en
+   merknad festet til `evidensjournal` som begynner med «Kontrollørens funn,
+   gitt videre av fagansvarlig:», med funnene slik de står og datoen, så de er
+   sporbare og kontrolløren ser dem i neste runde. Så kontrollerer kuratoren
+   hvert funn selv, svarer på hvert punkt i den tråden, trekker grenen fra
+   kontroll om den står som `klar`, retter som over og sender den til kontroll
+   igjen. Meldingen er ikke en vurdering og ikke en avgjørelse fra
+   fagansvarlig: en godkjenning i den publiserer ingenting, og kuratoren
+   publiserer først når godkjenningen står i OUSFAR.
 10. **Publiseringen.** Når den siste revisjonen er godkjent og ingenting
     hindrer det, publiserer kuratoren (`publiser`). Etterpå kjøres
     funksjonstesten mot den publiserte siden, og det som gjensto, står i
@@ -262,7 +273,9 @@ kontrolløren kommer dit. Reglene presiserer kravene over; de erstatter dem ikke
   rapportert hos barnet.
 - **Nøkkeltallene i viktige data** (også tid til steady state og
   halveringstiden) endres ikke uten en avgjørelse fra fagansvarlig, selv om
-  preparatomtalen sier noe annet. Et nytt referanseområde eller en ny grense
+  preparatomtalen sier noe annet. Et nytt nøkkeltallskort der grunnversjonen
+  ikke har noe, legges heller ikke inn uten en slik avgjørelse; tallene står
+  med kilde i farmakokinetikkortene (t½, tₛₛ). Et nytt referanseområde eller en ny grense
   fra et forslag eller en enkelt studie legges ikke inn før et menneske har
   avgjort det. Kortet viser hvem som sier hva, og saken går som etter krav 3.
 - **AGNPs varslingsgrense** er laboratoriets alarmgrense, ikke en dokumentert
