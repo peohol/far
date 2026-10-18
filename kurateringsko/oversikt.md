@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-18T19:49:59.104Z. Stoffene sist lest fra databasen 2026-10-18T10:30:22.628Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-18T19:50:48.330Z. Stoffene sist lest fra databasen 2026-10-18T10:30:22.628Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 78 · Reservert: 1 · Venter på godkjenning: 11 · Publisert: 4 · Blokkert: 5 · Utenfor køen: 1
+Klar: 78 · Venter på godkjenning: 12 · Publisert: 4 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
-- **sertindol** (sertindol-0078), frist 2026-10-18T22:49:59.104Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
@@ -19,6 +19,7 @@ Klar: 78 · Reservert: 1 · Venter på godkjenning: 11 · Publisert: 4 · Blokke
 - **ketobemidon**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **lamotrigin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **levetiracetam**: kurateringsgren i OUSFAR (klar), venter på godkjenning
+- **sertindol**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **topiramat**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **vortioksetin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 
@@ -32,7 +33,7 @@ Klar: 78 · Reservert: 1 · Venter på godkjenning: 11 · Publisert: 4 · Blokke
 
 ## Køen
 
-Neste stoff gis ikke ut nå: 11 kurateringsgrener venter på kontroll; et nytt stoff gis ut når færre enn 5 gjør det.
+Neste stoff gis ikke ut nå: 12 kurateringsgrener venter på kontroll; et nytt stoff gis ut når færre enn 5 gjør det.
 
 | # | Stoff | Modus | Poeng | Hvorfor |
 | --- | --- | --- | --- | --- |
