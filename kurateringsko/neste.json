@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-18T03:37:22.119Z",
+  "oppdatert_kl": "2026-10-18T03:38:09.260Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "antall": {
     "klar": 83,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 6,
+    "venter_godkjenning": 7,
     "sammenslatt": 0,
     "publisert": 4,
     "blokkert": 5,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "vortioksetin",
-      "oppgave": "vortioksetin-0059",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-18T06:37:22.119Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "neste": [
     {
       "stoff": "cbd",
@@ -200,6 +192,12 @@
     {
       "stoff": "sertindol",
       "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    },
+    {
+      "stoff": "vortioksetin",
+      "gren": "afab07ef-a24e-485e-b31f-9f38498a61af",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     }
