@@ -4,13 +4,15 @@
 -- Agenten kan gi kommentaren en `klient_id`, som den velger før det første
 -- forsøket. Et nytt forsøk med den samme ID-en og den samme teksten lagrer
 -- ingenting nytt, men svarer med kommentaren som alt er lagret
--- (`alt_lagret: true`). Den samme ID-en for en annen tekst eller en annen tråd
--- er en feil, så ingenting forsvinner i stillhet. Svaret på `kommenter` sier nå
+-- (`alt_lagret: true`). Den samme ID-en for en annen tekst, en annen tråd, eller
+-- en ny tråd med en annen art eller et annet anker er en feil, så ingenting
+-- forsvinner i stillhet. Svaret på `kommenter` sier nå
 -- også uttrykkelig at kommentaren er lagret, og når; trådene viser ID-en, så
 -- kontrolløren kan se etter i neste kjøring hva som faktisk står der.
 --
--- Bare kuratering.ny_kommentar, kuratering.traader og kuratering.h_kommenter
--- endres; resten står som før.
+-- Bare kuratering.ny_kommentar, kuratering.traader, kuratering.les_anker og
+-- kuratering.h_kommenter endres, og kuratering.anker_form er ny; resten står
+-- som før.
 
 alter table kuratering.kommentarer
   add column klient_id text,
@@ -18,6 +20,90 @@ alter table kuratering.kommentarer
 
 create unique index kommentarer_klient_id_idx on kuratering.kommentarer (gren, coalesce(agent, profil), klient_id)
 where klient_id is not null;
+
+-- Ankeret slik det lagres: ID-ene som uuid og tekstene uten mellomrom rundt.
+-- les_anker kontrollerer det mot grenen først; et nytt forsøk sammenligner med
+-- den samme formen uten å kontrollere det på nytt, siden grenen kan ha endret
+-- seg siden.
+create function kuratering.anker_form(p_anker jsonb)
+returns jsonb
+language sql
+immutable
+set search_path = ''
+as $$
+  select case
+    when p_anker is null or p_anker = 'null'::jsonb then null
+    when jsonb_typeof(p_anker) <> 'object' then p_anker
+    else (
+      select jsonb_object_agg(k, case when k in ('objekt', 'referanse') then to_jsonb((p_anker ->> k)::uuid) else to_jsonb(btrim(p_anker ->> k)) end)
+      from jsonb_object_keys(p_anker) k
+    )
+  end
+$$;
+
+create or replace function kuratering.les_anker(p_gren kuratering.grener, p_anker jsonb)
+returns jsonb
+language plpgsql
+stable
+set search_path = ''
+as $$
+declare
+  grunnlag public.sideversjoner;
+  objekt uuid;
+  tekst text;
+begin
+  if p_anker is null or p_anker = 'null'::jsonb then
+    return null;
+  end if;
+  if jsonb_typeof(p_anker) <> 'object' then
+    raise exception 'Ankeret må være et objekt.' using errcode = '22023';
+  end if;
+  if exists (select 1 from jsonb_object_keys(p_anker) k where k not in ('objekt', 'felt', 'seksjon', 'referanse', 'kilde', 'dokument')) then
+    raise exception 'Ankeret kan ha objekt, felt, seksjon, referanse, kilde og dokument.' using errcode = '22023';
+  end if;
+  foreach tekst in array array['felt', 'seksjon', 'kilde'] loop
+    if p_anker ? tekst and char_length(coalesce(p_anker ->> tekst, '')) not between 1 and 200 then
+      raise exception 'Ankeret: % må være en tekst på 1 til 200 tegn.', tekst using errcode = '22023';
+    end if;
+  end loop;
+  if p_anker ? 'dokument' and not (p_anker ->> 'dokument' in ('kildeplan', 'evidensjournal', 'dekningsmatrise', 'blindprotokoll', 'selvtest', 'notat')) then
+    raise exception 'Ankeret: ukjent dokument «%».', p_anker ->> 'dokument' using errcode = '22023';
+  end if;
+
+  if p_anker ? 'felt' and not p_anker ? 'objekt' then
+    raise exception 'Ankeret: et felt må høre til et objekt (siden eller et kort).' using errcode = '22023';
+  end if;
+  if p_anker ? 'seksjon' and not (btrim(p_anker ->> 'seksjon') = any (kuratering.seksjoner())) then
+    raise exception 'Ankeret: ukjent seksjon «%».', p_anker ->> 'seksjon' using errcode = '22023';
+  end if;
+
+  select v.* into strict grunnlag from public.sideversjoner v where v.id = p_gren.grunnversjon;
+  if p_anker ? 'kilde'
+    and not exists (select 1 from jsonb_array_elements(coalesce(grunnlag.manifest -> 'bivirkninger', '[]')) b where b ->> 'nokkel' = btrim(p_anker ->> 'kilde'))
+    and not exists (
+      select 1 from jsonb_array_elements(coalesce(kuratering.tilstand(p_gren) -> 'bivirkninger' -> 'importer', '[]')) i
+      where i -> 'kilde' ->> 'nokkel' = btrim(p_anker ->> 'kilde')
+    )
+  then
+    raise exception 'Ankeret: preparatomtalen «%» står ikke på fagsiden eller i grenen.', p_anker ->> 'kilde' using errcode = '22023';
+  end if;
+  if p_anker ? 'objekt' then
+    objekt := (p_anker ->> 'objekt')::uuid;
+    if not (kuratering.tilstand(p_gren) -> 'objekter' ? objekt::text) and kuratering.revisjon_i_versjon(grunnlag, objekt) is null then
+      raise exception 'Ankeret: objektet % hører ikke til fagsiden eller grenen.', objekt using errcode = '22023';
+    end if;
+  end if;
+  if p_anker ? 'referanse' then
+    objekt := (p_anker ->> 'referanse')::uuid;
+    if not (kuratering.tilstand(p_gren) -> 'objekter' ? objekt::text)
+      and not exists (select 1 from jsonb_array_elements(grunnlag.manifest -> 'referanser') r where (r ->> 'id')::uuid = objekt)
+    then
+      raise exception 'Ankeret: referansen % står ikke på fagsiden eller i grenen.', objekt using errcode = '22023';
+    end if;
+  end if;
+  return kuratering.anker_form(p_anker);
+end;
+$$;
 
 -- Den nye kommentaren, med klient-ID-en når den er gitt.
 create function kuratering.ny_kommentar(
@@ -111,7 +197,8 @@ $$;
 -- En ny tråd ({gren, tekst, art?, anker?, klient_id?}) eller et svar ({gren,
 -- svar_pa, tekst, klient_id?}). Kuratoren skriver merknader og svar; bare
 -- kontrolløren og administratorene åpner sperrende tråder. Med en klient-ID
--- som alt er lagret for den samme teksten og tråden, svarer den med
+-- som alt er lagret for den samme teksten og tråden (og for en ny tråd den
+-- samme arten og det samme ankeret), svarer den med
 -- kommentaren som står der, også om grenen er avsluttet siden.
 create or replace function kuratering.h_kommenter(p_aktor kuratering.aktor, p_data jsonb)
 returns jsonb
@@ -143,6 +230,8 @@ begin
           when p_data ->> 'svar_pa' is null then tidligere.id
           else (kuratering.traaden(g, (p_data ->> 'svar_pa')::uuid)).id
         end)
+        or (p_data ->> 'svar_pa' is null
+          and (tidligere.art is distinct from art or tidligere.anker is distinct from kuratering.anker_form(p_data -> 'anker')))
       then
         raise exception 'klient_id % er alt brukt for en annen kommentar i grenen. Velg en ny for en ny kommentar.', v_klient using errcode = 'PT409';
       end if;

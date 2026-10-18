@@ -953,12 +953,13 @@ describe('kommentarene', () => {
 
       const lest = await verktoy('les', { gren: k.gren })
       expect(lest).toMatchObject({ isError: false, structuredContent: { id: k.gren, status: 'klar' } })
-      const forste = await verktoy('kommenter', {
+      const rot = {
         gren: k.gren,
         anker: { dokument: 'evidensjournal' },
         tekst: 'Delkontroll av revisjon 1: doseringen kontrollert mot kilden.',
         klient_id: `${k.gren}-r1-1`,
-      })
+      }
+      const forste = await verktoy('kommenter', rot)
       expect(forste).toMatchObject({ isError: false, structuredContent: { lagret: true, klient_id: `${k.gren}-r1-1` } })
       const traad = forste.structuredContent.traad as string
 
@@ -974,6 +975,11 @@ describe('kommentarene', () => {
       expect((await verktoy('kommenter', { ...svar, tekst: 'En annen tekst.' })).structuredContent).toMatchObject({ kode: 'PT409' })
       expect((await verktoy('kommenter', { ...svar, svar_pa: undefined })).structuredContent).toMatchObject({ kode: 'PT409' })
       expect((await verktoy('kommenter', { ...svar, klient_id: 'kort' })).structuredContent).toMatchObject({ kode: '22023' })
+      // En ny tråd er den samme bare med den samme arten og det samme ankeret.
+      expect((await verktoy('kommenter', rot)).structuredContent).toMatchObject({ alt_lagret: true, id: traad })
+      expect((await verktoy('kommenter', { ...rot, art: 'sperrende' })).structuredContent).toMatchObject({ kode: 'PT409' })
+      expect((await verktoy('kommenter', { ...rot, anker: { dokument: 'selvtest' } })).structuredContent).toMatchObject({ kode: 'PT409' })
+      expect((await verktoy('kommenter', { ...rot, anker: undefined })).structuredContent).toMatchObject({ kode: 'PT409' })
 
       const trader = (await verktoy('kommentarer', { gren: k.gren })).structuredContent as unknown as { resultat: Traad[] }
       const kommentarer = trader.resultat.find((t) => t.id === traad)!.kommentarer as unknown as Json[]
@@ -983,7 +989,7 @@ describe('kommentarene', () => {
       expect((await agent<{ status: string }>(chatgpt, 'status', { gren: k.gren })).status).toBe('klar')
       // Den samme ID-en kan brukes av en annen agent.
       expect((await agent<Json>(claude, 'kommenter', { ...svar, tekst: 'Kuratorens svar.' })).alt_lagret).toBeUndefined()
-      expect(logg.mock.calls.map(([linje]) => JSON.parse(String(linje)).utfall)).toEqual(['ok', 'ok', 'ok', 'ok', 'PT409', 'PT409', '22023', 'ok'])
+      expect(logg.mock.calls.map(([linje]) => JSON.parse(String(linje)).utfall)).toEqual(['ok', 'ok', 'ok', 'ok', 'PT409', 'PT409', '22023', 'ok', 'PT409', 'PT409', 'PT409', 'ok'])
     } finally {
       logg.mockRestore()
     }

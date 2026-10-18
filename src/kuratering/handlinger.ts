@@ -82,7 +82,7 @@ export const AGENTHANDLINGER: readonly Agenthandling[] = [
   {
     navn: 'kommenter',
     beskrivelse:
-      'En ny tråd festet til noe konkret i grenen, eller et svar i en tråd (svar_pa). En sperrende tråd hindrer godkjenning og publisering til den som åpnet den lukker den; bare kontrolløren åpner sperrende tråder. Kuratoren må svare i hver åpen sperrende tråd før neste kontrollrunde. Kommentaren er lagret bare når svaret har lagret: true og id; alt annet betyr at ingenting er lagret. Med klient_id lagres den nøyaktig én gang: et nytt forsøk med samme klient_id og tekst svarer alt_lagret: true. Kommentaren er et internt arbeidsnotat i OUSFAR og sendes ikke videre.',
+      'En ny tråd festet til noe konkret i grenen, eller et svar i en tråd (svar_pa). En sperrende tråd hindrer godkjenning og publisering til den som åpnet den lukker den; bare kontrolløren åpner sperrende tråder. Kuratoren må svare i hver åpen sperrende tråd før neste kontrollrunde. Kommentaren er lagret bare når svaret har lagret: true og id; alt annet betyr at ingenting er lagret. Med klient_id lagres den nøyaktig én gang: et nytt forsøk med de samme argumentene og samme klient_id svarer alt_lagret: true. Kommentaren er et internt arbeidsnotat i OUSFAR og sendes ikke videre.',
     argumenter: objekt(
       {
         gren,

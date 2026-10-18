@@ -214,9 +214,10 @@ arkivert, står trådene som de var: de kan ikke kommenteres, lukkes eller
   alt annet betyr at ingenting er lagret. Med `klient_id` (8–100 tegn:
   bokstaver, sifre og `. _ : -`), som agenten velger før det første forsøket,
   lagres den nøyaktig én gang: et nytt forsøk med den samme ID-en og den
-  samme teksten i den samme tråden lagrer ingenting nytt og svarer med
-  kommentaren som står der (`alt_lagret: true`), også om grenen er avsluttet
-  siden. Den samme ID-en for en annen tekst eller tråd avvises (`PT409`).
+  samme teksten i den samme tråden (for en ny tråd også den samme arten og
+  det samme ankeret) lagrer ingenting nytt og svarer med kommentaren som står
+  der (`alt_lagret: true`), også om grenen er avsluttet siden. Den samme
+  ID-en for noe annet avvises (`PT409`).
   ID-en gjelder per agent og gren, og står på kommentaren i trådene.
 
 ### Når et kall ikke blir lagret
