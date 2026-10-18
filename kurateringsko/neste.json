@@ -1,9 +1,9 @@
 {
-  "oppdatert_kl": "2026-10-18T04:28:31.759Z",
+  "oppdatert_kl": "2026-10-18T04:34:17.280Z",
   "malt_kl": "2026-10-17T14:23:30.223Z",
   "antall": {
-    "klar": 79,
-    "reservert": 0,
+    "klar": 78,
+    "reservert": 1,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 11,
     "sammenslatt": 0,
@@ -11,23 +11,16 @@
     "blokkert": 5,
     "utenfor": 1
   },
-  "aktive": [],
-  "neste": [
+  "aktive": [
     {
       "stoff": "vortioksetin",
-      "modus": "de_novo",
-      "poeng": 1455.7,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen vortioksetin-0059.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "6 av 13 redaksjonelle seksjoner er tomme.",
-        "19 av 24 elementer har ingen kilde.",
-        "Bare 4 referanser."
-      ],
-      "tidligst_kl": null
-    },
+      "oppgave": "vortioksetin-0068",
+      "okt": "kurateringsko/okt/20261016-125910",
+      "frist_kl": "2026-10-18T07:34:17.280Z",
+      "fase": null
+    }
+  ],
+  "neste": [
     {
       "stoff": "valproat",
       "modus": "de_novo",
@@ -151,6 +144,20 @@
         "9 av 13 redaksjonelle seksjoner er tomme.",
         "1 av 8 elementer har ingen kilde.",
         "Bare 3 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "litium",
+      "modus": "de_novo",
+      "poeng": 444.8,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 9 elementer har ingen kilde.",
+        "Bare 4 referanser."
       ],
       "tidligst_kl": null
     }
