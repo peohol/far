@@ -21,10 +21,12 @@
  */
 import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
-import { beforeAll, describe, expect, it } from 'vitest'
+import type { SupabaseClient } from '@supabase/supabase-js'
+import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { PANELREKKEFOLGE } from '../faginnhold/paneler'
 import { kontrollerDekning, kontrollpunkter, tomMatrise } from '../kuratorprotokoll/dekning'
 import { SELVTESTKRAV, SELVTESTPORTER, tomSelvtest } from '../kuratorprotokoll/selvtest'
+import { behandleKurateringMcp } from '../kuratering/endepunkt'
 import { AGENTHANDLINGER } from '../kuratering/handlinger'
 import { faginnholdskall, feilFra, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
@@ -918,6 +920,73 @@ describe('kommentarene', () => {
     expect(await adm<Traad[]>('kommentarer', { gren: k.gren, apne: true })).toEqual([])
     const [rad] = await kall.fasit<{ id: string }>('select id from kuratering.kommentarer where traad = $1 limit 1', [merknad.traad])
     expect((await feilFra(() => db.query('update kuratering.kommentarer set tekst = $1 where id = $2', ['x', rad!.id])))?.code).toBe('42501')
+  })
+
+  // Kontrolløren gjennom MCP-koblingen, med databasen bak: lese grenen og
+  // fortsette i en tråd den alt har skrevet i, der et nytt forsøk med samme
+  // klient_id ikke gir en kommentar til.
+  it('lar kontrolløren lese en gren og svare i en eksisterende tråd gjennom MCP-koblingen, nøyaktig én gang', async () => {
+    const logg = vi.spyOn(console, 'info').mockImplementation(() => {})
+    const mcpKlient = {
+      rpc: async (_funksjon: string, a: { nokkel: string; handling: string; data: Json }) => {
+        try {
+          return { data: await agent(a.nokkel, a.handling, a.data), error: null }
+        } catch (e) {
+          const f = e as { code?: string; message?: string }
+          return { data: null, error: { code: f.code, message: f.message } }
+        }
+      },
+    } as unknown as SupabaseClient
+    let id = 0
+    const verktoy = async (name: string, args: Json) => {
+      const kropp = { jsonrpc: '2.0', id: ++id, method: 'tools/call', params: { name, arguments: args } }
+      const foresporsel = new Request(`https://x/api/kuratering-mcp?nokkel=${chatgpt}`, { method: 'POST', body: JSON.stringify(kropp) })
+      const { result } = (await (await behandleKurateringMcp(foresporsel, {}, { klient: mcpKlient })).json()) as {
+        result: { isError: boolean; structuredContent: Json & { kode?: string } }
+      }
+      return result
+    }
+    try {
+      const k = await kuratertGren()
+      await medDokumenter(k.gren)
+      await agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 1 })
+
+      const lest = await verktoy('les', { gren: k.gren })
+      expect(lest).toMatchObject({ isError: false, structuredContent: { id: k.gren, status: 'klar' } })
+      const forste = await verktoy('kommenter', {
+        gren: k.gren,
+        anker: { dokument: 'evidensjournal' },
+        tekst: 'Delkontroll av revisjon 1: doseringen kontrollert mot kilden.',
+        klient_id: `${k.gren}-r1-1`,
+      })
+      expect(forste).toMatchObject({ isError: false, structuredContent: { lagret: true, klient_id: `${k.gren}-r1-1` } })
+      const traad = forste.structuredContent.traad as string
+
+      // Svaret på det første forsøket kom aldri fram, så kontrolløren prøver igjen.
+      const svar = { gren: k.gren, svar_pa: traad, tekst: 'Videreført: kinetikken kontrollert; ingen nye funn.', klient_id: `${k.gren}-r1-2` }
+      const lagret = await verktoy('kommenter', svar)
+      const igjen = await verktoy('kommenter', svar)
+      expect(lagret.structuredContent).toMatchObject({ lagret: true, traad })
+      expect(lagret.structuredContent.alt_lagret).toBeUndefined()
+      expect(igjen).toMatchObject({ isError: false, structuredContent: { lagret: true, alt_lagret: true, id: lagret.structuredContent.id, traad } })
+
+      // Den samme ID-en for en annen tekst eller en annen tråd er en feil, og lagrer ingenting.
+      expect((await verktoy('kommenter', { ...svar, tekst: 'En annen tekst.' })).structuredContent).toMatchObject({ kode: 'PT409' })
+      expect((await verktoy('kommenter', { ...svar, svar_pa: undefined })).structuredContent).toMatchObject({ kode: 'PT409' })
+      expect((await verktoy('kommenter', { ...svar, klient_id: 'kort' })).structuredContent).toMatchObject({ kode: '22023' })
+
+      const trader = (await verktoy('kommentarer', { gren: k.gren })).structuredContent as unknown as { resultat: Traad[] }
+      const kommentarer = trader.resultat.find((t) => t.id === traad)!.kommentarer as unknown as Json[]
+      expect(kommentarer.map((x) => x.klient_id)).toEqual([`${k.gren}-r1-1`, `${k.gren}-r1-2`])
+      expect(trader.resultat).toHaveLength(1)
+      // Kommentarene vurderer ingenting: grenen venter fortsatt på kontrolløren.
+      expect((await agent<{ status: string }>(chatgpt, 'status', { gren: k.gren })).status).toBe('klar')
+      // Den samme ID-en kan brukes av en annen agent.
+      expect((await agent<Json>(claude, 'kommenter', { ...svar, tekst: 'Kuratorens svar.' })).alt_lagret).toBeUndefined()
+      expect(logg.mock.calls.map(([linje]) => JSON.parse(String(linje)).utfall)).toEqual(['ok', 'ok', 'ok', 'ok', 'PT409', 'PT409', '22023', 'ok'])
+    } finally {
+      logg.mockRestore()
+    }
   })
 })
 

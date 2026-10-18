@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.103.6',
+    dato: '2026-10-18',
+    sammendrag: 'Kontrollørens kommentarer lagres nøyaktig én gang, og et stoppet kall telles aldri som gjort',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring for vanlige brukere. Når kontrolløren prøver å skrive en kommentar på nytt etter at et forsøk ble stoppet, blir den lagret bare én gang, og svaret sier tydelig at den er lagret. Kontrolløren kan også se i trådene hva som faktisk står der.',
+      'Blir et skrivekall stoppet før det når OUSFAR, prøver kontrolløren én gang til. Blir det stoppet igjen, slutter den å skrive i den kjøringen, godkjenner ingen kuratering der noe ikke er lagret, og sier fra om hva som mangler.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.103.5',
     dato: '2026-10-17',
     sammendrag: 'Kuratoren lærer av det kontrolløren finner, og retter det samme i kurateringene som venter',

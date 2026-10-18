@@ -9,6 +9,7 @@ prosjektet, så en ny økt kan fortsette herfra alene.
 
 | Dato | Punkt |
 | --- | --- |
+| 2026-10-18 | F3 pågår som før. Den planlagte kontrollørkjøringen i ChatGPT er slått av: OpenAI stopper skrivekallene fra planlagte oppgaver før de når OUSFAR («Når et kall ikke blir lagret» i `docs/kurateringsgrener.md`). Kontrollrundene startes for hånd i en vanlig samtale. `kommenter` lagres nå nøyaktig én gang med `klient_id`, og hvert verktøykall gir én linje uten innhold i serverloggen (1.103.6). |
 | 2026-10-17 | F3 pågår: de novo-runde 2 går gjennom registeret med én reservasjon om gangen (`maks_aktive` 1). Claude holder en buffer på færre enn fem grener hos kontrolløren. Over det retter Claude det kontrolløren sender tilbake, og ser etter samme feil i grenene som venter («Erfaringer fra kontrollen» i `docs/kuratorprotokoll.md`). Kjøringen følges i `/mnt/project-files/kuratering/runde.md` (utenfor repoet, siden den viser til fagtekst og tråder), med en planlagt kuratorkjøring hver time. Kontrolløren kjøres av Peder med den korte beskjeden. |
 | 2026-10-16 | B1–F2 ferdige: piloten er bestått (citalopram, lurasidon og GHB kuratert i grener, godkjent av ChatGPT, publisert, funksjonstesten grønn). F3 (1.101.0): `bare_forrang` av og `forrang` tom, så køen går gjennom hele registeret; de planlagte kjøringene startes når PR-en er i produksjonen. |
 
@@ -154,10 +155,12 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 1. ~~Slå sammen PR-ene #231–#237~~ (gjort 2026-10-16).
 2. ~~ChatGPT-kontrollørens nøkkel og MCP-koblingen~~ (gjort 2026-10-16; i
    ChatGPT heter det nå «Plugins» → «Add custom MCP server», uten
-   autentisering, siden nøkkelen står i adressen). Gjenstår: den planlagte
-   kjøringen i ChatGPT med beskjeden i `docs/kontrollorinstruks.md`; til den
-   finnes, ber Peder ChatGPT om hver kontrollrunde med den samme korte
-   beskjeden.
+   autentisering, siden nøkkelen står i adressen). Den planlagte kjøringen i
+   ChatGPT er slått av fordi OpenAI stopper skrivekallene fra planlagte
+   oppgaver (2026-10-18). Til OpenAI har rettet det, ber Peder ChatGPT om hver
+   kontrollrunde i en vanlig samtale, med den korte beskjeden i
+   `docs/kontrollorinstruks.md`. Kjøringen slås på igjen først når en planlagt
+   kjøring har lagret en kommentar i en tråd.
 3. Publisering til produksjonen krever Peders uttrykkelige ja i Claude-økten
    (sikkerhetssperren); han ga det for piloten 2026-10-16.
 
@@ -264,3 +267,19 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
   Kontrolløren får nå hele kuratorprotokollen, også disse reglene, med
   verktøyet `instruks`. Før fikk den bare en henvisning til protokollen, og
   koblingen har ingen måte å lese repoet på.
+- 2026-10-18: Skrivekall som ikke ble lagret (1.103.6). I de planlagte
+  kontrollrundene natt til 18.10 ble to til tre skrivekall per runde stoppet
+  med «This tool call was blocked by OpenAI's safety checks». Ingen av dem
+  nådde OUSFAR: databasen har ingen kommentar fra kontrolløren etter 09:12 og
+  ingen vurdering etter 18:55 (UTC 17.10), og serveren var den samme som da
+  kallene gikk igjennom. Den samme feilen er meldt av mange på OpenAIs forum
+  for planlagte oppgaver siden slutten av september, og OpenAIs kundestøtte
+  har bekreftet at de undersøker den. I OUSFAR: `kommenter` tar en valgfri `klient_id` og lagrer kommentaren
+  nøyaktig én gang (`alt_lagret` ved et nytt forsøk, `PT409` om ID-en er brukt
+  for noe annet), svaret sier `lagret: true`, trådene viser ID-en, og hvert
+  verktøykall gir én linje i serverloggen uten nøkkel eller tekst.
+  Kontrollørinstruksen har fått «Når et kall ikke blir lagret»: ett nytt
+  forsøk med den samme ID-en, kontrollert stans etter to stopp, og ingen
+  vurdering av en gren med noe som ikke er lagret. Tester i
+  `kurateringsgrener.test.ts` (MCP-koblingen fra lesing til svar i en
+  eksisterende tråd) og `kurateringsendepunkt.test.ts`.

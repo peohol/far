@@ -9,8 +9,8 @@ import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, matchesGlob } from 'node:path'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { describe, expect, it, vi } from 'vitest'
-import { AGENTHANDLINGER } from '../kuratering/handlinger'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { AGENTHANDLINGER, KLIENT_ID } from '../kuratering/handlinger'
 import {
   behandleKuratering,
   behandleKurateringMcp,
@@ -25,6 +25,14 @@ import {
 } from '../kuratering/endepunkt'
 
 const NOKKEL = 'far_' + 'a'.repeat(64)
+
+// Serverloggen (én linje per verktøykall) holdes ute av testutskriften.
+beforeEach(() => {
+  vi.spyOn(console, 'info').mockImplementation(() => {})
+})
+afterEach(() => {
+  vi.restoreAllMocks()
+})
 
 function klient(svar: { data?: unknown; error?: { code: string; message: string } | null } = { data: { ok: true } }) {
   const rpc = vi.fn().mockResolvedValue({ data: svar.data ?? null, error: svar.error ?? null })
@@ -126,6 +134,30 @@ describe('/api/kuratering-mcp', () => {
     const varsel = await behandleKurateringMcp(post('https://x/api/kuratering-mcp', rpc('notifications/initialized', undefined, null)), {}, klient())
     expect(varsel.status).toBe(202)
     expect((await behandleKurateringMcp(post('https://x/api/kuratering-mcp', rpc('tools/list'), null), {}, klient())).status).toBe(401)
+  })
+
+  it('skriver én linje i serverloggen per verktøykall: verktøyet, utfallet og klient_id, aldri nøkkelen eller teksten', async () => {
+    const logg = vi.mocked(console.info)
+    const args = { gren: 'g', svar_pa: 'k', tekst: 'Syntetisk fagtekst som ikke skal i loggen.', klient_id: 'g-r6-merknad-1' }
+    await behandleKurateringMcp(post('https://x/api/kuratering-mcp', rpc('tools/call', { name: 'kommenter', arguments: args })), {}, klient({ data: { lagret: true } }))
+    const feil = klient({ error: { code: 'PT409', message: 'klient_id er alt brukt for en annen kommentar i grenen.' } })
+    await behandleKurateringMcp(post('https://x/api/kuratering-mcp', rpc('tools/call', { name: 'kommenter', arguments: { ...args, klient_id: 'feil form!' } })), {}, feil)
+    expect(logg.mock.calls.map(([linje]) => JSON.parse(String(linje)))).toEqual([
+      { kuratering_mcp: 'kommenter', utfall: 'ok', ms: expect.any(Number), klient_id: 'g-r6-merknad-1' },
+      { kuratering_mcp: 'kommenter', utfall: 'PT409', ms: expect.any(Number) },
+    ])
+    const alt = JSON.stringify(logg.mock.calls)
+    for (const hemmelig of [NOKKEL, 'fagtekst', '"g"', 'alt brukt']) expect(alt).not.toContain(hemmelig)
+  })
+
+  it('tilbyr klient_id i kommenter, med samme form som databasen krever', () => {
+    const kommenter = AGENTHANDLINGER.find((h) => h.navn === 'kommenter')!
+    const egenskaper = (kommenter.argumenter as { properties: Record<string, { pattern?: string }> }).properties
+    expect(egenskaper.klient_id!.pattern).toBe(KLIENT_ID)
+    const migrasjon = readFileSync(new URL('../../supabase/migrations/20261018025037_kommentar_klient_id.sql', import.meta.url), 'utf8')
+    expect(migrasjon).toContain(`klient_id ~ '${KLIENT_ID}'`)
+    expect(migrasjon).toContain(`v_klient !~ '${KLIENT_ID}'`)
+    expect(kommenter.beskrivelse).toMatch(/lagret: true/)
   })
 })
 

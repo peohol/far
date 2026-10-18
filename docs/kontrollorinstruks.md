@@ -23,9 +23,11 @@ Grunnreglene:
   Kontroller at grenen stemmer med avgjørelsen, men be ikke om å endre
   verdien den gjelder. Tyder en kilde på at avgjørelsen bygger på noe som er
   feil, si det i en merknad; det sperrer ikke.
-- Blir et kall til OUSFAR stoppet, enten av OUSFAR eller av ChatGPT, tas
-  feilmeldingen med i oversikten til slutt (steg 7), så et menneske kan rette
-  det.
+- Det du skriver (`kommenter`, `lukk_kommentar`, `gjenapne_kommentar`,
+  `vurder`), er bare gjort når OUSFAR har svart med resultatet. Blir et kall
+  stoppet, er ingenting lagret, og arbeidet er ikke dokumentert; se «Når et
+  kall ikke blir lagret». Feilmeldingen tas med i oversikten til slutt
+  (steg 7), så et menneske kan rette det.
 
 ## Tilkoblingen
 
@@ -75,7 +77,10 @@ i ChatGPT henter den nye.
    `art: "sperrende"` og et `anker` som peker på det det gjelder (`objekt`
    for kortet, `felt` for feltet slik sammenligningen navngir det,
    `referanse`, `kilde` eller `dokument`). Skriv hva som er galt, kilden, og
-   hva som må til. Et forslag som ikke må følges, er en `merknad`.
+   hva som må til. Et forslag som ikke må følges, er en `merknad`. Gi hver
+   kommentar en `klient_id` før du sender den, for eksempel
+   `<gren>-r<revisjon>-<løpenummer>`, og bruk den samme hvis du må prøve
+   igjen. Se så i svaret at den er lagret (`lagret: true`).
 5. **Vurder.**
    - Er alt i orden og ingen sperrende tråd åpen: `vurder` med
      `beslutning: "godkjent"` for den siste revisjonen, og en begrunnelse som
@@ -103,7 +108,30 @@ i ChatGPT henter den nye.
    nye versjoner av dokumentene, og vurderer den samme revisjonen på nytt.
 7. **Til slutt.** Gi den som startet kjøringen en kort oversikt per gren,
    uten fagtekst: vurderingen (`godkjent`, `endringer` eller ikke ferdig),
-   trådene du har lukket, og hvert kall som ble stoppet, med feilmeldingen.
+   trådene du har lukket, og hvert kall som ble stoppet, med feilmeldingen og
+   om det var OUSFAR eller ChatGPT som stoppet det.
+
+## Når et kall ikke blir lagret
+
+- **Lagret.** `kommenter` svarer med `lagret: true` og `id` (eller
+  `alt_lagret: true` når den samme `klient_id` alt var lagret). `vurder`,
+  `lukk_kommentar` og `gjenapne_kommentar` svarer med grenen eller tråden.
+  Alt annet betyr at ingenting er lagret.
+- **Avvist av OUSFAR.** Svaret har `feil` og `kode`, på norsk. Les det, og
+  rett kallet hvis det går (for eksempel feil revisjon eller et anker som
+  ikke finnes). «Tråden er alt lukket» betyr at den er lukket.
+- **Stoppet av ChatGPT.** En melding som «This tool call was blocked by
+  OpenAI's safety checks» betyr at kallet aldri nådde OUSFAR. Ingenting er
+  lagret. Prøv én gang til med nøyaktig de samme argumentene og den samme
+  `klient_id`. Blir det stoppet igjen, ikke prøv flere ganger.
+- **Kontrollert stans.** Blir to skrivekall stoppet av ChatGPT i den samme
+  kjøringen, skriver du ikke mer i kjøringen. Vurder ingen gren der det du
+  skulle skrive, ikke er lagret: godkjenn aldri en gren med en kommentar,
+  lukking eller begrunnelse som ikke er lagret. Gå til steg 7, og si per gren
+  hva som ikke ble lagret (tråden eller ankeret, og arten), uten fagtekst.
+- **Neste kjøring.** Se i `kommentarer` hva som faktisk står der (trådene
+  viser `klient_id`), og skriv det som mangler. Skriv ikke det som alt står
+  der, på nytt.
 
 ## Beskjeden i ChatGPT
 
