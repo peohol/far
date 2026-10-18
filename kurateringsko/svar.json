@@ -1,56 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-sertindol-030131",
-  "foresporsel_sha256": "eae5160b895fe89e903be9ffc2bd9de4aa97908013f3b767f3986de2db92a30c",
-  "handling": "reserver",
+  "foresporsel_id": "fullfort-sertindol-0055",
+  "foresporsel_sha256": "5e06a67b69197cb09fd59cc0a96d580325d1c9069d8bfbb3df895d92af888d91",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "sertindol er reservert til 2026-10-18T06:01:56.424Z.",
-  "behandlet_kl": "2026-10-18T03:01:56.424Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39092156958",
-  "oppgave": {
-    "oppgave": "sertindol-0055",
-    "stoff": "sertindol",
-    "navn": "Sertindol",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-18T06:01:56.424Z",
-    "jobbgren": "kuratorjobb/sertindol-0040",
-    "kurateringsgren": "kuratering/sertindol-0055",
-    "pr": null,
-    "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
-    "gjenoppta": {
-      "oppgave": "sertindol-0052",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "avbrutt_kl": "2026-10-18T03:00:16.376Z",
-      "grunn": "Grenen er tilbake hos kuratoren.",
-      "fase": null,
-      "jobbgren": "kuratorjobb/sertindol-0040",
-      "kurateringsgren": null,
-      "pr": null,
-      "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
-      "kunnskapsgrense": "2026-10-17"
-    },
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-17T14:23:30.777Z",
-      "side": true,
-      "elementer": 6,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 4,
-      "referanser": 2,
-      "elementer_uten_kilde": 1
-    },
-    "prioritet": {
-      "poeng": 1447.6,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen sertindol-0052.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 2 referanser."
-      ]
-    }
-  }
+  "melding": "sertindol er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-18T03:02:53.853Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39092206436"
 }
