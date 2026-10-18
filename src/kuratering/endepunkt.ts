@@ -22,7 +22,7 @@ import { join } from 'node:path'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Greninfo } from '../kurateringsko/modell.js'
 import { bearer, erAdmin, hvem, serverklient, svar, type Adminsjekk, type Githubsjekk, type Miljo } from '../server/tilgang.js'
-import { AGENTHANDLINGER, AGENTHANDLINGSNAVN } from './handlinger.js'
+import { AGENTHANDLINGER, AGENTHANDLINGSNAVN, KLIENT_ID } from './handlinger.js'
 
 export const MCP_PROTOKOLL = '2025-06-18'
 const MCP_PROTOKOLLER = new Set(['2024-11-05', '2025-03-26', MCP_PROTOKOLL])
@@ -141,6 +141,27 @@ const INSTRUKSER =
 // kaller først, har derfor instruksen med, foran svaret fra databasen.
 export const INSTRUKSINNLEDNING = 'Instruksen for kontrolløren (docs/kontrollorinstruks.md), med kuratorprotokollen (docs/kuratorprotokoll.md) etter. Følg dem i denne kjøringen.'
 
+const KLIENT_ID_FORM = new RegExp(KLIENT_ID)
+
+/**
+ * Én linje i serverloggen per verktøykall, uten nøkkel, argumenter eller
+ * fagtekst: verktøyet (`ukjent` for et navn OUSFAR ikke har), utfallet og
+ * tiden, og `klient_id` når kallet har en. Den viser om et kall nådde OUSFAR
+ * og hva OUSFAR svarte; et kall ChatGPT stoppet før det ble sendt, står ikke
+ * der (docs/kurateringsgrener.md, «Når et kall ikke blir lagret»).
+ */
+export function loggKall(verktoy: string, utfall: { ok: boolean; kode?: string }, ms: number, args: unknown): string {
+  const klient = args !== null && typeof args === 'object' ? (args as { klient_id?: unknown }).klient_id : undefined
+  const linje = JSON.stringify({
+    kuratering_mcp: verktoy,
+    utfall: utfall.ok ? 'ok' : (utfall.kode ?? 'feil'),
+    ms,
+    ...(typeof klient === 'string' && KLIENT_ID_FORM.test(klient) ? { klient_id: klient } : {}),
+  })
+  console.info(linje)
+  return linje
+}
+
 const tekstsvar = (id: Rpc['id'], innhold: unknown, feil: boolean, foran?: string) =>
   rpcSvar(id, {
     content: [...(foran ? [{ type: 'text', text: foran }] : []), { type: 'text', text: JSON.stringify(innhold) }],
@@ -169,25 +190,53 @@ async function behandleRpc(melding: Rpc, db: SupabaseClient | null, nokkel: stri
     case 'tools/list':
       return rpcSvar(id, { tools: MCP_VERKTOY })
     case 'tools/call': {
+      // Hvert verktøykall som når hit, gir nøyaktig én logglinje, også når det feiler.
       const navn = melding.params?.name
-      if (navn === INSTRUKSVERKTOY.name) {
-        const instruks = await lesInstruks()
-        if (instruks === null) {
-          return tekstsvar(id, { feil: 'Instruksen kunne ikke leses i OUSFAR nå. Les docs/kontrollorinstruks.md og docs/kuratorprotokoll.md på main i repoet peohol/far, og si fra om feilen.' }, true)
-        }
-        return rpcSvar(id, { content: [{ type: 'text', text: instruks }], isError: false })
+      const args = melding.params?.arguments ?? {}
+      const kjent = navn === INSTRUKSVERKTOY.name || (typeof navn === 'string' && AGENTHANDLINGSNAVN.has(navn))
+      const start = Date.now()
+      const logg = (utfall: Kallutfall) => loggKall(kjent ? (navn as string) : 'ukjent', utfall, Date.now() - start, args)
+      try {
+        const { utfall, svar } = await kallVerktoy(id, navn, args, db, nokkel, lesInstruks)
+        logg(utfall)
+        return svar
+      } catch {
+        logg({ ok: false, kode: 'unntak' })
+        return rpcFeil(id, -32603, 'OUSFAR fikk en feil før svaret var klart. Kallet kan likevel være utført: les grenen eller trådene før du prøver igjen.')
       }
-      if (typeof navn !== 'string' || !AGENTHANDLINGSNAVN.has(navn)) return rpcFeil(id, -32602, `Ukjent verktøy «${String(navn)}».`)
-      if (!db) return rpcFeil(id, -32603, 'Mangler oppkoblingen mot databasen.')
-      const utfall = await utforHandling(db, nokkel, navn, melding.params?.arguments ?? {})
-      if (!utfall.ok && utfall.status === 403) return rpcFeil(id, -32001, utfall.feil)
-      const instruks = navn === 'oversikt' ? await lesInstruks() : null
-      const foran = instruks === null ? undefined : `${INSTRUKSINNLEDNING}\n\n${instruks}`
-      return tekstsvar(id, utfall.ok ? utfall.data : { feil: utfall.feil, kode: utfall.kode }, !utfall.ok, foran)
     }
     default:
       return rpcFeil(id, -32601, `Ukjent metode «${method}».`)
   }
+}
+
+type Kallutfall = { ok: boolean; kode?: string }
+
+async function kallVerktoy(
+  id: Rpc['id'],
+  navn: unknown,
+  args: unknown,
+  db: SupabaseClient | null,
+  nokkel: string,
+  lesInstruks: () => Promise<string | null>,
+): Promise<{ utfall: Kallutfall; svar: object }> {
+  if (navn === INSTRUKSVERKTOY.name) {
+    const instruks = await lesInstruks()
+    if (instruks === null) {
+      const feil = 'Instruksen kunne ikke leses i OUSFAR nå. Les docs/kontrollorinstruks.md og docs/kuratorprotokoll.md på main i repoet peohol/far, og si fra om feilen.'
+      return { utfall: { ok: false, kode: 'uten_instruks' }, svar: tekstsvar(id, { feil }, true) }
+    }
+    return { utfall: { ok: true }, svar: rpcSvar(id, { content: [{ type: 'text', text: instruks }], isError: false }) }
+  }
+  if (typeof navn !== 'string' || !AGENTHANDLINGSNAVN.has(navn)) {
+    return { utfall: { ok: false, kode: 'ukjent_verktoy' }, svar: rpcFeil(id, -32602, `Ukjent verktøy «${String(navn)}».`) }
+  }
+  if (!db) return { utfall: { ok: false, kode: 'uten_database' }, svar: rpcFeil(id, -32603, 'Mangler oppkoblingen mot databasen.') }
+  const utfall = await utforHandling(db, nokkel, navn, args)
+  if (!utfall.ok && utfall.status === 403) return { utfall, svar: rpcFeil(id, -32001, utfall.feil) }
+  const instruks = navn === 'oversikt' ? await lesInstruks() : null
+  const foran = instruks === null ? undefined : `${INSTRUKSINNLEDNING}\n\n${instruks}`
+  return { utfall, svar: tekstsvar(id, utfall.ok ? utfall.data : { feil: utfall.feil, kode: utfall.kode }, !utfall.ok, foran) }
 }
 
 /** `/api/kuratering-mcp`. */

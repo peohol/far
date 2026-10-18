@@ -7,6 +7,9 @@
 
 type Skjema = Record<string, unknown>
 
+/** Formen på `klient_id` i `kommenter`; den samme står i databasen (`kuratering.kommentarer`). */
+export const KLIENT_ID = '^[A-Za-z0-9._:-]{8,100}$'
+
 const tekst = (beskrivelse: string, maks?: number): Skjema => ({ type: 'string', description: beskrivelse, ...(maks ? { maxLength: maks } : {}) })
 const heltall = (beskrivelse: string): Skjema => ({ type: 'integer', minimum: 0, description: beskrivelse })
 const gren = tekst('ID-en til kurateringsgrenen')
@@ -79,7 +82,7 @@ export const AGENTHANDLINGER: readonly Agenthandling[] = [
   {
     navn: 'kommenter',
     beskrivelse:
-      'En ny tråd festet til noe konkret i grenen, eller et svar i en tråd (svar_pa). En sperrende tråd hindrer godkjenning og publisering til den som åpnet den lukker den; bare kontrolløren åpner sperrende tråder. Kuratoren må svare i hver åpen sperrende tråd før neste kontrollrunde.',
+      'En ny tråd festet til noe konkret i grenen, eller et svar i en tråd (svar_pa). En sperrende tråd hindrer godkjenning og publisering til den som åpnet den lukker den; bare kontrolløren åpner sperrende tråder. Kuratoren må svare i hver åpen sperrende tråd før neste kontrollrunde. Kommentaren er lagret når svaret har lagret: true og id, og ikke når svaret er en feil. Uten svar kan den likevel være lagret: se i kommentarer, eller prøv igjen med samme klient_id. Med klient_id lagres den nøyaktig én gang: et nytt forsøk med de samme argumentene og samme klient_id svarer alt_lagret: true. Kommentaren er et internt arbeidsnotat i OUSFAR og sendes ikke videre.',
     argumenter: objekt(
       {
         gren,
@@ -94,6 +97,11 @@ export const AGENTHANDLINGER: readonly Agenthandling[] = [
           dokument: { type: 'string', enum: ['kildeplan', 'evidensjournal', 'dekningsmatrise', 'blindprotokoll', 'selvtest', 'notat'] },
         }),
         svar_pa: tekst('En kommentar i tråden som besvares'),
+        klient_id: {
+          type: 'string',
+          pattern: KLIENT_ID,
+          description: 'Valgfri ID du velger før det første forsøket, som «<gren>-r<revisjon>-<nr>»; bruk den samme når du prøver igjen',
+        },
       },
       ['gren', 'tekst'],
     ),

@@ -56,7 +56,7 @@ nytt).
 | `agenter` / `ny_agentnokkel` | admin | `{}` / `{agent}` |
 | `gjenopprett_versjon` | admin | `{stoff, nr, grunn?}` |
 | `kommentarer` | kurator (egen), kontrollør, admin | `{gren, apne?}` |
-| `kommenter` | kurator (egen), kontrollør, admin | `{gren, tekst, art?: "merknad" \| "sperrende", anker?}` eller `{gren, tekst, svar_pa}` |
+| `kommenter` | kurator (egen), kontrollør, admin | `{gren, tekst, art?: "merknad" \| "sperrende", anker?, klient_id?}` eller `{gren, tekst, svar_pa, klient_id?}`; svarer `{id, traad, kl, lagret: true}` (se [Kommentarene](#kommentarene)) |
 | `lukk_kommentar` | se [Kommentarene](#kommentarene) | `{gren, kommentar, tekst?}` |
 | `gjenapne_kommentar` | kontrollør, admin | `{gren, kommentar, tekst}` |
 
@@ -210,6 +210,45 @@ arkivert, står trådene som de var: de kan ikke kommenteres, lukkes eller
   svart etter gjenåpningen.
 - `les` gir trådene med `traader`: status, om tråden venter på kuratoren, og
   kommentarene.
+- En kommentar er lagret når `kommenter` svarer med `lagret: true` og `id`,
+  og ikke lagret når svaret er en feil fra OUSFAR. Uten et svar kan den være
+  lagret likevel: se i `kommentarer`, eller prøv igjen med den samme
+  `klient_id`. Med `klient_id` (8–100 tegn:
+  bokstaver, sifre og `. _ : -`), som agenten velger før det første forsøket,
+  lagres den nøyaktig én gang: et nytt forsøk med den samme ID-en og den
+  samme teksten i den samme tråden (for en ny tråd også den samme arten og
+  det samme ankeret) lagrer ingenting nytt og svarer med kommentaren som står
+  der (`alt_lagret: true`), også om grenen er avsluttet siden. Den samme
+  ID-en for noe annet avvises (`PT409`).
+  ID-en gjelder per agent og gren, og står på kommentaren i trådene.
+
+### Når et kall ikke blir lagret
+
+MCP-endepunktet skriver én linje i serverloggen (Vercel) for hvert
+verktøykall som når det, også når kallet feiler:
+`{"kuratering_mcp": <verktøy> | "ukjent", "utfall": "ok" | <feilkode>, "ms", "klient_id"?}`,
+uten nøkkel, argumenter eller fagtekst (`loggKall` i `endepunkt.ts`). Utfallet
+er databasens feilkode, eller `uten_database`, `ukjent_verktoy`,
+`uten_instruks` eller `unntak` (et uventet brudd underveis, der kallet kan
+være utført; kontrolløren får da beskjed om å se etter i grenen). Et kall
+ChatGPT stoppet før det ble sendt, står ikke der, og ingenting er lagret;
+svaret kontrolløren får, er da ChatGPTs egen melding, som «This tool call was
+blocked by OpenAI's safety checks». Et tidsavbrudd eller en brutt tilkobling
+etter at kallet nådde OUSFAR, kan ha lagret det. Hva kontrolløren gjør i hvert
+tilfelle, står i `docs/kontrollorinstruks.md` («Når et kall ikke blir
+lagret»).
+
+Natten 17.–18. oktober 2026 ble kontrollørens skrivekall (`kommenter`) i de
+planlagte kjøringene i ChatGPT stoppet med den meldingen. Ingen av dem nådde
+OUSFAR: kontrollørens siste kommentar er fra 17.10 kl. 09:12 og siste
+vurdering fra 18:55 (UTC), det står ingenting fra kontrolløren etter det, og
+serveren var ikke endret mellom kjøringene som virket og de som ble stoppet. Det samme er
+meldt av mange i OpenAIs utviklerforum siden slutten av september 2026: skriv
+fra planlagte oppgaver (Tasks) stoppes av en sikkerhetskontroll før kallet
+sendes, mens de samme kallene virker i en vanlig samtale; OpenAIs kundestøtte
+har bekreftet at det ble undersøkt (13. og 16.10), uten en rettelse. Dette
+ligger utenfor OUSFAR og må tas opp med OpenAI. Til det er rettet, er det
+kjøringer startet for hånd i en samtale som kan skrive.
 
 ## Publiseringen
 
