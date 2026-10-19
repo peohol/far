@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-19T02:02:46.068Z",
+  "oppdatert_kl": "2026-10-19T02:03:32.132Z",
   "malt_kl": "2026-10-18T10:30:22.628Z",
   "antall": {
     "klar": 79,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 10,
+    "venter_godkjenning": 11,
     "sammenslatt": 0,
     "publisert": 1,
     "blokkert": 8,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "fenytoin",
-      "oppgave": "fenytoin-0081",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-19T05:02:46.068Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "holdes_tilbake": null,
   "neste": [
     {
@@ -184,6 +176,12 @@
       "status": "venter_godkjenning"
     },
     {
+      "stoff": "fenytoin",
+      "gren": "40ecac1a-e908-4cb8-a62e-94546263372b",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    },
+    {
       "stoff": "flunitrazepam",
       "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
       "grenstatus": "klar",
@@ -244,7 +242,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-19T02:02:46.068Z",
+          "kl": "2026-10-19T02:03:32.132Z",
           "kilde": "system"
         }
       ]
@@ -254,8 +252,8 @@
       "blokkeringer": [
         {
           "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-19T02:02:46.068Z",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
+          "kl": "2026-10-19T02:03:32.132Z",
           "kilde": "system"
         }
       ]
@@ -276,8 +274,8 @@
       "blokkeringer": [
         {
           "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-19T02:02:46.068Z",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
+          "kl": "2026-10-19T02:03:32.132Z",
           "kilde": "system"
         }
       ]

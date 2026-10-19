@@ -1,18 +1,19 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-19T02:02:46.068Z. Stoffene sist lest fra databasen 2026-10-18T10:30:22.628Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-19T02:03:32.132Z. Stoffene sist lest fra databasen 2026-10-18T10:30:22.628Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 79 · Reservert: 1 · Venter på godkjenning: 10 · Publisert: 1 · Blokkert: 8 · Utenfor køen: 1
+Klar: 79 · Venter på godkjenning: 11 · Publisert: 1 · Blokkert: 8 · Utenfor køen: 1
 
 ## Pågår
 
-- **fenytoin** (fenytoin-0081), frist 2026-10-19T05:02:46.068Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
 - **brekspiprazol**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **cbd**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **doksepin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
+- **fenytoin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **flunitrazepam**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **ketobemidon**: kurateringsgren i OUSFAR (klar), venter på godkjenning
 - **lamotrigin**: kurateringsgren i OUSFAR (klar), venter på godkjenning
@@ -25,9 +26,9 @@ Klar: 79 · Reservert: 1 · Venter på godkjenning: 10 · Publisert: 1 · Blokke
 
 - **etanol**: Stoffet har ingen publisert fagside å kuratere.
 - **fenobarbital**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
-- **ghb**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
+- **ghb**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.
 - **kokain**: Stoffet har ingen publisert fagside å kuratere.
-- **lurasidon**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
+- **lurasidon**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.
 - **mdma**: Stoffet har ingen publisert fagside å kuratere.
 - **metamfetamin**: Stoffet har ingen publisert fagside å kuratere.
 - **okskarbazepin**: Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig.
