@@ -1,56 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-fenytoin-020216",
-  "foresporsel_sha256": "c3fcb90f97c3e969904b8fa8eb2b9a562b072e571e1589c75a56dae394df49ef",
-  "handling": "reserver",
+  "foresporsel_id": "fullfort-fenytoin-0081",
+  "foresporsel_sha256": "2fdd834e73122355c0c5aeccbf7279ab919378db6f6a57ad439cae465256a1c7",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "fenytoin er reservert til 2026-10-19T05:02:46.068Z.",
-  "behandlet_kl": "2026-10-19T02:02:46.068Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39188074479",
-  "oppgave": {
-    "oppgave": "fenytoin-0081",
-    "stoff": "fenytoin",
-    "navn": "Fenytoin",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-19T05:02:46.068Z",
-    "jobbgren": "kuratorjobb/fenytoin-0037",
-    "kurateringsgren": "kuratering/fenytoin-0081",
-    "pr": null,
-    "gren": "40ecac1a-e908-4cb8-a62e-94546263372b",
-    "gjenoppta": {
-      "oppgave": "fenytoin-0075",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "avbrutt_kl": "2026-10-19T02:02:46.068Z",
-      "grunn": "Grenen er tilbake hos kuratoren.",
-      "fase": null,
-      "jobbgren": "kuratorjobb/fenytoin-0037",
-      "kurateringsgren": null,
-      "pr": null,
-      "gren": "40ecac1a-e908-4cb8-a62e-94546263372b",
-      "kunnskapsgrense": "2026-10-17"
-    },
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-18T10:30:23.208Z",
-      "side": true,
-      "elementer": 6,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 4,
-      "referanser": 3,
-      "elementer_uten_kilde": 1
-    },
-    "prioritet": {
-      "poeng": 1447.6,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen fenytoin-0075.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ]
-    }
-  }
+  "melding": "fenytoin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-19T02:03:32.132Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39188134238"
 }
