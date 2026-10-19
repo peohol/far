@@ -1,13 +1,13 @@
 {
-  "oppdatert_kl": "2026-10-19T09:42:19.139Z",
+  "oppdatert_kl": "2026-10-19T10:33:37.676Z",
   "malt_kl": "2026-10-19T07:01:39.673Z",
   "antall": {
     "klar": 89,
     "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 1,
+    "venter_godkjenning": 0,
     "sammenslatt": 0,
-    "publisert": 4,
+    "publisert": 5,
     "blokkert": 5,
     "utenfor": 1
   },
@@ -164,14 +164,7 @@
       "tidligst_kl": null
     }
   ],
-  "til_gjennomgang": [
-    {
-      "stoff": "ketobemidon",
-      "gren": "030084b9-47c7-4ab5-8a71-11bfe76b6f5c",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    }
-  ],
+  "til_gjennomgang": [],
   "blokkert": [
     {
       "stoff": "etanol",

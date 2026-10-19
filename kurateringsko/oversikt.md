@@ -1,8 +1,8 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-19T09:42:19.139Z. Stoffene sist lest fra databasen 2026-10-19T07:01:39.673Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-19T10:33:37.676Z. Stoffene sist lest fra databasen 2026-10-19T07:01:39.673Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 89 · Venter på godkjenning: 1 · Publisert: 4 · Blokkert: 5 · Utenfor køen: 1
+Klar: 89 · Publisert: 5 · Blokkert: 5 · Utenfor køen: 1
 
 ## Pågår
 
@@ -10,7 +10,7 @@ Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
-- **ketobemidon**: kurateringsgren i OUSFAR (klar), venter på godkjenning
+Ingen kurateringer venter.
 
 ## Blokkert
 
