@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-18T20:30:18.036Z",
+  "oppdatert_kl": "2026-10-19T01:06:45.363Z",
   "malt_kl": "2026-10-18T10:30:22.628Z",
   "teller": 78,
   "stoffer": {
@@ -3718,11 +3718,19 @@
     "lamotrigin": {
       "stoff": "lamotrigin",
       "navn": "Lamotrigin",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1449.5,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen lamotrigin-0070.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "6 av 13 redaksjonelle seksjoner er tomme.",
+          "12 av 18 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-18T10:30:23.208Z",
@@ -3734,9 +3742,20 @@
         "elementer_uten_kilde": 12
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "lamotrigin-0070",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-19T01:06:45.363Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/lamotrigin-0019",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "48e10b1b-31b0-452d-9e29-8404e30aa989",
+        "kunnskapsgrense": "2026-10-17"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -3749,18 +3768,6 @@
       },
       "aktiv": true,
       "historikk": [
-        {
-          "kl": "2026-10-17T05:07:11.984Z",
-          "hendelse": "gren_tilbakemelding",
-          "oppgave": "lamotrigin-0019",
-          "melding": "Grenen: tilbakemelding, revisjon 4, kontrollrunde 1."
-        },
-        {
-          "kl": "2026-10-17T05:07:11.984Z",
-          "hendelse": "retting",
-          "oppgave": "lamotrigin-0019",
-          "melding": "Kontrolløren har bedt om endringer i kontrollrunde 1."
-        },
         {
           "kl": "2026-10-17T05:31:48.279Z",
           "hendelse": "reservert",
@@ -3940,20 +3947,21 @@
           "hendelse": "gren_klar",
           "oppgave": "lamotrigin-0070",
           "melding": "Grenen: klar, revisjon 9, kontrollrunde 3."
+        },
+        {
+          "kl": "2026-10-19T01:06:45.363Z",
+          "hendelse": "gren_retting",
+          "oppgave": "lamotrigin-0070",
+          "melding": "Grenen: retting, revisjon 10, kontrollrunde 2."
+        },
+        {
+          "kl": "2026-10-19T01:06:45.363Z",
+          "hendelse": "retting",
+          "oppgave": "lamotrigin-0070",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "48e10b1b-31b0-452d-9e29-8404e30aa989",
-        "oppgave": "lamotrigin-0070",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-17",
-        "jobbgren": "kuratorjobb/lamotrigin-0019",
-        "registrert_kl": "2026-10-18T17:47:30.691Z",
-        "status": "klar",
-        "revisjon": 9,
-        "kontrollrunde": 3
-      }
+      "appgren": null
     },
     "lerkanidipin": {
       "stoff": "lerkanidipin",
@@ -5998,11 +6006,19 @@
     "topiramat": {
       "stoff": "topiramat",
       "navn": "Topiramat",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1447.6,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen topiramat-0076.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-18T10:30:23.208Z",
@@ -6014,9 +6030,20 @@
         "elementer_uten_kilde": 1
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "topiramat-0076",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-19T01:06:45.363Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/topiramat-0041",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "6a91451c-9e4a-4712-a913-253546677b1e",
+        "kunnskapsgrense": "2026-10-17"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -6029,19 +6056,6 @@
       },
       "aktiv": true,
       "historikk": [
-        {
-          "kl": "2026-10-17T16:21:46.892Z",
-          "hendelse": "reservert",
-          "oppgave": "topiramat-0041",
-          "okt": "kurateringsko/okt/20261016-125910",
-          "melding": "Forsøk 1, de_novo."
-        },
-        {
-          "kl": "2026-10-17T16:52:21.115Z",
-          "hendelse": "fornyet",
-          "oppgave": "topiramat-0041",
-          "okt": "kurateringsko/okt/20261016-125910"
-        },
         {
           "kl": "2026-10-17T17:28:29.450Z",
           "hendelse": "gren_funnet",
@@ -6220,20 +6234,21 @@
           "hendelse": "gren_klar",
           "oppgave": "topiramat-0076",
           "melding": "Grenen: klar, revisjon 12, kontrollrunde 1."
+        },
+        {
+          "kl": "2026-10-19T01:06:45.363Z",
+          "hendelse": "gren_arbeid",
+          "oppgave": "topiramat-0076",
+          "melding": "Grenen: arbeid, revisjon 13, kontrollrunde 0."
+        },
+        {
+          "kl": "2026-10-19T01:06:45.363Z",
+          "hendelse": "retting",
+          "oppgave": "topiramat-0076",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "6a91451c-9e4a-4712-a913-253546677b1e",
-        "oppgave": "topiramat-0076",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-17",
-        "jobbgren": "kuratorjobb/topiramat-0041",
-        "registrert_kl": "2026-10-18T19:28:43.863Z",
-        "status": "klar",
-        "revisjon": 12,
-        "kontrollrunde": 1
-      }
+      "appgren": null
     },
     "tramadol": {
       "stoff": "tramadol",

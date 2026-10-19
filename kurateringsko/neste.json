@@ -1,19 +1,49 @@
 {
-  "oppdatert_kl": "2026-10-18T20:30:18.036Z",
+  "oppdatert_kl": "2026-10-19T01:06:45.363Z",
   "malt_kl": "2026-10-18T10:30:22.628Z",
   "antall": {
-    "klar": 78,
+    "klar": 80,
     "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 12,
+    "venter_godkjenning": 10,
     "sammenslatt": 0,
     "publisert": 4,
     "blokkert": 5,
     "utenfor": 1
   },
   "aktive": [],
-  "holdes_tilbake": "12 kurateringsgrener venter på kontroll; et nytt stoff gis ut når færre enn 5 gjør det.",
+  "holdes_tilbake": null,
   "neste": [
+    {
+      "stoff": "lamotrigin",
+      "modus": "de_novo",
+      "poeng": 1449.5,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen lamotrigin-0070.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "6 av 13 redaksjonelle seksjoner er tomme.",
+        "12 av 18 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "topiramat",
+      "modus": "de_novo",
+      "poeng": 1447.6,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen topiramat-0076.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 4 referanser."
+      ],
+      "tidligst_kl": null
+    },
     {
       "stoff": "valproat",
       "modus": "de_novo",
@@ -125,34 +155,6 @@
         "Bare 2 referanser."
       ],
       "tidligst_kl": null
-    },
-    {
-      "stoff": "zopiklon",
-      "modus": "de_novo",
-      "poeng": 445.5,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 8 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "litium",
-      "modus": "de_novo",
-      "poeng": 444.8,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 9 elementer har ingen kilde.",
-        "Bare 4 referanser."
-      ],
-      "tidligst_kl": null
     }
   ],
   "til_gjennomgang": [
@@ -199,12 +201,6 @@
       "status": "venter_godkjenning"
     },
     {
-      "stoff": "lamotrigin",
-      "gren": "48e10b1b-31b0-452d-9e29-8404e30aa989",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
       "stoff": "levetiracetam",
       "gren": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
       "grenstatus": "klar",
@@ -213,12 +209,6 @@
     {
       "stoff": "sertindol",
       "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
-      "stoff": "topiramat",
-      "gren": "6a91451c-9e4a-4712-a913-253546677b1e",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     },
