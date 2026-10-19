@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.104.0',
+    dato: '2026-10-19',
+    sammendrag: 'Tema og «Reduser bevegelse» kan følge maskinen',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Mindre omfang',
+    gjelder: ['hele appen'],
+    punkter: [
+      'Under «Preferanser» i kontomenyen velges temaet nå med tre valg: lyst (sol), mørkt (måne) eller følg systemet (skjerm). Følger du systemet, skifter appen mellom lyst og mørkt sammen med maskinen.',
+      'Nytt valg «Reduser bevegelse»: ja, nei eller følg systemet. Står det på, ligger ikonene i ro i stedet for å spille den lille animasjonen sin. Rulling og åpning og lukking av kort er som før.',
+      'Begge valgene huskes på kontoen. Nye brukere følger systemet; har du valgt tema før, står det valget.',
+    ],
+  },
+  {
     versjon: '1.103.12',
     dato: '2026-10-19',
     sammendrag: 'Claude-trådene arbeider uten å spørre om lov for vanlige steg',

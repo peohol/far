@@ -7,16 +7,8 @@
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="description" content="Verktøy for å kommentere farmakologiske analyser." />
     <title>Kommentarverktøy for farmakologiske analyser</title>
-    <script>
-      // Settes før første maling slik at siden ikke blinker i feil tema.
-      // Mørkt er standard; et lagret valg går foran.
-      try {
-        var lagret = localStorage.getItem('far:tema')
-        document.documentElement.dataset.tema = lagret === 'lyst' ? 'lyst' : 'moerkt'
-      } catch (e) {
-        document.documentElement.dataset.tema = 'moerkt'
-      }
-    </script>
+    <!-- Temaet og «Reduser bevegelse» settes før første maling av et skript
+         vite.config.ts legger inn her (src/domain/systemvalg.ts). -->
   </head>
   <body>
     <div id="root"></div>

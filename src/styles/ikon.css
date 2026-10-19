@@ -162,35 +162,45 @@
    ble uskarpt i hvile. Derfor slutter hver animasjon der tegningen står
    (eller i en vinkel der formen ser lik ut), og ingenting blir holdt igjen. */
 .ikon[data-spiller] [data-anim] {
+  animation-duration: var(--ikon-tid);
   animation-timing-function: var(--kurve-ikon);
   transform-box: fill-box;
   transform-origin: center;
 }
 
-.ikon[data-spiller] [data-anim='spin45'] { animation-name: o-spin45; animation-duration: 900ms; }
-.ikon[data-spiller] [data-anim='spinm60'] { animation-name: o-spinm60; animation-duration: 900ms; }
-.ikon[data-spiller] [data-anim='spin240'] { animation-name: o-spin240; animation-duration: 1100ms; transform-box: view-box; }
-.ikon[data-spiller] [data-anim='spinback'] { animation-name: o-spinback; animation-duration: 800ms; transform-box: view-box; }
-.ikon[data-spiller] [data-anim='spin360'] { animation-name: o-spin360; animation-duration: 900ms; transform-box: view-box; }
-.ikon[data-spiller] [data-anim='rayL'] { animation-name: o-rayL; animation-duration: 900ms; }
-.ikon[data-spiller] [data-anim='rayS'] { animation-name: o-rayS; animation-duration: 900ms; }
-.ikon[data-spiller] [data-anim='wink'] { animation-name: o-wink; animation-duration: 520ms; }
-.ikon[data-spiller] [data-anim='pop'] { animation-name: o-pop; animation-duration: 480ms; }
-.ikon[data-spiller] [data-anim='drop'] { animation-name: o-drop; animation-duration: 700ms; }
-.ikon[data-spiller] [data-anim='bumpR'] { animation-name: o-bumpR; animation-duration: 560ms; }
-.ikon[data-spiller] [data-anim='bumpL'] { animation-name: o-bumpL; animation-duration: 560ms; }
-.ikon[data-spiller] [data-anim='flash'] { animation-name: o-flash; animation-duration: 600ms; }
-.ikon[data-spiller] [data-anim='draw'] { animation-name: o-draw; animation-duration: 1000ms; stroke-dasharray: 1; }
-.ikon[data-spiller] [data-anim='tick'] { animation-name: o-tick; animation-duration: 900ms; transform-box: view-box; transform-origin: 33px 33px; }
-.ikon[data-spiller] [data-anim='fill'] { animation-name: o-fill; animation-duration: 800ms; transform-origin: bottom; }
-.ikon[data-spiller] [data-anim='shake'] { animation-name: o-shake; animation-duration: 520ms; transform-box: view-box; }
-.ikon[data-spiller] [data-anim='pulse'] { animation-name: o-pulse; animation-duration: 480ms; transform-box: view-box; }
-.ikon[data-spiller] [data-anim='glidR'] { animation-name: o-glidR; animation-duration: 900ms; }
-.ikon[data-spiller] [data-anim='glidL'] { animation-name: o-glidL; animation-duration: 900ms; }
+.ikon[data-spiller] [data-anim='spin45'] { animation-name: o-spin45; --ikon-tid: 900ms; }
+.ikon[data-spiller] [data-anim='spinm60'] { animation-name: o-spinm60; --ikon-tid: 900ms; }
+.ikon[data-spiller] [data-anim='spin240'] { animation-name: o-spin240; --ikon-tid: 1100ms; transform-box: view-box; }
+.ikon[data-spiller] [data-anim='spinback'] { animation-name: o-spinback; --ikon-tid: 800ms; transform-box: view-box; }
+.ikon[data-spiller] [data-anim='spin360'] { animation-name: o-spin360; --ikon-tid: 900ms; transform-box: view-box; }
+.ikon[data-spiller] [data-anim='rayL'] { animation-name: o-rayL; --ikon-tid: 900ms; }
+.ikon[data-spiller] [data-anim='rayS'] { animation-name: o-rayS; --ikon-tid: 900ms; }
+.ikon[data-spiller] [data-anim='wink'] { animation-name: o-wink; --ikon-tid: 520ms; }
+.ikon[data-spiller] [data-anim='pop'] { animation-name: o-pop; --ikon-tid: 480ms; }
+.ikon[data-spiller] [data-anim='drop'] { animation-name: o-drop; --ikon-tid: 700ms; }
+.ikon[data-spiller] [data-anim='bumpR'] { animation-name: o-bumpR; --ikon-tid: 560ms; }
+.ikon[data-spiller] [data-anim='bumpL'] { animation-name: o-bumpL; --ikon-tid: 560ms; }
+.ikon[data-spiller] [data-anim='flash'] { animation-name: o-flash; --ikon-tid: 600ms; }
+.ikon[data-spiller] [data-anim='draw'] { animation-name: o-draw; --ikon-tid: 1000ms; stroke-dasharray: 1; }
+.ikon[data-spiller] [data-anim='tick'] { animation-name: o-tick; --ikon-tid: 900ms; transform-box: view-box; transform-origin: 33px 33px; }
+.ikon[data-spiller] [data-anim='fill'] { animation-name: o-fill; --ikon-tid: 800ms; transform-origin: bottom; }
+.ikon[data-spiller] [data-anim='shake'] { animation-name: o-shake; --ikon-tid: 520ms; transform-box: view-box; }
+.ikon[data-spiller] [data-anim='pulse'] { animation-name: o-pulse; --ikon-tid: 480ms; transform-box: view-box; }
+.ikon[data-spiller] [data-anim='glidR'] { animation-name: o-glidR; --ikon-tid: 900ms; }
+.ikon[data-spiller] [data-anim='glidL'] { animation-name: o-glidL; --ikon-tid: 900ms; }
 
+/* «Reduser bevegelse» (`BEVEGELSE` i src/domain/systemvalg.ts) gjelder bare
+   ikonene: `data-bevegelse` på <html> er den virkelige verdien, også når
+   valget er å følge systemet. Rulling og kort følger systemet som før. */
+:root[data-bevegelse='redusert'] .ikon [data-anim] {
+  animation: none !important;
+}
+
+/* Har brukeren svart nei mens systemet ber om mindre bevegelse, korter
+   `base.css` ned alle animasjoner; ikonene får tiden sin tilbake. */
 @media (prefers-reduced-motion: reduce) {
-  .ikon [data-anim] {
-    animation: none !important;
+  :root[data-bevegelse='full'] .ikon[data-spiller] [data-anim] {
+    animation-duration: var(--ikon-tid) !important;
   }
 }
 

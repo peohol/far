@@ -134,7 +134,8 @@ dem. Bare de åpne idéene står under overskriftene. Gruppert etter kategori
 har hver kategori en knapp for en ny idé under den nederste, som starter
 skjemaet med kategorien valgt. Tid står med de nyeste først. Valget lagres i `brukerinnstillinger` under
 nøkkelen `ideer.sortering`, en liten tabell for valg som følger brukeren. Den
-brukes også til andre slike valg, som temaet (`tema`, se `hooks/useKontotema.ts`);
+brukes også til andre slike valg, som temaet (`tema`) og «Reduser bevegelse»
+(`bevegelse`), se `domain/systemvalg.ts` og `hooks/useKontovalg.ts`;
 lesing og skriving går gjennom `auth/innstillinger.ts`.
 
 ## Riktekst

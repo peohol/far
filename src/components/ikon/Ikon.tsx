@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactElement, type SVGProps } from 'react'
+import { BEVEGELSE } from '../../domain/systemvalg'
 import { IKONER, IKONFARGER, type Ikondefinisjon, type Ikondel, type Ikonnavn } from './register'
 
 /**
@@ -28,9 +29,13 @@ export interface IkonProps extends Omit<SVGProps<SVGSVGElement>, 'children' | 'r
 
 const STORRELSER: readonly string[] = ['tekst', 'ui', 'underpunkt', 'seksjon', 'konsept', 'plot']
 
-/** Brukeren har bedt om mindre bevegelse. CSS-en slår også av animasjonene. */
+/**
+ * Brukeren har bedt om mindre bevegelse, selv eller gjennom systemet
+ * («Reduser bevegelse», `BEVEGELSE`). Leses ved hver avspilling, så et nytt
+ * valg gjelder med en gang. CSS-en slår også av animasjonene.
+ */
 function roligBevegelse(): boolean {
-  return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
+  return document.documentElement.dataset[BEVEGELSE.attributt] === BEVEGELSE.naarSann
 }
 
 /**
@@ -44,7 +49,7 @@ const SYNLIG = 0.6
  * Ikonet spiller en kort animasjon én gang når nærmeste `[data-ih]`-forelder
  * (ellers forelderen) får pekeren over seg eller fokus, og første gang det
  * kommer i bildet. Det er aldri kontinuerlig bevegelse, og ingenting spilles
- * med `prefers-reduced-motion`.
+ * når «Reduser bevegelse» står på.
  *
  * Fargen på hver del kommer fra semantiske tokens, så samme ikon virker i
  * lyst og mørkt tema. Farge er aldri eneste betydningsbærer: ikonet står
@@ -57,9 +62,11 @@ export function Ikon({ navn, storrelse = 'tekst', etikett, className, ...rest }:
 
   useEffect(() => {
     const el = svg.current
-    if (!el || roligBevegelse()) return
+    if (!el) return
     const vert = el.parentElement?.closest<HTMLElement>('[data-ih]') ?? el.parentElement
-    const spill = () => setSpilt((n) => n + 1)
+    const spill = () => {
+      if (!roligBevegelse()) setSpilt((n) => n + 1)
+    }
     vert?.addEventListener('mouseenter', spill)
     vert?.addEventListener('focusin', spill)
     let observator: IntersectionObserver | undefined

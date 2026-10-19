@@ -305,6 +305,19 @@
   color: var(--paa-aksent);
 }
 
+/* Et ikon i stedet for merket står i sine egne farger, og i én farge på
+   aksenten når valget står. */
+.trinnbryter__valg .ikon {
+  flex: none;
+}
+
+.trinnbryter__valg--valgt .ikon,
+.trinnbryter__valg--valgt .ikon [data-farge] {
+  --ikon-farge: var(--paa-aksent);
+  --ikon-linje: var(--paa-aksent);
+  --ikon-blekk: var(--paa-aksent);
+}
+
 /* --- Tekstfelt ---------------------------------------------------------------
    Et tekstfelt vokser med teksten, men aldri forbi halve den synlige høyden
    av flaten det står på — kroppen i et modalt lag, diskusjonsmenyen, ellers
