@@ -1,11 +1,11 @@
 {
-  "oppdatert_kl": "2026-10-19T07:50:40.707Z",
+  "oppdatert_kl": "2026-10-19T08:46:20.819Z",
   "malt_kl": "2026-10-19T07:01:39.673Z",
   "antall": {
-    "klar": 83,
+    "klar": 89,
     "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 7,
+    "venter_godkjenning": 1,
     "sammenslatt": 0,
     "publisert": 1,
     "blokkert": 8,
@@ -30,6 +30,65 @@
       "tidligst_kl": null
     },
     {
+      "stoff": "kariprazin",
+      "modus": "de_novo",
+      "poeng": 1464.8,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen kariprazin-0082.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "7 av 13 redaksjonelle seksjoner er tomme.",
+        "18 av 22 elementer har ingen kilde.",
+        "Bare 2 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "cbd",
+      "modus": "de_novo",
+      "poeng": 1462.3,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen cbd-0071.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "12 av 13 redaksjonelle seksjoner er tomme.",
+        "Bare 1 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "doksepin",
+      "modus": "de_novo",
+      "poeng": 1460.7,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen doksepin-0077.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "7 av 13 redaksjonelle seksjoner er tomme.",
+        "14 av 19 elementer har ingen kilde.",
+        "Bare 4 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "vortioksetin",
+      "modus": "de_novo",
+      "poeng": 1455.7,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen vortioksetin-0068.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "6 av 13 redaksjonelle seksjoner er tomme.",
+        "19 av 24 elementer har ingen kilde.",
+        "Bare 4 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
       "stoff": "flunitrazepam",
       "modus": "de_novo",
       "poeng": 1451.7,
@@ -41,6 +100,21 @@
         "9 av 13 redaksjonelle seksjoner er tomme.",
         "2 av 8 elementer har ingen kilde.",
         "Bare 1 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "lamotrigin",
+      "modus": "de_novo",
+      "poeng": 1449.5,
+      "grunner": [
+        "Fortsetter den avbrutte kurateringen lamotrigin-0079.",
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "6 av 13 redaksjonelle seksjoner er tomme.",
+        "12 av 18 elementer har ingen kilde.",
+        "Bare 3 referanser."
       ],
       "tidligst_kl": null
     },
@@ -75,86 +149,16 @@
       "tidligst_kl": null
     },
     {
-      "stoff": "topiramat",
+      "stoff": "sertindol",
       "modus": "de_novo",
       "poeng": 1447.6,
       "grunner": [
-        "Fortsetter den avbrutte kurateringen topiramat-0080.",
+        "Fortsetter den avbrutte kurateringen sertindol-0078.",
         "De novo-kuratering i runden som gjelder.",
         "Aldri kuratert.",
         "Ingen kuratering å regne alderen fra.",
         "9 av 13 redaksjonelle seksjoner er tomme.",
         "1 av 6 elementer har ingen kilde.",
-        "Bare 4 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "valproat",
-      "modus": "de_novo",
-      "poeng": 447.6,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "atomoksetin",
-      "modus": "de_novo",
-      "poeng": 446.4,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 7 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "alprazolam",
-      "modus": "de_novo",
-      "poeng": 445.5,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 8 elementer har ingen kilde.",
-        "Bare 2 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "diazepam",
-      "modus": "de_novo",
-      "poeng": 445.5,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 8 elementer har ingen kilde.",
-        "Bare 4 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "nitrazepam",
-      "modus": "de_novo",
-      "poeng": 445.5,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 8 elementer har ingen kilde.",
         "Bare 2 referanser."
       ],
       "tidligst_kl": null
@@ -162,44 +166,8 @@
   ],
   "til_gjennomgang": [
     {
-      "stoff": "cbd",
-      "gren": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
-      "stoff": "doksepin",
-      "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
-      "stoff": "kariprazin",
-      "gren": "e2d4268c-247a-445f-9986-74e32400b738",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
       "stoff": "ketobemidon",
       "gren": "030084b9-47c7-4ab5-8a71-11bfe76b6f5c",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
-      "stoff": "lamotrigin",
-      "gren": "48e10b1b-31b0-452d-9e29-8404e30aa989",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
-      "stoff": "sertindol",
-      "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
-      "grenstatus": "klar",
-      "status": "venter_godkjenning"
-    },
-    {
-      "stoff": "vortioksetin",
-      "gren": "afab07ef-a24e-485e-b31f-9f38498a61af",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     }
@@ -222,7 +190,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-19T07:50:40.707Z",
+          "kl": "2026-10-19T08:46:20.819Z",
           "kilde": "system"
         }
       ]
@@ -233,7 +201,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-19T07:50:40.707Z",
+          "kl": "2026-10-19T08:46:20.819Z",
           "kilde": "system"
         }
       ]
@@ -255,7 +223,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-19T07:50:40.707Z",
+          "kl": "2026-10-19T08:46:20.819Z",
           "kilde": "system"
         }
       ]

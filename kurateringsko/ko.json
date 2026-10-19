@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-19T07:50:40.707Z",
+  "oppdatert_kl": "2026-10-19T08:46:20.819Z",
   "malt_kl": "2026-10-19T07:01:39.673Z",
   "teller": 82,
   "stoffer": {
@@ -785,11 +785,18 @@
     "cbd": {
       "stoff": "cbd",
       "navn": "CBD",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1462.3,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen cbd-0071.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "12 av 13 redaksjonelle seksjoner er tomme.",
+          "Bare 1 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-19T07:01:40.450Z",
@@ -801,9 +808,20 @@
         "elementer_uten_kilde": 0
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "cbd-0071",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-19T08:46:20.819Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/cbd-0013",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
+        "kunnskapsgrense": "2026-10-16"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -816,18 +834,6 @@
       },
       "aktiv": true,
       "historikk": [
-        {
-          "kl": "2026-10-16T22:34:51.735Z",
-          "hendelse": "gren_funnet",
-          "oppgave": "cbd-0013",
-          "melding": "Fant kurateringsgrenen a7bbf679-f4ca-4c6a-b74d-42d928c37b11."
-        },
-        {
-          "kl": "2026-10-16T22:34:51.735Z",
-          "hendelse": "fornyet",
-          "oppgave": "cbd-0013",
-          "okt": "kurateringsko/okt/20261016-125910"
-        },
         {
           "kl": "2026-10-16T23:03:10.884Z",
           "hendelse": "fullfort",
@@ -1006,20 +1012,21 @@
           "hendelse": "gren_klar",
           "oppgave": "cbd-0071",
           "melding": "Grenen: klar, revisjon 11, kontrollrunde 4."
+        },
+        {
+          "kl": "2026-10-19T08:46:20.819Z",
+          "hendelse": "gren_retting",
+          "oppgave": "cbd-0071",
+          "melding": "Grenen: retting, revisjon 11, kontrollrunde 3."
+        },
+        {
+          "kl": "2026-10-19T08:46:20.819Z",
+          "hendelse": "retting",
+          "oppgave": "cbd-0071",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
-        "oppgave": "cbd-0071",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-16",
-        "jobbgren": "kuratorjobb/cbd-0013",
-        "registrert_kl": "2026-10-18T18:00:08.616Z",
-        "status": "klar",
-        "revisjon": 11,
-        "kontrollrunde": 4
-      }
+      "appgren": null
     },
     "citalopram": {
       "stoff": "citalopram",
@@ -1286,11 +1293,19 @@
     "doksepin": {
       "stoff": "doksepin",
       "navn": "Doksepin",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1460.7,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen doksepin-0077.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "7 av 13 redaksjonelle seksjoner er tomme.",
+          "14 av 19 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-19T07:01:40.450Z",
@@ -1302,9 +1317,20 @@
         "elementer_uten_kilde": 14
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "doksepin-0077",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-19T08:46:20.819Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/doksepin-0028",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
+        "kunnskapsgrense": "2026-10-16"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -1317,19 +1343,6 @@
       },
       "aktiv": true,
       "historikk": [
-        {
-          "kl": "2026-10-17T00:03:17.016Z",
-          "hendelse": "fullfort",
-          "oppgave": "doksepin-0014",
-          "okt": "kurateringsko/okt/20261016-125910",
-          "melding": "Kurateringsgrenen 14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f, kunnskapsgrense 2026-10-16."
-        },
-        {
-          "kl": "2026-10-17T00:03:17.016Z",
-          "hendelse": "gren_klar",
-          "oppgave": "doksepin-0014",
-          "melding": "Grenen: klar, revisjon 4, kontrollrunde 1."
-        },
         {
           "kl": "2026-10-17T00:52:44.469Z",
           "hendelse": "gren_tilbakemelding",
@@ -1509,20 +1522,21 @@
           "hendelse": "gren_klar",
           "oppgave": "doksepin-0077",
           "melding": "Grenen: klar, revisjon 12, kontrollrunde 5."
+        },
+        {
+          "kl": "2026-10-19T08:46:20.819Z",
+          "hendelse": "gren_retting",
+          "oppgave": "doksepin-0077",
+          "melding": "Grenen: retting, revisjon 12, kontrollrunde 4."
+        },
+        {
+          "kl": "2026-10-19T08:46:20.819Z",
+          "hendelse": "retting",
+          "oppgave": "doksepin-0077",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
-        "oppgave": "doksepin-0077",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-16",
-        "jobbgren": "kuratorjobb/doksepin-0028",
-        "registrert_kl": "2026-10-18T19:30:09.997Z",
-        "status": "klar",
-        "revisjon": 12,
-        "kontrollrunde": 5
-      }
+      "appgren": null
     },
     "duloksetin": {
       "stoff": "duloksetin",
@@ -1763,7 +1777,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-19T07:50:40.707Z",
+          "kl": "2026-10-19T08:46:20.819Z",
           "kilde": "system"
         }
       ],
@@ -2616,7 +2630,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-19T07:50:40.707Z",
+          "kl": "2026-10-19T08:46:20.819Z",
           "kilde": "system"
         }
       ],
@@ -3001,11 +3015,19 @@
     "kariprazin": {
       "stoff": "kariprazin",
       "navn": "Kariprazin",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1464.8,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen kariprazin-0082.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "7 av 13 redaksjonelle seksjoner er tomme.",
+          "18 av 22 elementer har ingen kilde.",
+          "Bare 2 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-19T07:01:40.450Z",
@@ -3017,9 +3039,20 @@
         "elementer_uten_kilde": 18
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "kariprazin-0082",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-19T08:46:20.819Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/kariprazin-0012",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "e2d4268c-247a-445f-9986-74e32400b738",
+        "kunnskapsgrense": "2026-10-16"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -3196,20 +3229,21 @@
           "hendelse": "gren_klar",
           "oppgave": "kariprazin-0082",
           "melding": "Grenen: klar, revisjon 11, kontrollrunde 4."
+        },
+        {
+          "kl": "2026-10-19T08:46:20.819Z",
+          "hendelse": "gren_retting",
+          "oppgave": "kariprazin-0082",
+          "melding": "Grenen: retting, revisjon 11, kontrollrunde 3."
+        },
+        {
+          "kl": "2026-10-19T08:46:20.819Z",
+          "hendelse": "retting",
+          "oppgave": "kariprazin-0082",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "e2d4268c-247a-445f-9986-74e32400b738",
-        "oppgave": "kariprazin-0082",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-16",
-        "jobbgren": "kuratorjobb/kariprazin-0012",
-        "registrert_kl": "2026-10-19T02:16:11.129Z",
-        "status": "klar",
-        "revisjon": 11,
-        "kontrollrunde": 4
-      }
+      "appgren": null
     },
     "karvedilol": {
       "stoff": "karvedilol",
@@ -3844,11 +3878,19 @@
     "lamotrigin": {
       "stoff": "lamotrigin",
       "navn": "Lamotrigin",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1449.5,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen lamotrigin-0079.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "6 av 13 redaksjonelle seksjoner er tomme.",
+          "12 av 18 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-19T07:01:40.450Z",
@@ -3860,9 +3902,20 @@
         "elementer_uten_kilde": 12
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "lamotrigin-0079",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-19T08:46:20.819Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/lamotrigin-0019",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "48e10b1b-31b0-452d-9e29-8404e30aa989",
+        "kunnskapsgrense": "2026-10-17"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -3875,18 +3928,6 @@
       },
       "aktiv": true,
       "historikk": [
-        {
-          "kl": "2026-10-17T06:24:57.621Z",
-          "hendelse": "gren_tilbakemelding",
-          "oppgave": "lamotrigin-0025",
-          "melding": "Grenen: tilbakemelding, revisjon 5, kontrollrunde 2."
-        },
-        {
-          "kl": "2026-10-17T06:24:57.621Z",
-          "hendelse": "retting",
-          "oppgave": "lamotrigin-0025",
-          "melding": "Kontrolløren har bedt om endringer i kontrollrunde 2."
-        },
         {
           "kl": "2026-10-17T07:48:08.816Z",
           "hendelse": "reservert",
@@ -4066,20 +4107,21 @@
           "hendelse": "gren_klar",
           "oppgave": "lamotrigin-0079",
           "melding": "Grenen: klar, revisjon 10, kontrollrunde 3."
+        },
+        {
+          "kl": "2026-10-19T08:46:20.819Z",
+          "hendelse": "gren_retting",
+          "oppgave": "lamotrigin-0079",
+          "melding": "Grenen: retting, revisjon 10, kontrollrunde 2."
+        },
+        {
+          "kl": "2026-10-19T08:46:20.819Z",
+          "hendelse": "retting",
+          "oppgave": "lamotrigin-0079",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "48e10b1b-31b0-452d-9e29-8404e30aa989",
-        "oppgave": "lamotrigin-0079",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-17",
-        "jobbgren": "kuratorjobb/lamotrigin-0019",
-        "registrert_kl": "2026-10-19T01:08:18.913Z",
-        "status": "klar",
-        "revisjon": 10,
-        "kontrollrunde": 3
-      }
+      "appgren": null
     },
     "lerkanidipin": {
       "stoff": "lerkanidipin",
@@ -4564,7 +4606,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-19T07:50:40.707Z",
+          "kl": "2026-10-19T08:46:20.819Z",
           "kilde": "system"
         }
       ],
@@ -5677,11 +5719,19 @@
     "sertindol": {
       "stoff": "sertindol",
       "navn": "Sertindol",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1447.6,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen sertindol-0078.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde.",
+          "Bare 2 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-19T07:01:40.450Z",
@@ -5693,9 +5743,20 @@
         "elementer_uten_kilde": 1
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "sertindol-0078",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-19T08:46:20.819Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/sertindol-0040",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
+        "kunnskapsgrense": "2026-10-17"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -5878,20 +5939,21 @@
           "hendelse": "gren_klar",
           "oppgave": "sertindol-0078",
           "melding": "Grenen: klar, revisjon 10, kontrollrunde 1."
+        },
+        {
+          "kl": "2026-10-19T08:46:20.819Z",
+          "hendelse": "gren_arbeid",
+          "oppgave": "sertindol-0078",
+          "melding": "Grenen: arbeid, revisjon 10, kontrollrunde 0."
+        },
+        {
+          "kl": "2026-10-19T08:46:20.819Z",
+          "hendelse": "retting",
+          "oppgave": "sertindol-0078",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
-        "oppgave": "sertindol-0078",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-17",
-        "jobbgren": "kuratorjobb/sertindol-0040",
-        "registrert_kl": "2026-10-18T19:50:48.330Z",
-        "status": "klar",
-        "revisjon": 10,
-        "kontrollrunde": 1
-      }
+      "appgren": null
     },
     "sertralin": {
       "stoff": "sertralin",
@@ -6103,7 +6165,7 @@
       "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 52.2,
+        "poeng": 52.5,
         "grunner": [
           "De novo-kuratering i runden som gjelder.",
           "Sist kuratert 2026-10-10."
@@ -6652,11 +6714,19 @@
     "vortioksetin": {
       "stoff": "vortioksetin",
       "navn": "Vortioksetin",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1455.7,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen vortioksetin-0068.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "6 av 13 redaksjonelle seksjoner er tomme.",
+          "19 av 24 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
       },
       "maal": {
         "kl": "2026-10-19T07:01:40.450Z",
@@ -6668,9 +6738,20 @@
         "elementer_uten_kilde": 19
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "vortioksetin-0068",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-19T08:46:20.819Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/vortioksetin-0015",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "afab07ef-a24e-485e-b31f-9f38498a61af",
+        "kunnskapsgrense": "2026-10-17"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -6847,20 +6928,21 @@
           "hendelse": "gren_klar",
           "oppgave": "vortioksetin-0068",
           "melding": "Grenen: klar, revisjon 9, kontrollrunde 3."
+        },
+        {
+          "kl": "2026-10-19T08:46:20.819Z",
+          "hendelse": "gren_retting",
+          "oppgave": "vortioksetin-0068",
+          "melding": "Grenen: retting, revisjon 9, kontrollrunde 2."
+        },
+        {
+          "kl": "2026-10-19T08:46:20.819Z",
+          "hendelse": "retting",
+          "oppgave": "vortioksetin-0068",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "afab07ef-a24e-485e-b31f-9f38498a61af",
-        "oppgave": "vortioksetin-0068",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-17",
-        "jobbgren": "kuratorjobb/vortioksetin-0015",
-        "registrert_kl": "2026-10-18T04:34:44.794Z",
-        "status": "klar",
-        "revisjon": 9,
-        "kontrollrunde": 3
-      }
+      "appgren": null
     },
     "ziprasidon": {
       "stoff": "ziprasidon",
