@@ -4,7 +4,6 @@ import {
   useContext,
   useEffect,
   useId,
-  useMemo,
   useRef,
   useState,
   type MouseEvent,
@@ -26,9 +25,7 @@ import {
   type Seksjonsstyring,
 } from './Seksjonsstyring'
 import { useSkjuling } from '../../hooks/useSkjuling'
-import { useRutenettflytting } from './Skuffrutenett'
-import { useFlytting } from '../../hooks/useFlytting'
-import { rullefart } from '../../hooks/useKortHopp'
+import { useKortvalg, useRutenettflytting, type Kortvalg } from './Skuffrutenett'
 import '../../styles/seksjoner.css'
 
 /**
@@ -262,7 +259,8 @@ function Skufframme({
   flyttes: boolean
   /** Nøkkelen i styringen for siden. Et underkort har ingen. */
   skuff?: string
-  onSett: (apen: boolean) => void
+  /** Et trykk som åpner eller lukker; `ramme` er skuffens ytterste element. */
+  onSett: (apen: boolean, ramme: Element) => void
   /** Nettleserens eget søk fant noe i den lukkede skuffen. */
   onFunnet: (inner: HTMLElement) => void
   /** Søket på siden skal vise noe i skuffen (`VIS_HENDELSE`). */
@@ -301,7 +299,7 @@ function Skufframme({
     return () => el.removeEventListener(VIS_HENDELSE, vises)
   }, [])
 
-  const veksle = () => onSett(!apen)
+  const veksle = () => onSett(!apen, ramme.current!)
   // Et trykk hvor som helst i hodet åpner og lukker — men ikke på knappene i det.
   const trykkIHodet = (event: MouseEvent<HTMLDivElement>) => {
     if ((event.target as Element).closest(INTERAKTIVT)) return
@@ -310,7 +308,7 @@ function Skufframme({
   }
   // Knappene i hodet virker på innholdet, så det må stå fram.
   const trykkPaaHandling = (event: MouseEvent<HTMLDivElement>) => {
-    if (!apen && (event.target as Element).closest(INTERAKTIVT)) onSett(true)
+    if (!apen && (event.target as Element).closest(INTERAKTIVT)) onSett(true, ramme.current!)
   }
 
   const Overskrift = OVERSKRIFTER[niva]
@@ -454,22 +452,15 @@ function Fastramme({
 
 /* --- Underkort: en visning i et detaljkort som styrer seg selv ------------ */
 
-interface Underkortstyring {
-  apen: string | null
-  /** Et trykk: åpner eller lukker kortet med flytting. */
-  veksle: (id: string, apnes: boolean) => void
-  /** Søket eller nettleseren skal vise noe i kortet: åpne det straks. */
-  vis: (id: string) => void
-}
-
-const Underkortkontekst = createContext<Underkortstyring | null>(null)
+const Underkortkontekst = createContext<Kortvalg | null>(null)
 
 /**
  * Kort i et rutenett inne i et detaljkort, når innholdet i kortet selv er en
  * samling som åpnes for seg — som organsystemene under en frekvens i
  * «Bivirkninger». Kortene ser ut og oppfører seg som detaljkort: bare ett står
- * åpent om gangen, et åpnet kort tar hele bredden og naboene glir dit de skal
- * (`useFlytting`), og et kort uten mer å vise er fast (`kanApnes={false}`).
+ * åpent om gangen, et åpnet kort tar hele bredden og naboene glir dit de skal,
+ * siden ruller kortet brukeren åpner fram (`useKortvalg`), og et kort uten mer
+ * å vise er fast (`kanApnes={false}`).
  *
  * Det er ikke et tredje nivå med skuffer: rutenettet styrer seg selv og står
  * ikke i styringen for siden eller i adressen, slik styrkene i «Preparater»
@@ -492,26 +483,8 @@ export function Underkortrutenett({
 }) {
   const niva = useContext(Nivakontekst)
   if (niva?.slag !== 'detalj') throw new Error('Underkortene må stå i et detaljkort.')
-  const [apen, setApen] = useState<string | null>(apenFraStart)
   const liste = useRef<HTMLUListElement>(null)
-  // Kortet brukeren åpnet, rulles fram når det har vokst ferdig.
-  const rullTil = useRef(false)
-  const husk = useFlytting(liste, {
-    etter: () => {
-      if (!rullTil.current) return
-      rullTil.current = false
-      liste.current?.querySelector(':scope > li > [data-apen]')?.scrollIntoView({ behavior: rullefart(), block: 'nearest' })
-    },
-  })
-  const veksle = useCallback(
-    (id: string, apnes: boolean) => {
-      husk()
-      rullTil.current = apnes
-      setApen(apnes ? id : null)
-    },
-    [husk],
-  )
-  const styring = useMemo<Underkortstyring>(() => ({ apen, veksle, vis: setApen }), [apen, veksle])
+  const styring = useKortvalg(liste, apenFraStart)
   return (
     <Underkortkontekst.Provider value={styring}>
       <ul ref={liste} className={['skuffrutenett', 'underkortrutenett', className].filter(Boolean).join(' ')} aria-label={etikett}>
@@ -552,7 +525,7 @@ export function Underkort({
           apen={styring.apen === id}
           animer
           flyttes
-          onSett={(apnes) => styring.veksle(id, apnes)}
+          onSett={(apnes, ramme) => styring.veksle(id, apnes, ramme)}
           onFunnet={visDette}
           onVis={visDette}
         />

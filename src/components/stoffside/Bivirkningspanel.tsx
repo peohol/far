@@ -7,6 +7,7 @@ import {
   bivirkningstekster,
   gruppeoppsummering,
   oppsummerBivirkninger,
+  undergruppeHarMer,
   undergruppeoppsummering,
   type Bivirkningstabell,
   type Bivirkningsvisning,
@@ -40,7 +41,8 @@ export function harBivirkninger(tilstand: Bivirkningstilstand): boolean {
  * Det er ett datasett, og bryteren øverst bestemmer bare hvordan det vises
  * (`docs/bivirkninger.md`). Gruppene er detaljkort tegnet som overskrifter, i
  * styringen for siden som andre detaljkort; i hver står kombinasjonene som
- * underkort med ikon, navn og oppsummering, som åpnes til punktlista. Bare
+ * underkort med ikon, navn og oppsummering, som åpnes til punktlista. Står
+ * alt allerede i oppsummeringen, er kortet fast og viser den. Bare
  * kombinasjoner med bivirkninger vises. Har siden flere tabeller (flere
  * preparatomtaler, eller flere tabeller i én), står hver for seg med navnet
  * over, og radene blandes aldri. Dataene kan ikke redigeres her; de
@@ -204,28 +206,36 @@ function Bivirkningsgruppe({ gruppe, tabell, alene }: { gruppe: Gruppe; tabell: 
       >
         {gruppe.undergrupper.map((under) => {
           const uid = undergruppeid(gruppe.nokkel, under.nokkel, tabell)
+          const oppsummering = undergruppeoppsummering(under)
+          const kanApnes = undergruppeHarMer(under)
           return (
             <Underkort
               key={uid}
               id={uid}
               anker={elementAnker(uid)}
+              kanApnes={kanApnes}
               ikon={bivirkningsikon(under.nokkel)}
               tittel={<Uthev tekst={gruppenavn(under.nokkel)} />}
               tittelTillegg={<Definisjon nokkel={under.nokkel} />}
-              oppsummering={forhandsvisning(undergruppeoppsummering(under))}
+              oppsummering={forhandsvisning(oppsummering)}
             >
-              <ul className="bivirkninger__liste">
-                {under.bivirkninger.map((b) => (
-                  <li key={`${b.kilde}:${b.posisjon}`}>
-                    <Uthev tekst={b.tekst} />
-                    {b.fotnote && (
-                      <span className="bivirkninger__fotnote">
-                        <Uthev tekst={b.fotnote} />
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
+              {kanApnes ? (
+                <ul className="bivirkninger__liste">
+                  {under.bivirkninger.map((b) => (
+                    <li key={`${b.kilde}:${b.posisjon}`}>
+                      <Uthev tekst={b.tekst} />
+                      {b.fotnote && (
+                        <span className="bivirkninger__fotnote">
+                          <Uthev tekst={b.fotnote} />
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                // Alt står i oppsummeringen, så det faste kortet viser den, der søket kan fremheve.
+                <Uthev tekst={oppsummering} />
+              )}
             </Underkort>
           )
         })}

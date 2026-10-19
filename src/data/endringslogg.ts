@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.104.1',
+    dato: '2026-10-19',
+    sammendrag: 'Alle kort på fagsidene åpnes og rulles fram på samme måte',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Mindre omfang',
+    gjelder: ['stoff'],
+    punkter: [
+      'Bivirkningskortene og styrkekortene under «Preparater» rulles nå fram når du åpner dem, slik de andre kortene på fagsidene gjør.',
+      'Et bivirkningskort som allerede viser alle bivirkningene sine i lukket tilstand, kan ikke lenger åpnes. Det står fast med bivirkningene under navnet, som andre kort uten mer å vise. Kort med fotnoter eller flere bivirkninger enn det er plass til, åpnes som før.',
+    ],
+  },
+  {
     versjon: '1.104.0',
     dato: '2026-10-19',
     sammendrag: 'Tema og «Reduser bevegelse» kan følge maskinen',

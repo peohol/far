@@ -499,6 +499,11 @@
     gap: var(--rom-2);
   }
 
+  /* Et åpnet kort rulles fram over dokken, som skuffene (`seksjoner.css`). */
+  .styrkekort {
+    scroll-margin-bottom: var(--dokk-offset);
+  }
+
   .styrkekort__knapp {
     aspect-ratio: 1;
     padding: var(--rom-3);

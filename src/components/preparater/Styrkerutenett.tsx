@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type RefObject } from 'react'
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, type RefObject } from 'react'
 import { flushSync } from 'react-dom'
-import { useFlytting } from '../../hooks/useFlytting'
-import { rullefart } from '../../hooks/useKortHopp'
 import type { Formikon } from '../../legemiddeldata/legemiddelformer'
 import { oppsummerStyrke, type Formgruppe, type Styrkegruppe } from '../../legemiddeldata/preparatmodell'
 import { Ikon } from '../ikon/Ikon'
 import { VIS_HENDELSE } from '../seksjoner/Seksjonsstyring'
+import { useKortvalg, type Kortvalg } from '../seksjoner/Skuffrutenett'
 import { Uthev } from '../Uthev'
 import { formikonnavn, Preparatmerker } from './Merker'
 
@@ -22,7 +21,8 @@ export interface Preparatvalg {
  * Styrkene i én legemiddelform som et rutenett av like store kort (Atlas:
  * `StrengthGrid` og `StrengthCard`). Ett kort per styrke, uansett hvor mange
  * preparater som har den. Bare ett kort står åpent: det fyller bredden og
- * lister preparatnavnene alfabetisk, og et navn åpner preparatvinduet.
+ * lister preparatnavnene alfabetisk, og et navn åpner preparatvinduet. Kortene
+ * åpnes, lukkes, flyttes og rulles fram som alle andre kort (`useKortvalg`).
  *
  * Ikonet på kortet har delestrek når FEST sier at alle preparatene med
  * styrken kan deles. Er det ulikt mellom dem, får hvert preparatnavn sitt eget
@@ -45,29 +45,9 @@ export function Styrkerutenett({
   valgt: Preparatvalg | null
   onVelg: (valg: Preparatvalg) => void
 }) {
-  // En form med én styrke har ingenting å velge mellom.
-  const [apen, setApen] = useState<string | null>(form.styrker.length === 1 ? form.styrker[0]!.id : null)
   const rutenett = useRef<HTMLUListElement>(null)
-  // Kortet brukeren åpnet, rulles fram når det har vokst ferdig.
-  const rullTil = useRef(false)
-  const husk = useFlytting(rutenett, {
-    etter: () => {
-      if (!rullTil.current) return
-      rullTil.current = false
-      rutenett.current
-        ?.querySelector(':scope > [data-apen]')
-        ?.scrollIntoView({ behavior: rullefart(), block: 'nearest' })
-    },
-  })
-  // Et trykk flytter kortene synlig; søket som åpner et kort, gjør det straks.
-  const veksle = useCallback(
-    (id: string, apnes: boolean) => {
-      husk()
-      rullTil.current = apnes
-      setApen(apnes ? id : null)
-    },
-    [husk],
-  )
+  // En form med én styrke har ingenting å velge mellom.
+  const kortvalg = useKortvalg(rutenett, form.styrker.length === 1 ? form.styrker[0]!.id : null)
 
   return (
     <ul
@@ -82,9 +62,8 @@ export function Styrkerutenett({
           styrke={s}
           form={form.form}
           ikon={form.ikon}
-          apen={apen === s.id}
-          settApen={setApen}
-          veksle={veksle}
+          apen={kortvalg.apen === s.id}
+          kortvalg={kortvalg}
           valgt={valgt?.styrke === s.id ? valgt.preparat : null}
           onVelg={(preparat) => onVelg({ preparat, styrke: s.id })}
         />
@@ -98,8 +77,7 @@ function Styrkekort({
   form,
   ikon,
   apen,
-  settApen,
-  veksle,
+  kortvalg,
   valgt,
   onVelg,
 }: {
@@ -107,14 +85,12 @@ function Styrkekort({
   form: string
   ikon: Formikon
   apen: boolean
-  /** Hvilket kort i rutenettet som står åpent, straks; `null` lukker. */
-  settApen: (id: string | null) => void
-  /** Åpner eller lukker kortet med flytting, som et trykk gjør. */
-  veksle: (id: string, apnes: boolean) => void
+  kortvalg: Kortvalg
   valgt: string | null
   onVelg: (preparat: string) => void
 }) {
   const id = useId()
+  const kort = useRef<HTMLLIElement>(null)
   const innhold = useRef<HTMLDivElement>(null)
   const tekst = styrke.styrke || UTEN_STYRKE
   const antall = oppsummerStyrke(styrke)
@@ -123,11 +99,13 @@ function Styrkekort({
 
   // Søket eller nettleseren fant noe i det lukkede kortet: åpne det, og la
   // dem rulle til treffet selv.
-  const vis = useCallback(() => settApen(styrke.id), [settApen, styrke.id])
+  const { vis: visKort } = kortvalg
+  const vis = useCallback(() => visKort(styrke.id), [visKort, styrke.id])
   useSkjultTilFunnet(innhold, apen, vis)
 
   return (
     <li
+      ref={kort}
       className={['styrkekort', styrke.kombinasjon && 'styrkekort--lang'].filter(Boolean).join(' ')}
       data-apen={apen || undefined}
     >
@@ -139,7 +117,7 @@ function Styrkekort({
         aria-controls={`${id}-innhold`}
         aria-describedby={`${id}-antall`}
         title={styrke.kombinasjon ? tekst : undefined}
-        onClick={() => veksle(styrke.id, !apen)}
+        onClick={() => kortvalg.veksle(styrke.id, !apen, kort.current!)}
       >
         <Ikon navn={formikonnavn(ikon, styrke.deling)} className="styrkekort__ikon" />
         <span className="styrkekort__tekst">
