@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-19T01:18:43.050Z",
+  "oppdatert_kl": "2026-10-19T01:19:26.252Z",
   "malt_kl": "2026-10-18T10:30:22.628Z",
   "teller": 80,
   "stoffer": {
@@ -6018,7 +6018,7 @@
     "topiramat": {
       "stoff": "topiramat",
       "navn": "Topiramat",
-      "status": "reservert",
+      "status": "venter_godkjenning",
       "modus": "de_novo",
       "prioritet": {
         "poeng": 0,
@@ -6033,34 +6033,10 @@
         "referanser": 4,
         "elementer_uten_kilde": 1
       },
-      "reservasjon": {
-        "oppgave": "topiramat-0080",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "modus": "de_novo",
-        "reservert_kl": "2026-10-19T01:18:43.050Z",
-        "fornyet_kl": "2026-10-19T01:18:43.050Z",
-        "frist_kl": "2026-10-19T04:18:43.050Z",
-        "fase": null,
-        "jobbgren": "kuratorjobb/topiramat-0041",
-        "kurateringsgren": "kuratering/topiramat-0080",
-        "pr": null,
-        "gren": "6a91451c-9e4a-4712-a913-253546677b1e",
-        "kunnskapsgrense": "2026-10-17"
-      },
+      "reservasjon": null,
       "forsok": 1,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "topiramat-0076",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-19T01:06:45.363Z",
-        "grunn": "Grenen er tilbake hos kuratoren.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/topiramat-0041",
-        "kurateringsgren": null,
-        "pr": null,
-        "gren": "6a91451c-9e4a-4712-a913-253546677b1e",
-        "kunnskapsgrense": "2026-10-17"
-      },
+      "gjenoppta": null,
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -6068,23 +6044,11 @@
         "oppgave": "topiramat-0080",
         "okt": "kurateringsko/okt/20261016-125910",
         "startet_kl": "2026-10-19T01:18:43.050Z",
-        "avsluttet_kl": null,
-        "utfall": "reservert"
+        "avsluttet_kl": "2026-10-19T01:19:26.252Z",
+        "utfall": "fullfort"
       },
       "aktiv": true,
       "historikk": [
-        {
-          "kl": "2026-10-17T17:28:29.450Z",
-          "hendelse": "fornyet",
-          "oppgave": "topiramat-0041",
-          "okt": "kurateringsko/okt/20261016-125910"
-        },
-        {
-          "kl": "2026-10-17T17:51:59.565Z",
-          "hendelse": "fornyet",
-          "oppgave": "topiramat-0041",
-          "okt": "kurateringsko/okt/20261016-125910"
-        },
         {
           "kl": "2026-10-17T18:26:32.826Z",
           "hendelse": "blokkert",
@@ -6264,9 +6228,33 @@
           "oppgave": "topiramat-0080",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Forsøk 1, de_novo, fortsetter topiramat-0076."
+        },
+        {
+          "kl": "2026-10-19T01:19:26.252Z",
+          "hendelse": "fullfort",
+          "oppgave": "topiramat-0080",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Kurateringsgrenen 6a91451c-9e4a-4712-a913-253546677b1e, kunnskapsgrense 2026-10-17."
+        },
+        {
+          "kl": "2026-10-19T01:19:26.252Z",
+          "hendelse": "gren_klar",
+          "oppgave": "topiramat-0080",
+          "melding": "Grenen: klar, revisjon 14, kontrollrunde 1."
         }
       ],
-      "appgren": null
+      "appgren": {
+        "id": "6a91451c-9e4a-4712-a913-253546677b1e",
+        "oppgave": "topiramat-0080",
+        "modus": "de_novo",
+        "runde": 2,
+        "kunnskapsgrense": "2026-10-17",
+        "jobbgren": "kuratorjobb/topiramat-0041",
+        "registrert_kl": "2026-10-19T01:19:26.252Z",
+        "status": "klar",
+        "revisjon": 14,
+        "kontrollrunde": 1
+      }
     },
     "tramadol": {
       "stoff": "tramadol",
@@ -7009,6 +6997,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "fullfort-topiramat-0080",
         "reserver-topiramat-011815",
         "fullfort-lamotrigin-0079",
         "reserver-lamotrigin-010703",
@@ -7057,71 +7046,24 @@
         "fullfort-lamotrigin-0057",
         "reserver-lamotrigin-030518",
         "fullfort-kariprazin-0056",
-        "reserver-kariprazin-030334",
-        "fullfort-sertindol-0055"
+        "reserver-kariprazin-030334"
       ],
       "siste": {
-        "id": "reserver-topiramat-011815",
-        "sha256": "776902a6152d1fb173b21c6c2342c9f6d3de473ba307c660870bd74f72cf0d24",
+        "id": "fullfort-topiramat-0080",
+        "sha256": "e5eaf965c3886828258fbc2a17322eef670caee8b5421fa98e87de59b4a07f62",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "reserver-topiramat-011815",
-          "foresporsel_sha256": "776902a6152d1fb173b21c6c2342c9f6d3de473ba307c660870bd74f72cf0d24",
-          "handling": "reserver",
+          "foresporsel_id": "fullfort-topiramat-0080",
+          "foresporsel_sha256": "e5eaf965c3886828258fbc2a17322eef670caee8b5421fa98e87de59b4a07f62",
+          "handling": "fullfort",
           "utfall": "ok",
-          "melding": "topiramat er reservert til 2026-10-19T04:18:43.050Z.",
-          "behandlet_kl": "2026-10-19T01:18:43.050Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/39184755215",
-          "oppgave": {
-            "oppgave": "topiramat-0080",
-            "stoff": "topiramat",
-            "navn": "Topiramat",
-            "modus": "de_novo",
-            "forsok": 1,
-            "frist_kl": "2026-10-19T04:18:43.050Z",
-            "jobbgren": "kuratorjobb/topiramat-0041",
-            "kurateringsgren": "kuratering/topiramat-0080",
-            "pr": null,
-            "gren": "6a91451c-9e4a-4712-a913-253546677b1e",
-            "gjenoppta": {
-              "oppgave": "topiramat-0076",
-              "okt": "kurateringsko/okt/20261016-125910",
-              "avbrutt_kl": "2026-10-19T01:06:45.363Z",
-              "grunn": "Grenen er tilbake hos kuratoren.",
-              "fase": null,
-              "jobbgren": "kuratorjobb/topiramat-0041",
-              "kurateringsgren": null,
-              "pr": null,
-              "gren": "6a91451c-9e4a-4712-a913-253546677b1e",
-              "kunnskapsgrense": "2026-10-17"
-            },
-            "sist_kuratert": null,
-            "maal": {
-              "kl": "2026-10-18T10:30:23.208Z",
-              "side": true,
-              "elementer": 6,
-              "redaksjonelle_paneler": 13,
-              "paneler_med_innhold": 4,
-              "referanser": 4,
-              "elementer_uten_kilde": 1
-            },
-            "prioritet": {
-              "poeng": 1447.6,
-              "grunner": [
-                "Fortsetter den avbrutte kurateringen topiramat-0076.",
-                "De novo-kuratering i runden som gjelder.",
-                "Aldri kuratert.",
-                "Ingen kuratering å regne alderen fra.",
-                "9 av 13 redaksjonelle seksjoner er tomme.",
-                "1 av 6 elementer har ingen kilde.",
-                "Bare 4 referanser."
-              ]
-            }
-          }
+          "melding": "topiramat er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+          "behandlet_kl": "2026-10-19T01:19:26.252Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/39184811779"
         }
       },
       "besvart_commit": "78d0e1f9da9921a3513add06c74531a7dd98e02e",
-      "sist_brukt_kl": "2026-10-19T01:18:43.050Z"
+      "sist_brukt_kl": "2026-10-19T01:19:26.252Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
