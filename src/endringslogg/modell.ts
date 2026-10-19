@@ -11,7 +11,7 @@
 import type { Profil } from '@delt/profil'
 
 /** Repoet migrasjonene og agentenes endringer ligger i. */
-export const REPO = 'https://github.com/peohol/far'
+export const REPO = 'https://github.com/peohol/ousfar'
 
 /** Hvilken side loggen gjelder. */
 export type Endringsside =

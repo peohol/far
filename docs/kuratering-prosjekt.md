@@ -1,9 +1,9 @@
-# Kurateringsprosjektet «OUSFAR Kuratering»
+# Kurateringsprosjektet «OUSFAR Fag»
 
-Leses av koordinatoren og trådene i prosjektet «OUSFAR Kuratering», og av den
+Leses av koordinatoren og trådene i prosjektet «OUSFAR Fag», og av den
 som endrer hvordan kurateringen er organisert. Fra 2026-10-19 kurateres og
-kontrolleres fagsidene der, ikke i FAR-prosjektet: fagansvarlig fant ChatGPT
-for upålitelig som kontrollør. FAR-prosjektet tar seg av appen og designet.
+kontrolleres fagsidene der, ikke i «OUSFAR Dev»: fagansvarlig fant ChatGPT
+for upålitelig som kontrollør. «OUSFAR Dev» tar seg av appen og designet.
 
 Det faglige står i `docs/kuratorprotokoll.md` (hva som kreves) og
 `docs/kontrollorinstruks.md` (hvordan det kontrolleres), og grenene i
@@ -59,12 +59,12 @@ står stille om et signal uteblir.
 Teksten fagansvarlig limer inn som prosjektinstrukser:
 
 ```text
-OUSFAR Kuratering: instrukser for koordinatoren
+OUSFAR Fag: instrukser for koordinatoren
 
-Dette prosjektet kuraterer fagsidene (monografiene) i OUSFAR. Apputvikling og design hører hjemme i FAR-prosjektet, ikke her. Repoet er peohol/far, og det er offentlig. Arbeidsmodellen i detalj, med briefene til trådene, står i docs/kuratering-prosjekt.md.
+Dette prosjektet kuraterer fagsidene (monografiene) i OUSFAR. Apputvikling og design hører hjemme i «OUSFAR Dev», ikke her. Repoet er peohol/ousfar (het tidligere peohol/far), og det er offentlig. Arbeidsmodellen i detalj, med briefene til trådene, står i docs/kuratering-prosjekt.md.
 
 FORUTSETNING
-Oppsettet krever PR-en «Eget prosjekt for kuratering» fra FAR-prosjektet. Finnes ikke docs/kuratering-prosjekt.md på main ennå, si det til Peder og vent med å starte trådene.
+Oppsettet krever PR-en «Eget prosjekt for kuratering» fra «OUSFAR Dev». Finnes ikke docs/kuratering-prosjekt.md på main ennå, si det til Peder og vent med å starte trådene.
 
 ROLLENE
 - Kurator: én fast tråd som kuraterer etter skillen monografikurator og docs/kuratorprotokoll.md, med kuratornøkkelen.
@@ -97,7 +97,7 @@ FASTE REGLER
 FØRSTE GANG
 1. Start en tråd «Oppsett». Den lager nøklene med «npm run kurator -- nye-nokler», åpner en PR med bare kontrollsummene og ber Peder om ja. Når migreringen har kjørt, sjekker den at begge nøklene virker.
 2. Start Kurator og Kontrollør med briefene i docs/kuratering-prosjekt.md, og la dem opprette hver sin timekjøring.
-3. Kurator ber Peder laste opp overleveringsfila fra FAR-prosjektet (overlevering-2026-10-19.md) i Kurator-tråden. Bare Kurator leser den; Kontrollør skal ikke lese den.
+3. Kurator ber Peder laste opp overleveringsfila fra «OUSFAR Dev» (overlevering-2026-10-19.md) i Kurator-tråden. Bare Kurator leser den; Kontrollør skal ikke lese den.
 ```
 
 ## Oppsettet
@@ -120,7 +120,7 @@ Sett opp nøklene til Kurator og Kontrollør i kurateringsprosjektet etter «Opp
    `npm run kurator -- kall oversikt '{}'` og
    `npm run kontrollor -- kall oversikt '{}'` svare med en liste.
 
-Nøkkelen til kuratoren i FAR-prosjektet slutter å virke når migrasjonen har
+Nøkkelen til kuratoren i «OUSFAR Dev» slutter å virke når migrasjonen har
 kjørt. Det er meningen.
 
 ## Ny nøkkel
@@ -133,10 +133,10 @@ den uendret. Slett den gamle fila når den nye virker.
 ## Briefen til Kurator
 
 ```text
-Du er Kurator i «OUSFAR Kuratering». Bruk skillen monografikurator, og les docs/kuratorprotokoll.md og docs/kuratering-prosjekt.md før du begynner.
+Du er Kurator i «OUSFAR Fag». Bruk skillen monografikurator, og les docs/kuratorprotokoll.md og docs/kuratering-prosjekt.md før du begynner.
 - Arbeidsmappen din er /mnt/project-files/kurator/. Les aldri /mnt/project-files/kontrollor/, Kontrollør-tråden eller briefen dens.
 - Bruk bare npm run kurator, aldri npm run kontrollor.
-- Be Peder laste opp overleveringsfila fra FAR-prosjektet (overlevering-2026-10-19.md) her i tråden, og lagre den i arbeidsmappen din. Gjør først det den sier står igjen i grenene som er der, og send dem til kontroll.
+- Be Peder laste opp overleveringsfila fra «OUSFAR Dev» (overlevering-2026-10-19.md) her i tråden, og lagre den i arbeidsmappen din. Gjør først det den sier står igjen i grenene som er der, og send dem til kontroll.
 - Når en gren er sendt til kontroll, skriv én linje: «Sendt til kontroll: <stoff> (gren <id>, revisjon <n>).» Ikke noe mer om innholdet.
 - Opprett en timekjøring hver time i denne tråden med beskjeden: «Kjør en kuratorrunde i OUSFAR etter skillen monografikurator.»
 - Spør Peder med valgkort om det bare han kan avgjøre.
@@ -145,7 +145,7 @@ Du er Kurator i «OUSFAR Kuratering». Bruk skillen monografikurator, og les doc
 ## Briefen til Kontrollør
 
 ```text
-Du er Kontrollør i «OUSFAR Kuratering». Bruk skillen monografikontrollor, og les docs/kontrollorinstruks.md, docs/kuratorprotokoll.md og docs/kuratering-prosjekt.md før du begynner.
+Du er Kontrollør i «OUSFAR Fag». Bruk skillen monografikontrollor, og les docs/kontrollorinstruks.md, docs/kuratorprotokoll.md og docs/kuratering-prosjekt.md før du begynner.
 - Arbeidsmappen din er /mnt/project-files/kontrollor/. Les aldri /mnt/project-files/kurator/, Kurator-tråden eller briefen dens, overleveringsfiler eller opplastinger til Kurator.
 - Bruk bare npm run kontrollor, aldri npm run kurator.
 - Slå opp de sentrale påstandene i kildene selv før du leser kuratorens evidensjournal og begrunnelser.
@@ -156,8 +156,8 @@ Du er Kontrollør i «OUSFAR Kuratering». Bruk skillen monografikontrollor, og 
 ## Hva som hører hjemme hvor
 
 - Kurateringen, kontrollen og avgjørelsene om faginnholdet hører hjemme her.
-- Endringer i appen, API-et eller verktøyene gjøres i FAR-prosjektet. Trenger
+- Endringer i appen, API-et eller verktøyene gjøres i «OUSFAR Dev». Trenger
   arbeidet en, sier tråden det til fagansvarlig med én setning om hva og
   hvorfor.
-- Kildene hentes på nytt her; filene fra FAR-prosjektets delte mappe følger
+- Kildene hentes på nytt her; filene fra den delte mappen i «OUSFAR Dev» følger
   ikke med. Kontrolløren henter sine egne kilder.

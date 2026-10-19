@@ -110,7 +110,7 @@ const lesFil = (fil: string) => readFile(join(process.cwd(), fil), 'utf8').catch
 export async function lesKontrollorinstruks(): Promise<string | null> {
   const [instruks, protokoll] = await Promise.all(INSTRUKSFILER.map(lesFil))
   if (instruks === null) return null
-  return `${instruks}\n\n---\n\n${protokoll ?? `${PROTOKOLLFIL} kunne ikke leses i OUSFAR nå. Les den på main i repoet peohol/far, og si fra om feilen.`}`
+  return `${instruks}\n\n---\n\n${protokoll ?? `${PROTOKOLLFIL} kunne ikke leses i OUSFAR nå. Les den på main i repoet peohol/ousfar, og si fra om feilen.`}`
 }
 
 // Bare den offentlige instruksteksten: verktøyet spør ikke databasen og tar
@@ -223,7 +223,7 @@ async function kallVerktoy(
   if (navn === INSTRUKSVERKTOY.name) {
     const instruks = await lesInstruks()
     if (instruks === null) {
-      const feil = 'Instruksen kunne ikke leses i OUSFAR nå. Les docs/kontrollorinstruks.md og docs/kuratorprotokoll.md på main i repoet peohol/far, og si fra om feilen.'
+      const feil = 'Instruksen kunne ikke leses i OUSFAR nå. Les docs/kontrollorinstruks.md og docs/kuratorprotokoll.md på main i repoet peohol/ousfar, og si fra om feilen.'
       return { utfall: { ok: false, kode: 'uten_instruks' }, svar: tekstsvar(id, { feil }, true) }
     }
     return { utfall: { ok: true }, svar: rpcSvar(id, { content: [{ type: 'text', text: instruks }], isError: false }) }

@@ -53,22 +53,28 @@ export const GITHUB_OIDC = {
   utsteder: 'https://token.actions.githubusercontent.com',
   /** Publikummet arbeidsflyten ber om tokenet for (`core.getIDToken('ousfar')`). */
   publikum: 'ousfar',
-  repo: 'peohol/far',
+  /**
+   * Repoet, med ID-en GitHub gir det (`repository_id`). Den står fast når
+   * repoet får nytt navn, slik peohol/far ble til peohol/ousfar i oktober 2026.
+   */
+  repoId: '1325012593',
   gren: 'refs/heads/main',
 }
 
 const githubNokler = createRemoteJWKSet(new URL(`${GITHUB_OIDC.utsteder}/.well-known/jwks`))
 
 /**
- * Hvem kravene i et kontrollert OIDC-token fra GitHub sier kjører: repoet,
- * grenen og arbeidsflyten (`.github/workflows/<fil>`) må stemme. Arbeidsflyten
- * står i `workflow_ref`; `job_workflow_ref` er der bare når jobben kjører en
- * gjenbrukt arbeidsflyt, og må da være den samme. Den planlagte kjøringen er
- * `cron`, en kjøring noen startet for hånd, `manuell`.
+ * Hvem kravene i et kontrollert OIDC-token fra GitHub sier kjører: repoet (ved
+ * ID-en), grenen og arbeidsflyten (`.github/workflows/<fil>`) i det samme
+ * repoet må stemme. Arbeidsflyten står i `workflow_ref`, med repoets navn
+ * først; `job_workflow_ref` er der bare når jobben kjører en gjenbrukt
+ * arbeidsflyt, og må da være den samme. Den planlagte kjøringen er `cron`, en
+ * kjøring noen startet for hånd, `manuell`.
  */
 export function githubkrav(krav: Record<string, unknown>, arbeidsflyt: string): Utlost | null {
-  const ventet = `${GITHUB_OIDC.repo}/${arbeidsflyt}@${GITHUB_OIDC.gren}`
-  if (krav.repository !== GITHUB_OIDC.repo || krav.ref !== GITHUB_OIDC.gren || krav.workflow_ref !== ventet) return null
+  if (krav.repository_id !== GITHUB_OIDC.repoId || typeof krav.repository !== 'string' || krav.ref !== GITHUB_OIDC.gren) return null
+  const ventet = `${krav.repository}/${arbeidsflyt}@${GITHUB_OIDC.gren}`
+  if (krav.workflow_ref !== ventet) return null
   if (krav.job_workflow_ref !== undefined && krav.job_workflow_ref !== ventet) return null
   return krav.event_name === 'schedule' ? 'cron' : 'manuell'
 }

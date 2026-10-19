@@ -38,7 +38,7 @@ export const EGENSKAPER = [
 export const MAKS_PER_KALL = 100
 
 /** Hvem som spør, så PubChem kan si fra. */
-export const BRUKERAGENT = 'OUSFAR-datasynk/1.0 (+https://github.com/peohol/far)'
+export const BRUKERAGENT = 'OUSFAR-datasynk/1.0 (+https://github.com/peohol/ousfar)'
 
 export class PubchemFeil extends Error {
   constructor(

@@ -198,7 +198,7 @@ describe('endringsloggen for en side', () => {
     expect(lag?.textContent).toContain('bekreftet kjørt i databasen')
     expect(within(lag).getByRole('link', { name: /PR #999/ }).getAttribute('href')).toBe('https://github.com/peohol/far/pull/999')
     expect(within(lag).getByRole('link', { name: /Se migrasjonen/ }).getAttribute('href')).toBe(
-      'https://github.com/peohol/far/blob/main/supabase/migrations/20261013120000_syntetisk_kuratering.sql',
+      'https://github.com/peohol/ousfar/blob/main/supabase/migrations/20261013120000_syntetisk_kuratering.sql',
     )
   })
 

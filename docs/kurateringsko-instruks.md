@@ -132,7 +132,7 @@ den er publisert, men nye kurateringer gjøres i grenene.
 ## Teksten til tidsplanen
 
 > Arbeid videre med OUSFARs kurateringskø: les `docs/kurateringsko-instruks.md`
-> på `main` i repoet peohol/far, og følg den med kuratorskillen.
+> på `main` i repoet peohol/ousfar, og følg den med kuratorskillen.
 
 En pilot med et bestemt stoff: legg til `"stoff": "<nøkkel>"` i `reserver`
 (steg 2), eller sett stoffet først i `forrang` i

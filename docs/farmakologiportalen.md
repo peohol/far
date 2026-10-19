@@ -71,9 +71,10 @@ Kontrollert 8. oktober 2026: 134 verifisert, 2 usikre, ingen uavklart.
 `synk.ts`) kjøres hver natt kl. 04.40 UTC av GitHub Actions
 (`.github/workflows/farmakologiportalen-synk.yml`, også manuelt med «Run
 workflow») og med «Hent nå» i «Datakilder». Jobben logger inn med et
-kortlivet OIDC-token fra GitHub, som serveren kontrollerer mot repoet,
-`main` og arbeidsflyten (`githubkjoring` i `src/server/tilgang.ts`); ingen
-hemmelighet ligger i GitHub. Én kjøring:
+kortlivet OIDC-token fra GitHub, som serveren kontrollerer mot repoet (ved
+ID-en, som står fast om repoet får nytt navn), `main` og arbeidsflyten
+(`githubkjoring` i `src/server/tilgang.ts`); ingen hemmelighet ligger i
+GitHub. Én kjøring:
 
 1. henter alle seks listene. Feiler ett kall, avbrytes kjøringen før noe er
    lastet inn;
