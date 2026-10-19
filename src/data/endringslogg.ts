@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.103.11',
+    dato: '2026-10-19',
+    sammendrag: 'Nye nøkler til Claude-kuratoren og Claude-kontrolløren i det nye kurateringsprosjektet',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Kuratoren og kontrolløren som arbeider med fagsidene i det nye kurateringsprosjektet, får hver sin nye nøkkel. Den gamle nøkkelen til kuratoren slutter å virke.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.103.10',
     dato: '2026-10-19',
     sammendrag: 'De faste hentingene fra GitHub virker igjen etter at repoet fikk nytt navn',
