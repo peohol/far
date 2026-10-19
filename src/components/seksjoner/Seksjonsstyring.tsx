@@ -173,10 +173,9 @@ export function SeksjonsstyringKilde({ bevares = false, children }: { bevares?: 
     })
   }, [])
 
-  /** `sto`: hvor i vinduet skuffen sto før den ble åpnet (se `rullTilpasset`). */
-  const rullNar = useCallback((nokkel: string, plass: Rullemal, sto?: number) => {
+  const rullNar = useCallback((nokkel: string, plass: Rullemal) => {
     const skuff = finnSkuff(nokkel)
-    if (skuff) etterTegning(() => rull(skuff, plass, sto))
+    if (skuff) etterTegning(() => rull(skuff, plass))
     else venter.current = { nokkel, plass }
   }, [])
 
@@ -264,14 +263,10 @@ export function SeksjonsstyringKilde({ bevares = false, children }: { bevares?: 
     const sett = (sti: readonly string[], apen: boolean) => {
       const nokkel = skuffnokkel(sti)
       if (apen) {
-        // Før skuffen åpnes: nettleseren skal ikke flytte siden når det rundt
-        // skuffen skifter plass, og skuffen skal bli stående der brukeren
-        // trykket, til siden ruller den fram.
-        const slipp = laasAnker()
-        etterTegning(() => etterTegning(slipp))
-        const sto = finnSkuff(nokkel)?.getBoundingClientRect().top
+        const skuff = finnSkuff(nokkel)
+        if (skuff) rullFramNarApnet(skuff)
+        else rullNar(nokkel, TILPASSET)
         velg(kjedeFor(sti), true)
-        rullNar(nokkel, TILPASSET, sto)
       } else if (tilstand(sti, registrert.get(nokkel)?.apenFraStart ?? false).apen) {
         setValgt((forrige) => new Map(forrige).set(skuffnokkel(sti.slice(0, -1)), { nokkel: null, animer: true }))
       }
@@ -334,6 +329,21 @@ function finnSkuff(nokkel: string): Element | null {
 /** Kjører `gjor` når React har tegnet det som nettopp ble satt. */
 function etterTegning(gjor: () => void) {
   requestAnimationFrame(() => gjor())
+}
+
+/**
+ * Ruller fram et kort eller en skuff brukeren åpner, slik `rullTilpasset`
+ * beskriver. Det er det samme for alt som åpnes med et trykk: skuffene i
+ * styringen for siden (`sett`) og kortene i et rutenett som styrer seg selv
+ * (`useKortvalg`). Kalles rett før endringen som åpner: nettleseren skal ikke
+ * flytte siden når det rundt kortet skifter plass, og kortet skal bli stående
+ * der brukeren trykket, til siden ruller det fram.
+ */
+export function rullFramNarApnet(kort: Element) {
+  const slipp = laasAnker()
+  etterTegning(() => etterTegning(slipp))
+  const sto = kort.getBoundingClientRect().top
+  etterTegning(() => rull(kort, TILPASSET, sto))
 }
 
 /** Rullingen til en åpnet skuff som pågår, så en ny rulling tar over i stedet for å slåss med den. */

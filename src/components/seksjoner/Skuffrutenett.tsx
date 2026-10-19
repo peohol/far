@@ -1,6 +1,6 @@
-import { createContext, useContext, useRef, type HTMLAttributes } from 'react'
+import { createContext, useCallback, useContext, useMemo, useRef, useState, type HTMLAttributes, type RefObject } from 'react'
 import { useFlytting } from '../../hooks/useFlytting'
-import { useSeksjonsstyring } from './Seksjonsstyring'
+import { rullFramNarApnet, useSeksjonsstyring } from './Seksjonsstyring'
 
 /**
  * Detaljkort i et rutenett (`.skuffrutenett`, se `seksjoner.css`): de lukkede
@@ -40,4 +40,41 @@ const Flytting = createContext<(() => void) | null>(null)
  */
 export function useRutenettflytting(): (() => void) | null {
   return useContext(Flytting)
+}
+
+/** Hvilket kort som står åpent i et rutenett som styrer seg selv, og det som åpner og lukker dem (se `useKortvalg`). */
+export interface Kortvalg {
+  /** Kortet som står åpent, eller `null` når alle er lukket. */
+  apen: string | null
+  /**
+   * Et trykk på kortet `kort`: åpner det, så kortene flytter seg synlig og
+   * siden ruller det fram, eller lukker det.
+   */
+  veksle: (id: string, apnes: boolean, kort: Element) => void
+  /** Søket eller nettleseren skal vise noe i kortet: åpner det straks. */
+  vis: (id: string) => void
+}
+
+/**
+ * Kortene i et rutenett som styrer seg selv i stedet for å stå i styringen
+ * for siden: underkortene (`Underkortrutenett`) og styrkene i «Preparater»
+ * (`Styrkerutenett`). De åpnes og lukkes som detaljkortene i et
+ * `Skuffrutenett`: bare ett står åpent, et trykk flytter kortene synlig
+ * (`useFlytting`), og kortet brukeren åpner, rulles fram på samme måte som en
+ * skuff (`rullFramNarApnet`). Søket og nettleseren som åpner et kort, gjør det
+ * straks. Om et kort i det hele tatt kan åpnes, avgjør den som tegner det: et
+ * kort uten mer å vise er fast.
+ */
+export function useKortvalg(liste: RefObject<HTMLElement>, apenFraStart: string | null = null): Kortvalg {
+  const [apen, setApen] = useState<string | null>(apenFraStart)
+  const husk = useFlytting(liste)
+  const veksle = useCallback(
+    (id: string, apnes: boolean, kort: Element) => {
+      husk()
+      if (apnes) rullFramNarApnet(kort)
+      setApen(apnes ? id : null)
+    },
+    [husk],
+  )
+  return useMemo(() => ({ apen, veksle, vis: setApen }), [apen, veksle])
 }

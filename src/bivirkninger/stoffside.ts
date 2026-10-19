@@ -3,7 +3,7 @@
  * visningene av det samme datasettet, tabell for tabell, oppsummeringene, og
  * tekstene søket på siden finner. Alt her er rene funksjoner.
  */
-import { antall, ramsOpp } from '../faginnhold/oppsummering'
+import { antall, kuttes, ramsOpp } from '../faginnhold/oppsummering'
 import type { Tilleggstekst } from '../faginnhold/sok'
 import { BIVIRKNINGSPANEL } from './referanser'
 import {
@@ -86,6 +86,15 @@ export function gruppeoppsummering(gruppe: Gruppe): string {
 /** Oppsummeringen av en kombinasjon i lukket kort: bivirkningene, etter hverandre. */
 export function undergruppeoppsummering(under: Undergruppe): string {
   return ramsOpp(under.bivirkninger.map((b) => b.tekst))
+}
+
+/**
+ * Om kombinasjonen har mer å vise enn oppsummeringen det lukkede kortet står
+ * med: en fotnote, eller flere bivirkninger enn oppsummeringen får plass til.
+ * Ellers står alt allerede der, og kortet er fast.
+ */
+export function undergruppeHarMer(under: Undergruppe): boolean {
+  return under.bivirkninger.some((b) => b.fotnote) || kuttes(undergruppeoppsummering(under))
 }
 
 /**

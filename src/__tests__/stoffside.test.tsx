@@ -3258,6 +3258,17 @@ describe('bivirkningene fra preparatomtalene', () => {
     return [...kort.querySelectorAll('.underkortrutenett .skuff__tittelTekst')].map((t) => t.textContent ?? '')
   }
 
+  /**
+   * Bivirkningene i seksjonen, sortert: punktene i kortene som åpnes, og
+   * oppsummeringen i de faste, der alt står.
+   */
+  function bivirkningstekstene(): string[] {
+    const seksjon = screen.getByRole('region', { name: 'Bivirkninger' })
+    const punkter = [...seksjon.querySelectorAll('.bivirkninger__liste > li')].map((li) => li.textContent ?? '')
+    const faste = [...seksjon.querySelectorAll('.underkortrutenett .skuff__fastinnhold')].flatMap((el) => (el.textContent ?? '').split(' · '))
+    return [...punkter, ...faste].sort()
+  }
+
   const visning = () => screen.getByRole('slider', { name: 'Vis bivirkningene etter' })
 
   it('viser ikke seksjonen når siden ikke har bivirkninger, og leser dem etter stoffets nøkkel', async () => {
@@ -3314,23 +3325,37 @@ describe('bivirkningene fra preparatomtalene', () => {
     expect(screen.getByText('Syntetisk fotnote')).toBeTruthy()
   })
 
-  it('kan åpne hvert kombinasjonskort, med oppsummeringen lukket og punktlista åpen', async () => {
+  it('åpner bare kombinasjonskort som har mer å vise enn oppsummeringen, og viser resten faste', async () => {
     const user = userEvent.setup()
     vis('amitriptylin', bivirkningskilde())
     await apneSkuff(user, 'Bivirkninger')
-    const seksjon = screen.getByRole('region', { name: 'Bivirkninger' })
-    for (const gruppe of ['Vanlige', 'Sjeldne', 'Ikke kjent']) {
+    const kortI = (gruppe: string) => skuffen(gruppe).closest('.overskriftskort') as HTMLElement
+
+    // For mange bivirkninger til at oppsummeringen får med alle: kortet åpnes til punktlista.
+    await user.click(skuffen('Vanlige'))
+    const nevrologiske = within(kortI('Vanlige')).getByRole('button', { name: /Nevrologiske sykdommer/ })
+    expect(nevrologiske.closest('.skuff')!.querySelector('.skuff__oppsummering')?.textContent).toMatch(/…$/)
+    await user.click(nevrologiske)
+    expect(nevrologiske.getAttribute('aria-expanded')).toBe('true')
+    expect(within(nevrologiske.closest('.skuff') as HTMLElement).getAllByRole('listitem')).toHaveLength(10)
+    // En fotnote står bare i det åpnede kortet, så et kort med fotnote åpnes, selv med én kort bivirkning.
+    const hud = within(kortI('Vanlige')).getByRole('button', { name: /Hud- og underhudssykdommer/ })
+    await user.click(hud)
+    expect(hud.getAttribute('aria-expanded')).toBe('true')
+    expect(screen.getByText('Syntetisk fotnote')).toBeTruthy()
+
+    // Én kort bivirkning uten fotnote står hel i oppsummeringen: kortet er fast, uten knapp og pil.
+    for (const [gruppe, tekst] of [
+      ['Sjeldne', 'Syntetisk sjelden bivirkning'],
+      ['Ikke kjent', 'Syntetisk bivirkning med ukjent frekvens'],
+    ] as const) {
       await user.click(skuffen(gruppe))
-      expect(seksjon.querySelector('.underkortrutenett .skuff--fast')).toBeNull()
+      const fast = kortI(gruppe).querySelector('.underkortrutenett .skuff--fast') as HTMLElement
+      expect(fast).not.toBeNull()
+      expect(within(fast).queryByRole('button')).toBeNull()
+      expect(fast.querySelector('.skuff__pil')).toBeNull()
+      expect(fast.querySelector('.skuff__fastinnhold')?.textContent).toBe(tekst)
     }
-    // Også et kort med én kort bivirkning og ingen fotnote åpnes og lukkes.
-    const ukjent = within(skuffen('Ikke kjent').closest('.overskriftskort') as HTMLElement).getByRole('button', { name: /Gastrointestinale sykdommer/ })
-    expect(ukjent.getAttribute('aria-expanded')).toBe('true')
-    const kortet = ukjent.closest('.skuff') as HTMLElement
-    expect(within(kortet).getByRole('listitem').textContent).toBe('Syntetisk bivirkning med ukjent frekvens')
-    await user.click(ukjent)
-    expect(ukjent.getAttribute('aria-expanded')).toBe('false')
-    expect(kortet.querySelector('.skuff__oppsummering')?.textContent).toContain('Syntetisk bivirkning med ukjent frekvens')
   })
 
   it('holder tabellene i en preparatomtale hver for seg, med navnet og frekvensgrunnlaget over', async () => {
@@ -3376,7 +3401,7 @@ describe('bivirkningene fra preparatomtalene', () => {
     const user = userEvent.setup()
     vis('amitriptylin', bivirkningskilde())
     await apneSkuff(user, 'Bivirkninger')
-    const fraFrekvens = [...screen.getByRole('region', { name: 'Bivirkninger' }).querySelectorAll('.bivirkninger__liste > li')].map((li) => li.textContent).sort()
+    const fraFrekvens = bivirkningstekstene()
     fireEvent.change(visning(), { target: { value: '1' } })
     expect(visning().getAttribute('aria-valuetext')).toBe('Organsystem')
     expect(gruppene()).toEqual(['Nevrologiske sykdommer', 'Gastrointestinale sykdommer', 'Hud- og underhudssykdommer'])
@@ -3384,7 +3409,7 @@ describe('bivirkningene fra preparatomtalene', () => {
     expect(kortene('Nevrologiske sykdommer')).toEqual(['Vanlige', 'Sjeldne'])
     // Frekvensen står med navnet og definisjonen også inne i et organsystem.
     expect(within(skuffen('Nevrologiske sykdommer').closest('.overskriftskort') as HTMLElement).getByText('< 1/1 000', { exact: false })).toBeTruthy()
-    const fraOrgansystem = [...screen.getByRole('region', { name: 'Bivirkninger' }).querySelectorAll('.bivirkninger__liste > li')].map((li) => li.textContent).sort()
+    const fraOrgansystem = bivirkningstekstene()
     expect(fraOrgansystem).toEqual(fraFrekvens)
     expect(fraOrgansystem).toHaveLength(13)
   })

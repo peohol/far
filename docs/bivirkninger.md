@@ -171,9 +171,12 @@ Trekkspillet følger reglene i `docs/seksjoner.md`: gruppene er detaljkort i
 styringen for siden, med én åpen om gangen. Kortene i en gruppe er
 `Underkort` i et `Underkortrutenett` — en visning i detaljkortet som styrer
 seg selv, også med én åpen om gangen, og ikke et tredje nivå i styringen.
-Hvert kombinasjonskort kan alltid åpnes: lukket viser det bivirkningene som
-oppsummering, åpent som punktliste med fotnotene. Har en gruppe bare én
-kombinasjon, står den åpen fra start.
+Et kombinasjonskort viser bivirkningene som oppsummering når det er lukket,
+og som punktliste med fotnotene når det er åpent. Det kan åpnes bare når det
+har mer å vise (`undergruppeHarMer` i `stoffside.ts`): en fotnote, eller
+flere bivirkninger enn oppsummeringen får med. Ellers står alt i
+oppsummeringen, og kortet er fast og viser den under navnet. Har en gruppe
+bare én kombinasjon, står den åpen fra start.
 
 Søket på siden finner bivirkningene, fotnotene og navnene i visningen som
 står (`bivirkningstekster`).

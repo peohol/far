@@ -26,9 +26,11 @@ offentlige kilder.
   seksjonen står åpen. Det gjelder uansett hva som åpner skuffen: et trykk,
   en direktelenke, søket på siden eller nettleserens eget søk. Et detaljkort
   husker at det sto åpent når seksjonen lukkes og åpnes igjen.
-- Når brukeren åpner en skuff, ruller siden den fram i det synlige feltet
-  mellom den faste toppmenyen og bunnen av vinduet (over dokken på smale
-  flater):
+- Når brukeren åpner en skuff eller et kort — et detaljkort, et underkort
+  som i «Bivirkninger», eller en styrke i «Preparater» — ruller siden det
+  fram i det synlige feltet mellom den faste toppmenyen og bunnen av vinduet
+  (over dokken på smale flater). Det er én og samme rulling for alt
+  (`rullFramNarApnet` i `Seksjonsstyring.tsx`):
   - får den åpne skuffen plass i feltet, midtstilles den;
   - er den høyere enn feltet, legges toppen rett under toppmenyen.
 
@@ -124,13 +126,19 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   - et mekanismekort har mer når det har en utdypende tekst. Ellers står
     effektpillen fast under målet.
 
+  Kombinasjonskortene i «Bivirkninger» avgjør det med `undergruppeHarMer`
+  (se `docs/bivirkninger.md`). Regelen gjelder alle kort som åpnes og
+  lukkes, og et nytt slags kort må si om det har mer å vise.
+
   Kildene til kortet står nederst i det faste kortet, som i det åpnede.
 - En seksjon i en seksjon, eller et detaljkort utenfor en seksjon eller i et
   annet detaljkort, stopper tegningen med en feil. Trenger innholdet et
   tredje nivå, skal det heller deles opp.
 - Innholdet i et detaljkort kan likevel ha en egen liten visning som åpner og
   lukker, når designet ber om det: styrkekortene i «Preparater»
-  (`src/components/preparater/`). Den styrer seg selv og er ikke en skuff.
+  (`src/components/preparater/`). Den styrer seg selv og er ikke en skuff,
+  men åpner, lukker, flytter og ruller kortene med den samme kroken som
+  underkortene (`useKortvalg` i `Skuffrutenett.tsx`).
   Skjuler den noe, gjøres det med `hidden="until-found"`, og den åpner seg
   når nettleserens søk finner noe der (`beforematch`) og når `apneTil` sender
   `VIS_HENDELSE` fra elementet som skal vises (`useSkjultTilFunnet`).
@@ -138,8 +146,8 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   `Underkortrutenett` med `Underkort` fra `Seksjon.tsx`, som i
   «Bivirkninger» (`docs/bivirkninger.md`). Kortene har samme hode, pil, kant
   og flytting som detaljkortene (`Skufframme` og `Fastramme` tegner begge),
-  overskrift på nivå 4, ett åpent om gangen, og `kanApnes={false}` for et
-  kort uten mer å vise. Rutenettet styrer seg selv og står ikke i styringen
+  overskrift på nivå 4, ett åpent om gangen, den samme rullingen når et kort
+  åpnes (`useKortvalg`), og `kanApnes={false}` for et kort uten mer å vise. Rutenettet styrer seg selv og står ikke i styringen
   for siden eller i adressen; det åpner kortet rundt et treff selv
   (`beforematch` og `VIS_HENDELSE`).
 - Et detaljkort som skal se ut som en overskrift i stedet for et kort — når

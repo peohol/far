@@ -10,7 +10,10 @@ import { act, cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useRef, useState } from 'react'
-import { Detaljkort, Seksjon } from '../components/seksjoner/Seksjon'
+import { Detaljkort, Seksjon, Underkort, Underkortrutenett } from '../components/seksjoner/Seksjon'
+import { Styrkerutenett } from '../components/preparater/Styrkerutenett'
+import { formikon } from '../legemiddeldata/legemiddelformer'
+import type { Formgruppe, Styrkegruppe } from '../legemiddeldata/preparatmodell'
 import {
   SeksjonsstyringKilde,
   skufferRundt,
@@ -571,7 +574,8 @@ describe('rullingen', () => {
     Object.defineProperty(document.documentElement, 'scrollHeight', { value: 100_000, configurable: true })
     const ekte = window.getComputedStyle.bind(window)
     vi.spyOn(window, 'getComputedStyle').mockImplementation((el, pseudo) => {
-      if (!(el as Element).hasAttribute?.('data-skuff')) return ekte(el, pseudo)
+      // Skuffene og kortene som rulles fram, har toppmenyen over og luften under som margen.
+      if (!(el as Element).matches?.('.skuff, .styrkekort')) return ekte(el, pseudo)
       return { ...ekte(el, pseudo), scrollMarginTop: `${OVER}px`, scrollMarginBottom: `${UNDER}px` } as CSSStyleDeclaration
     })
   })
@@ -664,6 +668,61 @@ describe('rullingen', () => {
     await nesteBilde()
     // 140 px høyt: (684 − 140) / 2 = 272 px luft.
     expect(rulletTil).toHaveBeenLastCalledWith({ top: RULLET - 50 - OVER - 272, behavior: 'instant' })
+  })
+
+  it('ruller et underkort fram på samme måte når det åpnes, og ikke når det lukkes', async () => {
+    const user = userEvent.setup()
+    render(
+      <SeksjonsstyringKilde>
+        <Seksjon id="b" tittel="B" apenFraStart>
+          <Detaljkort id="k" tittel="K" apenFraStart>
+            <Underkortrutenett etikett="Underkortene">
+              <Underkort id="u" anker="underkortet" tittel="U" oppsummering="Begynnelsen …">
+                <p>Hele teksten</p>
+              </Underkort>
+            </Underkortrutenett>
+          </Detaljkort>
+        </Seksjon>
+      </SeksjonsstyringKilde>,
+    )
+    await nesteBilde()
+    rulletTil.mockClear()
+    document.getElementById('underkortet')!.getBoundingClientRect = () => ({ top: 300, height: 140 }) as DOMRect
+    await user.click(knapp('U'))
+    await nesteBilde()
+    // 140 px høyt: (684 − 140) / 2 = 272 px luft.
+    expect(rulletTil).toHaveBeenLastCalledWith({ top: RULLET + 300 - OVER - 272, behavior: 'instant' })
+    expect(rullet).not.toHaveBeenCalled()
+    rulletTil.mockClear()
+    await user.click(knapp('U'))
+    await nesteBilde()
+    expect(rulletTil).not.toHaveBeenCalled()
+  })
+
+  it('ruller et styrkekort i «Preparater» fram på samme måte når det åpnes', async () => {
+    const user = userEvent.setup()
+    const styrke = (id: string, tekst: string): Styrkegruppe =>
+      ({
+        id,
+        nokkel: id,
+        styrke: tekst,
+        presisering: null,
+        mengde: null,
+        ledd: [],
+        uten_styrke: [],
+        kombinasjon: false,
+        preparater: [{ preparat: `p-${id}`, navn: `Syntetisk ${tekst}`, produsenter: [], merker: [], deling: 'ukjent' }],
+      }) as unknown as Styrkegruppe
+    const form: Formgruppe = { id: 'tab', form: 'Tablett', ikon: formikon(null, 'Tablett'), styrker: [styrke('s10', '10 mg'), styrke('s25', '25 mg')], deling: 'ukjent' }
+    render(<Styrkerutenett form={form} anker="styrkene" valgt={null} onVelg={() => {}} />)
+    const tjuefem = screen.getByRole('button', { name: /25 mg/ })
+    tjuefem.closest('li')!.getBoundingClientRect = () => ({ top: 600, height: 100 }) as DOMRect
+    await user.click(tjuefem)
+    expect(tjuefem.getAttribute('aria-expanded')).toBe('true')
+    await nesteBilde()
+    // 100 px høyt: (684 − 100) / 2 = 292 px luft.
+    expect(rulletTil).toHaveBeenLastCalledWith({ top: RULLET + 600 - OVER - 292, behavior: 'instant' })
+    expect(rullet).not.toHaveBeenCalled()
   })
 
   it('ruller ikke når skuffen lukkes', async () => {
@@ -797,6 +856,10 @@ describe('rullingen', () => {
     const css = readFileSync('src/styles/seksjoner.css', 'utf8')
     expect(css).toMatch(/\.skuff\s*\{[^}]*scroll-margin-block:\s*var\(--toppmeny-offset\)/)
     expect(css).toMatch(/\.skuff\s*\{\s*scroll-margin-bottom:\s*var\(--dokk-offset\)/)
+    // Styrkekortene i «Preparater» har de samme grensene.
+    const preparater = readFileSync('src/styles/preparater.css', 'utf8')
+    expect(preparater).toMatch(/\.styrkekort\s*\{[^}]*scroll-margin-block:\s*var\(--toppmeny-offset\) var\(--rom-7\)/)
+    expect(preparater).toMatch(/\.styrkekort\s*\{\s*scroll-margin-bottom:\s*var\(--dokk-offset\)/)
   })
 
   it('klipper innholdet ved kroppens kant mens skuffen glir, så det ikke blir et tomt bånd nederst', () => {
