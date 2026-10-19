@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.103.9',
+    dato: '2026-10-19',
+    sammendrag: 'Riktig ord «monografi», og kurateringene får en egen Claude-kontrollør',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    gjelder: ['sok', 'stoff', 'kuratering', 'vinduer'],
+    punkter: [
+      'Søkesiden og endringsloggen skriver «monografi» og «monografier», ikke «monograf». Kuratoren heter «Claude monografikurator» i fagsidenes endringslogg og på kurateringssidene. Eldre oppføringer i fagsidenes endringslogg beholder ordlyden de ble skrevet med, siden den loggen aldri endres i ettertid.',
+      'Kurateringene kontrolleres nå av en egen Claude-kontrollør, med sin egen nøkkel og uten kontakt med kuratoren utenom trådene i kurateringen. Kontrolløren slår opp i kildene selv før den leser kuratorens begrunnelser. ChatGPT er ikke lenger kontrollør, og trådene ChatGPT åpnet, kan lukkes av den nye kontrolløren når de er løst.',
+    ],
+  },
+  {
     versjon: '1.103.8',
     dato: '2026-10-18',
     sammendrag: 'Kontrollørens funn går ikke tapt når ChatGPT stopper skrivingen',
@@ -295,17 +307,17 @@ export const ENDRINGSLOGG: Endring[] = [
     sammendrag: 'Kurateringskøen hopper over testsiden',
     typer: ['Funksjonalitet'],
     omfang: 'Minimalt omfang',
-    punkter: ['Ingen endring i appen. Fagsiden «Teststoff», som er laget for å prøve appen, står ikke lenger i køen monografkuratoren henter stoffer fra.'],
+    punkter: ['Ingen endring i appen. Fagsiden «Teststoff», som er laget for å prøve appen, står ikke lenger i køen monografikuratoren henter stoffer fra.'],
     utenVarsel: true,
   },
   {
     versjon: '1.92.5',
     dato: '2026-10-14',
-    sammendrag: 'Monografkuratoren får en arbeidskø gjennom hele stoffregisteret, og funksjonstesten dekker kjemi og laboratorieanalyser',
+    sammendrag: 'Monografikuratoren får en arbeidskø gjennom hele stoffregisteret, og funksjonstesten dekker kjemi og laboratorieanalyser',
     typer: ['Funksjonalitet'],
     omfang: 'Minimalt omfang',
     punkter: [
-      'Ingen endring i appen. Monografkuratoren kan nå arbeide seg gjennom stoffregisteret fra en kø: den henter neste fagside, reserverer den så ingen andre kuraterer den samtidig, og leverer et utkast til gjennomgang. Køen prioriterer sider som mangler innhold, har få kilder eller ikke er kuratert på lenge, og følger hver kuratering til den er publisert.',
+      'Ingen endring i appen. Monografikuratoren kan nå arbeide seg gjennom stoffregisteret fra en kø: den henter neste fagside, reserverer den så ingen andre kuraterer den samtidig, og leverer et utkast til gjennomgang. Køen prioriterer sider som mangler innhold, har få kilder eller ikke er kuratert på lenge, og følger hver kuratering til den er publisert.',
       'Ingenting publiseres uten at et menneske har godkjent det.',
       'Kontrollen av at en fagside leses riktig, dekker nå også kjemiske grunndata og analysene ved norske laboratorier, med koblingene til stoffet.',
     ],
@@ -320,7 +332,7 @@ export const ENDRINGSLOGG: Endring[] = [
     gjelder: ['vinduer'],
     punkter: [
       'Hver endring i endringsloggen begynner nå med profilbildet og navnet til den som gjorde den, og tidspunktet etter. Uten profilbilde vises forbokstavene, og systemet vises med et tannhjul.',
-      'Kuratorboten vises med navnet og profilbildet fra sin egen profil, «Kurator Bot». At det er ChatGPT monografkurator, står når endringen foldes ut.',
+      'Kuratorboten vises med navnet og profilbildet fra sin egen profil, «Kurator Bot». At det er ChatGPT monografikurator, står når endringen foldes ut.',
     ],
   },
   {
@@ -398,11 +410,11 @@ export const ENDRINGSLOGG: Endring[] = [
   {
     versjon: '1.91.1',
     dato: '2026-10-13',
-    sammendrag: 'Teknisk hjelp til monografkuratoren: funksjonstest av fagsidene og originale preparatomtaler',
+    sammendrag: 'Teknisk hjelp til monografikuratoren: funksjonstest av fagsidene og originale preparatomtaler',
     typer: ['Funksjonalitet'],
     omfang: 'Minimalt omfang',
     punkter: [
-      'Ingen endring i appen. Monografkuratoren kan nå få en kontroll av at en fagside leses riktig, slik en vanlig innlogget bruker ser den, med legemiddeldata, bivirkninger og farmakogenetikk.',
+      'Ingen endring i appen. Monografikuratoren kan nå få en kontroll av at en fagside leses riktig, slik en vanlig innlogget bruker ser den, med legemiddeldata, bivirkninger og farmakogenetikk.',
       'Kuratoren kan også få de originale preparatomtalene fra DMP, kontrollert for at de kom hele, med tekstuttrekk og et bilde av hver side til visuell kontroll av tabellene. Preparater uten preparatomtale hos DMP, som sentralt godkjente, listes opp.',
     ],
     utenVarsel: true,
@@ -1934,11 +1946,11 @@ export const ENDRINGSLOGG: Endring[] = [
   {
     versjon: '1.32.2',
     dato: '2026-09-25',
-    sammendrag: 'Fagsøket finner også analyttsider som ennå ikke har en monograf',
+    sammendrag: 'Fagsøket finner også analyttsider som ennå ikke har en monografi',
     typer: ['Funksjonalitet'],
     omfang: 'Mindre omfang',
     punkter: [
-      'Søker du på et stoff som har en analyttside, men ennå ingen monograf – for eksempel diazepam – kommer siden nå opp som stofftreff i fagsøket og på søkesiden. Før kom bare stoffer med publisert monograf med.',
+      'Søker du på et stoff som har en analyttside, men ennå ingen monografi – for eksempel diazepam – kommer siden nå opp som stofftreff i fagsøket og på søkesiden. Før kom bare stoffer med publisert monografi med.',
     ],
   },
   {

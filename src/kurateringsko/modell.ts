@@ -1,5 +1,5 @@
 /**
- * Kurateringskøen: arbeidslisten monografkuratoren henter neste stoff fra,
+ * Kurateringskøen: arbeidslisten monografikuratoren henter neste stoff fra,
  * med det køen vet om hvert stoff (`docs/kurateringsko.md`).
  *
  * Køen står på en egen gren som bare arbeidsflyten «Kurateringskø» skriver

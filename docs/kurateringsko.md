@@ -1,6 +1,6 @@
 # Kurateringskøen
 
-Leses av monografkuratoren (Claude Code, `docs/kuratorprotokoll.md`) og av den
+Leses av monografikuratoren (Claude Code, `docs/kuratorprotokoll.md`) og av den
 som endrer køen. Køen er
 arbeidslisten kuratoren henter neste stoff fra når den arbeider seg gjennom
 stoffregisteret på egen hånd. Det kuratoren gjør ved hver planlagte kjøring,
@@ -109,7 +109,7 @@ Et stoff som venter etter en feil, står sist til `tidligst_kl`.
 - **Oppdagelse.** Nye stoffer i stoffregisteret kommer i køen ved neste
   måling. Et stoff uten publisert fagside blokkeres (`uten_fagside`) til siden
   finnes; den blokkeringen forsvinner av seg selv.
-- **Kurateringer i repoet.** Køen leser monografkurateringene blant
+- **Kurateringer i repoet.** Køen leser monografikurateringene blant
   migrasjonene på `main` (kallet `intern.kuratering_start('<stoff>')`) og
   evidensjournalene i `docs/kurateringsjournal/<stoff>.md` (feltene
   «Kurateringsmodus», «Kunnskapsgrense», «Siste fulle kjøring» og

@@ -22,7 +22,7 @@ export interface FagsokfeltProps extends Omit<InputHTMLAttributes<HTMLInputEleme
 }
 
 /**
- * Feltet for globalt fagsøk i toppmenyen. Det søker i stoffmonografene, og er
+ * Feltet for globalt fagsøk i toppmenyen. Det søker i stoffmonografiene, og er
  * noe annet enn analyttsøket som driver fortolkningen.
  *
  * Dette er skallet: feltet, plassen og snarveien. Søket selv og rullegardinen

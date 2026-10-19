@@ -93,9 +93,9 @@ nøkkelen (`src/kuratering/endepunkt.ts`); nøkkelen kontrolleres i databasen:
   bare for kurateringskøen, med GitHubs OIDC-token for arbeidsflyten på `main`
   (`docs/kurateringsko.md`), og for administratorene.
 
-Kuratoren (Claude Code) kaller med `npm run kurator -- kall <handling>`
-(`scripts/kurator.ts`, `docs/kuratorprotokoll.md`); kontrolløren (ChatGPT)
-gjennom MCP (`docs/kontrollorinstruks.md`).
+Kuratoren kaller med `npm run kurator -- kall <handling>` og kontrolløren med
+`npm run kontrollor -- kall <handling>`, hver med sin egen nøkkel
+(`scripts/kurateringsagent.ts`, `docs/kuratering-prosjekt.md`).
 
 ## Endringene
 
@@ -128,8 +128,9 @@ i orden.
 
 | Agent | Rolle | Nøkkelen |
 | --- | --- | --- |
-| `claude-monografkurator` | kurator | Lagt inn som SHA-256 i migrasjonen `kurateringsagenter`; selve nøkkelen har Claude-øktene i prosjektet, utenfor repoet |
-| `chatgpt-monografkurator` | kontrollør | Lages av en administrator i appen |
+| `claude-monografkurator` (Claude monografikurator) | kurator | Lages med `npm run kurator -- nye-nokler` og legges inn som SHA-256 i en migrasjon; selve nøkkelen ligger i kurateringsprosjektets delte mappe, utenfor repoet (`docs/kuratering-prosjekt.md`) |
+| `claude-monografikontrollor` (Claude monografikontrollør) | kontrollør | Som kuratorens, i en egen fil |
+| `chatgpt-monografkurator` (ChatGPT monografikurator) | kontrollør | Slått av fra 2026-10-19; «Lag ny nøkkel» slår den på igjen |
 
 En administrator ser agentene under «Kurateringer» i administrasjonsmenyen:
 rollen, når nøkkelen ble laget og når agenten sist kalte inn. «Lag ny nøkkel»

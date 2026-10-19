@@ -83,7 +83,7 @@ function endring(id: string, kl: string, ekstra: Partial<Endring> = {}): Endring
   }
 }
 
-const KURATOR = { nokkel: 'chatgpt-monografkurator', navn: 'ChatGPT monografkurator', art: 'ki-agent' as const, beskrivelse: 'Kuraterer fagsidene.', rutine: false }
+const KURATOR = { nokkel: 'chatgpt-monografkurator', navn: 'ChatGPT monografikurator', art: 'ki-agent' as const, beskrivelse: 'Kuraterer fagsidene.', rutine: false }
 
 const KURATERING = endring('k1', '2026-10-13T12:00:00Z', {
   aktor: 'agent',
@@ -177,7 +177,7 @@ describe('endringsloggen for en side', () => {
     expect(kurator!.querySelector('.avatar img')?.getAttribute('src')).toBe('https://bilder.test/kuratorbot/avatar.webp')
     expect(kurator!.querySelector('.innholdslogg__hvem')?.textContent).toBe('Kurator Bot')
     await user.click(within(kurator!).getByRole('button', { expanded: false }))
-    expect(within(kurator!).getByText('ChatGPT monografkurator')).toBeTruthy()
+    expect(within(kurator!).getByText('ChatGPT monografikurator')).toBeTruthy()
     // Uten profilbilde: forbokstavene.
     expect(rita!.querySelector('.avatar img')).toBeNull()
     expect(rita!.querySelector('.avatar__initialer')?.textContent).toBe('RR')

@@ -1,10 +1,10 @@
-# Monografkuratering
+# Monografikuratering
 
 Leses når en stoffmonografi (en fagside) skal oppdateres med en
 datamigrasjon etter en kuratering. Hvordan sidene, revisjonene og
 publiseringen er bygget, står i `docs/faginnhold.md`.
 
-**Rollene.** Nye kurateringer gjøres av Claude-monografkuratoren i en
+**Rollene.** Nye kurateringer gjøres av Claude-monografikuratoren i en
 kurateringsgren i OUSFAR, etter `docs/kuratorprotokoll.md`, og kontrolleres
 uavhengig av ChatGPT-kontrolløren (`docs/kontrollorinstruks.md`) før de kan
 publiseres (`docs/kurateringsgrener.md`). Veien her, en datamigrasjon i en PR,
@@ -120,7 +120,7 @@ kjøring (`docs/kurateringsko.md`, `docs/kurateringsko-instruks.md`).
 
 4. **Utrullingen.** Når preflight og testene er bestått, slås PR-en sammen, og
    GitHub Actions ruller migrasjonen ut til produksjonen og kontrollerer
-   historikken (`docs/migrasjoner.md`). En ordinær monografkuratering trenger
+   historikken (`docs/migrasjoner.md`). En ordinær monografikuratering trenger
    ikke noe eget samtykke; sammenslåingen er godkjenningen. Hvis migrasjonen
    avviker fra den vanlige malen og innebærer vesentlig risiko for datatap,
    sikkerhet/personvern, produksjonstilgjengelighet eller vanskelig reversering,

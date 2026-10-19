@@ -1,15 +1,31 @@
 /**
  * Kurateringsgrenene sett fra en agent som kaller OUSFAR over HTTP
  * (`/api/kuratering`, `docs/kurateringsgrener.md`): Claude-kuratoren bruker
- * den gjennom `npm run kurator`. Nøkkelen sendes bare i overskriften og
- * skrives aldri ut.
+ * den gjennom `npm run kurator`, Claude-kontrolløren gjennom
+ * `npm run kontrollor`. Nøkkelen sendes bare i overskriften og skrives aldri ut.
  */
 
 type Hent = (adresse: string, valg?: RequestInit) => Promise<Response>
 
 export const STANDARDADRESSE = 'https://ousfar.vercel.app'
-/** Der Claude-øktene i prosjektet har nøkkelen; aldri i repoet. */
-export const STANDARD_NOKKELFIL = '/mnt/project-files/.hemmelig/claude-monografkurator.nokkel'
+
+/**
+ * Rollene en Claude-økt i kurateringsprosjektet har (`docs/kuratering-prosjekt.md`):
+ * agenten i OUSFAR, og fila i prosjektets delte mappe der nøkkelen ligger,
+ * aldri i repoet. Hver rolle har sin egen nøkkel, så den ene tråden aldri kan
+ * opptre som den andre.
+ */
+export const ROLLER = {
+  kurator: { navn: 'kuratoren', agent: 'claude-monografkurator', nokkelfil: '/mnt/project-files/.hemmelig/kurator.nokkel' },
+  kontrollor: { navn: 'kontrolløren', agent: 'claude-monografikontrollor', nokkelfil: '/mnt/project-files/.hemmelig/kontrollor.nokkel' },
+} as const
+
+export type Rolle = keyof typeof ROLLER
+
+export function lesRolle(verdi: string | undefined): Rolle {
+  if (verdi && Object.hasOwn(ROLLER, verdi)) return verdi as Rolle
+  throw new Error(`Ukjent rolle «${verdi ?? ''}». Bruk ${Object.keys(ROLLER).join(' eller ')}.`)
+}
 
 /** En feil fra OUSFAR, med koden databasen ga (`42501`, `22023`, `PT404`, `PT409`). */
 export class Agentfeil extends Error {

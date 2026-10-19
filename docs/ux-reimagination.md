@@ -1,4 +1,4 @@
-# OUSFAR – UX-reimagination og stoffmonografer
+# OUSFAR – UX-reimagination og stoffmonografier
 
 **Dato:** 24.09.2026  
 **Status:** Implementeringsplan. Dette dokumentet er spesifikasjonen for design- og implementeringsarbeidet, ikke en beskrivelse av dagens UI. Fremdriften står i §16.
@@ -42,9 +42,9 @@ Dette er en full visuell reimagination, ikke et lag med kosmetisk CSS over dagen
 Claude Design skal ikke forsøke å redesigne hele appen i ett sprang. Lag i stedet et lite sett referanseflater som dekker nesten alle primitive mønstre:
 
 1. OUSFARs hovedflate med ny global toppmeny og globalt fagsøk.
-2. En komplett stoffmonograf for **kvetiapin**, desktop, lyst tema.
-3. Samme monograf på smal mobil.
-4. Samme monograf i mørkt tema.
+2. En komplett stoffmonografi for **kvetiapin**, desktop, lyst tema.
+3. Samme monografi på smal mobil.
+4. Samme monografi i mørkt tema.
 5. Preparater: én åpnet legemiddelform, styrkerutenettet, én utvidet styrke og preparatmodal.
 6. Global søkeresultatside.
 7. Ett eksisterende fortolkningstrinn med nytt visuelt skall, men uendret mekanikk.
@@ -104,7 +104,7 @@ Animasjon skal være kort og meningsfull, ikke kontinuerlig pynt. prefers-reduce
 
 ## 5. Én global toppmeny
 
-Dagens separate venstre menyknapp, høyre verktøylinje og monografens StepBar skal samles til ett fast appskall øverst.
+Dagens separate venstre menyknapp, høyre verktøylinje og monografiens StepBar skal samles til ett fast appskall øverst.
 
 ### 5.1 Innhold
 
@@ -112,8 +112,8 @@ Toppmenyen skal kunne inneholde:
 
 - sidemenyknapp;
 - globalt fagsøk;
-- kontekstavhengige handlinger for monograf: Lukk, Åpne fortolkning, Rediger/Avslutt redigering;
-- lokalt søk i åpen monograf;
+- kontekstavhengige handlinger for monografi: Lukk, Åpne fortolkning, Rediger/Avslutt redigering;
+- lokalt søk i åpen monografi;
 - konto/brukere;
 - hurtigtastvisning;
 - tema.
@@ -127,14 +127,14 @@ Alle handlinger skal ha ikon. Tekst kan beholdes der den forbedrer forståelsen;
 - Én eksplisitt høyde/offset-token slik at innhold, scrollIntoView og ankerlenker aldri havner under toppmenyen.
 - Tydelig, men diskret skille fra innholdet.
 - Globalt fagsøk skal alltid ha en faktisk søkeinput i toppmenyen. På smale flater får den prioritet i bredden.
-- Lokalt monografsøk kan være kompakt og ekspandere eller få overlay på mobil slik at to store søkefelt ikke konkurrerer om samme rad.
+- Lokalt monografisøk kan være kompakt og ekspandere eller få overlay på mobil slik at to store søkefelt ikke konkurrerer om samme rad.
 - Sekundære knapper skal krympe til ikonmodus før søkefeltet presses urimelig sammen.
 
 ## 6. To klart forskjellige søk
 
 ### 6.1 Globalt fagsøk
 
-Dette søker i stoffmonografene, ikke i analyttvelgeren på startsiden.
+Dette søker i stoffmonografiene, ikke i analyttvelgeren på startsiden.
 
 - Alltid tilgjengelig i toppmenyen.
 - Ctrl+K fokuserer feltet og overstyrer nettleserens standardhandling. Støtt også Cmd+K på macOS.
@@ -163,9 +163,9 @@ Eksisterende aksent- og æøå-folding og utdragslogikk beholdes. Unngå en ugje
 
 Det skal etableres én effektiv lesesti for alt publisert, søkbart faginnhold. Ikke gjør ett nettverkskall per side. Ikke dupliser TypeScript-rangeringen i SQL. Velg en kompakt publisert råmodell eller en indeks som produseres av samme TypeScript-logikk.
 
-### 6.3 Lokalt monografsøk
+### 6.3 Lokalt monografisøk
 
-Eksisterende Sidesok beholdes funksjonelt, men flyttes inn i toppmenyen eller monografkonteksten og gjøres mindre.
+Eksisterende Sidesok beholdes funksjonelt, men flyttes inn i toppmenyen eller monografikonteksten og gjøres mindre.
 
 - Ctrl+B fokuserer søket; støtt også Cmd+B.
 - Dagens slash-snarvei kan fjernes når den nye snarveien er på plass.
@@ -189,7 +189,7 @@ Implementer regelen sentralt i Seksjonsstyring, ikke ad hoc i hvert panel. Nøkl
 
 Redigeringsmodus skal ikke være avhengig av den gamle åpne-alle-knappen. Hvis redigering trenger større oversikt, løs dette som en intern redigeringspresentasjon eller ved å åpne målseksjonen eksplisitt; ikke bryt lesemodusens invariant.
 
-## 8. Stoffmonograf: ny rekkefølge og presentasjon
+## 8. Stoffmonografi: ny rekkefølge og presentasjon
 
 Rekkefølgen skal være:
 
@@ -265,7 +265,7 @@ Dagens modell legemiddelform → preparat → styrker skal endres i presentasjon
 
 Ikonsettet skal ikke bygges fra en håndskrevet antakelse om mulige former.
 
-Lag en liten maskinell kartlegging som fra gjeldende FEST-data finner alle distinkte LegemiddelformKort som faktisk forekommer blant preparater knyttet til OUSFARs publiserte stoffmonografer. Bruk stabil FEST-kode som nøkkel og tekst som etikett.
+Lag en liten maskinell kartlegging som fra gjeldende FEST-data finner alle distinkte LegemiddelformKort som faktisk forekommer blant preparater knyttet til OUSFARs publiserte stoffmonografier. Bruk stabil FEST-kode som nøkkel og tekst som etikett.
 
 Resultatet skal kunne kontrolleres i test eller generert rapport. Et ikonregister mapper stabile formkoder til visuell kategori. Alle aktive former skal enten ha eksplisitt ikon eller en dokumentert generisk fallback. Legg en test som gjør nye, umappede former synlige ved en senere FEST-oppdatering.
 
@@ -391,7 +391,7 @@ Ingen bred visuell implementering før Claude Design-handoff finnes. Tekniske gr
 - tester for to nivåer, scroll og redusert bevegelse.
 
 **PR C – Global søkeplattform**
-- effektiv lesesti for alle publiserte monografer;
+- effektiv lesesti for alle publiserte monografier;
 - gjenbruk indekserSide og sok;
 - resultatrute og deep links;
 - ingen ny parallell rankingmotor.
@@ -409,7 +409,7 @@ Disse fire PR-ene bør eie separate stil- og kodeområder så langt det lar seg 
 
 Startes mot oppdatert main etter at relevante fundamenter er merget.
 
-**PR E – Monografstruktur og viktige data**
+**PR E – Monografistruktur og viktige data**
 - panelrekkefølge;
 - alltid åpen viktige-data-flate uten paneltittel;
 - grupperte konsentrasjons- og kinetikkort;
@@ -435,10 +435,10 @@ Startes mot oppdatert main etter at relevante fundamenter er merget.
 - global input i topplinjen, Ctrl/Cmd+K;
 - rangert dropdown + Vis alle treff;
 - søkeresultatside;
-- kompakt monografsøk i topplinjen, Ctrl/Cmd+B;
+- kompakt monografisøk i topplinjen, Ctrl/Cmd+B;
 - fokus- og snarveiskonflikter testet.
 
-**PR H – Øvrige monografpaneler**
+**PR H – Øvrige monografipaneler**
 - seksjonsikoner og farmakokinetikk-underikoner;
 - visuell oppgradering av Farmakodynamikk, Indikasjon, Dosering, Farmakokinetikk og Interaksjoner;
 - serumtabell mot PDF-fasit;
@@ -472,7 +472,7 @@ Arbeidet er ikke ferdig før:
 
 - toppkontrollene aldri overlapper på støttede bredder;
 - globalt fagsøk er tilgjengelig overalt og Ctrl/Cmd+K virker;
-- lokalt monografsøk er kompakt og Ctrl/Cmd+B virker;
+- lokalt monografisøk er kompakt og Ctrl/Cmd+B virker;
 - åpning av en skuff lukker søsknene på samme nivå, men ikke forelderen;
 - åpnet skuff legges synlig under den faste toppmenyen;
 - Viktige data er alltid synlig og først etter stoffnavnet;
@@ -496,7 +496,7 @@ Arbeidet er ikke ferdig før:
 4. **Automatiske referanser er ikke redaksjonelle objekter.** Read-only-opprinnelse skal være en systemregel.
 5. **Klinisk innhold er ikke UX-copy.** Designrunden kan rydde chrome og hjelpetekst, ikke forbedre farmakologisk tekst automatisk.
 6. **Animasjon skal gi feedback.** Ikke bruk konstant dekorativ bevegelse i en arbeidsflate som skal kunne brukes under konsentrasjon.
-7. **Mobil er en referanseflate, ikke en etterkontroll.** Kvetiapin-monografen skal designes eksplisitt både bred og smal før komponentene generaliseres.
+7. **Mobil er en referanseflate, ikke en etterkontroll.** Kvetiapin-monografien skal designes eksplisitt både bred og smal før komponentene generaliseres.
 
 ## 16. Fremdrift
 
@@ -509,10 +509,10 @@ Vedlikeholdes bare av koordinatorøkten, ved hver merge. Visuell fasit: Claude D
 | C | Søkedata for globalt søk | Merget (#55, 1.26.6) |
 | D | Referansemodell med FEST | Merget (#54, 1.24.0) |
 | F1 | Preparatmodell og legemiddelformregister | Merget (#53, 1.23.1) |
-| E | Monografstruktur og Viktige data | Merget (#58, 1.26.1) |
+| E | Monografistruktur og Viktige data | Merget (#58, 1.26.1) |
 | F2 | Preparater-UI | Merget (#57, 1.26.0; rettelse #59, 1.26.2) |
 | G | Globalt og lokalt søk-UI | Merget (#63, 1.27.0) |
-| H | Øvrige monografpaneler og serumtabell | Merget (#60, 1.26.3) |
+| H | Øvrige monografipaneler og serumtabell | Merget (#60, 1.26.3) |
 | I | Resten av appens visuelle språk | Merget (#62, 1.26.5) |
 | Konto | Innlogging, konto, brukerliste, endringslogg og redigering | Merget (#61, 1.26.4) |
 | J | Sluttintegrasjon og kvalitetskontroll | Merget (#64, 1.28.0) |

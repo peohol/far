@@ -1,5 +1,5 @@
 /**
- * Kurateringene som står i repoet: monografkurateringene blant migrasjonene
+ * Kurateringene som står i repoet: monografikurateringene blant migrasjonene
  * på main, og evidensjournalene i `docs/kurateringsjournal/`. Køen bruker dem
  * som historikk for kurateringer den ikke har fulgt selv — de som ble gjort
  * før køen fantes, og de som gjøres utenom den.
@@ -11,7 +11,7 @@ export interface Repofil {
   innhold: string
 }
 
-/** Kallet en monografkuratering åpner siden med (`docs/monografkuratering.md`). Ikke definisjonen av funksjonen. */
+/** Kallet en monografikuratering åpner siden med (`docs/monografkuratering.md`). Ikke definisjonen av funksjonen. */
 const KURATERINGSSTART = /intern\.kuratering_start\(\s*'([a-z0-9-]+)'\s*\)/
 const VERSJON = /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})_/
 const DATO = '(\\d{4}-\\d{2}-\\d{2})'

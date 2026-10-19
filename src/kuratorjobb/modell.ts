@@ -1,5 +1,5 @@
 /**
- * Kuratorjobbene: den tekniske hjelpen ChatGPT-monografkuratoren får fra
+ * Kuratorjobbene: den tekniske hjelpen ChatGPT-monografikuratoren får fra
  * GitHub Actions (`docs/kuratorjobber.md`). En jobb er en forespørsel i en
  * fil på en egen gren, og resultatet skrives tilbake på samme gren, som
  * maskinlesbare filer kuratoren henter med GitHub-verktøyene sine.
