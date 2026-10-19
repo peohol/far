@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-19T08:46:20.819Z",
+  "oppdatert_kl": "2026-10-19T09:42:19.139Z",
   "malt_kl": "2026-10-19T07:01:39.673Z",
   "teller": 82,
   "stoffer": {
@@ -1753,7 +1753,7 @@
     "fenobarbital": {
       "stoff": "fenobarbital",
       "navn": "Fenobarbital",
-      "status": "blokkert",
+      "status": "publisert",
       "modus": null,
       "prioritet": {
         "poeng": 0,
@@ -1773,14 +1773,7 @@
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-19T08:46:20.819Z",
-          "kilde": "system"
-        }
-      ],
+      "blokkeringer": [],
       "sist_kuratert": {
         "kl": "2026-10-17T19:25:40.327673+00:00",
         "modus": "de_novo",
@@ -2606,7 +2599,7 @@
     "ghb": {
       "stoff": "ghb",
       "navn": "GHB",
-      "status": "blokkert",
+      "status": "publisert",
       "modus": null,
       "prioritet": {
         "poeng": 0,
@@ -2626,14 +2619,7 @@
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-19T08:46:20.819Z",
-          "kilde": "system"
-        }
-      ],
+      "blokkeringer": [],
       "sist_kuratert": {
         "kl": "2026-10-16T19:09:34.511755+00:00",
         "modus": "de_novo",
@@ -3512,6 +3498,12 @@
           "hendelse": "gren_klar",
           "oppgave": "ketobemidon-0069",
           "melding": "Grenen: klar, revisjon 7, kontrollrunde 4."
+        },
+        {
+          "kl": "2026-10-19T09:42:19.139Z",
+          "hendelse": "gren_klar",
+          "oppgave": "ketobemidon-0069",
+          "melding": "Grenen: klar, revisjon 8, kontrollrunde 5."
         }
       ],
       "appgren": {
@@ -3523,8 +3515,8 @@
         "jobbgren": "kuratorjobb/ketobemidon-0018",
         "registrert_kl": "2026-10-18T17:26:35.749Z",
         "status": "klar",
-        "revisjon": 7,
-        "kontrollrunde": 4
+        "revisjon": 8,
+        "kontrollrunde": 5
       }
     },
     "klomipramin": {
@@ -4582,7 +4574,7 @@
     "lurasidon": {
       "stoff": "lurasidon",
       "navn": "Lurasidon",
-      "status": "blokkert",
+      "status": "publisert",
       "modus": null,
       "prioritet": {
         "poeng": 0,
@@ -4602,14 +4594,7 @@
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-19T08:46:20.819Z",
-          "kilde": "system"
-        }
-      ],
+      "blokkeringer": [],
       "sist_kuratert": {
         "kl": "2026-10-16T19:07:32.191688+00:00",
         "modus": "de_novo",
