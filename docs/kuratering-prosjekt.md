@@ -123,6 +123,10 @@ Sett opp nøklene til Kurator og Kontrollør i kurateringsprosjektet etter «Opp
 Nøkkelen til kuratoren i «OUSFAR Dev» slutter å virke når migrasjonen har
 kjørt. Det er meningen.
 
+Hva trådene kan gjøre uten å spørre fagansvarlig, står i
+`.claude/settings.json` (fagansvarlig ville ha trådene så selvstendige som
+mulig, 2026-10-19). Det gjelder bare så lenge prosjektet har ett repo.
+
 ## Ny nøkkel
 
 Svarer OUSFAR `403` for en rolle, eller kan en nøkkel ha kommet på avveie:

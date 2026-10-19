@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.103.12',
+    dato: '2026-10-19',
+    sammendrag: 'Claude-trådene arbeider uten å spørre om lov for vanlige steg',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Claude-trådene som arbeider med repoet, kan hente kilder fra nettet, lese og redigere filer, kjøre egne skript og verktøyene, og lagre endringer på sine egne grener uten å spørre om lov hver gang. Det som ikke kan angres, som å skrive over historikk eller slette, krever fortsatt et ja.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.103.11',
     dato: '2026-10-19',
     sammendrag: 'Nye nøkler til Claude-kuratoren og Claude-kontrolløren i det nye kurateringsprosjektet',
