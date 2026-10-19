@@ -1,7 +1,8 @@
 import { Component, Suspense, lazy, useId, type ReactNode } from 'react'
 import { useOkt } from '../../auth/okt'
 import type { Tilgang } from '../../domain/tilgang'
-import { useTheme } from '../../hooks/useTheme'
+import { BEVEGELSE, TEMA } from '../../domain/systemvalg'
+import { useSystemvalg } from '../../hooks/useSystemvalg'
 import { Bevaringseier } from '../../oppdatering/Bevaring'
 import { Button } from '../Button'
 import { Temaknapp } from '../toppmeny/Temaknapp'
@@ -92,13 +93,15 @@ function Portramme({
   notis?: string | undefined
   children: ReactNode
 }) {
-  const { theme, toggle } = useTheme()
+  const tema = useSystemvalg(TEMA)
+  // Holder «Reduser bevegelse» i takt med systemet også her.
+  useSystemvalg(BEVEGELSE)
   const tittelId = useId()
 
   return (
     <div className="port">
       <div className="port__tema">
-        <Temaknapp theme={theme} onToggleTheme={toggle} variant="kant" storrelse="kontroll" />
+        <Temaknapp tema={tema.virkelig} onVelg={tema.velg} variant="kant" storrelse="kontroll" />
       </div>
 
       <main className={['port__innhold', bred && 'port__innhold--bred'].filter(Boolean).join(' ')}>

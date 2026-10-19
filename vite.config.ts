@@ -2,6 +2,7 @@ import { fileURLToPath } from 'node:url'
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { KLINISK_PAKKE } from './src/auth/vegg'
+import { systemvalgskript } from './src/domain/systemvalg'
 import { ENDRINGSLOGG } from './src/data/endringslogg'
 import { endringsomrader, nyesteVersjon, oppdateringsversjon } from './src/domain/versjon'
 import { VERSJONSFIL, type Byggopplysninger } from './src/oppdatering/versjon'
@@ -31,8 +32,20 @@ function versjonsfil(): Plugin {
   }
 }
 
+/**
+ * Temaet og «Reduser bevegelse» settes på `<html>` før noe tegnes, så siden
+ * aldri blinker i feil tema. Skriptet lages fra samme beskrivelse som appen
+ * bruker (`src/domain/systemvalg.ts`).
+ */
+function systemvalg(): Plugin {
+  return {
+    name: 'ousfar-systemvalg',
+    transformIndexHtml: () => [{ tag: 'script', children: systemvalgskript(), injectTo: 'head' }],
+  }
+}
+
 export default defineConfig({
-  plugins: [react(), versjonsfil()],
+  plugins: [react(), versjonsfil(), systemvalg()],
   base: './',
   build: {
     outDir: 'dist',

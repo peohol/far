@@ -1,9 +1,15 @@
 import { useRef, useState, type CSSProperties, type PointerEvent } from 'react'
+import { Ikon } from './ikon/Ikon'
+import type { Ikonnavn } from './ikon/register'
 
 /** Ett valg på bryteren: verdien det står for og merket som vises. */
 export interface Trinnvalg<T> {
   verdi: T
   merke: string
+  /** Vises i stedet for merket, som da blir tipset ved pekeren. */
+  ikon?: Ikonnavn
+  /** Det skjermlesere sier, når det trengs mer enn merket (som «Følg system» for «System»). */
+  navn?: string
 }
 
 export interface TrinnbryterProps<T> {
@@ -138,7 +144,7 @@ export function Trinnbryter<T>({ etikett, valg, verdi, onVelg }: TrinnbryterProp
         step={1}
         value={valgt}
         aria-label={etikett}
-        aria-valuetext={valg[valgt]?.merke}
+        aria-valuetext={valg[valgt] && (valg[valgt].navn ?? valg[valgt].merke)}
         onChange={(e) => velg(Number(e.target.value))}
         onKeyDown={() => setPekerfokus(false)}
         onBlur={() => setPekerfokus(false)}
@@ -164,8 +170,11 @@ export function Trinnbryter<T>({ etikett, valg, verdi, onVelg }: TrinnbryterProp
           <span
             key={v.merke}
             className={`trinnbryter__valg${i === valgt ? ' trinnbryter__valg--valgt' : ''}`}
+            title={v.ikon && (v.navn ?? v.merke)}
+            // Ikonet spiller når pekeren kommer til sitt eget valg.
+            data-ih={v.ikon && ''}
           >
-            {v.merke}
+            {v.ikon ? <Ikon navn={v.ikon} storrelse="ui" /> : v.merke}
           </span>
         ))}
       </div>

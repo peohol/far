@@ -47,6 +47,7 @@ import { analytterForFortolkning, stoffbeskrivelse, stofferForFortolkning } from
 import { rusModulFor } from './domain/rus'
 import { THC_KODE } from './domain/thc'
 import { search } from './domain/search'
+import { BEVEGELSE, TEMA } from './domain/systemvalg'
 import {
   CUTOFF_NOKKEL,
   CUTOFF_SPORSMAL,
@@ -91,7 +92,7 @@ import {
 import { useRute } from './hooks/useRute'
 import { useNaarLedig } from './hooks/useNaarLedig'
 import { useSokeindeks, type Sokeindekshenter } from './hooks/useSokeindeks'
-import { useKontotema } from './hooks/useKontotema'
+import { useKontovalg } from './hooks/useKontovalg'
 import { lesPubliserteRegelsett } from './regler/kommentarer'
 import { slaOpp } from './regler/publiserte'
 import { useBevart } from './oppdatering/Bevaring'
@@ -132,7 +133,8 @@ export default function App() {
   const dispatch = useCallback((action: Action) => setState((forrige) => reducer(forrige, action)), [setState])
   const [failedCopy, setFailedCopy] = useState<string | null>(null)
   const profil = useProfil()
-  const { theme, toggle } = useKontotema(profil.id)
+  const tema = useKontovalg(TEMA, profil.id)
+  const bevegelse = useKontovalg(BEVEGELSE, profil.id)
   const copy = useClipboard()
   const { flash, show } = useCopyFlash(BLINK)
   /**
@@ -673,7 +675,7 @@ export default function App() {
                       <Varselknapp />
                     </>
                   }
-                  konto={<Kontomeny theme={theme} onToggleTheme={toggle} />}
+                  konto={<Kontomeny tema={tema} bevegelse={bevegelse} />}
                 />
 
                 {/* Fortolkningens handlinger i toppmenyen (i dokken på smale

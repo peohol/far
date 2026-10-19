@@ -485,7 +485,8 @@
 }
 
 .nedtrekk__valgknapp .ikon,
-.nedtrekk__bryter .ikon {
+.nedtrekk__bryter .ikon,
+.nedtrekk__trinnnavn .ikon {
   width: 1.375rem;
   height: 1.375rem;
 }
@@ -578,6 +579,36 @@
 .nedtrekk__bryter:has(input:focus-visible) {
   outline: var(--fokusring) solid var(--fokus);
   outline-offset: calc(-1 * var(--fokusring));
+}
+
+/* Et valg med flere enn to muligheter, som temaet: navnet i flukt med
+   bryterne over, og trinnbryteren under, like bred som raden. */
+.nedtrekk__trinn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  padding: var(--rom-2) var(--rom-4) var(--rom-2) calc(2 * var(--rom-4) + 1.375rem);
+}
+
+.nedtrekk__trinnnavn {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-4);
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-medium);
+}
+
+.nedtrekk__trinn .trinnbryter {
+  display: flex;
+}
+
+.nedtrekk__trinn .trinnbryter__spor {
+  flex: 1;
+  min-height: var(--hoyde-liten);
+}
+
+.nedtrekk__trinn .trinnbryter__valg {
+  padding-inline: var(--rom-2);
 }
 
 /* --- Smale flater ---------------------------------------------------------------

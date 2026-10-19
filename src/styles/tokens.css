@@ -365,7 +365,8 @@
 }
 
 /* --- Redusert bevegelse ----------------------------------------------------
-   Alle varigheter blir 0, og ikonene ligger i ro. */
+   Alle varigheter blir 0. Ikonene følger brukerens eget valg i stedet
+   («Reduser bevegelse», se `ikon.css`). */
 @media (prefers-reduced-motion: reduce) {
   :root {
     --fart-rask: 0ms;

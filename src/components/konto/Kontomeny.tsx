@@ -4,23 +4,43 @@ import { visningsnavn } from '@delt/profil'
 import { useAvatarlenker } from '../../auth/avatarer'
 import { useOkt, useProfil } from '../../auth/okt'
 import { useShortcutVisibility } from '../../hooks/useShortcutVisibility'
-import type { Theme } from '../../hooks/useTheme'
+import { SYSTEM, type Bevegelse, type Tema, type Valg, type Valgstyring } from '../../domain/systemvalg'
 import { Bryter } from '../Bryter'
 import { Ikon } from '../ikon/Ikon'
+import type { Ikonnavn } from '../ikon/register'
+import { Trinnbryter, type Trinnvalg } from '../Trinnbryter'
 import { Menyskuff, Menyvalg, Nedtrekksmeny } from '../toppmeny/Nedtrekksmeny'
 import { Avatar } from './Avatar'
 import { Kontopanel } from './Kontopanel'
 
 export interface KontomenyProps {
-  theme: Theme
-  onToggleTheme: () => void
+  tema: Valgstyring<Tema>
+  bevegelse: Valgstyring<Bevegelse>
 }
+
+/**
+ * Det tredje valget på begge bryterne: å la nettleseren og maskinen avgjøre.
+ * «Følg system» får ikke plass ved siden av de to andre, og står som «System».
+ */
+const FOLG_SYSTEM = { verdi: SYSTEM, merke: 'System', navn: 'Følg system' } as const
+
+const TEMAVALG: readonly Trinnvalg<Valg<Tema>>[] = [
+  { verdi: 'lyst', merke: 'Lyst', ikon: 'sun' },
+  { verdi: 'moerkt', merke: 'Mørkt', ikon: 'moon' },
+  { ...FOLG_SYSTEM, ikon: 'skjerm' },
+]
+
+const BEVEGELSESVALG: readonly Trinnvalg<Valg<Bevegelse>>[] = [
+  { verdi: 'redusert', merke: 'Ja' },
+  { verdi: 'full', merke: 'Nei' },
+  FOLG_SYSTEM,
+]
 
 /**
  * Kontoen, fra avataren helt til høyre i toppmenyen: hvem appen er logget inn
  * som, veien til egen profil, preferansene og utlogging.
  */
-export function Kontomeny({ theme, onToggleTheme }: KontomenyProps) {
+export function Kontomeny({ tema, bevegelse }: KontomenyProps) {
   const profil = useProfil()
   const { loggUt } = useOkt()
   const lenker = useAvatarlenker([profil])
@@ -78,8 +98,8 @@ export function Kontomeny({ theme, onToggleTheme }: KontomenyProps) {
               <Preferanser
                 apen={preferanser}
                 onVeksle={() => setPreferanser((a) => !a)}
-                theme={theme}
-                onToggleTheme={onToggleTheme}
+                tema={tema}
+                bevegelse={bevegelse}
               />
               <li>
                 <Menyvalg ikon="logout" tekst="Logg ut" onClick={() => void loggUt()} />
@@ -94,19 +114,18 @@ export function Kontomeny({ theme, onToggleTheme }: KontomenyProps) {
 }
 
 /**
- * «Preferanser»: en skuff i menyen med hurtigtastene og temaet (`Menyskuff`).
+ * «Preferanser»: en skuff i menyen med hurtigtastene, temaet og bevegelsen
+ * (`Menyskuff`).
  */
 function Preferanser({
   apen,
   onVeksle,
-  theme,
-  onToggleTheme,
+  tema,
+  bevegelse,
 }: {
   apen: boolean
   onVeksle: () => void
-  theme: Theme
-  onToggleTheme: () => void
-}) {
+} & KontomenyProps) {
   const hurtigtaster = useShortcutVisibility()
   return (
     <Menyskuff ikon="gears" tekst="Preferanser" apen={apen} onVeksle={onVeksle}>
@@ -114,10 +133,31 @@ function Preferanser({
         <Ikon navn="keys" storrelse="ui" />
         Vis hurtigtaster
       </Bryter>
-      <Bryter className="nedtrekk__bryter" pa={theme === 'moerkt'} onEndre={onToggleTheme}>
-        <Ikon navn="moon" storrelse="ui" />
-        Mørkt tema
-      </Bryter>
+      <Trevalg ikon="tema" tekst="Tema" valg={TEMAVALG} styring={tema} />
+      <Trevalg ikon="bevegelse" tekst="Reduser bevegelse" valg={BEVEGELSESVALG} styring={bevegelse} />
     </Menyskuff>
+  )
+}
+
+/** Et valg i skuffen med flere enn to muligheter: navnet over, bryteren under. */
+function Trevalg<V extends string>({
+  ikon,
+  tekst,
+  valg,
+  styring,
+}: {
+  ikon: Ikonnavn
+  tekst: string
+  valg: readonly Trinnvalg<Valg<V>>[]
+  styring: Valgstyring<V>
+}) {
+  return (
+    <div className="nedtrekk__trinn" data-ih="">
+      <span className="nedtrekk__trinnnavn" aria-hidden="true">
+        <Ikon navn={ikon} storrelse="ui" />
+        {tekst}
+      </span>
+      <Trinnbryter etikett={tekst} valg={valg} verdi={styring.valg} onVelg={styring.velg} />
+    </div>
   )
 }

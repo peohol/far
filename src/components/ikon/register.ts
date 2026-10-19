@@ -357,6 +357,26 @@ const REGISTER = {
     vb: 24,
     parts: [P('M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z', 'f1', 'info'), C(17.5, 5.5, 1.3, 'f2', 'warn', 'pop')],
   },
+  // Temaet: en sirkel, halvt lys og halvt mørk.
+  tema: {
+    vb: 24,
+    ga: 'spin360',
+    parts: [C(12, 12, 8.5, 'f1', 'glass'), P('M12 3.5a8.5 8.5 0 0 1 0 17z', 'f2', 'info')],
+  },
+  // «Følg system»: skjermen, som tar valget fra maskinen.
+  skjerm: {
+    vb: 24,
+    parts: [
+      R(3, 4, 18, 12.5, 2, 'f1', 'glass'),
+      R(6, 7, 12, 6.5, 1, 'f2', 'accent', 'fill'),
+      P('M12 16.5v3.5M8.5 20h7', 'l', 'i-ink'),
+    ],
+  },
+  // «Reduser bevegelse»: en kule med fartsstreker bak seg.
+  bevegelse: {
+    vb: 24,
+    parts: [P('M3 8.5h6M2 12h7M3 15.5h6', 'l', 'i-ink', 'draw'), C(15.5, 12, 4.5, 'f1', 'accent', 'glidR')],
+  },
   user: { vb: 24, parts: [C(12, 8.5, 4, 'f1', 'accent'), P('M4.5 20.5a7.5 7.5 0 0 1 15 0z', 'f2', 'accent')] },
   more: {
     vb: 24,

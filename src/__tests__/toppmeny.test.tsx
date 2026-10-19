@@ -9,6 +9,7 @@ import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import type { Datakildestatus, Kjoring } from '../datakilder/status'
+import type { Bevegelse, Tema, Valg } from '../domain/systemvalg'
 
 const loggUt = vi.fn(async () => {})
 const rolle = vi.hoisted(() => ({ verdi: 'admin' }))
@@ -94,12 +95,9 @@ function Ramme({ children }: { children: React.ReactNode }) {
 }
 
 /** `matchMedia` finnes ikke i jsdom. */
+/** «Reduser bevegelse» slik skriptet i `<head>` eller `useSystemvalg` setter den. */
 function bevegelse(rolig: boolean) {
-  vi.stubGlobal('matchMedia', (sporring: string) => ({
-    matches: rolig && sporring.includes('reduce'),
-    addEventListener: () => {},
-    removeEventListener: () => {},
-  }))
+  document.documentElement.dataset.bevegelse = rolig ? 'redusert' : 'full'
 }
 
 describe('ikonene', () => {
@@ -155,6 +153,35 @@ describe('ikonene', () => {
       const svg = container.querySelector('svg')!
       expect(svg.hasAttribute('data-spiller')).toBe(!rolig)
       unmount()
+    }
+  })
+
+  it('følger et nytt valg av «Reduser bevegelse» med en gang, uten å tegnes på nytt', () => {
+    bevegelse(true)
+    const { container } = render(
+      <button type="button" data-ih="">
+        <Ikon navn="search" />
+      </button>,
+    )
+    const knapp = container.querySelector('button')!
+    fireEvent.mouseEnter(knapp)
+    expect(container.querySelector('svg')!.hasAttribute('data-spiller')).toBe(false)
+    bevegelse(false)
+    fireEvent.mouseEnter(knapp)
+    expect(container.querySelector('svg')!.hasAttribute('data-spiller')).toBe(true)
+  })
+
+  it('stopper bare ikonene ved «Reduser bevegelse», og lar dem spille ved nei selv om systemet ber om ro', () => {
+    const css = readFileSync('src/styles/ikon.css', 'utf8')
+    expect(css).toMatch(/:root\[data-bevegelse='redusert'\] \.ikon \[data-anim\] \{\s*animation: none !important;/)
+    expect(css).toMatch(
+      /@media \(prefers-reduced-motion: reduce\) \{\s*:root\[data-bevegelse='full'\] \.ikon\[data-spiller\] \[data-anim\] \{\s*animation-duration: var\(--ikon-tid\) !important;/,
+    )
+    // Ikonene står ikke lenger direkte på systemets ønske.
+    expect(css).not.toMatch(/@media \(prefers-reduced-motion: reduce\) \{\s*\.ikon/)
+    // Hver animasjon har en tid som kan gis tilbake.
+    for (const regel of css.match(/\[data-anim='[^']+'\] \{[^}]*animation-name[^}]*\}/g) ?? []) {
+      expect(regel).toMatch(/--ikon-tid: \d+ms/)
     }
   })
 
@@ -352,15 +379,16 @@ describe('fagsøkfeltet', () => {
 const panel = (knapp: HTMLElement) => document.getElementById(knapp.getAttribute('aria-controls')!)!
 
 describe('kontomenyen', () => {
-  /** Temaet og hurtigtastene slik appen holder dem, så bryterne kan prøves. */
+  /** Temaet, bevegelsen og hurtigtastene slik appen holder dem, så bryterne kan prøves. */
   function Konto() {
-    const [theme, setTheme] = useState<'lyst' | 'moerkt'>('lyst')
+    const [tema, setTema] = useState<Valg<Tema>>('system')
+    const [bevegelse, setBevegelse] = useState<Valg<Bevegelse>>('system')
     const { visible } = useShortcutVisibility()
     return (
       <>
-        <Kontomeny theme={theme} onToggleTheme={() => setTheme((t) => (t === 'lyst' ? 'moerkt' : 'lyst'))} />
+        <Kontomeny tema={{ valg: tema, velg: setTema }} bevegelse={{ valg: bevegelse, velg: setBevegelse }} />
         <output>
-          {theme} {visible ? 'med' : 'uten'} hurtigtaster
+          {tema} {bevegelse} {visible ? 'med' : 'uten'} hurtigtaster
         </output>
       </>
     )
@@ -415,12 +443,28 @@ describe('kontomenyen', () => {
     expect(skuff.hasAttribute('hidden')).toBe(false)
 
     const hurtigtaster = within(skuff).getByRole('switch', { name: 'Vis hurtigtaster' }) as HTMLInputElement
-    const tema = within(skuff).getByRole('switch', { name: 'Mørkt tema' }) as HTMLInputElement
-    expect([hurtigtaster.checked, tema.checked]).toEqual([false, false])
-    await userEvent.click(tema)
+    const tema = within(skuff).getByRole('slider', { name: 'Tema' })
+    const bevegelse = within(skuff).getByRole('slider', { name: 'Reduser bevegelse' })
+    // Begge følger systemet til brukeren velger noe annet.
+    expect(hurtigtaster.checked).toBe(false)
+    expect(tema.getAttribute('aria-valuetext')).toBe('Følg system')
+    expect(bevegelse.getAttribute('aria-valuetext')).toBe('Følg system')
+    // Temaet viser ikoner, bevegelsen ord.
+    const merker = (skala: HTMLElement) =>
+      [...skala.parentElement!.querySelectorAll('.trinnbryter__valg')].map((v) => v.getAttribute('title') ?? v.textContent)
+    expect(merker(tema)).toEqual(['Lyst', 'Mørkt', 'Følg system'])
+    expect(merker(bevegelse)).toEqual(['Ja', 'Nei', 'System'])
+
+    fireEvent.change(tema, { target: { value: '1' } })
+    fireEvent.change(bevegelse, { target: { value: '0' } })
     await userEvent.click(hurtigtaster)
-    expect([hurtigtaster.checked, tema.checked]).toEqual([true, true])
-    expect(screen.getByRole('status').textContent).toBe('moerkt med hurtigtaster')
+    expect(hurtigtaster.checked).toBe(true)
+    expect(tema.getAttribute('aria-valuetext')).toBe('Mørkt')
+    expect(bevegelse.getAttribute('aria-valuetext')).toBe('Ja')
+    expect(screen.getByRole('status').textContent).toBe('moerkt redusert med hurtigtaster')
+    fireEvent.change(tema, { target: { value: '0' } })
+    fireEvent.change(bevegelse, { target: { value: '1' } })
+    expect(screen.getByRole('status').textContent).toBe('lyst full med hurtigtaster')
     // Bryterne er inni menyen: den står åpen.
     expect(meny.hidden).toBe(false)
 

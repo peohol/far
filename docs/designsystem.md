@@ -42,7 +42,8 @@ har ingen egne tall. Mangler en verdi, legges den inn der på riktig nivå.
 
 Fargene er semantiske og finnes i lyst og mørkt tema med de samme navnene.
 Temaet settes med `data-tema="lyst"` eller `"moerkt"` på `<html>`, og kan også
-settes på et enkelt element.
+settes på et enkelt element. Følger brukeren systemet, står den virkelige
+verdien der likevel (`src/domain/systemvalg.ts`).
 
 - **Flater:** `--flate-bunn`, `--flate`, `--flate-hevet`, `--flate-toppmeny`.
 - **Tekst:** `--blekk-sterk`, `--blekk`, `--blekk-dempet`.
@@ -111,7 +112,9 @@ Atlas. Det er data, så et nytt ikon er en ny oppføring der.
   temaet.
 - **Bevegelse:** ikonet spiller en kort animasjon én gang når nærmeste
   `[data-ih]` får peker eller fokus, og første gang det kommer i bildet.
-  Ingenting spilles med `prefers-reduced-motion`.
+  Ingenting spilles når «Reduser bevegelse» står på. Valget (ja, nei eller
+  følg systemet, som da er `prefers-reduced-motion`) gjelder bare ikonene,
+  og står som `data-bevegelse` på `<html>`; se «Preferanser» under.
 
 - **Klikk:** delene av tegningen tegnes på nytt hver gang animasjonen
   spilles, også når et museklikk gir knappen fokus. Derfor tar bare selve
@@ -174,8 +177,9 @@ bare fargene gjennom `--tast-flate`, `--tast-blekk` og `--tast-kant`
 - **`Details`** er en sammenleggbar seksjon med ikon og pil.
 - **`Trinnbryter`** (Atlas `MarginScale`) er noen få faste valg side om side,
   der en knott glir til valget. Valget trykkes eller dras dit; en usynlig
-  skala under tar tastaturet og skjermleserne. Brukes til sikkerhetsmarginen
-  i THC-modulen.
+  skala under tar tastaturet og skjermleserne. Et valg kan vise et ikon i
+  stedet for merket (temaet i «Preferanser»). Brukes til sikkerhetsmarginen
+  i THC-modulen, visningene på fagsidene og preferansene.
 - **Tekstfelt** (rikteksteditorene og `<textarea>`) vokser aldri forbi halve
   den synlige høyden av flaten de står på (`--tekstfelt-maks`, i `cqh`), og
   aldri under én linje. Flatene er kroppen i et modalt lag og
@@ -228,7 +232,7 @@ Resten av grensesnitteksten:
 | Viktige data | «Konsentrasjoner i serum», «Kinetikk», «Ikke oppgitt» |
 | Fagsøket | «↑ ↓ velg · Enter åpne · Esc lukk», «Vis alle treff (N)», «Ingen treff i fagstoffet.» |
 | Søkesiden | «Søk i fagstoff», fanene «Alle», «Stoff», «Preparater», «Tekst», «Referanser», og gruppen «I teksten» |
-| Toppmenyen, høyre side | «Idéer», «Administrasjon» med «Brukere» og «Datakilder», og kontomenyen med «Endre navn og profilbilde», «Preferanser» («Vis hurtigtaster», «Mørkt tema») og «Logg ut» |
+| Toppmenyen, høyre side | «Idéer», «Administrasjon» med «Brukere» og «Datakilder», og kontomenyen med «Endre navn og profilbilde», «Preferanser» («Vis hurtigtaster», «Tema» med Lyst, Mørkt og Følg system, «Reduser bevegelse» med Ja, Nei og Følg system, vist som «System») og «Logg ut» |
 | Versjonspillen | klokka og versjonen, «Vis endringslogg» |
 
 Hurtigtastmerkene vises ikke i søkefeltene på smale flater: der er det
@@ -404,8 +408,13 @@ Helt til høyre står tre knapper:
   administratorer: brukerne og datakildene.
 - **Kontoen** (`src/components/konto/Kontomeny.tsx`), avataren: hvem som er
   logget inn, «Endre navn og profilbilde», «Preferanser» og «Logg ut».
-  «Preferanser» er en skuff i menyen med bryterne for hurtigtastene og det
-  mørke temaet (`Bryter`), og glir opp som skuffene ellers (`useSkjuling`).
+  «Preferanser» er en skuff i menyen med bryteren for hurtigtastene
+  (`Bryter`) og trinnbryterne for «Tema» og «Reduser bevegelse»
+  (`Trinnbryter`), og glir opp som skuffene ellers (`useSkjuling`). Tema og
+  bevegelse kan stå fast eller følge systemet; de er beskrevet i
+  `src/domain/systemvalg.ts`, settes før første bilde av et skript
+  `vite.config.ts` legger i `<head>`, og lagres i nettleseren og på kontoen
+  (`useKontovalg`). Nye slike valg legges inn der. Nye brukere følger systemet.
 
 Adminmenyen og kontoen bygger på `Nedtrekksmeny`
 (`src/components/toppmeny/Nedtrekksmeny.tsx`), med valgene som `Menyvalg`.
