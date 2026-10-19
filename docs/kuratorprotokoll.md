@@ -1,11 +1,14 @@
 # Kuratorprotokollen
 
-Leses av monografkuratoren (Claude Code) ved hver kuratering av en fagside, og
-av kontrolløren (ChatGPT eller en administrator) for å vite hva som skal
-kontrolleres. Dette er den ene, versjonsstyrte faglige kilden for hvordan en
-fagside kurateres. Kuratorskillen (`.claude/skills/monografkurator/SKILL.md`),
-instruksen for køen (`docs/kurateringsko-instruks.md`) og kontrollørinstruksen
-(`docs/kontrollorinstruks.md`) viser hit og gjentar den ikke. Protokollen
+Leses av monografikuratoren (Claude Code) ved hver kuratering av en fagside,
+og av kontrolløren (Claude-monografikontrolløren eller en administrator) for å
+vite hva som skal kontrolleres. Dette er den ene, versjonsstyrte faglige
+kilden for hvordan en fagside kurateres. Kuratorskillen
+(`.claude/skills/monografikurator/SKILL.md`), kontrollørskillen
+(`.claude/skills/monografikontrollor/SKILL.md`), instruksen for køen
+(`docs/kurateringsko-instruks.md`) og kontrollørinstruksen
+(`docs/kontrollorinstruks.md`) viser hit og gjentar den ikke. Hvordan kurator
+og kontrollør holdes atskilt, står i `docs/kuratering-prosjekt.md`. Protokollen
 endres bare i en PR, og et krav svekkes aldri uten at det står i loggen
 nederst hvorfor.
 
@@ -18,7 +21,7 @@ bivirkningene i `docs/bivirkninger.md`; kuratorjobbene i `docs/kuratorjobber.md`
 | Rolle | Hvem | Gjør | Gjør aldri |
 | --- | --- | --- | --- |
 | Kurator | `claude-monografkurator` | Kildesøket, kildevurderingen, teksten, strukturen, dokumentene, svarene på kommentarene, og publiseringen etter godkjenning | Godkjenner eget arbeid, lukker en sperrende tråd, eller publiserer uten godkjenning |
-| Kontrollør | `chatgpt-monografkurator`, eller en administrator | En uavhengig, adversarial kontroll av nøyaktig én revisjon, med egne oppslag i kildene | Skriver i grenen eller godkjenner en revisjon med åpne sperrende tråder |
+| Kontrollør | `claude-monografikontrollor`, eller en administrator (`chatgpt-monografkurator` er slått av fra 2026-10-19) | En uavhengig, adversarial kontroll av nøyaktig én revisjon, med egne oppslag i kildene | Skriver i grenen eller godkjenner en revisjon med åpne sperrende tråder |
 | Administrator | Folk med rollen admin | Stanser, gjenopptar og forkaster; kan kontrollere, godkjenne og publisere | |
 
 Databasen håndhever rollene: en agent kan ikke godkjenne en gren den selv
@@ -145,17 +148,10 @@ Kuratoren melder hva den gjør med `aktivitet` (med seksjonen og kortet), så
    følger den i. Kontrolløren holder seg til en slik avgjørelse
    (`docs/kontrollorinstruks.md`). Merkingen brukes bare for en avgjørelse et
    menneske faktisk har gitt.
-   Fikk kontrolløren ikke lagret det den skulle skrive, gir den en melding til
-   kuratoren som fagansvarlig limer inn (kontrollørinstruksen, «Når
-   skrivekallene stoppes»). Kuratoren fører den først inn i grenen, som en
-   merknad festet til `evidensjournal` som begynner med «Kontrollørens funn,
-   gitt videre av fagansvarlig:», med funnene slik de står og datoen, så de er
-   sporbare og kontrolløren ser dem i neste runde. Så kontrollerer kuratoren
-   hvert funn selv, svarer på hvert punkt i den tråden, trekker grenen fra
-   kontroll om den står som `klar`, retter som over og sender den til kontroll
-   igjen. Meldingen er ikke en vurdering og ikke en avgjørelse fra
-   fagansvarlig: en godkjenning i den publiserer ingenting, og kuratoren
-   publiserer først når godkjenningen står i OUSFAR.
+   En merknad som begynner med «Kontrollørens funn, gitt videre av
+   fagansvarlig:», er funn fra ChatGPT-kontrolløren som kuratoren førte inn i
+   det tidligere oppsettet. Den besvares som en tråd fra kontrolløren, og
+   publiserer ingenting.
 10. **Publiseringen.** Når den siste revisjonen er godkjent og ingenting
     hindrer det, publiserer kuratoren (`publiser`). Etterpå kjøres
     funksjonstesten mot den publiserte siden, og det som gjensto, står i
@@ -289,16 +285,17 @@ kontrolløren kommer dit. Reglene presiserer kravene over; de erstatter dem ikke
 
 ## Kontrollen
 
-Kontrolløren følger `docs/kontrollorinstruks.md`: den kontrollerer de
-ufravikelige kravene med egne oppslag (særlig tallene, preparatomtalene og
-de beskyttede norske dataene), åpner en sperrende tråd festet til kortet og
+Kontrolløren følger `docs/kontrollorinstruks.md`: uavhengig av kuratoren slår
+den først opp de sentrale påstandene i kildene selv, og leser kuratorens
+begrunnelser etterpå. Den kontrollerer de ufravikelige kravene med egne
+oppslag (særlig tallene, preparatomtalene og de beskyttede norske dataene), åpner en sperrende tråd festet til kortet og
 feltet for hver endring som må gjøres og en merknad for et forslag, og
 godkjenner bare når ingen sperrende tråd står åpen og kravene er oppfylt.
 Godkjenningen sier hva som er kontrollert.
 
 ## Bakgrunnen og loggen
 
-Protokollen er overført fra ChatGPT-monografkuratorens arbeid (de novo-
+Protokollen er overført fra ChatGPT-monografikuratorens arbeid (de novo-
 piloten for citalopram 2026-10-13 og evidensjournalene i
 `docs/kurateringsjournal/`), `docs/monografkuratering.md` og
 `docs/bivirkninger.md`, og tilpasset kurateringsgrenene. De 37
@@ -313,3 +310,9 @@ kontrollpunktene er de samme som piloten dekket (testen
   de novo-runde 2. Ingen krav er svekket. Nøkkeltallene i viktige data
   behandles som beskyttede, slik kontrolløren og fagansvarlig allerede har gjort
   i flere grener.
+- 2026-10-19: kontrolløren er en egen Claude-agent i et eget prosjekt
+  (`docs/kuratering-prosjekt.md`), og ChatGPT-kontrolløren er slått av.
+  Kontrolløren slår opp de sentrale påstandene selv før den leser kuratorens
+  begrunnelser. Ordningen der fagansvarlig ga videre en melding fra
+  kontrolløren, gjelder ikke lenger, siden kontrolløren skriver i grenen selv.
+  Ingen krav er svekket.

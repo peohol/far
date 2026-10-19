@@ -35,7 +35,7 @@
     "scripts/produksjonsmigrering.ts",
     "scripts/kuratorjobb.ts",
     "scripts/kurateringsko.ts",
-    "scripts/kurator.ts",
+    "scripts/kurateringsagent.ts",
     "supabase/functions/_delt",
     "api"
   ]

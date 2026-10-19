@@ -64,7 +64,7 @@ export function Sokeside({ q, indeks, onKrev, onProvIgjen, beskrivSide, onLukk }
     for (const t of treff) per.get(treffgruppe(t.dokument.felt))!.push(t)
     return TREFFGRUPPER.map((gruppe) => ({ gruppe, treff: per.get(gruppe)! }))
   }, [treff])
-  const monografer = useMemo(() => new Set(treff.map((t) => sidenokkel(t.dokument.sted.side))).size, [treff])
+  const monografier = useMemo(() => new Set(treff.map((t) => sidenokkel(t.dokument.sted.side))).size, [treff])
   const viste = grupper.filter((g) => g.treff.length > 0 && (filter === 'alle' || g.gruppe === filter))
 
   return (
@@ -82,7 +82,7 @@ export function Sokeside({ q, indeks, onKrev, onProvIgjen, beskrivSide, onLukk }
           <p className="sokeside__antall" role="status">
             {treff.length === 0
               ? 'Ingen treff'
-              : `${antallTekst(treff.length, 'treff', 'treff')} i ${antallTekst(monografer, 'monograf', 'monografer')}`}
+              : `${antallTekst(treff.length, 'treff', 'treff')} i ${antallTekst(monografier, 'monografi', 'monografier')}`}
           </p>
         )}
       </header>

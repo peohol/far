@@ -52,7 +52,7 @@ den er ikke et system ved siden av.
   legges inn med en migrasjon.
 - **`agentprofiler`** — brukernavnet til profilen en agent vises med: loggen
   viser navnet og profilbildet derfra, og agentens navn i detaljene. Kuratorboten (ChatGPT
-  monografkurator) har profilen `kuratortest`. En kobling legges inn med en
+  monografikurator) har profilen `kuratortest`. En kobling legges inn med en
   migrasjon, og gjelder også når profilen opprettes senere; uten profil vises
   agenten med forbokstavene.
 

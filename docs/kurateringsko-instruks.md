@@ -1,7 +1,7 @@
 # Instruks for hver planlagte kjøring
 
-Leses av monografkuratoren (Claude Code, med kuratorskillen
-`.claude/skills/monografkurator/SKILL.md`) ved hver planlagte kjøring. Følg
+Leses av monografikuratoren (Claude Code, med kuratorskillen
+`.claude/skills/monografikurator/SKILL.md`) ved hver planlagte kjøring. Følg
 stegene i rekkefølge. Hvordan køen virker, står i `docs/kurateringsko.md`; det
 faglige arbeidet gjøres etter `docs/kuratorprotokoll.md`, i en kurateringsgren
 i OUSFAR (`docs/kurateringsgrener.md`).

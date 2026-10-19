@@ -7,7 +7,7 @@ import { createPortal } from 'react-dom'
  * toppmenyen, på én rad i dokken eller på to:
  *
  * - `hoved` (første rad i dokken når den går over to):
- *   - `sidesok`: søket i den åpne siden (monografens lokale søk)
+ *   - `sidesok`: søket i den åpne siden (monografiens lokale søk)
  *   - `hovedhandling`: sidens hovedhandling, som «Åpne fortolkning» eller
  *     «Publiser»
  * - `handlinger` (andre rad):

@@ -1,11 +1,14 @@
 /**
  * Verktøyene i kuratorprotokollen (`docs/kuratorprotokoll.md`): kontroll-
  * punktene i dekningsmatrisen utledet av appens innholdsmodell, kontrollen av
- * en matrise, og agentklienten Claude-kuratoren kaller OUSFAR med.
+ * en matrise, agentklienten Claude-agentene kaller OUSFAR med, og nøklene deres.
  */
-import { readFileSync } from 'node:fs'
+import { mkdtempSync, readFileSync, statSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
-import { Agentfeil, lagAgentklient, lesArgumenter } from '../kuratorprotokoll/agentklient'
+import { Agentfeil, ROLLER, lagAgentklient, lesArgumenter, lesRolle } from '../kuratorprotokoll/agentklient'
+import { migrasjonsversjon, nokkelmigrasjon, nokkelSha256, sikreNokler } from '../kuratorprotokoll/nokler'
 import { kontrollerDekning, kontrollpunkter, modellSha256, tomMatrise } from '../kuratorprotokoll/dekning'
 
 const CITALOPRAM = JSON.parse(readFileSync(new URL('../../docs/kurateringsjournal/citalopram-dekning.json', import.meta.url), 'utf8')) as {
@@ -71,5 +74,51 @@ describe('agentklienten', () => {
     expect(lesArgumenter('{"gren":"g"}', () => '')).toEqual({ gren: 'g' })
     expect(lesArgumenter('@a.json', (sti) => (sti === 'a.json' ? '{"x":1}' : ''))).toEqual({ x: 1 })
     expect(() => lesArgumenter('[1]', () => '')).toThrow()
+  })
+})
+
+describe('rollene og nøklene', () => {
+  it('gir kuratoren og kontrolløren hver sin agent og nøkkelfil, og godtar bare rollene som finnes', () => {
+    expect(lesRolle('kurator')).toBe('kurator')
+    expect(lesRolle('kontrollor')).toBe('kontrollor')
+    for (const feil of [undefined, '', 'admin', 'toString']) expect(() => lesRolle(feil)).toThrow(/Ukjent rolle/)
+    const roller = Object.values(ROLLER)
+    expect(new Set(roller.map((r) => r.agent)).size).toBe(roller.length)
+    expect(new Set(roller.map((r) => r.nokkelfil)).size).toBe(roller.length)
+    for (const r of roller) expect(r.nokkelfil).toMatch(/^\/mnt\/project-files\/\.hemmelig\//)
+  })
+
+  it('lager en nøkkel som bare eieren kan lese, og overskriver aldri en som finnes', () => {
+    const mappe = mkdtempSync(join(tmpdir(), 'nokler-'))
+    const agenter = [
+      { agent: 'a-kurator', nokkelfil: join(mappe, 'hemmelig', 'a.nokkel') },
+      { agent: 'b-kontrollor', nokkelfil: join(mappe, 'hemmelig', 'b.nokkel') },
+    ]
+    const forste = sikreNokler(agenter)
+    expect(forste.map((n) => n.ny)).toEqual([true, true])
+    for (const n of forste) {
+      const nokkel = readFileSync(n.nokkelfil, 'utf8').trim()
+      expect(nokkel).toMatch(/^far_[0-9a-f]{64}$/)
+      expect(n.sha256).toBe(nokkelSha256(nokkel))
+      expect(statSync(n.nokkelfil).mode & 0o777).toBe(0o600)
+    }
+    expect(forste[0]!.sha256).not.toBe(forste[1]!.sha256)
+    // En gang til: de samme nøklene.
+    expect(sikreNokler(agenter)).toEqual(forste.map((n) => ({ ...n, ny: false })))
+    // En fil uten gyldig nøkkel blir stående som den er.
+    writeFileSync(agenter[1]!.nokkelfil, 'noe annet')
+    expect(() => sikreNokler(agenter)).toThrow(/overskrives ikke/)
+    expect(readFileSync(agenter[1]!.nokkelfil, 'utf8')).toBe('noe annet')
+  })
+
+  it('skriver migrasjonen med bare kontrollsummene, og versjonen som tidspunktet i UTC', () => {
+    const sha = nokkelSha256('far_' + 'a'.repeat(64))
+    const sql = nokkelmigrasjon([{ agent: 'claude-monografikontrollor', sha256: sha }])
+    expect(sql).toContain(`nokkel_sha256 = '${sha}'`)
+    expect(sql).toContain(`where agent = 'claude-monografikontrollor'`)
+    expect(sql).not.toContain('a'.repeat(64))
+    expect(() => nokkelmigrasjon([{ agent: "x'; drop table y; --", sha256: sha }])).toThrow()
+    expect(() => nokkelmigrasjon([{ agent: 'x', sha256: 'far_hemmelig' }])).toThrow()
+    expect(migrasjonsversjon(new Date('2026-10-19T04:05:06.789Z'))).toBe('20261019040506')
   })
 })

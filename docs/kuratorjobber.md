@@ -1,6 +1,6 @@
 # Kuratorjobber
 
-Leses av ChatGPT-monografkuratoren, og av den som endrer jobbene. Jobbene er
+Leses av ChatGPT-monografikuratoren, og av den som endrer jobbene. Jobbene er
 den tekniske hjelpen kuratoren får fra GitHub Actions under en kuratering
 (`docs/monografkuratering.md`):
 

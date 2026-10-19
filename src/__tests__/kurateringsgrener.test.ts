@@ -24,7 +24,9 @@ import { readFileSync } from 'node:fs'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { PANELREKKEFOLGE } from '../faginnhold/paneler'
+import { ROLLER } from '../kuratorprotokoll/agentklient'
 import { kontrollerDekning, kontrollpunkter, tomMatrise } from '../kuratorprotokoll/dekning'
+import { lagNokkel, nokkelmigrasjon, nokkelSha256 } from '../kuratorprotokoll/nokler'
 import { SELVTESTKRAV, SELVTESTPORTER, tomSelvtest } from '../kuratorprotokoll/selvtest'
 import { behandleKurateringMcp } from '../kuratering/endepunkt'
 import { AGENTHANDLINGER } from '../kuratering/handlinger'
@@ -226,6 +228,27 @@ describe('tilgangen', () => {
     expect(lagret[0]!.n).not.toContain(claude.slice(4, 20))
     const liste = await adm<{ agent: string; har_nokkel: boolean; roller: string[] }[]>('agenter')
     expect(liste).toEqual(expect.arrayContaining([expect.objectContaining({ agent: 'claude-monografkurator', har_nokkel: true, roller: ['kurator'] })]))
+  })
+
+  it('har en egen agent for hver rolle i kurateringsprosjektet, og nøkkelmigrasjonen slipper den inn', async () => {
+    const agenter = await kall.fasit<{ agent: string; roller: string[]; navn: string }>(
+      'select a.agent, a.roller, e.navn from kuratering.agenter a join public.endringsagenter e on e.nokkel = a.agent',
+    )
+    for (const [rolle, { agent: navn }] of Object.entries(ROLLER)) {
+      expect(agenter).toContainEqual(expect.objectContaining({ agent: navn, roller: [rolle] }))
+    }
+    // Navnene brukeren ser, sier «monografi».
+    for (const a of agenter) expect(a.navn).not.toMatch(/monograf(?!i)/i)
+
+    const nokkel = lagNokkel()
+    const { agent: kontrollor } = ROLLER.kontrollor
+    expect((await feilFra(() => agent(nokkel, 'oversikt')))?.code).toBe('42501')
+    await db.exec(nokkelmigrasjon([{ agent: kontrollor, sha256: nokkelSha256(nokkel) }]))
+    expect(Array.isArray(await agent(nokkel, 'oversikt'))).toBe(true)
+    const [lagret] = await kall.fasit<{ n: string }>(`select nokkel_sha256 as n from kuratering.agenter where agent = '${kontrollor}'`)
+    expect(lagret!.n).toBe(nokkelSha256(nokkel))
+    // En agent som ikke finnes, stopper migrasjonen.
+    await expect(db.exec(nokkelmigrasjon([{ agent: 'finnes-ikke', sha256: nokkelSha256(nokkel) }]))).rejects.toThrow(/finnes-ikke/)
   })
 
   it('lar bare kuratorer åpne grener, og bare én aktiv per side', async () => {
@@ -466,7 +489,7 @@ describe('publiseringen', () => {
 
     // Revisjonene er skrevet av kuratoren og publisert av administratoren.
     const revisjoner = await kall.revisjoner(k.dosering)
-    expect(revisjoner.at(-1)).toMatchObject({ utfort_av_fornavn: 'Claude', utfort_av_etternavn: 'monografkurator' })
+    expect(revisjoner.at(-1)).toMatchObject({ utfort_av_fornavn: 'Claude', utfort_av_etternavn: 'monografikurator' })
     expect(revisjoner.at(-1)!.innhold).toMatchObject({ panel: 'dosering' })
     const [publisering] = await kall.fasit<{ utfort_av: string }>(
       'select utfort_av from public.objektpubliseringer where objekt_id = $1 order by revisjon desc limit 1',
@@ -862,6 +885,31 @@ describe('kommentarene', () => {
     expect((await adm<Traad[]>('kommentarer', { gren: k.gren }))[0]!.kommentarer.map((x) => x.handling)).toEqual([
       'kommentar', 'kommentar', 'lukket', 'gjenapnet', 'lukket',
     ])
+  })
+
+  it('lar en annen kontrollør lukke de sperrende trådene til en kontrollør som er slått av', async () => {
+    const kontrollor = lagNokkel()
+    await db.exec(nokkelmigrasjon([{ agent: ROLLER.kontrollor.agent, sha256: nokkelSha256(kontrollor) }]))
+    const k = await kuratertGren()
+    await medDokumenter(k.gren)
+    await agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 1 })
+    const traad = await agent<{ traad: string }>(chatgpt, 'kommenter', {
+      gren: k.gren,
+      art: 'sperrende',
+      anker: { objekt: k.dosering, felt: 'Tekst' },
+      tekst: 'Doseringen mangler kilde.',
+    })
+    const lukk = (nokkel: string) =>
+      agent(nokkel, 'lukk_kommentar', { gren: k.gren, kommentar: traad.traad, tekst: 'Kontrollert.', klient_id: 'lukk-overtatt-0001' })
+    expect((await feilFra(() => lukk(kontrollor)))?.code).toBe('42501')
+    await db.exec(`update kuratering.agenter set aktiv = false where agent = 'chatgpt-monografkurator'`)
+    try {
+      // Kuratoren kan fortsatt ikke lukke den.
+      expect((await feilFra(() => lukk(claude)))?.code).toBe('42501')
+      expect(await lukk(kontrollor)).toMatchObject({ traad: traad.traad, status: 'lukket' })
+    } finally {
+      await db.exec(`update kuratering.agenter set aktiv = true where agent = 'chatgpt-monografkurator'`)
+    }
   })
 
   it('gir en ny svarplikt når kontrolløren åpner en tråd igjen med et nytt funn', async () => {

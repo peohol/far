@@ -126,7 +126,7 @@ function grendetaljer(overstyr: Partial<Grendetaljer> = {}): Grendetaljer {
     runde: 1,
     revisjon: 2,
     blindfase: false,
-    kurator: 'Claude monografkurator',
+    kurator: 'Claude monografikurator',
     grunnversjon: 1,
     konflikt: false,
     teknisk_ok: true,
@@ -165,8 +165,8 @@ function grenstatus(gren: Grendetaljer, overstyr: Partial<Grenstatusdata> = {}):
 }
 
 const AGENTER: Agentinfo[] = [
-  { agent: 'claude-monografkurator', navn: 'Claude monografkurator', roller: ['kurator'], aktiv: true, har_nokkel: true, nokkel_kl: '2026-10-01T12:00:00Z' },
-  { agent: 'chatgpt-monografkurator', navn: 'ChatGPT monografkurator', roller: ['kontrollor'], aktiv: true, har_nokkel: false },
+  { agent: 'claude-monografkurator', navn: 'Claude monografikurator', roller: ['kurator'], aktiv: true, har_nokkel: true, nokkel_kl: '2026-10-01T12:00:00Z' },
+  { agent: 'chatgpt-monografkurator', navn: 'ChatGPT monografikurator', roller: ['kontrollor'], aktiv: true, har_nokkel: false },
 ]
 
 function klient(gren: Grendetaljer = grendetaljer(), status: Partial<Grenstatusdata> = {}): Kurateringsklient {
@@ -568,17 +568,17 @@ describe('agentene', () => {
     const k = klient()
     const { rerender } = render(<Kurateringsoversikt apen klient={k} onLukk={vi.fn()} />)
     const liste = await screen.findByRole('list', { name: 'Agentene' })
-    expect(within(liste).getByText(/Claude monografkurator · Kurator/)).toBeTruthy()
+    expect(within(liste).getByText(/Claude monografikurator · Kurator/)).toBeTruthy()
     expect(within(liste).getByText(/Ingen nøkkel · aldri sett/)).toBeTruthy()
     // Lista hentes på nytt etter den nye nøkkelen; feiler det, står nøkkelen likevel.
     vi.mocked(k.agenter).mockRejectedValueOnce(new Error('Nettverksfeil'))
     await userEvent.click(within(liste).getByRole('button', { name: 'Lag nøkkel' }))
-    await userEvent.click(within(liste).getByRole('button', { name: 'Bekreft ny nøkkel til ChatGPT monografkurator.' }))
+    await userEvent.click(within(liste).getByRole('button', { name: 'Bekreft ny nøkkel til ChatGPT monografikurator.' }))
     await waitFor(() => expect(k.nyAgentnokkel).toHaveBeenCalledWith('chatgpt-monografkurator'))
     expect(await screen.findByText(/Fikk ikke hentet: Nettverksfeil/)).toBeTruthy()
     const mcp = screen.getByRole('textbox', { name: 'Adressen til ChatGPT (MCP)' }) as HTMLInputElement
     expect(mcp.value).toBe(`${window.location.origin}/api/kuratering-mcp?nokkel=far_${'b'.repeat(64)}`)
-    expect(screen.getByText(/Ny nøkkel til ChatGPT monografkurator/)).toBeTruthy()
+    expect(screen.getByText(/Ny nøkkel til ChatGPT monografikurator/)).toBeTruthy()
 
     // Lukkes laget, er nøkkelen borte også når det åpnes igjen.
     rerender(<Kurateringsoversikt apen={false} klient={k} onLukk={vi.fn()} />)
@@ -594,7 +594,7 @@ describe('agentene', () => {
     const { rerender } = render(<Kurateringsoversikt apen klient={k} onLukk={vi.fn()} />)
     const liste = await screen.findByRole('list', { name: 'Agentene' })
     await userEvent.click(within(liste).getByRole('button', { name: 'Lag nøkkel' }))
-    await userEvent.click(within(liste).getByRole('button', { name: 'Bekreft ny nøkkel til ChatGPT monografkurator.' }))
+    await userEvent.click(within(liste).getByRole('button', { name: 'Bekreft ny nøkkel til ChatGPT monografikurator.' }))
     await waitFor(() => expect(k.nyAgentnokkel).toHaveBeenCalled())
     // Laget lukkes før svaret kommer, og åpnes igjen etterpå.
     rerender(<Kurateringsoversikt apen={false} klient={k} onLukk={vi.fn()} />)

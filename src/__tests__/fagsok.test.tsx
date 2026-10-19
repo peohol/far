@@ -295,7 +295,7 @@ describe('søkesiden', () => {
     expect(onKrev).toHaveBeenCalled()
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('«sertralin»')
     const antall = sokGlobalt(KLAR.indeks, 'sertralin', Infinity).length
-    expect(screen.getByText(`${antall} treff i 2 monografer`)).toBeTruthy()
+    expect(screen.getByText(`${antall} treff i 2 monografier`)).toBeTruthy()
     expect(document.title).toBe('«sertralin» – Søk i fagstoff – OUSFAR')
 
     // Referansen står på siden selv, og siden er alt med som stoffet.

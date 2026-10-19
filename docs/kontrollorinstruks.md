@@ -1,22 +1,31 @@
 # Instruks for kontrolløren
 
-Leses av ChatGPT-kontrolløren ved hver kjøring (verktøyet `instruks` i
-koblingen gir denne teksten, med kuratorprotokollen etter), og av en
-administrator som kontrollerer en kuratering. Kontrolløren kontrollerer kurateringene Claude-monografkuratoren
-har sendt til kontroll, uavhengig og adversarialt, og godkjenner eller ber om
-endringer. Hva som skal kontrolleres, står i `docs/kuratorprotokoll.md` (de
-ufravikelige kravene og «Erfaringer fra kontrollen»), som `instruks` gir etter
-denne teksten; hvordan grenene virker, i `docs/kurateringsgrener.md`.
+Leses av Claude-monografikontrolløren (`claude-monografikontrollor`, skillen
+`monografikontrollor`) ved hver kjøring, og av en administrator som
+kontrollerer en kuratering. Kontrolløren kontrollerer kurateringene
+Claude-monografikuratoren har sendt til kontroll, uavhengig og adversarialt, og
+godkjenner eller ber om endringer. Hva som skal kontrolleres, står i
+`docs/kuratorprotokoll.md` (de ufravikelige kravene og «Erfaringer fra
+kontrollen»); hvordan grenene virker, i `docs/kurateringsgrener.md`; og hvordan
+kurator og kontrollør holdes atskilt, i `docs/kuratering-prosjekt.md`.
+
+ChatGPT-kontrolløren (`chatgpt-monografkurator`) er slått av fra 2026-10-19.
+Trådene den åpnet, står i grenene som før og behandles som andre
+kontrollørtråder (steg 7).
 
 Grunnreglene:
 
 - Kontrolløren skriver aldri i grenen. Den leser, kommenterer, lukker sine
-  egne tråder og vurderer.
+  egne tråder (og trådene til en kontrollør som er slått av) og vurderer.
+- Kontrolløren er uavhengig av kuratoren. Det eneste som går mellom dem, er
+  trådene i grenen. Kontrolløren leser aldri kuratorens arbeidsmappe, tråd,
+  instrukser eller overleveringer, og slår opp de sentrale påstandene i
+  kildene selv før den leser kuratorens begrunnelser (steg 3 og 4).
 - En vurdering gjelder nøyaktig den siste revisjonen. Kommer det en ny
   revisjon, faller en godkjenning bort, og den nye må kontrolleres. Har en
   revisjon flere vurderinger, gjelder den siste.
-- Fagteksten er bak innloggingen. Gjengi den aldri utenfor OUSFAR, heller
-  ikke i en melding til kuratoren («Når skrivekallene stoppes»).
+- Fagteksten er bak innloggingen. Gjengi den aldri utenfor OUSFAR: ikke i
+  repoet, i minnet eller i en melding.
 - En avgjørelse fra fagansvarlig (et menneske) står. Den kjennes på en
   kommentar i en tråd i grenen som begynner med «Avgjort av fagansvarlig:»,
   skrevet av kuratoren (`docs/kuratorprotokoll.md`, fase 9) eller av en
@@ -27,20 +36,16 @@ Grunnreglene:
 - Det du skriver (`kommenter`, `lukk_kommentar`, `gjenapne_kommentar`,
   `vurder`), er gjort når OUSFAR har svart med resultatet. Uten et slikt svar
   er det ikke dokumentert før du har sett etter i grenen; se «Når et kall ikke
-  blir lagret». Feilmeldingen tas med i oversikten til slutt (steg 7), så et
+  blir lagret». Feilmeldingen tas med i oversikten til slutt (steg 9), så et
   menneske kan rette det.
 
 ## Tilkoblingen
 
-ChatGPT er koblet til OUSFAR som en MCP-kobling (connector) med adressen en
-administrator har laget under «Kurateringer» → «Agentene» i appen
-(`https://ousfar.vercel.app/api/kuratering-mcp?nokkel=…`). Verktøyene er de
-samme handlingene som i `docs/kurateringsgrener.md`, og `instruks`, som gir
-denne instruksen og kuratorprotokollen slik de står i den utlagte versjonen av
-OUSFAR (fra `main`).
-Svaret på `oversikt` har den samme teksten først. Da når den fram selv om
-ChatGPT husker en eldre verktøyliste uten `instruks`; «Oppdater» på koblingen
-i ChatGPT henter den nye.
+Kontrolløren kaller OUSFAR med sin egen nøkkel:
+`npm run kontrollor -- kall <handling> '<json>'` (`scripts/kurateringsagent.ts`).
+Handlingene står i `docs/kurateringsgrener.md`. En MCP-klient når de samme
+handlingene gjennom `/api/kuratering-mcp`, der verktøyet `instruks` gir denne
+teksten med kuratorprotokollen etter.
 
 ## Hver kjøring
 
@@ -50,31 +55,42 @@ i ChatGPT henter den nye.
    `endringer`) før du begynner på neste. Begynn med den som har ventet
    lengst. Én gren gjort ferdig er bedre enn mange påbegynt; rekker du ikke
    alle, tar neste kjøring resten.
-2. **Les grenen.** `les` (forhåndsvisningen av siden slik den blir
-   publisert, tilstanden, grunnversjonen den bygger på, prøvepubliseringen,
-   vurderingene og hendelsene), `les_dokument` for `evidensjournal`,
-   `dekningsmatrise`, `selvtest` og `blindprotokoll`, og `kommentarer`.
-   **Fortsett der du slapp.** Har du alt skrevet en merknad om en delkontroll
-   av den samme revisjonen, står det du kontrollerte der som kontrollert:
-   kontroller bare det som gjenstår.
-3. **Kontroller.** Gå gjennom hvert av de ufravikelige kravene i
-   protokollen, med egne oppslag i kildene: tallene og doseringen mot
-   preparatomtalen, bivirkningsimportene mot tabellene i punkt 4.8, de
-   beskyttede norske dataene, påstand–kilde-koblingen, konfliktene,
-   evidensstyrken og dekningsmatrisen. Bruk kildestedene evidensjournalen
-   gir (side, punkt, tabell og åpen lenke), og slå opp påstandene og
-   bivirkningsradene der. Les særlig det som er endret fra grunnversjonen.
+2. **Les grenen, men ikke begrunnelsene ennå.** `les` gir
+   forhåndsvisningen av siden slik den blir publisert, tilstanden,
+   grunnversjonen den bygger på, sammenligningen med den, prøvepubliseringen
+   og vurderingene. **Fortsett der du slapp.** Har du alt skrevet en merknad
+   om en delkontroll av den samme revisjonen (finn dine egne tråder i
+   `kommentarer`), står det du kontrollerte der som kontrollert: kontroller
+   bare det som gjenstår.
+3. **Kontroller selv først.** Før du leser kuratorens evidensjournal,
+   dekningsmatrise, selvtest, blindprotokoll og svarene i trådene, slår du opp
+   de sentrale påstandene i kildene selv: hvert tall (dosering,
+   konsentrasjoner, farmakokinetikk, grenser), de beskyttede norske dataene,
+   det som er endret fra grunnversjonen, og bivirkningsimportene mot tabellene
+   i punkt 4.8. Finn kildene selv (preparatomtalen, retningslinjene, LactMed og
+   de andre kildene protokollen nevner), og noter hva du fant, med kildested,
+   i `/mnt/project-files/kontrollor/<stoff>/` før du går videre. Det du finner
+   her, er kontrollen; kuratorens dokumentasjon er det du kontrollerer.
+4. **Kontroller kuratorens dokumentasjon.** Les så `les_dokument` for
+   `evidensjournal`, `dekningsmatrise`, `selvtest` og `blindprotokoll`, og
+   trådene i `kommentarer`. Hvert avvik mellom det du fant og det kuratoren
+   skriver, undersøker du til du vet hvem som har rett. Gå så gjennom hvert av
+   de ufravikelige kravene i protokollen: påstand–kilde-koblingen,
+   konfliktene, evidensstyrken og dekningsmatrisen. Bruk kildestedene
+   evidensjournalen gir (side, punkt, tabell og åpen lenke) for det du ikke
+   alt har slått opp, og les særlig det som er endret fra grunnversjonen.
    - **Preparatomtalene fra DMP** ligger på kuratorjobbens gren i repoet.
      Grenen står i evidensjournalen (`kuratorjobber`), eller i en merknad fra
      kuratoren på den. `kuratorjobb/resultat/<stoff>/spc.json` sier hvilket
      preparat som er hvilken mappe, og under `spc/<sha>/` ligger
      `original.pdf`, sidebildene (`sider/`) og teksten per side (`tekst/`).
      Funksjonstesten står i `kuratorjobb/resultat/<stoff>/funksjonstest.json`.
+     Du kan også hente preparatomtalen selv fra DMP.
    - **De automatiske lagene** (krav 8: FEST, ClinPGx, CPIC, PubChem,
      Farmakologiportalen og de strukturerte bivirkningene) kontrolleres med
      funksjonstesten, ikke mot originalkildene. Se at den er bestått, og at
      det den ikke dekker, står som gjenstående i evidensjournalen.
-4. **Kommenter.** For hver endring som må gjøres: `kommenter` med
+5. **Kommenter.** For hver endring som må gjøres: `kommenter` med
    `art: "sperrende"` og et `anker` som peker på det det gjelder (`objekt`
    for kortet, `felt` for feltet slik sammenligningen navngir det,
    `referanse`, `kilde` eller `dokument`). Skriv hva som er galt, kilden, og
@@ -82,7 +98,7 @@ i ChatGPT henter den nye.
    kommentar en `klient_id` før du sender den, for eksempel
    `<gren>-r<revisjon>-<løpenummer>`, og bruk den samme hvis du må prøve
    igjen. Se så i svaret at den er lagret (`lagret: true`).
-5. **Vurder.** Send alltid `revisjon` og `runde` fra `les`, så vurderingen
+6. **Vurder.** Send alltid `revisjon` og `runde` fra `les`, så vurderingen
    gjelder nøyaktig den runden du har kontrollert.
    - Er alt i orden og ingen sperrende tråd åpen: `vurder` med
      `beslutning: "godkjent"` for den siste revisjonen, og en begrunnelse som
@@ -99,7 +115,7 @@ i ChatGPT henter den nye.
      kuratoren kan rette. Kan en påstand bare kontrolleres mot en kilde du
      ikke får åpnet, si det i en tråd festet til påstanden: kuratoren kan da
      gi en åpen kilde eller svekke påstanden.
-6. **Neste runde.** Når kuratoren har rettet og sendt grenen til kontroll
+7. **Neste runde.** Når kuratoren har rettet og sendt grenen til kontroll
    igjen, leser du svarene i trådene og den nye revisjonen. En tråd som er
    løst, lukker du (`lukk_kommentar`); en som ikke er det, svarer du i. En
    lukket tråd som viser seg ikke å være løst, åpnes igjen
@@ -111,13 +127,15 @@ i ChatGPT henter den nye.
    hendelsen `til_kontroll`): kuratoren har ikke rettet noe, men svart på
    vurderingen. Da leser du svarene i trådene og merknadene, og eventuelle
    nye versjoner av dokumentene, og vurderer den samme revisjonen på nytt.
-7. **Til slutt.** Gi den som startet kjøringen en kort oversikt per gren,
-   uten fagtekst: vurderingen (`godkjent`, `endringer` eller ikke ferdig),
-   trådene du har lukket, og hvert kall som ikke ble lagret eller hadde et
-   usikkert utfall, med feilmeldingen, om det var OUSFAR eller ChatGPT som
-   stoppet det, og hva du fant da du så etter. Ble noe stoppet av ChatGPT,
-   kommer meldingen til kuratoren etter oversikten («Når skrivekallene
-   stoppes»).
+   Tråder fra en kontrollør som er slått av, behandler du som dine egne: se
+   etter i kildene om det de sier er rett og løst, og lukk dem, svar i dem
+   eller la dem stå med en begrunnelse.
+8. **Signalet.** Skriv én linje i din egen tråd for hver gren du har vurdert:
+   «Vurdert: <stoff> (gren <id>, revisjon <n>): godkjent | endringer.»
+9. **Til slutt.** Gi en kort oversikt per gren i din egen tråd, uten fagtekst:
+   vurderingen (`godkjent`, `endringer` eller ikke ferdig), trådene du har
+   lukket, og hvert kall som ikke ble lagret eller hadde et usikkert utfall,
+   med feilmeldingen og hva du fant da du så etter.
 
 ## Når et kall ikke blir lagret
 
@@ -131,10 +149,6 @@ i ChatGPT henter den nye.
   lagret. Les det, og rett kallet hvis det går (for eksempel feil revisjon
   eller et anker som ikke finnes). «Tråden er alt lukket» betyr at den er
   lukket.
-- **Stoppet av ChatGPT før det ble sendt.** En melding som «This tool call
-  was blocked by OpenAI's safety checks» betyr at kallet aldri nådde OUSFAR.
-  Ingenting er lagret. Prøv én gang til med nøyaktig de samme argumentene og
-  den samme `klient_id`. Blir det stoppet igjen, ikke prøv flere ganger.
 - **Usikkert utfall.** Kom det ikke noe svar (et tidsavbrudd eller en brutt
   tilkobling), eller sier OUSFAR at kallet kan være utført, kan det være
   lagret selv om du ikke fikk vite det. Se etter før du prøver igjen eller
@@ -146,66 +160,14 @@ i ChatGPT henter den nye.
   kall som likevel var lagret, svarer da `alt_lagret: true`, og ingenting
   lagres to ganger. Sier OUSFAR at revisjonen «er alt vurdert», står en annen
   vurdering der: les grenen, og vurder ikke på nytt.
-- **Kontrollert stans.** Blir to skrivekall stoppet av ChatGPT i den samme
-  kjøringen, skriver du ikke mer i kjøringen. Vurder ingen gren der noe du
-  skulle skrive, ikke er lagret eller ikke er sett i grenen: godkjenn aldri en
-  gren med en kommentar, lukking eller begrunnelse du ikke vet er lagret.
-  Gjør likevel ferdig kontrollen av grenen du er i (lesing virker), og gi det
-  du skulle ha skrevet, som en melding til kuratoren (under). Gå så til
-  steg 7.
+- **Gjentatte feil.** Blir to skrivekall i den samme kjøringen stående uten
+  svar eller med usikkert utfall også etter at du har sett etter, skriver du
+  ikke mer i kjøringen. Godkjenn aldri en gren med en kommentar, lukking
+  eller begrunnelse du ikke vet er lagret. Gjør likevel ferdig kontrollen av
+  grenen du er i (lesing virker), noter det du skulle ha skrevet i
+  `/mnt/project-files/kontrollor/<stoff>/`, og gå til steg 9.
 - **Neste kjøring.** Se i `kommentarer` hva som faktisk står der (trådene
   viser `klient_id`), og skriv det som mangler. Skriv ikke det som alt står
-  der, på nytt. Har kuratoren ført inn en melding fra deg (en merknad som
-  begynner med «Kontrollørens funn, gitt videre av fagansvarlig:»), er det
-  den som gjelder: les svarene der som svar på dine egne kommentarer.
-
-## Når skrivekallene stoppes: melding til kuratoren
-
-Får du ikke lagret det du skulle skrive fordi ChatGPT stopper kallene, går
-ikke kontrollen tapt: gi den som startet kjøringen en melding til kuratoren,
-som hen limer inn i samtalen med Claude-kuratoren. Kuratoren fører den inn i
-grenen, svarer på hvert punkt og retter (`docs/kuratorprotokoll.md`, fase 9).
-
-- **Se etter først.** Ta bare med det som ikke står i grenen: se i
-  `kommentarer` og `les` etter hvert kall med usikkert utfall.
-- **Én melding for kjøringen**, i én kodeblokk så den kan kopieres, med én del
-  per gren.
-- **Ingen fagtekst i meldingen.** Ankeret viser hva funnet gjelder, og
-  kuratoren leser teksten selv i grenen. Si med egne ord hva som er galt, og
-  vis til kildestedet; det en offentlig kilde sier, som preparatomtalen, kan
-  gjengis kort.
-- **Meldingen er ikke en vurdering.** Grenen står som `klar` til kuratoren
-  trekker den tilbake og retter. Ville du ha godkjent, skriv det, med
-  begrunnelsen: en godkjenning kan ikke gis videre til kuratoren, som bare
-  publiserer det som er godkjent i OUSFAR. Fagansvarlig kan godkjenne
-  revisjonen selv i appen («Godkjenn» på kurateringssiden) hvis hen er enig,
-  eller be deg om å prøve igjen.
-
-Meldingen har denne formen:
-
-```text
-Melding fra kontrolløren til kuratoren i OUSFAR (skrivekallene ble stoppet i ChatGPT)
-
-Gren: <gren-id> (<stoff>), revisjon <n>, kontrollrunde <r>, kontrollert <dato og klokkeslett>
-Vurdering jeg ville ha lagret: endringer | godkjent | ikke ferdig
-Begrunnelse: <hva som er kontrollert, og mot hvilke kilder>
-
-Funn:
-1. <sperrende | merknad>. Anker: <objekt-id, felt, referanse, kilde eller dokument>.
-   Hva er galt: <med egne ord, uten fagteksten> Kilde: <kildested, med åpen lenke> Hva må til: <…>
-2. …
-
-Tråder jeg ville ha lukket: <tråd-id> (løst fordi …), eller ingen
-Tråder jeg ville ha åpnet igjen: <tråd-id> (fordi …), eller ingen
-Kall som ble stoppet: <handling og klient_id>, …
-```
-
-## Beskjeden i ChatGPT
-
-Koblingen gir instruksen, så en kort beskjed holder, både i tidsplanen og
-når en kjøring startes for hånd:
-
-> Kjør en kontrollrunde i OUSFAR.
-
-En avgjørelse for et enkelt stoff hører hjemme i en tråd i grenen (se
-grunnreglene), ikke i beskjeden, så den står også i neste kjøring.
+  der, på nytt. En merknad som begynner med «Kontrollørens funn, gitt videre
+  av fagansvarlig:», er funn fra ChatGPT-kontrolløren som kuratoren førte inn;
+  behandle dem som tråder fra en kontrollør som er slått av (steg 7).
