@@ -45,7 +45,7 @@ import {
 import type { Tilleggstekst } from '../faginnhold/sok'
 import { byggKjemivisning } from '../kjemi/stoffside'
 import { byggForbindelsesregister, FORBINDELSER, type Forbindelse } from '../kjemi/forbindelser'
-import { githubkrav, githubkjoring, type Githubsjekk } from '../server/tilgang'
+import { GITHUB_OIDC, githubkrav, githubkjoring, type Githubsjekk } from '../server/tilgang'
 import { falskFpApi, FPLISTER } from './hjelp/datakilder'
 import { kallSom } from './hjelp/fest'
 import { faginnholdskall, nyDatabase, opprettBruker } from './hjelp/testdatabase'
@@ -514,18 +514,25 @@ describe('endepunktet', () => {
     expect(utlost).toEqual(['cron', 'manuell', 'manuell', 'cron'])
   })
 
-  it('godtar bare GitHubs token for arbeidsflyten på main i repoet', async () => {
-    const ventet = `peohol/far/${FP_ARBEIDSFLYT}@refs/heads/main`
+  it('godtar bare GitHubs token for arbeidsflyten på main i repoet, også etter at repoet har fått nytt navn', async () => {
+    const ventet = `peohol/ousfar/${FP_ARBEIDSFLYT}@refs/heads/main`
     // Slik GitHub fyller kravene for en vanlig arbeidsflyt: `job_workflow_ref` er der bare for en gjenbrukt.
-    const krav = { repository: 'peohol/far', ref: 'refs/heads/main', workflow_ref: ventet, event_name: 'schedule' }
+    const krav = { repository: 'peohol/ousfar', repository_id: GITHUB_OIDC.repoId, ref: 'refs/heads/main', workflow_ref: ventet, event_name: 'schedule' }
     expect(githubkrav(krav, FP_ARBEIDSFLYT)).toBe('cron')
+    // Det gamle navnet, slik tokenene var før repoet ble omdøpt.
+    expect(githubkrav({ ...krav, repository: 'peohol/far', workflow_ref: `peohol/far/${FP_ARBEIDSFLYT}@refs/heads/main` }, FP_ARBEIDSFLYT)).toBe('cron')
+    // Et annet repo, også med det samme navnet, og en arbeidsflyt fra et annet repo.
+    expect(githubkrav({ ...krav, repository_id: '1' }, FP_ARBEIDSFLYT)).toBeNull()
+    expect(githubkrav({ ...krav, repository_id: undefined }, FP_ARBEIDSFLYT)).toBeNull()
+    expect(githubkrav({ ...krav, workflow_ref: `noen/annet/${FP_ARBEIDSFLYT}@refs/heads/main` }, FP_ARBEIDSFLYT)).toBeNull()
     expect(githubkrav({ ...krav, event_name: 'workflow_dispatch' }, FP_ARBEIDSFLYT)).toBe('manuell')
     expect(githubkrav({ ...krav, job_workflow_ref: ventet }, FP_ARBEIDSFLYT)).toBe('cron')
     expect(githubkrav({ ...krav, job_workflow_ref: 'annen/repo/.github/workflows/x.yml@refs/heads/main' }, FP_ARBEIDSFLYT)).toBeNull()
     expect(githubkrav({ ...krav, workflow_ref: undefined }, FP_ARBEIDSFLYT)).toBeNull()
-    expect(githubkrav({ ...krav, workflow_ref: 'peohol/far/.github/workflows/ci.yml@refs/heads/main' }, FP_ARBEIDSFLYT)).toBeNull()
+    expect(githubkrav({ ...krav, workflow_ref: 'peohol/ousfar/.github/workflows/ci.yml@refs/heads/main' }, FP_ARBEIDSFLYT)).toBeNull()
     expect(githubkrav({ ...krav, ref: 'refs/heads/claude/noe' }, FP_ARBEIDSFLYT)).toBeNull()
     expect(githubkrav({ ...krav, repository: 'noen/far' }, FP_ARBEIDSFLYT)).toBeNull()
+    expect(githubkrav({ ...krav, repository: undefined }, FP_ARBEIDSFLYT)).toBeNull()
     // Et token fra noen annen utsteder, eller ikke et token i det hele tatt, avvises uten nettverkskall.
     const annen = `${btoa('{"alg":"none"}')}.${btoa('{"iss":"https://annen.example"}')}.x`
     expect(await githubkjoring(annen, FP_ARBEIDSFLYT)).toBeNull()

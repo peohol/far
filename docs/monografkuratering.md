@@ -77,7 +77,7 @@ kjøring (`docs/kurateringsko.md`, `docs/kurateringsko-instruks.md`).
      "korrigeringer": ["Rettinger av feil"],
      "kildegrunnlag": ["Endringer i kildene: nye, byttede, fjernede"],
      "mangler": ["Viktige hull som fortsatt står åpne"],
-     "lenker": ["https://github.com/peohol/far/pull/<nr>"]
+     "lenker": ["https://github.com/peohol/ousfar/pull/<nr>"]
    }
    ```
 

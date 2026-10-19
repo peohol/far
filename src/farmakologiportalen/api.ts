@@ -28,7 +28,7 @@ export const FP_NOKKEL = '7a2211fa-1de4-4bab-abe3-4953be4ac285'
 /** Minste tid mellom to kall: portalen har ingen oppgitt grense, så det er god margin. */
 export const MINSTE_AVSTAND_MS = 2000
 
-export const BRUKERAGENT = 'OUSFAR-datasynk/1.0 (+https://github.com/peohol/far)'
+export const BRUKERAGENT = 'OUSFAR-datasynk/1.0 (+https://github.com/peohol/ousfar)'
 
 /** Adressen til en analyse, et laboratorium eller en komponent i portalen. */
 export const fpUrl = {

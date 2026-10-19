@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.103.10',
+    dato: '2026-10-19',
+    sammendrag: 'De faste hentingene fra GitHub virker igjen etter at repoet fikk nytt navn',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Etter at repoet fikk nytt navn, slapp ikke OUSFAR lenger inn jobbene som kjører fra GitHub, så den nattlige hentingen fra Farmakologiportalen feilet. Jobbene kjennes nå igjen på repoet selv, ikke på navnet, så de virker igjen og tåler et nytt navn senere.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.103.9',
     dato: '2026-10-19',
     sammendrag: 'Riktig ord «monografi», og kurateringene får en egen Claude-kontrollør',

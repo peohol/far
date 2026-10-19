@@ -120,7 +120,7 @@ ingen kan utgi seg for en agent fra appen.
 
 ```sql
 select intern.endring_start('claude-code', '<migrasjonens eget filnavn>',
-  'Kort, forståelig hensikt', array['https://github.com/peohol/far/pull/<nr>']);
+  'Kort, forståelig hensikt', array['https://github.com/peohol/ousfar/pull/<nr>']);
 -- … endringene …
 ```
 
