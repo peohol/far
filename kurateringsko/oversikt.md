@@ -1,6 +1,6 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-19T02:47:58.451Z. Stoffene sist lest fra databasen 2026-10-18T10:30:22.628Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-19T03:40:14.827Z. Stoffene sist lest fra databasen 2026-10-18T10:30:22.628Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
 Klar: 78 · Venter på godkjenning: 12 · Publisert: 1 · Blokkert: 8 · Utenfor køen: 1
 
@@ -36,7 +36,7 @@ Ingen kurateringer er reservert nå.
 
 ## Køen
 
-Neste stoff gis ikke ut nå: 15 kurateringsgrener venter på kontroll; et nytt stoff gis ut når færre enn 5 gjør det.
+Neste stoff gis ikke ut nå: kurateringsgrenene i OUSFAR kunne ikke leses, så køen vet ikke hvor mange som venter på kontroll.
 
 | # | Stoff | Modus | Poeng | Hvorfor |
 | --- | --- | --- | --- | --- |
