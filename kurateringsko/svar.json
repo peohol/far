@@ -1,56 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-kariprazin-021456",
-  "foresporsel_sha256": "1bf5b85f1fff5e9542325ae2c0b72a493f88de3004305ca6e77f5b7a0bda8468",
-  "handling": "reserver",
+  "foresporsel_id": "fullfort-kariprazin-0082",
+  "foresporsel_sha256": "aa8a7d9214995a33a7043df32a4e39b5ed5853f2abd8bbfeaa51d396085f1a9f",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "kariprazin er reservert til 2026-10-19T05:15:21.152Z.",
-  "behandlet_kl": "2026-10-19T02:15:21.152Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/39189076049",
-  "oppgave": {
-    "oppgave": "kariprazin-0082",
-    "stoff": "kariprazin",
-    "navn": "Kariprazin",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-19T05:15:21.152Z",
-    "jobbgren": "kuratorjobb/kariprazin-0012",
-    "kurateringsgren": "kuratering/kariprazin-0082",
-    "pr": null,
-    "gren": "e2d4268c-247a-445f-9986-74e32400b738",
-    "gjenoppta": {
-      "oppgave": "kariprazin-0056",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "avbrutt_kl": "2026-10-19T01:18:43.050Z",
-      "grunn": "Kontrolløren har bedt om endringer i kontrollrunde 3.",
-      "fase": null,
-      "jobbgren": "kuratorjobb/kariprazin-0012",
-      "kurateringsgren": null,
-      "pr": null,
-      "gren": "e2d4268c-247a-445f-9986-74e32400b738",
-      "kunnskapsgrense": "2026-10-16"
-    },
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-18T10:30:23.208Z",
-      "side": true,
-      "elementer": 22,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 6,
-      "referanser": 2,
-      "elementer_uten_kilde": 18
-    },
-    "prioritet": {
-      "poeng": 1464.8,
-      "grunner": [
-        "Fortsetter den avbrutte kurateringen kariprazin-0056.",
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "7 av 13 redaksjonelle seksjoner er tomme.",
-        "18 av 22 elementer har ingen kilde.",
-        "Bare 2 referanser."
-      ]
-    }
-  }
+  "melding": "kariprazin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-19T02:16:11.129Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/39189139453"
 }
