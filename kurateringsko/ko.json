@@ -1,7 +1,7 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-19T04:39:00.471Z",
-  "malt_kl": "2026-10-18T10:30:22.628Z",
+  "oppdatert_kl": "2026-10-19T07:01:39.673Z",
+  "malt_kl": "2026-10-19T07:01:39.673Z",
   "teller": 82,
   "stoffer": {
     "alprazolam": {
@@ -21,7 +21,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -63,7 +63,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 7,
         "redaksjonelle_paneler": 13,
@@ -105,7 +105,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 30,
         "redaksjonelle_paneler": 13,
@@ -147,7 +147,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 28,
         "redaksjonelle_paneler": 13,
@@ -189,7 +189,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -231,7 +231,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 26,
         "redaksjonelle_paneler": 13,
@@ -273,7 +273,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -316,7 +316,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 7,
         "redaksjonelle_paneler": 13,
@@ -358,7 +358,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 20,
         "redaksjonelle_paneler": 13,
@@ -400,7 +400,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -429,14 +429,22 @@
     "brekspiprazol": {
       "stoff": "brekspiprazol",
       "navn": "Brekspiprazol",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1466.3,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen brekspiprazol-0064.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "7 av 13 redaksjonelle seksjoner er tomme.",
+          "17 av 20 elementer har ingen kilde.",
+          "Bare 1 referanser."
+        ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 20,
         "redaksjonelle_paneler": 13,
@@ -445,9 +453,20 @@
         "elementer_uten_kilde": 17
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "brekspiprazol-0064",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-19T07:01:39.673Z",
+        "grunn": "Kontrolløren har bedt om endringer i kontrollrunde 4.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/brekspiprazol-0027",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "65e21273-dd2c-408b-b987-9ef8adf219c9",
+        "kunnskapsgrense": "2026-10-16"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -620,20 +639,21 @@
           "hendelse": "gren_klar",
           "oppgave": "brekspiprazol-0064",
           "melding": "Grenen: klar, revisjon 9, kontrollrunde 4."
+        },
+        {
+          "kl": "2026-10-19T07:01:39.673Z",
+          "hendelse": "gren_tilbakemelding",
+          "oppgave": "brekspiprazol-0064",
+          "melding": "Grenen: tilbakemelding, revisjon 9, kontrollrunde 4."
+        },
+        {
+          "kl": "2026-10-19T07:01:39.673Z",
+          "hendelse": "retting",
+          "oppgave": "brekspiprazol-0064",
+          "melding": "Kontrolløren har bedt om endringer i kontrollrunde 4."
         }
       ],
-      "appgren": {
-        "id": "65e21273-dd2c-408b-b987-9ef8adf219c9",
-        "oppgave": "brekspiprazol-0064",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-16",
-        "jobbgren": "kuratorjobb/brekspiprazol-0027",
-        "registrert_kl": "2026-10-18T04:23:27.779Z",
-        "status": "klar",
-        "revisjon": 9,
-        "kontrollrunde": 4
-      }
+      "appgren": null
     },
     "bumetanid": {
       "stoff": "bumetanid",
@@ -652,7 +672,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -694,7 +714,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -736,7 +756,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -772,7 +792,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 2,
         "redaksjonelle_paneler": 13,
@@ -1011,7 +1031,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 44,
         "redaksjonelle_paneler": 13,
@@ -1152,7 +1172,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -1194,7 +1214,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -1237,7 +1257,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -1273,7 +1293,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 19,
         "redaksjonelle_paneler": 13,
@@ -1520,7 +1540,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 27,
         "redaksjonelle_paneler": 13,
@@ -1562,7 +1582,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -1605,7 +1625,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -1647,7 +1667,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 26,
         "redaksjonelle_paneler": 13,
@@ -1683,7 +1703,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": false,
         "elementer": 0,
         "redaksjonelle_paneler": 13,
@@ -1726,7 +1746,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 49,
         "redaksjonelle_paneler": 13,
@@ -1743,7 +1763,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-19T02:47:58.451Z",
+          "kl": "2026-10-19T07:01:39.673Z",
           "kilde": "system"
         }
       ],
@@ -1878,7 +1898,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -1907,14 +1927,22 @@
     "fenytoin": {
       "stoff": "fenytoin",
       "navn": "Fenytoin",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1447.6,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen fenytoin-0081.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -1923,9 +1951,20 @@
         "elementer_uten_kilde": 1
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "fenytoin-0081",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-19T07:01:39.673Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/fenytoin-0037",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "40ecac1a-e908-4cb8-a62e-94546263372b",
+        "kunnskapsgrense": "2026-10-17"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -2076,32 +2115,41 @@
           "hendelse": "gren_klar",
           "oppgave": "fenytoin-0081",
           "melding": "Grenen: klar, revisjon 9, kontrollrunde 1."
+        },
+        {
+          "kl": "2026-10-19T07:01:39.673Z",
+          "hendelse": "gren_arbeid",
+          "oppgave": "fenytoin-0081",
+          "melding": "Grenen: arbeid, revisjon 9, kontrollrunde 0."
+        },
+        {
+          "kl": "2026-10-19T07:01:39.673Z",
+          "hendelse": "retting",
+          "oppgave": "fenytoin-0081",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "40ecac1a-e908-4cb8-a62e-94546263372b",
-        "oppgave": "fenytoin-0081",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-17",
-        "jobbgren": "kuratorjobb/fenytoin-0037",
-        "registrert_kl": "2026-10-19T02:03:32.132Z",
-        "status": "klar",
-        "revisjon": 9,
-        "kontrollrunde": 1
-      }
+      "appgren": null
     },
     "flunitrazepam": {
       "stoff": "flunitrazepam",
       "navn": "Flunitrazepam",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1451.7,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen flunitrazepam-0072.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "2 av 8 elementer har ingen kilde.",
+          "Bare 1 referanser."
+        ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -2110,9 +2158,20 @@
         "elementer_uten_kilde": 2
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "flunitrazepam-0072",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-19T07:01:39.673Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/flunitrazepam-0017",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
+        "kunnskapsgrense": "2026-10-17"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -2125,18 +2184,6 @@
       },
       "aktiv": true,
       "historikk": [
-        {
-          "kl": "2026-10-17T05:07:11.984Z",
-          "hendelse": "gren_tilbakemelding",
-          "oppgave": "flunitrazepam-0017",
-          "melding": "Grenen: tilbakemelding, revisjon 5, kontrollrunde 2."
-        },
-        {
-          "kl": "2026-10-17T05:07:11.984Z",
-          "hendelse": "retting",
-          "oppgave": "flunitrazepam-0017",
-          "melding": "Kontrolløren har bedt om endringer i kontrollrunde 2."
-        },
         {
           "kl": "2026-10-17T05:30:01.113Z",
           "hendelse": "reservert",
@@ -2316,20 +2363,21 @@
           "hendelse": "gren_klar",
           "oppgave": "flunitrazepam-0072",
           "melding": "Grenen: klar, revisjon 10, kontrollrunde 4."
+        },
+        {
+          "kl": "2026-10-19T07:01:39.673Z",
+          "hendelse": "gren_retting",
+          "oppgave": "flunitrazepam-0072",
+          "melding": "Grenen: retting, revisjon 10, kontrollrunde 3."
+        },
+        {
+          "kl": "2026-10-19T07:01:39.673Z",
+          "hendelse": "retting",
+          "oppgave": "flunitrazepam-0072",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
-        "oppgave": "flunitrazepam-0072",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-17",
-        "jobbgren": "kuratorjobb/flunitrazepam-0017",
-        "registrert_kl": "2026-10-18T18:01:36.746Z",
-        "status": "klar",
-        "revisjon": 10,
-        "kontrollrunde": 4
-      }
+      "appgren": null
     },
     "fluoksetin": {
       "stoff": "fluoksetin",
@@ -2347,7 +2395,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 29,
         "redaksjonelle_paneler": 13,
@@ -2389,7 +2437,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 26,
         "redaksjonelle_paneler": 13,
@@ -2431,7 +2479,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 28,
         "redaksjonelle_paneler": 13,
@@ -2473,7 +2521,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -2515,7 +2563,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -2551,7 +2599,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 46,
         "redaksjonelle_paneler": 13,
@@ -2568,7 +2616,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-19T02:47:58.451Z",
+          "kl": "2026-10-19T07:01:39.673Z",
           "kilde": "system"
         }
       ],
@@ -2756,7 +2804,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 23,
         "redaksjonelle_paneler": 13,
@@ -2798,7 +2846,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 20,
         "redaksjonelle_paneler": 13,
@@ -2840,7 +2888,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -2882,7 +2930,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -2924,7 +2972,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -2960,7 +3008,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -3179,7 +3227,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 23,
         "redaksjonelle_paneler": 13,
@@ -3220,7 +3268,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 28,
         "redaksjonelle_paneler": 13,
@@ -3268,7 +3316,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -3461,7 +3509,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 27,
         "redaksjonelle_paneler": 13,
@@ -3503,7 +3551,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -3545,7 +3593,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 27,
         "redaksjonelle_paneler": 13,
@@ -3587,7 +3635,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 31,
         "redaksjonelle_paneler": 13,
@@ -3629,7 +3677,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -3665,7 +3713,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": false,
         "elementer": 0,
         "redaksjonelle_paneler": 13,
@@ -3713,7 +3761,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 51,
         "redaksjonelle_paneler": 13,
@@ -3767,7 +3815,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -3803,7 +3851,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 18,
         "redaksjonelle_paneler": 13,
@@ -4049,7 +4097,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -4078,14 +4126,22 @@
     "levetiracetam": {
       "stoff": "levetiracetam",
       "navn": "Levetiracetam",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1447.6,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen levetiracetam-0074.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -4094,9 +4150,20 @@
         "elementer_uten_kilde": 1
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "levetiracetam-0074",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-19T07:01:39.673Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/levetiracetam-0038",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
+        "kunnskapsgrense": "2026-10-17"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -4285,20 +4352,21 @@
           "hendelse": "gren_klar",
           "oppgave": "levetiracetam-0074",
           "melding": "Grenen: klar, revisjon 12, kontrollrunde 1."
+        },
+        {
+          "kl": "2026-10-19T07:01:39.673Z",
+          "hendelse": "gren_arbeid",
+          "oppgave": "levetiracetam-0074",
+          "melding": "Grenen: arbeid, revisjon 12, kontrollrunde 0."
+        },
+        {
+          "kl": "2026-10-19T07:01:39.673Z",
+          "hendelse": "retting",
+          "oppgave": "levetiracetam-0074",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
-        "oppgave": "levetiracetam-0074",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-17",
-        "jobbgren": "kuratorjobb/levetiracetam-0038",
-        "registrert_kl": "2026-10-18T18:05:30.106Z",
-        "status": "klar",
-        "revisjon": 12,
-        "kontrollrunde": 1
-      }
+      "appgren": null
     },
     "levomepromazin": {
       "stoff": "levomepromazin",
@@ -4316,7 +4384,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 24,
         "redaksjonelle_paneler": 13,
@@ -4358,7 +4426,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 20,
         "redaksjonelle_paneler": 13,
@@ -4401,7 +4469,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 9,
         "redaksjonelle_paneler": 13,
@@ -4443,7 +4511,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -4479,7 +4547,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 48,
         "redaksjonelle_paneler": 13,
@@ -4496,7 +4564,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-19T02:47:58.451Z",
+          "kl": "2026-10-19T07:01:39.673Z",
           "kilde": "system"
         }
       ],
@@ -4673,7 +4741,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": false,
         "elementer": 0,
         "redaksjonelle_paneler": 13,
@@ -4722,7 +4790,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -4758,7 +4826,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": false,
         "elementer": 0,
         "redaksjonelle_paneler": 13,
@@ -4807,7 +4875,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -4849,7 +4917,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 7,
         "redaksjonelle_paneler": 13,
@@ -4891,7 +4959,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 25,
         "redaksjonelle_paneler": 13,
@@ -4933,7 +5001,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 27,
         "redaksjonelle_paneler": 13,
@@ -4975,7 +5043,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 9,
         "redaksjonelle_paneler": 13,
@@ -5017,7 +5085,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -5060,7 +5128,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -5102,7 +5170,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 24,
         "redaksjonelle_paneler": 13,
@@ -5145,7 +5213,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -5181,7 +5249,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -5285,7 +5353,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -5327,7 +5395,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 30,
         "redaksjonelle_paneler": 13,
@@ -5369,7 +5437,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 26,
         "redaksjonelle_paneler": 13,
@@ -5411,7 +5479,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 30,
         "redaksjonelle_paneler": 13,
@@ -5453,7 +5521,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -5496,7 +5564,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -5538,7 +5606,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -5580,7 +5648,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 23,
         "redaksjonelle_paneler": 13,
@@ -5616,7 +5684,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -5841,7 +5909,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 30,
         "redaksjonelle_paneler": 13,
@@ -5884,7 +5952,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 23,
         "redaksjonelle_paneler": 13,
@@ -5925,7 +5993,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 2,
         "redaksjonelle_paneler": 13,
@@ -5967,7 +6035,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 20,
         "redaksjonelle_paneler": 13,
@@ -6003,7 +6071,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 1,
         "redaksjonelle_paneler": 13,
@@ -6042,7 +6110,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 43,
         "redaksjonelle_paneler": 13,
@@ -6083,14 +6151,22 @@
     "topiramat": {
       "stoff": "topiramat",
       "navn": "Topiramat",
-      "status": "venter_godkjenning",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 1447.6,
+        "grunner": [
+          "Fortsetter den avbrutte kurateringen topiramat-0080.",
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -6099,9 +6175,20 @@
         "elementer_uten_kilde": 1
       },
       "reservasjon": null,
-      "forsok": 1,
+      "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": null,
+      "gjenoppta": {
+        "oppgave": "topiramat-0080",
+        "okt": "kurateringsko/okt/20261016-125910",
+        "avbrutt_kl": "2026-10-19T07:01:39.673Z",
+        "grunn": "Grenen er tilbake hos kuratoren.",
+        "fase": null,
+        "jobbgren": "kuratorjobb/topiramat-0041",
+        "kurateringsgren": null,
+        "pr": null,
+        "gren": "6a91451c-9e4a-4712-a913-253546677b1e",
+        "kunnskapsgrense": "2026-10-17"
+      },
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -6114,19 +6201,6 @@
       },
       "aktiv": true,
       "historikk": [
-        {
-          "kl": "2026-10-17T18:26:32.826Z",
-          "hendelse": "blokkert",
-          "oppgave": "topiramat-0041",
-          "okt": "kurateringsko/okt/20261016-125910",
-          "melding": "Krav 3: beskyttet norsk referanseområde i konflikt med nyere kilder; venter på avgjørelse fra fagansvarlig."
-        },
-        {
-          "kl": "2026-10-17T18:43:26.780Z",
-          "hendelse": "tilbakestilt",
-          "okt": "kurateringsko/okt/20261016-125910",
-          "melding": "Fagansvarlig har avgjort 2026-10-17; grenen sendes til kontroll. Gitt tilbake med kurateringsgrenen 6a91451c-9e4a-4712-a913-253546677b1e."
-        },
         {
           "kl": "2026-10-17T18:44:18.477Z",
           "hendelse": "reservert",
@@ -6306,20 +6380,21 @@
           "hendelse": "gren_klar",
           "oppgave": "topiramat-0080",
           "melding": "Grenen: klar, revisjon 14, kontrollrunde 1."
+        },
+        {
+          "kl": "2026-10-19T07:01:39.673Z",
+          "hendelse": "gren_arbeid",
+          "oppgave": "topiramat-0080",
+          "melding": "Grenen: arbeid, revisjon 14, kontrollrunde 0."
+        },
+        {
+          "kl": "2026-10-19T07:01:39.673Z",
+          "hendelse": "retting",
+          "oppgave": "topiramat-0080",
+          "melding": "Grenen er tilbake hos kuratoren."
         }
       ],
-      "appgren": {
-        "id": "6a91451c-9e4a-4712-a913-253546677b1e",
-        "oppgave": "topiramat-0080",
-        "modus": "de_novo",
-        "runde": 2,
-        "kunnskapsgrense": "2026-10-17",
-        "jobbgren": "kuratorjobb/topiramat-0041",
-        "registrert_kl": "2026-10-19T01:19:26.252Z",
-        "status": "klar",
-        "revisjon": 14,
-        "kontrollrunde": 1
-      }
+      "appgren": null
     },
     "tramadol": {
       "stoff": "tramadol",
@@ -6337,7 +6412,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 10,
         "redaksjonelle_paneler": 13,
@@ -6379,7 +6454,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -6422,7 +6497,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -6464,7 +6539,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -6506,7 +6581,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 26,
         "redaksjonelle_paneler": 13,
@@ -6548,7 +6623,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -6584,7 +6659,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 24,
         "redaksjonelle_paneler": 13,
@@ -6803,7 +6878,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 30,
         "redaksjonelle_paneler": 13,
@@ -6846,7 +6921,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -6889,7 +6964,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -6931,7 +7006,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-18T10:30:23.208Z",
+        "kl": "2026-10-19T07:01:40.450Z",
         "side": true,
         "elementer": 26,
         "redaksjonelle_paneler": 13,
