@@ -1,26 +1,18 @@
 {
-  "oppdatert_kl": "2026-10-19T02:15:21.152Z",
+  "oppdatert_kl": "2026-10-19T02:16:11.129Z",
   "malt_kl": "2026-10-18T10:30:22.628Z",
   "antall": {
     "klar": 78,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 11,
+    "venter_godkjenning": 12,
     "sammenslatt": 0,
     "publisert": 1,
     "blokkert": 8,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "kariprazin",
-      "oppgave": "kariprazin-0082",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-19T05:15:21.152Z",
-      "fase": null
-    }
-  ],
-  "holdes_tilbake": "14 kurateringsgrener venter på kontroll; et nytt stoff gis ut når færre enn 5 gjør det.",
+  "aktive": [],
+  "holdes_tilbake": "15 kurateringsgrener venter på kontroll; et nytt stoff gis ut når færre enn 5 gjør det.",
   "neste": [
     {
       "stoff": "valproat",
@@ -195,6 +187,12 @@
       "status": "venter_godkjenning"
     },
     {
+      "stoff": "kariprazin",
+      "gren": "e2d4268c-247a-445f-9986-74e32400b738",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    },
+    {
       "stoff": "ketobemidon",
       "gren": "030084b9-47c7-4ab5-8a71-11bfe76b6f5c",
       "grenstatus": "klar",
@@ -249,7 +247,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-19T02:15:21.152Z",
+          "kl": "2026-10-19T02:16:11.129Z",
           "kilde": "system"
         }
       ]
@@ -260,7 +258,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-19T02:15:21.152Z",
+          "kl": "2026-10-19T02:16:11.129Z",
           "kilde": "system"
         }
       ]
@@ -282,7 +280,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-19T02:15:21.152Z",
+          "kl": "2026-10-19T02:16:11.129Z",
           "kilde": "system"
         }
       ]
