@@ -1,8 +1,8 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-20T16:34:37.179Z. Stoffene sist lest fra databasen 2026-10-20T03:37:28.464Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-20T17:31:14.274Z. Stoffene sist lest fra databasen 2026-10-20T03:37:28.464Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 78 · Publisert: 14 · Blokkert: 7 · Utenfor køen: 1
+Klar: 78 · Publisert: 15 · Blokkert: 6 · Utenfor køen: 1
 
 ## Pågår
 
@@ -14,13 +14,12 @@ Ingen kurateringer venter.
 
 ## Blokkert
 
-- **cbd**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, godkjent); den må avsluttes først.
 - **doksepin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
 - **etanol**: Stoffet har ingen publisert fagside å kuratere.
 - **kokain**: Stoffet har ingen publisert fagside å kuratere.
 - **mdma**: Stoffet har ingen publisert fagside å kuratere.
 - **metamfetamin**: Stoffet har ingen publisert fagside å kuratere.
-- **okskarbazepin**: Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig. Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, godkjent); den må avsluttes først.
+- **okskarbazepin**: Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig.
 
 ## Køen
 
@@ -102,6 +101,6 @@ Ingen kurateringer venter.
 | 74 | labetalol | de_novo | 395.3 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 5 av 13 redaksjonelle seksjoner er tomme. 3 av 22 elementer har ingen kilde. |
 | 75 | karvedilol | de_novo | 395 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 5 av 13 redaksjonelle seksjoner er tomme. 3 av 23 elementer har ingen kilde. |
 | 76 | ketamin | de_novo | 102.3 | De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-04. 6 av 13 redaksjonelle seksjoner er tomme. 1 av 28 elementer har ingen kilde. |
-| 77 | kvetiapin | de_novo | 64.5 | De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-05. 1 av 13 redaksjonelle seksjoner er tomme. 3 av 51 elementer har ingen kilde. |
+| 77 | kvetiapin | de_novo | 64.7 | De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-05. 1 av 13 redaksjonelle seksjoner er tomme. 3 av 51 elementer har ingen kilde. |
 | 78 | thc | de_novo | 52.7 | De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-10. |
 
