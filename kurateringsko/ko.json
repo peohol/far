@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-20T17:31:14.274Z",
+  "oppdatert_kl": "2026-10-20T18:37:43.695Z",
   "malt_kl": "2026-10-20T03:37:28.464Z",
   "teller": 82,
   "stoffer": {
@@ -1300,8 +1300,8 @@
       "blokkeringer": [
         {
           "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-20T17:31:14.274Z",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
+          "kl": "2026-10-20T18:37:43.695Z",
           "kilde": "system"
         }
       ],

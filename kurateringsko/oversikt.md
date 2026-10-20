@@ -1,6 +1,6 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-20T17:31:14.274Z. Stoffene sist lest fra databasen 2026-10-20T03:37:28.464Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-20T18:37:43.695Z. Stoffene sist lest fra databasen 2026-10-20T03:37:28.464Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
 Klar: 78 · Publisert: 15 · Blokkert: 6 · Utenfor køen: 1
 
@@ -14,7 +14,7 @@ Ingen kurateringer venter.
 
 ## Blokkert
 
-- **doksepin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
+- **doksepin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.
 - **etanol**: Stoffet har ingen publisert fagside å kuratere.
 - **kokain**: Stoffet har ingen publisert fagside å kuratere.
 - **mdma**: Stoffet har ingen publisert fagside å kuratere.
