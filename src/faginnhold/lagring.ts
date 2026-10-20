@@ -16,6 +16,7 @@ import type { Intervallregelsettinnhold } from '../regler/modell'
 import type { Scenarioregelsett } from '../domain/scenario'
 import type { ThcRegelsettinnhold } from '../domain/thcTekster'
 import { iEndring, type Endringskontekst } from '../endringslogg/operasjon'
+import { uventetFeil } from '../auth/databasefeil'
 
 const UVENTET_FEIL = 'Noe gikk galt. Prøv igjen.'
 const IKKE_GODTATT = 'Innholdet ble ikke godtatt. Kontroller feltene og prøv igjen.'
@@ -78,7 +79,7 @@ export function tilFeil(feil: Databasefeil): Error {
   }
   if (feil.code && LESBARE_FEIL.has(feil.code) && feil.message) return new Error(feil.message)
   if (feil.code && REGELBRUDD.has(feil.code)) return new Error(IKKE_GODTATT)
-  return new Error(UVENTET_FEIL)
+  return new Error(uventetFeil(feil))
 }
 
 export interface Faginnholdslager {

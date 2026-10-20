@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.105.3',
+    dato: '2026-10-20',
+    sammendrag: 'Uventede feil sier hva databasen svarte',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    gjelder: ['hele appen'],
+    punkter: [
+      'Når noe går galt på en måte appen ikke har en egen forklaring for, står databasens egen feilkode og melding nå etter «Noe gikk galt. Prøv igjen.». Den teksten kan sendes videre når en feil meldes, så årsaken kan finnes.',
+    ],
+  },
+  {
     versjon: '1.105.2',
     dato: '2026-10-20',
     sammendrag: 'Lange preparatnavn under «Preparater» vises ikke lenger med én bokstav per linje',
