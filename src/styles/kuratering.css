@@ -119,6 +119,14 @@ a.utgaveliste__rad:focus-visible {
   color: var(--blekk-dempet);
 }
 
+/* De andre grenene fagsiden har hatt, under raden med den som gjelder. */
+.utgaveliste__tidligere {
+  margin: var(--rom-1) 0 0;
+  padding: 0 var(--rom-5);
+  font-size: var(--tekst-meta);
+  color: var(--blekk-dempet);
+}
+
 /* --- «Følg agenten»: stedet som følges, og det agenten nettopp endret --------- */
 .utgave--agent {
   position: relative;
