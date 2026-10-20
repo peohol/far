@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-20T09:35:03.258Z",
+  "oppdatert_kl": "2026-10-20T10:32:09.281Z",
   "malt_kl": "2026-10-20T03:37:28.464Z",
   "teller": 82,
   "stoffer": {
@@ -1772,7 +1772,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-20T09:35:03.258Z",
+          "kl": "2026-10-20T10:32:09.281Z",
           "kilde": "system"
         }
       ],
@@ -2167,7 +2167,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-20T09:35:03.258Z",
+          "kl": "2026-10-20T10:32:09.281Z",
           "kilde": "system"
         }
       ],
@@ -3022,7 +3022,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-20T09:35:03.258Z",
+          "kl": "2026-10-20T10:32:09.281Z",
           "kilde": "system"
         }
       ],
@@ -4168,19 +4168,11 @@
     "levetiracetam": {
       "stoff": "levetiracetam",
       "navn": "Levetiracetam",
-      "status": "klar",
-      "modus": "de_novo",
+      "status": "publisert",
+      "modus": null,
       "prioritet": {
-        "poeng": 1447.6,
-        "grunner": [
-          "Fortsetter den avbrutte kurateringen levetiracetam-0074.",
-          "De novo-kuratering i runden som gjelder.",
-          "Aldri kuratert.",
-          "Ingen kuratering å regne alderen fra.",
-          "9 av 13 redaksjonelle seksjoner er tomme.",
-          "1 av 6 elementer har ingen kilde.",
-          "Bare 3 referanser."
-        ]
+        "poeng": 0,
+        "grunner": []
       },
       "maal": {
         "kl": "2026-10-20T03:37:29.671Z",
@@ -4194,21 +4186,18 @@
       "reservasjon": null,
       "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "levetiracetam-0074",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-19T07:01:39.673Z",
-        "grunn": "Grenen er tilbake hos kuratoren.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/levetiracetam-0038",
-        "kurateringsgren": null,
-        "pr": null,
-        "gren": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
-        "kunnskapsgrense": "2026-10-17"
-      },
+      "gjenoppta": null,
       "pr": null,
       "blokkeringer": [],
-      "sist_kuratert": null,
+      "sist_kuratert": {
+        "kl": "2026-10-20T09:57:31.894195+00:00",
+        "modus": "de_novo",
+        "kunnskapsgrense": "2026-10-17",
+        "runde": 2,
+        "pr": null,
+        "gren": "f238bd0d-4ee0-4bef-8b76-ec07076d2ae1",
+        "kilde": "ko"
+      },
       "siste_kjoring": {
         "oppgave": "levetiracetam-0074",
         "okt": "kurateringsko/okt/20261016-125910",
@@ -4218,11 +4207,6 @@
       },
       "aktiv": true,
       "historikk": [
-        {
-          "kl": "2026-10-14T04:50:43.758Z",
-          "hendelse": "oppdaget",
-          "melding": "Nytt stoff i stoffregisteret."
-        },
         {
           "kl": "2026-10-17T10:15:42.012Z",
           "hendelse": "reservert",
@@ -4406,6 +4390,12 @@
           "hendelse": "retting",
           "oppgave": "levetiracetam-0074",
           "melding": "Grenen er tilbake hos kuratoren."
+        },
+        {
+          "kl": "2026-10-20T10:32:09.281Z",
+          "hendelse": "publisert",
+          "oppgave": "levetiracetam-0074",
+          "melding": "Kurateringsgrenen er publisert (revisjon 16)."
         }
       ],
       "appgren": null
