@@ -4,6 +4,7 @@
  * ekte database bygd av migrasjonene.
  */
 import type { PGlite } from '@electric-sql/pglite'
+import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { STOFFREGISTERDATA } from '../domain/stoffregister'
 import { faginnholdskall, feilFra, nyDatabase, opprettBruker, som, type Faginnholdskall } from './hjelp/testdatabase'
@@ -24,6 +25,7 @@ interface Registerdata {
   sider: { id: string; slug: string; navn: string; innhold: boolean; oppsummering: unknown }[]
 }
 
+const BIVIRKNINGSIMPORT = JSON.parse(readFileSync(new URL('../../supabase/maler/bivirkningsimport.json', import.meta.url), 'utf8'))
 const DOK = { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Syntetisk.' }] }] }
 
 describe('stoffregisteret i databasen', () => {
@@ -236,6 +238,44 @@ describe('stoffregisteret i databasen', () => {
     // En ny side med nøkkelen tar stoffet i bruk igjen.
     await nySide('Slettes')
     expect(await status('slettes')).toBeNull()
+  })
+
+  it('sletter en side med importerte bivirkninger for godt, med bivirkningene', async () => {
+    const { side } = await nySide('Med bivirkninger', true)
+    const imp = structuredClone(BIVIRKNINGSIMPORT)
+    imp.stoff = 'med-bivirkninger'
+    await db.query('select bivirkninger.importer($1::jsonb)', [JSON.stringify(imp)])
+    const bivirkninger = () =>
+      kall.fasit<{ kilder: number; rader: number }>(
+        `select (select count(*) from bivirkninger.kilder where infoside = $1)::int as kilder,
+                (select count(*) from bivirkninger.bivirkninger b join bivirkninger.kilder k on k.id = b.kilde where k.infoside = $1)::int as rader`,
+        [side],
+      )
+    expect((await bivirkninger())[0]!.rader).toBeGreaterThan(0)
+
+    await sql(admin, 'select public.slett_stoff($1)', ['med-bivirkninger'])
+    await sql(admin, 'select public.slett_stoff_for_godt($1)', ['med-bivirkninger'])
+    expect(await status('med-bivirkninger')).toBe('fjernet')
+    expect(await bivirkninger()).toEqual([{ kilder: 0, rader: 0 }])
+  })
+
+  it('sier fra med en melding som kan vises, og lar siden ligge, når noe annet peker på den', async () => {
+    const { side } = await nySide('Fastholdt')
+    // Noe utenfor det slettingen kjenner, som peker på siden.
+    await kall.fasit('create table public.peker_paa_siden (side uuid references public.redigerbare_objekter (id))')
+    await kall.fasit('insert into public.peker_paa_siden values ($1)', [side])
+    try {
+      await sql(admin, 'select public.slett_stoff($1)', ['fastholdt'])
+      const feil = await feilFra(() => sql(admin, 'select public.slett_stoff_for_godt($1)', ['fastholdt']))
+      expect(feil?.code).toBe('22023')
+      expect(feil?.message).toMatch(/^Fagsiden kan ikke slettes for godt, fordi noe annet peker på den/)
+      // Tømmingen hopper over den, i stedet for å stoppe.
+      expect(await en<number>(admin, 'select public.tom_stoffpapirkurven()')).toBe(0)
+      expect(await status('fastholdt')).toBe('papirkurv')
+    } finally {
+      await kall.fasit('drop table public.peker_paa_siden')
+      await sql(admin, 'select public.gjenopprett_stoff($1)', ['fastholdt'])
+    }
   })
 
   it('lar en side det pekes på, ligge i papirkurven', async () => {
