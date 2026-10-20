@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-20T08:40:25.147Z",
+  "oppdatert_kl": "2026-10-20T09:35:03.258Z",
   "malt_kl": "2026-10-20T03:37:28.464Z",
   "teller": 82,
   "stoffer": {
@@ -1771,8 +1771,8 @@
       "blokkeringer": [
         {
           "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-20T08:40:25.147Z",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
+          "kl": "2026-10-20T09:35:03.258Z",
           "kilde": "system"
         }
       ],
@@ -2167,7 +2167,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-20T08:40:25.147Z",
+          "kl": "2026-10-20T09:35:03.258Z",
           "kilde": "system"
         }
       ],
@@ -2998,19 +2998,11 @@
     "kariprazin": {
       "stoff": "kariprazin",
       "navn": "Kariprazin",
-      "status": "klar",
-      "modus": "de_novo",
+      "status": "blokkert",
+      "modus": null,
       "prioritet": {
-        "poeng": 1464.8,
-        "grunner": [
-          "Fortsetter den avbrutte kurateringen kariprazin-0082.",
-          "De novo-kuratering i runden som gjelder.",
-          "Aldri kuratert.",
-          "Ingen kuratering å regne alderen fra.",
-          "7 av 13 redaksjonelle seksjoner er tomme.",
-          "18 av 22 elementer har ingen kilde.",
-          "Bare 2 referanser."
-        ]
+        "poeng": 0,
+        "grunner": []
       },
       "maal": {
         "kl": "2026-10-20T03:37:29.671Z",
@@ -3024,21 +3016,25 @@
       "reservasjon": null,
       "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "kariprazin-0082",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-19T08:46:20.819Z",
-        "grunn": "Grenen er tilbake hos kuratoren.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/kariprazin-0012",
-        "kurateringsgren": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
+          "kl": "2026-10-20T09:35:03.258Z",
+          "kilde": "system"
+        }
+      ],
+      "sist_kuratert": {
+        "kl": "2026-10-20T08:47:08.954056+00:00",
+        "modus": "de_novo",
+        "kunnskapsgrense": "2026-10-16",
+        "runde": 2,
         "pr": null,
         "gren": "e2d4268c-247a-445f-9986-74e32400b738",
-        "kunnskapsgrense": "2026-10-16"
+        "kilde": "ko"
       },
-      "pr": null,
-      "blokkeringer": [],
-      "sist_kuratert": null,
       "siste_kjoring": {
         "oppgave": "kariprazin-0082",
         "okt": "kurateringsko/okt/20261016-125910",
@@ -3224,6 +3220,12 @@
           "hendelse": "retting",
           "oppgave": "kariprazin-0082",
           "melding": "Grenen er tilbake hos kuratoren."
+        },
+        {
+          "kl": "2026-10-20T09:35:03.258Z",
+          "hendelse": "publisert",
+          "oppgave": "kariprazin-0082",
+          "melding": "Kurateringsgrenen er publisert (revisjon 15)."
         }
       ],
       "appgren": null
@@ -5710,19 +5712,11 @@
     "sertindol": {
       "stoff": "sertindol",
       "navn": "Sertindol",
-      "status": "klar",
-      "modus": "de_novo",
+      "status": "publisert",
+      "modus": null,
       "prioritet": {
-        "poeng": 1447.6,
-        "grunner": [
-          "Fortsetter den avbrutte kurateringen sertindol-0078.",
-          "De novo-kuratering i runden som gjelder.",
-          "Aldri kuratert.",
-          "Ingen kuratering å regne alderen fra.",
-          "9 av 13 redaksjonelle seksjoner er tomme.",
-          "1 av 6 elementer har ingen kilde.",
-          "Bare 2 referanser."
-        ]
+        "poeng": 0,
+        "grunner": []
       },
       "maal": {
         "kl": "2026-10-20T03:37:29.671Z",
@@ -5736,21 +5730,18 @@
       "reservasjon": null,
       "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "sertindol-0078",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-19T08:46:20.819Z",
-        "grunn": "Grenen er tilbake hos kuratoren.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/sertindol-0040",
-        "kurateringsgren": null,
-        "pr": null,
-        "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
-        "kunnskapsgrense": "2026-10-17"
-      },
+      "gjenoppta": null,
       "pr": null,
       "blokkeringer": [],
-      "sist_kuratert": null,
+      "sist_kuratert": {
+        "kl": "2026-10-20T09:10:48.256956+00:00",
+        "modus": "de_novo",
+        "kunnskapsgrense": "2026-10-17",
+        "runde": 2,
+        "pr": null,
+        "gren": "96b6c9d3-2611-42f0-8b42-9392cc134ad2",
+        "kilde": "ko"
+      },
       "siste_kjoring": {
         "oppgave": "sertindol-0078",
         "okt": "kurateringsko/okt/20261016-125910",
@@ -5942,6 +5933,12 @@
           "hendelse": "retting",
           "oppgave": "sertindol-0078",
           "melding": "Grenen er tilbake hos kuratoren."
+        },
+        {
+          "kl": "2026-10-20T09:35:03.258Z",
+          "hendelse": "publisert",
+          "oppgave": "sertindol-0078",
+          "melding": "Kurateringsgrenen er publisert (revisjon 13)."
         }
       ],
       "appgren": null
