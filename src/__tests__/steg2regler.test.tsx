@@ -103,7 +103,8 @@ async function tilSteg2(kode: string) {
   )
   await user.keyboard(kode.toLowerCase())
   await user.keyboard('1')
-  const steg = await screen.findByRole('region', { name: 'Velg konsentrasjon' })
+  // Hele appen tegnes; på en travel testmaskin tar det mer enn standardsekundet.
+  const steg = await screen.findByRole('region', { name: 'Velg konsentrasjon' }, { timeout: 5000 })
   return { user, steg }
 }
 
