@@ -3,6 +3,7 @@ import { stoffadresse } from '../../domain/rute'
 import { ANDRE_STOFFER_ID, type Registerkategori, type Registerstoff } from '../../domain/stoffregister'
 import { antall, forhandsvisning, ramsOpp } from '../../faginnhold/oppsummering'
 import { useLukkMedEscape } from '../../hooks/useLukkMedEscape'
+import type { Kurateringsklient } from '../../kuratering/klient'
 import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import { useStoffregisterkilde, type Stoffregisterkilde } from '../../stoffregister/Stoffregisterkilde'
 import { kanSletteKategori, kanSletteStoff } from '../../stoffregister/modell'
@@ -14,10 +15,12 @@ import { SeksjonsstyringKilde } from '../seksjoner/Seksjonsstyring'
 import { Skuffrutenett } from '../seksjoner/Skuffrutenett'
 import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
 import { Toppmenyknapp } from '../toppmeny/Toppmenyknapp'
+import { Trinnbryter, type Trinnvalg } from '../Trinnbryter'
 import { Bekreftknapp, Idehandling, Slettknapp, Tidspunkt } from '../traad/Smadeler'
 import { kategoriikon } from '../ikon/register'
 import { PAPIRKURVDAGER, slettesForGodt } from './papirkurv'
 import { Redigeringsbrett } from './Redigeringsbrett'
+import { Kurateringsfane } from './Kurateringsfane'
 import { Registerhandlingskilde, useRegisterhandling } from './Registerhandling'
 import { Stoffkort, type Stoffkortvalg } from './Stoffkort'
 import '../../styles/monograf-topp.css'
@@ -25,7 +28,16 @@ import '../../styles/monograf-topp.css'
 export interface StoffregistersideProps extends Stoffkortvalg {
   /** Tilbake til fortolkningen slik den sto. */
   onLukk: () => void
+  /** Kurateringene av fagsidene, til fanen «Kurateringer». Uten den har siden bare registeret. */
+  kuratering?: Kurateringsklient
 }
+
+type Fane = 'register' | 'kurateringer'
+
+const FANER: readonly Trinnvalg<Fane>[] = [
+  { verdi: 'register', merke: 'Register' },
+  { verdi: 'kurateringer', merke: 'Kurateringer' },
+]
 
 /**
  * Helsiden for stoffregisteret (`#/stoffregister`): hele registeret, med sine
@@ -40,6 +52,9 @@ export interface StoffregistersideProps extends Stoffkortvalg {
  * og stoffene dras mellom dem. Nederst står arkivet, og for administratorer
  * papirkurven.
  *
+ * Fanen «Kurateringer» (`Kurateringsfane`) viser i stedet hver fagside med
+ * statusen til kurateringene av den.
+ *
  * Tastene: `Escape` lukker siden.
  */
 export function Stoffregisterside(props: StoffregistersideProps) {
@@ -53,9 +68,10 @@ export function Stoffregisterside(props: StoffregistersideProps) {
   )
 }
 
-function Innhold({ katalog, onApneFortolkning, onLukk }: StoffregistersideProps) {
+function Innhold({ katalog, onApneFortolkning, onLukk, kuratering }: StoffregistersideProps) {
   const kilde = useStoffregisterkilde()
   const [modus, setModus] = useBevart<'lese' | 'rediger'>('modus', 'lese')
+  const [fane, setFane] = useBevart<Fane>('fane', 'register')
   const overskrift = useId()
 
   useEffect(() => {
@@ -74,6 +90,8 @@ function Innhold({ katalog, onApneFortolkning, onLukk }: StoffregistersideProps)
   if (!kilde) return null
   const { register } = kilde
   const redigerer = modus === 'rediger'
+  // Redigeringen gjelder registeret, så den viser alltid det.
+  const kurateringer = kuratering && !redigerer && fane === 'kurateringer' ? kuratering : null
   const ekte = register.kategorier.filter((k) => k.id !== ANDRE_STOFFER_ID)
 
   return (
@@ -85,9 +103,11 @@ function Innhold({ katalog, onApneFortolkning, onLukk }: StoffregistersideProps)
           </Toppmenyknapp>
         </ToppmenyInnhold>
       ) : (
-        <ToppmenyInnhold spor="redigering">
-          <Ikonknapp ikon="edit" etikett="Rediger stoffregisteret" aria-pressed="false" onClick={() => setModus('rediger')} />
-        </ToppmenyInnhold>
+        !kurateringer && (
+          <ToppmenyInnhold spor="redigering">
+            <Ikonknapp ikon="edit" etikett="Rediger stoffregisteret" aria-pressed="false" onClick={() => setModus('rediger')} />
+          </ToppmenyInnhold>
+        )
       )}
       <ToppmenyInnhold spor="lukk">
         <Lukkeknapp onLukk={onLukk} />
@@ -97,7 +117,12 @@ function Innhold({ katalog, onApneFortolkning, onLukk }: StoffregistersideProps)
         <h1 id={overskrift} className="identitet__navn" tabIndex={-1}>
           Stoffregister
         </h1>
-        {register.lastet && (
+        {kuratering && !redigerer && (
+          <div className="stoffregisterside__faner">
+            <Trinnbryter etikett="Vis" valg={FANER} verdi={fane} onVelg={setFane} />
+          </div>
+        )}
+        {register.lastet && !kurateringer && (
           <p className="metalinje">
             {antall(register.stoffer.length, 'stoff', 'stoffer')} i {antall(ekte.length, 'kategori', 'kategorier')}
           </p>
@@ -121,7 +146,8 @@ function Innhold({ katalog, onApneFortolkning, onLukk }: StoffregistersideProps)
       )}
       {!register.lastet && !kilde.feil && <p className="stoffregisterside__laster">Henter stoffregisteret …</p>}
 
-      {register.lastet && (
+      {register.lastet && kurateringer && <Kurateringsfane kategorier={register.kategorier} klient={kurateringer} />}
+      {register.lastet && !kurateringer && (
         <SeksjonsstyringKilde bevares>
           {redigerer ? (
             <Redigeringsbrett />

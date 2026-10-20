@@ -2,9 +2,9 @@
  * Kurateringsgrenene og sideversjonene, lest og styrt fra appen.
  *
  * Administratorene når grenene gjennom `kuratering_admin`; alle innloggede
- * leser versjonene av fagsidene. Meldingene fra databasen i disse funksjonene
- * er skrevet for å vises, også ved en konflikt (`PT409`), som her betyr at
- * siden eller grenen er endret siden den ble lest.
+ * leser versjonene av fagsidene og statusen til kurateringene. Meldingene fra
+ * databasen i disse funksjonene er skrevet for å vises, også ved en konflikt
+ * (`PT409`), som her betyr at siden eller grenen er endret siden den ble lest.
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { lesBivirkningsdata } from '../bivirkninger/lesing'
@@ -12,6 +12,7 @@ import { tilFeil, type Databasefeil } from '../faginnhold/lagring'
 import { TOM_STOFFSIDE, type Stoffsidedata } from '../faginnhold/lesing'
 import type { Sideutgave } from '../faginnhold/sidesammenligning'
 import type { Agentinfo, Anker, Grendetaljer, Grensammendrag, Grenstatusdata, Sideversjonsdata, Versjonsinfo } from './modell'
+import type { Kurateringsrad } from './sidestatus'
 
 /** Svaret på en publisering: `ok: false` når den stoppet, og grenen er blokkert med grunnen. */
 export interface Publiseringssvar {
@@ -47,6 +48,8 @@ export interface Kurateringsklient {
   versjoner(stoff: string): Promise<Versjonsinfo[]>
   /** Én versjon av fagsiden, eller `null` når den ikke finnes. */
   versjon(stoff: string, nr: number): Promise<{ versjon: Versjonsinfo; utgave: Sideutgavedata } | null>
+  /** Kurateringene av alle fagsidene, uten noe annet enn status og tidspunkter. For alle innloggede. */
+  kurateringer(): Promise<Kurateringsrad[]>
 }
 
 /** Feilen fra databasen som noe som kan vises. */
@@ -96,6 +99,7 @@ export function lagKurateringsklient(klient: SupabaseClient): Kurateringsklient 
     agenter: () => admin<Agentinfo[]>('agenter').then((r) => r ?? []),
     nyAgentnokkel: (agent) => admin('ny_agentnokkel', { agent }),
     versjoner: (stoff) => kall<Versjonsinfo[]>('les_sideversjoner', { stoff }).then((r) => r ?? []),
+    kurateringer: () => kall<Kurateringsrad[]>('les_kurateringer', {}).then((r) => r ?? []),
     versjon: async (stoff, nr) => {
       const [data, bivirkninger] = await Promise.all([
         kall<Sideversjonsdata | null>('les_sideversjon', { stoff, nr }),

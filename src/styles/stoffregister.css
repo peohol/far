@@ -35,6 +35,38 @@
   color: var(--blekk-dempet);
 }
 
+/* --- Fanene: registeret og kurateringene ------------------------------------ */
+.stoffregisterside__faner,
+.kurateringsfane__valg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-3) var(--rom-5);
+}
+
+.kurateringsfane {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+  padding: 0 var(--rom-4);
+}
+
+.kurateringsfane .metalinje {
+  margin: 0;
+}
+
+/* Merket står fast etter navnet, og det som står om kurateringen tar resten. */
+.kurateringsrad .merke {
+  flex: none;
+}
+
+/* På en smal flate fyller bryterne bredden, så merkene får mest mulig plass. */
+@media (max-width: 30em) {
+  .stoffregisterside__faner > .trinnbryter,
+  .kurateringsfane__valg > .trinnbryter {
+    flex: 1 1 100%;
+  }
+}
+
 /* --- Lesevisningen ---------------------------------------------------------- */
 
 /* Innholdet i en seksjon står mot venstre; en underkategori tar hele bredden,

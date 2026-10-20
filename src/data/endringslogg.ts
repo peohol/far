@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.104.2',
+    versjon: '1.105.1',
     dato: '2026-10-20',
     sammendrag: 'Fagsider med bivirkninger kan slettes for godt fra papirkurven',
     typer: ['Funksjonalitet'],
@@ -22,6 +22,20 @@ export const ENDRINGSLOGG: Endring[] = [
       'En fagside med importerte bivirkninger kunne ikke slettes for godt fra papirkurven. Appen svarte bare «Noe gikk galt. Prøv igjen.». Nå slettes siden, og bivirkningene går med den.',
       'Den samme feilen kunne stoppe tømmingen av papirkurven og den automatiske ryddingen etter 30 dager. Det går nå igjen.',
       'Peker noe annet på en fagside så den ikke kan slettes for godt, sier appen det med en forklaring, og siden blir liggende i papirkurven.',
+    ],
+  },
+  {
+    versjon: '1.105.0',
+    dato: '2026-10-20',
+    sammendrag: 'Ny fane «Kurateringer» i stoffregisteret, og én status per fagside i kurateringsmenyen',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Moderat omfang',
+    gjelder: ['stoffregister', 'vinduer'],
+    punkter: [
+      'Stoffregisteret har fått fanen «Kurateringer», som alle kan se. Den viser hver fagside med om den er kuratert, om en kuratering pågår, eller om den ikke er kuratert ennå, og når.',
+      'En fagside regnes som kuratert når minst én kuratering av den er publisert. Kurateringene som ble gjort før kurateringsgrenene, er med.',
+      'Fanen kan vise alle fagsidene eller bare én status, og sorteres etter nyeste eller eldste kuratering, stoffgruppe eller navn. Valgene huskes.',
+      'I kurateringsmenyen for administratorene står hver fagside nå bare én gang, med én status. En side med en kuratering som pågår, står bare der den venter, og de tidligere kurateringene av siden lenkes fra raden i stedet for å stå som egne rader.',
     ],
   },
   {

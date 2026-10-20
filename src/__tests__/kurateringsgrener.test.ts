@@ -20,7 +20,7 @@
  * Innholdet er syntetisk.
  */
 import type { PGlite } from '@electric-sql/pglite'
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { PANELREKKEFOLGE } from '../faginnhold/paneler'
@@ -1336,6 +1336,35 @@ describe('statusen og agentene', () => {
     expect(Object.keys(rad).sort()).toEqual(['art', 'id', 'oppdatert_kl', 'publisert_kl', 'revisjon', 'runde', 'status', 'stoff'])
     expect(rad).toMatchObject({ stoff: k.slug, art: 'kuratering', status: 'arbeid', revisjon: 1 })
     expect((await feilFra(() => kall.les(admin, 'select public.kuratering_kostatus()')))?.code).toBe('42501')
+  })
+
+  it('gir alle innloggede kurateringene per fagside, uten fagtekst og uten de forkastede', async () => {
+    const pagaar = await kuratertGren('Oversiktsstoff')
+    const forkastet = await kuratertGren('Forkastet oversiktsstoff')
+    await adm('forkast', { gren: forkastet.gren, grunn: 'Syntetisk' })
+    const publisert = await kuratertGren('Publisert oversiktsstoff')
+    await tilGodkjent(publisert.gren)
+    await adm('publiser', { gren: publisert.gren, revisjon: 1 })
+    const rader = await kall.les<{ r: Json[] }>(leser, 'select public.les_kurateringer() as r').then((r) => r[0]!.r)
+    const etter = (stoff: string) => rader.filter((r) => r.stoff === stoff)
+    expect(etter(pagaar.slug)).toEqual([{ stoff: pagaar.slug, art: 'kuratering', status: 'arbeid', opprettet_kl: expect.any(String), status_kl: expect.any(String) }])
+    expect(etter(forkastet.slug)).toEqual([])
+    expect(etter(publisert.slug)).toEqual([expect.objectContaining({ status: 'publisert', publisert_kl: expect.any(String) })])
+    expect(JSON.stringify(rader)).not.toMatch(/Ny dosering|Syntetisk kuratering|formaal|kurator/)
+    // Kurateringene gjort med en migrasjon, med tidspunktet i versjonen.
+    expect(etter('thc').map((r) => r.publisert_kl)).toEqual(['2026-10-10T04:51:00+00:00', '2026-10-10T08:00:00+00:00'])
+    expect((await feilFra(() => kall.les(null, 'select public.les_kurateringer()')))?.code).toBe('42501')
+  })
+
+  it('har hver migrasjon som kuraterte en fagside før kurateringsgrenene, i lista over kurateringer', async () => {
+    const mappe = new URL('../../supabase/migrations/', import.meta.url)
+    const filer = readdirSync(mappe).filter((f) => f.endsWith('.sql')).sort()
+    const forventet = filer.flatMap((f) => {
+      const treff = /intern\.kuratering_start\('([^']+)'/.exec(readFileSync(new URL(f, mappe), 'utf8'))
+      return treff ? [{ migrasjon: f, stoff: treff[1] }] : []
+    })
+    const lista = await kall.fasit<{ migrasjon: string; stoff: string }>('select migrasjon, stoff from kuratering.migrasjonskurateringer order by migrasjon')
+    expect(lista).toEqual(forventet)
   })
 
   it('har hver handling i lista som en funksjon, og gir Claude-kuratoren en nøkkel uten at nøkkelen står i repoet', async () => {

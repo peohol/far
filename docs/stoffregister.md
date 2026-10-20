@@ -16,7 +16,7 @@ Stoffene, aliasene og koblingene til laboratorieanalysene står i
 | `src/data/stoffregister.json` | Stoffene, aliasene og koblingene til analysene (ikke inndelingen) |
 | `src/domain/stoffregister.ts` | Registeret slik appen viser det (`byggStoffregister`): datafilen, fagsidene og inndelingen fra databasen. Uten riktekst, så fortolkningen ikke drar faginnholdet med seg |
 | `src/stoffregister/` | Svaret fra databasen og endringene i det (`modell.ts`), kallene (`api.ts`) og kilden sidemenyen, helsiden og fagsidene deler (`Stoffregisterkilde.tsx`) |
-| `src/components/stoffregister/` | Helsiden, kortene, redigeringsbrettet med menyene, arkivet og papirkurven, og menyen og meldingen på fagsiden (`Fagsidestatus.tsx`) |
+| `src/components/stoffregister/` | Helsiden, kortene, redigeringsbrettet med menyene, arkivet og papirkurven, fanen «Kurateringer» (`Kurateringsfane.tsx`), og menyen og meldingen på fagsiden (`Fagsidestatus.tsx`) |
 | `src/components/stoffregister/registerdra.ts` | Reglene for dra-og-slipp i redigeringen (se under) |
 | `src/hooks/useSortering.ts`, `src/styles/stoffregister.css`, `src/styles/sortering.css` | Dra-og-slipp, felles med diskusjonene, og utseendet |
 
@@ -52,6 +52,12 @@ analysene og veien til fagsiden og fortolkningen. Visningen er bare for å
 lese: alt som endrer et stoff, gjøres i redigeringen. Siden har sine egne
 diskusjoner (`register:stoffregister`, se `docs/diskusjoner.md`). `Escape`
 lukker den.
+
+**Fanen «Kurateringer»** står ved siden av registeret, for alle innloggede:
+hver fagside én gang, med om den er kuratert, om en kuratering pågår, eller
+om den ikke er kuratert ennå. Hva statusen betyr, står i
+`docs/kurateringsgrener.md` («Status per fagside»). Redigeringen gjelder
+bare registeret.
 
 **Oppsummeringen** er en kort riktekst i panelet «Identitet» på fagsiden
 (elementet `oppsummering`), og skrives og redigeres der. Er den ikke skrevet,
