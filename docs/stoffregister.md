@@ -119,10 +119,14 @@ papirkurven står ikke i registeret eller i søket.
   Derfra hentes den tilbake, slettes for godt, eller tømmes alt. Den som
   slettet, kan angre det selv om den ikke ser papirkurven.
 - Det som har ligget i papirkurven i mer enn 30 dager, slettes for godt når
-  noen åpner appen (`rydd_stoffpapirkurven`). Revisjonene, diskusjonene,
-  favorittene og plasseringene går med, og `slettede_stoffsider` husker hva
-  som ble slettet og av hvem. En side noe annet i historikken peker på, blir
-  liggende i papirkurven.
+  noen åpner appen (`rydd_stoffpapirkurven`). Revisjonene, sideversjonene,
+  kurateringsgrenene, bivirkningene, diskusjonene, favorittene og
+  plasseringene går med, og `slettede_stoffsider` husker hva som ble slettet
+  og av hvem. En side noe annet i historikken peker på, blir liggende i
+  papirkurven. Det samme gjør en side noe annet i databasen peker på: da sier
+  databasen det med en melding som kan vises (`22023`), og tømmingen hopper
+  over siden. En ny tabell som peker på fagsiden, må enten slettes med den i
+  `intern.fjern_stoff` eller ha `on delete cascade`.
 
 Reglene håndheves i databasen. Appen har de samme (`kanSletteStoff`,
 `kanSletteKategori`) for å vise bare valgene som virker.
