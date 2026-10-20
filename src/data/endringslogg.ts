@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.105.1',
+    dato: '2026-10-20',
+    sammendrag: 'Lange preparatnavn under «Preparater» vises ikke lenger med én bokstav per linje',
+    typer: ['Design / layout'],
+    omfang: 'Minimalt omfang',
+    gjelder: ['stoff'],
+    punkter: [
+      'Et preparat med langt navn og flere merker, som godkjenningsfritak og kombinasjon, kunne få navnet presset sammen til én bokstav per linje. Nå får navnet alltid god bredde: merkene flyttes under navnet når de ikke får plass ved siden av.',
+      'Navnet brytes mellom ordene, og bare inne i et ord når ordet alene er bredere enn kortet. Et svært langt merke bryter teksten sin i stedet for å stikke ut av kortet.',
+    ],
+  },
+  {
     versjon: '1.105.0',
     dato: '2026-10-20',
     sammendrag: 'Ny fane «Kurateringer» i stoffregisteret, og én status per fagside i kurateringsmenyen',

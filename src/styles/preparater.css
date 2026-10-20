@@ -193,9 +193,21 @@
   border-color: var(--aksent);
 }
 
-.preparatrad__navn {
+/* Navnet og merkene står side om side når det er plass, ellers går merkene
+   under navnet. Navnet får aldri mindre enn sin grunnbredde ved siden av
+   merkene, så et langt navn ikke presses ned til én bokstav per linje. */
+.preparatrad__innhold {
   display: flex;
   flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2) var(--rom-4);
+  min-width: 0;
+}
+
+.preparatrad__navn {
+  display: flex;
+  flex: 1 1 12rem;
   flex-direction: column;
   gap: var(--rom-1);
   min-width: 0;
@@ -218,6 +230,14 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--rom-2);
+  min-width: 0;
+}
+
+/* Et merke som er bredere enn hele raden, bryter teksten sin i stedet for å
+   stikke ut av kortet. */
+.preparatrad__merker .merke {
+  max-width: 100%;
+  white-space: normal;
 }
 
 .preparatrad__produsent {
@@ -522,23 +542,13 @@
     padding: 0 var(--rom-3);
   }
 
+  /* Kolonnen følger kortet, ikke det lengste ordet i et preparatnavn. */
   .preparatrader {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  /* Merkene står under navnet, så navnet får hele bredden. */
-  .preparatrad {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    row-gap: var(--rom-2);
-  }
-
+  /* Merkene står alltid under navnet, så navnet får hele bredden. */
   .preparatrad__merker {
-    grid-row: 2;
-  }
-
-  .preparatrad__pil {
-    grid-row: 1 / span 2;
-    grid-column: 2;
+    flex-basis: 100%;
   }
 }
