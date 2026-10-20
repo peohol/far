@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.105.1',
+    versjon: '1.105.2',
     dato: '2026-10-20',
     sammendrag: 'Lange preparatnavn under «Preparater» vises ikke lenger med én bokstav per linje',
     typer: ['Design / layout'],
@@ -21,6 +21,19 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'Et preparat med langt navn og flere merker, som godkjenningsfritak og kombinasjon, kunne få navnet presset sammen til én bokstav per linje. Nå får navnet alltid god bredde: merkene flyttes under navnet når de ikke får plass ved siden av.',
       'Navnet brytes mellom ordene, og bare inne i et ord når ordet alene er bredere enn kortet. Et svært langt merke bryter teksten sin i stedet for å stikke ut av kortet.',
+    ],
+  },
+  {
+    versjon: '1.105.1',
+    dato: '2026-10-20',
+    sammendrag: 'Fagsider med bivirkninger kan slettes for godt fra papirkurven',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    gjelder: ['stoff', 'stoffregister'],
+    punkter: [
+      'En fagside med importerte bivirkninger kunne ikke slettes for godt fra papirkurven. Appen svarte bare «Noe gikk galt. Prøv igjen.». Nå slettes siden, og bivirkningene går med den.',
+      'Den samme feilen kunne stoppe tømmingen av papirkurven og den automatiske ryddingen etter 30 dager. Det går nå igjen.',
+      'Peker noe annet på en fagside så den ikke kan slettes for godt, sier appen det med en forklaring, og siden blir liggende i papirkurven.',
     ],
   },
   {
