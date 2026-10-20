@@ -1,6 +1,6 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-20T06:48:15.319Z. Stoffene sist lest fra databasen 2026-10-20T03:37:28.464Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-20T07:38:26.575Z. Stoffene sist lest fra databasen 2026-10-20T03:37:28.464Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
 Klar: 86 · Publisert: 7 · Blokkert: 6 · Utenfor køen: 1
 
@@ -15,7 +15,7 @@ Ingen kurateringer venter.
 ## Blokkert
 
 - **etanol**: Stoffet har ingen publisert fagside å kuratere.
-- **fenobarbital**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
+- **fenobarbital**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.
 - **kokain**: Stoffet har ingen publisert fagside å kuratere.
 - **mdma**: Stoffet har ingen publisert fagside å kuratere.
 - **metamfetamin**: Stoffet har ingen publisert fagside å kuratere.
