@@ -188,6 +188,7 @@ function klient(gren: Grendetaljer = grendetaljer(), status: Partial<Grenstatusd
     gjenapneKommentar: vi.fn(async () => ({})),
     versjoner: vi.fn(async () => [versjonsinfo(2), versjonsinfo(1, 'basis')]),
     versjon: vi.fn(async (_stoff: string, nr: number) => ({ versjon: versjonsinfo(nr), utgave: nr === 1 ? GAMMEL : NY })),
+    kurateringer: vi.fn(async () => [sammendrag]),
   }
 }
 
@@ -625,7 +626,7 @@ describe('på fagsiden', () => {
 
   it('ordner de aktive grenene etter hvem som har neste handling, med det som venter og siden når', async () => {
     const k = klient()
-    const gren = (id: number, overstyr: Partial<Grensammendrag>): Grensammendrag => ({ ...(grendetaljer() as Grensammendrag), id: `44444444-0000-4000-8000-00000000010${id}`, ...overstyr })
+    const gren = (id: number, overstyr: Partial<Grensammendrag>): Grensammendrag => ({ ...(grendetaljer() as Grensammendrag), id: `44444444-0000-4000-8000-00000000010${id}`, stoff: `stoff-${id}`, ...overstyr })
     vi.mocked(k.oversikt).mockResolvedValue([
       gren(1, { navn: 'Alfa', status: 'tilbakemelding', status_kl: '2026-10-02T12:00:00Z', venter_pa_kurator: 2, apne_sperrer: 1 }),
       ...[2, 3, 4, 5, 6].map((i) => gren(i, { navn: `Til kontroll ${i}`, status: 'klar', runde: 2, status_kl: `2026-10-0${i}T12:00:00Z` })),
@@ -646,5 +647,39 @@ describe('på fagsiden', () => {
     expect(within(admin).getByText('Grunn: Venter på en avgjørelse.')).toBeTruthy()
     expect(screen.getByRole('link', { name: /Ferdig · Publisert/ })).toBeTruthy()
     expect(screen.queryByText(/Ingen kurateringer pågår/)).toBeNull()
+  })
+
+  it('viser hver fagside én gang, med én status, og lenker til de andre grenene den har hatt', async () => {
+    const k = klient()
+    const gren = (id: number, overstyr: Partial<Grensammendrag>): Grensammendrag => ({ ...(grendetaljer() as Grensammendrag), id: `44444444-0000-4000-8000-00000000020${id}`, ...overstyr })
+    const publisert = (id: number, stoff: string, navn: string, kl: string) =>
+      gren(id, { stoff, navn, status: 'publisert', status_kl: kl, publisert_kl: kl, oppdatert_kl: kl })
+    vi.mocked(k.oversikt).mockResolvedValue([
+      // Publisert to ganger, og nå til kontroll igjen.
+      publisert(1, 'alfa', 'Alfa', '2026-10-10T12:00:00Z'),
+      publisert(2, 'alfa', 'Alfa', '2026-10-12T12:00:00Z'),
+      gren(3, { stoff: 'alfa', navn: 'Alfa', status: 'klar', status_kl: '2026-10-14T12:00:00Z' }),
+      // Publisert to ganger, ingen som pågår.
+      publisert(4, 'beta', 'Beta', '2026-10-11T12:00:00Z'),
+      publisert(5, 'beta', 'Beta', '2026-10-13T12:00:00Z'),
+      // Forkastet etter en publisering: fortsatt publisert.
+      publisert(6, 'gamma', 'Gamma', '2026-10-09T12:00:00Z'),
+      gren(7, { stoff: 'gamma', navn: 'Gamma', status: 'arkivert', status_kl: '2026-10-15T12:00:00Z', oppdatert_kl: '2026-10-15T12:00:00Z' }),
+    ])
+    render(<Kurateringsoversikt apen klient={k} onLukk={vi.fn()} />)
+    const kontroll = await screen.findByRole('region', { name: 'Venter på kontrolløren' })
+    expect(within(kontroll).getAllByRole('link', { name: /^Alfa · / })).toHaveLength(1)
+    expect(within(kontroll).getByRole('link', { name: /^Alfa · Til kontroll/ }).getAttribute('href')).toBe('#/kuratering/44444444-0000-4000-8000-000000000203')
+    // De tidligere grenene står som lenker under raden, ikke som egne rader.
+    expect(within(kontroll).getAllByRole('link', { name: /^publisert / }).map((a) => a.getAttribute('href'))).toEqual([
+      '#/kuratering/44444444-0000-4000-8000-000000000202',
+      '#/kuratering/44444444-0000-4000-8000-000000000201',
+    ])
+    // Alfa står ikke under «Avsluttet» i tillegg.
+    const lenker = screen.getAllByRole('link').map((a) => a.textContent ?? '')
+    expect(lenker.filter((t) => t.startsWith('Alfa ·'))).toHaveLength(1)
+    expect(lenker.filter((t) => t.startsWith('Beta ·'))).toEqual([expect.stringMatching(/^Beta · Publisert/)])
+    expect(lenker.filter((t) => t.startsWith('Gamma ·'))).toEqual([expect.stringMatching(/^Gamma · Publisert/)])
+    expect(screen.getByRole('link', { name: /^forkastet / }).getAttribute('href')).toBe('#/kuratering/44444444-0000-4000-8000-000000000207')
   })
 })

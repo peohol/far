@@ -7,7 +7,7 @@
  * og papirkurven, som bare administratorer ser. Reglene i selve databasen
  * prøves i `stoffregisterdb.test.ts`.
  */
-import { cleanup, render, screen, waitFor, within } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ReactNode } from 'react'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
@@ -19,6 +19,8 @@ import { ToppmenyKilde } from '../components/toppmeny/Toppmenykilde'
 import { TipsLag } from '../components/Tips'
 import { ANALYTTKATALOG } from '../domain/analyttkatalog'
 import type { Endringskontekst } from '../endringslogg/operasjon'
+import type { Kurateringsklient } from '../kuratering/klient'
+import type { Kurateringsrad } from '../kuratering/sidestatus'
 import type { Registerlager } from '../stoffregister/api'
 import { StoffregisterkildeProvider, useLagStoffregisterkilde } from '../stoffregister/Stoffregisterkilde'
 import { endreStruktur, type Registerdatabase, type Registerendring, type Registerside } from '../stoffregister/modell'
@@ -103,11 +105,13 @@ function Side({
   lager,
   admin,
   opprettSide,
+  kuratering,
   children,
 }: {
   lager: Registerlager
   admin: boolean
   opprettSide?: (navn: string, slug: string, endring: Endringskontekst) => Promise<void>
+  kuratering?: Kurateringsklient
   children?: ReactNode
 }) {
   const kilde = useLagStoffregisterkilde({ lager, admin, ...(opprettSide && { opprettSide }) })
@@ -115,7 +119,9 @@ function Side({
     <ToppmenyKilde>
       <Toppmeny meny={null} konto={null} />
       <StoffregisterkildeProvider kilde={kilde}>
-        {children ?? <Stoffregisterside katalog={ANALYTTKATALOG} onApneFortolkning={onApneFortolkning} onLukk={onLukk} />}
+        {children ?? (
+          <Stoffregisterside katalog={ANALYTTKATALOG} onApneFortolkning={onApneFortolkning} onLukk={onLukk} kuratering={kuratering} />
+        )}
       </StoffregisterkildeProvider>
     </ToppmenyKilde>
   )
@@ -124,12 +130,12 @@ function Side({
 const onApneFortolkning = vi.fn()
 const onLukk = vi.fn()
 
-async function vis({ admin = false, lager = lagLager() } = {}) {
+async function vis({ admin = false, lager = lagLager(), kuratering }: { admin?: boolean; lager?: ReturnType<typeof lagLager>; kuratering?: Kurateringsklient } = {}) {
   onApneFortolkning.mockClear()
   onLukk.mockClear()
   render(
     <TipsLag>
-      <Side lager={lager} admin={admin} />
+      <Side lager={lager} admin={admin} kuratering={kuratering} />
     </TipsLag>,
   )
   await screen.findByText(/stoffer i \d+ kategorier/)
@@ -230,6 +236,82 @@ describe('lesevisningen', () => {
     await vis()
     await userEvent.keyboard('{Escape}')
     expect(onLukk).toHaveBeenCalled()
+  })
+})
+
+describe('kurateringene', () => {
+  const rad = (stoff: string, overstyr: Partial<Kurateringsrad>): Kurateringsrad => ({
+    stoff,
+    art: 'kuratering',
+    status: 'publisert',
+    opprettet_kl: '2026-10-01T08:00:00Z',
+    ...overstyr,
+  })
+  /** Syntetiske kurateringer: publiserte, en som pågår etter en publisering, og en som pågår for første gang. */
+  const RADER: Kurateringsrad[] = [
+    rad('citalopram', { publisert_kl: '2026-10-06T11:45:00Z', opprettet_kl: '2026-10-06T11:45:00Z' }),
+    rad('citalopram', { art: 'de_novo', opprettet_kl: '2026-10-11T08:00:00Z', publisert_kl: '2026-10-12T09:00:00Z' }),
+    rad('ketamin', { publisert_kl: '2026-10-04T03:03:44Z', opprettet_kl: '2026-10-04T03:03:44Z' }),
+    rad('thc', { publisert_kl: '2026-10-10T08:00:00Z', opprettet_kl: '2026-10-10T08:00:00Z' }),
+    rad('thc', { status: 'klar', opprettet_kl: '2026-10-18T07:00:00Z', status_kl: '2026-10-19T07:00:00Z' }),
+    rad('ghb', { art: 'de_novo', status: 'arbeid', opprettet_kl: '2026-10-19T10:00:00Z' }),
+  ]
+  const klient = () => ({ kurateringer: vi.fn(async () => RADER) }) as unknown as Kurateringsklient
+
+  const fane = () => screen.getByRole('slider', { name: 'Vis' })
+  const sortering = () => screen.getByRole('slider', { name: 'Sorter etter' })
+  const navnene = (liste: HTMLElement) =>
+    within(liste).getAllByRole('link').map((a) => a.textContent)
+
+  async function kurateringsfanen(kuratering = klient()) {
+    await vis({ kuratering })
+    expect(fane().getAttribute('aria-valuetext')).toBe('Register')
+    fireEvent.change(fane(), { target: { value: '1' } })
+    return screen.findByRole('list', { name: 'Fagsidene' })
+  }
+
+  it('viser hver fagside én gang med én status, nyeste kuratering først og sidene uten sist', async () => {
+    const liste = await kurateringsfanen()
+    // Karbamazepin står i to kategorier, men bare én gang her.
+    expect(navnene(liste).filter((n) => n === 'Karbamazepin')).toHaveLength(1)
+    expect(navnene(liste).slice(0, 5)).toEqual(['GHB', 'THC', 'Citalopram', 'Ketamin', 'Alprazolam'])
+    const linje = (navn: string) => within(liste).getByRole('link', { name: navn }).closest('li') as HTMLElement
+    expect(linje('GHB').textContent).toMatch(/Pågår.*De novo-kuratering: kurateres, startet/)
+    expect(linje('THC').textContent).toMatch(/Pågår.*Kuratering: til kontroll, startet .* · sist kuratert/)
+    expect(linje('Citalopram').textContent).toMatch(/Kuratert.*SSRI · De novo-kuratering publisert .* · 2 kurateringer i alt/)
+    expect(linje('Bupropion').textContent).toMatch(/Ikke kuratert.*NDRI$/)
+    expect(screen.getByText(/2 pågår · 2 kuratert · \d+ ikke kuratert/)).toBeTruthy()
+    // Redigeringen gjelder registeret, og knappen står bare der.
+    expect(within(screen.getByRole('navigation', { name: 'Toppmeny' })).queryByRole('button', { name: 'Rediger stoffregisteret' })).toBeNull()
+  })
+
+  it('viser bare fagsidene med én status, og sorterer etter stoffgruppe i registerets rekkefølge', async () => {
+    await kurateringsfanen()
+    fireEvent.change(screen.getByRole('slider', { name: 'Vis fagsidene som er' }), { target: { value: '2' } })
+    expect(navnene(screen.getByRole('list', { name: 'Fagsidene' }))).toEqual(['Citalopram', 'Ketamin'])
+    fireEvent.change(screen.getByRole('slider', { name: 'Vis fagsidene som er' }), { target: { value: '0' } })
+    fireEvent.change(sortering(), { target: { value: '2' } })
+    expect(sortering().getAttribute('aria-valuetext')).toBe('Stoffgruppe')
+    const grupper = screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)
+    expect(grupper.slice(0, 2)).toEqual(['Antidepressiver › SSRI', 'Antidepressiver › SNRI'])
+    expect(grupper.at(-1)).toBe('Andre stoffer')
+    expect(grupper.indexOf('Stimulanter')).toBeLessThan(grupper.indexOf('Cannabinoider'))
+    expect(navnene(screen.getByRole('list', { name: 'Cannabinoider' }))).toEqual(['CBD', 'THC'])
+  })
+
+  it('sier fra når kurateringene ikke kan hentes, og prøver igjen', async () => {
+    const k = klient()
+    vi.mocked(k.kurateringer).mockRejectedValueOnce(new Error('Nettverksfeil'))
+    await vis({ kuratering: k })
+    fireEvent.change(fane(), { target: { value: '1' } })
+    expect((await screen.findByRole('alert')).textContent).toMatch(/Fikk ikke hentet kurateringene. Nettverksfeil/)
+    await userEvent.click(screen.getByRole('button', { name: 'Prøv igjen' }))
+    expect(await screen.findByRole('list', { name: 'Fagsidene' })).toBeTruthy()
+  })
+
+  it('har ingen fane uten kurateringene', async () => {
+    await vis()
+    expect(screen.queryByRole('slider', { name: 'Vis' })).toBeNull()
   })
 })
 

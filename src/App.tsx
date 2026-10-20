@@ -763,7 +763,12 @@ export default function App() {
 
                 {rute.side === 'stoffregister' && (
                   <main className="scene scene--stoffregister">
-                    <Stoffregisterside katalog={katalog} onApneFortolkning={apneFortolkning} onLukk={lukkInfoside} />
+                    <Stoffregisterside
+                      katalog={katalog}
+                      onApneFortolkning={apneFortolkning}
+                      onLukk={lukkInfoside}
+                      kuratering={faginnhold.kuratering}
+                    />
                   </main>
                 )}
 

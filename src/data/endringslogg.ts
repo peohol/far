@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.105.0',
+    dato: '2026-10-20',
+    sammendrag: 'Ny fane «Kurateringer» i stoffregisteret, og én status per fagside i kurateringsmenyen',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Moderat omfang',
+    gjelder: ['stoffregister', 'vinduer'],
+    punkter: [
+      'Stoffregisteret har fått fanen «Kurateringer», som alle kan se. Den viser hver fagside med om den er kuratert, om en kuratering pågår, eller om den ikke er kuratert ennå, og når.',
+      'En fagside regnes som kuratert når minst én kuratering av den er publisert. Kurateringene som ble gjort før kurateringsgrenene, er med.',
+      'Fanen kan vise alle fagsidene eller bare én status, og sorteres etter nyeste eller eldste kuratering, stoffgruppe eller navn. Valgene huskes.',
+      'I kurateringsmenyen for administratorene står hver fagside nå bare én gang, med én status. En side med en kuratering som pågår, står bare der den venter, og de tidligere kurateringene av siden lenkes fra raden i stedet for å stå som egne rader.',
+    ],
+  },
+  {
     versjon: '1.104.1',
     dato: '2026-10-19',
     sammendrag: 'Alle kort på fagsidene åpnes og rulles fram på samme måte',

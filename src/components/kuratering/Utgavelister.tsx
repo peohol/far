@@ -19,6 +19,7 @@ import {
   type Grensammendrag,
   type Versjonsinfo,
 } from '../../kuratering/modell'
+import { perFagside, sist, type Sidekuratering } from '../../kuratering/sidestatus'
 import { useClipboard } from '../../hooks/useClipboard'
 import { Button } from '../Button'
 import { Bekreftknapp } from '../traad/Smadeler'
@@ -84,21 +85,54 @@ export function Versjonsliste({ apen, stoff, navn, onLukk }: { apen: boolean; st
   )
 }
 
-/** Én gren i en liste: hva, hvor langt den er kommet, hva som venter, og lenken til den. */
-function Grenrad({ gren, onApne }: { gren: Grensammendrag; onApne?: () => void }) {
+/**
+ * Én fagside i lista: grenen statusen gjelder (hva, hvor langt den er kommet,
+ * hva som venter, og lenken til den), og under den lenkene til de andre
+ * grenene siden har hatt.
+ */
+function Grenrad({ side, onApne }: { side: Sidekuratering<Grensammendrag>; onApne?: () => void }) {
+  const gren = side.gjeldende
   const venter = [...hvaSomVenter(gren), gren.aktivitet && erAktiv(gren.status) ? `Nå: ${gren.aktivitet.tekst}` : '']
   return (
-    <a className="utgaveliste__rad" href={kurateringsadresse(gren.id)} onClick={onApne}>
-      <span className="utgaveliste__hode">
-        {gren.navn ?? gren.stoff} · {STATUSNAVN[gren.status]}
-      </span>
-      <span className="utgaveliste__meta">
-        {[ARTSNAVN[gren.art], gren.formaal, `revisjon ${gren.revisjon}`, tidspunkt(gren.oppdatert_kl)].join(' · ')}
-      </span>
-      {gren.konflikt && <span className="utgaveliste__meta">Fagsiden er publisert på nytt etter at grenen ble laget.</span>}
-      {venter.some(Boolean) && <span className="utgaveliste__meta">{venter.filter(Boolean).join(' · ')}</span>}
-      {gren.status_grunn && erAktiv(gren.status) && <span className="utgaveliste__meta">Grunn: {gren.status_grunn}</span>}
-    </a>
+    <>
+      <a className="utgaveliste__rad" href={kurateringsadresse(gren.id)} onClick={onApne}>
+        <span className="utgaveliste__hode">
+          {gren.navn ?? gren.stoff} · {STATUSNAVN[gren.status]}
+        </span>
+        <span className="utgaveliste__meta">
+          {[ARTSNAVN[gren.art], gren.formaal, `revisjon ${gren.revisjon}`, tidspunkt(gren.oppdatert_kl)].join(' · ')}
+        </span>
+        {gren.konflikt && <span className="utgaveliste__meta">Fagsiden er publisert på nytt etter at grenen ble laget.</span>}
+        {venter.some(Boolean) && <span className="utgaveliste__meta">{venter.filter(Boolean).join(' · ')}</span>}
+        {gren.status_grunn && erAktiv(gren.status) && <span className="utgaveliste__meta">Grunn: {gren.status_grunn}</span>}
+      </a>
+      {side.tidligere.length > 0 && (
+        <p className="utgaveliste__tidligere">
+          Tidligere:{' '}
+          {side.tidligere.map((g, i) => (
+            <span key={g.id}>
+              {i > 0 && ', '}
+              <a href={kurateringsadresse(g.id)} onClick={onApne}>
+                {STATUSNAVN[g.status].toLowerCase()} {tidspunkt(g.publisert_kl ?? g.oppdatert_kl)}
+              </a>
+            </span>
+          ))}
+        </p>
+      )}
+    </>
+  )
+}
+
+/** Fagsidene i en liste, hver én gang. */
+function Sideliste({ sider, onApne }: { sider: readonly Sidekuratering<Grensammendrag>[]; onApne?: () => void }) {
+  return (
+    <ul className="utgaveliste">
+      {sider.map((s) => (
+        <li key={s.stoff}>
+          <Grenrad side={s} onApne={onApne} />
+        </li>
+      ))}
+    </ul>
   )
 }
 
@@ -116,7 +150,10 @@ function Kontrollbuffer({ antall }: { antall: number }) {
 
 /**
  * Arbeidsoversikten over kurateringsgrenene, for administratorene: de aktive
- * og de som er avsluttet de siste 30 dagene, eller alle.
+ * og de som er avsluttet de siste 30 dagene, eller alle. Hver fagside står én
+ * gang, med én status (`src/kuratering/sidestatus.ts`): under den som har
+ * neste handling når en gren pågår, ellers under «Avsluttet». De andre
+ * grenene siden har hatt, lenkes fra raden.
  */
 export function Kurateringsoversikt({ apen, klient: egen, onLukk }: { apen: boolean; klient?: Kurateringsklient; onLukk: () => void }) {
   const [alle, setAlle] = useState(false)
@@ -125,8 +162,15 @@ export function Kurateringsoversikt({ apen, klient: egen, onLukk }: { apen: bool
   const hent = useMemo(() => (klient ? () => klient.oversikt(alle ? { alle: true } : {}) : null), [klient, alle])
   const tilstand = useApenHenting<Grensammendrag[]>(apen, hent)
   const grupper = useMemo(() => {
-    const liste = tilstand.status === 'klar' ? tilstand.data : []
-    return { aktive: etterAnsvar(liste), avsluttede: liste.filter((g) => !erAktiv(g.status)) }
+    const sider = [...perFagside(tilstand.status === 'klar' ? tilstand.data : []).values()]
+    const etterGren = new Map(sider.flatMap((s) => (s.aktiv ? [[s.aktiv.id, s] as const] : [])))
+    return {
+      aktive: etterAnsvar(sider.flatMap((s) => (s.aktiv ? [s.aktiv] : []))).map((g) => ({
+        ansvarlig: g.ansvarlig,
+        sider: g.grener.map((gren) => etterGren.get(gren.id)!),
+      })),
+      avsluttede: sider.filter((s) => !s.aktiv).sort((a, b) => sist(b.gjeldende) - sist(a.gjeldende)),
+    }
   }, [tilstand])
   return (
     <Modallag
@@ -152,28 +196,16 @@ export function Kurateringsoversikt({ apen, klient: egen, onLukk }: { apen: bool
           {grupper.aktive.map((gruppe) => (
             <section key={gruppe.ansvarlig} aria-label={ANSVARLIGNAVN[gruppe.ansvarlig]}>
               <h3 className="historikk__gruppetittel">
-                {ANSVARLIGNAVN[gruppe.ansvarlig]} ({gruppe.grener.length})
+                {ANSVARLIGNAVN[gruppe.ansvarlig]} ({gruppe.sider.length})
               </h3>
-              {gruppe.ansvarlig === 'kontrolloren' && <Kontrollbuffer antall={gruppe.grener.length} />}
-              <ul className="utgaveliste">
-                {gruppe.grener.map((g) => (
-                  <li key={g.id}>
-                    <Grenrad gren={g} onApne={onLukk} />
-                  </li>
-                ))}
-              </ul>
+              {gruppe.ansvarlig === 'kontrolloren' && <Kontrollbuffer antall={gruppe.sider.length} />}
+              <Sideliste sider={gruppe.sider} onApne={onLukk} />
             </section>
           ))}
           {grupper.avsluttede.length > 0 && (
             <>
               <h3 className="historikk__gruppetittel">Avsluttet</h3>
-              <ul className="utgaveliste">
-                {grupper.avsluttede.map((g) => (
-                  <li key={g.id}>
-                    <Grenrad gren={g} onApne={onLukk} />
-                  </li>
-                ))}
-              </ul>
+              <Sideliste sider={grupper.avsluttede} onApne={onLukk} />
             </>
           )}
         </>

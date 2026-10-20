@@ -17,7 +17,7 @@ revisjonen og en bestått prøvepublisering. Høyst én gren er aktiv per side.
 | Kuratoren (agent med rollen `kurator`, i dag Claude) | åpne en gren, skrive i sin egen gren, lagre arbeidsdokumenter, melde aktivitet, sende til kontroll, oppdatere til ny grunnversjon, publisere etter godkjenning, forkaste sin egen gren |
 | Kontrolløren (agent med rollen `kontrollor`, i dag ChatGPT) | lese alle grener, vurdere en revisjon: `godkjent` eller `endringer` |
 | Administratorene | lese, vurdere, publisere, stanse, gjenoppta og forkaste; gi agentene nøkler |
-| Andre brukere | ingenting; grenene er usynlige for dem |
+| Andre brukere | ingenting i grenene; de ser bare statusen til kurateringene per fagside (se [Status per fagside](#status-per-fagside)) |
 
 En agent vurderer aldri en gren den selv kuraterer, og ingen mennesker skriver
 i en aktiv gren. Agentene er i `kuratering.agenter`; nøkkelen lagres bare som
@@ -362,6 +362,40 @@ siden alt i den har vært publisert før. Sideversjonen den gir, har opphavet
   denne versjonen».
 - «Versjoner» i menyen på fagsiden, «Kurateringer» i administrasjonsmenyen, og
   en melding øverst på fagsiden for administratorene når en gren er aktiv.
+- Fanen «Kurateringer» i stoffregisteret (`#/stoffregister`), for alle
+  innloggede: hver fagside med statusen under, og hvor langt en kuratering som
+  pågår er kommet, i enkle ord. Kan vises etter status og sorteres etter
+  tidspunktet, stoffgruppen (den første stoffet står i, i registerets
+  rekkefølge) eller navnet (`src/components/stoffregister/Kurateringsfane.tsx`).
+
+### Status per fagside
+
+Hver fagside har én kurateringsstatus, regnet ut i
+`src/kuratering/sidestatus.ts` av alle kurateringene den har hatt. Både
+«Kurateringer» i administrasjonsmenyen og fanen i stoffregisteret bruker
+den, så de sier det samme om en side:
+
+- **Pågår**: siden har en gren som ikke er publisert eller forkastet (høyst
+  én). I administrasjonsmenyen står siden én gang, under den som har neste
+  handling.
+- **Kuratert**: ellers, når minst én kuratering (`kuratering` eller `de_novo`)
+  av siden er publisert. Statusen gjelder den sist publiserte.
+- **Ikke kuratert**: ellers. En forkastet gren eller en publisert
+  gjenoppretting gjør ingen side kuratert.
+
+I administrasjonsmenyen står en side uten gren som pågår, én gang under
+«Avsluttet», og de andre grenene den har hatt, lenkes fra raden
+(«Tidligere: …»).
+
+Fanen leser `public.les_kurateringer()`, som alle innloggede kan kalle: hver
+gren som ikke er forkastet, med bare siden, arten, statusen og når den
+startet, fikk statusen sin og ble publisert — ingen fagtekst, formål,
+grunner, kommentarer eller agenter. Med kommer kurateringene som ble gjort
+med en migrasjon før grenene fantes (`intern.kuratering_start`), som
+publiserte kurateringer med tidspunktet i migrasjonens versjon. De står i
+`kuratering.migrasjonskurateringer`, én rad per migrasjon; en ny slik
+migrasjon føres inn der med en egen migrasjon, og
+`kurateringsgrener.test.ts` feiler til det er gjort.
 - Sammenligningen av to hele utgaver av siden står i
   `src/faginnhold/sidesammenligning.ts`, og bruker de samme feltene som
   historikken for ett objekt.
