@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-20T10:32:09.281Z",
+  "oppdatert_kl": "2026-10-20T11:31:51.039Z",
   "malt_kl": "2026-10-20T03:37:28.464Z",
   "teller": 82,
   "stoffer": {
@@ -780,18 +780,11 @@
     "cbd": {
       "stoff": "cbd",
       "navn": "CBD",
-      "status": "klar",
-      "modus": "de_novo",
+      "status": "blokkert",
+      "modus": null,
       "prioritet": {
-        "poeng": 1462.3,
-        "grunner": [
-          "Fortsetter den avbrutte kurateringen cbd-0071.",
-          "De novo-kuratering i runden som gjelder.",
-          "Aldri kuratert.",
-          "Ingen kuratering å regne alderen fra.",
-          "12 av 13 redaksjonelle seksjoner er tomme.",
-          "Bare 1 referanser."
-        ]
+        "poeng": 0,
+        "grunner": []
       },
       "maal": {
         "kl": "2026-10-20T03:37:29.671Z",
@@ -805,21 +798,25 @@
       "reservasjon": null,
       "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "cbd-0071",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-19T08:46:20.819Z",
-        "grunn": "Grenen er tilbake hos kuratoren.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/cbd-0013",
-        "kurateringsgren": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
+          "kl": "2026-10-20T11:31:51.039Z",
+          "kilde": "system"
+        }
+      ],
+      "sist_kuratert": {
+        "kl": "2026-10-20T11:31:14.364297+00:00",
+        "modus": "de_novo",
+        "kunnskapsgrense": "2026-10-16",
+        "runde": 2,
         "pr": null,
         "gren": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
-        "kunnskapsgrense": "2026-10-16"
+        "kilde": "ko"
       },
-      "pr": null,
-      "blokkeringer": [],
-      "sist_kuratert": null,
       "siste_kjoring": {
         "oppgave": "cbd-0071",
         "okt": "kurateringsko/okt/20261016-125910",
@@ -829,13 +826,6 @@
       },
       "aktiv": true,
       "historikk": [
-        {
-          "kl": "2026-10-16T23:03:10.884Z",
-          "hendelse": "fullfort",
-          "oppgave": "cbd-0013",
-          "okt": "kurateringsko/okt/20261016-125910",
-          "melding": "Kurateringsgrenen a7bbf679-f4ca-4c6a-b74d-42d928c37b11, kunnskapsgrense 2026-10-16."
-        },
         {
           "kl": "2026-10-16T23:03:10.884Z",
           "hendelse": "gren_klar",
@@ -1019,6 +1009,12 @@
           "hendelse": "retting",
           "oppgave": "cbd-0071",
           "melding": "Grenen er tilbake hos kuratoren."
+        },
+        {
+          "kl": "2026-10-20T11:31:51.039Z",
+          "hendelse": "publisert",
+          "oppgave": "cbd-0071",
+          "melding": "Kurateringsgrenen er publisert (revisjon 17)."
         }
       ],
       "appgren": null
@@ -1772,7 +1768,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-20T10:32:09.281Z",
+          "kl": "2026-10-20T11:31:51.039Z",
           "kilde": "system"
         }
       ],
@@ -2167,7 +2163,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-20T10:32:09.281Z",
+          "kl": "2026-10-20T11:31:51.039Z",
           "kilde": "system"
         }
       ],
@@ -2998,7 +2994,7 @@
     "kariprazin": {
       "stoff": "kariprazin",
       "navn": "Kariprazin",
-      "status": "blokkert",
+      "status": "publisert",
       "modus": null,
       "prioritet": {
         "poeng": 0,
@@ -3018,14 +3014,7 @@
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-20T10:32:09.281Z",
-          "kilde": "system"
-        }
-      ],
+      "blokkeringer": [],
       "sist_kuratert": {
         "kl": "2026-10-20T08:47:08.954056+00:00",
         "modus": "de_novo",
@@ -3878,19 +3867,11 @@
     "lamotrigin": {
       "stoff": "lamotrigin",
       "navn": "Lamotrigin",
-      "status": "klar",
-      "modus": "de_novo",
+      "status": "blokkert",
+      "modus": null,
       "prioritet": {
-        "poeng": 1449.5,
-        "grunner": [
-          "Fortsetter den avbrutte kurateringen lamotrigin-0079.",
-          "De novo-kuratering i runden som gjelder.",
-          "Aldri kuratert.",
-          "Ingen kuratering å regne alderen fra.",
-          "6 av 13 redaksjonelle seksjoner er tomme.",
-          "12 av 18 elementer har ingen kilde.",
-          "Bare 3 referanser."
-        ]
+        "poeng": 0,
+        "grunner": []
       },
       "maal": {
         "kl": "2026-10-20T03:37:29.671Z",
@@ -3904,21 +3885,25 @@
       "reservasjon": null,
       "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "lamotrigin-0079",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-19T08:46:20.819Z",
-        "grunn": "Grenen er tilbake hos kuratoren.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/lamotrigin-0019",
-        "kurateringsgren": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
+          "kl": "2026-10-20T11:31:51.039Z",
+          "kilde": "system"
+        }
+      ],
+      "sist_kuratert": {
+        "kl": "2026-10-20T10:46:16.715917+00:00",
+        "modus": "de_novo",
+        "kunnskapsgrense": "2026-10-17",
+        "runde": 2,
         "pr": null,
         "gren": "48e10b1b-31b0-452d-9e29-8404e30aa989",
-        "kunnskapsgrense": "2026-10-17"
+        "kilde": "ko"
       },
-      "pr": null,
-      "blokkeringer": [],
-      "sist_kuratert": null,
       "siste_kjoring": {
         "oppgave": "lamotrigin-0079",
         "okt": "kurateringsko/okt/20261016-125910",
@@ -3928,13 +3913,6 @@
       },
       "aktiv": true,
       "historikk": [
-        {
-          "kl": "2026-10-17T07:48:08.816Z",
-          "hendelse": "reservert",
-          "oppgave": "lamotrigin-0035",
-          "okt": "kurateringsko/okt/20261016-125910",
-          "melding": "Forsøk 1, de_novo, fortsetter lamotrigin-0025."
-        },
         {
           "kl": "2026-10-17T07:49:06.118Z",
           "hendelse": "fullfort",
@@ -4119,6 +4097,12 @@
           "hendelse": "retting",
           "oppgave": "lamotrigin-0079",
           "melding": "Grenen er tilbake hos kuratoren."
+        },
+        {
+          "kl": "2026-10-20T11:31:51.039Z",
+          "hendelse": "publisert",
+          "oppgave": "lamotrigin-0079",
+          "melding": "Kurateringsgrenen er publisert (revisjon 14)."
         }
       ],
       "appgren": null
