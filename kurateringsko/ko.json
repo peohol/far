@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-20T11:31:51.039Z",
+  "oppdatert_kl": "2026-10-20T12:44:20.289Z",
   "malt_kl": "2026-10-20T03:37:28.464Z",
   "teller": 82,
   "stoffer": {
@@ -780,7 +780,7 @@
     "cbd": {
       "stoff": "cbd",
       "navn": "CBD",
-      "status": "blokkert",
+      "status": "publisert",
       "modus": null,
       "prioritet": {
         "poeng": 0,
@@ -800,14 +800,7 @@
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-20T11:31:51.039Z",
-          "kilde": "system"
-        }
-      ],
+      "blokkeringer": [],
       "sist_kuratert": {
         "kl": "2026-10-20T11:31:14.364297+00:00",
         "modus": "de_novo",
@@ -1284,19 +1277,11 @@
     "doksepin": {
       "stoff": "doksepin",
       "navn": "Doksepin",
-      "status": "klar",
-      "modus": "de_novo",
+      "status": "blokkert",
+      "modus": null,
       "prioritet": {
-        "poeng": 1460.7,
-        "grunner": [
-          "Fortsetter den avbrutte kurateringen doksepin-0077.",
-          "De novo-kuratering i runden som gjelder.",
-          "Aldri kuratert.",
-          "Ingen kuratering å regne alderen fra.",
-          "7 av 13 redaksjonelle seksjoner er tomme.",
-          "14 av 19 elementer har ingen kilde.",
-          "Bare 4 referanser."
-        ]
+        "poeng": 0,
+        "grunner": []
       },
       "maal": {
         "kl": "2026-10-20T03:37:29.671Z",
@@ -1310,21 +1295,25 @@
       "reservasjon": null,
       "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "doksepin-0077",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-19T08:46:20.819Z",
-        "grunn": "Grenen er tilbake hos kuratoren.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/doksepin-0028",
-        "kurateringsgren": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
+          "kl": "2026-10-20T12:44:20.289Z",
+          "kilde": "system"
+        }
+      ],
+      "sist_kuratert": {
+        "kl": "2026-10-20T11:47:11.779214+00:00",
+        "modus": "de_novo",
+        "kunnskapsgrense": "2026-10-16",
+        "runde": 2,
         "pr": null,
         "gren": "14bc861a-8fe2-4e3b-83a4-6bc43fe0dd1f",
-        "kunnskapsgrense": "2026-10-16"
+        "kilde": "ko"
       },
-      "pr": null,
-      "blokkeringer": [],
-      "sist_kuratert": null,
       "siste_kjoring": {
         "oppgave": "doksepin-0077",
         "okt": "kurateringsko/okt/20261016-125910",
@@ -1334,12 +1323,6 @@
       },
       "aktiv": true,
       "historikk": [
-        {
-          "kl": "2026-10-17T00:52:44.469Z",
-          "hendelse": "gren_tilbakemelding",
-          "oppgave": "doksepin-0014",
-          "melding": "Grenen: tilbakemelding, revisjon 4, kontrollrunde 1."
-        },
         {
           "kl": "2026-10-17T00:52:44.469Z",
           "hendelse": "retting",
@@ -1525,6 +1508,12 @@
           "hendelse": "retting",
           "oppgave": "doksepin-0077",
           "melding": "Grenen er tilbake hos kuratoren."
+        },
+        {
+          "kl": "2026-10-20T12:44:20.289Z",
+          "hendelse": "publisert",
+          "oppgave": "doksepin-0077",
+          "melding": "Kurateringsgrenen er publisert (revisjon 17)."
         }
       ],
       "appgren": null
@@ -1744,7 +1733,7 @@
     "fenobarbital": {
       "stoff": "fenobarbital",
       "navn": "Fenobarbital",
-      "status": "blokkert",
+      "status": "publisert",
       "modus": null,
       "prioritet": {
         "poeng": 0,
@@ -1764,14 +1753,7 @@
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-20T11:31:51.039Z",
-          "kilde": "system"
-        }
-      ],
+      "blokkeringer": [],
       "sist_kuratert": {
         "kl": "2026-10-17T19:25:40.327673+00:00",
         "modus": "de_novo",
@@ -1932,19 +1914,11 @@
     "fenytoin": {
       "stoff": "fenytoin",
       "navn": "Fenytoin",
-      "status": "klar",
-      "modus": "de_novo",
+      "status": "publisert",
+      "modus": null,
       "prioritet": {
-        "poeng": 1447.6,
-        "grunner": [
-          "Fortsetter den avbrutte kurateringen fenytoin-0081.",
-          "De novo-kuratering i runden som gjelder.",
-          "Aldri kuratert.",
-          "Ingen kuratering å regne alderen fra.",
-          "9 av 13 redaksjonelle seksjoner er tomme.",
-          "1 av 6 elementer har ingen kilde.",
-          "Bare 3 referanser."
-        ]
+        "poeng": 0,
+        "grunner": []
       },
       "maal": {
         "kl": "2026-10-20T03:37:29.671Z",
@@ -1958,21 +1932,18 @@
       "reservasjon": null,
       "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "fenytoin-0081",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-19T07:01:39.673Z",
-        "grunn": "Grenen er tilbake hos kuratoren.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/fenytoin-0037",
-        "kurateringsgren": null,
-        "pr": null,
-        "gren": "40ecac1a-e908-4cb8-a62e-94546263372b",
-        "kunnskapsgrense": "2026-10-17"
-      },
+      "gjenoppta": null,
       "pr": null,
       "blokkeringer": [],
-      "sist_kuratert": null,
+      "sist_kuratert": {
+        "kl": "2026-10-20T11:37:08.313996+00:00",
+        "modus": "de_novo",
+        "kunnskapsgrense": "2026-10-17",
+        "runde": 2,
+        "pr": null,
+        "gren": "40ecac1a-e908-4cb8-a62e-94546263372b",
+        "kilde": "ko"
+      },
       "siste_kjoring": {
         "oppgave": "fenytoin-0081",
         "okt": "kurateringsko/okt/20261016-125910",
@@ -2132,6 +2103,12 @@
           "hendelse": "retting",
           "oppgave": "fenytoin-0081",
           "melding": "Grenen er tilbake hos kuratoren."
+        },
+        {
+          "kl": "2026-10-20T12:44:20.289Z",
+          "hendelse": "publisert",
+          "oppgave": "fenytoin-0081",
+          "melding": "Kurateringsgrenen er publisert (revisjon 16)."
         }
       ],
       "appgren": null
@@ -2139,7 +2116,7 @@
     "flunitrazepam": {
       "stoff": "flunitrazepam",
       "navn": "Flunitrazepam",
-      "status": "blokkert",
+      "status": "publisert",
       "modus": null,
       "prioritet": {
         "poeng": 0,
@@ -2159,14 +2136,7 @@
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-20T11:31:51.039Z",
-          "kilde": "system"
-        }
-      ],
+      "blokkeringer": [],
       "sist_kuratert": {
         "kl": "2026-10-20T08:18:22.887639+00:00",
         "modus": "de_novo",
@@ -3867,7 +3837,7 @@
     "lamotrigin": {
       "stoff": "lamotrigin",
       "navn": "Lamotrigin",
-      "status": "blokkert",
+      "status": "publisert",
       "modus": null,
       "prioritet": {
         "poeng": 0,
@@ -3887,14 +3857,7 @@
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-20T11:31:51.039Z",
-          "kilde": "system"
-        }
-      ],
+      "blokkeringer": [],
       "sist_kuratert": {
         "kl": "2026-10-20T10:46:16.715917+00:00",
         "modus": "de_novo",
@@ -5252,7 +5215,7 @@
       "stoff": "okskarbazepin",
       "navn": "Okskarbazepin",
       "status": "blokkert",
-      "modus": "de_novo",
+      "modus": null,
       "prioritet": {
         "poeng": 0,
         "grunner": []
@@ -5269,18 +5232,7 @@
       "reservasjon": null,
       "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "okskarbazepin-0039",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-17T14:52:49.441Z",
-        "grunn": "Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/okskarbazepin-0039",
-        "kurateringsgren": "kuratering/okskarbazepin-0039",
-        "pr": null,
-        "gren": "6f7ecff9-99cd-491e-8998-be57844ac0ea",
-        "kunnskapsgrense": null
-      },
+      "gjenoppta": null,
       "pr": null,
       "blokkeringer": [
         {
@@ -5288,9 +5240,23 @@
           "grunn": "Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig.",
           "kl": "2026-10-17T14:52:49.441Z",
           "kilde": "agent"
+        },
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
+          "kl": "2026-10-20T12:44:20.289Z",
+          "kilde": "system"
         }
       ],
-      "sist_kuratert": null,
+      "sist_kuratert": {
+        "kl": "2026-10-20T12:08:48.193619+00:00",
+        "modus": "de_novo",
+        "kunnskapsgrense": null,
+        "runde": 2,
+        "pr": null,
+        "gren": "6f7ecff9-99cd-491e-8998-be57844ac0ea",
+        "kilde": "ko"
+      },
       "siste_kjoring": {
         "oppgave": "okskarbazepin-0039",
         "okt": "kurateringsko/okt/20261016-125910",
@@ -5342,6 +5308,12 @@
           "oppgave": "okskarbazepin-0039",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig."
+        },
+        {
+          "kl": "2026-10-20T12:44:20.289Z",
+          "hendelse": "publisert",
+          "oppgave": "okskarbazepin-0039",
+          "melding": "Kurateringsgrenen er publisert (revisjon 7)."
         }
       ],
       "appgren": null
