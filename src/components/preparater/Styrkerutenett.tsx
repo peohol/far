@@ -150,20 +150,23 @@ function Styrkekort({
                 aria-haspopup="dialog"
                 onClick={() => onVelg(p.preparat)}
               >
-                <span className="preparatrad__navn">
-                  <span className="preparatrad__tittel">
-                    {ulikeIkoner && <Ikon navn={radikoner[i]!} storrelse="1.4em" className="preparatrad__ikon" />}
-                    <Uthev tekst={p.navn} />
+                {/* Navnet og merkene deler linjen, og merkene går under navnet når det ikke er plass. */}
+                <span className="preparatrad__innhold">
+                  <span className="preparatrad__navn">
+                    <span className="preparatrad__tittel">
+                      {ulikeIkoner && <Ikon navn={radikoner[i]!} storrelse="1.4em" className="preparatrad__ikon" />}
+                      <Uthev tekst={p.navn} />
+                    </span>
+                    {p.produsenter.length > 0 && (
+                      <span className="preparatrad__produsent">{p.produsenter.join(', ')}</span>
+                    )}
                   </span>
-                  {p.produsenter.length > 0 && (
-                    <span className="preparatrad__produsent">{p.produsenter.join(', ')}</span>
+                  {p.merker.length > 0 && (
+                    <span className="preparatrad__merker">
+                      <Preparatmerker merker={p.merker} />
+                    </span>
                   )}
                 </span>
-                {p.merker.length > 0 && (
-                  <span className="preparatrad__merker">
-                    <Preparatmerker merker={p.merker} />
-                  </span>
-                )}
                 <span className="preparatrad__pil" aria-hidden="true">
                   <Ikon navn="chev" />
                 </span>
