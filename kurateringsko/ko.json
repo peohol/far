@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-20T07:38:26.575Z",
+  "oppdatert_kl": "2026-10-20T08:40:25.147Z",
   "malt_kl": "2026-10-20T03:37:28.464Z",
   "teller": 82,
   "stoffer": {
@@ -1771,8 +1771,8 @@
       "blokkeringer": [
         {
           "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-20T07:38:26.575Z",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
+          "kl": "2026-10-20T08:40:25.147Z",
           "kilde": "system"
         }
       ],
@@ -2143,19 +2143,11 @@
     "flunitrazepam": {
       "stoff": "flunitrazepam",
       "navn": "Flunitrazepam",
-      "status": "klar",
-      "modus": "de_novo",
+      "status": "blokkert",
+      "modus": null,
       "prioritet": {
-        "poeng": 1451.7,
-        "grunner": [
-          "Fortsetter den avbrutte kurateringen flunitrazepam-0072.",
-          "De novo-kuratering i runden som gjelder.",
-          "Aldri kuratert.",
-          "Ingen kuratering å regne alderen fra.",
-          "9 av 13 redaksjonelle seksjoner er tomme.",
-          "2 av 8 elementer har ingen kilde.",
-          "Bare 1 referanser."
-        ]
+        "poeng": 0,
+        "grunner": []
       },
       "maal": {
         "kl": "2026-10-20T03:37:29.671Z",
@@ -2169,21 +2161,25 @@
       "reservasjon": null,
       "forsok": 0,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "flunitrazepam-0072",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-19T07:01:39.673Z",
-        "grunn": "Grenen er tilbake hos kuratoren.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/flunitrazepam-0017",
-        "kurateringsgren": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
+          "kl": "2026-10-20T08:40:25.147Z",
+          "kilde": "system"
+        }
+      ],
+      "sist_kuratert": {
+        "kl": "2026-10-20T08:18:22.887639+00:00",
+        "modus": "de_novo",
+        "kunnskapsgrense": "2026-10-17",
+        "runde": 2,
         "pr": null,
         "gren": "1c60dd4d-6dde-407f-a53d-c4649a83193b",
-        "kunnskapsgrense": "2026-10-17"
+        "kilde": "ko"
       },
-      "pr": null,
-      "blokkeringer": [],
-      "sist_kuratert": null,
       "siste_kjoring": {
         "oppgave": "flunitrazepam-0072",
         "okt": "kurateringsko/okt/20261016-125910",
@@ -2193,13 +2189,6 @@
       },
       "aktiv": true,
       "historikk": [
-        {
-          "kl": "2026-10-17T05:30:01.113Z",
-          "hendelse": "reservert",
-          "oppgave": "flunitrazepam-0024",
-          "okt": "kurateringsko/okt/20261016-125910",
-          "melding": "Forsøk 1, de_novo, fortsetter flunitrazepam-0017."
-        },
         {
           "kl": "2026-10-17T05:30:47.572Z",
           "hendelse": "fullfort",
@@ -2384,6 +2373,12 @@
           "hendelse": "retting",
           "oppgave": "flunitrazepam-0072",
           "melding": "Grenen er tilbake hos kuratoren."
+        },
+        {
+          "kl": "2026-10-20T08:40:25.147Z",
+          "hendelse": "publisert",
+          "oppgave": "flunitrazepam-0072",
+          "melding": "Kurateringsgrenen er publisert (revisjon 12)."
         }
       ],
       "appgren": null
@@ -6161,7 +6156,7 @@
       "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 52.5,
+        "poeng": 52.7,
         "grunner": [
           "De novo-kuratering i runden som gjelder.",
           "Sist kuratert 2026-10-10."
