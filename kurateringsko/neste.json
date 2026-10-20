@@ -1,5 +1,5 @@
 {
-  "oppdatert_kl": "2026-10-20T14:33:21.411Z",
+  "oppdatert_kl": "2026-10-20T15:32:27.945Z",
   "malt_kl": "2026-10-20T03:37:28.464Z",
   "antall": {
     "klar": 78,
@@ -7,8 +7,8 @@
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 0,
     "sammenslatt": 0,
-    "publisert": 15,
-    "blokkert": 6,
+    "publisert": 14,
+    "blokkert": 7,
     "utenfor": 1
   },
   "aktive": [],
@@ -158,12 +158,23 @@
   "til_gjennomgang": [],
   "blokkert": [
     {
+      "stoff": "cbd",
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
+          "kl": "2026-10-20T15:32:27.945Z",
+          "kilde": "system"
+        }
+      ]
+    },
+    {
       "stoff": "doksepin",
       "blokkeringer": [
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-20T14:33:21.411Z",
+          "kl": "2026-10-20T15:32:27.945Z",
           "kilde": "system"
         }
       ]
@@ -220,6 +231,12 @@
           "grunn": "Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig.",
           "kl": "2026-10-17T14:52:49.441Z",
           "kilde": "agent"
+        },
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
+          "kl": "2026-10-20T15:32:27.945Z",
+          "kilde": "system"
         }
       ]
     }

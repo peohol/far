@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-20T14:33:21.411Z",
+  "oppdatert_kl": "2026-10-20T15:32:27.945Z",
   "malt_kl": "2026-10-20T03:37:28.464Z",
   "teller": 82,
   "stoffer": {
@@ -780,7 +780,7 @@
     "cbd": {
       "stoff": "cbd",
       "navn": "CBD",
-      "status": "publisert",
+      "status": "blokkert",
       "modus": null,
       "prioritet": {
         "poeng": 0,
@@ -800,7 +800,14 @@
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [],
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
+          "kl": "2026-10-20T15:32:27.945Z",
+          "kilde": "system"
+        }
+      ],
       "sist_kuratert": {
         "kl": "2026-10-20T11:31:14.364297+00:00",
         "modus": "de_novo",
@@ -1301,7 +1308,7 @@
         {
           "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-20T14:33:21.411Z",
+          "kl": "2026-10-20T15:32:27.945Z",
           "kilde": "system"
         }
       ],
@@ -5240,6 +5247,12 @@
           "grunn": "Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig.",
           "kl": "2026-10-17T14:52:49.441Z",
           "kilde": "agent"
+        },
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
+          "kl": "2026-10-20T15:32:27.945Z",
+          "kilde": "system"
         }
       ],
       "sist_kuratert": {
