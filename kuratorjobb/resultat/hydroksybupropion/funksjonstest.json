@@ -1,0 +1,84 @@
+{
+  "stoff": "hydroksybupropion",
+  "status": "advarsel",
+  "kontroller": [
+    {
+      "id": "les_stoff",
+      "rpc": "les_stoff",
+      "ms": 339,
+      "status": "advarsel",
+      "melding": "Den publiserte siden har ingen innholdselementer.",
+      "antall": {
+        "elementer": 0,
+        "referanser": 0
+      }
+    },
+    {
+      "id": "sidemodell",
+      "status": "ok",
+      "melding": "Siden kan settes sammen slik appen viser den."
+    },
+    {
+      "id": "referanser",
+      "status": "ok",
+      "melding": "Alle referansene siden siterer, ble lest med den.",
+      "antall": {
+        "sitert": 0
+      }
+    },
+    {
+      "id": "utkast_skjult",
+      "rpc": "les_stoff",
+      "ms": 182,
+      "status": "ok",
+      "melding": "Utkastet er skjult for en vanlig bruker, som det skal."
+    },
+    {
+      "id": "stoffliste",
+      "rpc": "les_stoffliste",
+      "ms": 195,
+      "status": "ok",
+      "melding": "Siden står i lista over fagsider.",
+      "antall": {
+        "sider": 106
+      }
+    },
+    {
+      "id": "fest",
+      "status": "ikke_aktuelt",
+      "melding": "Siden er ikke koblet til virkestoff i FEST."
+    },
+    {
+      "id": "bivirkninger",
+      "rpc": "les_bivirkninger",
+      "ms": 199,
+      "status": "ikke_aktuelt",
+      "melding": "Ingen bivirkninger er importert fra preparatomtaler for siden.",
+      "antall": {
+        "kilder": 0,
+        "rader": 0,
+        "rader_appen_viser": 0
+      }
+    },
+    {
+      "id": "clinpgx",
+      "status": "ikke_aktuelt",
+      "melding": "Siden er ikke koblet til ClinPGx."
+    },
+    {
+      "id": "cpic",
+      "status": "ikke_aktuelt",
+      "melding": "Siden er ikke koblet til ClinPGx, som CPIC slås opp etter."
+    },
+    {
+      "id": "kjemi",
+      "status": "advarsel",
+      "melding": "Stoffet har ingen forbindelser i registeret over forbindelser, så seksjonen «Kjemiske grunndata» vises ikke."
+    },
+    {
+      "id": "laboratorieanalyser",
+      "status": "advarsel",
+      "melding": "Stoffet har ingen forbindelser i registeret, så laboratorieanalysene kan ikke slås opp."
+    }
+  ]
+}
