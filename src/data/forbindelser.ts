@@ -3001,10 +3001,11 @@ export const FORBINDELSESDATA: Forbindelse[] = [
       "grunnlag": "Eneste treff i PubChem for «psilocin»; samme InChIKey hos ClinPGx (PA166338901, CID 4980) og ChEBI (CHEBI:8613)."
     },
     "farmakologiportalen": {
-      "status": "uavklart",
-      "grunn": "Ikke kontrollert ennå: komponentlisten fra Farmakologiportalen var ikke tilgjengelig da forbindelsen ble lagt inn.",
-      "kandidater": [],
-      "kontrollert": "2026-10-21"
+      "status": "verifisert",
+      "id": "696",
+      "navn": "Psilocin (psilocybin)",
+      "kontrollert": "2026-10-21",
+      "grunnlag": "Eneste komponent i Farmakologiportalen med navnet («Psilocin (psilocybin)», ID 696); CAS-nummeret 520-53-6 er også PubChems, og molekylvekten 204,27 g/mol stemmer med PubChem (CID 4980) (204,27)."
     }
   },
   {
@@ -3027,8 +3028,10 @@ export const FORBINDELSESDATA: Forbindelse[] = [
     },
     "farmakologiportalen": {
       "status": "uavklart",
-      "grunn": "Ikke kontrollert ennå: komponentlisten fra Farmakologiportalen var ikke tilgjengelig da forbindelsen ble lagt inn.",
-      "kandidater": [],
+      "grunn": "«Psilocin (psilocybin)» (ID 696) har navnet, men verken CAS-nummeret (520-53-6) eller molekylvekten (204,27 g/mol) stemmer med PubChem (CID 10624).",
+      "kandidater": [
+        "696"
+      ],
       "kontrollert": "2026-10-21"
     }
   },

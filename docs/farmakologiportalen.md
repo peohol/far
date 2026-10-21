@@ -36,8 +36,12 @@ npx vite-node scripts/kurer-farmakologiportalen.ts -- --komponenter <fil> [--all
 ```
 
 der `<fil>` er komponentlisten som JSON: OUSFARs kopi (`select jsonb_agg(raa)
-from farmakologiportalen.komponent where utgatt_kl is null`) eller listen slik
-portalen gir den. Skriptet kontrollerer hver forbindelse
+from farmakologiportalen.komponent where utgatt_kl is null`), listen slik
+portalen gir den, eller komponentene slik `les_laboratorieanalyser` gir dem
+(`{ id, data }`). Det siste går når verken SQL mot databasen eller portalen
+svarer der skriptet kjøres: funksjonen tar høyst 200 ID-er per kall, så hele
+lista hentes ved å spørre etter ID-ene i biter (21. oktober 2026: 979
+komponenter, høyeste ID 11740). Skriptet kontrollerer hver forbindelse
 (`src/farmakologiportalen/kurering.ts`):
 
 1. Navnet (det norske, det engelske, `synonymer` og `fpnavn`) må gi nøyaktig
@@ -59,14 +63,17 @@ En usikker kobling vises, men måleområdene regnes ikke om mellom masse og
 stoffmengde, og fagsiden sier fra.
 
 Kontrollert 8. oktober 2026: 134 verifisert, 2 usikre, ingen uavklart.
-Psilocybin og psilocin (lagt inn 21. oktober 2026) er uavklart til skriptet er
-kjørt mot komponentlisten: den var ikke tilgjengelig da de ble lagt inn, så
-laboratorieanalysene vises ikke for dem ennå.
+Psilocybin og psilocin ble kontrollert 21. oktober 2026: psilocin er
+verifisert, psilocybin uavklart.
 
 | Forbindelse | Hvorfor usikker |
 | --- | --- |
 | 7-aminoflunitrazepam | Portalens CAS-nummer er 7-aminonitrazepams; molekylvekten er ikke oppgitt |
 | Desmetylklomipramin | Ikke koblet til PubChem (`docs/kjemi.md`), så verken CAS eller molekylvekt kan kontrolleres |
+
+| Forbindelse | Hvorfor uavklart |
+| --- | --- |
+| Psilocybin | Portalens eneste treff, «Psilocin (psilocybin)», er psilocin (CAS og molekylvekt er psilocins); laboratoriene måler psilocin, og psilocybin-siden viser analysene gjennom den |
 
 ## Synkroniseringen
 

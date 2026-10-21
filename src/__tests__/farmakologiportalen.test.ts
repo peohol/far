@@ -826,6 +826,12 @@ describe('visningen på fagsidene', () => {
     expect(lesLabsokedata(null)).toEqual({ komponenter: [], analyser: [], laboratorier: [] })
   })
 
+  it('finner analysene for en fagside som bare finnes i databasen, gjennom metabolitten laboratoriene måler', () => {
+    // Psilocybin er uavklart i portalen; «Psilocin (psilocybin)» er psilocin.
+    expect(FORBINDELSER.finn('psilocybin')!.farmakologiportalen?.status).toBe('uavklart')
+    expect(labkomponenter('psilocybin')).toEqual(['696'])
+  })
+
   it('viser ingenting for et stoff uten koblede forbindelser', () => {
     expect(labkomponenter('finnes-ikke')).toEqual([])
     expect(byggLabvisning('finnes-ikke', null, null).tabeller).toEqual([])
