@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.105.4',
+    dato: '2026-10-21',
+    sammendrag: 'Fagsider kan opprettes, endres og legges i papirkurven igjen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    gjelder: ['stoff', 'stoffregister'],
+    punkter: [
+      'Å opprette en ny fagside, legge en fagside i papirkurven eller lagre og publisere endringer i en fagside stoppet med «permission denied for schema intern». En kontroll som kjøres når endringen lagres, manglet tilgang i databasen. Nå virker det igjen.',
+    ],
+  },
+  {
     versjon: '1.105.3',
     dato: '2026-10-20',
     sammendrag: 'Uventede feil sier hva databasen svarte',
