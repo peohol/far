@@ -59,6 +59,9 @@ En usikker kobling vises, men måleområdene regnes ikke om mellom masse og
 stoffmengde, og fagsiden sier fra.
 
 Kontrollert 8. oktober 2026: 134 verifisert, 2 usikre, ingen uavklart.
+Psilocybin og psilocin (lagt inn 21. oktober 2026) er uavklart til skriptet er
+kjørt mot komponentlisten: den var ikke tilgjengelig da de ble lagt inn, så
+laboratorieanalysene vises ikke for dem ennå.
 
 | Forbindelse | Hvorfor usikker |
 | --- | --- |

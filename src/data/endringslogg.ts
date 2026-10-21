@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.105.5',
+    dato: '2026-10-21',
+    sammendrag: 'Psilocybin-siden får kjemiske grunndata',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    gjelder: ['stoff'],
+    punkter: [
+      'Psilocybin og psilocin er lagt inn blant forbindelsene, så seksjonen «Kjemiske grunndata» på psilocybin-siden viser molekylformelen, molekylvekten og identifikatorene i PubChem for begge. Begge er bekreftet av ClinPGx og ChEBI før de ble koblet.',
+      'Tallene vises etter neste henting fra PubChem.',
+      'Laboratorieanalysene for psilocin fra Farmakologiportalen er ikke koblet ennå, og vises ikke.',
+    ],
+  },
+  {
     versjon: '1.105.4',
     dato: '2026-10-21',
     sammendrag: 'Fagsider kan opprettes, endres og legges i papirkurven igjen',
