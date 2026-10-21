@@ -305,6 +305,20 @@ describe('hvem som kan endre faginnholdet', () => {
     }
   })
 
+  it('kjører de utsatte utløserne som eieren, så de virker for den innloggede', async () => {
+    // Produksjonen kjører Postgres 17, der en utsatt utløser kjøres som rollen
+    // ved slutten av transaksjonen: den innloggede, som ikke har tilgang til
+    // `intern`. Testdatabasen (Postgres 18) kjører den som rollen som la den i
+    // kø, så bare denne kontrollen fanger en utløser som mangler `security definer`.
+    const utlosere = await fasit<{ utloser: string; definer: boolean }>(
+      `select t.tgrelid::regclass || '.' || t.tgname as utloser, p.prosecdef as definer
+       from pg_trigger t join pg_proc p on p.oid = t.tgfoid
+       where t.tgdeferrable and not t.tgisinternal order by 1`,
+    )
+    expect(utlosere.length).toBeGreaterThan(0)
+    expect(utlosere.filter((u) => !u.definer).map((u) => u.utloser)).toEqual([])
+  })
+
   it('lar en administrator opprette og endre et utkast', async () => {
     const opprettet = await opprett('infoside', { navn: 'Utkast fra admin' })
     expect(opprettet).toMatchObject({ type: 'infoside', revisjon: 1, publisert_revisjon: null })

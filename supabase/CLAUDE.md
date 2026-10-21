@@ -29,6 +29,10 @@ Tillegg til reglene i rotens `CLAUDE.md`. Gjelder alt under `supabase/`.
   løse oppgaven. De destruktive setningene utrullingen kjenner igjen, stopper
   den til fila har merket `-- destruktiv-godkjent: <hvem, når, hva>`; skriv det
   bare etter en slik godkjenning.
+- En utsatt utløser (`deferrable initially deferred`) skal ha en
+  `security definer`-funksjon. Produksjonen kjører Postgres 17, der den kjøres
+  som den innloggede ved slutten av transaksjonen; testdatabasen kjører
+  Postgres 18 og viser ikke feilen. En test i `faginnhold.test.ts` krever det.
 - En migrasjon skal kunne kjøres i én transaksjon: ingen `begin`/`commit`,
   `create index concurrently`, `vacuum` o.l. Utrullingen stopper slike, siden en
   feil underveis ville etterlatt dem halvveis utført (`docs/migrasjoner.md`).
