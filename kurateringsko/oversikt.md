@@ -1,6 +1,6 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-22T21:30:54.391Z. Stoffene sist lest fra databasen 2026-10-22T18:37:42.482Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-22T22:30:25.858Z. Stoffene sist lest fra databasen 2026-10-22T18:37:42.482Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
 Klar: 76 · Publisert: 16 · Blokkert: 8 · Utenfor køen: 1
 
@@ -14,14 +14,14 @@ Ingen kurateringer venter.
 
 ## Blokkert
 
-- **alprazolam**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.
-- **atomoksetin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, klar); den må avsluttes først.
+- **alprazolam**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, klar); den må avsluttes først.
+- **atomoksetin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, retting); den må avsluttes først.
 - **etanol**: Stoffet har ingen publisert fagside å kuratere.
 - **kokain**: Stoffet har ingen publisert fagside å kuratere.
 - **mdma**: Stoffet har ingen publisert fagside å kuratere.
 - **metamfetamin**: Stoffet har ingen publisert fagside å kuratere.
 - **okskarbazepin**: Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig.
-- **valproat**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, klar); den må avsluttes først.
+- **valproat**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.
 
 ## Køen
 
