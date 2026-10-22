@@ -5,7 +5,8 @@ og av kontrolløren (Claude-monografikontrolløren eller en administrator) for �
 vite hva som skal kontrolleres. Dette er den ene, versjonsstyrte faglige
 kilden for hvordan en fagside kurateres. Kuratorskillen
 (`.claude/skills/monografikurator/SKILL.md`), kontrollørskillen
-(`.claude/skills/monografikontrollor/SKILL.md`), instruksen for køen
+(`.claude/skills/monografikontrollor/SKILL.md`), vaktmesterskillen
+(`.claude/skills/vaktmester/SKILL.md`), instruksen for køen
 (`docs/kurateringsko-instruks.md`) og kontrollørinstruksen
 (`docs/kontrollorinstruks.md`) viser hit og gjentar den ikke. Hvordan kurator
 og kontrollør holdes atskilt, står i `docs/kuratering-prosjekt.md`. Protokollen
@@ -64,7 +65,8 @@ Hvert krav kontrolleres i selvtesten og av kontrolløren.
 6. **Konflikter synliggjøres og glattes aldri over.** Sier to kilder noe
    ulikt (to preparatomtaler, en regulatorisk og en klinisk kilde, en eldre og
    en nyere retningslinje), står det i teksten hvem som sier hva, og i
-   evidensjournalen hvorfor teksten bygger på den den bygger på.
+   evidensjournalen hvorfor teksten bygger på den den bygger på. Tall der det
+   ene bare er det andre avrundet, er ikke en konflikt («Nesten-duplikater»).
 7. **Evidensstyrken står.** Hver sentral påstand har grunnlaget og en
    vurdering av evidensstyrken i evidensjournalen; teksten overdriver ikke det
    kildene bærer (effektstørrelser, absolutte risikoer og begrensninger står
@@ -254,10 +256,13 @@ Leseren velger måleenheten konsentrasjonene vises i (µg/L, nmol/L eller
   plasma, fullblod, urin, morsmelk og andre prøver, og i studier (Ki, IC₅₀).
   Også en grense skrevet som tekst («over 1 000 µg/L») merkes, med
   komparatoren eller ordene utenfor noden.
-- **Hva som ikke merkes:** styrken til et preparat (mg/mL i en mikstur eller
-  en injeksjonsvæske), doser og doseringshastigheter, og enheter appen ikke
-  kan regne om (per desiliter, promille, prosent, per kreatinin). De står som
-  vanlig tekst.
+- **Hva som ikke merkes:** styrken og innholdet i et preparat (mg/mL i en
+  mikstur eller en injeksjonsvæske, også hjelpestoffene), doser og
+  doseringshastigheter, enheter appen ikke kan regne om (per desiliter,
+  promille, prosent, per kreatinin), og kroppens egne stoffer som måles i en
+  fast klinisk enhet (natrium, bikarbonat, glukose, hormoner som prolaktin),
+  der en omregning til leserens enhet ikke gir mening. De står som vanlig
+  tekst.
 - **Tallet og enheten er kildens** (krav 5): `verdi` og `enhet` skrives
   nøyaktig som kilden oppga dem, uten omregning eller avrunding. Et omregnet
   tall skrives aldri i teksten; appen regner om selv. «ca.», «over» og
@@ -276,6 +281,30 @@ Leseren velger måleenheten konsentrasjonene vises i (µg/L, nmol/L eller
   konsentrasjonsenhet som står umerket. `FEIL` (tallet eller enheten kan ikke
   leses, eller forbindelsen finnes ikke) rettes før grenen sendes til
   kontroll; et umerket tall er enten merket eller utenfor regelen over.
+
+## Nesten-duplikater
+
+Et tall står én gang. Oppgir to kilder nesten det samme tallet for det samme,
+er det støy for leseren å få begge («1,98 timer etter A, 2 timer etter B»).
+
+- **Hva som er et nesten-duplikat:** to tall for nøyaktig det samme (samme
+  størrelse, populasjon, legemiddelform, metode og forbindelse) der det ene
+  er det andre avrundet, eller forskjellen er så liten at den ikke kan endre
+  noen klinisk vurdering (1,98 og 2 timer). Det gjelder også det samme tallet
+  med to avrundinger eller i to enheter i ett kort; appen regner om
+  konsentrasjonene selv («Konsentrasjonene i teksten»).
+- **Hvilket som står:** det mest leservennlige, som regel det rundeste. Er de
+  like lesbare, står tallet fra kilden som har forrang (krav 1), ellers den
+  teksten bygger på.
+- **Kilden:** tallet tilskrives bare en kilde som oppgir det, eller som bærer
+  det slik det står («ca. 2 timer» for 1,98). Ellers fjernes kilden til tallet
+  som er tatt ut, fra påstanden (krav 4). Evidensjournalen sier hva som er
+  tatt ut, og fra hvilken kilde (`avstemming`).
+- **Hva som ikke er et nesten-duplikat** (begge står, krav 6): en forskjell
+  som kan ha klinisk betydning (den krysser en grense, et dosetrinn eller et
+  område), og tall for ulike populasjoner, former, metoder eller
+  forbindelser. Beskyttede norske data (krav 3) og nøkkeltallene i viktige
+  data tas aldri ut. Er du i tvil, er det ikke et nesten-duplikat.
 
 ## Erfaringer fra kontrollen
 
@@ -357,3 +386,8 @@ holder dem i takt med modellen og piloten).
 - 2026-10-22: «Konsentrasjonene i teksten». Konsentrasjonene merkes, så
   leseren ser dem i måleenheten sin (fagansvarlig). Tallene står fortsatt som
   i kilden. Ingen krav er svekket.
+- 2026-10-22: «Nesten-duplikater» (fagansvarlig): et tall som bare er et annet
+  avrundet, står ikke ved siden av det. Ingen krav er svekket: en forskjell som
+  kan ha betydning, vises fortsatt (krav 6). Kroppens egne stoffer (natrium,
+  bikarbonat og lignende) merkes ikke som konsentrasjoner, siden de ellers ble
+  vist i enheter som ikke gir mening for dem.

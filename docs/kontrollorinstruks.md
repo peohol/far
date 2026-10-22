@@ -98,6 +98,11 @@ teksten med kuratorprotokollen etter.
      (metabolitt eller moderstoff, fri form og ikke salt), og at hvert umerket
      tall faller utenfor regelen. En merking med `FEIL`, en feil forbindelse
      eller en konsentrasjon som skulle vært merket, er en sperrende tråd.
+   - **Nesten-duplikater** (protokollen, «Nesten-duplikater»): står to tall
+     for det samme der det ene bare er det andre avrundet, eller forskjellen
+     ikke kan endre noen klinisk vurdering, er det en sperrende tråd. Det er
+     også et tall som er tatt ut selv om forskjellen kan ha betydning (krav 6).
+     Er du i tvil, er det en merknad.
 5. **Kommenter.** For hver endring som må gjøres: `kommenter` med
    `art: "sperrende"` og et `anker` som peker på det det gjelder (`objekt`
    for kortet, `felt` for feltet slik sammenligningen navngir det,
