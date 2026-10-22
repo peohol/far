@@ -77,8 +77,9 @@ Hvert krav kontrolleres i selvtesten og av kontrolløren.
    kvitteres aldri ut som bestått.
 9. **Seksjonene med faste kort følger reglene** i `docs/monografkuratering.md`
    («Seksjonene med faste kort»): et kort bare når det er relevant
-   dokumentasjon, behandlingen ved forgiftning er stoffspesifikk, og tallene i
-   viktige data flyttes eller dupliseres ikke.
+   dokumentasjon, «Fenomenologi» bare for psykoaktive stoffer, behandlingen
+   ved forgiftning er stoffspesifikk, og tallene i viktige data flyttes eller
+   dupliseres ikke.
 10. **Kunnskapsgrensen er en dato.** Kildesøket gjelder til en bestemt dato,
     som står i evidensjournalen og meldes til køen. Nye kilder etter den
     inngår ikke.
@@ -298,9 +299,10 @@ Godkjenningen sier hva som er kontrollert.
 Protokollen er overført fra ChatGPT-monografikuratorens arbeid (de novo-
 piloten for citalopram 2026-10-13 og evidensjournalene i
 `docs/kurateringsjournal/`), `docs/monografkuratering.md` og
-`docs/bivirkninger.md`, og tilpasset kurateringsgrenene. De 37
-kontrollpunktene er de samme som piloten dekket (testen
-`kuratorprotokoll.test.ts` holder dem i takt med modellen).
+`docs/bivirkninger.md`, og tilpasset kurateringsgrenene. Kontrollpunktene
+var de 37 piloten dekket; siden har modellen fått «Fenomenologi» i
+«Virkninger» (2026-10-22), så de er 38 (testen `kuratorprotokoll.test.ts`
+holder dem i takt med modellen og piloten).
 
 - 2026-10-16: første versjon (fase E2 i `docs/kurateringsgrener-fremdrift.md`).
   Den opprinnelige teksten i ChatGPT-kuratorskillen står ikke i repoet; når

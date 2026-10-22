@@ -1,7 +1,7 @@
 {
   "name": "far",
   "private": true,
-  "version": "1.105.5",
+  "version": "1.106.1",
   "type": "module",
   "description": "Verktøy for å kommentere farmakologiske analyser",
   "scripts": {

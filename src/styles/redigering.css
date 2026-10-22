@@ -105,6 +105,13 @@
   font-size: var(--tekst-meta);
 }
 
+/* Hva et fast kort skal brukes til (`veiledning` i paneler.ts), ved knappen
+   som legger det til og i redigeringsvinduet. */
+.redigeringshjelp {
+  max-width: 70ch;
+  margin: 0;
+}
+
 .sistredigert {
   font-size: var(--tekst-merke);
   color: var(--blekk-dempet);

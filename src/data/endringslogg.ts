@@ -12,8 +12,8 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.105.5',
-    dato: '2026-10-21',
+    versjon: '1.106.1',
+    dato: '2026-10-22',
     sammendrag: 'Psilocybin-siden får kjemiske grunndata og laboratorieanalysene for psilocin',
     typer: ['Funksjonalitet'],
     omfang: 'Mindre omfang',
@@ -22,6 +22,19 @@ export const ENDRINGSLOGG: Endring[] = [
       'Psilocybin og psilocin er lagt inn blant forbindelsene, så seksjonen «Kjemiske grunndata» på psilocybin-siden viser molekylformelen, molekylvekten og identifikatorene i PubChem for begge. Begge er bekreftet av ClinPGx og ChEBI før de ble koblet. Tallene vises etter neste henting fra PubChem.',
       'Seksjonen «Analyse ved norske laboratorier» viser analysene av psilocin fra Farmakologiportalen, der den heter «Psilocin (psilocybin)». CAS-nummeret og molekylvekten stemmer med PubChem, så måleområdene kan regnes om mellom µg/L og nmol/L.',
       'Psilocybin selv er ikke koblet til portalen: portalens eneste treff på navnet er psilocin.',
+    ],
+  },
+  {
+    versjon: '1.106.0',
+    dato: '2026-10-22',
+    sammendrag: 'Nytt kort «Fenomenologi» under «Virkninger» på fagsidene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    gjelder: ['stoff'],
+    punkter: [
+      '«Virkninger» har fått det faste kortet «Fenomenologi», som står først i seksjonen, foran kortene med egne overskrifter. Det er for psykoaktive stoffer: stoffer som påvirker den subjektive opplevelsen direkte gjennom sine farmakologiske virkninger, også psykofarmaka og for eksempel noen antihistaminer og antiepileptika.',
+      'I redigeringsmodus legges kortet til med «Fenomenologi» i «Virkninger». Hva kortet skal brukes til, står ved knappen og i redigeringsvinduet. Overskriften er fast, og kortet kan stå én gang per fagside.',
+      'Kortet er tomt på alle fagsider til det er skrevet, og vises ikke for den som leser før det har innhold. De andre kortene i «Virkninger» kan fortsatt legges til, flyttes og få egne overskrifter som før.',
     ],
   },
   {

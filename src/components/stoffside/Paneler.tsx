@@ -420,17 +420,21 @@ function Kortserie<T>({
   const grupper = faste ? definisjon.grupper : undefined
   const navnPaa = (element: Sideelement) => type.navn(type.les(element.data))
   const erFast = (navn: string) => faste?.includes(navn) ?? false
+  // Kort med fri overskrift: alle uten faste kort, og de andre enn de faste når panelet har begge.
+  const tillaterFrie = !faste || Boolean(definisjon.frieKort)
+  const frie = tillaterFrie ? elementer.filter((e) => !erFast(navnPaa(e))) : []
   const fastNytt = typeof nytt === 'string' && faste ? nytt : null
   const startNytt = fastNytt !== null && type.medTittel ? type.medTittel(fastNytt) : type.tomt()
 
   /**
    * Ett kort. I en gruppe er det et underkort, ellers et detaljkort i
-   * seksjonens rutenett; innholdet og knappene er de samme. `liste` er kortene
-   * det flyttes blant.
+   * seksjonens rutenett; innholdet og knappene er de samme. De frie kortene
+   * flyttes blant hverandre; de faste står på sin faste plass.
    */
-  const kortet = (element: Sideelement, i: number, liste: readonly Sideelement[], apenFraStart: boolean) => {
+  const kortet = (element: Sideelement, apenFraStart: boolean) => {
     const kort = type.les(element.data)
     const navn = type.navn(kort)
+    const i = frie.indexOf(element)
     // Kortet åpnes bare når det har mer å vise. Redaktøren åpner det for å komme til knappene.
     const kanApnes = redigerer || type.harMer(kort)
     const hode = {
@@ -452,13 +456,13 @@ function Kortserie<T>({
             visning={type.visning(kort)}
             ekstra={
               <>
-                {!faste && i > 0 && (
-                  <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt opp: ${navn}`} onClick={() => void handlinger.flyttElement(element, liste, -1)}>
+                {i > 0 && (
+                  <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt opp: ${navn}`} onClick={() => void handlinger.flyttElement(element, frie, -1)}>
                     Flytt opp
                   </Button>
                 )}
-                {!faste && i < liste.length - 1 && (
-                  <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt ned: ${navn}`} onClick={() => void handlinger.flyttElement(element, liste, 1)}>
+                {i !== -1 && i < frie.length - 1 && (
+                  <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt ned: ${navn}`} onClick={() => void handlinger.flyttElement(element, frie, 1)}>
                     Flytt ned
                   </Button>
                 )}
@@ -485,6 +489,7 @@ function Kortserie<T>({
                 tittel={navn}
                 ikon={type.ikon(kort) ?? seksjonsikon(definisjon.nokkel)}
                 fastTittel={erFast(navn)}
+                veiledning={definisjon.veiledning?.[navn]}
                 start={kort}
                 referanser={element.referanser}
                 onAvbryt={lukk}
@@ -520,24 +525,34 @@ function Kortserie<T>({
     )
   }
 
-  /** Knappene for de faste kortene som ikke er lagt til ennå. */
+  /** Knappene for de faste kortene som ikke er lagt til ennå, med det de skal brukes til. */
   const leggTilFaste = (titler: readonly string[]) =>
     redigerer &&
     titler.length > 0 && (
-      <div className="redigeringsrad">
-        {titler.map((tittel) => (
-          <Button
-            key={tittel}
-            variant="kant"
-            icon={<Ikon navn="plus" />}
-            className="redigeringsknapp"
-            aria-label={`Legg til: ${tittel}`}
-            onClick={() => setNytt(tittel)}
-          >
-            {tittel}
-          </Button>
-        ))}
-      </div>
+      <>
+        <div className="redigeringsrad">
+          {titler.map((tittel) => (
+            <Button
+              key={tittel}
+              variant="kant"
+              icon={<Ikon navn="plus" />}
+              className="redigeringsknapp"
+              aria-label={`Legg til: ${tittel}`}
+              onClick={() => setNytt(tittel)}
+            >
+              {tittel}
+            </Button>
+          ))}
+        </div>
+        {titler.map(
+          (tittel) =>
+            definisjon.veiledning?.[tittel] && (
+              <p key={tittel} className="felt__hjelp redigeringshjelp">
+                <b>{tittel}:</b> {definisjon.veiledning[tittel]}
+              </p>
+            ),
+        )}
+      </>
     )
   const mangler = (titler: readonly string[]) => titler.filter((tittel) => !elementer.some((e) => navnPaa(e) === tittel))
 
@@ -563,7 +578,7 @@ function Kortserie<T>({
               >
                 {kort.length > 0 && (
                   <Underkortrutenett etikett={gruppe.tittel} apenFraStart={kort.length === 1 ? kort[0]!.id : null}>
-                    {kort.map((element, i) => kortet(element, i, kort, false))}
+                    {kort.map((element) => kortet(element, false))}
                   </Underkortrutenett>
                 )}
                 {leggTilFaste(mangler(gruppe.kort))}
@@ -575,10 +590,10 @@ function Kortserie<T>({
       {utenGruppe.length > 0 && (
         <Skuffrutenett className="infokort">
           {/* Står det bare ett kort i seksjonen, er det ingenting å velge mellom. */}
-          {utenGruppe.map((element, i) => kortet(element, i, utenGruppe, ettAlene && elementer.length === 1))}
+          {utenGruppe.map((element) => kortet(element, ettAlene && elementer.length === 1))}
         </Skuffrutenett>
       )}
-      {redigerer && !faste && (
+      {redigerer && tillaterFrie && (
         <div className="redigeringsrad">
           <Button variant="kant" icon={<Ikon navn="plus" />} className="redigeringsknapp" onClick={() => setNytt(true)}>
             {leggTilTekst}
@@ -592,6 +607,7 @@ function Kortserie<T>({
             tittel={fastNytt ?? 'Nytt kort'}
             ikon={(fastNytt !== null && type.ikon(startNytt)) || seksjonsikon(definisjon.nokkel)}
             fastTittel={fastNytt !== null}
+            veiledning={fastNytt !== null ? definisjon.veiledning?.[fastNytt] : undefined}
             start={startNytt}
             referanser={[]}
             onAvbryt={() => setNytt(false)}

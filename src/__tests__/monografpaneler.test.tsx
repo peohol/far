@@ -239,6 +239,7 @@ describe('ikonregisteret for farmakokinetikken', () => {
     expect(kinetikkikon('Abstinens, seponeringssyndrom og rebound-effekter')).toBe('abstinens')
     expect(kinetikkikon('Addiksjon')).toBe('vane')
     expect(kinetikkikon('Lært mestringsavhengighet')).toBe('krykke')
+    expect(kinetikkikon('Fenomenologi')).toBe('fenomenologi')
     expect(kinetikkikon('Misbrukspotensial')).toBe('misbruk')
     expect(kinetikkikon('  Distribusjonsvolum ')).toBe('dist')
     expect(kinetikkikon('Metabolisme')).toBe('metab')
