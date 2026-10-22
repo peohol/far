@@ -13,7 +13,7 @@ import { sammenlignFelter, type Felt, type Feltendring } from './historikk'
 import { innholdsfelter } from './innholdsfelter'
 import type { Stoffsidedata } from './lesing'
 import type { Innholdselementinnhold } from './modell'
-import { FJERNET, PANELER, panelFor } from './paneler'
+import { FJERNET, PANELER, panelFor, sammenlignKort } from './paneler'
 import { formaterReferanse } from './referanser'
 
 /** En utgave av siden slik sammenligningen ser den. */
@@ -49,8 +49,7 @@ export function sidensKort(side: Stoffsidedata): Stoffsidedata['elementer'] {
     .sort(
       (a, b) =>
         (PANELPLASS.get(a.innhold.panel) ?? PANELER.length) - (PANELPLASS.get(b.innhold.panel) ?? PANELER.length) ||
-        a.innhold.posisjon - b.innhold.posisjon ||
-        a.id.localeCompare(b.id),
+        sammenlignKort({ ...a.innhold, id: a.id }, { ...b.innhold, id: b.id }),
     )
 }
 

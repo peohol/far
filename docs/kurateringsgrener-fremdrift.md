@@ -127,7 +127,8 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 - Køen kobler en gren til reservasjonen i `oppdaterGrener`
   (`src/kurateringsko/ko.ts`); grenene leses én gang per kjøring
   (`src/kurateringsko/grener.ts`). Kuratorprotokollens dekningsmatrise har de
-  samme 37 kontrollpunktene som kurateringsjournalene
+  samme 37 kontrollpunktene som kurateringsjournalene, pluss
+  «virkninger/Fenomenologi» fra 2026-10-22
   (`src/kuratorprotokoll/dekning.ts`, testet mot `citalopram-dekning.json`).
 - Den opprinnelige ChatGPT-kuratorskillen ligger ikke i repoet; protokollen er
   bygd fra journalene, malen og dokumentene. Dukker den opp, tas det

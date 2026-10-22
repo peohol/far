@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.106.0',
+    dato: '2026-10-22',
+    sammendrag: 'Nytt kort «Fenomenologi» under «Virkninger» på fagsidene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    gjelder: ['stoff'],
+    punkter: [
+      '«Virkninger» har fått det faste kortet «Fenomenologi», som står først i seksjonen, foran kortene med egne overskrifter. Det er for psykoaktive stoffer: stoffer som påvirker den subjektive opplevelsen direkte gjennom sine farmakologiske virkninger, også psykofarmaka og for eksempel noen antihistaminer og antiepileptika.',
+      'I redigeringsmodus legges kortet til med «Fenomenologi» i «Virkninger». Hva kortet skal brukes til, står ved knappen og i redigeringsvinduet. Overskriften er fast, og kortet kan stå én gang per fagside.',
+      'Kortet er tomt på alle fagsider til det er skrevet, og vises ikke for den som leser før det har innhold. De andre kortene i «Virkninger» kan fortsatt legges til, flyttes og få egne overskrifter som før.',
+    ],
+  },
+  {
     versjon: '1.105.4',
     dato: '2026-10-21',
     sammendrag: 'Fagsider kan opprettes, endres og legges i papirkurven igjen',

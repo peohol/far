@@ -73,6 +73,8 @@ export interface SkjemaProps<T> {
   ikon?: Ikonnavn
   /** Overskriften er fast (`Paneldefinisjon.kort`) og redigeres ikke. */
   fastTittel?: boolean
+  /** Hva kortet skal brukes til (`Paneldefinisjon.veiledning`), øverst i skjemaet. */
+  veiledning?: string
 }
 
 const KONFLIKT =
@@ -100,6 +102,7 @@ function Skjemaramme<T>({
   kildetittel = 'Kilder for hele kortet',
   navn = `${meta}: ${tittel}`,
   bred,
+  veiledning,
   children,
 }: Omit<SkjemaProps<T>, 'start'> & {
   kontroller: () => { data: T } | { feil: string }
@@ -206,6 +209,7 @@ function Skjemaramme<T>({
         onSubmit={(e) => void lagre(e)}
         noValidate
       >
+        {veiledning && <p className="felt__hjelp redigeringshjelp">{veiledning}</p>}
         {children}
         <Referansevelger tittel={kildetittel} valgte={kilder} onEndre={setKilder} />
       </form>

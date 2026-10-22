@@ -8,7 +8,7 @@
  */
 import type { Regeldata, Stoffsidedata, Utgave } from './lesing'
 import type { Innholdselementinnhold, Referanseinnhold } from './modell'
-import { FJERNET, PANELREKKEFOLGE, panelFor } from './paneler'
+import { FJERNET, PANELREKKEFOLGE, panelFor, sammenlignKort } from './paneler'
 import {
   feltreferanser,
   INGEN_AUTOMATISKE,
@@ -57,10 +57,6 @@ export interface Referanseunivers {
   panelreferanser: Readonly<Record<string, readonly string[]>>
 }
 
-function sammenlign(a: Sideelement, b: Sideelement): number {
-  return a.posisjon - b.posisjon || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)
-}
-
 export function tilReferanse(utgave: Utgave<Referanseinnhold>): Referanse {
   return { ...utgave.innhold, id: utgave.id }
 }
@@ -86,7 +82,7 @@ export function byggSidemodell(data: Stoffsidedata): Sidemodell {
     })
     paneler.set(panel, liste)
   }
-  for (const liste of paneler.values()) liste.sort(sammenlign)
+  for (const liste of paneler.values()) liste.sort(sammenlignKort)
 
   const panelreferanser = bareKjentePaneler(data.infoside?.innhold.panelreferanser ?? {})
   const referanser = data.referanser.map(tilReferanse)
@@ -117,7 +113,7 @@ export function referanseunivers(
     },
   }
   const referanser = [...modell.referanser, ...automatiske.referanser]
-  const { nummerering, liste } = sidereferanser(side, referanser, PANELREKKEFOLGE)
+  const { nummerering, liste } = sidereferanser(side, referanser, PANELREKKEFOLGE, sammenlignKort)
   const panelreferanser = Object.fromEntries(
     PANELREKKEFOLGE.map((panel) => [panel, feltreferanser(side, panel)] as const).filter(([, ider]) => ider.length > 0),
   )

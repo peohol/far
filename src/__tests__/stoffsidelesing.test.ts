@@ -510,11 +510,14 @@ describe('de faste kortene', () => {
       await expect(kort(panel, forste!), panel).rejects.toThrow()
       // Mellomrom rundt overskriften gjør det ikke til et annet kort.
       await expect(kort(panel, ` ${forste} `), panel).rejects.toThrow()
-      await kort(panel, andre!)
+      if (andre) await kort(panel, andre)
     }
     // Uten faste kort kan samme overskrift stå flere ganger.
     await kort('farmakokinetikk', 'Absorpsjon')
     await kort('farmakokinetikk', 'Absorpsjon')
+    // Det samme gjelder de frie kortene i et panel som også har faste.
+    await kort('virkninger', 'Sedasjon')
+    await kort('virkninger', 'Sedasjon')
   })
 
   it('kjenner igjen kortet som sto i veien, så appen kan si at noen andre la det inn', async () => {
@@ -533,6 +536,8 @@ describe('de faste kortene', () => {
     }
     // Et kort med fri overskrift, og et som er fjernet, står aldri i veien.
     expect(enkeltnokkel(innhold('farmakokinetikk', 'kinetikkort', { tittel: 'Absorpsjon' }))).toBeNull()
+    expect(enkeltnokkel(innhold('virkninger', 'kinetikkort', { tittel: 'Sedasjon' }))).toBeNull()
+    expect(enkeltnokkel(innhold('virkninger', 'kinetikkort', { tittel: ' Fenomenologi ' }))).not.toBeNull()
     expect(enkeltnokkel(innhold('fjernet', 'kinetikkort', { tittel: 'Amming' }))).toBeNull()
     // Mellomrom rundt overskriften gjør det ikke til et annet kort, som i databasen.
     expect(enkeltnokkel(innhold('graviditet_amming', 'kinetikkort', { tittel: ' Amming ' }))).toBe(enkeltnokkel(tilfeller[0]!))
@@ -568,8 +573,15 @@ describe('de faste kortene', () => {
       .map(les)
       .filter((tekst) => tekst.includes('create unique index innholdselementer_fast_kort_idx'))
       .at(-1)!
-    const liste = /panel in \(([^)]*)\)/.exec(sql.slice(sql.indexOf('create unique index innholdselementer_fast_kort_idx')))![1]!
-    expect([...liste.matchAll(/'([a-z_]+)'/g)].map((m) => m[1]).sort()).toEqual([...PANELER_MED_FASTE_KORT].sort())
+    const indeks = sql.slice(sql.indexOf('create unique index innholdselementer_fast_kort_idx'))
+    // Panelene med bare faste kort gjelder hver overskrift; de som også har frie kort, bare de faste overskriftene.
+    const liste = /panel in \(([^)]*)\)/.exec(indeks)![1]!
+    const bareFaste = PANELER_MED_FASTE_KORT.filter((p) => !panelFor(p)!.frieKort)
+    expect([...liste.matchAll(/'([a-z_]+)'/g)].map((m) => m[1]).sort()).toEqual([...bareFaste].sort())
+    const par = /\(panel, btrim\(data ->> 'tittel'\)\) in \(([\s\S]*?)\)\s*\)\s*;/.exec(indeks)?.[1] ?? ''
+    const blandede = PANELER_MED_FASTE_KORT.filter((p) => panelFor(p)!.frieKort).flatMap((p) => fasteKort(panelFor(p)!)!.map((k) => `${p}/${k}`))
+    expect([...par.matchAll(/\('([a-z_]+)', '([^']+)'\)/g)].map((m) => `${m[1]}/${m[2]}`).sort()).toEqual(blandede.sort())
+    expect(blandede).toEqual(['virkninger/Fenomenologi'])
   })
 })
 

@@ -24,6 +24,7 @@ import {
   lesIntervallverdi,
   lesLegemiddelkobling,
   lesTallfelt,
+  sammenlignKort,
   tallTilFelt,
 } from '../faginnhold/paneler'
 import { SITERING, kortnavn } from '../faginnhold/referanser'
@@ -483,6 +484,26 @@ describe('sidemodellen', () => {
       ['c', 3],
     ])
     expect(modell.referanseliste.map((r) => r.referanse.tittel)).toEqual(['Kilde B', 'Kilde A', 'Kilde C'])
+  })
+
+  it('har de faste kortene først i et panel som også har frie, i visningen og i nummereringen', () => {
+    const virkning = (id: string, tittel: string, posisjon: number, kilde: string) =>
+      element(id, { panel: 'virkninger', posisjon, elementtype: 'kinetikkort', data: { tittel, ...tekstMed(kilde) } })
+    // «Fenomenologi» står på plass 0 som det første frie kortet, med en ID som ellers ville lagt det sist.
+    const modell = byggSidemodell({
+      ...side(),
+      elementer: [virkning('v1', 'Sedasjon', 0, 'a'), virkning('v2', 'Antidepressiv effekt', 1, 'b'), virkning('vz', 'Fenomenologi', 0, 'c')],
+    })
+    expect(modell.paneler.get('virkninger')!.map((e) => e.id)).toEqual(['vz', 'v1', 'v2'])
+    expect([...modell.nummerering]).toEqual([
+      ['c', 1],
+      ['a', 2],
+      ['b', 3],
+    ])
+    // Uten frie kort i panelet er rekkefølgen den vanlige, etter plassen.
+    expect(sammenlignKort({ id: 'a', panel: 'farmakokinetikk', posisjon: 1, data: { tittel: 'Fenomenologi' } }, { id: 'b', panel: 'farmakokinetikk', posisjon: 0, data: {} })).toBeGreaterThan(0)
+    // Et fritt kort står etter det faste, står etter det faste uansett plass.
+    expect(sammenlignKort({ id: 'a', panel: 'virkninger', posisjon: 0, data: { tittel: 'Sedasjon' } }, { id: 'b', panel: 'virkninger', posisjon: 9, data: { tittel: ' Fenomenologi ' } })).toBeGreaterThan(0)
   })
 
   it('publiserer i den rekkefølgen databasen krever, og bare det som er endret', () => {
