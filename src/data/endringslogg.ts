@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.107.1',
+    dato: '2026-10-22',
+    sammendrag: 'En vaktmester retter språk og doble tall på de kuraterte fagsidene',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. En egen vaktmester går over fagsidene som er kuratert, og retter språket, fjerner tall som bare gjentar et annet tall avrundet, og gjør tekniske endringer som å merke konsentrasjonene. Endringene kontrolleres og publiseres som andre kurateringer.',
+      'Oppgir to kilder nesten det samme tallet, for eksempel 1,98 og 2 timer, står bare det enkleste tallet. Forskjeller som kan ha betydning, vises fortsatt med hvem som sier hva.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.107.0',
     dato: '2026-10-22',
     sammendrag: 'Velg måleenhet for konsentrasjonene i preferansene',

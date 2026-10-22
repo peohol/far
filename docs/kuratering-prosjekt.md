@@ -6,8 +6,9 @@ kontrolleres fagsidene der, ikke i «OUSFAR Dev»: fagansvarlig fant ChatGPT
 for upålitelig som kontrollør. «OUSFAR Dev» tar seg av appen og designet.
 
 Det faglige står i `docs/kuratorprotokoll.md` (hva som kreves) og
-`docs/kontrollorinstruks.md` (hvordan det kontrolleres), og grenene i
-`docs/kurateringsgrener.md`. Her står hvordan prosjektet er satt opp.
+`docs/kontrollorinstruks.md` (hvordan det kontrolleres), vaktmesterens arbeid
+i skillen `vaktmester`, og grenene i `docs/kurateringsgrener.md`. Her står
+hvordan prosjektet er satt opp.
 
 ## Rollene
 
@@ -16,10 +17,13 @@ Det faglige står i `docs/kuratorprotokoll.md` (hva som kreves) og
 | Koordinatoren | Starter og holder trådene i gang, gir signalene mellom dem og svarer fagansvarlig i prosjektchatten. Gjør ikke fagarbeid. | Ingen |
 | Kurator (én fast tråd) | Kuraterer etter skillen `monografikurator` og protokollen, retter og publiserer det som er godkjent | `claude-monografkurator`, `npm run kurator`, `/mnt/project-files/.hemmelig/kurator.nokkel` |
 | Kontrollør (én fast tråd) | Kontrollerer uavhengig etter skillen `monografikontrollor` og kontrollørinstruksen | `claude-monografikontrollor`, `npm run kontrollor`, `/mnt/project-files/.hemmelig/kontrollor.nokkel` |
+| Vaktmester (én fast tråd) | Retter feil og mangler på fagsider som er publisert, etter skillen `vaktmester`: språket, nesten-duplikater og tekniske endringer fagansvarlig ber om. Ingen omfattende faglige endringer og ingen egne litteratursøk | Som kuratoren: grenene er kuratorgrener, og kontrolløren kontrollerer dem som andre |
 | Fagansvarlig (Peder) | Avgjør det bare et menneske kan avgjøre, og sier ja til å slå sammen en PR | Administrator i appen |
 
 Databasen håndhever rollene: kuratoren kan ikke godkjenne, kontrolløren kan
-ikke skrive i grenen, og ingen godkjenner en gren de selv kuraterer.
+ikke skrive i grenen, og ingen godkjenner en gren de selv kuraterer. Den
+tillater også bare én aktiv gren per fagside, så Kurator og Vaktmester
+arbeider aldri på den samme siden samtidig.
 
 ## Uavhengigheten
 
@@ -31,9 +35,11 @@ bekreftelsesskjevhet). Derfor:
 2. Koordinatoren gir bare nøytrale signaler (under). Aldri innhold, sitater,
    funn, vurderinger eller egen mening om kvaliteten, og aldri vedlagte
    meldinger fra den andre tråden.
-3. Hver tråd har sin egen arbeidsmappe, `/mnt/project-files/kurator/` og
-   `/mnt/project-files/kontrollor/`, og leser aldri den andres mappe, tråd
-   eller brief. Overleveringer fra kuratoren er for kuratoren.
+3. Hver tråd har sin egen arbeidsmappe, `/mnt/project-files/kurator/`,
+   `/mnt/project-files/vaktmester/` og `/mnt/project-files/kontrollor/`.
+   Vaktmesteren står på kuratorens side: Kurator og Vaktmester leser aldri
+   kontrollørens mappe, tråd eller brief, og Kontrollør leser aldri deres.
+   Overleveringer fra kuratoren er for kuratoren.
 4. Prosjektminnet har bare prosessfakta om arbeidsflyten, aldri faglige
    vurderinger av et stoff.
 5. Hver tråd bruker bare sin egen nøkkel. Nøklene skrives aldri ut, verken i
@@ -48,11 +54,11 @@ bekreftelsesskjevhet). Derfor:
 
 | Tråden skriver | Koordinatoren sier til den andre tråden |
 | --- | --- |
-| Kurator: «Sendt til kontroll: <stoff> (gren <id>, revisjon <n>).» | Til Kontrollør: «<stoff> (gren <id>) er sendt til kontroll.» |
-| Kontrollør: «Vurdert: <stoff> (gren <id>, revisjon <n>): godkjent \| endringer.» | Til Kurator: «Kontrolløren har vurdert <stoff> (gren <id>).» |
+| Kurator eller Vaktmester: «Sendt til kontroll: <stoff> (gren <id>, revisjon <n>).» | Til Kontrollør: «<stoff> (gren <id>) er sendt til kontroll.» |
+| Kontrollør: «Vurdert: <stoff> (gren <id>, revisjon <n>): godkjent \| endringer.» | Til tråden som sendte grenen: «Kontrolløren har vurdert <stoff> (gren <id>).» Vaktmesterens grener har et formål som begynner med «Vaktmester:». |
 
-Begge trådene har en timekjøring som ser etter i OUSFAR selv, så ingenting
-står stille om et signal uteblir.
+Kurator og Kontrollør har hver sin timekjøring som ser etter i OUSFAR selv,
+så ingenting står stille om et signal uteblir.
 
 ## Prosjektinstruksene
 
@@ -69,7 +75,8 @@ Oppsettet krever PR-en «Eget prosjekt for kuratering» fra «OUSFAR Dev». Finn
 ROLLENE
 - Kurator: én fast tråd som kuraterer etter skillen monografikurator og docs/kuratorprotokoll.md, med kuratornøkkelen.
 - Kontrollør: én fast tråd som kontrollerer uavhengig etter skillen monografikontrollor og docs/kontrollorinstruks.md, med sin egen kontrollørnøkkel.
-- Koordinatoren (du): starter og holder de to trådene i gang, gir signaler mellom dem og svarer Peder i prosjektchatten. Du gjør ikke fagarbeid selv.
+- Vaktmester: én fast tråd som retter feil og mangler på publiserte fagsider etter skillen vaktmester (språket, nesten-duplikater og tekniske endringer), med kuratornøkkelen. Grenene går til Kontrollør som Kurators.
+- Koordinatoren (du): starter og holder trådene i gang, gir signaler mellom dem og svarer Peder i prosjektchatten. Du gjør ikke fagarbeid selv.
 - Peder er fagansvarlig. Bare han avgjør beskyttede data og nøkkeltall, og bare han gir ja til å slå sammen en PR.
 
 UAVHENGIGHETEN (viktigst)
@@ -82,9 +89,9 @@ UAVHENGIGHETEN (viktigst)
 
 GANGEN
 - Kurator sender en gren til kontroll og melder det i sin egen tråd. Da gir du Kontrollør signalet.
-- Kontrollør vurderer og melder det i sin egen tråd. Da gir du Kurator signalet.
+- Kontrollør vurderer og melder det i sin egen tråd. Da gir du Kurator signalet (eller Vaktmester, når det er dens gren).
 - Er grenen godkjent, publiserer Kurator den og kjører funksjonstesten. Ber Kontrollør om endringer, retter Kurator og sender grenen på nytt.
-- Begge trådene har en timekjøring som sjekker OUSFAR selv, så ingenting står stille om et signal uteblir.
+- Kurator og Kontrollør har hver sin timekjøring som sjekker OUSFAR selv, så ingenting står stille om et signal uteblir.
 - Er det noe bare Peder kan avgjøre, spør tråden som har saken, ham med et valgkort. En avgjørelse føres inn som et svar som begynner med «Avgjort av fagansvarlig:», og bare etter Peders eget svar.
 
 FASTE REGLER
@@ -155,6 +162,16 @@ Du er Kontrollør i «OUSFAR Fag». Bruk skillen monografikontrollor, og les doc
 - Slå opp de sentrale påstandene i kildene selv før du leser kuratorens evidensjournal og begrunnelser.
 - Når du har vurdert en gren, skriv én linje: «Vurdert: <stoff> (gren <id>, revisjon <n>): godkjent | endringer.»
 - Opprett en timekjøring hver time i denne tråden med beskjeden: «Kjør en kontrollrunde i OUSFAR etter skillen monografikontrollor.»
+```
+
+## Briefen til Vaktmester
+
+```text
+Du er Vaktmester i «OUSFAR Fag». Bruk skillen vaktmester, og les docs/kuratorprotokoll.md og docs/kuratering-prosjekt.md før du begynner.
+- Arbeidsmappen din er /mnt/project-files/vaktmester/. Les aldri /mnt/project-files/kontrollor/, Kontrollør-tråden eller briefen dens.
+- Bruk bare npm run kurator, aldri npm run kontrollor.
+- Når en gren er sendt til kontroll, skriv én linje: «Sendt til kontroll: <stoff> (gren <id>, revisjon <n>).» Ikke noe mer om innholdet.
+- Spør Peder med valgkort om det bare han kan avgjøre.
 ```
 
 ## Hva som hører hjemme hvor
