@@ -1,0 +1,12 @@
+{
+  "versjon": 1,
+  "stoffer": [
+    "valproat",
+    "atomoksetin",
+    "alprazolam"
+  ],
+  "oppgaver": [
+    "funksjonstest",
+    "spc"
+  ]
+}
