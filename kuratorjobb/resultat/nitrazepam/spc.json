@@ -1,0 +1,237 @@
+{
+  "stoff": "nitrazepam",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-22T04:15:06.408609+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 7,
+    "hentet": 1,
+    "dokumenter": 1,
+    "mangler": [
+      {
+        "merkevare_id": "ID_3751BE51-1F0D-48C1-B38B-0568F4F49442",
+        "varenavn": "Nitrazepam dak",
+        "navn_form_styrke": "Nitrazepam dak tab 5 mg",
+        "produsent": "Orifarm Generics A/S",
+        "atc": "N05CD02",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_4DD7FE90-AA69-4C78-A3C7-5F40CEFCF17B",
+        "varenavn": "Nitrazepam al",
+        "navn_form_styrke": "Nitrazepam al tab 5 mg",
+        "produsent": "Aliud Pharma",
+        "atc": "N05CD02",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_555C5D25-7020-47E1-95B3-E6F64211FA1E",
+        "varenavn": "Nitrazepam pharmvit",
+        "navn_form_styrke": "Nitrazepam pharmvit tab 5 mg",
+        "produsent": "Pharmvit",
+        "atc": "N05CD02",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_9C34F176-E303-4E95-BCF5-67CE348BBA9A",
+        "varenavn": "Nitrazepam rosemont",
+        "navn_form_styrke": "Nitrazepam rosemont mikst susp 2,5 mg/5 ml",
+        "produsent": "Rosemont Pharmaceuticals Ltd.",
+        "atc": "N05CD02",
+        "legemiddelform": "Mikstur, suspensjon",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_D2C9FD29-FE82-4EA5-A4A5-8E08EADD0C83",
+        "varenavn": "Nitrazepam dak",
+        "navn_form_styrke": "Nitrazepam dak tab 5 mg",
+        "produsent": "Orifarm Healthcare",
+        "atc": "N05CD02",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_FFC93638-2329-4811-B811-87930600E6B1",
+        "varenavn": "Nitrazepam SA",
+        "navn_form_styrke": "Nitrazepam SA mikst susp 0,5 mg/ml",
+        "produsent": "Sykehusapotekene HF",
+        "atc": "N05CD02",
+        "legemiddelform": "Mikstur, suspensjon",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 1 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 1,
+        "ikke_dmp": 0,
+        "uten_omtale": 6
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "6 av 7 preparater i FEST mangler en hentet preparatomtale fra DMP: 6 uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA). SPC-behovet er ikke dekket; se «dekning.mangler».",
+      "antall": {
+        "preparater": 7,
+        "hentet": 1,
+        "mangler": 6,
+        "dokumenter": 1
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05853.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05853.pdf",
+      "hentet_kl": "2026-10-22T22:46:49.091Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "333534",
+        "content-md5": "BvfxO4PaGqjkTqd97D7u1g==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:58 GMT",
+        "etag": "0x8DE5379412B245F",
+        "date": "Thu, 22 Oct 2026 22:46:49 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_EF3F4C33-ED1C-40FB-A2C8-E2D1E6DEFBBD",
+          "varenavn": "Apodorm",
+          "navn_form_styrke": "Apodorm tab 5 mg",
+          "produsent": "Actavis Group PTC ehf",
+          "atc": "N05CD02",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05853.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (333534 byte).",
+          "antall": {
+            "bytes": 333534
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "ad4ad7416de5737d27a5b13d965292d94dbc8347f294bd71adfc148e92c58abc"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "ad4ad7416de5737d27a5b13d965292d94dbc8347f294bd71adfc148e92c58abc",
+      "bytes": 333534,
+      "mappe": "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d",
+      "pdf": {
+        "sider": 7,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "SmPC Apodorm tabletter",
+        "laget": "Tue May 30 10:14:30 2023 UTC",
+        "endret": "Tue May 30 10:14:30 2023 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/original.pdf",
+        "tekst": "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/tekst/side-001.txt",
+          "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/tekst/side-002.txt",
+          "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/tekst/side-003.txt",
+          "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/tekst/side-004.txt",
+          "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/tekst/side-005.txt",
+          "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/tekst/side-006.txt",
+          "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/tekst/side-007.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/sider/side-001.png",
+          "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/sider/side-002.png",
+          "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/sider/side-003.png",
+          "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/sider/side-004.png",
+          "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/sider/side-005.png",
+          "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/sider/side-006.png",
+          "kuratorjobb/resultat/nitrazepam/spc/ad4ad7416de5737d/sider/side-007.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 4,
+        "til": 5
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (7 sider).",
+          "antall": {
+            "sider": 7
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 12589
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 4."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 7
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

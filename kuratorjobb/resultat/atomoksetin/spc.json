@@ -1,0 +1,1141 @@
+{
+  "stoff": "atomoksetin",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-22T04:15:06.408609+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 65,
+    "hentet": 7,
+    "dokumenter": 1,
+    "mangler": [
+      {
+        "merkevare_id": "ID_0481BFED-3583-4891-9DAF-36E62F683480",
+        "varenavn": "Atomoxetina generis",
+        "navn_form_styrke": "Atomoxetina generis kaps 40 mg",
+        "produsent": "Generis",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_04868FA1-DE69-4C83-A993-FF5FBA471046",
+        "varenavn": "Atomoxetine stada",
+        "navn_form_styrke": "Atomoxetine stada kaps 18 mg",
+        "produsent": "Stada",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_051B1755-D1AE-4128-9B85-B3F07D75FC10",
+        "varenavn": "Atomoxetin zentiva",
+        "navn_form_styrke": "Atomoxetin zentiva kaps 10 mg",
+        "produsent": "Zentiva",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_069F33A5-3922-4D30-886D-D3F89973BB42",
+        "varenavn": "Atomoxetin viatris",
+        "navn_form_styrke": "Atomoxetin viatris kaps 25 mg",
+        "produsent": "Viatris",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_098B2037-9B3E-414A-9623-9E807587CBD8",
+        "varenavn": "Atomoxetin orion",
+        "navn_form_styrke": "Atomoxetin orion kaps 40 mg",
+        "produsent": "Orion Pharma",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_0ADC6DB5-19B5-45FF-9068-B9A0859E3579",
+        "varenavn": "Atomoxetin al",
+        "navn_form_styrke": "Atomoxetin al kaps 60 mg",
+        "produsent": "Aliud Pharma",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_183B817B-ACBC-4A8F-812E-1DCE5588DE38",
+        "varenavn": "Auroxetyn",
+        "navn_form_styrke": "Auroxetyn kaps 10 mg",
+        "produsent": "Aurovitas",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_2150F49F-6166-4C19-B954-3ADDC5A6DD54",
+        "varenavn": "Atomoxe 1a pharma",
+        "navn_form_styrke": "Atomoxe 1a pharma kaps 18 mg",
+        "produsent": "1 A Pharma",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_23D8C963-019A-40BB-9448-73406179871D",
+        "varenavn": "Atomoxetin zentiva",
+        "navn_form_styrke": "Atomoxetin zentiva kaps 40 mg",
+        "produsent": "Zentiva",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_26E36317-774A-4051-9390-9F40DC1D4168",
+        "varenavn": "Atomoxetin puren",
+        "navn_form_styrke": "Atomoxetin puren kaps 100 mg",
+        "produsent": "Puren",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_278A487B-E3C8-43EC-816A-F6CE589921BE",
+        "varenavn": "Atomoxetine teva",
+        "navn_form_styrke": "Atomoxetine teva kaps 10 mg",
+        "produsent": "Teva",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_27B0A62B-ED83-4AEC-8967-6C57CE78C090",
+        "varenavn": "Atomoxetin al",
+        "navn_form_styrke": "Atomoxetin al kaps 10 mg",
+        "produsent": "Aliud Pharma",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_2FE958CE-191A-47EB-9869-5F861EE2B48A",
+        "varenavn": "Atomoxetine teva",
+        "navn_form_styrke": "Atomoxetine teva kaps 40 mg",
+        "produsent": "Teva",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_34B69DE8-D15F-4A69-8252-E3BE51E305E8",
+        "varenavn": "Atomoxetin-ratiopharm",
+        "navn_form_styrke": "Atomoxetin-ratiopharm kaps 18 mg",
+        "produsent": "Ratiopharm",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_38350669-971F-4482-B2CA-C40550BA1724",
+        "varenavn": "Atomoxetin zentiva",
+        "navn_form_styrke": "Atomoxetin zentiva kaps 25 mg",
+        "produsent": "Zentiva",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_3E3FEEF4-2871-4FB8-9867-0A4D1F7D8EBC",
+        "varenavn": "Atomoxetin al",
+        "navn_form_styrke": "Atomoxetin al kaps 18 mg",
+        "produsent": "Aliud Pharma",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_3E542379-3EBD-4D56-A9F7-60F46955A306",
+        "varenavn": "Atomoxetin zentiva",
+        "navn_form_styrke": "Atomoxetin zentiva kaps 60 mg",
+        "produsent": "Zentiva",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_456BC4E2-CA20-4388-8F5D-87D1A50F5260",
+        "varenavn": "Atomoxetin glenmark",
+        "navn_form_styrke": "Atomoxetin glenmark kaps 40 mg",
+        "produsent": "Glenmark",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_481E8508-A165-4154-80B1-B6C508440C9E",
+        "varenavn": "Auroxetyn",
+        "navn_form_styrke": "Auroxetyn kaps 25 mg",
+        "produsent": "Aurovitas",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_4E25B87B-2F8D-4C3A-9F45-18BF3C1B21EC",
+        "varenavn": "Atomoxetin glenmark",
+        "navn_form_styrke": "Atomoxetin glenmark kaps 25 mg",
+        "produsent": "Glenmark",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_580A357C-E893-423E-A582-1A8188E2BCA1",
+        "varenavn": "Atomoxetine teva",
+        "navn_form_styrke": "Atomoxetine teva kaps 80 mg",
+        "produsent": "Teva",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_58205F54-D90B-48D9-A592-F91F1EADEB09",
+        "varenavn": "Atomoxetin beta",
+        "navn_form_styrke": "Atomoxetin beta kaps 18 mg",
+        "produsent": "Betapharm",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_58E27BEA-FBD2-494C-BCD8-23564990B480",
+        "varenavn": "Atomoxetin al",
+        "navn_form_styrke": "Atomoxetin al kaps 25 mg",
+        "produsent": "Aliud Pharma",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_5EB92099-F2C5-4B61-AAE7-EF9816555213",
+        "varenavn": "Atomoxetine stada",
+        "navn_form_styrke": "Atomoxetine stada kaps 80 mg",
+        "produsent": "Stada",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_6A0411CE-3E8F-4C90-B4A9-883F045328FF",
+        "varenavn": "Atomoxetin orion",
+        "navn_form_styrke": "Atomoxetin orion kaps 18 mg",
+        "produsent": "Orion Pharma",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_6F2DBEE3-753E-456B-B27B-AD4628602910",
+        "varenavn": "Atomoxetine stada",
+        "navn_form_styrke": "Atomoxetine stada kaps 10 mg",
+        "produsent": "Stada",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_735C81D2-BDAE-47E9-8D9D-2D4AB03A46E5",
+        "varenavn": "Atomoxetin puren",
+        "navn_form_styrke": "Atomoxetin puren kaps 18 mg",
+        "produsent": "Puren",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_793FA459-0604-4B05-AF21-70C0FD569374",
+        "varenavn": "Atomoxetina generis",
+        "navn_form_styrke": "Atomoxetina generis kaps 25 mg",
+        "produsent": "Generis",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_87B1B473-A556-43CC-BCAD-5D6939D332BF",
+        "varenavn": "Atomoxetine amarox",
+        "navn_form_styrke": "Atomoxetine amarox kaps 18 mg",
+        "produsent": "Amarox",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_8C0AAE14-FC8A-4BD7-81D5-56C9BEABBAD7",
+        "varenavn": "Auroxetyn",
+        "navn_form_styrke": "Auroxetyn kaps 18 mg",
+        "produsent": "Aurovitas",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_9A8CB996-C442-4787-AE5B-4D4403B104D2",
+        "varenavn": "Atomoxetine amarox",
+        "navn_form_styrke": "Atomoxetine amarox kaps 10 mg",
+        "produsent": "Amarox",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_9B664B6C-21C0-44CA-A05F-BEF5E90A85C4",
+        "varenavn": "Atomoxetine consilient",
+        "navn_form_styrke": "Atomoxetine consilient mikst oppl 4 mg/ml",
+        "produsent": "Consilient Health",
+        "atc": "N06BA09",
+        "legemiddelform": "Mikstur, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_9D86DE54-0F0E-4490-B516-33497FE437DC",
+        "varenavn": "Atomoxetine amarox",
+        "navn_form_styrke": "Atomoxetine amarox kaps 25 mg",
+        "produsent": "Amarox",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_9ED2B4E5-E4E7-4B0D-8077-44217DC43E1B",
+        "varenavn": "Atomoxetin zentiva",
+        "navn_form_styrke": "Atomoxetin zentiva kaps 18 mg",
+        "produsent": "Zentiva",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_A163824E-AFAC-432A-A35D-54FF55B889E8",
+        "varenavn": "Atomoxe 1a pharma",
+        "navn_form_styrke": "Atomoxe 1a pharma kaps 80 mg",
+        "produsent": "1 A Pharma",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_A33F7F03-185F-4765-988A-E9E3DF5BDA7D",
+        "varenavn": "Atomoxetin heumann",
+        "navn_form_styrke": "Atomoxetin heumann kaps 40 mg",
+        "produsent": "Heumann Pharma",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_A694BD0D-647F-4979-99AA-A5174BE14DD3",
+        "varenavn": "Atomoxetin orion",
+        "navn_form_styrke": "Atomoxetin orion kaps 10 mg",
+        "produsent": "Orion Pharma",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_AD7D75B0-B5DA-4D02-B990-FEAC0E65824B",
+        "varenavn": "Atomoxetine amarox",
+        "navn_form_styrke": "Atomoxetine amarox kaps 60 mg",
+        "produsent": "Amarox",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_B8778714-4C95-4BCA-8FE6-93899FC1B08E",
+        "varenavn": "Atomoxetine stada",
+        "navn_form_styrke": "Atomoxetine stada kaps 60 mg",
+        "produsent": "Stada",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_BE3DFCEE-8B73-47A6-A82A-EE46E39659B8",
+        "varenavn": "Atomoxetine amarox",
+        "navn_form_styrke": "Atomoxetine amarox kaps 40 mg",
+        "produsent": "Amarox",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_BFBA81EA-20B8-4DA8-96AB-8278BB38BB23",
+        "varenavn": "Auroxetyn",
+        "navn_form_styrke": "Auroxetyn kaps 40 mg",
+        "produsent": "Aurovitas",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_C2E10623-0F7F-4712-AC6F-A41198C5903A",
+        "varenavn": "Atomoxetine stada",
+        "navn_form_styrke": "Atomoxetine stada kaps 25 mg",
+        "produsent": "Stada",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_C56CC63C-EA6F-430D-9FB3-72DA3823B158",
+        "varenavn": "Atomoxetin teva",
+        "navn_form_styrke": "Atomoxetin teva kaps 25 mg",
+        "produsent": "Teva B.V.",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_C7922057-9769-457A-9FFC-CA5AF69E0D63",
+        "varenavn": "Atomoxetin puren",
+        "navn_form_styrke": "Atomoxetin puren kaps 10 mg",
+        "produsent": "Puren",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_C907BEBC-5888-499D-83D4-13C6A962560B",
+        "varenavn": "Atomoxetine teva",
+        "navn_form_styrke": "Atomoxetine teva kaps 25 mg",
+        "produsent": "Teva",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_CA60B97B-E165-45BC-8942-43135FE6A9E7",
+        "varenavn": "Atomoxetine stada",
+        "navn_form_styrke": "Atomoxetine stada kaps 40 mg",
+        "produsent": "Stada",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_CB6ECA3B-5539-4147-B566-1367773D0875",
+        "varenavn": "Atomoxetina generis",
+        "navn_form_styrke": "Atomoxetina generis kaps 80 mg",
+        "produsent": "Generis",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_D78BAF13-4721-40D9-99FA-5E99433A654B",
+        "varenavn": "Atomoxetin al",
+        "navn_form_styrke": "Atomoxetin al kaps 40 mg",
+        "produsent": "Aliud Pharma",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_D844C9B4-557C-4861-8874-8F77E0CFB193",
+        "varenavn": "Atomoxetine amarox",
+        "navn_form_styrke": "Atomoxetine amarox kaps 100 mg",
+        "produsent": "Amarox",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_DE70BE87-9BD1-4AC8-8553-97DD3EC0D6CD",
+        "varenavn": "Atomoxetine teva",
+        "navn_form_styrke": "Atomoxetine teva kaps 18 mg",
+        "produsent": "Teva",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_E7B9376A-A058-4832-854C-5C16B69AC733",
+        "varenavn": "Atomoxetin teva",
+        "navn_form_styrke": "Atomoxetin teva kaps 40 mg",
+        "produsent": "Teva",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_EBE7AE00-F2D5-49E0-A616-0EB3EA20D038",
+        "varenavn": "Atomoxetin teva",
+        "navn_form_styrke": "Atomoxetin teva kaps 18 mg",
+        "produsent": "Teva",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_EE495737-196C-48E0-BC43-DED797E8F53F",
+        "varenavn": "Atomoxetine teva",
+        "navn_form_styrke": "Atomoxetine teva kaps 60 mg",
+        "produsent": "Teva",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_F20D7D83-1688-4C23-8BB6-4F9678707A67",
+        "varenavn": "Atomoxetin puren",
+        "navn_form_styrke": "Atomoxetin puren kaps 40 mg",
+        "produsent": "Puren",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_F2E17B1F-AF04-4E65-8B6F-493A160DE254",
+        "varenavn": "Atomoxetin viatris",
+        "navn_form_styrke": "Atomoxetin viatris kaps 10 mg",
+        "produsent": "Viatris",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_F644DB9E-55D1-434F-8A15-873AE84677C8",
+        "varenavn": "Atomoxetine amarox",
+        "navn_form_styrke": "Atomoxetine amarox kaps 80 mg",
+        "produsent": "Amarox",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_FC3E06B7-481B-4926-9CFB-B20D960D2646",
+        "varenavn": "Atomoxetin teva",
+        "navn_form_styrke": "Atomoxetin teva kaps 10 mg",
+        "produsent": "Teva B.V.",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_FDCC534F-17B7-4ED3-8CF4-6EF3CB6FCD12",
+        "varenavn": "Atomoxetin viatris",
+        "navn_form_styrke": "Atomoxetin viatris kaps 80 mg",
+        "produsent": "Viatris",
+        "atc": "N06BA09",
+        "legemiddelform": "Kapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 7 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 7,
+        "ikke_dmp": 0,
+        "uten_omtale": 58
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "58 av 65 preparater i FEST mangler en hentet preparatomtale fra DMP: 58 uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA). SPC-behovet er ikke dekket; se «dekning.mangler».",
+      "antall": {
+        "preparater": 65,
+        "hentet": 7,
+        "mangler": 58,
+        "dokumenter": 1
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14456.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14456.pdf",
+      "hentet_kl": "2026-10-22T22:46:31.461Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "367556",
+        "content-md5": "F0vtIEVIGXZFUhxmYPYEWg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:55 GMT",
+        "etag": "0x8DE53793F9E0702",
+        "date": "Thu, 22 Oct 2026 22:46:32 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_1125C9AC-6562-4EA3-9409-725ED0CC2675",
+          "varenavn": "Atomoxetine Medical Valley",
+          "navn_form_styrke": "Atomoxetine Medical Valley  kaps 100 mg",
+          "produsent": "Medical Valley Invest AB",
+          "atc": "N06BA09",
+          "legemiddelform": "Kapsel, hard"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14456.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (367556 byte).",
+          "antall": {
+            "bytes": 367556
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "fc4827549a4e00366ed66ab5d4525552fd380be35eb30eb8878830955a400831"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14450.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14450.pdf",
+      "hentet_kl": "2026-10-22T22:46:41.120Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "367556",
+        "content-md5": "F0vtIEVIGXZFUhxmYPYEWg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:57 GMT",
+        "etag": "0x8DE5379408BC714",
+        "date": "Thu, 22 Oct 2026 22:46:41 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_25AF437F-4414-434F-8B53-5AF14622E4AC",
+          "varenavn": "Atomoxetine Medical Valley",
+          "navn_form_styrke": "Atomoxetine Medical Valley  kaps 10 mg",
+          "produsent": "Medical Valley Invest AB",
+          "atc": "N06BA09",
+          "legemiddelform": "Kapsel, hard"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14450.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (367556 byte).",
+          "antall": {
+            "bytes": 367556
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "fc4827549a4e00366ed66ab5d4525552fd380be35eb30eb8878830955a400831"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14454.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14454.pdf",
+      "hentet_kl": "2026-10-22T22:46:42.670Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "367556",
+        "content-md5": "F0vtIEVIGXZFUhxmYPYEWg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:50 GMT",
+        "etag": "0x8DE53793C56814A",
+        "date": "Thu, 22 Oct 2026 22:46:43 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_3447417A-0CC6-434C-9064-168BD295E586",
+          "varenavn": "Atomoxetine Medical Valley",
+          "navn_form_styrke": "Atomoxetine Medical Valley  kaps 60 mg",
+          "produsent": "Medical Valley Invest AB",
+          "atc": "N06BA09",
+          "legemiddelform": "Kapsel, hard"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14454.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (367556 byte).",
+          "antall": {
+            "bytes": 367556
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "fc4827549a4e00366ed66ab5d4525552fd380be35eb30eb8878830955a400831"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14455.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14455.pdf",
+      "hentet_kl": "2026-10-22T22:46:43.861Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "367556",
+        "content-md5": "F0vtIEVIGXZFUhxmYPYEWg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:55 GMT",
+        "etag": "0x8DE53793F4AE9F4",
+        "date": "Thu, 22 Oct 2026 22:46:44 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_3A0BE517-0071-40E1-BCDA-CC0845FE26BB",
+          "varenavn": "Atomoxetine Medical Valley",
+          "navn_form_styrke": "Atomoxetine Medical Valley  kaps 80 mg",
+          "produsent": "Medical Valley Invest AB",
+          "atc": "N06BA09",
+          "legemiddelform": "Kapsel, hard"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14455.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (367556 byte).",
+          "antall": {
+            "bytes": 367556
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "fc4827549a4e00366ed66ab5d4525552fd380be35eb30eb8878830955a400831"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14451.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14451.pdf",
+      "hentet_kl": "2026-10-22T22:46:44.148Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "367556",
+        "content-md5": "F0vtIEVIGXZFUhxmYPYEWg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:58 GMT",
+        "etag": "0x8DE537941250AB9",
+        "date": "Thu, 22 Oct 2026 22:46:44 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_3DAC2388-C0B7-4150-9FB2-BB87F4CC4156",
+          "varenavn": "Atomoxetine Medical Valley",
+          "navn_form_styrke": "Atomoxetine Medical Valley  kaps 18 mg",
+          "produsent": "Medical Valley Invest AB",
+          "atc": "N06BA09",
+          "legemiddelform": "Kapsel, hard"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14451.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (367556 byte).",
+          "antall": {
+            "bytes": 367556
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "fc4827549a4e00366ed66ab5d4525552fd380be35eb30eb8878830955a400831"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14452.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14452.pdf",
+      "hentet_kl": "2026-10-22T22:46:44.515Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "367556",
+        "content-md5": "F0vtIEVIGXZFUhxmYPYEWg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:59 GMT",
+        "etag": "0x8DE537941B72396",
+        "date": "Thu, 22 Oct 2026 22:46:45 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_449DDA09-F84A-4ECA-9B0A-C50C3AC23CAD",
+          "varenavn": "Atomoxetine Medical Valley",
+          "navn_form_styrke": "Atomoxetine Medical Valley  kaps 25 mg",
+          "produsent": "Medical Valley Invest AB",
+          "atc": "N06BA09",
+          "legemiddelform": "Kapsel, hard"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14452.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (367556 byte).",
+          "antall": {
+            "bytes": 367556
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "fc4827549a4e00366ed66ab5d4525552fd380be35eb30eb8878830955a400831"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14453.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14453.pdf",
+      "hentet_kl": "2026-10-22T22:46:45.034Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "367556",
+        "content-md5": "F0vtIEVIGXZFUhxmYPYEWg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:53 GMT",
+        "etag": "0x8DE53793E85E1B5",
+        "date": "Thu, 22 Oct 2026 22:46:45 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_F75EB303-A361-4322-AA2B-A87228D56F88",
+          "varenavn": "Atomoxetine Medical Valley",
+          "navn_form_styrke": "Atomoxetine Medical Valley  kaps 40 mg",
+          "produsent": "Medical Valley Invest AB",
+          "atc": "N06BA09",
+          "legemiddelform": "Kapsel, hard"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/21-14453.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (367556 byte).",
+          "antall": {
+            "bytes": 367556
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "fc4827549a4e00366ed66ab5d4525552fd380be35eb30eb8878830955a400831"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "fc4827549a4e00366ed66ab5d4525552fd380be35eb30eb8878830955a400831",
+      "bytes": 367556,
+      "mappe": "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036",
+      "pdf": {
+        "sider": 19,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "mutual-recognition-decentralised-referral-pi-template-version-42_en_CLEAN_NO",
+        "laget": "Thu Dec  5 08:26:19 2024 UTC",
+        "endret": "Thu Dec  5 08:26:19 2024 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/original.pdf",
+        "tekst": "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-001.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-002.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-003.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-004.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-005.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-006.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-007.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-008.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-009.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-010.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-011.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-012.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-013.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-014.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-015.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-016.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-017.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-018.txt",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/tekst/side-019.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-001.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-002.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-003.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-004.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-005.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-006.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-007.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-008.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-009.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-010.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-011.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-012.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-013.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-014.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-015.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-016.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-017.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-018.png",
+          "kuratorjobb/resultat/atomoksetin/spc/fc4827549a4e0036/sider/side-019.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 9,
+        "til": 13
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (19 sider).",
+          "antall": {
+            "sider": 19
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 46825
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 9."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 19
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

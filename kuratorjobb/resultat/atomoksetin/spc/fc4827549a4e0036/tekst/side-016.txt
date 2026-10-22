@@ -1,0 +1,60 @@
+   ATX            758        482 (63,6 %)      <0.001         663             292 (44,0 %)         <0,001
+   PBO            611        301 (49,3 %)                     557             175 (31,4 %)
+a
+  Inkluderer alle studier i tabell X unntatt: Akutt CGI-S responsanalyse eksluderer to studier hos
+pasienter med komorbide tilstander (LYBY, LYDQ); Akutt CAARS responsanalyse ekskluderer èn
+studie hvor CAARS ikke ble brukt (LYBY).
+
+I to av de akutte studiene ble pasienter med ADHD og komorbid alkoholisme eller sosial angstlidelse
+undersøkt, og i begge studiene ble ADHD symptomene forbedret. I studien med komorbid
+alkoholmisbruk var det ingen forskjell mellom atomoksetin og placebo relatert til alkoholbruk. I
+studien med komorbid angstlidelse fant man at angstlidelsen ikke ble verre med
+atomokssetinbehandling.
+
+Atomoksetins effekt til å opprettholde symptomrespons ble vist i en studie der pasienter etter en aktiv
+initiell behandlingsperiode på 24 uker, ble randomisert til å motta ytterligere seks måneders
+dobbeltblind behandling med atomoksetin eller placebo dersom de møtte kriteriet for klinisk
+meningsfylt respons (definert som forbedring i både CAARS-Inv:SV og CGI-S score). En større andel
+av atomoksetinbehandlede enn placebobehandlede pasienter møtte kriteriet for opprettholdelse av
+klinisk meningsfylt respons etter 6 måneder (64,3 % vs. 50,0 %, p=0,001). Atomoksetinbehandlede
+pasienter viste statistisk signifikant bedre vedlikeholdelse av funksjon enn placebobehandlende
+pasienter, dette vist ved mindre gjennomsnittsforandring av total score på ”Adult ADHD Quality of
+Life (AAQoL)” etter 3 måneder (p=0,003) og etter 6 måneder (p=0,002).
+
+QT/QTc studie
+En grundig QT/QTc-studie utført med friske voksne langsomme omsettere via CYP2D6 med doser
+opp til 60 mg atomoksetin 2 ganger daglig, viste at ved forventet maksimal konsentrasjon var effekt av
+atomoksetin på QTc-intervallet ikke signifikant forskjellig fra placebo. Det var en liten økning i
+QTc-intervallet ved økt atomoksetinkonsentrasjon.
+
+5.2   Farmakokinetiske egenskaper
+
+Farmakokinetikken til atomoksetin hos barn og ungdom er tilsvarende den for voksne.
+Farmakokinetikken til atomoksetin er ikke undersøkt hos barn under 6 år.
+
+Farmakokinetiske studier viser at atomoksetin kapsler og oral oppløsning er bioekvivalente.
+
+Absorpsjon
+Atomoksetin absorberes raskt og nesten fullstendig etter oral administrering og når gjennomsnittlig
+maksimal plasmakonsentrasjon (Cmax) ca. 1-2 timer etter inntak. Absolutt biotilgjengelighet av
+atomoksetin etter oral administrering varierte fra 63 % til 94 % avhengig av interindividuelle
+forskjeller i den beskjedne første passasje-metabolismen. Atomoksetin kan administreres med eller
+uten mat.
+
+Distribusjon
+Atomoksetin distribueres i stor grad og har høy binding til plasmaprotein (98 %), primært albumin.
+
+Biotransformasjon
+Atomoksetin metaboliseres primært via cytokrom P450 2D6 (CYP2D6). Pasienter med redusert
+aktivitet i denne metaboliseringsveien (PM) utgjør ca. 7 % av den kaukasiske befolkning og har
+høyere plasmakonsentrasjon av atomoksetin, sammenlignet med de med normal aktivitet (EM). For
+PM er atomoksetin AUC ca. 10 ganger, og Css maks. ca. 5 ganger større enn for EM. Hovedmetabolitt
+er 4-hydroksyatomoksetin som raskt glukuronideres. 4-Hydroksyatomoksetin er ekvipotent med
+atomoksetin, men sirkulerer i plasma i mye lavere konsentrasjoner. Selv om 4-hydroksyatomoksetin
+primært dannes via CYP2D6, kan 4-hydroksyatomoksetin, hos individer som mangler
+CYP2D6-aktivitet, dannes via ulike andre cytokrom P450-enzymer, men ved lavere hastighet.
+Atomoksetin hemmer eller induserer ikke CYP2D6 i terapeutiske doser.
+Cytokrom P450-enzymer: Atomoksetin førte ikke til klinisk signifikant inhibisjon eller induksjon av
+cytokrom P450-enzymer, inkludert CYP1A2, CYP3A, CYP2D6 og CYP2C9.
+
+                                                  16
