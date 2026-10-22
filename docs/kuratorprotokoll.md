@@ -259,15 +259,23 @@ Leseren velger måleenheten konsentrasjonene vises i (µg/L, nmol/L eller
 - **Hva som ikke merkes:** styrken og innholdet i et preparat (mg/mL i en
   mikstur eller en injeksjonsvæske, også hjelpestoffene), doser og
   doseringshastigheter, enheter appen ikke kan regne om (per desiliter,
-  promille, prosent, per kreatinin), og kroppens egne stoffer som måles i en
-  fast klinisk enhet (natrium, bikarbonat, glukose, hormoner som prolaktin),
-  der en omregning til leserens enhet ikke gir mening. De står som vanlig
-  tekst.
+  promille, prosent, per kreatinin), og stoffer som måles i en fast klinisk
+  enhet der en omregning til leserens enhet ikke gir mening: kroppens egne
+  stoffer (natrium, bikarbonat, glukose, hormoner som prolaktin), etanol og
+  litium. Heller ikke tall i et ordrett sitat merkes: en omregning inne i
+  anførselstegnene ville tillagt kilden et tall den ikke skrev. Tall i et
+  sitat som betyr noe for leseren, står merket i teksten utenfor sitatet.
+  Det umerkede står som vanlig tekst.
 - **Tallet og enheten er kildens** (krav 5): `verdi` og `enhet` skrives
   nøyaktig som kilden oppga dem, uten omregning eller avrunding. Et omregnet
-  tall skrives aldri i teksten; appen regner om selv. «ca.», «over» og
+  tall skrives aldri i teksten; appen regner om selv, og oppgir kilden det
+  samme tallet i to enheter, står bare det første. «ca.», «over» og
   «under» står utenfor noden; `<`, `>`, `≤` og `≥` kan stå i den, foran ett
-  tall. Merkingen endrer aldri en beskyttet verdi (krav 3).
+  tall. Deler flere tall én enhet («10 og 20 µg/L», «9,1 ± 4,1 ng/mL»,
+  «40 mg/L (5–90)»), står enheten ved hvert tall, og nM, µM, mM og enheter
+  skrevet med ord («mikromol/liter») skrives nmol/L, µmol/L, mmol/L og
+  µmol/L; det er samme tall i samme enhet. Merkingen endrer aldri en
+  beskyttet verdi (krav 3).
 - **Forbindelsen** er den som faktisk er målt (`src/data/forbindelser.ts`):
   metabolitten når det er metabolitten, den frie formen og ikke saltet
   (`docs/kjemi.md`). Uten den regnes tallet bare om innen masse eller
@@ -391,3 +399,7 @@ holder dem i takt med modellen og piloten).
   kan ha betydning, vises fortsatt (krav 6). Kroppens egne stoffer (natrium,
   bikarbonat og lignende) merkes ikke som konsentrasjoner, siden de ellers ble
   vist i enheter som ikke gir mening for dem.
+- 2026-10-22: «Konsentrasjonene i teksten» (fagansvarlig): ordrette sitater,
+  etanol og litium merkes ikke, samme tall i to enheter står bare én gang, og
+  skrivemåten når flere tall deler én enhet er beskrevet. Ingen krav er
+  svekket: tallene står fortsatt som i kilden.
