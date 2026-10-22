@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.107.2',
+    dato: '2026-10-22',
+    sammendrag: 'Klarere regler for hvilke konsentrasjoner i fagtekstene som regnes om',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Ordrette sitater fra kildene står som kilden skrev dem og regnes ikke om, og etanol og litium vises i mmol/L som før. Oppgir en kilde samme tall i to enheter, står det bare én gang, siden appen regner om selv.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.107.1',
     dato: '2026-10-22',
     sammendrag: 'En vaktmester retter språk og doble tall på de kuraterte fagsidene',
