@@ -1,6 +1,6 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-22T22:30:25.858Z. Stoffene sist lest fra databasen 2026-10-22T18:37:42.482Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-22T23:30:38.376Z. Stoffene sist lest fra databasen 2026-10-22T18:37:42.482Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
 Klar: 76 · Publisert: 16 · Blokkert: 8 · Utenfor køen: 1
 
@@ -14,22 +14,22 @@ Ingen kurateringer venter.
 
 ## Blokkert
 
-- **alprazolam**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, klar); den må avsluttes først.
-- **atomoksetin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, retting); den må avsluttes først.
+- **diazepam**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, arbeid); den må avsluttes først.
 - **etanol**: Stoffet har ingen publisert fagside å kuratere.
 - **kokain**: Stoffet har ingen publisert fagside å kuratere.
 - **mdma**: Stoffet har ingen publisert fagside å kuratere.
 - **metamfetamin**: Stoffet har ingen publisert fagside å kuratere.
+- **nitrazepam**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, arbeid); den må avsluttes først.
+- **oksazepam**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, arbeid); den må avsluttes først.
 - **okskarbazepin**: Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig.
-- **valproat**: Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.
 
 ## Køen
 
 | # | Stoff | Modus | Poeng | Hvorfor |
 | --- | --- | --- | --- | --- |
-| 1 | diazepam | de_novo | 445.5 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 8 elementer har ingen kilde. Bare 4 referanser. |
-| 2 | nitrazepam | de_novo | 445.5 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 8 elementer har ingen kilde. Bare 2 referanser. |
-| 3 | oksazepam | de_novo | 445.5 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 8 elementer har ingen kilde. Bare 3 referanser. |
+| 1 | valproat | de_novo | 447.6 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 6 elementer har ingen kilde. Bare 3 referanser. |
+| 2 | atomoksetin | de_novo | 446.4 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 7 elementer har ingen kilde. Bare 3 referanser. |
+| 3 | alprazolam | de_novo | 445.5 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 8 elementer har ingen kilde. Bare 2 referanser. |
 | 4 | petidin | de_novo | 445.5 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 8 elementer har ingen kilde. Bare 2 referanser. |
 | 5 | zolpidem | de_novo | 445.5 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 8 elementer har ingen kilde. Bare 2 referanser. |
 | 6 | zopiklon | de_novo | 445.5 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 9 av 13 redaksjonelle seksjoner er tomme. 1 av 8 elementer har ingen kilde. Bare 3 referanser. |

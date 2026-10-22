@@ -1,5 +1,5 @@
 {
-  "oppdatert_kl": "2026-10-22T22:30:25.858Z",
+  "oppdatert_kl": "2026-10-22T23:30:38.376Z",
   "malt_kl": "2026-10-22T18:37:42.482Z",
   "antall": {
     "klar": 76,
@@ -15,21 +15,35 @@
   "holdes_tilbake": null,
   "neste": [
     {
-      "stoff": "diazepam",
+      "stoff": "valproat",
       "modus": "de_novo",
-      "poeng": 445.5,
+      "poeng": 447.6,
       "grunner": [
         "De novo-kuratering i runden som gjelder.",
         "Aldri kuratert.",
         "Ingen kuratering å regne alderen fra.",
         "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 8 elementer har ingen kilde.",
-        "Bare 4 referanser."
+        "1 av 6 elementer har ingen kilde.",
+        "Bare 3 referanser."
       ],
       "tidligst_kl": null
     },
     {
-      "stoff": "nitrazepam",
+      "stoff": "atomoksetin",
+      "modus": "de_novo",
+      "poeng": 446.4,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 7 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "alprazolam",
       "modus": "de_novo",
       "poeng": 445.5,
       "grunner": [
@@ -39,20 +53,6 @@
         "9 av 13 redaksjonelle seksjoner er tomme.",
         "1 av 8 elementer har ingen kilde.",
         "Bare 2 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "oksazepam",
-      "modus": "de_novo",
-      "poeng": 445.5,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 8 elementer har ingen kilde.",
-        "Bare 3 referanser."
       ],
       "tidligst_kl": null
     },
@@ -154,23 +154,12 @@
   "til_gjennomgang": [],
   "blokkert": [
     {
-      "stoff": "alprazolam",
+      "stoff": "diazepam",
       "blokkeringer": [
         {
           "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, klar); den må avsluttes først.",
-          "kl": "2026-10-22T22:30:25.858Z",
-          "kilde": "system"
-        }
-      ]
-    },
-    {
-      "stoff": "atomoksetin",
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, retting); den må avsluttes først.",
-          "kl": "2026-10-22T22:30:25.858Z",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, arbeid); den må avsluttes først.",
+          "kl": "2026-10-22T23:30:38.376Z",
           "kilde": "system"
         }
       ]
@@ -220,6 +209,28 @@
       ]
     },
     {
+      "stoff": "nitrazepam",
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, arbeid); den må avsluttes først.",
+          "kl": "2026-10-22T23:30:38.376Z",
+          "kilde": "system"
+        }
+      ]
+    },
+    {
+      "stoff": "oksazepam",
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, arbeid); den må avsluttes først.",
+          "kl": "2026-10-22T23:30:38.376Z",
+          "kilde": "system"
+        }
+      ]
+    },
+    {
       "stoff": "okskarbazepin",
       "blokkeringer": [
         {
@@ -227,17 +238,6 @@
           "grunn": "Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig.",
           "kl": "2026-10-17T14:52:49.441Z",
           "kilde": "agent"
-        }
-      ]
-    },
-    {
-      "stoff": "valproat",
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, tilbakemelding); den må avsluttes først.",
-          "kl": "2026-10-22T22:30:25.858Z",
-          "kilde": "system"
         }
       ]
     }
