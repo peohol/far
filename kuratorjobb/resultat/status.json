@@ -1,18 +1,49 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/manuell-39802056636",
     "foresporsel_commit": "1d5f9b8ea4fb46032aadf2278546dcba48db7375",
     "foresporsel_sha256": "4d15acf30f94356361b8ef6b3176f581655547ef905776dfd7b5bdc94fd057e4",
     "kode_commit": "cf36d2602624ed31c09f34cf9c8a28ed70d645d4",
     "kjoring": "https://github.com/peohol/ousfar/actions/runs/39802056636",
-    "startet_kl": "2026-10-22T15:13:28.530Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-22T15:13:31.032Z",
+    "ferdig_kl": "2026-10-22T15:13:36.580Z"
   },
-  "foresporsel": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "psilocybin"
+    ],
+    "oppgaver": [
+      "funksjonstest"
+    ]
+  },
   "referanse": null,
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 598
+    }
+  ],
+  "stoffer": {
+    "psilocybin": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/psilocybin/funksjonstest.json"
+        }
+      }
+    }
+  }
 }

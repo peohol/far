@@ -1,0 +1,120 @@
+{
+  "stoff": "psilocybin",
+  "status": "advarsel",
+  "kontroller": [
+    {
+      "id": "les_stoff",
+      "rpc": "les_stoff",
+      "ms": 1930,
+      "status": "ok",
+      "melding": "Den publiserte siden ble lest.",
+      "antall": {
+        "elementer": 47,
+        "referanser": 112
+      }
+    },
+    {
+      "id": "sidemodell",
+      "status": "ok",
+      "melding": "Siden kan settes sammen slik appen viser den."
+    },
+    {
+      "id": "referanser",
+      "status": "ok",
+      "melding": "Alle referansene siden siterer, ble lest med den.",
+      "antall": {
+        "sitert": 112
+      }
+    },
+    {
+      "id": "utkast_skjult",
+      "rpc": "les_stoff",
+      "ms": 183,
+      "status": "ok",
+      "melding": "Utkastet er skjult for en vanlig bruker, som det skal."
+    },
+    {
+      "id": "stoffliste",
+      "rpc": "les_stoffliste",
+      "ms": 438,
+      "status": "ok",
+      "melding": "Siden står i lista over fagsider.",
+      "antall": {
+        "sider": 107
+      }
+    },
+    {
+      "id": "fest",
+      "status": "ikke_aktuelt",
+      "melding": "Siden er ikke koblet til virkestoff i FEST."
+    },
+    {
+      "id": "bivirkninger",
+      "rpc": "les_bivirkninger",
+      "ms": 436,
+      "status": "ikke_aktuelt",
+      "melding": "Ingen bivirkninger er importert fra preparatomtaler for siden.",
+      "antall": {
+        "kilder": 0,
+        "rader": 0,
+        "rader_appen_viser": 0
+      }
+    },
+    {
+      "id": "clinpgx",
+      "status": "ikke_aktuelt",
+      "melding": "Siden er ikke koblet til ClinPGx."
+    },
+    {
+      "id": "cpic",
+      "status": "ikke_aktuelt",
+      "melding": "Siden er ikke koblet til ClinPGx, som CPIC slås opp etter."
+    },
+    {
+      "id": "kjemi",
+      "rpc": "les_kjemi",
+      "ms": 417,
+      "status": "advarsel",
+      "melding": "2 av de koblede forbindelsene er ikke hentet fra PubChem ennå.",
+      "antall": {
+        "forbindelser": 2,
+        "hentet": 0,
+        "ikke_hentet": 2,
+        "uavklarte": 0,
+        "rader": 0,
+        "rader_appen_viser": 0
+      }
+    },
+    {
+      "id": "kjemivisning",
+      "status": "ok",
+      "melding": "Seksjonen «Kjemiske grunndata» kan bygges av svaret."
+    },
+    {
+      "id": "laboratorieanalyser",
+      "rpc": "les_laboratorieanalyser",
+      "ms": 447,
+      "status": "ok",
+      "melding": "Laboratorieanalysene ble lest, og koblingene stemmer (kontrollert 2026-10-22T04:50:27.90344+00:00).",
+      "antall": {
+        "forbindelser": 2,
+        "koblet": 1,
+        "usikre": 0,
+        "komponenter": 1,
+        "analyser": 4,
+        "laboratorier": 2
+      }
+    },
+    {
+      "id": "laboratorievisning",
+      "status": "ok",
+      "melding": "Seksjonen «Analyse ved norske laboratorier» kan bygges av svaret, i alle enhetene.",
+      "antall": {
+        "tabeller": 2,
+        "rader": 3,
+        "ikke_omregnet": 1,
+        "usikre": 0
+      }
+    }
+  ]
+}
