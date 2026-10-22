@@ -16,7 +16,7 @@ import {
 import { INGEN_EFFEKT } from '../../faginnhold/mekanismer'
 import { doseringskort } from '../../faginnhold/doseringskort'
 import { OPPSUMMERINGSSKILLE, antall, forhandsvisning, kuttes, ramsOpp } from '../../faginnhold/oppsummering'
-import { NODER, erTomt, klartekst, tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
+import { NODER, erTomt, klartekst, tomtDokument, type Konsentrasjonsskriver, type Riktekstdokument } from '../../faginnhold/riktekst'
 import { Button } from '../Button'
 import { SenketTekst } from '../SenketTekst'
 import { Ikon } from '../ikon/Ikon'
@@ -55,7 +55,7 @@ export interface Panelkontekst {
   redigerer: boolean
   handlinger: Stoffsidehandlinger
   /** En konsentrasjon i teksten slik leseren ser den (`konsentrasjonIEnhet`), til oppsummeringene. */
-  konsentrasjon: (attrs: unknown) => string
+  konsentrasjon: Konsentrasjonsskriver
 }
 
 /** ID-en et element har på siden, så søket kan peke dit. */

@@ -3613,13 +3613,29 @@ describe('kjemiske grunndata', () => {
     vis('amitriptylin', k)
     // Metabolitten regnes om med molekylvekten siden alt har; litium hentes for seg.
     // Oppsummeringen av den lukkede seksjonen viser det samme som teksten.
-    expect(await screen.findByText('Nortriptylin 13–40 µg/L, litium 3500 µg/L')).toBeTruthy()
+    expect(await screen.findByText('Nortriptylin 13–40 µg/L, litium 3500 µg/L', {}, { timeout: 3000 })).toBeTruthy()
     expect(les).toHaveBeenCalledWith(['2160', '4543'])
     expect(les).toHaveBeenCalledWith(['28486'])
     await apneSkuff(user, 'Indikasjon')
     const seksjon = screen.getByRole('region', { name: 'Indikasjon' })
     expect(within(seksjon).getByRole('button', { name: /^13–40 µg\/L/ })).toBeTruthy()
     expect(within(seksjon).getByRole('button', { name: /^3500 µg\/L/ })).toBeTruthy()
+
+    // Søket på siden finner tallene og enhetene slik de vises, og viser hvor de står.
+    await user.keyboard('{Control>}b{/Control}')
+    await user.keyboard('13–40')
+    await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Treff 1 av 1'))
+    expect(within(seksjon).getByRole('button', { name: /^13–40 µg\/L/ }).querySelector('mark.sidetreff')?.textContent).toBe('13–40')
+    expect(within(screen.getByRole('list', { name: 'Hvor treffene står' })).getByRole('button').textContent).toBe('Indikasjon')
+    const sok = screen.getByRole('searchbox', { name: 'Søk på denne siden' })
+    await user.clear(sok)
+    await user.keyboard('µg/L')
+    await waitFor(() => expect(within(seksjon).getAllByRole('button', { name: /µg\/L/ }).every((b) => b.querySelector('mark.sidetreff'))).toBe(true))
+    expect(screen.getByRole('status').textContent).toMatch(/^Treff 1 av \d+$/)
+    // Tallet fra kilden står ikke på siden, og søket peker ikke dit.
+    await user.clear(sok)
+    await user.keyboard('50–150')
+    await waitFor(() => expect(screen.queryByRole('list', { name: 'Hvor treffene står' })).toBeNull())
   })
 
   it('viser forbindelsene også før dataene er hentet', async () => {

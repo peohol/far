@@ -224,6 +224,15 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
     [legemidler, koblet],
   )
 
+  // Konsentrasjonene i teksten slik leseren ser dem: i oppsummeringene og i søket på siden.
+  const { enhet: maleenhet } = useMaleenhet()
+  const konsentrasjon = useCallback(
+    (attrs: unknown) => {
+      const vist = konsentrasjonIEnhet(attrs, maleenhet, molvekter)
+      return `${vist.tekst} ${vist.enhet}`
+    },
+    [maleenhet, molvekter],
+  )
   const dokumenter = useMemo(
     () =>
       indekserSide(
@@ -237,19 +246,14 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
           ...labsoketekster(laboratorier),
           ...kjemisoketekster(kjemi),
         ],
+        konsentrasjon,
       ),
-    [slug, navn, kjent, analytter, modell, legemidler, interaksjoner, pgx, cpictilstand, bivirkninger, bivirkningsvisning, kjemi, laboratorier],
+    [slug, navn, kjent, analytter, modell, legemidler, interaksjoner, pgx, cpictilstand, bivirkninger, bivirkningsvisning, kjemi, laboratorier, konsentrasjon],
   )
+  // Treffene telles på nytt når innholdet endres, også når konsentrasjonene vises i en annen enhet.
+  const sokeinnhold = useMemo(() => [side.data, konsentrasjon], [side.data, konsentrasjon])
   const ord = useMemo(() => sokeord(sporring), [sporring])
 
-  const { enhet: maleenhet } = useMaleenhet()
-  const konsentrasjon = useCallback(
-    (attrs: unknown) => {
-      const vist = konsentrasjonIEnhet(attrs, maleenhet, molvekter)
-      return `${vist.tekst} ${vist.enhet}`
-    },
-    [maleenhet, molvekter],
-  )
   const kontekst: Panelkontekst = { modell, redigerer, handlinger, konsentrasjon }
   const redigeringsverdi = useMemo(
     () => ({
@@ -336,7 +340,7 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
           onEndre={setSporring}
           beholder={beholder}
           dokumenter={dokumenter}
-          innholdsnokkel={side.data}
+          innholdsnokkel={sokeinnhold}
         />
       </ToppmenyInnhold>
 

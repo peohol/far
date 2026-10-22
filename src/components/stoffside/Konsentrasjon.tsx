@@ -89,7 +89,9 @@ export function Konsentrasjon({ attrs }: { attrs: Record<string, unknown> }) {
         <span className="konsentrasjon__tall">
           <Uthev tekst={vist.tekst} />
         </span>{' '}
-        <span className="konsentrasjon__enhet">{vist.enhet}</span>
+        <span className="konsentrasjon__enhet">
+          <Uthev tekst={vist.enhet} />
+        </span>
         <span className="kun-skjermleser">, vis alle enheter</span>
       </button>
       {apen && knapp.ref.current && (

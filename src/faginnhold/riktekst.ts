@@ -248,7 +248,7 @@ export function erTomt(dokument: Riktekstnode): boolean {
  * konsentrasjon tallet og enheten som i kilden, eller slik `konsentrasjon`
  * skriver den (i leserens måleenhet, i oppsummeringene). Brukes av søket.
  */
-export function klartekst(dokument: Riktekstnode, konsentrasjon: (attrs: unknown) => string = konsentrasjonstekst): string {
+export function klartekst(dokument: Riktekstnode, konsentrasjon: Konsentrasjonsskriver = konsentrasjonstekst): string {
   if (dokument.type === NODER.tekst) return dokument.text ?? ''
   if (dokument.type === NODER.konsentrasjon) return konsentrasjon(dokument.attrs)
   if (dokument.type === NODER.direktelenke) return typeof dokument.attrs?.etikett === 'string' ? dokument.attrs.etikett : ''
@@ -256,6 +256,9 @@ export function klartekst(dokument: Riktekstnode, konsentrasjon: (attrs: unknown
   const deler = (dokument.content ?? []).map((n) => klartekst(n, konsentrasjon))
   return BLOKKBEHOLDERE.has(dokument.type) || LISTER.has(dokument.type) ? deler.filter(Boolean).join('\n') : deler.join('')
 }
+
+/** Skriver en konsentrasjon i teksten (attributtene til noden) som tekst. */
+export type Konsentrasjonsskriver = (attrs: unknown) => string
 
 /** En konsentrasjon som tekst, med tallet og enheten som i kilden: «50–200 nmol/L». */
 export function konsentrasjonstekst(attrs: unknown): string {
