@@ -1,61 +1,19 @@
 {
-  "oppdatert_kl": "2026-10-22T18:37:42.482Z",
+  "oppdatert_kl": "2026-10-22T19:30:32.758Z",
   "malt_kl": "2026-10-22T18:37:42.482Z",
   "antall": {
-    "klar": 79,
+    "klar": 76,
     "reservert": 0,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 0,
     "sammenslatt": 0,
     "publisert": 16,
-    "blokkert": 5,
+    "blokkert": 8,
     "utenfor": 1
   },
   "aktive": [],
   "holdes_tilbake": null,
   "neste": [
-    {
-      "stoff": "valproat",
-      "modus": "de_novo",
-      "poeng": 447.6,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 6 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "atomoksetin",
-      "modus": "de_novo",
-      "poeng": 446.4,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 7 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "alprazolam",
-      "modus": "de_novo",
-      "poeng": 445.5,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "9 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 8 elementer har ingen kilde.",
-        "Bare 2 referanser."
-      ],
-      "tidligst_kl": null
-    },
     {
       "stoff": "diazepam",
       "modus": "de_novo",
@@ -153,10 +111,70 @@
         "Bare 4 referanser."
       ],
       "tidligst_kl": null
+    },
+    {
+      "stoff": "tapentadol",
+      "modus": "de_novo",
+      "poeng": 442.3,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "12 av 13 redaksjonelle seksjoner er tomme."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "bupropion",
+      "modus": "de_novo",
+      "poeng": 432.5,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "6 av 13 redaksjonelle seksjoner er tomme.",
+        "16 av 22 elementer har ingen kilde."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "trimipramin",
+      "modus": "de_novo",
+      "poeng": 432.5,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "6 av 13 redaksjonelle seksjoner er tomme.",
+        "16 av 22 elementer har ingen kilde."
+      ],
+      "tidligst_kl": null
     }
   ],
   "til_gjennomgang": [],
   "blokkert": [
+    {
+      "stoff": "alprazolam",
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, arbeid); den må avsluttes først.",
+          "kl": "2026-10-22T19:30:32.758Z",
+          "kilde": "system"
+        }
+      ]
+    },
+    {
+      "stoff": "atomoksetin",
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, arbeid); den må avsluttes først.",
+          "kl": "2026-10-22T19:30:32.758Z",
+          "kilde": "system"
+        }
+      ]
+    },
     {
       "stoff": "etanol",
       "blokkeringer": [
@@ -209,6 +227,17 @@
           "grunn": "Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig.",
           "kl": "2026-10-17T14:52:49.441Z",
           "kilde": "agent"
+        }
+      ]
+    },
+    {
+      "stoff": "valproat",
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (de_novo, arbeid); den må avsluttes først.",
+          "kl": "2026-10-22T19:30:32.758Z",
+          "kilde": "system"
         }
       ]
     }
