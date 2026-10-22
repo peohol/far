@@ -16,6 +16,7 @@
  * har `uavklart` med grunnen og kandidatene.
  */
 import { FORBINDELSESDATA } from '../data/forbindelser.js'
+import { FORBINDELSESNOKKEL } from '../enheter/konsentrasjon.js'
 
 /** Hva forbindelsen er for stoffet på fagsiden. */
 export type Forbindelsesrelasjon = 'selve_stoffet' | 'metabolitt'
@@ -90,7 +91,6 @@ export const FORBINDELSESRELASJONER: readonly Forbindelsesrelasjon[] = ['selve_s
 export const FORBINDELSESFORMER: readonly Forbindelsesform[] = ['fri', 'ion', 'salt']
 
 export const INCHIKEY = /^[A-Z]{14}-[A-Z]{10}-[A-Z]$/
-const NOKKEL = /^[a-z0-9][a-z0-9-]*$/
 
 export interface Forbindelsesregister {
   alle: readonly Forbindelse[]
@@ -135,7 +135,7 @@ export function kontrollerForbindelser(forbindelser: readonly Forbindelse[], sto
   const cider = new Map<number, string>()
   const fpider = new Map<string, string>()
   for (const f of forbindelser) {
-    if (!NOKKEL.test(f.nokkel)) feil.push(`${f.nokkel}: ugyldig nøkkel`)
+    if (!FORBINDELSESNOKKEL.test(f.nokkel)) feil.push(`${f.nokkel}: ugyldig nøkkel`)
     if (nokler.has(f.nokkel)) feil.push(`${f.nokkel}: står to ganger`)
     nokler.add(f.nokkel)
     if (!f.navn.trim() || !f.engelsk.trim()) feil.push(`${f.nokkel}: mangler navn`)

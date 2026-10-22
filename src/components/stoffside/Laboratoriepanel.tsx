@@ -1,5 +1,6 @@
 import { useId } from 'react'
 import { VISNINGSENHETER, type Visningsenhet } from '../../enheter/konsentrasjon'
+import { useMaleenhet } from '../../enheter/Maleenhet'
 import type { Paneldefinisjon } from '../../faginnhold/paneler'
 import { fpUrl } from '../../farmakologiportalen/api'
 import {
@@ -11,7 +12,6 @@ import {
   type Labtabell,
   type Labvisning,
 } from '../../farmakologiportalen/stoffside'
-import { useBevart } from '../../oppdatering/Bevaring'
 import { Trinnbryter, type Trinnvalg } from '../Trinnbryter'
 import { Uthev } from '../Uthev'
 import { Kildelenke } from './Farmakogenetikkdeler'
@@ -19,7 +19,6 @@ import { elementAnker, Panel, type Panelkontekst } from './Paneler'
 import '../../styles/laboratorier.css'
 
 const ENHETSVALG: readonly Trinnvalg<Visningsenhet>[] = VISNINGSENHETER.map((e) => ({ verdi: e, merke: e }))
-const erVisningsenhet = (v: unknown): v is Visningsenhet => VISNINGSENHETER.some((e) => e === v)
 /** Brytepunktene etter skråstreken mellom to lange ord («immunologiske/enzymatiske»), men ikke i «LC-MS/MS». */
 const etterSkrastrek = (tekst: string) => [...tekst.matchAll(/(?<=\p{L}{4})\/(?=\p{L}{4})/gu)].map((m) => m.index + 1)
 
@@ -27,7 +26,7 @@ const etterSkrastrek = (tekst: string) => [...tekst.matchAll(/(?<=\p{L}{4})\/(?=
  * Seksjonen «Analyse ved norske laboratorier»: analysene laboratoriene oppgir
  * i Farmakologiportalen for forbindelsene stoffet har, én tabell per matrise
  * og analytt («Serum · Desmetylcitalopram»), med måleområdene i enheten
- * brukeren velger. Tabellene er smale nok til å vises i hele bredden; lange
+ * brukeren velger (preferansen «Måleenhet», som bryteren her også endrer). Tabellene er smale nok til å vises i hele bredden; lange
  * navn brytes. Ingenting her
  * redigeres; koblingene står i `src/data/forbindelser.ts`, og portalen står
  * som kilde i referansefeltet (`src/farmakologiportalen/`).
@@ -41,8 +40,7 @@ export function Laboratoriepanel({
   kontekst: Panelkontekst
   visning: Labvisning
 }) {
-  const [lagret, setEnhet] = useBevart<Visningsenhet>('laboratorieenhet', 'µg/L')
-  const enhet = erVisningsenhet(lagret) ? lagret : 'µg/L'
+  const { enhet, velg } = useMaleenhet()
   return (
     <Panel
       definisjon={definisjon}
@@ -52,7 +50,7 @@ export function Laboratoriepanel({
     >
       <div className="laboratorier">
         <div className="laboratorier__valg">
-          <Trinnbryter etikett="Vis måleområdene i" valg={ENHETSVALG} verdi={enhet} onVelg={setEnhet} />
+          <Trinnbryter etikett="Vis måleområdene i" valg={ENHETSVALG} verdi={enhet} onVelg={velg} />
         </div>
         {visning.tabeller.map((t) => (
           <Tabell key={t.nokkel} tabell={t} enhet={enhet} />

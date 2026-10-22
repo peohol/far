@@ -48,7 +48,7 @@ import {
 } from './paneler'
 import { mekanismeFor } from './mekanismer'
 import { formaterReferanse } from './referanser'
-import { klartekst } from './riktekst'
+import { klartekst, konsentrasjonstekst, type Konsentrasjonsskriver } from './riktekst'
 import { stoffadresse } from '../domain/rute'
 import { navnenokkel } from '../domain/sokenavn'
 import type { KobletAnalytt } from '../domain/koblinger'
@@ -285,18 +285,23 @@ export interface Elementtekst {
 /**
  * Tekstene i et innholdselement, slik de leses: fritekst uten formatering,
  * radene i tabellen og verdien i et datakort. Tomme tekster er utelatt.
- * Søket og historikken bruker de samme.
+ * Søket og historikken bruker de samme. Konsentrasjonene står som i kilden,
+ * eller slik `konsentrasjon` skriver dem (søket på siden: i leserens måleenhet).
  */
-export function elementtekster(elementtype: string, data: unknown): Elementtekst[] {
+export function elementtekster(
+  elementtype: string,
+  data: unknown,
+  konsentrasjon: Konsentrasjonsskriver = konsentrasjonstekst,
+): Elementtekst[] {
   const tekst = (felt: Sokefelt, t: string, tittel?: string, navn?: string): Elementtekst[] =>
     t.trim() ? [{ felt, tekst: t, ...(tittel && { tittel }), ...(navn && { navn }) }] : []
 
   switch (elementtype) {
     case ELEMENTTYPER.riktekst:
-      return tekst('fritekst', klartekst(lesRiktekst(data).dokument))
+      return tekst('fritekst', klartekst(lesRiktekst(data).dokument, konsentrasjon))
     case ELEMENTTYPER.kinetikk: {
       const { tittel, dokument } = lesKinetikk(data)
-      return [...tekst('overskrift', tittel, tittel), ...tekst('fritekst', klartekst(dokument), tittel)]
+      return [...tekst('overskrift', tittel, tittel), ...tekst('fritekst', klartekst(dokument, konsentrasjon), tittel)]
     }
     case ELEMENTTYPER.mekanisme: {
       const kort = lesMekanismekort(data)
@@ -304,7 +309,7 @@ export function elementtekster(elementtype: string, data: unknown): Elementtekst
       return [
         ...tekst('overskrift', kort.maal, t, 'Mål'),
         ...tekst('verdi', mekanismeFor(kort.mekanisme)?.effekt ?? '', t, 'Effekt'),
-        ...tekst('fritekst', klartekst(kort.dokument), t, 'Utdypende tekst'),
+        ...tekst('fritekst', klartekst(kort.dokument, konsentrasjon), t, 'Utdypende tekst'),
       ]
     }
     case ELEMENTTYPER.dosetabell:
@@ -321,13 +326,13 @@ export function elementtekster(elementtype: string, data: unknown): Elementtekst
   }
 }
 
-function elementdokumenter(side: Sokested['side'], element: Sideelement): Sokedokument[] {
+function elementdokumenter(side: Sokested['side'], element: Sideelement, konsentrasjon?: Konsentrasjonsskriver): Sokedokument[] {
   const panelDef = panelFor(element.panel)
   const panel = panelDef && { nokkel: panelDef.nokkel, tittel: panelDef.tittel }
   // I et panel av kort er hvert kort sitt eget detaljkort. En tekst som står
   // i farmakodynamikken fra før mekanismekortene, står under kortene.
   const detaljkort = erKortserie(panelDef?.form) && element.elementtype !== ELEMENTTYPER.riktekst ? element.id : undefined
-  return elementtekster(element.elementtype, element.data).map(({ felt, tekst, tittel }) => ({
+  return elementtekster(element.elementtype, element.data, konsentrasjon).map(({ felt, tekst, tittel }) => ({
     sted: {
       side,
       ...(panel && { panel }),
@@ -363,6 +368,7 @@ export function indekserSide(
   identitet: Sideidentitet,
   modell: Sidemodell,
   tillegg: readonly Tilleggstekst[] = [],
+  konsentrasjon?: Konsentrasjonsskriver,
 ): Sokedokument[] {
   const side = { stoff: identitet.stoff, navn: identitet.navn }
   // Hver tekst én gang, i det sterkeste feltet den står i.
@@ -390,7 +396,7 @@ export function indekserSide(
     const ordnet = [...elementer].sort(
       (a, b) => (datakortplass.get(a.elementtype) ?? 0) - (datakortplass.get(b.elementtype) ?? 0),
     )
-    for (const element of ordnet) iPanel(panel).push(...elementdokumenter(side, element))
+    for (const element of ordnet) iPanel(panel).push(...elementdokumenter(side, element, konsentrasjon))
   }
   for (const { panel, element, detaljkort, felt, tekst } of tillegg) {
     const definisjon = panelFor(panel)

@@ -141,7 +141,9 @@ sidelengs; på smale skjermer står bemerkningen under måleområdet.
 Laboratoriet og måleområdet lenker til portalen.
 
 Måleområdene vises i enheten brukeren velger (µg/L, nmol/L, µmol/L), med høyst
-to gjeldende sifre, som `x—y` (`src/enheter/konsentrasjon.ts`). Fasit er
+to gjeldende sifre, som `x—y` (`src/enheter/konsentrasjon.ts`). Bryteren over
+tabellene er den samme preferansen som «Måleenhet» under «Preferanser», som
+også gjelder konsentrasjonene i fagtekstene (`docs/faginnhold.md`). Fasit er
 portalens API, ikke det portalens sider viser (Peder, 9. oktober 2026).
 Portalens egen analyseside viser et måleområde bare når begge grensene er
 oppgitt. Én grense alene (342 aktive analyser i oktober 2026, halvparten

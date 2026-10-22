@@ -429,7 +429,7 @@ describe('kontomenyen', () => {
     expect(valg.map((v) => v.textContent)).toEqual(['Endre navn og profilbilde', 'Preferanser', 'Logg ut'])
   })
 
-  it('folder ut preferansene med hurtigtastene og temaet, og de virker derfra', async () => {
+  it('folder ut preferansene med hurtigtastene, temaet og måleenheten, og de virker derfra', async () => {
     const knapp = vis()
     await userEvent.click(knapp)
     const meny = panel(knapp)
@@ -465,6 +465,14 @@ describe('kontomenyen', () => {
     fireEvent.change(tema, { target: { value: '0' } })
     fireEvent.change(bevegelse, { target: { value: '1' } })
     expect(screen.getByRole('status').textContent).toBe('lyst full med hurtigtaster')
+
+    // Måleenheten konsentrasjonene vises i: de samme tre som laboratorietabellene, µg/L til noe annet er valgt.
+    const maleenhet = within(skuff).getByRole('slider', { name: 'Måleenhet' })
+    expect(merker(maleenhet)).toEqual(['µg/L', 'nmol/L', 'µmol/L'])
+    expect(maleenhet.getAttribute('aria-valuetext')).toBe('µg/L')
+    fireEvent.change(maleenhet, { target: { value: '1' } })
+    expect(maleenhet.getAttribute('aria-valuetext')).toBe('nmol/L')
+    expect(localStorage.getItem('far:maleenhet')).toBe('nmol/L')
     // Bryterne er inni menyen: den står åpen.
     expect(meny.hidden).toBe(false)
 

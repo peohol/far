@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { lesValg, virkeligVerdi, type Systemvalg, type Valg } from '../domain/systemvalg'
 
 /** Om mediespørringen slår til nå, og følger med når systemet endres. */
@@ -22,12 +22,35 @@ function liste(sporring: string): MediaQueryList | null {
   return typeof window.matchMedia === 'function' ? window.matchMedia(sporring) : null
 }
 
-function lagret<V extends string>(def: Systemvalg<V>): Valg<V> {
-  try {
-    return lesValg(def, localStorage.getItem(def.lagring)) ?? def.standard
-  } catch {
-    return def.standard
-  }
+/**
+ * Et valg nettleseren husker under `lagring`, som en vanlig tilstand. Det
+ * som er husket, leses med `les` når valget tas i bruk; mangler det eller er
+ * ugyldig, gjelder `standard`. Bare valg som faktisk tas, huskes, så den som
+ * aldri har valgt, følger standarden. Inne i appen følger valget også kontoen
+ * (`useKontosynk`).
+ */
+export function useHusketValg<T extends string>(lagring: string, les: (verdi: unknown) => T | null, standard: T) {
+  const [valg, settValg] = useState<T>(() => {
+    try {
+      return les(localStorage.getItem(lagring)) ?? standard
+    } catch {
+      return standard
+    }
+  })
+
+  const velg = useCallback(
+    (neste: T) => {
+      settValg(neste)
+      try {
+        localStorage.setItem(lagring, neste)
+      } catch {
+        // Privat nettlesermodus e.l. — valget gjelder fortsatt for økten.
+      }
+    },
+    [lagring],
+  )
+
+  return [valg, velg] as const
 }
 
 /**
@@ -38,21 +61,13 @@ function lagret<V extends string>(def: Systemvalg<V>): Valg<V> {
  * det også kontoen (`useKontovalg`).
  */
 export function useSystemvalg<V extends string>(def: Systemvalg<V>) {
-  const [valg, velg] = useState<Valg<V>>(() => lagret(def))
+  const [valg, velg] = useHusketValg<Valg<V>>(def.lagring, (verdi) => lesValg(def, verdi), def.standard)
   const treff = useMediesporring(def.sporring)
   const virkelig = virkeligVerdi(def, valg, treff)
 
   useEffect(() => {
     document.documentElement.dataset[def.attributt] = virkelig
   }, [def, virkelig])
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(def.lagring, valg)
-    } catch {
-      // Privat nettlesermodus e.l. — valget gjelder fortsatt for økten.
-    }
-  }, [def, valg])
 
   return { valg, virkelig, velg }
 }

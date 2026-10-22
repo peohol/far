@@ -540,10 +540,39 @@ Hvordan innholdet tegnes, endrer aldri hva som står der:
 Tillatt er avsnitt, overskrifter i to nivåer (vist ett og to nivåer under
 den nærmeste overskriften rundt teksten, se `UnderOverskrift`), sitater,
 skillelinjer, linjeskift, punkt- og nummererte lister, fet, kursiv,
-understreket, senket og hevet skrift, kode, lenker (bare `http(s)`) og
-siteringer. Alt leses gjennom `rensDokument` før det vises. Spesialtegnene i
-editorens tegnmeny (`src/faginnhold/spesialtegn.ts`) har de samme gruppene og
-tegnene som i mdeditz.
+understreket, senket og hevet skrift, kode, lenker (bare `http(s)`),
+siteringer og konsentrasjoner. Alt leses gjennom `rensDokument` før det vises.
+Spesialtegnene i editorens tegnmeny (`src/faginnhold/spesialtegn.ts`) har de
+samme gruppene og tegnene som i mdeditz.
+
+**Konsentrasjonene** i teksten vises i måleenheten leseren har valgt under
+«Preferanser» (µg/L, nmol/L eller µmol/L, de samme som i «Analyse ved norske
+laboratorier», og lagret på kontoen som `maleenhet`). En konsentrasjon er en
+egen node med tallet og enheten nøyaktig som i kilden, og forbindelsen som er
+målt (nøkkelen i `src/data/forbindelser.ts`, eller `null`):
+
+```json
+{ "type": "konsentrasjon", "attrs": { "verdi": "50–200", "enhet": "nmol/L", "forbindelse": "citalopram" } }
+```
+
+`verdi` er ett tall («1,2», «1 000») eller et område («50–200»), eventuelt med
+komparator foran ett tall («< 0,05», «≥ 10»). `enhet` er masse eller
+stoffmengde per liter eller milliliter («µg/L», «ng/mL», «mmol/L»). Noe annet
+kan ikke regnes om, og `rensDokument` gjør det til vanlig tekst. Står tallet
+alt i den valgte enheten (også skrevet per milliliter), vises det nøyaktig som
+i kilden; ellers regnes det om og vises med høyst to gjeldende sifre, som i
+laboratorietabellene (`src/enheter/konsentrasjon.ts`). Mellom masse og
+stoffmengde trengs forbindelsens molekylvekt fra PubChem (`docs/kjemi.md`):
+fagsiden henter den for sine egne forbindelser og for dem teksten ellers
+nevner; uten den står tallet som i kilden. Tallet er en knapp med bare
+aksentfargen som merke (fagansvarlig ønsket en subtil merking), fylt med
+aksenten når pekeren er over, og boblen ved det (peker over eller klikk) viser
+tallet i kilden og i alle tre enhetene. Oppsummeringene av lukkede seksjoner
+og kort og søket på siden bruker også den valgte enheten; det globale søket
+finner tallet som i kilden. I editoren merkes en konsentrasjon med knappen
+«Konsentrasjon» (markert tekst som «50–200 nmol/L» fyller ut feltene), og står
+som i kilden, på aksentflate med stiplet strek så det som er merket, synes. Hva kuratoren
+merker, står i `docs/kuratorprotokoll.md` («Konsentrasjonene i teksten»).
 
 **Redigeringen.** Administratorer får knappen «Rediger». Knappene for å endre
 vises først når utkastet er hentet, og alt lagres som utkast mot revisjonen

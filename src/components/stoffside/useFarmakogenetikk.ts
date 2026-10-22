@@ -8,7 +8,8 @@ import { useFaginnholdskilde } from './Faginnholdskilde'
 import type { Bivirkningsdata } from '../../bivirkninger/modell'
 import { byggBivirkningsvisning, type Bivirkningsvisning } from '../../bivirkninger/stoffside'
 import type { Kjemiutvalg } from '../../kjemi/lesing'
-import { byggKjemivisning, kjemicider, type Kjemivisning } from '../../kjemi/stoffside'
+import { FORBINDELSER } from '../../kjemi/forbindelser'
+import { byggKjemivisning, kjemicider, molvekter, type Kjemivisning } from '../../kjemi/stoffside'
 import type { Labutvalg } from '../../farmakologiportalen/lesing'
 import { byggLabvisning, labkomponenter, type Labvisning } from '../../farmakologiportalen/stoffside'
 
@@ -86,6 +87,26 @@ export function useKjemi(stoff: string): Kjemivisning {
   const { tilstand } = useKilde(useFaginnholdskilde().kjemi, cider, somDet<Kjemiutvalg>)
   const utvalg = tilstand.status === 'klar' ? tilstand.utvalg : null
   return useMemo(() => byggKjemivisning(stoff, utvalg), [stoff, utvalg])
+}
+
+/**
+ * Molekylvektene omregningen av konsentrasjonene i teksten trenger, etter
+ * forbindelsens nøkkel: forbindelsene stoffet har (`kjemi`, alt hentet), og
+ * de andre teksten nevner (`nevnte`), som hentes for seg.
+ */
+export function useMolvekter(kjemi: Kjemivisning, nevnte: readonly string[]): ReadonlyMap<string, string> {
+  const egne = useMemo(() => molvekter(kjemi.rader), [kjemi])
+  const andre = useMemo(
+    () => [...new Set(nevnte)].flatMap((n) => (egne.has(n) ? [] : (FORBINDELSER.finn(n) ?? []))).filter((f) => f.pubchem),
+    [nevnte, egne],
+  )
+  const cider = useMemo(() => andre.map((f) => String(f.pubchem!.cid)), [andre])
+  const { tilstand } = useKilde(useFaginnholdskilde().kjemi, cider, somDet<Kjemiutvalg>)
+  return useMemo(() => {
+    if (tilstand.status !== 'klar') return egne
+    const hentet = new Map(tilstand.utvalg.forbindelser.map((p) => [p.cid, p.data]))
+    return new Map([...egne, ...molvekter(andre.map((f) => ({ forbindelse: f, data: hentet.get(f.pubchem!.cid) ?? null })))])
+  }, [egne, andre, tilstand])
 }
 
 /**

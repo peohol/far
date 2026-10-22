@@ -4,7 +4,8 @@ Leses når noe som har med forbindelsene, koblingene til PubChem, synkronisering
 eller seksjonen «Kjemiske grunndata» på fagsidene skal endres. Driftstatusen og
 endringsloggen står i `docs/datakilder.md`. Koblingene til Farmakologiportalen
 og laboratorieanalysene står i `docs/farmakologiportalen.md`; molekylvektene
-der regnes om med, kommer herfra.
+der regnes om med, kommer herfra, og det gjør også molekylvektene
+konsentrasjonene i fagtekstene regnes om med (`docs/faginnhold.md`).
 
 ## Forbindelser er ikke fagsider
 

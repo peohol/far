@@ -7,8 +7,9 @@
  * leter etter siteringer i. Formateringen er bevisst begrenset: fet, kursiv,
  * understreking, senket og hevet skrift, kode, overskrifter i to nivåer,
  * sitater, punktlister, nummererte lister, skillelinjer, lenker,
- * referanser og direktelenker (lenkebrikker til en diskusjon, en idé eller en
- * kommentar, se `src/direktelenker/`).
+ * referanser, direktelenker (lenkebrikker til en diskusjon, en idé eller en
+ * kommentar, se `src/direktelenker/`) og konsentrasjoner (tall med enhet som
+ * vises i måleenheten leseren har valgt, se `src/enheter/konsentrasjon.ts`).
  * Fontstørrelse, farger og justering finnes ikke; vanlig fritekst er
  * venstrejustert og ser lik ut overalt.
  *
@@ -17,6 +18,7 @@
  * formatering — teksten i det beholdes — og lenker må være nettadresser.
  */
 import { lesLenkemal } from '../direktelenker/mal'
+import { FORBINDELSESNOKKEL, lesTekstkonsentrasjon } from '../enheter/konsentrasjon'
 import { SITERING } from './referanser'
 
 export interface Tekstmerke {
@@ -51,6 +53,7 @@ export const NODER = {
   listepunkt: 'listItem',
   sitering: SITERING,
   direktelenke: 'direktelenke',
+  konsentrasjon: 'konsentrasjon',
 } as const
 
 /** Merkene tekst kan ha. Navnene er TipTaps. */
@@ -133,6 +136,21 @@ function rensDirektelenke(attrs: unknown): Riktekstnode[] {
   return [{ type: NODER.direktelenke, attrs: { ...mal, etikett } }]
 }
 
+/**
+ * En merket konsentrasjon: tallet og enheten som i kilden, og forbindelsen.
+ * Kan den ikke leses som en konsentrasjon OUSFAR kan regne om, blir den
+ * stående som vanlig tekst.
+ */
+function rensKonsentrasjon(attrs: unknown): Riktekstnode[] {
+  const felt = (navn: string) => (erObjekt(attrs) && typeof attrs[navn] === 'string' ? attrs[navn].trim() : '')
+  const verdi = felt('verdi')
+  const enhet = felt('enhet')
+  const forbindelse = FORBINDELSESNOKKEL.test(felt('forbindelse')) ? felt('forbindelse') : null
+  if (lesTekstkonsentrasjon({ verdi, enhet })) return [{ type: NODER.konsentrasjon, attrs: { verdi, enhet, forbindelse } }]
+  const tekst = [verdi, enhet].filter(Boolean).join(' ')
+  return tekst ? [{ type: NODER.tekst, text: tekst }] : []
+}
+
 function siteringsider(attrs: unknown): string[] {
   const ider = erObjekt(attrs) ? attrs.referanser : undefined
   return Array.isArray(ider) ? [...new Set(ider.filter((id): id is string => typeof id === 'string'))] : []
@@ -157,6 +175,7 @@ function rensInnhold(innhold: unknown): Riktekstnode[] {
       return referanser.length > 0 ? [{ type: SITERING, attrs: { referanser } }] : []
     }
     if (node.type === NODER.direktelenke) return rensDirektelenke(node.attrs)
+    if (node.type === NODER.konsentrasjon) return rensKonsentrasjon(node.attrs)
     if (node.type === NODER.linjeskift || node.type === NODER.skillelinje) return [{ type: node.type }]
     if (!TILLATTE_NODER.has(node.type) || node.type === NODER.dokument) return rensInnhold(node.content)
 
@@ -183,6 +202,7 @@ function erTekstniva(node: Riktekstnode): boolean {
     node.type === NODER.tekst ||
     node.type === NODER.sitering ||
     node.type === NODER.direktelenke ||
+    node.type === NODER.konsentrasjon ||
     node.type === NODER.linjeskift
   )
 }
@@ -215,22 +235,45 @@ export function rensDokument(verdi: unknown): Riktekstdokument {
   return { type: 'doc', content: blokker(rensInnhold(verdi.content)) }
 }
 
-/** Sant når dokumentet verken har tekst, siteringer eller lenkebrikker. */
+/** Sant når dokumentet verken har tekst, siteringer, lenkebrikker eller konsentrasjoner. */
 export function erTomt(dokument: Riktekstnode): boolean {
   if (dokument.type === NODER.tekst) return !dokument.text?.trim()
-  if (dokument.type === NODER.sitering || dokument.type === NODER.direktelenke) return false
+  if (dokument.type === NODER.sitering || dokument.type === NODER.direktelenke || dokument.type === NODER.konsentrasjon) return false
   return (dokument.content ?? []).every(erTomt)
 }
 
 /**
  * Teksten i dokumentet uten formatering, med blokkene på hver sin linje.
- * Siteringene er ikke tekst og utelates; en lenkebrikke er navnet sitt.
- * Brukes av søket.
+ * Siteringene er ikke tekst og utelates; en lenkebrikke er navnet sitt, og en
+ * konsentrasjon tallet og enheten som i kilden, eller slik `konsentrasjon`
+ * skriver den (i leserens måleenhet, i oppsummeringene). Brukes av søket.
  */
-export function klartekst(dokument: Riktekstnode): string {
+export function klartekst(dokument: Riktekstnode, konsentrasjon: Konsentrasjonsskriver = konsentrasjonstekst): string {
   if (dokument.type === NODER.tekst) return dokument.text ?? ''
+  if (dokument.type === NODER.konsentrasjon) return konsentrasjon(dokument.attrs)
   if (dokument.type === NODER.direktelenke) return typeof dokument.attrs?.etikett === 'string' ? dokument.attrs.etikett : ''
   if (dokument.type === NODER.linjeskift) return '\n'
-  const deler = (dokument.content ?? []).map(klartekst)
+  const deler = (dokument.content ?? []).map((n) => klartekst(n, konsentrasjon))
   return BLOKKBEHOLDERE.has(dokument.type) || LISTER.has(dokument.type) ? deler.filter(Boolean).join('\n') : deler.join('')
+}
+
+/** Skriver en konsentrasjon i teksten (attributtene til noden) som tekst. */
+export type Konsentrasjonsskriver = (attrs: unknown) => string
+
+/** En konsentrasjon som tekst, med tallet og enheten som i kilden: «50–200 nmol/L». */
+export function konsentrasjonstekst(attrs: unknown): string {
+  if (!erObjekt(attrs)) return ''
+  return [attrs.verdi, attrs.enhet].filter((d): d is string => typeof d === 'string' && d !== '').join(' ')
+}
+
+/**
+ * Nodene av typen `type` i et dokument, eller hvor som helst i data med
+ * dokumenter i (som kortene på en side), i rekkefølgen de står og slik de er
+ * lagret: `finnNoder(elementer, NODER.konsentrasjon)`.
+ */
+export function finnNoder(verdi: unknown, type: string): Riktekstnode[] {
+  if (Array.isArray(verdi)) return verdi.flatMap((v) => finnNoder(v, type))
+  if (!erObjekt(verdi)) return []
+  if (verdi.type === type) return [verdi as unknown as Riktekstnode]
+  return Object.values(verdi).flatMap((v) => finnNoder(v, type))
 }

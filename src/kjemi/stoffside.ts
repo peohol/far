@@ -58,6 +58,16 @@ export function byggKjemivisning(
   return { rader, kontrollert_kl: tider[0] ?? null }
 }
 
+/**
+ * Molekylvektene PubChem har gitt for forbindelsene, etter nøkkelen, slik
+ * PubChem skriver dem («324.4», g/mol): det omregningen mellom masse og
+ * stoffmengde bruker. Forbindelser uten data eller med en vekt som ikke er et
+ * positivt tall, er ikke med.
+ */
+export function molvekter(rader: readonly Pick<Kjemirad, 'forbindelse' | 'data'>[]): Map<string, string> {
+  return new Map(rader.flatMap((r) => (r.data && Number(r.data.molvekt) > 0 ? [[r.forbindelse.nokkel, r.data.molvekt] as const] : [])))
+}
+
 /** En del av en molekylformel: tallene står senket, ladningen hevet. */
 export interface Formeldel {
   tekst: string

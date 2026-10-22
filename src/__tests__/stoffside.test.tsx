@@ -57,6 +57,7 @@ import { ENTITETER } from '../farmakologiportalen/modell'
 import { lesListe } from '../farmakologiportalen/synk'
 import type { Bivirkning, Bivirkningsdata } from '../bivirkninger/modell'
 import { thcRegelsettutgave } from './hjelp/thcgrunnlag'
+import { MALEENHET } from '../enheter/Maleenhet'
 
 beforeAll(() => {
   globalThis.ResizeObserver ??= class {
@@ -79,7 +80,11 @@ beforeAll(() => {
   Range.prototype.getBoundingClientRect ??= () => new DOMRect()
 })
 
-afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+  // Måleenheten huskes i nettleseren; hver test begynner med standardenheten.
+  localStorage.removeItem(MALEENHET.lagring)
+})
 
 /** Laboratorieanalyttene koblingene i registeret peker på. */
 const katalog = ANALYTTKATALOG
@@ -1913,6 +1918,7 @@ describe('rikteksteditoren', () => {
       'Sett inn skillelinje',
       'Lenke',
       'Sett inn spesialtegn',
+      'Merk en konsentrasjon som kan vises i andre enheter',
       'Sett inn referanse',
     ])
     // Knappene har de samme bokstavene som hurtigtastene.
@@ -3558,6 +3564,78 @@ describe('kjemiske grunndata', () => {
     // Formelen med tallene senket.
     expect(rader[0]!.querySelectorAll('sub')).toHaveLength(2)
     expect(within(seksjon).getByText('PubChem')).toBeTruthy()
+  })
+
+  it('viser konsentrasjonene i teksten i måleenheten brukeren har valgt, også for forbindelser fra andre sider', async () => {
+    localStorage.setItem(MALEENHET.lagring, 'µg/L')
+    const data = [
+      pubchemdata(2160, 'Amitriptyline', 'C20H23N', '277.4', 'KRMDCWKBEZIMAB-UHFFFAOYSA-N'),
+      pubchemdata(4543, 'Nortriptyline', 'C19H21N', '263.4', 'PHVGLTMQBUFIQQ-UHFFFAOYSA-N'),
+      pubchemdata(28486, 'Lithium', 'Li+', '6.94', 'HBBGRARXTFLTSG-UHFFFAOYSA-N'),
+    ]
+    const les = vi.fn(async (cider: readonly string[]) =>
+      lesKjemiutvalg({ kilde: 'PubChem', forbindelser: data.filter((d) => cider.includes(String(d.cid))) }),
+    )
+    const konsentrasjon = (verdi: string, enhet: string, forbindelse: string) => ({ type: 'konsentrasjon', attrs: { verdi, enhet, forbindelse } })
+    const medTekst = (): Stoffsidedata => {
+      const grunn = side()
+      return {
+        ...grunn,
+        elementer: [
+          ...grunn.elementer,
+          utgave('ind', {
+            infoside: 'hs',
+            panel: 'indikasjon',
+            posisjon: 0,
+            elementtype: 'riktekst',
+            data: {
+              dokument: {
+                type: 'doc',
+                content: [
+                  {
+                    type: 'paragraph',
+                    content: [
+                      { type: 'text', text: 'Nortriptylin ' },
+                      konsentrasjon('50–150', 'nmol/L', 'nortriptylin'),
+                      { type: 'text', text: ', litium ' },
+                      konsentrasjon('0,5', 'mmol/L', 'litium'),
+                    ],
+                  },
+                ],
+              },
+            },
+          }),
+        ],
+      }
+    }
+    const user = userEvent.setup()
+    const k = { ...kilde({ data: medTekst }), kjemi: { les } }
+    vis('amitriptylin', k)
+    // Metabolitten regnes om med molekylvekten siden alt har; litium hentes for seg.
+    // Oppsummeringen av den lukkede seksjonen viser det samme som teksten.
+    expect(await screen.findByText('Nortriptylin 13–40 µg/L, litium 3500 µg/L', {}, { timeout: 3000 })).toBeTruthy()
+    expect(les).toHaveBeenCalledWith(['2160', '4543'])
+    expect(les).toHaveBeenCalledWith(['28486'])
+    await apneSkuff(user, 'Indikasjon')
+    const seksjon = screen.getByRole('region', { name: 'Indikasjon' })
+    expect(within(seksjon).getByRole('button', { name: /^13–40 µg\/L/ })).toBeTruthy()
+    expect(within(seksjon).getByRole('button', { name: /^3500 µg\/L/ })).toBeTruthy()
+
+    // Søket på siden finner tallene og enhetene slik de vises, og viser hvor de står.
+    await user.keyboard('{Control>}b{/Control}')
+    await user.keyboard('13–40')
+    await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Treff 1 av 1'))
+    expect(within(seksjon).getByRole('button', { name: /^13–40 µg\/L/ }).querySelector('mark.sidetreff')?.textContent).toBe('13–40')
+    expect(within(screen.getByRole('list', { name: 'Hvor treffene står' })).getByRole('button').textContent).toBe('Indikasjon')
+    const sok = screen.getByRole('searchbox', { name: 'Søk på denne siden' })
+    await user.clear(sok)
+    await user.keyboard('µg/L')
+    await waitFor(() => expect(within(seksjon).getAllByRole('button', { name: /µg\/L/ }).every((b) => b.querySelector('mark.sidetreff'))).toBe(true))
+    expect(screen.getByRole('status').textContent).toMatch(/^Treff 1 av \d+$/)
+    // Tallet fra kilden står ikke på siden, og søket peker ikke dit.
+    await user.clear(sok)
+    await user.keyboard('50–150')
+    await waitFor(() => expect(screen.queryByRole('list', { name: 'Hvor treffene står' })).toBeNull())
   })
 
   it('viser forbindelsene også før dataene er hentet', async () => {

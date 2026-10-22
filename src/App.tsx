@@ -36,6 +36,7 @@ import { apneFraAdressen } from './components/direktelenker/navigasjon'
 import { diskusjonssideFor, diskusjonssider, fortolkningssidenavn } from './diskusjoner/modell'
 import { FavorittkildeProvider } from './favoritter/Favorittkilde'
 import { AutoerstattProvider } from './autoerstatt/Autoerstattkilde'
+import { MaleenhetKilde } from './enheter/Maleenhet'
 import { lagAutoerstattlager } from './autoerstatt/lagring'
 import { lagFavorittlager } from './favoritter/lagring'
 import { ANALYSEMETODER, filtrertPool } from './domain/analysemetoder'
@@ -642,7 +643,7 @@ export default function App() {
   // Sidene en tråd kan flyttes til.
   const sider = useMemo(() => diskusjonssider(register.stoffer, FORTOLKNINGSOPPFORINGER), [register])
 
-  return (
+  const app = (
     <ToppmenyKilde>
       <StoffregisterkildeProvider kilde={stoffregister}>
         <FavorittkildeProvider lager={favorittlager} brukerId={profil.id} kanonisk={kanoniskStoff}>
@@ -907,4 +908,6 @@ export default function App() {
       </StoffregisterkildeProvider>
     </ToppmenyKilde>
   )
+  // Måleenheten konsentrasjonene vises i, fra preferansene, gjelder overalt.
+  return <MaleenhetKilde brukerId={profil.id}>{app}</MaleenhetKilde>
 }

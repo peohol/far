@@ -1,0 +1,130 @@
+/* --- Konsentrasjoner i fagtekstene -------------------------------------------
+   Se `src/components/stoffside/Konsentrasjon.tsx`. Et tall som vises i
+   måleenheten leseren har valgt, er regnet ut og står ikke fast. Merkingen er
+   med vilje subtil (fagansvarliges ønske): bare aksentfargen, som er
+   forbeholdt det som kan trykkes på, og en fylt aksent når pekeren er over
+   eller boblen er åpen. Aksenten har god kontrast mot flatene i begge temaene
+   (over 5:1). */
+
+/* Festet er en innebygd blokk av samme grunn som referansepillens: boblen som
+   står i det, skal ikke regnes med når avsnittet brytes. */
+.konsentrasjon-feste {
+  display: inline-block;
+  position: relative;
+}
+
+.konsentrasjon {
+  display: inline;
+  /* Fyllingen ved peker får litt luft, uten at tallet flytter seg i linjen. */
+  margin: 0 -0.15em;
+  padding: 0 0.15em;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  color: var(--aksent);
+  background: transparent;
+  border: 0;
+  border-radius: var(--runding-merke);
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background var(--fart-rask) var(--kurve), color var(--fart-rask) var(--kurve);
+}
+
+.konsentrasjon:hover,
+.konsentrasjon[aria-expanded='true'] {
+  color: var(--paa-aksent);
+  background: var(--aksent);
+}
+
+.konsentrasjon:focus-visible {
+  outline: var(--fokusring) solid var(--aksent);
+  outline-offset: 1px;
+}
+
+/* I editoren står tallet som i kilden, og er en node som kan velges. Der skal
+   det som er merket, synes tydelig: aksentflate og stiplet strek. */
+.konsentrasjon--editor {
+  margin: 0;
+  padding: 0 0.2em;
+  background: var(--aksent-flate);
+  text-decoration: underline dashed currentColor;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.24em;
+  cursor: default;
+}
+
+.konsentrasjon--valgt {
+  outline: var(--fokusring) solid var(--aksent);
+  outline-offset: 1px;
+}
+
+/* Boblen: kilden øverst, så tallet i hver enhet, den valgte uthevet. */
+.konsentrasjonsboble {
+  line-height: normal;
+  white-space: normal;
+}
+
+.konsentrasjonsboble__innhold {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  max-width: min(22rem, var(--tips-maks-bredde, calc(100vw - 2.5rem)));
+}
+
+.konsentrasjonsboble__forbindelse {
+  font-weight: var(--vekt-halvfet);
+}
+
+.konsentrasjonsboble__molvekt,
+.konsentrasjonsboble__merknad {
+  font-weight: var(--vekt-normal);
+  color: var(--tips-blekk-dempet);
+}
+
+.konsentrasjonsboble__merknad {
+  font-size: var(--tekst-meta);
+}
+
+.konsentrasjonsboble__tabell {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  column-gap: var(--rom-5);
+}
+
+.konsentrasjonsboble__rad {
+  display: contents;
+}
+
+.konsentrasjonsboble__rad > * {
+  padding: 0.12em 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.konsentrasjonsboble__rad > [role='rowheader'] {
+  color: var(--tips-blekk-dempet);
+}
+
+.konsentrasjonsboble__rad--kilde > * {
+  padding-bottom: var(--rom-1);
+  margin-bottom: var(--rom-1);
+  border-bottom: var(--kant) solid color-mix(in srgb, var(--tips-blekk) 25%, transparent);
+}
+
+.konsentrasjonsboble__rad[aria-current] > * {
+  font-weight: var(--vekt-fet);
+  color: var(--tips-blekk);
+}
+
+.konsentrasjonsboble__mangler {
+  font-style: italic;
+  color: var(--tips-blekk-dempet);
+}
+
+/* Panelet i editoren som merker en konsentrasjon: feltene ved siden av
+   hverandre når det er plass. */
+.konsentrasjonspanel__felt {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  gap: var(--rom-3);
+}

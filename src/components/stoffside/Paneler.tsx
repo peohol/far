@@ -16,7 +16,7 @@ import {
 import { INGEN_EFFEKT } from '../../faginnhold/mekanismer'
 import { doseringskort } from '../../faginnhold/doseringskort'
 import { OPPSUMMERINGSSKILLE, antall, forhandsvisning, kuttes, ramsOpp } from '../../faginnhold/oppsummering'
-import { NODER, erTomt, klartekst, tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
+import { NODER, erTomt, klartekst, tomtDokument, type Konsentrasjonsskriver, type Riktekstdokument } from '../../faginnhold/riktekst'
 import { Button } from '../Button'
 import { SenketTekst } from '../SenketTekst'
 import { Ikon } from '../ikon/Ikon'
@@ -54,6 +54,8 @@ export interface Panelkontekst {
   modell: Sidemodell
   redigerer: boolean
   handlinger: Stoffsidehandlinger
+  /** En konsentrasjon i teksten slik leseren ser den (`konsentrasjonIEnhet`), til oppsummeringene. */
+  konsentrasjon: Konsentrasjonsskriver
 }
 
 /** ID-en et element har på siden, så søket kan peke dit. */
@@ -122,10 +124,14 @@ export function Panel({
   )
 }
 
-/** Oppsummeringen av en riktekst: avsnittene og punktene etter hverandre, «Tablett: 5–30 mg · Depotinjeksjon: …». */
-function tekstoppsummering(dokument: Riktekstdokument): string {
+/**
+ * Oppsummeringen av en riktekst: avsnittene og punktene etter hverandre,
+ * «Tablett: 5–30 mg · Depotinjeksjon: …», med konsentrasjonene i leserens
+ * måleenhet.
+ */
+function tekstoppsummering(dokument: Riktekstdokument, kontekst: Pick<Panelkontekst, 'konsentrasjon'>): string {
   // En linje som leder inn i en liste («… tabletter):»), henger sammen med det første punktet.
-  const linjer = ramsOpp(klartekst(dokument).split('\n')).split(OPPSUMMERINGSSKILLE)
+  const linjer = ramsOpp(klartekst(dokument, kontekst.konsentrasjon).split('\n')).split(OPPSUMMERINGSSKILLE)
   const tekst = linjer.reduce((samlet, linje) => (samlet === '' ? linje : `${samlet}${samlet.endsWith(':') ? ' ' : OPPSUMMERINGSSKILLE}${linje}`), '')
   return forhandsvisning(tekst)
 }
@@ -199,7 +205,7 @@ export function panelteksten(kontekst: Panelkontekst, nokkel: string) {
     (kontekst.modell.paneler.get(nokkel) ?? []).find((e) => e.elementtype === ELEMENTTYPER.riktekst) ?? null
   const dokument = element ? lesRiktekst(element.data).dokument : tomtDokument()
   const tomt = !element || (erTomt(dokument) && element.referanser.length === 0)
-  return { element, dokument, tomt, oppsummering: tekstoppsummering(dokument) }
+  return { element, dokument, tomt, oppsummering: tekstoppsummering(dokument, kontekst) }
 }
 
 export function Tekstpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjon; kontekst: Panelkontekst }) {
@@ -311,7 +317,7 @@ interface Korttype<T> {
   navn: (kort: T) => string
   ikon: (kort: T) => Ikonnavn | undefined
   tittel: (kort: T) => ReactNode
-  oppsummering: (kort: T) => ReactNode
+  oppsummering: (kort: T, kontekst: Panelkontekst) => ReactNode
   /** Klassen på detaljkortet, f.eks. for retningen på et mekanismekort. */
   klasse?: (kort: T) => string | undefined
   visning: (kort: T) => ReactNode
@@ -335,7 +341,7 @@ const KINETIKKORT: Korttype<Kinetikkdata> = {
   navn: (kort) => kort.tittel,
   ikon: (kort) => kinetikkikon(kort.tittel),
   tittel: (kort) => <Kinetikktittel tittel={kort.tittel} />,
-  oppsummering: (kort) => tekstoppsummering(kort.dokument),
+  oppsummering: (kort, kontekst) => tekstoppsummering(kort.dokument, kontekst),
   visning: (kort) => <Riktekst dokument={kort.dokument} />,
   // Får teksten plass i oppsummeringen, er det ikke mer å vise; da står den i sin helhet i det faste kortet.
   harMer: (kort) => kuttes(klartekst(kort.dokument)),
@@ -442,7 +448,7 @@ function Kortserie<T>({
       kanApnes,
       ikon: type.ikon(kort),
       tittel: type.tittel(kort),
-      oppsummering: kanApnes ? type.oppsummering(kort) : undefined,
+      oppsummering: kanApnes ? type.oppsummering(kort, kontekst) : undefined,
       className: type.klasse?.(kort),
     }
     // Ankeret søket peker på står inne i kortet, så å gå dit åpner også kortet.
