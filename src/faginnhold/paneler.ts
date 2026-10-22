@@ -218,12 +218,25 @@ interface Kortplass {
 }
 
 /** Plassen et fast kort har i et panel med også frie kort; de frie kommer etter. 0 ellers. */
-function fastPlass({ panel, elementtype = ELEMENTTYPER.kinetikk, data }: Kortplass): number {
-  const definisjon = panelFor(panel)
+function fastPlass(element: Kortplass): number {
+  const definisjon = panelFor(element.panel)
   const faste = definisjon?.frieKort ? fasteKort(definisjon) : undefined
   if (!faste) return 0
-  const plass = elementtype === ELEMENTTYPER.kinetikk ? faste.indexOf(lesKinetikk(data).tittel) : -1
-  return plass === -1 ? faste.length : plass
+  const tittel = fastKortIBlandetPanel(element)
+  return tittel === null ? faste.length : faste.indexOf(tittel)
+}
+
+/**
+ * Overskriften til et fast kort i et panel som også har frie kort, eller
+ * `null`. Der deler det faste kortet plass (`posisjon`) med det første frie, så
+ * det kjennes igjen på overskriften, også i navnene på kortene i historikken
+ * og i kurateringene (`kortnavn` i `sidesammenligning.ts`).
+ */
+export function fastKortIBlandetPanel({ panel, elementtype = ELEMENTTYPER.kinetikk, data }: Omit<Kortplass, 'id' | 'posisjon'>): string | null {
+  const definisjon = panelFor(panel)
+  if (!definisjon?.frieKort || elementtype !== ELEMENTTYPER.kinetikk) return null
+  const tittel = lesKinetikk(data).tittel
+  return fasteKort(definisjon)?.includes(tittel) ? tittel : null
 }
 
 /** Om panelet er en serie kort, der hvert element er sitt eget detaljkort. */

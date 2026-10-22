@@ -28,6 +28,7 @@ import {
   tallTilFelt,
 } from '../faginnhold/paneler'
 import { SITERING, kortnavn } from '../faginnhold/referanser'
+import { kortnavn as sideKortnavn } from '../faginnhold/sidesammenligning'
 import { erTomt, klartekst, rensDokument, tomtDokument } from '../faginnhold/riktekst'
 import { fold, indekserSide, sok, sokeord, sti, stoffidentitet, treffIntervaller, utdrag } from '../faginnhold/sok'
 import { analytterForStoff } from '../domain/koblinger'
@@ -502,6 +503,12 @@ describe('sidemodellen', () => {
     ])
     // Uten frie kort i panelet er rekkefølgen den vanlige, etter plassen.
     expect(sammenlignKort({ id: 'a', panel: 'farmakokinetikk', posisjon: 1, data: { tittel: 'Fenomenologi' } }, { id: 'b', panel: 'farmakokinetikk', posisjon: 0, data: {} })).toBeGreaterThan(0)
+    // Det faste og det første frie deler plass 0, men har hvert sitt navn i historikken og kurateringene.
+    expect(['vz', 'v1', 'v2'].map((id) => sideKortnavn(modell.paneler.get('virkninger')!.find((e) => e.id === id)!.utgave.innhold))).toEqual([
+      'Virkninger · Fenomenologi',
+      'Virkninger · kort 1',
+      'Virkninger · kort 2',
+    ])
     // Et fritt kort står etter det faste, står etter det faste uansett plass.
     expect(sammenlignKort({ id: 'a', panel: 'virkninger', posisjon: 0, data: { tittel: 'Sedasjon' } }, { id: 'b', panel: 'virkninger', posisjon: 9, data: { tittel: ' Fenomenologi ' } })).toBeGreaterThan(0)
   })
