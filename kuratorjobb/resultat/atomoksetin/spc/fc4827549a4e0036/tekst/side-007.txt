@@ -1,0 +1,59 @@
+Pediatrisk populasjon under 6 år
+Atomoxetine Medical Valley skal ikke brukes av pasienter under 6 år fordi effekt og sikkerhet i denne
+aldersgruppen ikke er fastlagt.
+
+Annen terapeutisk bruk
+Atomoksetin er ikke indisert til behandling av depressive episoder og/eller angst, ettersom kliniske
+studier hos voksne med disse lidelsene, uten ADHD, ikke viste effekt sammenlignet med placebo (se
+pkt. 5.1).
+
+Hjelpestoffer
+Atomoxetine Medical Valley inneholder natrium. Dette legemidlet inneholder mindre enn 1 mmol
+natrium (23 mg) i hver kapsel, og er så godt som ‘natriumfritt’.
+
+4.5   Interaksjon med andre legemidler og andre former for interaksjon
+
+Effekter av andre legemidler på atomoksetin
+
+MAO-hemmere
+Atomoksetin skal ikke brukes sammen med MAO-hemmere (se pkt. 4.3).
+
+CYP2D6-hemmere (SSRIer (f.eks. fluoksetin, paroksetin), kinidin, terbinafin)
+Hos pasienter som tar disse legemidlene kan atomoksetin-eksponering økes 6-8 ganger og Css,max økes
+3-4 ganger fordi metabolisering skjer via CYP2D6. En mer forsiktig titrering og lavere atomoksetin
+sluttdose kan være nødvendig hos pasienter som allerede tar CYP2D6-hemmende legemidler. Dersom
+behandling med CYP2D6-hemmere startes eller avsluttes etter titrering til adekvat atomoksetindose,
+bør klinisk respons og tolerabilitet vurderes på nytt for å avklare om dosejustering er nødvendig.
+
+Når atomoksetin kombineres med potente hemmere av andre cytokrom P450-enzymer enn CYP2D6
+hos pasienter som er langsomme omsettere via CYP2D6, er det anbefalt å være forsiktig fordi risikoen
+for klinisk relevant økning i eksponering av atomoksetin in vivo er ukjent.
+
+Salbutamol (eller andre beta2-agonister)
+Atomoksetin bør administreres med forsiktighet til pasienter behandlet med høydose salbutamol (eller
+andre beta2-agonister) via nebulisator eller systemisk administrasjon, fordi den kardiovaskulære
+effekten kan potenseres.
+
+Det ble gjort motstridende funn med hensyn til denne interaksjonen. Systemisk administrert
+salbutamol (600 mikrog i.v. i løpet av 2 timer) i kombinasjon med atomoksetin (60 mg 2 ganger daglig
+i 5 dager) induserte økning i hjertefrekvens og blodtrykk. Denne effekten var mest merkbar etter
+administrering av en kombinert oppstartdose med salbutamol og atomoksetin, men gikk tilbake mot
+utgangsverdier etter 8 timer. I en separat studie var imidlertid effekten på blodtrykket og
+hjertefrekvensen av en standard inhalasjonsdose med salbutamol (200 mikrog) ikke økt ved samtidig
+administrering av atomoksetin (80 mg en gang daglig i 5 dager) over kort tid. Tilsvarende var
+hjertefrekvensen etter flere inhalasjoner av salbutamol (800 mikrog) ikke forskjellig med eller uten
+atomoksetin. Denne studien inkluderte friske, asiatiske voksne som var raske omsettere av
+atomoksetin.
+
+Hjertefrekvens og blodtrykk bør overvåkes nøye. Dosejustering kan være nødvendig for enten
+atomoksetin eller salbutamol (eller andre beta2-agonister) i tilfeller med betydelig økt hjertefrekvens
+og blodtrykk ved samtidig administrasjon av disse legemidlene.
+
+Det er en potensiell økt risiko for forlengelse av QT-intervallet dersom atomoksetin administreres
+sammen med andre legemidler som forlenger QT-intervallet (som nevroleptika, antiarytmika klasse IA
+og III, moksifloksacin, erytromycin, metadon, meflokin, trisykliske antidepressiva, litium eller
+cisaprid), legemidler som forstyrrer elektrolyttbalansen (som tiaziddiuretika) og CYP2D6-hemmere.
+
+
+
+                                                   7

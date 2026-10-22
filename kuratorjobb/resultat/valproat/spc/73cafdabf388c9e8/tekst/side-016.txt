@@ -1,0 +1,56 @@
+Halveringstiden er lenger dersom nyrefunksjonen er nedsatt.
+
+Etter peroral administrering oppnås steady state-konsentrasjoner i plasma raskt (innen 3 til 4 dager).
+
+Etter intravenøs administrering kan steady state-konsentrasjoner i plasma oppnås innen få minutter og
+deretter opprettholdes ved intravenøs infusjon.
+
+Biotransformasjon
+Natriumvalproat metaboliseres primært i leveren. Det øker ikke sin egen metabolisme eller nedbrytningen av
+andre substanser, som for eksempel østrogen-progestogen kombinasjonspreparater. Dette skyldes manglende
+enzyminduserende effekt på cytokrom P450. Andre legemidler kan akselerere metabolismen av
+natriumvalproat ved å øke enzymaktivitet i levermikrosomer.
+
+Eliminasjon
+Natriumvalproat utskilles hovedsakelig i urinen etter metabolisme ved glukuronidkonjugering og
+betaoksidasjon.
+
+Kun små mengder natriumvalproat utskilles uendret i urinen.
+
+Natriumvalproatmolekylet er dialyserbart, men kun den frie formen (ca. 10 %) utskilles.
+
+Pediatrisk populasjon
+Barn og ungdom over 10 år har valproat clearance liknende den som rapporteres hos voksne. Hos barn under
+10 år varierer systemisk valproat clearance med alderen. Hos nyfødte og spedbarn opp til 2 måneders alder er
+valproat clearance redusert sammenlignet med voksne, og den er lavest like etter fødsel. Ved gjennomgang
+av faglitteraturen viste halveringstiden for valproat hos spedbarn under to måneder betraktelig variasjon
+mellom 1 til 67 timer. Hos barn i alderen 2–10 år er valproat clearance 50 % høyere enn hos voksne.
+
+
+5.3 Prekliniske sikkerhetsdata
+
+Natriumvalproater vist å være teratogent, og forårsake medfødte misdannelser, som for eksempel nyre- og
+skjelettskader, hos både mus, rotter og kaniner. Studier av kronisk toksisitet hos rotter og hunder viste
+reduksjon av spermatogenese og testikulær atrofi. Det kan ikke utelukkes at natriumvalproat påvirker
+testikkelutvikling, spermproduksjon og fruktbarhet hos mennesker.
+
+6. FARMASØYTISKE OPPLYSNINGER
+
+6.1 Fortegnelse over hjelpestoffer
+
+Vann til injeksjonsvæsker
+Kaliumdihydrogenfosfat, til pH-justering
+Dinatriumfosfatdodekahydrat, til pH-justering
+Nitrogen
+
+6.2 Uforlikeligheter
+Valproat Life Medical bør ikke administreres sammen med andre legemidler gjennom samme intravenøse
+drypp og må ikke blandes med andre legemidler enn de som er angitt under pkt. 6.6.
+
+6.3 Holdbarhet
+
+48 måneder
+
+Holdbarhet etter fortynning i henhold til instruksjonene: Kjemisk og fysisk stabilitet ved bruk er påvist i 24
+timer ved 2-8 ° C. Fra et mikrobiologisk synspunkt, med mindre fremgangsmåten for
+åpning/rekonstituering/fortynning utelukker risiko for mikrobiell kontaminering, skal preparatet brukes

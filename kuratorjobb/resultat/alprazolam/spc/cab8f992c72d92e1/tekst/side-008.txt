@@ -1,0 +1,53 @@
+mer alvorlige tilfeller: ataksi, hypotoni, hypotensjon, respirasjonsdepresjon, i sjeldne tilfeller koma og
+i meget sjeldne tilfeller død.
+
+Flumazenil kan bli brukt som antidot.
+
+
+5.       FARMAKOLOGISKE EGENSKAPER
+
+5.1      Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Anxiolytika. Triazolobenzodiazepin, ATC-kode: N05B A12.
+
+Virkningsmekanisme
+Alprazolam bindes til benzodiazepinreseptorene, og forsterker effekten av GABA-systemet.
+
+Farmakodynamiske effekter
+Alprazolam gir en doseavhengig reduksjon av REM-søvn, og forlenget REM-latens.
+
+5.2      Farmakokinetiske egenskaper
+
+Absorpsjon
+Ca. 90 %. Samtidig fødeinntak forlenger absorpsjonen, men uten å påvirke absorbert mengde.
+
+Distribusjon
+Maksimal plasmakonsentrasjon nås 1-2 timer etter inntak, og plasmanivåene er proporsjonale med den
+administrerte dose. Proteinbindingsgraden er ca. 70 %. “Steady state”-konsentrasjon oppnås etter ca. 3
+døgns behandling.
+
+Biotransformasjon
+Gjennomgår en omfattende metabolisme i leveren, først og fremst ved hydroksylering til 4-hydroksy-
+alprazolam og -hydroksy-alprazolam. Hovedmetabolittene er biologisk aktive med halveringstider av
+samme størrelsesorden som for alprazolam. De forekommer i lave konsentrasjoner og bidrar derfor i
+liten grad til effekten.
+
+Eliminasjon
+Halveringstid: Ca. 12 timer. Halveringstiden forlenges ved nedsatt leverfunksjon. Clearance: 1
+ml/minutt/kg. Metabolittene glukuronideres og utskilles i urinen.
+
+5.3      Prekliniske sikkerhetsdata
+
+Benzodiazepiner har i dyreforsøk gitt misdannelser, for eksempel ganespalte, CNS-misdannelser og
+varige adferdsforstyrrelser hos avkommet.
+
+Mutagenese, karsinogenese, fertilitet og okulære effekter
+
+Alprazolam var ikke mutagent i in vitro Ames test. Alprazolam viste ikke kromosomale avvik i
+mikronukleustesten in vivo hos rotter ved opptil den høyeste testdosen på 100 mg/kg, som er
+500 ganger høyere enn den maksimalt anbefalte humane døgndosen på 10 mg/døgn.
+
+Ingen tegn på karsinogent potensiale ble sett i løpet av 2 års bioassay-studier av alprazolam hos rotter i
+doser opptil 30 mg/kg/døgn (150 ganger maksimalt anbefalt human døgndose på 10 mg/døgn) og hos
+mus ved doser opptil 10 mg/kg/døgn (50 ganger maksimalt anbefalt human døgndose på
+10 mg/kg/døgn).

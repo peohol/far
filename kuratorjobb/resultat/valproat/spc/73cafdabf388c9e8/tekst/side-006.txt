@@ -1,0 +1,55 @@
+oksipital aura. Testing for POLG-mutasjon bør utføres i henhold til aktuelle kliniske retningslinjer for
+diagnostisk utredning av slike sykdommer (se pkt 4.3).
+
+Forverrede kramper
+Som med andre antiepileptika, kan enkelte pasienter, i stedet for en forbedring, oppleve en reversibel økt
+krampefrekvens og alvorlighetsgrad (inkludert status epilepticus) eller at nye typer kramper oppstår med
+valproat. Ved forverrede kramper bør pasientene rådes til å konsultere legen omgående (se pkt. 4.8).
+
+Andre forholdsregler
+Blodprøver (blodcelletall, inkludert blodplatetall, blødningstid og koagulasjonstid) anbefales før oppstart av
+behandling eller før operasjon, og ved spontane blåmerker eller blødninger (se pkt. 4.8).
+Natriumvalproat bør brukes med forsiktighet hos pasienter med nedsatt nyrefunksjon. Binding til
+serumalbumin reduseres og distribusjonsvolumet øker. Det kan være nødvendig å redusere doseringen.
+Dosering bør justeres i henhold til klinisk respons, da monitorering av plasmakonsentrasjoner kan være
+misvisende.
+
+Nedsatt nyrefunksjon
+Valproat Life Medical elimineres hovedsakelig gjennom nyrene, delvis i form av ketonlegemer, som kan
+påvirke tester for urinketonbestemmelse og gi falske positive resultater for diabetespasienter.
+
+Ureasyklusforstyrrelse (enzymdefekt)
+Ved mistanke om enzymdefekt i ureasyklus, bør nivå av ammoniakk i blodet kontrolleres før oppstart av
+behandling med natriumvalproat på grunn av risikoen for hyperammonemi.
+
+Vektøkning
+Pasienter bør advares om risikoen for vektøkning ved oppstart av behandling, fordi vektøkning er en
+risikofaktor for polycystisk ovariesyndrom (se pkt. 4.8). Hensiktsmessige tiltak bør settes i gang for å
+minimere denne risikoen. Potensielle endringer i menstruasjonssyklusen bør også overvåkes. Hvis
+vektøkning fortsetter til tross for en hensiktsmessig diett, bør behovet for behandling revurderes i hvert
+enkelt tilfelle.
+
+Immunforstyrrelser
+Bruk av natriumvalproat fører sjeldent til immunforstyrrelser, men denpotensielle fordelen av
+natriumvalproat bør likevel vurderes mot potensiell risiko hos pasienter med systemisk lupus erythematosus.
+
+Seponering av natriumvalproat eller bytte til et annet antiepileptikum skal utføres gradvis og med
+forsiktighet. For raske endringer kan føre til en plutselig økning i anfall.
+Det er vist at natriumvalproat stimulerer replikasjon av humant immunsviktvirus i enkelte in vitro-studier.
+Denne effekten er imidlertid beskjeden og avhenger av de studiemodellene som ble brukt og/eller individuell
+cellerespons på natriumvalproat in vitro. Den kliniske relevansen er ikke kjent. Dette bør likevel vurderes når
+man tolker resultatene av virologiske analyser av HIV-positive pasienter som får behandling med
+natriumvalproat
+
+Karnitin palmitoyltransferase II-defekt (CPT II)
+Pasienter med en underliggende karnitin palmitoyltransferase II-defekt (CPT II) bør advares om den
+forhøyede risikoen for rabdomyolyse ved bruk av natriumvalproat.
+
+Pediatriske pasienter
+Hos spedbarn vil natriumvalproat kun i unntakstilfeller være førstelinjebehandling. Det må brukes med stor
+forsiktighet og etter nøye vurdering av fordeler og risiko, og, om mulig, som monoterapi.
+
+4.5 Interaksjon med andre legemidler og andre former for interaksjon
+
+Effekter av natriumvalproat på andre legemidler
+Neuroleptika, MAO-hemmere, antidepressiva og benzodiazepiner

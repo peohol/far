@@ -1,0 +1,58 @@
+Eliminasjon
+Gjennomsnittlig halveringstid for atomoksetin etter oral admininstrering er 3,6 timer hos raske
+omsettere og 21 timer hos langsomme omsettere. Atomoksetin utskilles hovedsakelig som 4-
+hydroksyatomoksetin-O-glukuronid, hovedsakelig i urin.
+
+Linearitet/ikke linearitet:
+Farmakokinetikken til atomoksetin er lineær for de doser som er undersøkt både hos EM og PM.
+
+Spesielle pasientgrupper
+Nedsatt leverfunksjon fører til redusert utskillelse av atomoksetin, økt atomoksetineksponering (AUC
+doblet ved moderat nedsatt funksjon, og firedoblet ved alvorlig nedsatt funksjon) og forlenget
+halveringstid av legemidlet sammenlignet med friske kontroller med samme CYP2D6 EM genotype.
+Hos pasienter med moderat til alvorlig nedsatt leverfunksjon (Child Pugh klasse B og C) bør startdose
+og endelig dose tilpasses (se pkt. 4.2).
+
+For pasienter med terminal nyresvikt (end stage renal disease (ESRD)) var gjennomsnittlige
+plasmakonsentrasjoner for atomoksetin generelt høyere enn gjennomsnittet for friske kontrollpersoner;
+vist ved forhøyet Cmax (7 % forskjell) og økt AUC0-∞ (ca. 65 % forskjell). Ved justering for
+kroppsvekt, ble forskjellene mellom de to gruppene redusert til et minimum. Farmakokinetikken til
+atomoksetin og dets metabolitter hos individer med ESRD tyder på at dosejusteringer ikke er
+nødvendig (se pkt. 4.2).
+
+5.3   Prekliniske sikkerhetsdata
+
+Prekliniske data indikerer ingen spesiell fare for mennesker basert på konvensjonelle studier av
+sikkerhetsfarmakologi, toksisitetstester ved gjentatt dosering, gentoksisitet, karsinogenitet eller
+reproduksjons- og utviklingstoksisitet. Som følge av dosebegrensning pga. klinisk (eller ekstrem
+farmakologisk) respons hos forsøksdyr, kombinert med metabolske ulikheter mellom arter, ga maks.
+tolererte doser hos dyr i prekliniske studier eksponering tilsvarende, eller noe høyere eksponering, som
+hos CYP2D6 PM ved maks. anbefalt daglig dose.
+
+En studie ble utført i unge rotter for å vurdere effektene av atomoksetin på vekst og neuropsykologisk
+utvikling og kjønnsutvikling. Små forsinkelser i start av vaginal åpning (alle doser) og
+preputiumseparasjon ( 10 mg/kg/døgn) og små reduksjoner av bitestikkelvekt og spermieantall
+( 10 mg/kg/døgn) ble sett; det var imidlertid ingen effekt på fertilitet eller reproduktiv evne.
+Betydning av disse funnene for menneske er ikke kjent.
+
+Drektige kaniner ble behandlet via sonde med atomoksetin opptil 100 mg/kg/døgn gjennom
+organogenesen. Ved denne dosen ble det i en av tre studier observert reduksjon i antall levende fostre,
+økning av tidlig resorpsjon, mindre økninger i insidens av atypisk carotisarterie og manglende
+subclaviearterie. Disse funnene ble gjort ved doser som gav svak maternal toksisitet. Insidensen av
+disse funnene ligger innenfor historiske kontrollverdier. Nivå for ingen effekt for disse funnene var
+30 mg/kg/døgn. Eksponeringen (AUC) for fritt atomoksetin ved 100 mg/kg/døgn hos kaniner var
+ca. 3,3 ganger eksponering i menneske hos raske omsettere via CYP2D6 og 0,4 ganger eksponering
+hos langsomme omsettere via CYP2D6 ved maksimum døgndose på 1,4 mg/kg. I en av
+tre kaninstudier var funnene ikke entydige og betydningen for mennesker er ukjent.
+
+
+6.    FARMASØYTISKE OPPLYSNINGER
+
+6.1   Hjelpestoffer
+
+Kapselinnhold
+Pregelatinisert maisstivelse
+Kolloidal vannfri silika
+Dimetikon (350)
+
+                                                  17

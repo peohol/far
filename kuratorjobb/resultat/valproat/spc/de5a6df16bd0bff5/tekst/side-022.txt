@@ -1,0 +1,55 @@
+Distribusjon
+Maksimal plasmakonsentrasjon oppnås med oppløsningen innen 1-4 timer. Forholdet mellom dosen
+og plasmakonsentrasjonen er ikke lineært. Gjennomsnittlig terapeutisk område for
+plasmakonsentrasjon er 50-100 µg/ml. Over 100 µg/ml øker risikoen for bivirkninger eller forgiftning.
+Steady-state plasmanivå nås innen 3-4 dager.
+
+Valproatkonsentrasjonen i cerebrospinalvæske er 10 % av plasmakonsentrasjonen.
+
+Distribusjonsvolumet er aldersavhengig og er vanligvis 0,13-0,23 l/kg, 0,13-0,19 l/kg hos ungdom.
+
+Opptil 90 % av valproat er bundet til plasmaprotein, mest til albumin. Proteinbindingen reduseres ved
+høyere doser. Plasma proteinbinding er lavere hos eldre og hos pasienter med redusert nyre- eller
+leverfunksjon. I én studie ble det sett økt mengde fritt, aktivt stoff (8,5 til over 20 %) hos pasienter
+med signifikant redusert nyrefunksjon.
+Overføring over placenta (se pkt 4.6)
+Valproat krysser placenta. Serumkonsentrasjonen av valproat i navlestrengen, som representerer
+konsentrasjonen hos fosteret, var lignende eller litt høyere enn hos moren.
+Biotransformasjon, eliminasjon
+Biotransformasjon skjer ved glukuronidasjon og beta-, omega- og omega-1-oksidering. Ca. 20 % av
+den administrerte dosen utskilles i urinen som glukuronidester. Det er flere enn 20 metabolitter, og de
+som kommer fra omegaoksidering regnes som hepatotoksiske. Mindre enn 5 % av en administrert
+valproatdose gjenvinnes uendret i urinen.
+
+Hovedmetabolitten er 3-ketovalproat, opptil 3-60 % av denne utskilles i urinen. Denne metabolitten
+har antikonvulsiv effekt hos mus, men effekten hos mennesker er ikke utredet.
+
+I en studie var plasma clearance 12,7 ml/min hos pasienter med epilepsi og hos friske individer
+5 10 ml/min. Clearance øker ved inntak av enzyminduserende antiepileptika. Når valproat brukes som
+monoterapi, er plasmahalveringstiden 12-16 timer, som ikke endres ved langtidsbehandling.
+
+Når legemidlet brukes i kombinasjon med andre legemidler (primidon, fenytoin, fenobarbital eller
+karbamazepin), faller halveringstiden til verdier på mellom 4 og 9 timer, avhengig av enzyminduksjon.
+
+Barn og ungdom over 10 år har valproat clearance tilsvarende den som rapporteres hos voksne. Hos
+barn under 10 år varierer systemisk valproat clearance med alderen.. Hos nyfødte og spedbarn opp til 2
+måneders alder er valproat clearance redusert sammenlignet med voksne, og den er lavest like etter
+fødsel. Ved gjennomgang av faglitteraturen viste halveringstiden for valproat hos spedbarn under to
+måneder betraktelig variasjon mellom 1 til 67 timer. Hos barn i alderen 2–10 år er valproat clearance
+50 % høyere enn hos voksne.
+
+Halveringstiden er økt hos pasienter med nedsatt leverfunksjon. Ved overdosering er halveringstid på
+opptil 30 timer observert.
+
+Under graviditet øker hepatisk og renal clearance med økningen i distribusjonsvolumet i tredje
+trimester, hvilket kan gi et fall i plasmakonsentrasjon tross uendret dosering.
+
+5.3 Prekliniske sikkerhetsdata
+
+Akutt toksisitetsstudier i forskjellige dyrearter viser ingen spesiell følsomhet. Avhengig av dyreart er
+LD50 mellom 0,5 og 1,5 g/kg kroppsvekt.
+
+
+
+
+                                                                                                       22

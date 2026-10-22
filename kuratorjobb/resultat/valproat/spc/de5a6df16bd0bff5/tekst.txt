@@ -1,0 +1,1304 @@
+▼Dette legemidlet er underlagt særlig overvåking for å oppdage ny sikkerhetsinformasjon så
+raskt som mulig. Helsepersonell oppfordres til å melde enhver mistenkt bivirkning. Se pkt. 4.8
+for informasjon om bivirkningsrapportering.
+
+
+
+1. LEGEMIDLETS NAVN
+
+Orfiril 60 mg/ml mikstur, oppløsning
+
+2. KVALITATIV OG KVANTITATIV SAMMENSETNING
+
+1 ml inneholder: Natriumvalproat 60 mg
+Hjelpestoffer med kjent effekt:
+Orfiril 60 mg/ml mikstur, oppløsning inneholder 1,8 mmol (41,4 mg) natrium, 7 mg metyl-4-
+hydroksybenzoat og 3 mg propyl-4-hydroksybenzoat per 5 ml mikstur, oppløsning.
+For fullstendig liste over hjelpestoffer se punkt 6.1.
+
+3. LEGEMIDDELFORM
+
+Mikstur, oppløsning
+
+4. KLINISKE OPPLYSNINGER
+
+4.1 Indikasjoner
+
+Epilepsi:
+-     generaliserte anfall, f.eks. tonisk-kloniske anfall, absenser og myoklone anfall
+-     partielle anfall
+
+Manisk episode ved bipolar lidelse:
+-    Behandling av manisk episode ved bipolar lidelse, når litium er kontraindisert eller ikke tolerert.
+     Fortsatt behandling etter en manisk episode kan vurderes til pasienter som har respondert på
+     natriumvalproat for akutt mani.
+
+4.2 Dosering og administrasjonsmåte
+
+Behandlingen bør initieres og overvåkes av lege med erfaring innen diagnostisering og behandling av
+epilepsi eller manisk episode ved bipolar lidelse.
+
+For mikstur deles døgndosen opp i 2-4 doser. Forholdet mellom dosering og effekt, og mellom
+plasmakonsentrasjon og effekt, er ikke fullt avklart.
+
+Én oralsprøyte med 5 ml oral oppløsning inneholder 300 mg natriumvalproat. Graderingen tillater
+doseøkninger på 0,5 ml.
+
+Dosering
+
+Epilepsi:
+
+Monoterapi: Gradvis oppbygging til ca. 10 mg/kg/døgn i løpet av 3-7 dager. Om nødvendig kan dosen
+økes ytterligere med 1 ukes intervall, inntil det er oppnådd tilfredsstillende serumkonsentrasjon eller til
+det opptrer bivirkninger som hindrer ytterligere doseøkning.
+
+
+                                                                                                         1
+Kombinasjonsterapi: Gradvis oppbygging til ca. 20 mg/kg/døgn i løpet av 3-7 dager. Ytterligere
+doseregulering som ved monoterapi. Deretter økes natriumvalproat gradvis med 1 ukes intervall til
+anfallskontroll, eller til det opptrer bivirkninger som hindrer ytterligere doseøkning.
+
+Serumkonsentrasjonen må følges med blodprøver som må tas medikamentfastende om morgenen. Ved
+symptomer på overdosering (tretthet, kvalme, hodepine, nystagmus, usikker gange etc.), undersøkes
+serumkonsentrasjoner av alle antiepileptika som rettledning for dosereduksjon av det rette
+medikament.
+
+Til barn som ikke bruker andre antiepileptika: Startdose 20-40 mg/kg/døgn.
+
+Maniske episoder ved bipolar lidelse:
+
+Voksne
+
+Den daglige dosen bør tilpasses og monitoreres individuelt av behandlende lege.
+
+Anbefalt startdose er 750 mg. I tillegg har en startdose på 20 mg natriumvalproat/kg kroppsvekt også
+vist en akseptabel sikkerhetsprofil i kliniske studier. Legemiddelformer med forsinket frisetting kan
+gis en eller to ganger daglig. Dosen bør økes så raskt som mulig for å finne den laveste effektive
+daglige dosen som gir ønsket klinisk effekt, og bør tilpasses den kliniske responsen for hver pasient.
+
+Gjennomsnittlig daglig dose ligger mellom 1000 og 2000 mg valproat. Pasienter som får daglige doser
+over 45 mg/kg kroppsvekt bør overvåkes nøye.
+
+Forlengelse av behandling av maniske episoder ved bipolar lidelse bør tilpasses individuelt med
+laveste effektive dose.
+
+Barn og ungdom
+
+Sikkerhet og effekt av Orfiril 60mg/ml mikstur til behandling av bipolar lidelse hos pasienter under 18
+år har ikke blitt fastslått.
+
+Hos pasienter med nyreinsuffisient
+
+Det kan være nødvendig å redusere dosen hos pasienter med nyreinsuffisiens, eller øke dosen hos
+pasienter på hemodialyse. Valproat er dialyserbart (se pkt. 4.9). Dosering bør endres i henhold til
+klinisk overvåkning av pasienten (se pkt. 4.4).
+
+Administrasjonsmåte
+Mikstur, oppløsning skal tas ved måltider for å redusere gastrointestinale forstyrrelser. Deretter
+drikkes et halvt glass vann.
+
+Behandlingskontroll
+Behandlingen styres i henhold til den kliniske responsen. Plasmakonsentrasjon av valproat må følges.
+Blodprøver for slike avgjørelser skal tas om morgenen før pasienten har spist noe og kun etter at
+steady state plasmakonsentrasjoner er oppnådd. Optimal plasmakonsentrasjon varierer mellom
+personer og sannsynlig hos de enkelte personer ved forskjellige tidspunkter. Den kliniske vurdering
+bestemmer hvilken plasmakonsentrasjon som er optimal for den enkelte pasient (type anfall,
+krampefrekvens, medisinske, psykologiske, sosiale konsekvenser av krampene, bivirkninger). Pga.
+den forholdsvis korte halveringstiden, kan det forekomme betydelige variasjoner i døgnets
+plasmakonsentrasjonskurve. Plasmakonsentrasjonen bør i blant måles på andre tidspunkter enn om
+morgenen, spesielt hvis pasienten utvikler økt tendens til bivirkninger eller anfall til en bestemt tid på
+døgnet.
+
+
+                                                                                                             2
+Det er lettest å tilpasse optimal plasmakonsentrasjon dersom preparatet brukes som monoterapi.
+Generelt oppnås den terapeutiske effekten ved plasmanivåer mellom 300-700 µmol/l
+(≈43 - 100 µg/ml).
+
+Før behandlingen begynner, og før kirurgiske inngrep, og når pasienten har hematom eller
+blødningstendens, må hematologiske undersøkelser gjennomføres. Disse må inkludere: blødningstid,
+koaguleringstid, faktor VIII og trombocytter. Selv om immunologiske manifestasjoner forekommer
+meget sjeldent i forbindelse med valproatbehandling, må fordelene veies mot mulig risiko før
+behandling starter hos pasienter med systemisk lupus erytematosus (SLE).
+
+Blodbildet, spesielt blodplater, lever- og pankreasfunksjon må kontrolleres hos voksne og barn ved
+behov, og når behandling startes. Dette er spesielt viktig tidlig i behandlingen. Se også advarsler og
+forsiktighetsregler, 4.4.
+
+Jenter og kvinner i fertil alder
+
+Behandling med valproat skal initieres og følges opp av spesialist med erfaring innen behandling av
+epilepsi eller bipolar lidelse. Valproat skal ikke brukes hos jenter og kvinner i fertil alder med mindre
+annen behandling ikke har effekt eller ikke tolereres.
+
+Valproat forskrives og utleveres i henhold til det graviditetsforebyggende programmet for valproat (se
+pkt. 4.3 og 4.4).
+
+Valproat bør fortrinnsvis forskrives som monoterapi ved lavest effektive dose, og hvis mulig som
+depotformulering. Daglig dose bør fordeles på minst to enkeltdoser (se pkt. 4.6).
+
+Menn
+
+Det anbefales at behandling med Orfiril 60 mg/ml mikstur skal initieres og følges opp av spesialist
+med erfaring innen behandling av epilepsi eller bipolar lidelse (se pkt. 4.4 og 4.6).
+
+4.3 Kontraindikasjoner
+
+Orfiril 60 mg/ml mikstur er kontraindisert ved følgende situasjoner:
+-      overfølsomhet overfor virkestoffet eller overfor noen av hjelpestoffene listet opp i pkt. 6.1
+-      leversykdom, tidligere leversykdom og/eller lever- eller pankreasinsuffisiens
+-      leversykdom i familien
+-      søsken som døde av leverdysfunksjon under behandling med natriumvalproat
+-      porfyri
+-      koagulasjonsforstyrrelser med økt blødningstendens
+-      ureasyklusforstyrrelse (se pkt. 4.4)
+-      pasienter med ikke-korrigert systemisk primær karnitinmangel (se pkt. 4.4 Pasienter med risiko
+       for hypokarnitinemi)
+
+       Behandling av epilepsi:
+-      under graviditet, med mindre ingen annen egnet behandling finnes (se pkt. 4.4 og 4.6)
+-      hos kvinner i fertil alder, med mindre vilkårene til det graviditetsforebyggende programmet
+       overholdes (se pkt. 4.4 og 4.6)
+
+       Behandling av bipolar lidelse
+-      under graviditet (se pkt. 4.4 og 4.6)
+-      hos kvinner i fertil alder, med mindre vilkårene i det graviditetsforebyggende programmet
+       overholdes (se pkt. 4.4 og 4.6)
+
+
+
+                                                                                                            3
+Valproat er kontraindisert hos pasienter med kjent mitokondriesykdom som følge av mutasjon i
+kjernegenet som koder for det mitokondrielle enzymet polymerase γ (POLG), f.eks Alpers-
+Huttenlochers syndrom, og hos barn under to år som det mistenkes kan ha en POLG-relatert sykdom
+(se pkt. 4.4).
+4.4 Advarsler og forsiktighetsregler
+
+Forsiktighet kreves spesielt ved:
+-     spedbarn og barn der samtidig behandling med flere antiepileptika er nødvendig
+-     pasienter som har benmargskade
+-     barn og ungdom med multihandikap og alvorlige former for epilepsi
+-     pasienter med en sjelden, arvelig enzymmangel
+-     pasienter med nyreinsuffisiens og hypoproteinemi.
+
+Lever- og pankreasskade
+Det er observert sjeldne tilfeller av alvorlig lever- og pankreasskade med dødelig følge. Dette skjer
+oftest hos småbarn under 3 år som lider av alvorlige epileptiske anfall, spesielt ved organisk
+hjerneskade, psykisk utviklingshemming og/eller en arvelig metabolsk sykdom, inkludert
+mitokondriesykdommer som karnitinmangel, ureasyklusforstyrrelser, POLG-mutasjoner (se pkt. 4.3
+og 4.4) eller degenerativ sykdom. Valproat bør administreres med spesiell forsiktighet og som
+monoterapi hos disse pasientene. Erfaring viser at hos eldre barn (spesielt etter 10 års-alderen) synker
+hyppigheten av leversykdom kraftig. Hos de fleste ble leverskaden sett innen de første 6 måneder av
+behandlingsperioden, spesielt mellom uke 2 og 12, og mest ved samtidig bruk av andre antiepileptika.
+
+Alvorlig eller fatal leverskade kan forutgås av uspesifikke symptomer som økt anfallshyppighet,
+generell sykdomsfølelse, anoreksi, kvalme, brekninger, epigastriesmerter, lokalt eller generelt ødem og
+letargi. Forekomsten av disse symptomene bør overvåkes nøye.
+
+Behandling med natriumvalproat må avbrytes umiddelbart ved mistanke om alvorlig leverdysfunksjon
+eller pankreasskade. Tredobling av ASAT og ALAT-verdier, unormalt forlenget protrombintid, økt
+ALP og bilirubin samt endring i serumprotein gir grunnlag for seponering.
+
+Muligheten for økt kroppsvekt ved behandlingsstart må poengteres overfor pasienten.
+Hensiktsmessige vektkontrolltiltak må iverksettes.
+
+Pediatrisk populasjon
+Hos spedbarn er natriumvalproat førstevalgsterapi kun i spesielle tilfeller. Det bør kun brukes med stor
+forsiktighet og etter nøye vurdering av fordeler og risiko og, om mulig, som monoterapi.
+
+
+
+Graviditetsforebyggende program
+Valproat har et høyt teratogent potensial og barn som eksponeres for valproat in utero har høy risiko
+for medfødte misdannelser og nevrologiske utviklingsforstyrrelser (se pkt. 4.6).
+Orfiril 60 mg/ml mikstur er kontraindisert i følgende situasjoner:
+
+
+Behandling av epilepsi
+•      under graviditet, med mindre ingen annen egnet behandling finnes (se pkt. 4.3 og 4.6).
+•      hos kvinner i fertil alder, med mindre vilkårene i det graviditetsforebyggende programmet
+       overholdes (se pkt. 4.3 og 4.6).
+
+
+
+                                                                                                        4
+Behandling av bipolare lidelser
+•     under graviditet (se pkt. 4.3 og 4.6).
+•     hos kvinner i fertil alder, med mindre vilkårene i det graviditetsforebyggende programmet
+      overholdes (se pkt. 4.3 og 4.6).
+Vilkår i det graviditetsforebyggende programmet:
+Forskriveren må sørge for at:
+•        individuelle forhold bør evalueres i hvert enkelt tilfelle, og pasienten skal inkluderes i
+         diskusjoner for å garantere hennes engasjement, diskutere behandlingsalternativer og sikre at
+         pasienten forstår risikoene og nødvendige risikominimeringstiltak.
+•        potensialet for graviditet vurderes hos alle kvinnelige pasienter.
+•        pasienten har forstått og anerkjent risikoen for medfødte misdannelser og nevrologiske
+         utviklingsforstyrrelser, inkludert omfanget av disse risikoene, for barn som eksponeres for
+         valproat in utero.
+•        pasienten forstår behovet for å gjennomføre graviditetstesting før behandlingsstart og under
+         behandling, ved behov.
+•        pasienten gis råd om prevensjonsmidler, og at pasienten er i stand til å overholde behovet for
+         bruk av sikker prevensjon (for ytterligere informasjon, vennligst se underavsnitt om
+         prevensjonsmidler i denne advarselboksen), uten avbrudd, i hele behandlingsperioden med
+         valproat.
+•        pasienten forstår behovet for regelmessig (minimum årlig) evaluering av behandlingen av en
+         spesialist med erfaring innen behandling av epilepsi eller bipolare lidelser.
+•        pasienten forstår behovet for å kontakte lege straks hun planlegger å bli gravid for å sørge for
+         tilstrekkelig tid til diskusjon og bytte til alternative behandlingsmuligheter før befruktning, og
+         før bruk av prevensjonsmidler avbrytes.
+•        pasienten forstår behovet for å oppsøke lege umiddelbart ved graviditet.
+•        pasienten har mottatt pasientinformasjonsheftet.
+•        pasienten har bekreftet at hun har forstått farene og nødvendige forholdsregler forbundet med
+         bruk av valproat.
+
+Disse forutsetningene gjelder også kvinner som for øyeblikket ikke er seksuelt aktive, med mindre
+forskriveren anser at det er sterke grunner som tilsier at det ikke foreligger risiko for graviditet.
+
+
+Jenter
+•        Forskrivere må sikre at foreldre/omsorgspersoner til jenter forstår behovet for å umiddelbart
+         kontakte spesialist straks barnet som bruker valproat, opplever sin første menstruasjon
+         (menarke).
+•        Forskriveren må sikre at foreldre/omsorgspersoner til jenter som har hatt sin første
+         menstruasjon (menarke) mottar utfyllende informasjon om risikoen for medfødte misdannelser
+         og nevrologiske utviklingsforstyrrelser, inkludert omfanget av disse risikoene for barn som
+         eksponeres for valproat in utero.
+•        Hos pasienter som har hatt sin første menstruasjon (menarke), skal forskrivende spesialist årlig
+         revurdere behovet for valproat og vurdere alternative behandlingsmuligheter. Dersom valproat
+         er den eneste egnede behandlingen, bør behovet for bruk av sikker prevensjon og alle andre
+         vilkår knyttet til det graviditetsforebyggende programmet diskuteres. Forskriveren bør
+         etterstrebe å bytte til annen behandling før jentene når moden alder.
+
+
+
+
+                                                                                                              5
+Graviditetstest
+Graviditet må utelukkes før behandlingsstart med valproat. Valproatbehandling må ikke initieres hos
+kvinner i fertil alder uten at det foreligger en negativ graviditetstest (plasma-graviditetstest), bekreftet
+av helsepersonell, for å utelukke utilsiktet bruk under graviditet.
+Prevensjon
+Kvinner i fertil alder som forskrives valproat, må bruke sikre prevensjonsmidler, uten avbrudd, i hele
+behandlingsperioden med valproat. Disse pasientene må gis omfattende informasjon om forebygging
+av graviditet, og bør henvises til prevensjonsrådgivning dersom de ikke bruker sikre
+prevensjonsmidler. Minst én sikker prevensjonsmetode (fortrinnsvis en brukeruavhengig type, f.eks.
+spiral eller implantat) eller to komplementære prevensjonsmetoder, inkludert en barrieremetode, bør
+brukes. Ved valg av prevensjonsmetode skal individuelle omstendigheter vurderes i hvert tilfelle, og
+pasienten skal involveres i diskusjonen for å sikre at hun forplikter seg til å overholde det valgte
+tiltaket. Selv om hun har amenoré, må hun følge alle råd om sikker prevensjon.
+
+
+Østrogenholdige produkter
+Samtidig bruk med østrogenholdige produkter, inkludert østrogenholdig hormonprevensjon, kan
+potensielt føre til redusert effekt av valproat (se pkt. 4.5). Forskrivere bør overvåke klinisk respons
+(anfallskontroll eller humørkontroll) ved oppstart eller ved seponering av østrogenholdige produkter.
+På den andre siden reduserer ikke valproat effekten av hormonprevensjon.
+Årlige behandlingsevalueringer av spesialist
+Spesialisten bør evaluere, minst årlig, om valproat er den mest egnede behandlingen for pasienten.
+Spesialisten bør diskutere skjemaet som informerer om risikoen for fosterskade ved oppstart og under
+hver årlige evaluering, for å sørge for at pasienten har forstått innholdet.
+
+
+Graviditetsplanlegging
+Dersom en kvinne planlegger å bli gravid ved indikasjonen epilepsi, må en spesialist med erfaring
+innen behandling av epilepsi revurdere valproatbehandlingen og vurdere alternative
+behandlingsmuligheter. Det bør etterstrebes å bytte til passende behandlingsalternativer før
+befruktning, og før bruk av prevensjonsmidler avbrytes (se pkt. 4.6). Dersom bytte ikke er mulig, bør
+kvinnen motta ytterligere rådgivning angående risikoene valproat utgjør for det ufødte barnet, slik at
+hun kan ta en informert beslutning i familieplanleggingen.
+For indikasjonen bipolar lidelse: dersom en kvinne planlegger å bli gravid, må en spesialist med
+erfaring innen behandling av bipolar lidelse konsulteres, valproatbehandlingen bør seponeres og ved
+behov byttes til en alternativ behandling før befruktning, og før bruk av prevensjonsmidler avbrytes.
+
+
+Ved graviditet
+Dersom en kvinne som bruker valproat blir gravid, må hun umiddelbart henvises til en spesialist for å
+revurdere valproatbehandlingen og vurdere alternativ behandling. Pasienter eksponert for valproat
+under graviditet og partneren deres bør henvises til en spesialist med erfaring i å vurdere fosterskader
+av legemidler for rådgivning angående eksponering under graviditeten (se pkt. 4.6).
+
+
+Apotek må sikre at
+•     pasientkort legges ved ved hver utlevering av valproat og at pasienten forstår kortets innhold.
+•     pasienten frarådes å avbryte medisinering med valproat og å umiddelbart kontakt lege ved
+      planlegging eller mistanke om graviditet.
+
+                                                                                                           6
+Opplæringsmateriell
+For å bistå helsepersonell og pasienter i å unngå valproateksponering under graviditet, har innehaver
+av markedsføringstillatelsen laget opplæringsmateriell for å underbygge advarslene og gi veiledning
+om bruk av valproat hos kvinner i fertil alder og detaljene i det graviditetsforebyggende programmet.
+En pasientveileder og pasientkort bør tilbys alle kvinner i fertil alder som bruker valproat.
+Skjemaet som informerer om risikoen for fosterskader bør brukes ved behandlingsstart og ved hver
+årlige vurdering av valproatbehandling av spesialisten.
+
+Bruk hos mannlige pasienter
+
+En retrospektiv observasjonsstudie antyder økt risiko for nevroutviklingsforstyrrelser (NDDs) hos barn
+unnfanget av menn behandlet med valproat i løpet av de 3 månedene før unnfangelsen, sammenlignet
+med de som ble unnfanget av menn behandlet med lamotrigin eller levetiracetam. Andre studier
+antyder imidlertid ikke en økt risiko for NDDs etter paternal eksponering for valproat. Dermed er
+tilgjengelig evidens inkonsekvent, og den kausale rollen til valproat usikker (se pkt. 4.6).
+
+Som et forsiktighetstiltak bør forskrivere informere mannlige pasienter om denne potensielle risikoen
+(se pkt. 4.6) og diskutere behovet for å vurdere effektiv prevensjon, inkludert for en kvinnelig partner,
+mens de bruker valproat og i minst 3 måneder etter avsluttet behandling. Mannlige pasienter bør ikke
+donere sæd under behandlingen og i minst 3 måneder etter avsluttet behandling.
+
+Mannlige pasienter som behandles med valproat bør regelmessig evalueres av sin behandlende lege for
+å vurdere om valproat fortsatt er den mest passende behandlingen for pasienten. For mannlige
+pasienter som planlegger å unnfange barn, bør passende behandlingsalternativer vurderes og
+diskuteres med de mannlige pasientene. Individuelle forhold bør vurderes i hvert enkelt tilfelle. Det
+anbefales å rådføre en spesialist med erfaring i behandling av epilepsi eller bipolar lidelse etter behov.
+
+Opplæringsmateriell er tilgjengelig for helsepersonell og mannlige pasienter. En pasientveiledning bør
+gis til mannlige pasienter som bruker valproat.
+
+Tidsskjema for klinisk- og laboratorieundersøkelser (se nedenfor):
+
+Barn:
+
+Før behandlingsstart, deretter hver måned i 6 måneder, og så to ganger med tre måneders intervall. I
+tillegg anbefales det at foreldre/verger har regelmessig telefonkontakt med behandlende lege mellom
+laboratoriekontrollene for å sikre at toksiske eller andre kliniske symptomer oppdages tidlig.
+
+Laboratorieprøver som skal utføres før behandlingsstart:
+
+Fullt blodbilde med trombocytter, koagulasjonsprøver (tromboplastintid = aPTT, SPA, fibrinogen),
+serumamylase, ASAT, ALAT, ALP, totalbilirubin, serumprotein, blodglukose.
+
+Laboratorieprøver under behandling:
+
+Når det ikke er noen kliniske avvik, er kontroll av blodbildet (inkludert trombocytter) og leverprøver
+tilstrekkelig. Imidlertid bør hver annen kontroll inkludere koagulasjonsprøver.
+
+Etter 12 måneders behandling:
+
+Når det ikke er kliniske avvik, er 2 til 3 undersøkelser per år (kliniske og laboratoriemessige) som
+regel tilstrekkelig
+
+Hos ungdom og voksne:
+
+                                                                                                         7
+Risikoen for alvorlige eller fatale komplikasjoner er meget liten. Det anbefales derfor at når pasienten
+er undersøkt nøye klinisk og laboratoriemessig før behandlingsstart (som hos barn ovenfor),
+undersøkes blodbildet (inkl. trombocytter), lever- og pankreasfunksjonsprøver regelmessig, spesielt i
+de første seks månedene.
+
+Imidlertid bør man ikke kun basere seg på blodprøvesvarene siden de ikke nødvendigvis er unormale i
+alle tilfeller. Sykehistorien og den kliniske undersøkelsen er avgjørende for vurderingen. Man må også
+huske at forbigående økning i leverenzymene kan forekomme hos enkelte uten bevis for
+leverdysfunksjon, spesielt ved behandlingsstart.
+
+Ved endring i samtidige legemidler (doseøkninger eller tillegg) som er kjent for å påvirke leveren, bør
+levermonitorering startes opp igjen ved behov (se også pkt. 4.5 om risiko for leverskade med
+salicylater, andre antikonvulsiva, inkludert cannabidiol).
+
+Hyperammonemi
+Behandlingen med Orfiril kan føre til hyperammonemi. Derfor må plasmanivå av ammoniakk og
+natriumvalproat kontrolleres dersom pasienten får apati, somnolens, oppkast, arteriell hypotensjon
+samt økt anfallshyppighet, og dosering av Orfiril bør eventuelt reduseres.
+
+Ureasyklusforstyrrelser og risiko for hyperammonemi
+
+Dersom det er mistanke om enzymfeil i ureasyklus, bør pasientens metabolisme undersøkes før
+oppstart av behandling med valproat (se pkt. 4.3 og 4.4 Pasienter med risiko for hypokarnitinemi og
+Alvorlig leverskade).
+
+Pasienter med risiko for hypokarnitinemi
+
+Administrasjon av valproat kan utløse forekomst eller forverring av hypokarnitinemi som kan resultere
+i hyperammonemi (som igjen kan føre til hyperammonemiencefalopati). Andre symptomer som f.eks.
+levertoksisitet, hypoketotisk hypoglykemi, myopati inkludert kardiomyopati, rabdomyolyse, Fanconis
+syndrom er observert, hovedsakelig hos pasienter med risikofaktorer for hypokarnitinemi eller
+eksisterende hypokarnitinemi. Pasienter med høyere risiko for symptomatisk hypokarnitinemi ved
+behandling med valproat omfatter pasienter med metabolsk sykdom, inkludert mitokondriesykdom
+relatert til karnitin (se også pkt. 4.4 Pasienter med kjent eller mistenkt mitokondriesykdom og
+ureasyklusforstyrrelse og risiko for hyperammonemi), redusert næringsinntak av karnitin, pasienter
+yngre enn 10 år, samtidig bruk av pivalat-konjugerte legemidler eller andre antiepileptika.
+
+Pasienter bør oppfordres til å øyeblikkelig melde fra ved tegn på hyperammonemi som f.eks. ataksi,
+nedsatt bevissthet og oppkast. Tilskudd av karnitin bør vurderes når symptomer på hypokarnitinemi
+blir observert. Pasienter med systemisk primær karnitinmangel og korrigert for hypokarnitinemi skal
+kun behandles med valproat dersom fordelene med behandling oppveier risikoene hos disse pasientene
+og det ikke finnes behandlingsalternativer. Karnitinnivået bør monitoreres hos disse pasientene. .
+Pasienter med karnitinpalmitoyltransferase type II-mangel bør underrettes om den økte risikoen for
+rabdomyolyse under behandling med valproinsyre. Tilskudd av karnitin bør vurderes hos disse
+pasientene. Se også pkt. 4.5, 4.8 og 4.9.
+
+Lupus erythematosus
+Bruk av natriumvalproat fører sjeldent til reaksjoner i immunsystemet. Hos pasienter med tegn på
+lupus erythematosus bør det likevel kun administreres etter nøye vurdering av risiko og fordeler.
+
+Alvorlige kutane bivirkninger og angioødem
+
+Alvorlige kutane bivirkninger (SCAR) som Stevens-Johnsons syndrom (SJS), toksisk epidermal
+nekrolyse (TEN) og legemiddelindusert utslett med eosinofili og systemiske symptomer (DRESS),
+
+                                                                                                           8
+erythema multiforme og angioødem, er rapportert i forbindelse med valproatbehandling. Pasienter bør
+informeres om tegn og symptomer på alvorlige hudmanifestasjoner og overvåkes nøye. Dersom tegn
+på SCAR eller angioødem observeres, er det nødvendig med rask vurdering, og behandling må
+seponeres hvis diagnosen SCAR eller angioødem bekreftes.
+
+Forverring av krampeanfall
+Som med andre antiepileptika kan enkelte pasienter oppleve forverring av krampeanfall med valproat.
+
+Koagulasjonsstatus
+Spesielt ved høye doser forekommer en sjelden gang forlenget blødningstid og/eller trombocytopeni.
+Derfor bør pasienter med uventet slimhinneblødning eller økt tendens til hematom, utredes videre.
+
+Ekstra forsiktighet bør utvises dersom tromboplastintiden er betydelig forlenget sammen med andre
+endringer i laboratorieparametrene, som redusert fibrinogen og koagulasjonsfaktorer (hovedsakelig
+faktor VIII) eller forhøyet bilirubin eller leverenzymer. Kontroll av trombocytter, tromboplastintid,
+blødningstid og fibrinogen anbefales før operasjoner eller dentale inngrep.
+
+Benmargskade
+Pasienter med kjent benmargskade må monitoreres nøye.
+
+Nyresvikt
+
+Hos pasienter med nyresvikt må økning i serum natriumvalproat vurderes og dosen justeres deretter.
+
+Seponering
+Seponering av natriumvalproat eller overgang til annen antiepileptisk behandling må foretas gradvis
+og med forsiktighet. Brå endring kan resultere i plutselig økning i anfall.
+
+Interferens med laboratorieprøver
+Da natriumvalproat delvis metaboliseres til ketonlegemer, må muligheten for falsk positive resultater
+tas i betraktning ved måling av ketonlegemer i urinen hos diabetespasienter ved mistanke om
+ketoacidose.
+
+OBS:
+
+Det er vist at natriumvalproat stimulerer replikasjon av humant immunsviktvirus ved enkelte in vitro
+studier. Den kliniske betydningen av dette er ikke kjent.
+
+Selvmordstanker og selvmordsrelatert adferd
+Selvmordstanker og selvmordsrelatert adferd er rapportert hos pasienter behandlet med antiepileptiske
+legemidler for flere indikasjoner. En meta-analyse av randomiserte placebokontrollerte forsøk med
+antiepileptika har vist en liten økning i risiko for selvmordstanker og selvmordsrelatert adferd.
+Mekanismen bak denne risikoen er ikke kjent og tilgjengelige data kan ikke utelukke muligheten for
+økt risiko ved behandling med natriumvalproat
+Pasientene bør derfor overvåkes for tegn på selvmordstanker eller selvmordsrelatert adferd, og
+nødvendig behandling bør vurderes. Pasienter (og pårørende) bør oppfordres til å kontakte medisinsk
+hjelp omgående dersom selvmordstanker eller selvmordsrelatert adferd oppstår.
+
+Karbapenemer
+Samtidig bruk av natriumvalproat og karbapenemer er ikke anbefalt (se avsnitt 4.5).
+Pasienter med kjent eller mistenkt mitokondriesykdom
+
+
+                                                                                                        9
+Valproat kan utløse eller forverre kliniske tegn på underliggende mitokondriesykdommer forårsaket av
+mutasjoner i mitokondrielt DNA og i genet for POLG som kodes for i cellekjernen. Særlig har
+Valproat-indusert akutt leversvikt og leverrelaterte dødsfall blitt rapportert hyppigere hos pasienter
+med arvelig nevrometabolske syndrommer forårsaket av mutasjoner i genet for det mitokondrielle
+enzymet polymerase γ (POLG), f.eks. Alpers-Huttenlochers syndrom.
+POLG-relaterte sykdommer bør mistenkes hos pasienter med en familiehistorie eller symptomer som
+kan tyde på POLG-relatert sykdom, inkludert men ikke begrenset til uforklarlig encefalopati, refraktær
+epilepsi (fokal, myoklon), status epilepticus når behandling oppsøkes, forsinket utvikling,
+psykomotorisk regresjon, aksonal sensomotorisk nevropati, myopati, cerebellar ataksi, oftalmoplegi,
+eller komplisert migrene med oksipital aura. Testing for POLG-mutasjon bør utføres i henhold til
+aktuelle kliniske retningslinjer for diagnostisk utredning av slike sykdommer (se pkt 4.3).
+Natriuminnhold
+Dette legemidlet inneholder 41,4 mg natrium pr. 5 ml mikstur. Dette tilsvarer 2 % av WHOs anbefalte
+maksimale daglige inntak av natrium på 2 g for en voksen person
+
+
+4.5 Interaksjon med andre legemidler og andre former for interaksjon
+
+Følgende kombinasjoner med valproat kan nødvendiggjøre dosejustering: acetylsalicylsyre, cimetidin,
+etosuksimid, fenytoin, fenobarbital, karbamazepin, primidon lamotrigin, lorazepam, felbamat, warfarin
+og nimodipin. Valproat kan øke den sederende effekten av alkohol.
+
+Valproat kan indusere den sederende effekten av antidepressiva.
+
+Dersom natriumvalproat kombineres med andre antiepileptika, kan gjensidige effekter på
+plasmakonsentrasjonene forekomme. Enzyminduserende antiepileptika som fenobarbital, fenytoin og
+karbamazepin kan øke utskillelsen av natriumvalproat og dermed redusere effekten. Nivåene for
+metabolitter av valproinsyre kan økes ved samtidig bruk med fenytoin eller fenobarbital. Samtidig
+bruk av induserende legemidler kan øke risikoen for levertoksisitet og hyperammonemi.
+
+Felbamat
+
+Felbamat gir en lineær, doseavhengig økning i plasmakonsentrasjonen av fritt valproat på ca. 18 %.
+
+Valproat kan øke plasmakonsentrasjonen av felbamat med ca. 50 %.
+
+Meflokin
+
+Meflokin øker omsetningen av valproat og kan selv øke hyppigheten av kramper. Samtidig bruk kan
+derfor føre til epileptiske anfall.
+
+Cimetidin, fluoksetin og erythromycin
+
+Serumkonsentrasjonen av valproat kan forhøyes ved samtidig administrasjon av cimetidin, fluoksetin
+og erythromycin.
+
+Antimikrobielle midler av karbapenemgruppen (som imipenem, meropenem, panipenem)
+
+Fall i blodkonsentrasjonen av valproat er rapportert ved samtidig administrasjon av karbapenemer,
+som førte til en nedgang på 60-100 % av valproatkonsentrasjonen etter omtrent 2 dager. På grunn av
+den hurtige nedgangen og omfanget av den, regnes ikke samtidig administrasjon av karbapenemer hos
+pasienter stabilisert på valproatbehandling som en håndterlig interaksjon, og bør derfor unngås (se
+avsnitt 4.4).
+
+
+                                                                                                     10
+Fenobarbital
+
+Valproatinduserte økning i fenobarbitalkonsentrasjon, som kan gi en alvorlig sederende effekt, er
+spesielt viktig klinisk. Dersom dette forekommer, må dosen av fenobarbital eller primidon reduseres
+(primidon metaboliseres delvis til fenobarbital).
+
+Litium
+
+I kombinasjon med litium bør plasmakonsentrasjonen av begge de aktive midlene kontrolleres
+regelmessig
+
+Fenytoin
+
+Valproat kan forårsake en forbigående men betydelig økning i fritt (ikke bundet) serumfenytoin, men
+ved samtidig bruk reduseres totalt fenytoinnivå. Dette har imidlertid vanligvis ingen klinisk betydning
+siden mengden av fritt fenytoin forblir adekvat
+
+Karbamazepin
+
+Når karbamazepinbehandling seponeres etter kombinasjonsterapi med valproat, kan
+plasmakonsentrasjonen av valproat øke som følge av at induksjon av leverenzymene opphører.
+Valproat, derimot, hemmer enzymet epoksidhydrolase, som metaboliserer karbamazepinepoksid, den
+aktive metabolitten i karbamazepin. Dette fører til økt mengde av epoksid i plasma. Valproat kan øke
+karbamazepin-10,11-epoksid til toksisk nivå selv om karbamazepin ligger innenfor terapeutisk
+område.
+
+Nimodipin
+
+Ved samtidig bruk kan nimodipinnivået øke med ca 50 % pga. metabolisk hemming.
+
+Barbiturater, benzodiazepiner, neuroleptika og antidepressiva
+
+I kombinasjon med barbiturater, benzodiazepiner (f. eks diazepam, lorazepam, klonazepam),
+neuroleptika og antidepressiva, potenseres den sentralnervøse hemmingen av disse legemidlene.
+
+Olanzapin
+
+Valproinsyre kan redusere plasmakonsentrasjonen av olanzapin.
+
+Rufinamid
+
+Valproinsyre kan øke plasmanivået av rufinamid. Økningen avhenger av valproinsyrekonsentrasjonen.
+Spesiell omtanke er påkrevd hos barn da effekten er mer uttalt i denne aldersgruppen.
+
+Propofol
+
+Valproinsyre kan øke blodnivået av propofol. Doseredusering av propofol bør vurderes dersom det
+administreres sammen med valproat.
+
+Antikoagulantia (warfarin) og acetylsalisylsyre
+
+Samtidig bruk av natriumvalproat og antikoagulantia (warfarin) eller acetylsalisylsyre kan øke
+blødningstendensen. I tillegg reduserer acetylsalisylsyre valproats plasmaproteinbinding. Regelmessig
+kontroll av koagulasjonsparametre anbefales derfor. Natriumvalproat og acetylsalisylsyre bør ikke
+administreres samtidig ved feber og smerter, spesielt hos småbarn og spedbarn.
+
+
+                                                                                                     11
+Kodein
+
+Omsetning og plasmaproteinbinding av kodein kan påvirkes ved samtidig bruk av valproat.
+
+Lamotrigin
+
+Valproat hemmer omsetningen av lamotrigin. Det betyr at lamotrigindosen bør reduseres ved samtidig
+bruk.
+
+Det ser ut til at risikoen for hudreaksjoner øker dersom legemidler som inneholder valproat
+kombineres med lamotrigin.
+
+Etosuksimid
+
+Natriumvalproat øker konsentrasjonen av etosuksimid i plasma, med risiko for bivirkninger som
+resultat. Kontroll av plasmaetosuksimid anbefales ved kombinasjonsterapi.
+
+Zidovudin
+
+Valproat kan øke plasmakonsentrasjonen av zidovudin, med økt risiko for toksiske reaksjoner som
+resultat.
+
+Rifampicin
+
+Rifampicin kan redusere blodnivåene av valproat hvilket gir redusert terapeutisk effekt.
+Doseringsjustering av valproat kan derfor være nødvendig ved samtidig administrasjon med
+rifampicin.
+
+Proteasehemmere
+
+Plasmanivå av valproat reduseres ved samtidig administrering av proteasehemmere, som lopinavir
+eller ritonavir.
+
+Kolestyramin
+
+Samtidig administrering av kolestyramin kan redusere plasmanivået av valproat.
+
+Pivalat-konjugerte legemidler
+
+Samtidig administrasjon av valproat og pivalat-konjugerte legemidler (som cefditorenpivoksil,
+adefovirdipivoksil, pivmecillinam og pivampicillin) bør unngås på grunn av høyere risiko for
+karnitindeplesjon (se pkt. 4.4 Pasienter med risiko for hypokarnitinemi). Pasienter der samtidig
+administrasjon ikke kan unngås skal overvåkes nøye for tegn og symptomer på hypokarnitinemi.
+
+Topiramat
+
+I enkelte tilfeller har samtidig administrasjon av valproinsyre og topiramat blitt assosiert med
+hyperammonemi med og uten encefalopati.
+
+Acetazolamid
+
+Hyperammonemi kan også oppstå under samtidig administrering av valproinsyre og acetazolamid, og
+fører til økt risiko for encefalopati.
+
+
+
+
+                                                                                                   12
+Pasienter som behandles med disse to virkestoffene bør overvåkes nøye for tegn på hyperammonemisk
+encefalopati.
+
+Quetiapin
+
+Risikoen for nøytropeni/leukopeni kan økes når valproinsyre administreres sammen med quetiapin.
+
+Diazepam
+
+Hos friske frivillige erstattet valproat diazepam i plasmaalbuminbindingen og hemmet dermed
+metabolismen av diazepam. I kombinasjonsbehandling kan konsentrasjonen av ubundet diazepam øke,
+mens plasmaclearance og distribusjonsvolum av den frie diazepamfraksjonen kan bli redusert (med
+25 %, 20 %). Halveringstiden endres imidlertid ikke.
+
+Lorazepam
+
+Hos friske frivillige førte samtidig behandling med valproat og lorazepam til en reduksjon i
+plasmaclearance av lorazepam med opptil 40 %.
+
+Østrogenholdige produkter, inkludert østrogenholdig hormonprevensjon
+
+Østrogener er induktorer av UDP-glukuronosyltransferase (UGT) isoformer involvert i valproat-
+glukuronidering og kan øke clearance av valproat, noe som kan føre til redusert serumkonsentrasjon av
+valproat og potensielt redusert effekt av valproat (se pkt. 4.4). Vurder overvåkning av serumnivå av
+valproat.
+
+På den andre siden har ikke valproat noen enzyminduserende effekt. Dermed reduserer ikke valproat
+effekten av østroprogestative midler hos kvinner som bruker hormonprevensjon.
+
+Metamizol
+
+Metamizol (induktor av metaboliserende enzymer inkludert CYP2B6 og CYP3A4) kan redusere
+nivåene av valproat i serum ved samtidig bruk, noe som kan føre til en potensiell reduksjon i den
+kliniske effekten av valproat. Forskrivere bør monitorere klinisk respons (anfallskontroll eller
+humørkontroll) og vurdere monitorering av valproatnivåer i serum etter behov.
+
+Metotreksat
+Noen kasusrapporter beskriver en betydelig reduksjon i valproatnivåer i serum etter administrasjon av
+metotreksat, med forekomst av krampeanfall. Leger som forskriver legemidlet bør monitorere klinisk
+respons (anfallskontroll eller humørkontroll) og vurdere monitorering av valproatnivåer i serum etter
+behov.
+
+Klozapin
+Samtidig behandling med valproat og klozapin kan øke risikoen for nøytropeni og klozapinindusert
+myokarditt. Hvis samtidig bruk av valproat og klozapin er nødvendig, er det nødvendig med nøye
+overvåking for begge hendelsene.
+Risiko for leverskade
+
+Samtidig bruk av salicylater bør unngås hos barn under 3 år på grunn av risikoen for levertoksisitet (se
+pkt. 4.4). Samtidig bruk av valproat og behandling med flere antikonvulsiva øker risikoen for
+leverskade, særlig hos små barn (se pkt. 4.4). Samtidig bruk med cannabidiol øker forekomsten av
+forhøyede transaminaseenzymer. I kliniske studier med pasienter i alle aldre som samtidig mottar
+cannabidiol ved doser på 10 til 25 mg/kg og valproat, er økninger i ALAT på mer enn 3 ganger øvre
+normalgrense rapportert hos 19 % av pasientene. Hensiktsmessig levermonitorering bør utføres når
+
+                                                                                                     13
+valproat brukes samtidig med andre antikonvulsiva med potensiell hepatotoksisitet, inkludert
+cannabidiol, og dosereduksjoner eller seponering bør vurderes i tilfeller med signifikante avvik i
+leverparametre (se pkt. 4.4).
+
+Det er mulig at potensielt levertoksiske legemidler, blant annet alkohol, kan forverre natriumvalproats
+levertoksisitet.
+4.6 Fertilitet, graviditet og amming
+Graviditet og fertile kvinner
+
+
+
+ Behandling av epilepsi
+ •    Valproat er kontraindisert under graviditet, med mindre ingen alternativ behandling er egnet
+ •    Valproat er kontraindisert hos kvinner i fertil alder, med mindre vilkårene i det
+      graviditetsforebyggende programmet overholdes (se pkt. 4.3 og 4.4)
+
+ Behandling av bipolar lidelse
+ •    Valproat er kontraindisert under graviditet
+ •    Valproat er kontraindisert hos kvinner i fertil alder, med mindre vilkårene i det
+      graviditetsforebyggende programmet overholdes (se pkt. 4.3 og 4.4)
+
+
+
+Teratogenisitet og effekter på utvikling fra in utero-eksponering
+Eksponeringsrisiko relatert til valproat under graviditet
+Hos kvinner er både valproat monoterapi og valproat i kombinasjonsbehandling med andre
+antiepileptika er ofte forbundet med unormale utfall av graviditeter. Tilgjengelige data viser økt risiko
+for store medfødte misdannelser og nevroutviklingsforstyrrelser ved både valproat monoterapi og
+kombinasjonsbehandling sammenlignet med populasjonen som ikke er eksponert for valproat.
+Det er vist at valproat krysser placenta hos både dyr og mennesker (se pkt 5.2).
+Dyrestudier: Teratogene effekter er vist hos mus, rotter og kaniner (se pkt. 5.3).
+
+
+Medfødte misdannelser fra in utero-eksponering
+En meta-analyse (inkludert observasjons- og kohortstudier) viste at omtrent 11 % av barn født av
+kvinner med epilepsi eksponert for valproat monoterapi under graviditet, hadde store medfødte
+misdannelser. Dette er større enn risikoen for store misdannelser hos den generelle populasjonen (ca.
+2–3 %).
+Risikoen for store medfødte misdannelser hos barn etter eksponering in utero for
+kombinasjonsbehandling med antiepileptika som inkluderer valproat, er høyere enn for
+kombinasjonsbehandling med antiepileptika som ikke inkluderer valproat. Denne risikoen er
+doseavhengig ved valproat monoterapi, og tilgjengelige data indikerer at den er doseavhengig ved
+valproat kombinasjonsbehandling. Et trygt dosenivå kan imidlertid ikke fastslås.
+Tilgjengelige data viser en økt insidens av små og store misdannelser. De vanligste typene av
+misdannelser er nevralrørsskader, ansiktsdysmorfi, leppe- og ganespalte, kraniestenose, hjerte-, nyre-
+og urogenitale skader, skader i ekstremiteter (inkludert bilateral radial aplasi) og multiple avvik som
+omfatter flere organsystemer.
+
+
+                                                                                                       14
+Nevroutviklingsforstyrrelser fra in utero-eksponering
+Data har vist at eksponering for valproat in utero kan ha negative effekter på mental og fysisk
+utvikling hos det eksponerte barnet. Risikoen for nevroutviklingsforstyrrelser (inkludert autisme)
+synes å være doseavhengig når valproat brukes i monoterapi, men tilgjengelige data gjør det ikke
+mulig å fastslå et trygt dosenivå. Når valproat administreres som en del av en kombinasjonsbehandling
+med andre antiepileptika under graviditet, økte dessuten risikoen for nevroutviklingsforstyrrelser hos
+barnet signifikant sammenlignet med risikoen hos barn i den generelle populasjonen eller barn som ble
+født av ubehandlede epileptiske mødre. Eksakt svangerskapsperiode hvor det foreligger risiko for
+disse effektene er usikker, og muligheten for en risiko gjennom hele graviditeten kan ikke utelukkes.
+Når valproat administreres i monoterapi, viser studier med barn under skolepliktig alder eksponert in
+utero for valproat, at inntil 30–40 % opplever forsinkelser i tidlig utvikling, som å begynne senere å
+prate og gå, lavere intellektuell kompetanse, dårlig språkkompetanse (tale og forståelse) og
+hukommelsesvansker.
+
+Intelligenskvotient (IQ) målt hos barn i skolepliktig alder (6 år) som har blitt eksponert for valproat in
+utero, var i gjennomsnitt 7-10 poeng lavere enn hos barn eksponert for andre antiepileptika. Selv om
+betydningen av andre faktorer ikke kan utelukkes, er det hos barn eksponert for valproat holdepunkter
+for at risikoen for intellektuell svekkelse kan være uavhengig av maternal IQ.
+Det foreligger begrensede data vedrørende langtidseffekter.
+Tilgjengelige data fra en populasjonsstudie indikerer at barn eksponert for valproat in utero har økt
+risiko for å utvikle autismespekterforstyrrelser (ca. tre ganger) og barneautisme (ca. fem ganger)
+sammenlignet med den ikke-eksponerte populasjonen i studien.
+Tilgjengelige data fra en annen populasjonsstudie indikerer at barn eksponert for valproat in utero har
+økt risiko for å utvikle hyperkinetisk forstyrrelse (ADHD) (ca. 1,5 ganger) sammenlignet med den
+ikke-eksponerte populasjonen i studien.
+In utero-eksponering for valproat kan også føre til hørselshemming eller døvhet på grunn av
+misdannelser i øret og/eller nesen (sekundær effekt) og/eller til direkte toksisitet på hørselsfunksjonen.
+Både uni- og bilateral døvhet eller hørselshemming er beskrevet. Utfall ble ikke rapportert for alle for
+alle tilfeller, men i de fleste tilfeller der utfall ble rapportert var effekten ikke reversibel.
+In utero-eksponering for valproat kan føre til misdannelser i øyet (inkludert kolobomer, mikroftalmus)
+som har blitt rapportert i forbindelse med andre medfødte misdannelser. Disse misdannelsene i øyet
+kan påvirke synet.
+
+Jenter og kvinner i fertil alder
+Se ovenfor og pkt. 4.4
+
+
+Hvis en kvinne planlegger å bli gravid
+
+Ved indikasjonen epilepsi: Dersom en kvinne planlegger å bli gravid, må en spesialist med erfaring
+innen behandling av epilepsi revurdere valproatbehandlingen og vurdere alternative
+behandlingsmuligheter. Det bør etterstrebes å bytte til passende behandlingsalternativ før befruktning,
+og før bruk av prevensjonsmidler avbrytes (se pkt. 4.4). Dersom bytte ikke er mulig, bør kvinnen
+motta ytterligere rådgivning angående risikoene valproat utgjør for det ufødte barnet, slik at hun kan ta
+en informert beslutning i familieplanleggingen.
+
+
+
+                                                                                                        15
+Ved indikasjonen(e) bipolar lidelse: Dersom en kvinne planlegger å bli gravid, må en spesialist med
+erfaring innen behandling av bipolar lidelse konsulteres, valproatbehandlingen bør seponeres og ved
+behov byttes til en alternativ behandling før befruktning, og før bruk av prevensjonsmidler avbrytes.
+
+Gravide kvinner
+
+Valproat er kontraindisert som behandling av bipolar lidelse under graviditet. Valproat er
+kontraindisert som behandling av epilepsi under graviditet, med mindre ingen annen egnet behandling
+finnes (se pkt. 4.3 og 4.4).
+
+Dersom en kvinne som bruker valproat blir gravid, må hun umiddelbart henvises til en spesialist for å
+vurdere behandlingsalternativer. Under graviditet kan maternale tonisk-kloniske anfall og status
+epilepticus med hypoksi utgjøre en særlig risiko for død hos moren og det ufødte barnet.
+Dersom det under spesielle forhold avgjøres at en gravid kvinne, på tross av de kjente risikoene
+forbundet med valproat under graviditet og etter nøye overveielse av alternativ behandling, må få
+valproat mot epilepsi, er det anbefalt å:
+    -   Bruke laveste effektive dose og fordele døgndosen av valproat på flere små doser som tas i
+        løpet av dagen. Bruk av depotformulering kan være å foretrekke fremfor andre
+        behandlingsformuleringer for å unngå høy maksimal plasmakonsentrasjon (se pkt. 4.2).
+
+Alle pasienter eksponert for valproat under graviditet og partneren deres bør henvises til en spesialist
+med erfaring i å vurdere fosterskader av legemidler for rådgivning angående eksponering under
+graviditeten. Spesialisert prenatal overvåking bør iverksettes for å oppdage mulig forekomst av
+nevralrørsskade eller andre misdannelser. Folattilskudd før graviditet kan redusere risikoen for
+nevralrørsskader som kan oppstå ved alle svangerskap. Tilgjengelige data tyder imidlertid ikke på at
+det forebygger fosterskader eller misdannelser forårsaket av valproateksponering.
+
+Risiko hos nyfødte
+    -   Tilfeller av hemorrhagisk syndrom er rapportert i svært sjeldne tilfeller hos nyfødte av mødre
+        som har tatt valproat under graviditet. Dette hemorrhagiske syndromet er relatert til
+        trombocytopeni, hypofibrinogenemi og/eller en reduksjon i andre koagulasjonsfaktorer.
+        Afibrinogenemi er også rapportert og kan være fatalt. Dette syndromet må imidlertid skilles
+        fra en reduksjon av vitamin-K-faktorer indusert av fenobarbital og enzyminducere.
+        Trombocyttall, plasmanivå av fibrinogen, koagulasjonstester og koagulasjonsfaktorer skal
+        derfor undersøkes hos nyfødte.
+    -   Tilfeller av hypoglykemi er rapportert hos nyfødte av mødre som har tatt valproat i tredje
+        trimester av graviditeten.
+    -   Tilfeller av hypotyreose er rapportert hos nyfødte av mødre som har tatt valproat under
+        graviditet.
+    -   Abstinenssyndrom (spesielt uro, irritabilitet, hypereksitabilitet, nervøsitet, hyperkinesi,
+        muskelspenningsforstyrrelser, skjelving, kramper og problemer med matinntak) kan
+        forekomme hos nyfødte av mødre som har tatt valproat i siste trimester av graviditeten.
+Menn og potensiell risiko for nevroutviklingsforstyrrelser hos barn av fedre behandlet med valproat i
+de 3 månedene før unnfangelsen
+
+En retrospektiv observasjonsstudie i 3 nordiske land antyder økt risiko for nevroutviklingsforstyrrelser
+hos barn (fra 0 til 11 år) unnfanget av menn behandlet med valproat som monoterapi i de 3 månedene
+før unnfangelsen, sammenlignet med de som ble unnfanget av menn behandlet med lamotrigin eller
+
+                                                                                                       16
+levetiracetam som monoterapi, med en sammenslått justert hazard ratio (HR) på 1,50 (95 % KI: 1,09-
+2,07). Den justerte kumulative risikoen for nevroutviklingsforstyrrelser varierte mellom 4,0 % til 5,6
+% i valproatgruppen mot mellom 2,3 % til 3,2 % i lamotrigin/levetiracetamgruppen.
+
+Andre populasjonsbaserte observasjonsstudier viste ingen økt risiko for NDDs hos barn unnfanget av
+menn behandlet med valproat som monoterapi i de siste 3–4 månedene før unnfangelsen,
+sammenlignet med menn behandlet med lamotrigin eller levetiracetam som monoterapi.
+
+Forskjeller i studiedesign, inkludert kontroll av konfunderende faktorer og populasjonsutvalg, kan
+bidra til forskjeller i funnene mellom studiene. I tillegg antyder tilgjengelige data at faktorer andre enn
+valproateksponering, inkludert underliggende sykdom hos faren, kan bidra til den observerte
+assosiasjonen. Totalt sett er evidensen vedrørende en økt risiko for NDDs hos barn av fedre behandlet
+med valproat i de siste 3 månedene før unnfangelse inkonsekvent, og den kausale rollen til valproat er
+usikker.
+
+Som et forsiktighetstiltak bør forskrivere informere mannlige pasienter om denne potensielle risikoen
+og diskutere behovet for å vurdere effektiv prevensjon, inkludert for en kvinnelig partner, mens de
+bruker valproat og i minst 3 måneder etter avsluttet behandling (se pkt. 4.4). Mannlige pasienter bør
+ikke donere sæd under behandlingen og i minst 3 måneder etter avsluttet behandling.
+
+Mannlige pasienter som behandles med valproat bør regelmessig evalueres av sin behandlende lege for
+å vurdere om valproat fortsatt er den mest passende behandlingen for pasienten. For mannlige
+pasienter som planlegger å unnfange barn, bør passende behandlingsalternativer vurderes og
+diskuteres med de mannlige pasientene. Individuelle forhold bør vurderes i hvert enkelt tilfelle. Det
+anbefales å rådføre en spesialist med erfaring i behandling av epilepsi eller bipolar lidelse etter behov.
+
+Amming
+Valproat blir skilt ut i morsmelk hos mennesker i en konsentrasjon som varierer fra 1 % til 10 % av
+maternalt serumnivå. Hematologiske forstyrrelser er vist hos nyfødte/spedbarn som ammes av
+behandlede kvinner (se pkt. 4.8).
+
+Tatt i betraktning fordelene av amming for barnet og fordelene av behandling for moren, må det tas en
+beslutning om ammingen skal opphøre eller behandlingen med Orfiril 60mg/ml mikstur skal
+avsluttes/avstås fra.
+
+Fertilitet
+Amenoré, polycystiske ovarier og økt testosteronnivå er rapportert hos kvinner som har brukt valproat
+(se pkt. 4.8). Bruk av valproat kan også redusere fertilitet hos menn (se pkt. 4.8).
+
+Nedsatt fertilitet er i noen tilfeller reversibelt minst 3 måneder etter seponering av behandling. Et
+begrenset antall kasuistikker indikerer at en kraftig dosereduksjon kan bedre fertiliteten. I enkelte
+andre tilfeller var imidlertid reversering av mannlig infertilitet ikke kjent.
+
+4.7 Påvirkning av evnen til å kjøre bil og bruke maskiner
+
+Valproat kan påvirke evnen til å kjøre bil eller bruke maskiner. Forsiktighet må utvises inntil
+pasientenes reaksjon på midlet er klarlagt.
+
+4.8 Bivirkninger
+
+
+
+                                                                                                        17
+De mest vanlig rapporterte bivirkningene for natriumvalproat er gastrointestinale forstyrrelser, som
+forekommer hos ca. 20 % av pasientene. Gastrointestinale forstyrrelser er ofte forbigående. Tretthet
+forekommer oftere ved samtidig behandling med andre antiepileptika. Det er sett tilfeller av alvorlig
+leverskade, spesielt hos barn behandlet med høye doser eller kombinert med andre antiepileptika.
+
+Forekomsten av bivirkningene listet nedenfor defineres slik:
+svært vanlige (> 1/10)
+vanlige (> 1/100 til < 1/10)
+mindre vanlige (> 1/1 000 til < 1/100)
+sjeldne (> 1/10 000 til < 1/1 000)
+svært sjeldne (< 1/10 000)
+ikke kjent (kan ikke anslås utifra tilgjengelige data)
+
+Godartede, ondartede og uspesifiserte svulster (inkludert cyster og polypper)
+Ikke kjent:             Myelodysplastisk syndrom
+
+Sykdommer i blod og lymfatiske organer
+Vanlige:                Trombocytopeni, leukopeni
+Mindre vanlige:         Blødning
+Svært sjeldne:          Benmargforstyrrelser, redusert konsentrasjon av fibrinogen og/eller
+                        koagulasjonsfaktor VIII, redusert trombocyttadhesjon, forlenget blødningstid,
+                        lymfocytopeni, nøytropeni, pancytopeni, anemi eller aplasi av røde blodlegemer
+Ikke kjent:             Agranulocytose, makrocystisk anemi, makrocytose
+
+Forstyrrelser i immunsystemet
+Sjeldne:                Lupus erythematosus
+Ikke kjent:             Allergiske reaksjoner (se også Hud- og underhudssykdommer), angioødem,
+                        legemiddelutslett med eosinofili og systemiske symptomer (DRESS syndrom)
+
+Endokrine sykdommer
+Sjeldne:                Hyperandrogenisme (hirsutisme, virilisme, akne, hårtap med typisk mannlig
+                        distribusjon og/eller økte androgennivåer),
+
+Ikke kjent              Hypotyroidisme
+
+Stoffskifte -og ernæringsbetingede sykdommer
+Vanlige:                Hyperammonemi*1,vektøkning (risikofaktor for polycystisk ovarialsyndrom, tett
+                        overvåking er påkrevd (se avsnitt 4.4)) eller vekttap, appetittøkning eller tap av
+                        appetitt.
+
+Sjeldne:                Hyperinsulinemi, lavt nivå av insulinlignende vekstfaktorbindende protein-I,
+                        fedme.
+Svært sjeldne:          Hyponatremi, unormale tyreoideafunksjonsprøver (den kliniske relevansen er
+                        uklar).
+Ikke kjent:             Inadekvat ADH-sekresjon (SIADH), hypokarnitinemi (se pkt. 4.3 og 4.4).
+
+Psykiatriske lidelser
+Sjeldne:                Irritabilitet, hallusinasjoner, forvirring
+Ikke kjent:             Aggresjon*2, agitasjon*2, oppmerksomhetsforstyrrelse*2, unormal oppførsel*2,
+                        psykomotorisk hyperaktivitet*2, lærevansker*2
+
+Nevrologiske sykdommer
+
+                                                                                                        18
+Vanlige:              Søvnighet, tremor, parestesi
+Mindre vanlige:       Letargi, forbigående koma, i noen tilfeller assosiert med økt anfallhyppighet
+Sjeldne:              Hodepine, hyperaktivitet, spastisitiet, ataksi, stupor, diplopi
+Svært sjeldne:        Encefalopati*3, demens assosiert med cerebral atrofi, ekstrapyramidale lidelser
+                      f.eks. reversibel parkinsonisme
+Ikke kjent:           Forverring av krampeanfall, sedasjon, svekket hukommelse, nystagmus,
+svimmelhet, kognitiv forstyrrelse
+
+Sykdommer i øre og labyrint
+Svært sjeldne:        Redusert hørsel, tinnitus
+
+Karsykdommer
+Sjeldne:              Vaskulitt
+
+Sykdommer i respirasjonsorganer, thorax og mediastinum
+Mindre vanlige:        Pleuraeffusjon (eosinofil)
+
+Gastrointestinale sykdommer
+Svært vanlige:        Smerter, kvalme, oppkast
+Vanlige:              Diaré
+Sjeldne:              Pankreatitt, hypersalivasjon
+Ikke kjent:           Gingival sykdom (hovedsakelig gingival hyperplasi), stomatitt
+
+Sykdommer i lever og galleveier
+Vanlige:              Endringer i leverfunksjonsprøver
+Sjeldne:              Alvorlig leverskade*4 inkludert leversvikt
+
+Hud -og underhudssykdommer
+Vanlige:              Forbigående håravfall,depigmentering og krølling av hår, sykdommer i negl og
+                      negleseng
+Sjeldne:              Eksantem, erythema multiforme
+Svært sjeldne:        Stevens-Johnson syndrom, Lyells syndrom
+Ikke kjent:           Hirsutisme (f.eks. som følge av polysystisk ovariesyndrom), hyperpigmentering
+
+Sykdommer i muskler, bindevev og skjelett
+Ikke kjent:           Rabdomyolyse (se pkt. 4.4).
+                      Redusert benmineraltetthet, osteopeni, osteoporose og benbrudd har blitt
+                      rapportert hos pasienter som får langtidsbehandling med natriumvalproat.
+                      Mekanismen for hvordan natriumvalproat påvirker benmetabolisme er ikke
+                      kjent.
+
+Sykdommer i nyre og urinveier
+Svært sjeldne:        Enurese, Fanconis syndrom (en defekt i funksjonen til proksimale nyretubuli
+                      som forårsaker glukosuri, aminoaciduri, fosfaturi og urikosuri) assosiert med
+                      valproatbehandling, men virkemåten er foreløpig uklar.
+Ikke kjent:           Nyresvikt, interstitiell nefritt, nedsatt nyrefunksjon, urininkontinens
+
+Lidelser i kjønnsorganer og brystsykdommer
+Vanlige:              Amenoré
+Sjeldne:              Polycystisk ovarialsyndrom, dysmenoré, infertilitet hos menn (se pkt. 4.6)
+Ikke kjent:           Unormal spermatogenese (med redusert spermtall og/eller –motilitet)
+                                                                                                      19
+Medfødte og familiære/genetiske sykdommer
+Ikke kjent:          Medfødte misdannelser og utviklingsforstyrrelser (se pkt. 4.4 og 4.6).
+
+Generelle lidelser og reaksjoner på administrasjonsstedet
+Sjeldne:                Hypotermi, ødem
+
+Undersøkelser
+Ikke kjent:       Redusert antall koagulasjonsfaktorer (minst én), unormale koagulasjonstester (som
+                  forlenget protrombintid, forlenget aktivert partiell tromboplastintid, forlenget
+                  trombintid, økt INR-verdi, se pkt. 4.4 og 4.6), biotin-/biotinidasemangel
+
+*1 Isolerte tilfeller av moderat hyperammonemi uten endringer i leverfunksjonsprøver kan forekomme
+og burde ikke føre til seponering av behandlingen. Ved tilfeller av hyperammonemi forbundet med
+nevrologiske symptomer må videre utredning vurderes (se pkt. 4.3 og 4.4 Ureasyklusforstyrrelser og
+risiko for hyperammonemi og Pasienter med risiko for hypokarnitinemi).
+*2
+     Disse bivirkningene ses hovedsakelig i den pediatriske populasjonen.
+*3
+   Det er observert sjeldne tilfeller av encefalopati av ukjent patogenese som utviklet seg kort tid etter
+bruk av valproat og som var reversibel ved seponering. I noen få slike tilfeller er det rapportert økt
+serum ammoniakk og, ved kombinasjon med fenobarbital, økt serum fenobarbital. Svært sjeldne
+tilfeller av kronisk encefalopati er rapportert, spesielt ved høye doser eller i kombinasjon med andre
+antiepileptika. I disse tilfellene ble det sett neurologiske symptomer og forstyrrelser av høyere
+hjernefunksjoner uten sikker etiologi.
+
+*4 Spesiell oppmerksomhet må utvises ved følgende tegn på leverskade: reduksjon i antiepileptisk
+effekt karakterisert ved residiv eller økning i anfall, følelse av fysisk svakhet, anoreksi, kvalme eller
+gjentatt oppkast, epigastriesmerter av ukjent årsak, generalisert eller lokalisert ødem, apati,
+bevissthetsforstyrrelser med forvirring, agitasjon, bevegelsesforstyrrelser. I meget sjeldne tilfeller er
+pankreasskade med lignende kliniske bilde observert. Barn og spedbarn bør overvåkes nøye for disse
+symptomene. Dersom symptomene er vedvarende eller alvorlige, bør laboratoriemessig utredning
+utføres i tillegg til en grundig klinisk undersøkelse (se pkt. 4.4 Advarsler og forsiktighetsregler).
+
+Metylparahydroksybenzoat og propylparahydroksybenzoat kan forårsake allergiske reaksjoner
+(muligens først etter en stund).
+
+
+Pediatrisk populasjon
+Sikkerhetsprofilen til valproat i den pediatriske populasjonen er sammenlignbar med den for voksne,
+men noen bivirkninger er alvorligere eller observeres hovedsakelig i den pediatriske populasjonen. Det
+er en særlig risiko for alvorlig leverskade hos spedbarn og småbarn, spesielt under 3 år. Småbarn har
+også særlig risiko for pankreatitt. Disse risikoene reduseres i takt med økende alder (se pkt. 4.4).
+Psykiatriske lidelser slik som aggresjon, agitasjon, oppmerksomhetsforstyrrelse, unormal oppførsel,
+psykomotorisk hyperaktivitet og lærevansker observeres hovedsakelig hos den pediatriske
+populasjonen.
+
+Melding av mistenkte bivirkninger
+Melding av mistenkte bivirkninger etter godkjenning av legemidlet er viktig. Det gjør det mulig å
+overvåke forholdet mellom nytte og risiko for legemidlet kontinuerlig. Helsepersonell oppfordres til å
+melde enhver mistenkt bivirkning. Dette gjøres via meldeskjema som finnes på nettsiden til
+Direktoratet for medisinske produkter: www.dmp.no/meldeskjema.
+
+
+
+
+                                                                                                        20
+4.9 Overdosering
+
+Når mulig forgiftning utredes, bør muligheten for multippel intoksikasjon som resultat av inntak av
+flere legemidler (f.eks. ved selvmordsforsøk), vurderes.
+
+Ved terapeutisk plasmanivå (50 – 100 µg/ml) har natriumvalproat relativt lav toksisitet.
+
+Akutt natriumvalproatforgiftning med plasmanivåer over 100 µg/ml har forekommet sjeldent hos både
+voksne og barn. Enkelte tilfeller av akutt og kronisk overdosering med fatal følge er rapportert i
+litteraturen.
+
+Symptomene ved forgiftning er i hovedsak forvirring, sedasjon til koma, myasteni og hypo- eller
+arefleksi. Hypotoni, myose, kardiovaskulære og respirasjonsforstyrrelser, cerebralt ødem, metabolsk
+acidose, hypokalsemi og hypernatremi er også sett i enkelte tilfeller.
+
+Høyt plasmanivå utløser unormale neurologiske reaksjoner og atferdsendringer hos både voksne og
+barn.
+
+Det er ingen spesifikt antidot. Behandling må derfor bestå av generelle tiltak for å fjerne den aktive
+substansen fra kroppen og støtte livsviktige funksjoner. Om mulig bør det induseres oppkast eller
+utføres ventrikkelskylling og gis medisinsk kull innen 30 minutter etter inntak. I så fall er intensiv
+medisinsk overvåkning påkrevd.
+
+Hemodialyse kan være nyttig. Peritoneal dialyse har liten effekt.
+
+Det er utilstrekkelig erfaring med nytten av hematogen kullperfusjon eller full plasmautskiftning og
+blodoverføring. Av denne grunn anbefales intensiv sykehusovervåkning uten spesiell detoksifisering,
+men med monitorering av plasmakonsentrasjonen, spesielt hos barn
+
+Intravenøs administrasjon av nalokson for å motvirke nedsatt bevissthet var effektiv i ett tilfelle.
+
+Ved overdosering som resulterer i hyperammonemi kan karnitin gis intravenøst for å forsøke å
+normalisere ammoniakknivåene.
+
+5. FARMAKOLOGISKE EGENSKAPER
+
+5.1 Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Antiepileptika, fettsyrederivater, valproinsyre + salter.
+ATC-kode: N03A G01.
+
+Valproinsyre er et antiepileptikum uten strukturell likhet med de aktive stoffene i andre krampeløsende
+midler. Valproinsyre har vist krampeløsende effekt hos forsøksdyr og mennesker. En økning av
+GABA-mediert hemming ved en presynaptisk effekt på GABA-metabolisme og/eller en direkte
+postsynaptisk effekt på ionekanalene i nevronmembranene er den alminnelig anerkjente forklaringen.
+
+Prekliniske studier tyder på at valproat ikke fjernes fra hjernen av multidrug transportere.
+
+Valproat er vannløselig i lav grad (1:800) mens natriumvalproat er høygradig vannløselig (1:0,4).
+
+5.2 Farmakokinetiske egenskaper
+
+Absorpsjon
+Ved peroral administrasjon absorberes valproat og natriumsaltet raskt og fullstendig fra mage-
+tarmkanalen.
+
+                                                                                                         21
+Distribusjon
+Maksimal plasmakonsentrasjon oppnås med oppløsningen innen 1-4 timer. Forholdet mellom dosen
+og plasmakonsentrasjonen er ikke lineært. Gjennomsnittlig terapeutisk område for
+plasmakonsentrasjon er 50-100 µg/ml. Over 100 µg/ml øker risikoen for bivirkninger eller forgiftning.
+Steady-state plasmanivå nås innen 3-4 dager.
+
+Valproatkonsentrasjonen i cerebrospinalvæske er 10 % av plasmakonsentrasjonen.
+
+Distribusjonsvolumet er aldersavhengig og er vanligvis 0,13-0,23 l/kg, 0,13-0,19 l/kg hos ungdom.
+
+Opptil 90 % av valproat er bundet til plasmaprotein, mest til albumin. Proteinbindingen reduseres ved
+høyere doser. Plasma proteinbinding er lavere hos eldre og hos pasienter med redusert nyre- eller
+leverfunksjon. I én studie ble det sett økt mengde fritt, aktivt stoff (8,5 til over 20 %) hos pasienter
+med signifikant redusert nyrefunksjon.
+Overføring over placenta (se pkt 4.6)
+Valproat krysser placenta. Serumkonsentrasjonen av valproat i navlestrengen, som representerer
+konsentrasjonen hos fosteret, var lignende eller litt høyere enn hos moren.
+Biotransformasjon, eliminasjon
+Biotransformasjon skjer ved glukuronidasjon og beta-, omega- og omega-1-oksidering. Ca. 20 % av
+den administrerte dosen utskilles i urinen som glukuronidester. Det er flere enn 20 metabolitter, og de
+som kommer fra omegaoksidering regnes som hepatotoksiske. Mindre enn 5 % av en administrert
+valproatdose gjenvinnes uendret i urinen.
+
+Hovedmetabolitten er 3-ketovalproat, opptil 3-60 % av denne utskilles i urinen. Denne metabolitten
+har antikonvulsiv effekt hos mus, men effekten hos mennesker er ikke utredet.
+
+I en studie var plasma clearance 12,7 ml/min hos pasienter med epilepsi og hos friske individer
+5 10 ml/min. Clearance øker ved inntak av enzyminduserende antiepileptika. Når valproat brukes som
+monoterapi, er plasmahalveringstiden 12-16 timer, som ikke endres ved langtidsbehandling.
+
+Når legemidlet brukes i kombinasjon med andre legemidler (primidon, fenytoin, fenobarbital eller
+karbamazepin), faller halveringstiden til verdier på mellom 4 og 9 timer, avhengig av enzyminduksjon.
+
+Barn og ungdom over 10 år har valproat clearance tilsvarende den som rapporteres hos voksne. Hos
+barn under 10 år varierer systemisk valproat clearance med alderen.. Hos nyfødte og spedbarn opp til 2
+måneders alder er valproat clearance redusert sammenlignet med voksne, og den er lavest like etter
+fødsel. Ved gjennomgang av faglitteraturen viste halveringstiden for valproat hos spedbarn under to
+måneder betraktelig variasjon mellom 1 til 67 timer. Hos barn i alderen 2–10 år er valproat clearance
+50 % høyere enn hos voksne.
+
+Halveringstiden er økt hos pasienter med nedsatt leverfunksjon. Ved overdosering er halveringstid på
+opptil 30 timer observert.
+
+Under graviditet øker hepatisk og renal clearance med økningen i distribusjonsvolumet i tredje
+trimester, hvilket kan gi et fall i plasmakonsentrasjon tross uendret dosering.
+
+5.3 Prekliniske sikkerhetsdata
+
+Akutt toksisitetsstudier i forskjellige dyrearter viser ingen spesiell følsomhet. Avhengig av dyreart er
+LD50 mellom 0,5 og 1,5 g/kg kroppsvekt.
+
+
+
+
+                                                                                                       22
+Testikulær atrofi, degenerasjon av vas deferens og mangelfull spermatogenese samt endringer i lunge
+og prostata er observert i kroniske toksisitetsstudier ved doseringer på over 250 mg/kg hos rotter og
+90 mg/kg hos hunder.
+
+Karsinogenitet, mutagenitet
+Valproat var ikke mutagent i bakterier eller i en in vitro muselymfomtest, og induserte ikke DNA-
+reparasjon i primærkulturer av rottehepatocytter. Avhengig av administrasjonsvei forekom det
+imidlertid motstridende in vivo-resultater ved teratogene doser. Etter oral administrasjon, den viktigste
+administrasjonsveien hos mennesker, induserte ikke valproat kromosomavvik i benmarg hos rotter
+eller dominante letalmutasjoner hos mus. Intraperitoneal injeksjon av valproat økte antall DNA-
+trådbrudd og kromosomskader hos gnagere.
+I tillegg er det i publiserte studier rapportert økt forekomst av søsterkromatidbytte hos pasienter med
+epilepsi eksponert for valproat, sammenlignet med ubehandlede friske forsøkspersoner.
+Sammenligning av data fra pasienter med epilepsi behandlet med valproat og data fra ubehandlede
+pasienter med epilepsi viste imidlertid motstridende resultater. Den kliniske betydningen av disse
+DNA-/kromosomfunnene er ukjent.
+Prekliniske data indikerer ingen spesiell fare for mennesker basert på konvensjonelle studier av
+karsinogenitet.
+Reproduksjonstoksisitet
+
+Valproat medførte teratogene effekter (misdannelser i flere organsystemer) hos mus, rotter og kaniner.
+
+Atferdsforstyrrelser er rapportert hos førstegenerasjonsavkom av mus og rotter etter in utero-
+eksponering. Noen atferdsendringer ble også observert i andre generasjon, og disse endringene var
+mindre uttalt i 3. generasjon av mus etter akutt eksponering av første generasjon for teratogene doser
+av valproat in utero. Den underliggende mekanismen og kliniske betydningen av disse funnene er
+ukjent.
+
+I toksisitetsstudier med gjentatt dosering, ble det rapportert testikkeldegenerasjon/-atrofi eller
+abnormaliteter i spermatogenesen og en reduksjon i testikkelvekt hos voksne rotter og hunder etter
+oral administrering ved doser på henholdsvis 400 mg/kg/dag og 150 mg/kg/dag med tilhørende
+NOAEL for testisfunn på 270 mg/kg/dag hos voksne rotter og 90 mg/kg/dag hos voksne hunder.
+Sammenligningene av sikkerhetsmarginer basert på ekstrapolert AUC hos rotter og hunder tyder på at
+det kanskje ikke er noen sikkerhetsmargin.
+
+Hos unge rotter, ble det kun observert en reduksjon i testikkelvekten ved doser som oversteg maksimal
+tolerert dose (fra 240 mg/kg/dag ved intraperitoneal eller intravenøs administrasjon) og med ingen
+assosierte histologiske forandringer. Ingen effekter på de mannlige reproduksjonsorganene ble
+observert ved tolererte doser (opptil 90 mg/kg/dag). Basert på disse dataene er ungdyr ikke vurdert
+som mer mottakelige for testikulære funn enn voksne. Relevansen av de testikulære funnene for
+pediatrisk populasjon er ukjent.
+I en fertilitetsstudie på rotter, endret ikke valproat hannens reproduktive ytelse ved doser på opptil 350
+mg/kg/dag. Mannlig infertilitet har likevel blitt identifisert som en uønsket effekt hos mennesker (se
+pkt. 4.6 og 4.8).
+
+
+6. FARMASØYTISKE OPPLYSNINGER
+
+6.1 Hjelpestoffer
+
+Vaniljearoma, karmin (E 120), hypromellose, metylparahydroksybenzoat (E 218), natriumcyclamat,
+propylparahydroksybenzoat (E 216), sakkarinnatrium, trometamol, saltsyre, renset vann.
+
+6.2 Uforlikeligheter
+
+                                                                                                       23
+Ikke relevant
+
+
+
+6.3 Holdbarhet
+
+5 år.
+
+Orfiril mikstur, oppløsning bør brukes innen 12 uker etter at flasken ble åpnet første gang.
+
+6.4 Oppbevaringsbetingelser
+
+Oppbevares ved høyst 25°C.
+
+6.5 Emballasje (type og innhold)
+
+Gulbrun glassflaske med barnesikret plastlokk, pakket i en sammenleggbar boks som inneholder en
+5 ml oralsprøyte (polyetylen/polypropylen) og en adapter (polyetylen).
+
+Pakningsstørrelse: 250 ml.
+
+6.6 Spesielle forholdsregler for destruksjon og annen håndtering
+
+Ingen spesielle forholdsregler.
+
+7. INNEHAVER AV MARKEDSFØRINGSTILLATELSEN
+
+Desitin Arzneimittel GmbH
+
+Weg beim Jäger 214
+
+D-22335 Hamburg
+
+Tyskland
+
+8. MARKEDSFØRINGSTILLATELSESNUMMER (NUMRE)
+
+6563
+
+9. DATO FOR FØRSTE MARKEDSFØRINGSTILLATELSE / SISTE FORNYELSE
+
+04.12.1980
+
+10. OPPDATERINGSDATO
+
+03.09.2026
+
+
+
+
+                                                                                                  24
+

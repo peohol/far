@@ -1,0 +1,55 @@
+Etter peroralt inntak kan absorpsjon hindres ved tilførsel av medisinsk kull, og dette bør derfor alltid
+overveies etter peroralt inntak. Det må utvises forsiktighet for å hindre aspirasjon i forbindelse med de
+absorpsjonshindrende tiltakene, eventuelt med anestesiologisk assistanse.
+
+Ved forgiftning skal pasientene gis standard støttende og symptomatisk behandling. Tilstrekkelig diurese bør
+sikres. I alvorlige tilfeller kan hemodialyse eller hemoperfusjon øke eliminasjonen. Nalokson er blitt brukt
+med godt resultat i noen tilfeller.
+
+
+
+5. FARMAKOLOGISKE EGENSKAPER
+
+5.1 Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Antiepileptika, fettsyrederivater, ATC-kode: N03A G01.
+
+Det er vist at natriumvalproat har en antiepileptisk effekt i dyremodeller. Det er også vist å ha effekt ved
+behandling av epilepsi hos mennesker. Virkningsmekanismen til natriumvalproat er ikke kjent. Det er
+presentert flere hypoteser for virkningsmekanismen. Det antas at effekten ï det minste delvis skyldes en
+økning i nivået av den hemmende nevrotransmitteren gamma-amino-smørsyre (GABA) i hjernen.
+Natriumvalproat er vist å påvirke elektroencefalogrammet (EEG) hos epilepsipasienter. For eksempel er det
+vist at natriumvalproat reduserer "spike-wave"-aktivitet hos pasienter med generaliserte absensanfall.
+Natriumvalproat er ikke vist å ha noen signifikant hypnotisk effekt, eller noen signifikant effekt på
+respirasjon, blodtrykk, nyrefunksjon eller kroppstemperatur.
+
+5.2 Farmakokinetiske egenskaper
+Absorpsjon
+Etter peroral eller intravenøs administrering er gjennomsnittlig biotilgjengelighet av natriumvalproat 90 til
+100 %, og det er ingen signifikante forskjeller mellom friske forsøkspersoner og pasienter som får
+behandling med antiepileptika. Sammenhengen mellom administrert dose og effekt eller mellom
+plasmakonsentrasjon og effekt er ikke undersøkt grundig.
+
+Per definisjon er biotilgjengeligheten 100 % ved intravenøs administrering.
+
+Distribusjon
+Distribusjonsvolumet til natriumvalproat er 0,1-0,4 l/kg. Distribusjonsvolumet er primært begrenset til
+intravaskulært rom, med rask transport til ekstracellulær væske. Omtrent 90 % av natriumvalproat er bundet
+til serumproteiner, hovedsakelig albumin. Proteinbindingen er doseavhengig og mettbar. Sterk
+proteinbinding kan øke risikoen for klinisk signifikante interaksjoner med andre antiepileptika, spesielt
+fenytoin (se pkt. 4.5).
+
+Under graviditet øker lever- og nyreclearance som følge av økningen i distribusjonsvolumet i tredje
+trimester, hvilket kan gi et fall i plasmakonsentrasjon tross uendret dosering. Videre har en endring i
+plasmaproteinbinding blitt observert under graviditet, med en økning i fritt (terapeutisk aktivt) valproat.
+
+Plasmaproteinbindingen er lavere hos eldre og hos pasienter med nedsatt lever- eller nyrefunksjon.
+
+Konsentrasjonen av valproinsyre i cerebrospinalvæske ligger nær den frie konsentrasjonen som observeres i
+plasma. Valproat Life Medical passerer placentabarrieren. Hvis Valproat Life Medical gis til ammende
+mødre, skilles det ut i morsmelk i svært små mengder (1 til 10 % av total serumkonsentrasjon).
+
+Små mengder natriumvalproat utskilles i spytt. Natriumvalproatkonsentrasjonen i spytt er ikke avhengig av
+plasmakonsentrasjonen
+
+Halveringstiden er ca. 8-20 timer, og den er vanligvis kortere hos barn.

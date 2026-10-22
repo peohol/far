@@ -1,0 +1,56 @@
+Leverskade
+Det er observert tilfeller av alvorlig leverskade, i enkelte tilfeller med dødelig følge. Det foreligger høy risiko
+for alvorlig leverskade hos pasienter med tidligere leversykdom og hos barn under 3 år som behandles med
+flere typer antiepileptika, lider av alvorlige epileptiske anfall, hjerneskade, psykisk utviklingshemming
+og/eller en arvelig metabolsk sykdom. Valproat bør administreres med spesiell forsiktighet hos disse
+pasientgruppene. Hos barn over 3 år er riskoen for leversykdom betydelig redusert og den avtar gradvis med
+alderen. Hos de fleste ble leverskade sett i løpet av de første 6 månedene av behandlingen.
+
+Tegn som tyder på leverskade
+Kliniske symptomer er avgjørende for tidlig diagnose. Alvorlig leverskade kan være preget av uspesifikke
+symptomer som generelt ubehag, asteni, døsighet, nedsatt appetitt (anoreksi), sløvhet, oppkast, magesmerter
+og nedsatt effekt av natriumvalproat. Symptomer oppstår vanligvis plutselig. I slike tilfeller skal
+medisineringen avsluttes.
+Hos pasienter med epilepsi kan tilbakefall av anfall være et symptom på leverskade.
+Pasienter (eller når et barn er pasient, foreldrene) skal instrueres til å omgående rapportere slike symptomer
+til en lege hvis de oppstår. Undersøkelser inkludert klinisk undersøkelse og leverfunksjonsprøver, bør
+gjennomføres umiddelbart.
+
+Påvisning av leverskade
+Leverfunksjonsprøver bør gjennomføres før behandling innledes (se pkt. 4.3) og deretter regelmessig de
+første 6 månedene av behandlingen, spesielt hos pasienter med høy risiko. Som med andre antiepileptika,
+kan små, forbigående økninger i enkelte leverenzymverdier observeres, spesielt i begynnelsen av
+behandlingen. Mer omfattende biologiske undersøkelser anbefales hos disse pasientene. Blant vanlige
+undersøkelser er tester som gjenspeiler proteinsyntese, spesielt protrombinrate, mest relevante. Bekreftelse
+av unormal lav protrombinrate, spesielt i forbindelse med andre biologiske avvik (signifikant reduksjon i
+fibrinogen og koagulasjonsfaktorer, økt bilirubinnivå og forhøyede transaminaser), krever at behandlingen
+avsluttes. Som en forholdsregel bør eventuell samtidig bruk av salisylater også seponeres grunnet felles
+metabolismevei. Dosejusteringer bør gjøres når det er hensiktsmessig, og testene skal gjentas ved behov.
+
+Pankreatitt
+Natriumvalproat bør brukes med forsiktighet hos pasienter med pankreassykdom. På grunn av dette, bør man
+hos pasienter som opplever akutte magesmerter foreta en grundig medisinsk evaluering. Er pankreatitt
+diagnostisert, bør natriumvalproatseponeres.
+Svært sjeldne tilfeller av alvorlig pankreatitt, som kan være livstruende, har blitt rapportert. Barn har særlig
+risiko. Denne risikoen minker med økende alder. Vanskelig håndterbare anfall, alvorlige nevrologiske
+forstyrrelser eller samtidig behandling med andre antiepileptika kan øke risikoen for pankreatitt. Leversvikt
+samtidig med pankreatitt øker risikoen for dødelig utgang.
+
+Selvmordstanker og selvmordsrelatert adferd
+Selvmordstanker og selvmordsrelatert adferd er rapportert hos pasienter som har blitt behandlet med
+antiepileptika for flere indikasjoner. En meta-analyse av randomiserte placebokontrollerte forsøk med
+antiepileptika har vist en liten økning i risiko for selvmordstanker og selvmordsrelatert adferd. Mekanismen
+bak denne risikoen er ikke kjent og tilgjengelige data kan ikke utelukke muligheten for økt risiko ved
+behandling med natriumvalproat. Pasientene bør derfor overvåkes for tegn på selvmordstanker eller
+selvmordsrelatert adferd, og nødvendig behandling bør vurderes. Pasienter (og pårørende) bør oppfordres til
+å kontakte medisinsk hjelp omgående dersom selvmordstanker eller selvmordsrelatert adferd oppstår.
+Pasienter med kjent eller mistenkt mitokondriesykdom
+Valproat kan utløse eller forverre kliniske tegn på underliggende mitokondriesykdommer forårsaket av
+mutasjoner i mitokondrielt DNA og i genet for POLG som kodes for i cellekjernen. Særlig har Valproat-
+indusert akutt leversvikt og leverrelaterte dødsfall blitt rapportert hyppigere hos pasienter med arvelig
+nevrometabolske syndromer forårsaket av mutasjoner i genet for det mitokondrielle enzymet polymerase γ
+(POLG), f.eks. Alpers-Huttenlochers syndrom.
+POLG-relaterte sykdommer bør mistenkes hos pasienter med en familiehistorie eller symptomer som kan
+tyde på POLG-relatert sykdom, inkludert men ikke begrenset til uforklarlig encefalopati, refraktær epilepsi
+(fokal, myoklon), status epilepticus når behandling oppsøkes, forsinket utvikling, psykomotorisk regresjon,
+aksonal sensomotorisk nevropati, myopati, cerebellar ataksi, oftalmoplegi, eller komplisert migrene med

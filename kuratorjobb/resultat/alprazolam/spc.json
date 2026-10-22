@@ -1,0 +1,440 @@
+{
+  "stoff": "alprazolam",
+  "status": "ok",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-22T04:15:06.408609+00:00"
+  },
+  "dekning": {
+    "dekket": true,
+    "preparater": 4,
+    "hentet": 4,
+    "dokumenter": 2,
+    "mangler": []
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 4 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 4,
+        "ikke_dmp": 0,
+        "uten_omtale": 0
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "ok",
+      "melding": "Alle 4 preparatene FEST oppgir, har en hentet preparatomtale fra DMP.",
+      "antall": {
+        "preparater": 4,
+        "hentet": 4,
+        "mangler": 0,
+        "dokumenter": 2
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1995-02113.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1995-02113.pdf",
+      "hentet_kl": "2026-10-22T19:17:36.021Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "263486",
+        "content-md5": "e/2PZh4j3UzGgS5akUQCJQ==",
+        "last-modified": "Thu, 19 Mar 2026 20:49:01 GMT",
+        "etag": "0x8DE85F8F377ADAB",
+        "date": "Thu, 22 Oct 2026 19:17:36 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_023D3420-4789-4496-91BD-35E1D523F2FE",
+          "varenavn": "Xanor Depot",
+          "navn_form_styrke": "Xanor Depot depottab 3 mg",
+          "produsent": "Viatris Healthcare Limited",
+          "atc": "N05BA12",
+          "legemiddelform": "Depottablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1995-02113.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (263486 byte).",
+          "antall": {
+            "bytes": 263486
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "e15242ff52dc27c20f8216def67176f2cd053cda0cca8c15257c395ea9292a9a"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08028.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08028.pdf",
+      "hentet_kl": "2026-10-22T19:17:39.763Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "279244",
+        "content-md5": "GLx1yc9ARZZwG1jbMvy0Gw==",
+        "last-modified": "Thu, 19 Mar 2026 20:48:04 GMT",
+        "etag": "0x8DE85F8D1333CB9",
+        "date": "Thu, 22 Oct 2026 19:17:39 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_26A76826-51E2-4BD9-A19B-CEA245995565",
+          "varenavn": "Xanor",
+          "navn_form_styrke": "Xanor tab 1 mg",
+          "produsent": "Viatris Healthcare Limited",
+          "atc": "N05BA12",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08028.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (279244 byte).",
+          "antall": {
+            "bytes": 279244
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "cab8f992c72d92e16b70bf0f86dee3c7d85c6b6c4b020fa7f52d14625344f261"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08027.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08027.pdf",
+      "hentet_kl": "2026-10-22T19:17:42.479Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "279244",
+        "content-md5": "GLx1yc9ARZZwG1jbMvy0Gw==",
+        "last-modified": "Thu, 19 Mar 2026 20:48:04 GMT",
+        "etag": "0x8DE85F8D1302FF8",
+        "date": "Thu, 22 Oct 2026 19:17:42 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_2B929512-239E-42E8-B1A2-A4C09EDD6978",
+          "varenavn": "Xanor",
+          "navn_form_styrke": "Xanor tab 0,5 mg",
+          "produsent": "Viatris Healthcare Limited",
+          "atc": "N05BA12",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08027.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (279244 byte).",
+          "antall": {
+            "bytes": 279244
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "cab8f992c72d92e16b70bf0f86dee3c7d85c6b6c4b020fa7f52d14625344f261"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08029.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08029.pdf",
+      "hentet_kl": "2026-10-22T19:17:42.650Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "279244",
+        "content-md5": "GLx1yc9ARZZwG1jbMvy0Gw==",
+        "last-modified": "Thu, 19 Mar 2026 20:48:04 GMT",
+        "etag": "0x8DE85F8D1364992",
+        "date": "Thu, 22 Oct 2026 19:17:43 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_31F88412-AF2D-4E60-82DC-C2FBFCE0F22E",
+          "varenavn": "Xanor",
+          "navn_form_styrke": "Xanor tab 2 mg",
+          "produsent": "Viatris Healthcare Limited",
+          "atc": "N05BA12",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08029.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (279244 byte).",
+          "antall": {
+            "bytes": 279244
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "cab8f992c72d92e16b70bf0f86dee3c7d85c6b6c4b020fa7f52d14625344f261"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "e15242ff52dc27c20f8216def67176f2cd053cda0cca8c15257c395ea9292a9a",
+      "bytes": 263486,
+      "mappe": "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2",
+      "pdf": {
+        "sider": 10,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": "PREPARATOMTALE (SPC)",
+        "laget": "Thu Jan  8 08:58:49 2026 UTC",
+        "endret": "Thu Jan  8 08:58:49 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/original.pdf",
+        "tekst": "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/tekst/side-001.txt",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/tekst/side-002.txt",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/tekst/side-003.txt",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/tekst/side-004.txt",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/tekst/side-005.txt",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/tekst/side-006.txt",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/tekst/side-007.txt",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/tekst/side-008.txt",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/tekst/side-009.txt",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/tekst/side-010.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/sider/side-001.png",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/sider/side-002.png",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/sider/side-003.png",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/sider/side-004.png",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/sider/side-005.png",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/sider/side-006.png",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/sider/side-007.png",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/sider/side-008.png",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/sider/side-009.png",
+          "kuratorjobb/resultat/alprazolam/spc/e15242ff52dc27c2/sider/side-010.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 5,
+        "til": 7
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (10 sider).",
+          "antall": {
+            "sider": 10
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 18081
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 5."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 10
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "cab8f992c72d92e16b70bf0f86dee3c7d85c6b6c4b020fa7f52d14625344f261",
+      "bytes": 279244,
+      "mappe": "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1",
+      "pdf": {
+        "sider": 10,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": "PREPARATOMTALE (SPC)",
+        "laget": "Thu Jan  8 08:05:33 2026 UTC",
+        "endret": "Thu Jan  8 08:05:33 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/original.pdf",
+        "tekst": "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/tekst/side-001.txt",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/tekst/side-002.txt",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/tekst/side-003.txt",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/tekst/side-004.txt",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/tekst/side-005.txt",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/tekst/side-006.txt",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/tekst/side-007.txt",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/tekst/side-008.txt",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/tekst/side-009.txt",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/tekst/side-010.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/sider/side-001.png",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/sider/side-002.png",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/sider/side-003.png",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/sider/side-004.png",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/sider/side-005.png",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/sider/side-006.png",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/sider/side-007.png",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/sider/side-008.png",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/sider/side-009.png",
+          "kuratorjobb/resultat/alprazolam/spc/cab8f992c72d92e1/sider/side-010.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 5,
+        "til": 7
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (10 sider).",
+          "antall": {
+            "sider": 10
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 18788
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 5."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 10
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

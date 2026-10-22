@@ -1,0 +1,56 @@
+Valproat kan utløse eller forverre kliniske tegn på underliggende mitokondriesykdommer forårsaket av
+mutasjoner i mitokondrielt DNA og i genet for POLG som kodes for i cellekjernen. Særlig har
+Valproat-indusert akutt leversvikt og leverrelaterte dødsfall blitt rapportert hyppigere hos pasienter
+med arvelig nevrometabolske syndrommer forårsaket av mutasjoner i genet for det mitokondrielle
+enzymet polymerase γ (POLG), f.eks. Alpers-Huttenlochers syndrom.
+POLG-relaterte sykdommer bør mistenkes hos pasienter med en familiehistorie eller symptomer som
+kan tyde på POLG-relatert sykdom, inkludert men ikke begrenset til uforklarlig encefalopati, refraktær
+epilepsi (fokal, myoklon), status epilepticus når behandling oppsøkes, forsinket utvikling,
+psykomotorisk regresjon, aksonal sensomotorisk nevropati, myopati, cerebellar ataksi, oftalmoplegi,
+eller komplisert migrene med oksipital aura. Testing for POLG-mutasjon bør utføres i henhold til
+aktuelle kliniske retningslinjer for diagnostisk utredning av slike sykdommer (se pkt 4.3).
+Natriuminnhold
+Dette legemidlet inneholder 41,4 mg natrium pr. 5 ml mikstur. Dette tilsvarer 2 % av WHOs anbefalte
+maksimale daglige inntak av natrium på 2 g for en voksen person
+
+
+4.5 Interaksjon med andre legemidler og andre former for interaksjon
+
+Følgende kombinasjoner med valproat kan nødvendiggjøre dosejustering: acetylsalicylsyre, cimetidin,
+etosuksimid, fenytoin, fenobarbital, karbamazepin, primidon lamotrigin, lorazepam, felbamat, warfarin
+og nimodipin. Valproat kan øke den sederende effekten av alkohol.
+
+Valproat kan indusere den sederende effekten av antidepressiva.
+
+Dersom natriumvalproat kombineres med andre antiepileptika, kan gjensidige effekter på
+plasmakonsentrasjonene forekomme. Enzyminduserende antiepileptika som fenobarbital, fenytoin og
+karbamazepin kan øke utskillelsen av natriumvalproat og dermed redusere effekten. Nivåene for
+metabolitter av valproinsyre kan økes ved samtidig bruk med fenytoin eller fenobarbital. Samtidig
+bruk av induserende legemidler kan øke risikoen for levertoksisitet og hyperammonemi.
+
+Felbamat
+
+Felbamat gir en lineær, doseavhengig økning i plasmakonsentrasjonen av fritt valproat på ca. 18 %.
+
+Valproat kan øke plasmakonsentrasjonen av felbamat med ca. 50 %.
+
+Meflokin
+
+Meflokin øker omsetningen av valproat og kan selv øke hyppigheten av kramper. Samtidig bruk kan
+derfor føre til epileptiske anfall.
+
+Cimetidin, fluoksetin og erythromycin
+
+Serumkonsentrasjonen av valproat kan forhøyes ved samtidig administrasjon av cimetidin, fluoksetin
+og erythromycin.
+
+Antimikrobielle midler av karbapenemgruppen (som imipenem, meropenem, panipenem)
+
+Fall i blodkonsentrasjonen av valproat er rapportert ved samtidig administrasjon av karbapenemer,
+som førte til en nedgang på 60-100 % av valproatkonsentrasjonen etter omtrent 2 dager. På grunn av
+den hurtige nedgangen og omfanget av den, regnes ikke samtidig administrasjon av karbapenemer hos
+pasienter stabilisert på valproatbehandling som en håndterlig interaksjon, og bør derfor unngås (se
+avsnitt 4.4).
+
+
+                                                                                                     10

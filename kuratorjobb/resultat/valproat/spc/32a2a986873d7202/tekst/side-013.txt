@@ -1,0 +1,58 @@
+Rifampicin kan redusere blodnivåene av valproat hvilket gir redusert terapeutisk effekt.
+Doseringsjustering av valproat kan derfor være nødvendig ved samtidig administrasjon med
+rifampicin.
+
+Proteasehemmere
+
+Plasmanivå av valproat reduseres ved samtidig administrering av proteasehemmere, som lopinavir
+eller ritonavir.
+
+Pivalat-konjugerte legemidler
+
+Samtidig administrasjon av valproat og pivalat-konjugerte legemidler (som cefditorenpivoksil,
+adefovirdipivoksil, pivmecillinam og pivampicillin) bør unngås på grunn av høyere risiko for
+karnitindeplesjon (se pkt. 4.4 Pasienter med risiko for hypokarnitinemi). Pasienter der samtidig
+administrasjon ikke kan unngås skal overvåkes nøye for tegn og symptomer på hypokarnitinemi.
+
+Topiramat
+
+I enkelte tilfeller har samtidig administrasjon av valproinsyre og topiramat blitt assosiert med
+hyperammonemi med og uten encefalopati.
+
+Acetazolamid
+
+Hyperammonemi kan også oppstå under samtidig administrering av valproinsyre og acetazolamid, og
+fører til økt risiko for encefalopati.
+Pasienter som behandles med disse to virkestoffene bør overvåkes nøye for tegn på hyperammonemisk
+encefalopati.
+
+Quetiapin
+
+Risikoen for nøytropeni/leukopeni kan økes når valproinsyre administreres sammen med quetiapin.
+
+Diazepam
+
+Hos friske frivillige erstattet valproat diazepam i plasmaalbuminbindingen og hemmet dermed
+metabolismen av diazepam. I kombinasjonsbehandling kan konsentrasjonen av ubundet diazepam øke,
+mens plasmaclearance og distribusjonsvolum av den frie diazepamfraksjonen kan bli redusert (med
+25 %, 20 %). Halveringstiden endres imidlertid ikke.
+
+Lorazepam
+
+Hos friske frivillige førte samtidig behandling med valproat og lorazepam til en reduksjon i
+plasmaclearance av lorazepam med opptil 40 %.
+
+Østrogenholdige produkter, inkludert østrogenholdig hormonprevensjon
+
+Østrogener er induktorer av UDP-glukuronosyltransferase (UGT) isoformer involvert i valproat-
+glukuronidering og kan øke clearance av valproat, noe som kan føre til redusert serumkonsentrasjon av
+valproat og potensielt redusert effekt av valproat (se pkt. 4.4). Vurder overvåkning av serumnivå av
+valproat.
+
+På den andre siden har ikke valproat noen enzyminduserende effekt. Dermed reduserer ikke valproat
+effekten av østroprogestative midler hos kvinner som bruker hormonprevensjon.
+
+Metamizol
+
+
+                                                                                                   13

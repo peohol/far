@@ -1,0 +1,50 @@
+Ekstra forsiktighet bør utvises dersom tromboplastintiden er betydelig forlenget sammen med andre
+endringer i laboratorieparametrene, som redusert fibrinogen og koagulasjonsfaktorer (hovedsakelig
+faktor VIII) eller forhøyet bilirubin eller leverenzymer. Kontroll av trombocytter, tromboplastintid,
+blødningstid og fibrinogen anbefales før operasjoner eller dentale inngrep.
+Benmargskade
+Pasienter med kjent benmargskade må monitoreres nøye.
+Nyresvikt
+Hos pasienter med nyresvikt må økning i serum natriumvalproat vurderes og dosen justeres deretter.
+Seponering
+Seponering av natriumvalproat eller overgang til annen antiepileptisk behandling må foretas gradvis
+og med forsiktighet. Brå endring kan resultere i plutselig økning i anfall.
+Interferens med laboratorieprøver
+Da natriumvalproat delvis metaboliseres til ketonlegemer, må muligheten for falsk positive resultater
+tas i betraktning ved måling av ketonlegemer i urinen hos diabetespasienter ved mistanke om
+ketoacidose.
+OBS:
+Det er vist at natriumvalproat stimulerer replikasjon av humant immunsviktvirus ved enkelte in vitro
+studier. Den kliniske betydningen av dette er ikke kjent.
+
+Selvmordstanker og selvmordsrelatert adferd
+Selvmordstanker og selvmordsrelatert adferd er rapportert hos pasienter behandlet med antiepileptiske
+legemidler for flere indikasjoner. En meta-analyse av randomiserte placebokontrollerte forsøk med
+antiepileptika har vist en liten økning i risiko for selvmordstanker og selvmordsrelatert adferd.
+Mekanismen bak denne risikoen er ikke kjent og tilgjengelige data kan ikke utelukke muligheten for
+økt risiko ved behandling med natriumvalproat
+Pasientene bør derfor overvåkes for tegn på selvmordstanker eller selvmordsrelatert adferd, og
+nødvendig behandling bør vurderes. Pasienter (og pårørende) bør oppfordres til å kontakte medisinsk
+hjelp omgående dersom selvmordstanker eller selvmordsrelatert adferd oppstår.
+Karbapenemer
+Samtidig bruk av natriumvalproat og karbapenemer er ikke anbefalt (se avsnitt 4.5).
+Pasienter med kjent eller mistenkt mitokondriesykdom
+Valproat kan utløse eller forverre kliniske tegn på underliggende mitokondriesykdommer forårsaket av
+mutasjoner i mitokondrielt DNA og i genet for POLG som kodes for i cellekjernen. Særlig har
+Valproat-indusert akutt leversvikt og leverrelaterte dødsfall blitt rapportert hyppigere hos pasienter
+med arvelig nevrometabolske syndrommer forårsaket av mutasjoner i genet for det mitokondrielle
+enzymet polymerase γ (POLG), f.eks. Alpers-Huttenlochers syndrom.
+POLG-relaterte sykdommer bør mistenkes hos pasienter med en familiehistorie eller symptomer som
+kan tyde på POLG-relatert sykdom, inkludert men ikke begrenset til uforklarlig encefalopati, refraktær
+epilepsi (fokal, myoklon), status epilepticus når behandling oppsøkes, forsinket utvikling,
+psykomotorisk regresjon, aksonal sensomotorisk nevropati, myopati, cerebellar ataksi, oftalmoplegi,
+eller komplisert migrene med oksipital aura. Testing for POLG-mutasjon bør utføres i henhold til
+aktuelle kliniske retningslinjer for diagnostisk utredning av slike sykdommer (se pkt 4.3).
+Natriuminnhold
+Orfiril 300 mg enterotablett: Dette legemidlet inneholder 41,4 mg natrium pr. tablett. Dette tilsvarer
+2 % av WHOs anbefalte maksimal daglige inntak av natrium på 2 g for en voksen person.
+Orfiril 600 mg enterotablett: Dette legemidlet inneholder 82,8 mg natrium pr. tablett. Dette
+tilsvarer4 % av WHOs anbefalte maksimal daglige inntak av natrium på 2 g for en voksen person.
+
+4.5 Interaksjon med andre legemidler og andre former for interaksjon
+                                                                                                         9

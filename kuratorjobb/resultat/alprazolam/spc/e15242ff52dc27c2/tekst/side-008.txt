@@ -1,0 +1,58 @@
+mer alvorlige tilfeller: ataksi, hypotoni, hypotensjon, respirasjonsdepresjon, i sjeldne tilfeller koma og
+i meget sjeldne tilfeller død.
+
+Flumazenil kan bli brukt som antidot.
+
+
+5.       FARMAKOLOGISKE EGENSKAPER
+
+5.1      Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Triazolobenzodiazepin. ATC-kode N05B A12.
+
+Virkningsmekanisme
+Alprazolam bindes til benzodiazepinreseptorene, og forsterker effekten av GABA-systemet.
+
+Farmakodynamiske effekter
+Alprazolam gir en doseavhengig reduksjon av REM-søvn, og forlenget REM-latens.
+
+5.2      Farmakokinetiske egenskaper
+
+Absorpsjon
+Ca. 90 %. Samtidig fødeinntak forlenger absorpsjonen, men uten å påvirke absorbert mengde.
+
+Distribusjon
+Maksimal plasmakonsentrasjon nås 5-11 timer etter inntak, og plasmanivåene er proporsjonale med
+den administrerte dose. Proteinbindingsgraden er ca. 70 %. “Steady state”-konsentrasjon oppnås etter
+ca. 3 døgns behandling.
+
+Biotransformasjon
+Gjennomgår en omfattende metabolisme i leveren, først og fremst ved hydroksylering til 4-hydroksy-
+alprazolam og a-hydroksy-alprazolam. Hovedmetabolittene er biologisk aktive med halveringstider av
+samme størrelsesorden som for alprazolam. De forekommer i lave konsentrasjoner og bidrar derfor i
+liten grad til effekten.
+
+Eliminasjon
+Halveringstid: Ca. 12 timer. Halveringstiden forlenges ved nedsatt leverfunksjon. Clearance: 1
+ml/minutt/kg. Metabolittene glukuronideres og utskilles i urinen.
+
+5.3      Prekliniske sikkerhetsdata
+
+Alprazolam var ikke mutagent i Ames test in vitro. Alprazolam ga ikke kromosomale avvik i
+mikronukleustesten in vivo hos rotter ved testdoser opptil 100 mg/kg, som er 500 ganger den
+maksimalt anbefalte humane døgndosen på 10 mg/døgn.
+
+Alprazolam har ikke vist karsinogent potensiale i 2 års bioassay-studier hos rotter ved doser opptil
+30 mg/kg/døgn (150 ganger maksimalt anbefalt human døgndose) og hos mus ved doser opptil
+10 mg/kg/døgn (50 ganger maksimalt anbefalt human døgndose).
+
+Alprazolam reduserte ikke fertiliteten hos rotter ved doser opptil 5 mg/kg/døgn (25 ganger maksimalt
+anbefalt human døgndose). Benzodiazepiner har i dyreforsøk gitt misdannelser, for eksempel
+ganespalte, CNS-misdannelser og varige adferdsforstyrrelser hos avkommet.
+
+Da rotter ble behandlet peroralt med alprazolam 3, 10, og 30 mg/kg/døgn (15 til 150 ganger maksimalt
+anbefalt human døgndose) i 2 år, ble det observert en tendens til doserelatert økning i antall katarakter
+(hunner) og hornhinnevaskulariseringer (hanner). Disse skadene oppsto først etter 11 måneders
+
+
+                                                                                                8
