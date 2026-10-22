@@ -2255,6 +2255,71 @@ describe('kortene i farmakokinetikken', () => {
     expect(within(nytt).queryByLabelText('Overskrift')).toBeNull()
     expect(nytt.querySelector('[data-ikon="amming"]')).not.toBeNull()
   })
+
+  it('har «Fenomenologi» som fast kort først i «Virkninger», foran de frie kortene, med veiledning til redaktøren', async () => {
+    const user = userEvent.setup()
+    const VEILEDNING = 'Bare for psykoaktive stoffer'
+    const data =
+      (medFenomenologi: boolean) =>
+      (tilstand: Tilstand): Stoffsidedata => {
+        const s = medKort()(tilstand)
+        const kort = (id: string, tittel: string, posisjon: number) =>
+          utgave(id, {
+            infoside: 'hs',
+            panel: 'virkninger',
+            posisjon,
+            elementtype: 'kinetikkort',
+            data: { tittel, dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: LANG }] }] } },
+          })
+        // Det faste kortet står på plass 0 som det første frie, og har en ID som ellers ville lagt det sist.
+        const virkninger = [kort('v1', 'Sedasjon', 0), kort('v2', 'Antidepressiv effekt', 1), ...(medFenomenologi ? [kort('vz', 'Fenomenologi', 0)] : [])]
+        return { ...s, elementer: [...s.elementer, ...virkninger] }
+      }
+    const forste = vis('amitriptylin', kilde({ kanRedigere: true, data: data(true) }))
+    await finnVerdi('10–20 nmol/L')
+    const seksjon = screen.getByRole('region', { name: 'Virkninger' })
+    expect(seksjon.querySelector('.skuff__oppsummering')?.textContent).toBe('Fenomenologi · Sedasjon · Antidepressiv effekt')
+    await apneSkuff(user, 'Virkninger')
+    expect(within(seksjon).getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual(['Fenomenologi', 'Sedasjon', 'Antidepressiv effekt'])
+    expect(seksjon.querySelector('[data-ikon="fenomenologi"]')).not.toBeNull()
+    // Veiledningen er for redaktøren, ikke for den som leser.
+    expect(seksjon.textContent).not.toContain(VEILEDNING)
+
+    // Det faste kortet flyttes ikke og har fast overskrift; de frie flyttes blant hverandre og kan legges til.
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await apneSkuff(user, 'Virkninger')
+    const red = screen.getByRole('region', { name: 'Virkninger' })
+    expect(within(red).getByRole('button', { name: 'Legg til kort' })).toBeTruthy()
+    expect(within(red).queryByRole('button', { name: 'Legg til: Fenomenologi' })).toBeNull()
+    await apneSkuff(user, 'Fenomenologi')
+    expect(screen.queryByRole('button', { name: /^Flytt (opp|ned): Fenomenologi$/ })).toBeNull()
+    await user.click(await screen.findByRole('button', { name: 'Rediger: Fenomenologi' }))
+    const dialog = screen.getByRole('dialog')
+    expect(within(dialog).queryByLabelText('Overskrift')).toBeNull()
+    expect(dialog.textContent).toContain(VEILEDNING)
+    await user.click(within(dialog).getByRole('button', { name: 'Avbryt' }))
+    await apneSkuff(user, 'Sedasjon')
+    expect(screen.queryByRole('button', { name: 'Flytt opp: Sedasjon' })).toBeNull()
+    await user.click(await screen.findByRole('button', { name: 'Flytt ned: Sedasjon' }))
+    await waitFor(() => expect(forste.lager.lagreUtkast).toHaveBeenCalledTimes(2))
+    expect(forste.lager.lagreUtkast).toHaveBeenCalledWith('v1', 1, expect.objectContaining({ posisjon: 1 }))
+    expect(forste.lager.lagreUtkast).toHaveBeenCalledWith('v2', 1, expect.objectContaining({ posisjon: 0 }))
+    expect(forste.lager.lagreUtkast).not.toHaveBeenCalledWith('vz', expect.anything(), expect.anything())
+    cleanup()
+
+    // Uten kortet tilbys det for seg, med veiledningen ved knappen og i vinduet.
+    vis('amitriptylin', kilde({ kanRedigere: true, data: data(false) }))
+    await finnVerdi('10–20 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await apneSkuff(user, 'Virkninger')
+    const uten = screen.getByRole('region', { name: 'Virkninger' })
+    expect(uten.textContent).toContain(VEILEDNING)
+    await user.click(within(uten).getByRole('button', { name: 'Legg til: Fenomenologi' }))
+    const nytt = screen.getByRole('dialog')
+    expect(within(nytt).queryByLabelText('Overskrift')).toBeNull()
+    expect(nytt.textContent).toContain(VEILEDNING)
+    expect(nytt.querySelector('[data-ikon="fenomenologi"]')).not.toBeNull()
+  })
 })
 
 describe('mekanismekortene i farmakodynamikken', () => {

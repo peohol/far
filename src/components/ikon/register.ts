@@ -819,6 +819,14 @@ const REGISTER = {
     parts: kapsel,
     free: [G([P('M35 4.5 44.5 21.5h-19z', 'f2', 'warn'), P('M35 10.5v5', 'l'), C(35, 18.6, 1.3, 'h')], 'pop')],
   },
+  /* Fenomenologi: et hode i profil med gnisten fra virkningene inni, opplevelsen stoffet gir. */
+  fenomenologi: {
+    vb: 48,
+    parts: [
+      P('M15 44v-7c-4.2-3-6.5-7.6-6.5-13C8.5 14.4 15.9 7 25.5 7 34.2 7 40.5 13.3 40.5 21.5l3 6.5h-3v5a4 4 0 0 1-4 4H32v7z', 'f1', 'accent2'),
+      G([P('M24 13.5Q25.2 20.3 32 21.5 25.2 22.7 24 29.5 22.8 22.7 16 21.5 22.8 20.3 24 13.5z', 'f2', 'ok'), C(31.5, 14.5, 1.6, 'h', 'ok')], 'pop'),
+    ],
+  },
   /* Avhengighet, toleranse og tilbakeslagseffekter: to kjedeledd som henger i hverandre. */
   avhengighet: {
     vb: 48,

@@ -16,14 +16,16 @@ const CITALOPRAM = JSON.parse(readFileSync(new URL('../../docs/kurateringsjourna
 }
 
 describe('dekningen', () => {
-  it('utleder de samme 37 kontrollpunktene som den første de novo-piloten dekket, fra modellen', () => {
-    expect(kontrollpunkter()).toHaveLength(37)
-    expect(kontrollpunkter()).toEqual(CITALOPRAM.omrader.map((o) => o.nokkel))
+  it('utleder de 37 kontrollpunktene den første de novo-piloten dekket, og de faste kortene som er kommet til siden, fra modellen', () => {
+    expect(kontrollpunkter()).toHaveLength(38)
+    // «Fenomenologi» i «Virkninger» kom til 2026-10-22, etter piloten.
+    expect(kontrollpunkter().filter((p) => p !== 'virkninger/Fenomenologi')).toEqual(CITALOPRAM.omrader.map((o) => o.nokkel))
+    expect(kontrollpunkter().slice(8, 11)).toEqual(['virkninger', 'virkninger/Fenomenologi', 'bivirkninger'])
   })
 
   it('godtar en matrise som dekker hvert punkt med belegg, og sier hva som mangler i en som ikke gjør det', () => {
     const m = tomMatrise('de_novo')
-    expect(kontrollerDekning(m).filter((f) => f.endsWith('mangler begrunnelse.'))).toHaveLength(37)
+    expect(kontrollerDekning(m).filter((f) => f.endsWith('mangler begrunnelse.'))).toHaveLength(38)
     for (const o of m.omrader) Object.assign(o, { begrunnelse: 'Kontrollert.', kilder: ['SPC'], sok: ['søk'], bevis: 'Lest mot punkt 4.2.' })
     expect(kontrollerDekning(m)).toEqual([])
 

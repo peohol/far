@@ -465,7 +465,7 @@ styrer søket og nummereringen av referansene):
 | Identitet | `identitet` | `riktekst`: `{ dokument }` — den korte oppsummeringen av stoffet, som også står i kortet på helsiden for stoffregisteret. Navnet, kategoriene og de koblede analyttene kommer fra siden og stoffregisteret |
 | Viktige data | `viktige_data` | Ett kort per type og kode (`gjelder`, se «Sammenslåtte sider») — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon` (gruppen konsentrasjoner), `halveringstid`, `steady_state` (gruppen kinetikk). Konsentrasjonene har `{ nedre, ovre, enhet }`; t½ og tss har `{ former: [{ stoff?, form, typisk, min, maks, enhet }] }`, én rad per legemiddelform eller stoff |
 | Farmakodynamikk | `farmakodynamikk` | `mekanismekort`: `{ maal, mekanisme, dokument? }`, i rekkefølge, som regel ett per målprotein eller mekanisme (se «Farmakodynamikken som mekanismekort»). En `riktekst` fra en senere import vises under kortene |
-| Virkninger | `virkninger` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge, som i farmakokinetikken. Seksjonen kom til 2026-10-02 uten innhold; i lesemodus står den først når den har kort |
+| Virkninger | `virkninger` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge, som i farmakokinetikken, og foran dem det faste kortet «Fenomenologi» (`kort` og `frieKort` i `PANELER`), bare for psykoaktive stoffer (`veiledning`, se `docs/monografkuratering.md`). Seksjonen kom til 2026-10-02 uten innhold, og fikk «Fenomenologi» 2026-10-22; i lesemodus står den først når den har kort |
 | Bivirkninger | `bivirkninger` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge, som i farmakokinetikken. Kom til sammen med virkningene, uten innhold. Over kortene står bivirkningene fra preparatomtalene, gruppert etter frekvens eller organsystem; de importeres og redigeres ikke her (se `docs/bivirkninger.md`) |
 | Toksisitet og forgiftning | `toksisitet_forgiftning` | `kinetikkort`: `{ tittel, dokument }` med faste overskrifter (`kort` i `PANELER`), i denne rekkefølgen: «Toksisk dose og eksponering», «Toksiske konsentrasjoner», «Klinisk forgiftningsbilde», «Alvorlige komplikasjoner», «Toksikokinetiske særtrekk» og «Behandling ved forgiftning». Hvert kort kan stå én gang (også i databasen, se under), `posisjon` er plassen i `fasteKort`, og hvert har eget ikon. Tallene i viktige data (toksisk område, alvorlig/dødelig intoksikasjon) står for seg og kobles ikke hit; kortene kan utdype og sette dem i kontekst. Kom til 2026-10-04 uten innhold |
 | Indikasjon | `indikasjon` | `riktekst`: `{ dokument }` |
@@ -494,13 +494,17 @@ kategorien i identiteten kommer fra stoffregisteret og koblingene; navnet fra
 databasen når siden finnes der.
 
 **De faste kortene.** I seksjonene med faste kort (`PANELER_MED_FASTE_KORT`:
-toksisiteten, graviditeten og avhengigheten) har redaktøren én «Legg til: X»
-per kort som mangler, overskriften kan ikke endres, og kortene kan ikke
-flyttes. Et kort finnes bare når det har tekst, så seksjonen kan stå helt
+virkningene, toksisiteten, graviditeten og avhengigheten) har redaktøren én
+«Legg til: X» per kort som mangler, overskriften kan ikke endres, og kortene
+kan ikke flyttes. Står det i `veiledning` hva kortet skal brukes til, står det
+ved knappen og i redigeringsvinduet. Virkningene har også kort med fri
+overskrift (`frieKort`): de legges til med «Legg til kort», flyttes blant
+hverandre og står etter de faste (`sammenlignKort`, som også visningen,
+nummereringen av referansene og sammenligningen av utgaver bruker). Et kort finnes bare når det har tekst, så seksjonen kan stå helt
 eller delvis tom; i lesemodus står bare kortene som finnes, og en seksjon uten
 kort står ikke. Databasen håndhever at hvert fast kort står én gang per side,
 panel og tilstand, etter overskriften (`innholdselementer_fast_kort_idx`,
-migrasjonen `faste_kort_en_gang`). Et kort som er fjernet, står i `fjernet` og
+sist laget i migrasjonen `fenomenologi`). Et kort som er fjernet, står i `fjernet` og
 gir plass til et nytt med samme overskrift; publiseringen tar det fjernede
 først (`publiseringsplan`), så det nye ikke kolliderer med det gamle i det
 publiserte. Kortene er ellers vanlige kort i en kortserie: oppsummeringen,

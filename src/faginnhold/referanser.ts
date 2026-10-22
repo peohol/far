@@ -199,17 +199,26 @@ function sammenlignTekst(a: string, b: string): number {
   return a < b ? -1 : a > b ? 1 : 0
 }
 
+function etterPosisjon(a: Sideelement, b: Sideelement): number {
+  return a.posisjon - b.posisjon || sammenlignTekst(a.id, b.id)
+}
+
 /**
  * Alle forekomstene på siden, i leserekkefølge.
  *
  * `panelrekkefolge` er panelene slik siden viser dem. Paneler som ikke står
  * der, kommer etter, sortert på nøkkelen, så ingenting faller ut og
- * rekkefølgen alltid er den samme. I et panel står kortene etter posisjon og
- * deretter ID — samme rekkefølge som databasen bruker — og så de automatiske.
+ * rekkefølgen alltid er den samme. I et panel står kortene i `rekkefolge` —
+ * etter posisjon og deretter ID, samme rekkefølge som databasen bruker, når
+ * ikke annet er sagt (fagsidene gir `sammenlignKort`) — og så de automatiske.
  * Et kort siterer teksten sin før kortets egne referanser, og panelets
  * referanser kommer etter kortene: referansefeltet står nederst.
  */
-export function forekomster(side: Sidegrunnlag, panelrekkefolge: readonly string[] = []): Forekomst[] {
+export function forekomster(
+  side: Sidegrunnlag,
+  panelrekkefolge: readonly string[] = [],
+  rekkefolge: (a: Sideelement, b: Sideelement) => number = etterPosisjon,
+): Forekomst[] {
   const panelreferanser = side.panelreferanser ?? {}
   const automatiskePanel = side.automatiske?.panelreferanser ?? {}
   const perPanel = gruppert(side.elementer)
@@ -232,9 +241,7 @@ export function forekomster(side: Sidegrunnlag, panelrekkefolge: readonly string
     if (forekomst.ider.length > 0) resultat.push(forekomst)
   }
   for (const panel of [...new Set(panelrekkefolge), ...ovrige]) {
-    const elementer = [...(perPanel.get(panel) ?? [])].sort(
-      (a, b) => a.posisjon - b.posisjon || sammenlignTekst(a.id, b.id),
-    )
+    const elementer = [...(perPanel.get(panel) ?? [])].sort(rekkefolge)
     for (const element of elementer) {
       for (const ider of siteringer(element.data)) legg({ panel, element: element.id, niva: 'inline', ider })
       legg({ panel, element: element.id, niva: 'element', ider: [...(element.referanser ?? [])] })
@@ -356,8 +363,9 @@ export function sidereferanser(
   side: Sidegrunnlag,
   referanser: readonly Referanse[],
   panelrekkefolge: readonly string[] = [],
+  rekkefolge?: (a: Sideelement, b: Sideelement) => number,
 ) {
-  const alle = forekomster(side, panelrekkefolge)
+  const alle = forekomster(side, panelrekkefolge, rekkefolge)
   const nummerering = nummerer(alle, new Set(referanser.map((r) => r.id)))
   return {
     forekomster: alle,

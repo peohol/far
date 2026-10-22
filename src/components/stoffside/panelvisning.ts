@@ -62,6 +62,8 @@ const KINETIKKATEGORIER: readonly { ikon: Ikonnavn; monster: RegExp }[] = [
   { ikon: 'tdm', monster: /pr[oø]vetak/ },
   { ikon: 'ref', monster: /referanse(omr|grense)/ },
   { ikon: 'indik', monster: /indikasjon/ },
+  // Det faste kortet i «Virkninger».
+  { ikon: 'fenomenologi', monster: /fenomenologi/ },
   // De faste kortene i «Avhengighet, toleranse og tilbakeslagseffekter».
   { ikon: 'krykke', monster: /mestring/ },
   { ikon: 'misbruk', monster: /misbruk/ },

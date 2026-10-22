@@ -13,7 +13,7 @@ import { sammenlignFelter, type Felt, type Feltendring } from './historikk'
 import { innholdsfelter } from './innholdsfelter'
 import type { Stoffsidedata } from './lesing'
 import type { Innholdselementinnhold } from './modell'
-import { FJERNET, PANELER, panelFor } from './paneler'
+import { FJERNET, PANELER, fastKortIBlandetPanel, panelFor, sammenlignKort } from './paneler'
 import { formaterReferanse } from './referanser'
 
 /** En utgave av siden slik sammenligningen ser den. */
@@ -37,9 +37,14 @@ const iRekkefolge = (a: Bivirkning, b: Bivirkning) =>
   (FREKVENSPLASS.get(a.frekvens) ?? 0) - (FREKVENSPLASS.get(b.frekvens) ?? 0) ||
   a.posisjon - b.posisjon
 
-/** Navnet på et kort på siden, som «Dosering · kort 1». */
-export function kortnavn(innhold: Pick<Innholdselementinnhold, 'panel' | 'posisjon'>): string {
-  return `${panelFor(innhold.panel)?.tittel ?? innhold.panel} · kort ${innhold.posisjon + 1}`
+/**
+ * Navnet på et kort på siden, som «Dosering · kort 1». Et fast kort i et panel
+ * som også har frie kort, heter etter overskriften («Virkninger ·
+ * Fenomenologi»), siden det deler plass med det første frie.
+ */
+export function kortnavn(innhold: Pick<Innholdselementinnhold, 'panel' | 'posisjon' | 'elementtype' | 'data'>): string {
+  const fast = fastKortIBlandetPanel(innhold)
+  return `${panelFor(innhold.panel)?.tittel ?? innhold.panel} · ${fast ?? `kort ${innhold.posisjon + 1}`}`
 }
 
 /** Kortene på siden i sidens rekkefølge: panelene, så plassen. Fjernede kort er utelatt. */
@@ -49,8 +54,7 @@ export function sidensKort(side: Stoffsidedata): Stoffsidedata['elementer'] {
     .sort(
       (a, b) =>
         (PANELPLASS.get(a.innhold.panel) ?? PANELER.length) - (PANELPLASS.get(b.innhold.panel) ?? PANELER.length) ||
-        a.innhold.posisjon - b.innhold.posisjon ||
-        a.id.localeCompare(b.id),
+        sammenlignKort({ ...a.innhold, id: a.id }, { ...b.innhold, id: b.id }),
     )
 }
 

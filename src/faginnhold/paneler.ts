@@ -80,6 +80,19 @@ export interface Paneldefinisjon {
    * gruppenes kort i rekkefølge (se {@link fasteKort}).
    */
   grupper?: readonly Kortgruppe[]
+  /**
+   * Panelet har også kort med fri overskrift ved siden av de faste. De faste
+   * står da først, i sin rekkefølge, og de frie etter, i den rekkefølgen
+   * redaktøren gir dem (se {@link sammenlignKort}). Uten dette har et panel med
+   * faste kort bare dem.
+   */
+  frieKort?: boolean
+  /**
+   * Hva et fast kort skal brukes til, etter overskriften: står for
+   * redaktøren der kortet legges til og redigeres, og for kuratoren i
+   * `docs/monografkuratering.md`.
+   */
+  veiledning?: Readonly<Record<string, string>>
 }
 
 /** De faste kortene i et panel, i den rekkefølgen de står, også når de er delt i grupper. */
@@ -96,7 +109,17 @@ export const PANELER = [
   { nokkel: 'identitet', tittel: 'Identitet', form: 'identitet' },
   { nokkel: 'viktige_data', tittel: 'Viktige data', form: 'datakort' },
   { nokkel: 'farmakodynamikk', tittel: 'Farmakodynamikk', form: 'mekanismer' },
-  { nokkel: 'virkninger', tittel: 'Virkninger', form: 'kort' },
+  {
+    nokkel: 'virkninger',
+    tittel: 'Virkninger',
+    form: 'kort',
+    kort: ['Fenomenologi'],
+    frieKort: true,
+    veiledning: {
+      Fenomenologi:
+        'Bare for psykoaktive stoffer: stoffer som påvirker den subjektive opplevelsen direkte gjennom sine farmakologiske virkninger. Det gjelder ikke bare stoffer med ruspotensial, men også psykofarmaka og for eksempel noen antihistaminer og antiepileptika.',
+    },
+  },
   { nokkel: 'bivirkninger', tittel: 'Bivirkninger', form: 'kort' },
   {
     nokkel: 'toksisitet_forgiftning',
@@ -149,10 +172,10 @@ export const PANELREKKEFOLGE: readonly string[] = PANELER.map((p) => p.nokkel)
 
 /**
  * Panelene med faste kort (`kort` eller `grupper`). Hvert fast kort kan stå én
- * gang per side og tilstand, etter overskriften. Databasen håndhever det
- * (`innholdselementer_fast_kort_idx` i migrasjonen `faste_kort_en_gang`), så
- * to som legger til det samme kortet samtidig, ikke begge får det lagret.
- * Testene kontrollerer at listene stemmer.
+ * gang per side og tilstand, etter overskriften (se {@link erFastOverskrift}).
+ * Databasen håndhever det (`innholdselementer_fast_kort_idx`, sist laget i
+ * migrasjonen `fenomenologi`), så to som legger til det samme kortet
+ * samtidig, ikke begge får det lagret. Testene kontrollerer at listene stemmer.
  */
 export const PANELER_MED_FASTE_KORT: readonly string[] = PANELER.filter((p) => fasteKort(p)).map((p) => p.nokkel)
 
@@ -160,6 +183,60 @@ const PANEL_PER_NOKKEL = new Map<string, Paneldefinisjon>(PANELER.map((p) => [p.
 
 export function panelFor(nokkel: string): Paneldefinisjon | undefined {
   return PANEL_PER_NOKKEL.get(nokkel)
+}
+
+/**
+ * Om et kort med denne overskriften er et fast kort, som bare kan stå én gang
+ * i panelet. I et panel med bare faste kort gjelder det hver overskrift; i et
+ * panel som også har frie kort (`frieKort`), bare de faste overskriftene.
+ */
+export function erFastOverskrift(panel: string, tittel: string): boolean {
+  const definisjon = panelFor(panel)
+  const faste = definisjon && fasteKort(definisjon)
+  if (!faste) return false
+  return !definisjon.frieKort || faste.includes(tittel.trim())
+}
+
+/**
+ * Rekkefølgen kortene i et panel står i: etter `posisjon`, deretter ID-en,
+ * som i databasen. I et panel med både faste og frie kort står de faste
+ * først, i sin faste rekkefølge, så et fast kort som legges til senere, ikke
+ * havner mellom de frie. Visningen, nummereringen av referansene og
+ * sammenligningen av utgaver bruker den samme rekkefølgen.
+ */
+export function sammenlignKort(a: Kortplass, b: Kortplass): number {
+  return fastPlass(a) - fastPlass(b) || a.posisjon - b.posisjon || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)
+}
+
+/** Det et element trenger for å få plassen sin i panelet. Uten `elementtype` leses det som et kort med overskrift. */
+interface Kortplass {
+  id: string
+  panel: string
+  posisjon: number
+  elementtype?: string
+  data: unknown
+}
+
+/** Plassen et fast kort har i et panel med også frie kort; de frie kommer etter. 0 ellers. */
+function fastPlass(element: Kortplass): number {
+  const definisjon = panelFor(element.panel)
+  const faste = definisjon?.frieKort ? fasteKort(definisjon) : undefined
+  if (!faste) return 0
+  const tittel = fastKortIBlandetPanel(element)
+  return tittel === null ? faste.length : faste.indexOf(tittel)
+}
+
+/**
+ * Overskriften til et fast kort i et panel som også har frie kort, eller
+ * `null`. Der deler det faste kortet plass (`posisjon`) med det første frie, så
+ * det kjennes igjen på overskriften, også i navnene på kortene i historikken
+ * og i kurateringene (`kortnavn` i `sidesammenligning.ts`).
+ */
+export function fastKortIBlandetPanel({ panel, elementtype = ELEMENTTYPER.kinetikk, data }: Omit<Kortplass, 'id' | 'posisjon'>): string | null {
+  const definisjon = panelFor(panel)
+  if (!definisjon?.frieKort || elementtype !== ELEMENTTYPER.kinetikk) return null
+  const tittel = lesKinetikk(data).tittel
+  return fasteKort(definisjon)?.includes(tittel) ? tittel : null
 }
 
 /** Om panelet er en serie kort, der hvert element er sitt eget detaljkort. */
@@ -738,7 +815,7 @@ export function erEnkeltelement(elementtype: string): boolean {
 export function enkeltnokkel({ panel, elementtype, data }: { panel: string; elementtype: string; data: unknown }): string | null {
   if (panel === FJERNET) return null
   if (erEnkeltelement(elementtype)) return JSON.stringify([panel, elementtype, datakortGjelder(data)])
-  if (elementtype === ELEMENTTYPER.kinetikk && PANELER_MED_FASTE_KORT.includes(panel)) {
+  if (elementtype === ELEMENTTYPER.kinetikk && erFastOverskrift(panel, lesKinetikk(data).tittel)) {
     return JSON.stringify([panel, elementtype, lesKinetikk(data).tittel])
   }
   return null
