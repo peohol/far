@@ -1,18 +1,68 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/manuell-39865852488",
     "foresporsel_commit": "0e6c9a35affe8e793edd3c95b036936cedf27e89",
     "foresporsel_sha256": "13bf27d09fc821185ddcf2325738bc044e92748d8125bb4d222e6dfe90a3b05d",
     "kode_commit": "cf36d2602624ed31c09f34cf9c8a28ed70d645d4",
     "kjoring": "https://github.com/peohol/ousfar/actions/runs/39865852488",
-    "startet_kl": "2026-10-22T22:34:20.743Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-22T22:34:22.962Z",
+    "ferdig_kl": "2026-10-22T22:34:56.362Z"
   },
-  "foresporsel": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "alprazolam",
+      "diazepam"
+    ],
+    "oppgaver": [
+      "funksjonstest",
+      "spc"
+    ]
+  },
   "referanse": null,
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 400
+    }
+  ],
+  "stoffer": {
+    "alprazolam": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/alprazolam/funksjonstest.json"
+        },
+        "spc": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/alprazolam/spc.json"
+        }
+      }
+    },
+    "diazepam": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/diazepam/funksjonstest.json"
+        },
+        "spc": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/diazepam/spc.json"
+        }
+      }
+    }
+  }
 }

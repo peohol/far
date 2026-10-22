@@ -1,0 +1,54 @@
+Samtidig inntak av alkohol anbefales ikke.
+Benzodiazepiner gir additiv dempende effekt på sentralnervesystemet, inkludert respirasjonsdepresjon,
+når de tas samtidig med opioider, alkohol eller andre substanser med dempende effekt på
+sentralnervesystemet (se pkt. 4.4). Dette påvirker evnen til å kjøre bil og bruke maskiner.
+
+Samtidig bruk av benzodiazepiner og opioider øker risikoen for sedasjon, respirasjonsdepresjon, koma
+og død på grunn av additiv dempende effekt på sentralnervesystemet. Derfor bør dosering og
+varigheten av samtidig bruk begrenses (se pkt. 4.4).
+
+Økt sentraldepressiv effekt kan oppstå i tilfeller med samtidig bruk av flere typer legemidler:
+antipsykotiske (nevroleptika), hypnotiske, anxiolytika/beroligende, antidepressiva, narkotiske
+smertestillende, antiepileptika, anestetika og sedative antihistaminer. Narkotiske medikamenter kan gi
+økt eufori, hvilket kan øke risiko for psykisk avhengighet.
+
+Farmakokinetiske interaksjoner kan oppstå når alprazolam gis sammen med legemidler som
+interfererer med dets metabolisme.
+
+CYP3A hemmere
+Forbindelser som hemmer spesifikke leverenzymer (spesielt cytokrom P4503A4) kan gi økt
+konsentrasjon av alprazolam. Data fra kliniske studier med alprazolam, in vitro studier med
+alprazolam, og kliniske studier med legemidler som metaboliseres tilsvarende som alprazolam viser
+varierende grad av interaksjon, og mulig interaksjon med alprazolam for en rekke legemidler.
+
+Dekstropropoksyfen kan hemme metabolismen av alprazolam og dermed minske clearance av
+alprazolam. Kombinasjonen bør unngås.
+
+Forsiktighet og eventuelt dosereduksjon anbefales ved samtidig administrasjon av nefazodon og
+fluvoksamin.
+
+Forsiktighet anbefales ved samtidig bruk av cimetidin, fluoxetin, ketokonazol, itrakonazole eller andre
+azol-type soppmidler, orale antikonsepsjonsmidler, diltiazem eller makrolidantibiotika som
+erytromycin og klaritromycin da disse kan øke konsentrasjonen av alprazolam.
+
+CYP3A4-indusere
+Da alprazolam metaboliseres av CYP3A4 kan indusere av dette enzymet endre metabolismen av
+alprazolam.
+
+Interaksjoner med hiv-proteasehemmere (f.eks. ritonavir) og alprazolam er komplekse og
+tidsavhengige. Et klinisk forsøk (n=10) viste at lave doser av ritonavir (4x200 mg) gav signifikant
+nedsatt clearance, forlenget eliminasjonstid og forsterkede kliniske effekter av alprazolam. Ved fortsatt
+eksponering overfor ritonavir vil likevel CYP3A-induksjon utsette denne hemmingen. Denne
+interaksjonen vil kreve en dosejustering eller seponering av alprazolam.
+
+Karbamazepin synes å indusere metabolismen av alprazolam, med redusert effekt som resultat.
+For pasienter som behandles med imipramin, kan alprazolam hemme metabolismen av imipramin, slik
+at plasmakonsentrasjonen av imipramin og desmetylimipramin kan stige med ca. 30 %.
+
+Økte konsentrasjoner av digoksin er blitt rapportert når det ble gitt alprazolam, spesielt hos eldre (>65
+år ). Pasienter som får alprazolam og digoksin bør derfor kontrolleres for tegn og symptomer relatert
+til digoksintoksisitet.
+
+4.6      Fertilitet, graviditet og amming
+
+Graviditet

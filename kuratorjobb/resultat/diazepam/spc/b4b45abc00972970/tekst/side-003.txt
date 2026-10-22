@@ -1,0 +1,54 @@
+Pediatrisk populasjon
+Benzodiazepiner bør ikke gis til barn uten nøye vurdering av indikasjonen. Behandlingsvarigheten skal
+være så kort som mulig. Diazepam bør ikke gis til barn under 6 måneder, fordi sikkerhet og effekt ikke
+er avklart. Eventuell bruk til barn i denne aldersgruppen må foregå med stor forsiktighet, og kun når
+andre behandlingsalternativer ikke er tilgjengelig.
+
+Laktoseintoleranse
+Pasienter med sjeldne arvelige problemer med galaktoseintoleranse, en spesiell form for hereditær
+laktosemangel (Lapp lactase deficiency) eller glukose-galaktose malabsorpsjon bør ikke ta dette
+legemidlet.
+
+
+4.5   Interaksjon med andre legemidler og andre former for interaksjon
+
+Farmakodynamiske interaksjoner
+Potenserte effekter kan forekomme dersom diazepam gis samtidig med alkohol eller andre legemidler
+med CNS-depressive egenskaper (for eksempel antipsykotika, anxiolytika, bedøvende midler,
+analgetika, antidepressiva, hypnotika, antiepileptika, sedative antihistaminer).
+
+
+Samtidig bruk ikke anbefalt
+Alkohol
+Pasienter som får diazepam bør unngå alkohol (se pkt. 4.4).
+
+Spesiell forsiktighet med samtidig bruk
+Levodopa
+Ved kombinasjon av levodopa og diazepam er det sett reduserte effekter av levodopa ved kontroll over
+Parkinsons sykdom i et lite antall kasuistikker.
+
+Teofyllin og koffein motvirker delvis de sedative og eventuelt de angstdempende effektene av
+diazepam ved å blokkere adenosinreseptorer.
+
+Ketamin
+Diazepam påvirker farmakodynamikken og farmakokinetikken til ketamin, slik at
+ketaminkonsentrasjonen som er nødvendig for å oppnå tilstrekkelig anestesi er redusert når diazepam
+er til stede.
+
+Farmakokinetiske interaksjoner
+Metabolismen av diazepam og hovedmetabolitten er mediert via CYP3A4 og CYP2C19. Samtidig
+bruk av legemidler som hemmer disse enzymene kan medføre økt konsentrasjon av diazepam og
+økt/forlenget sedasjon. Samtidig bruk av legemidler som induserer disse enzymene kan øke
+metabolismen av diazepam og dermed føre til lavere konsentrasjon og redusert eller manglende effekt
+av diazepam. Dosejustering kan være nødvendig.
+
+Samtidig bruk ikke anbefalt
+Fenytoin
+Mekanisme – effekt på fenytoin: Metabolismen av fenytoin kan endres på en uforutsigbar måte,
+resulterende i økt, redusert eller uendret serumkonsentrasjon av fenytoin. Fenytoinkonsentrasjoner skal
+overvåkes nøyere når diazepam tilføyes eller seponeres.
+
+Spesiell forsiktighet med samtidig bruk
+Enzymhemmere
+Eksempler på hemmere av CYP3A4 og CYP2C19 av klinisk betydning er azoler (flukonazol og
+vorikonazol), fluvoksamin, omeprazol og cimetidin. Andre legemidler som hemmer metabolismen av
