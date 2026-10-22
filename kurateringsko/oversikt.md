@@ -1,8 +1,8 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-22T14:41:28.819Z. Stoffene sist lest fra databasen 2026-10-21T21:32:26.580Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-22T15:34:14.492Z. Stoffene sist lest fra databasen 2026-10-21T21:32:26.580Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 78 · Publisert: 5 · Blokkert: 17 · Utenfor køen: 1
+Klar: 79 · Publisert: 12 · Blokkert: 9 · Utenfor køen: 1
 
 ## Pågår
 
@@ -14,23 +14,15 @@ Ingen kurateringer venter.
 
 ## Blokkert
 
-- **brekspiprazol**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.
-- **cbd**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
-- **citalopram**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
-- **doksepin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
 - **etanol**: Stoffet har ingen publisert fagside å kuratere.
-- **fenobarbital**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
-- **fenytoin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
-- **flunitrazepam**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
+- **flunitrazepam**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, tilbakemelding); den må avsluttes først.
+- **kariprazin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
 - **kokain**: Stoffet har ingen publisert fagside å kuratere.
-- **lamotrigin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
-- **levetiracetam**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
-- **lurasidon**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.
+- **lamotrigin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.
 - **mdma**: Stoffet har ingen publisert fagside å kuratere.
 - **metamfetamin**: Stoffet har ingen publisert fagside å kuratere.
 - **okskarbazepin**: Skrivefasen stoppet av et automatisk sikkerhetsfilter; venter på avgjørelse fra fagansvarlig.
-- **psilocybin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
-- **vortioksetin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
+- **topiramat**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, retting); den må avsluttes først.
 
 ## Køen
 
@@ -111,7 +103,8 @@ Ingen kurateringer venter.
 | 73 | bisoprolol | de_novo | 395.3 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 5 av 13 redaksjonelle seksjoner er tomme. 3 av 22 elementer har ingen kilde. |
 | 74 | labetalol | de_novo | 395.3 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 5 av 13 redaksjonelle seksjoner er tomme. 3 av 22 elementer har ingen kilde. |
 | 75 | karvedilol | de_novo | 395 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 5 av 13 redaksjonelle seksjoner er tomme. 3 av 23 elementer har ingen kilde. |
-| 76 | ketamin | de_novo | 102.9 | De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-04. 6 av 13 redaksjonelle seksjoner er tomme. 1 av 28 elementer har ingen kilde. |
-| 77 | kvetiapin | de_novo | 65 | De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-05. 1 av 13 redaksjonelle seksjoner er tomme. 3 av 51 elementer har ingen kilde. |
-| 78 | thc | de_novo | 53.3 | De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-10. |
+| 76 | psilocybin | de_novo | 357.7 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 1 av 13 redaksjonelle seksjoner er tomme. |
+| 77 | ketamin | de_novo | 102.9 | De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-04. 6 av 13 redaksjonelle seksjoner er tomme. 1 av 28 elementer har ingen kilde. |
+| 78 | kvetiapin | de_novo | 65 | De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-05. 1 av 13 redaksjonelle seksjoner er tomme. 3 av 51 elementer har ingen kilde. |
+| 79 | thc | de_novo | 53.3 | De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-10. |
 

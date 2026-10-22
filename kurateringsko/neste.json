@@ -1,14 +1,14 @@
 {
-  "oppdatert_kl": "2026-10-22T14:41:28.819Z",
+  "oppdatert_kl": "2026-10-22T15:34:14.492Z",
   "malt_kl": "2026-10-21T21:32:26.580Z",
   "antall": {
-    "klar": 78,
+    "klar": 79,
     "reservert": 0,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 0,
     "sammenslatt": 0,
-    "publisert": 5,
-    "blokkert": 17,
+    "publisert": 12,
+    "blokkert": 9,
     "utenfor": 1
   },
   "aktive": [],
@@ -158,50 +158,6 @@
   "til_gjennomgang": [],
   "blokkert": [
     {
-      "stoff": "brekspiprazol",
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-22T14:41:28.819Z",
-          "kilde": "system"
-        }
-      ]
-    },
-    {
-      "stoff": "cbd",
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-22T14:41:28.819Z",
-          "kilde": "system"
-        }
-      ]
-    },
-    {
-      "stoff": "citalopram",
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-22T14:41:28.819Z",
-          "kilde": "system"
-        }
-      ]
-    },
-    {
-      "stoff": "doksepin",
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-22T14:41:28.819Z",
-          "kilde": "system"
-        }
-      ]
-    },
-    {
       "stoff": "etanol",
       "blokkeringer": [
         {
@@ -213,34 +169,23 @@
       ]
     },
     {
-      "stoff": "fenobarbital",
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-22T14:41:28.819Z",
-          "kilde": "system"
-        }
-      ]
-    },
-    {
-      "stoff": "fenytoin",
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-22T14:41:28.819Z",
-          "kilde": "system"
-        }
-      ]
-    },
-    {
       "stoff": "flunitrazepam",
       "blokkeringer": [
         {
           "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, tilbakemelding); den må avsluttes først.",
+          "kl": "2026-10-22T15:34:14.492Z",
+          "kilde": "system"
+        }
+      ]
+    },
+    {
+      "stoff": "kariprazin",
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-22T14:41:28.819Z",
+          "kl": "2026-10-22T15:34:14.492Z",
           "kilde": "system"
         }
       ]
@@ -261,30 +206,8 @@
       "blokkeringer": [
         {
           "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-22T14:41:28.819Z",
-          "kilde": "system"
-        }
-      ]
-    },
-    {
-      "stoff": "levetiracetam",
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-22T14:41:28.819Z",
-          "kilde": "system"
-        }
-      ]
-    },
-    {
-      "stoff": "lurasidon",
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
           "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-22T14:41:28.819Z",
+          "kl": "2026-10-22T15:34:14.492Z",
           "kilde": "system"
         }
       ]
@@ -323,23 +246,12 @@
       ]
     },
     {
-      "stoff": "psilocybin",
+      "stoff": "topiramat",
       "blokkeringer": [
         {
           "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-22T14:41:28.819Z",
-          "kilde": "system"
-        }
-      ]
-    },
-    {
-      "stoff": "vortioksetin",
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-22T14:41:28.819Z",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, retting); den må avsluttes først.",
+          "kl": "2026-10-22T15:34:14.492Z",
           "kilde": "system"
         }
       ]
