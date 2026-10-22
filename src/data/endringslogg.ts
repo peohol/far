@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.106.1',
+    dato: '2026-10-22',
+    sammendrag: 'Psilocybin-siden får kjemiske grunndata og laboratorieanalysene for psilocin',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    gjelder: ['stoff'],
+    punkter: [
+      'Psilocybin og psilocin er lagt inn blant forbindelsene, så seksjonen «Kjemiske grunndata» på psilocybin-siden viser molekylformelen, molekylvekten og identifikatorene i PubChem for begge. Begge er bekreftet av ClinPGx og ChEBI før de ble koblet. Tallene vises etter neste henting fra PubChem.',
+      'Seksjonen «Analyse ved norske laboratorier» viser analysene av psilocin fra Farmakologiportalen, der den heter «Psilocin (psilocybin)». CAS-nummeret og molekylvekten stemmer med PubChem, så måleområdene kan regnes om mellom µg/L og nmol/L.',
+      'Psilocybin selv er ikke koblet til portalen: portalens eneste treff på navnet er psilocin.',
+    ],
+  },
+  {
     versjon: '1.106.0',
     dato: '2026-10-22',
     sammendrag: 'Nytt kort «Fenomenologi» under «Virkninger» på fagsidene',

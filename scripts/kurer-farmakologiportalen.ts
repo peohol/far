@@ -6,8 +6,9 @@
  *   npx vite-node scripts/kurer-farmakologiportalen.ts -- --komponenter <fil> [--alle] [--skriv] [nøkkel …]
  *
  * `--komponenter` er komponentlisten fra portalen som JSON: enten slik
- * `/api/components` gir den, eller OUSFARs kopi
- * (`select jsonb_agg(raa) from farmakologiportalen.komponent where utgatt_kl is null`).
+ * `/api/components` gir den, OUSFARs kopi
+ * (`select jsonb_agg(raa) from farmakologiportalen.komponent where utgatt_kl is null`),
+ * eller komponentene slik `les_laboratorieanalyser` gir dem (`{ id, data }`, alt lest).
  * Portalen svarer bare OUSFARs server, så skriptet henter den ikke selv.
  *
  * Uten `--alle` gjelder det bare forbindelsene som ikke er koblet ennå, eller
@@ -34,8 +35,11 @@ const skriv = argumenter.includes('--skriv')
 const bare = new Set(argumenter.filter((a, i) => !a.startsWith('--') && argumenter[i - 1] !== '--komponenter'))
 
 const leser = entitet('komponent')
+/** En rad som alt er lest, slik `les_laboratorieanalyser` gir den. */
+const erLest = (rad: Record<string, unknown>): rad is { id: string; data: Fpkomponent['data'] } =>
+  typeof rad.id === 'string' && typeof rad.data === 'object' && rad.data !== null && 'navn' in rad.data
 const komponenter: Fpkomponent[] = (JSON.parse(readFileSync(komponentfil, 'utf8')) as Record<string, unknown>[])
-  .map((rad) => leser.les(rad, { enheter: new Map() }))
+  .map((rad) => (erLest(rad) ? rad : leser.les(rad, { enheter: new Map() })))
   .filter((k): k is NonNullable<typeof k> => k !== null)
   .map((k) => ({ id: k.id, data: k.data as Fpkomponent['data'] }))
 console.log(`${komponenter.length} komponenter fra Farmakologiportalen.`)

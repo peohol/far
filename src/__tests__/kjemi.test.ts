@@ -47,8 +47,11 @@ const TELLING = { forbindelser: 1, feilet: 0, konflikter: 0, strukturavvik: 0, u
 
 /* --- Registeret ----------------------------------------------------------- */
 
+/** Fagsidene som er laget i appen og bare finnes i databasen, men har forbindelser i registeret. */
+const FAGSIDER_I_DATABASEN = ['psilocybin']
+
 describe('registeret over forbindelser', () => {
-  const stoffer = new Set(stoffregister.stoffer.map((s) => s.slug))
+  const stoffer = new Set([...stoffregister.stoffer.map((s) => s.slug), ...FAGSIDER_I_DATABASEN])
 
   it('stemmer: kjente stoffer, unike nøkler og CID-er, og hver forbindelse er koblet eller sier hvorfor ikke', () => {
     expect(kontrollerForbindelser(FORBINDELSER.alle, stoffer)).toEqual([])
@@ -62,6 +65,7 @@ describe('registeret over forbindelser', () => {
     expect(FORBINDELSER.forStoff('citalopram').map((f) => f.nokkel)).toEqual(['citalopram', 'desmetylcitalopram'])
     expect(FORBINDELSER.forStoff('thc').map((f) => f.nokkel)).toEqual(['thc', 'thc-oh', 'thc-cooh'])
     expect(FORBINDELSER.forStoff('bupropion').map((f) => f.nokkel)).toEqual(['bupropion', 'hydroksybupropion'])
+    expect(FORBINDELSER.forStoff('psilocybin').map((f) => f.nokkel)).toEqual(['psilocybin', 'psilocin'])
   })
 
   it('lar én forbindelse høre til flere fagsider', () => {

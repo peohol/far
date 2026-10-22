@@ -28,6 +28,10 @@ om forbindelsen er `selve_stoffet` eller en `metabolitt` der) og `form`:
 | `ion` | et ion som måles som sådan (litium) |
 | `salt` | bare når laboratoriet faktisk oppgir saltet |
 
+Fagsiden er nøkkelen i stoffregisteret, eller nøkkelen til en side som er
+laget i appen og bare finnes i databasen (psilocybin); den siste må også stå i
+`FAGSIDER_I_DATABASEN` i `src/__tests__/kjemi.test.ts`, så testene kjenner den.
+
 Molekylvekten som skal brukes i en omregning, er alltid den målte formens —
 aldri saltet legemiddelet selges som (valproinsyre, ikke natriumvalproat;
 GHB som fri syre, ikke natriumoksybat; kandesartan, ikke forløperen
@@ -65,7 +69,8 @@ Alt annet blir `uavklart`, med grunnen og kandidatene, til noen har vurdert det.
 Skriptet endrer aldri en kobling som står; avviker kontrollen fra den, skrives
 avviket ut.
 
-Kontrollert 8. oktober 2026: 135 av 136 forbindelser er koblet. Uavklart:
+Kontrollert 8. oktober 2026: 135 av 136 forbindelser er koblet; psilocybin og
+psilocin ble koblet 21. oktober 2026. Uavklart:
 
 | Forbindelse | Hvorfor |
 | --- | --- |

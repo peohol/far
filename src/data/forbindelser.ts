@@ -2983,6 +2983,59 @@ export const FORBINDELSESDATA: Forbindelse[] = [
     }
   },
   {
+    "nokkel": "psilocin",
+    "navn": "Psilocin",
+    "engelsk": "psilocin",
+    "stoffer": [
+      {
+        "stoff": "psilocybin",
+        "relasjon": "metabolitt"
+      }
+    ],
+    "form": "fri",
+    "pubchem": {
+      "cid": 4980,
+      "inchikey": "SPCIYGNTAMCTRO-UHFFFAOYSA-N",
+      "formel": "C12H16N2O",
+      "kontrollert": "2026-10-21",
+      "grunnlag": "Eneste treff i PubChem for «psilocin»; samme InChIKey hos ClinPGx (PA166338901, CID 4980) og ChEBI (CHEBI:8613)."
+    },
+    "farmakologiportalen": {
+      "status": "verifisert",
+      "id": "696",
+      "navn": "Psilocin (psilocybin)",
+      "kontrollert": "2026-10-21",
+      "grunnlag": "Eneste komponent i Farmakologiportalen med navnet («Psilocin (psilocybin)», ID 696); CAS-nummeret 520-53-6 er også PubChems, og molekylvekten 204,27 g/mol stemmer med PubChem (CID 4980) (204,27)."
+    }
+  },
+  {
+    "nokkel": "psilocybin",
+    "navn": "Psilocybin",
+    "engelsk": "psilocybin",
+    "stoffer": [
+      {
+        "stoff": "psilocybin",
+        "relasjon": "selve_stoffet"
+      }
+    ],
+    "form": "fri",
+    "pubchem": {
+      "cid": 10624,
+      "inchikey": "QVDSEJDULKLHCG-UHFFFAOYSA-N",
+      "formel": "C12H17N2O4P",
+      "kontrollert": "2026-10-21",
+      "grunnlag": "Eneste treff i PubChem for «psilocybin»; samme InChIKey hos ClinPGx (PA166338881, CID 10624) og ChEBI (CHEBI:8614)."
+    },
+    "farmakologiportalen": {
+      "status": "uavklart",
+      "grunn": "«Psilocin (psilocybin)» (ID 696) har navnet, men verken CAS-nummeret (520-53-6) eller molekylvekten (204,27 g/mol) stemmer med PubChem (CID 10624).",
+      "kandidater": [
+        "696"
+      ],
+      "kontrollert": "2026-10-21"
+    }
+  },
+  {
     "nokkel": "ramipril",
     "navn": "Ramipril",
     "engelsk": "ramipril",
