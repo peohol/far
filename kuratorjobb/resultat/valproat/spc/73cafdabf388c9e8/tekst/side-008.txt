@@ -1,0 +1,56 @@
+Nimodipin
+Hos pasienter som behandles samtidig med natriumvalproat og nimodipin kan eksponeringen av nimodipin
+øke med 50 %. Ved hypotensjon bør derfor nimodipindosen reduseres.
+
+Effekter av andre legemidler på natriumvalproat
+Antiepileptika med enzyminduserende effekter (inkludert fenytoin, fenobarbital, karbamazepin) reduserer
+serumkonsentrasjonen av valproinsyre. Ved kombinasjonsbehandling bør doseringene justeres ut fra klinisk
+respons og måling av serumkonsentrasjon.
+
+På den annen side reduserer kombinasjon av felbamat og natriumvalproat clearance av valproinsyre med 22–
+50 %, og øker dermed plasmakonsentrasjonen av valproinsyre. Doseringen av natriumvalproat bør
+overvåkes.
+
+Konsentrasjonen av valproinsyremetabolitter kan øke ved samtidig bruk av fenytoin eller fenobarbital.
+Pasienter som behandles med disse to legemidlene skal derfor overvåkes nøye for tegn og symptomer på
+hyperammonemi.
+
+Meflokin øker metabolismen av valproinsyre og kan selv øke hyppigheten av kramper. Samtidig bruk kan
+derfor føre til epileptiske anfall.
+
+Ved samtidig bruk av natriumvalproat og legemidler med høy proteinbindingsgrad (acetylsalisylsyre), kan
+serumnivået av fri valproinsyre øke.
+Protrombinnivået bør overvåkes nøye ved samtidig bruk av vitamin K-avhengige antikoagulantia.
+
+Cimetidin eller erytromycin
+Serumkonsentrasjonen av valproinsyre kan øke (som følge av redusert levermetabolisme) ved samtidig bruk
+av cimetidin eller erytromycin.
+
+Karbapenemer (som panipenem, meropenem, imipenem)
+Redusert serumnivå av valproinsyre er rapportert ved samtidig bruk av karbapenemer, med en nedgang på
+60-100 % i valproinsyrenivået innen 2 dager. På grunn av den hurtige nedgangen og omfanget av den, er
+samtidig bruk av karbapenemer vanskelig å iverksette hos pasienter som behandles med valproinsyre, og
+dette bør derfor unngås (se pkt. 4.4).
+
+Rifampicin
+Rifampicin kan redusere blodnivået av valproinsyre og gi redusert terapeutisk effekt. Dosejustering av
+valproat kan derfor være nødvendig ved samtidig bruk av rifampicin.
+
+Proteasehemmere
+Proteasehemmere, som lopinavir og ritonavir, reduserer plasmakonsentrasjonen av valproat ved samtidig
+bruk.
+
+Kolestyramin
+Ved samtidig bruk kan kolestyramin redusere plasmakonsentrasjonen av valproat.
+
+Cisplatin
+Cisplatin kan redusere serumkonsentrasjonen av valproat. Grundig klinisk overvåkning er derfor nødvendig
+under cisplatinbasert kjemoterapi fordi legemidler mot kreft kan redusere serumkonsentrasjon og
+antiepileptisk aktivitet av valproat.
+
+Andre interaksjoner
+
+Topiramat
+Samtidig bruk av valproat og topiramat har vært forbundet med encefalopati og/eller hyperammonemi.
+Pasienter som tar disse to legemidlene bør overvåkes nøye for tegn og symptomer på
+hyperammonemirelatert encefalopati.

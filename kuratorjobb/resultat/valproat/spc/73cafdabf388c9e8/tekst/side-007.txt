@@ -1,0 +1,56 @@
+Natriumvalproat kan forsterke effekten av andre psykotrope legemidler som nevroleptika, MAO-hemmere,
+antidepressiva og benzodiazepiner. Klinisk overvåkning anbefales og dosejustering der det er
+hensiktsmessig.
+
+Litium
+Natriumvalproat har ingen effekt på litiumnivåer i serum.
+
+Fenobarbital
+Natriumvalproat øker plasmakonsentrasjonen av fenobarbital (på grunn av hemming av levermetabolisme)
+og sederende effekt kan forekomme, særlig hos barn. Derfor anbefales klinisk overvåkning de første 15
+dagene av kombinasjonsbehandling. Fenobarbitaldosen må umiddelbart reduseres dersom sedasjon oppstår,
+og fenobarbitalnivået i plasma kontolleres ved behov.
+
+Primidon
+Natriumvalproat øker plasmanivået av primidon og forsterker bivirkningene (som for eksempel sedasjon).
+Disse tegnene opphører ved langvarig behandling. Klinisk overvåkning anbefales spesielt i begynnelsen av
+kombinasjonsbehandling, og dosejustering der det er hensiktsmessig.
+
+Fenytoin
+Natriumvalproat reduserer total plasmakonsentrasjon av fenytoin. På den annen side øker natriumvalproat fri
+form av fenytoin med mulige symptomer på overdosering (valproinsyre fortrenger fenytoin fra
+plasmaproteinbindingssteder og reduserer dets levermetabolisme). Klinisk overvåkning anbefales derfor, og
+fri form bør måles når fenytoinnivået i plasma bestemmes.
+
+Etosuksimid
+Natriumvalproat øker plasmanivået av etosuksimid med opptil 50 %. Overvåkning av etosuksimidnivået i
+plasma anbefales ved kombinasjonsbehandling.
+
+Karbamazepin Klinisk toksisitet er rapportert når natriumvalproat administreres samtidig med karbamazepin,
+da natriumvalproat kan forsterke de toksiske effektene av karbamazepin. Klinisk overvåkning anbefales
+spesielt i begynnelsen av kombinasjonsbehandling, og dosejustering der det er hensiktsmessig.
+
+Lamotrigin
+Valproat reduserer metabolismen av lamotrigin og øker gjennomsnittlig halveringstid for lamotrigin til
+nesten det dobbelte. Denne interaksjonen kan føre til økt lamotrigintoksisitet, spesielt i form av alvorlige
+hudutslett. Klinisk overvåkning anbefales, og dosering med lamotrigin bør reduseres eller seponeres der det
+er hensiktsmessig
+
+Zidovudin
+Valproat kan øke konsentrasjonen av zidovudin i plasma, og dermed øke zidovudins toksisitet. Det kan være
+nødvendig å redusere zidovudindosen.
+
+Felbamat
+Valproinsyre kan øke serumnivået av felbamat med ca. 30-50 %.
+
+Olanzapin
+Valproinsyre kan redusere nivået av olanzapin i plasma.
+
+Rufinamid
+Valproinsyre kan øke nivået av rufinamid i plasma. Økningen er avhengig av konsentrasjonen av
+valproinsyre. Spesiell forsiktighet er påkrevd i forhold til barn da effekten er mer uttalt i den pediatriske
+populasjonen.
+
+Propofol
+Behov for en lavere dose av propofol er sett hos pasienter som bruker valproat. Når propofol og valproat
+brukes samtidig, bør det vurderes å benytte en redusert dose med propofol.

@@ -1,0 +1,1525 @@
+{
+  "stoff": "valproat",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-22T04:15:06.408609+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 21,
+    "hentet": 13,
+    "dokumenter": 7,
+    "mangler": [
+      {
+        "merkevare_id": "ID_043BD9D8-C343-4A49-B194-CB97C45AB2DA",
+        "varenavn": "Depakote",
+        "navn_form_styrke": "Depakote enterotab 125 mg",
+        "produsent": "Abbott",
+        "atc": "N03AG01",
+        "legemiddelform": "Enterotablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_3F241167-A37B-4548-A067-D160AEC17B30",
+        "varenavn": "Depakote Sprinkle",
+        "navn_form_styrke": "Depakote Sprinkle enterokaps 125 mg",
+        "produsent": "Abbott",
+        "atc": "N03AG01",
+        "legemiddelform": "Enterokapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_3FA7BD05-522B-428A-9CE1-751835B21544",
+        "varenavn": "Ergenyl chrono",
+        "navn_form_styrke": "Ergenyl chrono depottab 300 mg",
+        "produsent": "sanofi-aventis (2)",
+        "atc": "N03AG01",
+        "legemiddelform": "Depottablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_5C919C94-31D9-44D6-9733-462E513D8442",
+        "varenavn": "Deprakine Retard",
+        "navn_form_styrke": "Deprakine Retard depottab 500 mg",
+        "produsent": "Sanofi-aventis",
+        "atc": "N03AG01",
+        "legemiddelform": "Depottablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_5D5298FB-6644-4AE7-AB26-F02E60E632E1",
+        "varenavn": "Orfiril",
+        "navn_form_styrke": "Orfiril mikst oppl 60 mg/ml",
+        "produsent": "Desitin",
+        "atc": "N03AG01",
+        "legemiddelform": "Mikstur, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_60D37BE7-FEB0-4771-AB56-01B2F4F26F59",
+        "varenavn": "Apo-divalproex",
+        "navn_form_styrke": "Apo-divalproex enterotab 125 mg",
+        "produsent": "Apotex Inc.",
+        "atc": "N03AG01",
+        "legemiddelform": "Enterotablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_74EE6774-2395-4814-BE28-8407EAA3EF22",
+        "varenavn": "Orfiril Saft",
+        "navn_form_styrke": "Orfiril Saft mikst oppl 60 mg/ml",
+        "produsent": "Desitin",
+        "atc": "N03AG01",
+        "legemiddelform": "Mikstur, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_AFE45A8F-8CBE-46A7-9EF1-3F4E2E8CBF85",
+        "varenavn": "Natriumvalproat SA",
+        "navn_form_styrke": "Natriumvalproat SA depotkaps, hard 75 mg",
+        "produsent": "Sykehusapotekene HF",
+        "atc": "N03AG01",
+        "legemiddelform": "Depotkapsel, hard",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 11 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 11,
+        "ikke_dmp": 0,
+        "uten_omtale": 8
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "8 av 21 preparater i FEST mangler en hentet preparatomtale fra DMP: 8 uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA). SPC-behovet er ikke dekket; se «dekning.mangler».",
+      "antall": {
+        "preparater": 21,
+        "hentet": 13,
+        "mangler": 8,
+        "dokumenter": 7
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06563.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06563.pdf",
+      "hentet_kl": "2026-10-22T23:11:51.387Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "336232",
+        "content-md5": "LdaDQV5Q41w3sgQqq50tBw==",
+        "last-modified": "Thu, 08 Oct 2026 06:49:24 GMT",
+        "etag": "0x8DF25084A4826FB",
+        "date": "Thu, 22 Oct 2026 23:11:52 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_0BF4C095-71F5-4B2F-BBE2-1C942638110D",
+          "varenavn": "Orfiril",
+          "navn_form_styrke": "Orfiril mikst oppl 60 mg/ml",
+          "produsent": "Orifarm AS",
+          "atc": "N03AG01",
+          "legemiddelform": "Mikstur, oppløsning"
+        },
+        {
+          "merkevare_id": "ID_23E75D74-4C9C-49C3-91CC-B8EDD1FC11F2",
+          "varenavn": "Orfiril",
+          "navn_form_styrke": "Orfiril mikst oppl 60 mg/ml",
+          "produsent": "Desitin Arzneimittel GmbH",
+          "atc": "N03AG01",
+          "legemiddelform": "Mikstur, oppløsning"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06563.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (336232 byte).",
+          "antall": {
+            "bytes": 336232
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "de5a6df16bd0bff5dc6a215d4b643869150eb3b956860e11780c65457ad8ddbe"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-07866.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-07866.pdf",
+      "hentet_kl": "2026-10-22T23:12:03.682Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "329253",
+        "content-md5": "LBYG6SoINCSZn63FZj7ukw==",
+        "last-modified": "Thu, 08 Oct 2026 06:49:28 GMT",
+        "etag": "0x8DF25084CC181A5",
+        "date": "Thu, 22 Oct 2026 23:12:04 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_113559C7-B2CE-4D3C-A719-7DC4BBC68586",
+          "varenavn": "Orfiril retard",
+          "navn_form_styrke": "Orfiril retard depottab 300 mg",
+          "produsent": "Desitin Arzneimittel GmbH",
+          "atc": "N03AG01",
+          "legemiddelform": "Depottablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-07866.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (329253 byte).",
+          "antall": {
+            "bytes": 329253
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "e7f3aba7b6fd26f17b6523092909aa194401079645793f099f9bcc793a356110"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-01966.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-01966.pdf",
+      "hentet_kl": "2026-10-22T23:12:15.694Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "325983",
+        "content-md5": "YAlOAAcT6t5JK59cBgrGcg==",
+        "last-modified": "Thu, 08 Oct 2026 06:50:19 GMT",
+        "etag": "0x8DF25086ABAE32A",
+        "date": "Thu, 22 Oct 2026 23:12:16 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_1182789F-8159-4BC3-B12B-67070BFCBFE0",
+          "varenavn": "Orfiril long",
+          "navn_form_styrke": "Orfiril long depotkaps, hard 300 mg",
+          "produsent": "Desitin Arzneimittel GmbH",
+          "atc": "N03AG01",
+          "legemiddelform": "Depotkapsel, hard"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-01966.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (325983 byte).",
+          "antall": {
+            "bytes": 325983
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "687a509d0647da2e38264e6a803b2750b5eafc868ee1dc7c79e27073322be32e"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06635.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06635.pdf",
+      "hentet_kl": "2026-10-22T23:12:27.001Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "330976",
+        "content-md5": "A40dYah3puAm5k/JT81V8g==",
+        "last-modified": "Thu, 08 Oct 2026 06:49:24 GMT",
+        "etag": "0x8DF25084A62FE0E",
+        "date": "Thu, 22 Oct 2026 23:12:27 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_19EA0112-AD8E-4E03-9420-0605D5456991",
+          "varenavn": "Orfiril",
+          "navn_form_styrke": "Orfiril enterotab 600 mg",
+          "produsent": "Desitin Arzneimittel GmbH",
+          "atc": "N03AG01",
+          "legemiddelform": "Enterotablett"
+        },
+        {
+          "merkevare_id": "ID_BE26B120-FB83-4F3F-B8A1-4D0146A87E8F",
+          "varenavn": "Orfiril",
+          "navn_form_styrke": "Orfiril enterotab 600 mg",
+          "produsent": "Orifarm AS",
+          "atc": "N03AG01",
+          "legemiddelform": "Enterotablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06635.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (330976 byte).",
+          "antall": {
+            "bytes": 330976
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "694efe92738bbffb3fb6a0b94ada793803361b3c561b613437c860cfc41243e4"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-02608.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-02608.pdf",
+      "hentet_kl": "2026-10-22T23:12:39.081Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "380136",
+        "content-md5": "nsxlnett9XnJ546ssR/XTw==",
+        "last-modified": "Thu, 08 Oct 2026 06:50:19 GMT",
+        "etag": "0x8DF25086AC3947F",
+        "date": "Thu, 22 Oct 2026 23:12:39 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_290AE8BB-3EE5-4A7B-8DEF-81238DDFFB49",
+          "varenavn": "Orfiril",
+          "navn_form_styrke": "Orfiril inj, oppl 100 mg/ml",
+          "produsent": "Desitin Arzneimittel GmbH",
+          "atc": "N03AG01",
+          "legemiddelform": "Injeksjonsvæske, oppløsning"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-02608.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (380136 byte).",
+          "antall": {
+            "bytes": 380136
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "32a2a986873d72026af9d4cdcf15b503d8033f58bf85261db9a38818c4b5ea8a"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1998-02477.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1998-02477.pdf",
+      "hentet_kl": "2026-10-22T23:12:51.322Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "325611",
+        "content-md5": "chZxPr00GVroRqEwB+OwcQ==",
+        "last-modified": "Thu, 08 Oct 2026 06:50:20 GMT",
+        "etag": "0x8DF25086B78F81E",
+        "date": "Thu, 22 Oct 2026 23:12:52 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_43D61DBC-E21A-481A-9A74-3855F35FF85A",
+          "varenavn": "Orfiril long",
+          "navn_form_styrke": "Orfiril long depotgranulat 1000 mg",
+          "produsent": "Desitin Arzneimittel GmbH",
+          "atc": "N03AG01",
+          "legemiddelform": "Depotgranulat"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1998-02477.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (325611 byte).",
+          "antall": {
+            "bytes": 325611
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "30cbcd323b44ea49d51a466ec44f02d4ddbcf9886ce383827865db3c49945b80"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1998-02476.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1998-02476.pdf",
+      "hentet_kl": "2026-10-22T23:13:03.518Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "325611",
+        "content-md5": "chZxPr00GVroRqEwB+OwcQ==",
+        "last-modified": "Thu, 08 Oct 2026 06:50:20 GMT",
+        "etag": "0x8DF25086B763966",
+        "date": "Thu, 22 Oct 2026 23:13:04 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_565ED8CB-B89C-498D-9DB9-4028EE977C83",
+          "varenavn": "Orfiril long",
+          "navn_form_styrke": "Orfiril long depotgranulat 500 mg",
+          "produsent": "Desitin Arzneimittel GmbH",
+          "atc": "N03AG01",
+          "legemiddelform": "Depotgranulat"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1998-02476.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (325611 byte).",
+          "antall": {
+            "bytes": 325611
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "30cbcd323b44ea49d51a466ec44f02d4ddbcf9886ce383827865db3c49945b80"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/16-11494.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/16-11494.pdf",
+      "hentet_kl": "2026-10-22T23:13:04.766Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "318170",
+        "content-md5": "gWFD4CJMBWKHv3k1kkcCvA==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:58 GMT",
+        "etag": "0x8DE5379410A5AA6",
+        "date": "Thu, 22 Oct 2026 23:13:05 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_7859876E-4C32-4FCF-918A-E13755D05783",
+          "varenavn": "Valproat Life Medical",
+          "navn_form_styrke": "Valproat Life Medical inj/inf, oppl 100 mg/ml",
+          "produsent": "Life Medical ApS (1)",
+          "atc": "N03AG01",
+          "legemiddelform": "Injeksjons-/infusjonsvæske, oppløsning"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/16-11494.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (318170 byte).",
+          "antall": {
+            "bytes": 318170
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "73cafdabf388c9e87ea86a8e6a398c4538e84e2490400d83e999ac3172f2f7d2"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-01965.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-01965.pdf",
+      "hentet_kl": "2026-10-22T23:13:13.088Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "325983",
+        "content-md5": "YAlOAAcT6t5JK59cBgrGcg==",
+        "last-modified": "Thu, 08 Oct 2026 06:50:19 GMT",
+        "etag": "0x8DF25086AB84B75",
+        "date": "Thu, 22 Oct 2026 23:13:13 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_94103B49-19EF-4F17-A2FF-48F61DDC046F",
+          "varenavn": "Orfiril long",
+          "navn_form_styrke": "Orfiril long depotkaps, hard 150 mg",
+          "produsent": "Desitin Arzneimittel GmbH",
+          "atc": "N03AG01",
+          "legemiddelform": "Depotkapsel, hard"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/1996-01965.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (325983 byte).",
+          "antall": {
+            "bytes": 325983
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "687a509d0647da2e38264e6a803b2750b5eafc868ee1dc7c79e27073322be32e"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06564.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06564.pdf",
+      "hentet_kl": "2026-10-22T23:13:14.589Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "330976",
+        "content-md5": "A40dYah3puAm5k/JT81V8g==",
+        "last-modified": "Thu, 08 Oct 2026 06:49:24 GMT",
+        "etag": "0x8DF25084A4ABEA2",
+        "date": "Thu, 22 Oct 2026 23:13:15 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_AE45B8E6-1973-4CB2-A800-44DA9DE225BD",
+          "varenavn": "Orfiril",
+          "navn_form_styrke": "Orfiril enterotab 150 mg",
+          "produsent": "Desitin Arzneimittel GmbH",
+          "atc": "N03AG01",
+          "legemiddelform": "Enterotablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06564.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (330976 byte).",
+          "antall": {
+            "bytes": 330976
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "694efe92738bbffb3fb6a0b94ada793803361b3c561b613437c860cfc41243e4"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06565.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06565.pdf",
+      "hentet_kl": "2026-10-22T23:13:15.887Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "330976",
+        "content-md5": "A40dYah3puAm5k/JT81V8g==",
+        "last-modified": "Thu, 08 Oct 2026 06:49:24 GMT",
+        "etag": "0x8DF25084A4D5655",
+        "date": "Thu, 22 Oct 2026 23:13:16 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_BB920F1E-1A8C-4E62-8D07-E2C539FA55C5",
+          "varenavn": "Orfiril",
+          "navn_form_styrke": "Orfiril enterotab 300 mg",
+          "produsent": "Desitin Arzneimittel GmbH",
+          "atc": "N03AG01",
+          "legemiddelform": "Enterotablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06565.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (330976 byte).",
+          "antall": {
+            "bytes": 330976
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "694efe92738bbffb3fb6a0b94ada793803361b3c561b613437c860cfc41243e4"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "de5a6df16bd0bff5dc6a215d4b643869150eb3b956860e11780c65457ad8ddbe",
+      "bytes": 336232,
+      "mappe": "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5",
+      "pdf": {
+        "sider": 24,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": "1",
+        "laget": "Fri Oct  2 08:08:17 2026 UTC",
+        "endret": "Fri Oct  2 08:08:17 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/original.pdf",
+        "tekst": "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-001.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-002.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-003.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-004.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-005.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-006.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-007.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-008.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-009.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-010.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-011.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-012.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-013.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-014.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-015.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-016.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-017.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-018.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-019.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-020.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-021.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-022.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-023.txt",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/tekst/side-024.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-001.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-002.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-003.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-004.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-005.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-006.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-007.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-008.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-009.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-010.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-011.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-012.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-013.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-014.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-015.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-016.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-017.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-018.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-019.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-020.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-021.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-022.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-023.png",
+          "kuratorjobb/resultat/valproat/spc/de5a6df16bd0bff5/sider/side-024.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 17,
+        "til": 21
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (24 sider).",
+          "antall": {
+            "sider": 24
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 57292
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 17."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 24
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "e7f3aba7b6fd26f17b6523092909aa194401079645793f099f9bcc793a356110",
+      "bytes": 329253,
+      "mappe": "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1",
+      "pdf": {
+        "sider": 24,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": "1",
+        "laget": "Fri Oct  2 08:08:15 2026 UTC",
+        "endret": "Fri Oct  2 08:08:15 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/original.pdf",
+        "tekst": "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-001.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-002.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-003.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-004.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-005.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-006.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-007.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-008.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-009.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-010.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-011.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-012.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-013.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-014.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-015.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-016.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-017.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-018.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-019.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-020.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-021.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-022.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-023.txt",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/tekst/side-024.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-001.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-002.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-003.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-004.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-005.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-006.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-007.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-008.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-009.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-010.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-011.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-012.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-013.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-014.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-015.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-016.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-017.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-018.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-019.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-020.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-021.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-022.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-023.png",
+          "kuratorjobb/resultat/valproat/spc/e7f3aba7b6fd26f1/sider/side-024.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 17,
+        "til": 20
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (24 sider).",
+          "antall": {
+            "sider": 24
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 57226
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 17."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 24
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "687a509d0647da2e38264e6a803b2750b5eafc868ee1dc7c79e27073322be32e",
+      "bytes": 325983,
+      "mappe": "kuratorjobb/resultat/valproat/spc/687a509d0647da2e",
+      "pdf": {
+        "sider": 24,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": "1",
+        "laget": "Fri Oct  2 08:08:17 2026 UTC",
+        "endret": "Fri Oct  2 08:08:17 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/original.pdf",
+        "tekst": "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-001.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-002.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-003.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-004.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-005.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-006.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-007.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-008.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-009.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-010.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-011.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-012.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-013.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-014.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-015.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-016.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-017.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-018.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-019.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-020.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-021.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-022.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-023.txt",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/tekst/side-024.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-001.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-002.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-003.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-004.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-005.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-006.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-007.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-008.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-009.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-010.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-011.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-012.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-013.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-014.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-015.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-016.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-017.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-018.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-019.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-020.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-021.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-022.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-023.png",
+          "kuratorjobb/resultat/valproat/spc/687a509d0647da2e/sider/side-024.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 17,
+        "til": 20
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (24 sider).",
+          "antall": {
+            "sider": 24
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 57358
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 17."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 24
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "694efe92738bbffb3fb6a0b94ada793803361b3c561b613437c860cfc41243e4",
+      "bytes": 330976,
+      "mappe": "kuratorjobb/resultat/valproat/spc/694efe92738bbffb",
+      "pdf": {
+        "sider": 23,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": "1",
+        "laget": "Fri Oct  2 08:07:59 2026 UTC",
+        "endret": "Fri Oct  2 08:07:59 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/original.pdf",
+        "tekst": "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-001.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-002.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-003.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-004.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-005.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-006.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-007.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-008.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-009.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-010.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-011.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-012.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-013.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-014.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-015.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-016.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-017.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-018.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-019.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-020.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-021.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-022.txt",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/tekst/side-023.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-001.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-002.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-003.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-004.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-005.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-006.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-007.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-008.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-009.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-010.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-011.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-012.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-013.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-014.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-015.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-016.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-017.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-018.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-019.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-020.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-021.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-022.png",
+          "kuratorjobb/resultat/valproat/spc/694efe92738bbffb/sider/side-023.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 16,
+        "til": 19
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (23 sider).",
+          "antall": {
+            "sider": 23
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 57574
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 16."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 23
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "32a2a986873d72026af9d4cdcf15b503d8033f58bf85261db9a38818c4b5ea8a",
+      "bytes": 380136,
+      "mappe": "kuratorjobb/resultat/valproat/spc/32a2a986873d7202",
+      "pdf": {
+        "sider": 25,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": "1",
+        "laget": "Fri Oct  2 08:08:01 2026 UTC",
+        "endret": "Fri Oct  2 08:08:01 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/original.pdf",
+        "tekst": "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-001.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-002.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-003.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-004.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-005.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-006.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-007.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-008.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-009.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-010.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-011.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-012.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-013.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-014.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-015.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-016.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-017.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-018.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-019.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-020.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-021.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-022.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-023.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-024.txt",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/tekst/side-025.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-001.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-002.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-003.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-004.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-005.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-006.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-007.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-008.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-009.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-010.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-011.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-012.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-013.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-014.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-015.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-016.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-017.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-018.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-019.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-020.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-021.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-022.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-023.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-024.png",
+          "kuratorjobb/resultat/valproat/spc/32a2a986873d7202/sider/side-025.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 18,
+        "til": 21
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (25 sider).",
+          "antall": {
+            "sider": 25
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 58768
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 18."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 25
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "30cbcd323b44ea49d51a466ec44f02d4ddbcf9886ce383827865db3c49945b80",
+      "bytes": 325611,
+      "mappe": "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49",
+      "pdf": {
+        "sider": 22,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": "1",
+        "laget": "Fri Oct  2 08:08:25 2026 UTC",
+        "endret": "Fri Oct  2 08:08:25 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/original.pdf",
+        "tekst": "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-001.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-002.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-003.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-004.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-005.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-006.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-007.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-008.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-009.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-010.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-011.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-012.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-013.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-014.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-015.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-016.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-017.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-018.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-019.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-020.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-021.txt",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/tekst/side-022.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-001.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-002.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-003.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-004.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-005.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-006.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-007.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-008.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-009.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-010.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-011.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-012.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-013.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-014.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-015.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-016.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-017.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-018.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-019.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-020.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-021.png",
+          "kuratorjobb/resultat/valproat/spc/30cbcd323b44ea49/sider/side-022.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 16,
+        "til": 18
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (22 sider).",
+          "antall": {
+            "sider": 22
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 57779
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 16."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 22
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "73cafdabf388c9e87ea86a8e6a398c4538e84e2490400d83e999ac3172f2f7d2",
+      "bytes": 318170,
+      "mappe": "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8",
+      "pdf": {
+        "sider": 17,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": null,
+        "laget": "Tue Nov  1 08:55:56 2022 UTC",
+        "endret": "Tue Nov  1 08:55:56 2022 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/original.pdf",
+        "tekst": "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-001.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-002.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-003.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-004.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-005.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-006.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-007.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-008.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-009.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-010.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-011.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-012.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-013.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-014.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-015.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-016.txt",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/tekst/side-017.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-001.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-002.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-003.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-004.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-005.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-006.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-007.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-008.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-009.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-010.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-011.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-012.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-013.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-014.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-015.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-016.png",
+          "kuratorjobb/resultat/valproat/spc/73cafdabf388c9e8/sider/side-017.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 11,
+        "til": 14
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (17 sider).",
+          "antall": {
+            "sider": 17
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 42362
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 11."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 17
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

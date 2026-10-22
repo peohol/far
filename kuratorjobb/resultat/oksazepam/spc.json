@@ -1,0 +1,548 @@
+{
+  "stoff": "oksazepam",
+  "status": "ok",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-22T04:15:06.408609+00:00"
+  },
+  "dekning": {
+    "dekket": true,
+    "preparater": 6,
+    "hentet": 6,
+    "dokumenter": 2,
+    "mangler": []
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 6 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 6,
+        "ikke_dmp": 0,
+        "uten_omtale": 0
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "ok",
+      "melding": "Alle 6 preparatene FEST oppgir, har en hentet preparatomtale fra DMP.",
+      "antall": {
+        "preparater": 6,
+        "hentet": 6,
+        "mangler": 0,
+        "dokumenter": 2
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05134.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05134.pdf",
+      "hentet_kl": "2026-10-22T23:13:23.598Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "259033",
+        "content-md5": "IT/IpZxRDPAC8EaiTXM7eg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:54 GMT",
+        "etag": "0x8DE53793ED41D79",
+        "date": "Thu, 22 Oct 2026 23:13:24 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_77AB358A-DB73-472E-ABE0-68CD77EE0068",
+          "varenavn": "Sobril",
+          "navn_form_styrke": "Sobril tab 15 mg",
+          "produsent": "Pfizer AS",
+          "atc": "N05BA04",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05134.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (259033 byte).",
+          "antall": {
+            "bytes": 259033
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "c161d6c21692a293c347172ac15f29af15fed1be9f27f09d5d1c067aba8d2a2f"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06056.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06056.pdf",
+      "hentet_kl": "2026-10-22T23:13:27.303Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "259033",
+        "content-md5": "IT/IpZxRDPAC8EaiTXM7eg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:48 GMT",
+        "etag": "0x8DE53793B24480E",
+        "date": "Thu, 22 Oct 2026 23:13:27 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_85349781-98C4-4D72-A5CA-726808508337",
+          "varenavn": "Sobril",
+          "navn_form_styrke": "Sobril tab 10 mg",
+          "produsent": "Pfizer AS",
+          "atc": "N05BA04",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06056.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (259033 byte).",
+          "antall": {
+            "bytes": 259033
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "c161d6c21692a293c347172ac15f29af15fed1be9f27f09d5d1c067aba8d2a2f"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-14743.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-14743.pdf",
+      "hentet_kl": "2026-10-22T23:13:27.582Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "264670",
+        "content-md5": "ywMFU4T6kwOBVHwcHeYxqg==",
+        "last-modified": "Thu, 19 Mar 2026 20:49:19 GMT",
+        "etag": "0x8DE85F8FE0C64A2",
+        "date": "Thu, 22 Oct 2026 23:13:27 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_90E95FA0-3B1A-4967-A5C3-FC1F14499D42",
+          "varenavn": "Delipam",
+          "navn_form_styrke": "Delipam tab 15 mg",
+          "produsent": "2care4 Generics ApS",
+          "atc": "N05BA04",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-14743.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (264670 byte).",
+          "antall": {
+            "bytes": 264670
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "df462bcb37fcb30bf001649dc22a31d2f8abf26b90ff1a265f7f32f27297c543"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-14741.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-14741.pdf",
+      "hentet_kl": "2026-10-22T23:13:30.798Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "264670",
+        "content-md5": "ywMFU4T6kwOBVHwcHeYxqg==",
+        "last-modified": "Thu, 19 Mar 2026 20:49:19 GMT",
+        "etag": "0x8DE85F8FE06720F",
+        "date": "Thu, 22 Oct 2026 23:13:30 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_B53AA940-46AB-4CAB-ADB1-AB97E2D0FDC9",
+          "varenavn": "Delipam",
+          "navn_form_styrke": "Delipam tab 5 mg",
+          "produsent": "2care4 Generics ApS",
+          "atc": "N05BA04",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-14741.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (264670 byte).",
+          "antall": {
+            "bytes": 264670
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "df462bcb37fcb30bf001649dc22a31d2f8abf26b90ff1a265f7f32f27297c543"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05422.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05422.pdf",
+      "hentet_kl": "2026-10-22T23:13:30.984Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "259033",
+        "content-md5": "IT/IpZxRDPAC8EaiTXM7eg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:50 GMT",
+        "etag": "0x8DE53793C8F8A67",
+        "date": "Thu, 22 Oct 2026 23:13:31 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_BBDA6FCB-F27A-46B1-AD8C-B8ED230FB26D",
+          "varenavn": "Sobril",
+          "navn_form_styrke": "Sobril tab 25 mg",
+          "produsent": "Pfizer AS",
+          "atc": "N05BA04",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05422.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (259033 byte).",
+          "antall": {
+            "bytes": 259033
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "c161d6c21692a293c347172ac15f29af15fed1be9f27f09d5d1c067aba8d2a2f"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-14742.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-14742.pdf",
+      "hentet_kl": "2026-10-22T23:13:31.443Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "264670",
+        "content-md5": "ywMFU4T6kwOBVHwcHeYxqg==",
+        "last-modified": "Thu, 19 Mar 2026 20:49:19 GMT",
+        "etag": "0x8DE85F8FE095804",
+        "date": "Thu, 22 Oct 2026 23:13:31 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_C6A72795-4E5D-4407-B74B-228CE3529557",
+          "varenavn": "Delipam",
+          "navn_form_styrke": "Delipam tab 10 mg",
+          "produsent": "2care4 Generics ApS",
+          "atc": "N05BA04",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-14742.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (264670 byte).",
+          "antall": {
+            "bytes": 264670
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "df462bcb37fcb30bf001649dc22a31d2f8abf26b90ff1a265f7f32f27297c543"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "c161d6c21692a293c347172ac15f29af15fed1be9f27f09d5d1c067aba8d2a2f",
+      "bytes": 259033,
+      "mappe": "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293",
+      "pdf": {
+        "sider": 7,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "PREPARATOMTALE (SPC)",
+        "laget": "Mon Aug 28 06:34:37 2023 UTC",
+        "endret": "Mon Aug 28 06:34:37 2023 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/original.pdf",
+        "tekst": "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/tekst/side-001.txt",
+          "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/tekst/side-002.txt",
+          "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/tekst/side-003.txt",
+          "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/tekst/side-004.txt",
+          "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/tekst/side-005.txt",
+          "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/tekst/side-006.txt",
+          "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/tekst/side-007.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/sider/side-001.png",
+          "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/sider/side-002.png",
+          "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/sider/side-003.png",
+          "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/sider/side-004.png",
+          "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/sider/side-005.png",
+          "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/sider/side-006.png",
+          "kuratorjobb/resultat/oksazepam/spc/c161d6c21692a293/sider/side-007.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 4,
+        "til": 5
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (7 sider).",
+          "antall": {
+            "sider": 7
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 13113
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 4."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 7
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "df462bcb37fcb30bf001649dc22a31d2f8abf26b90ff1a265f7f32f27297c543",
+      "bytes": 264670,
+      "mappe": "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b",
+      "pdf": {
+        "sider": 7,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": "mutual-recognition-decentralised-referral-pi-template-version-42_en_CLEAN_NO",
+        "laget": "Tue Nov 11 07:40:27 2025 UTC",
+        "endret": "Tue Nov 11 07:40:27 2025 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/original.pdf",
+        "tekst": "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/tekst/side-001.txt",
+          "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/tekst/side-002.txt",
+          "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/tekst/side-003.txt",
+          "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/tekst/side-004.txt",
+          "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/tekst/side-005.txt",
+          "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/tekst/side-006.txt",
+          "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/tekst/side-007.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/sider/side-001.png",
+          "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/sider/side-002.png",
+          "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/sider/side-003.png",
+          "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/sider/side-004.png",
+          "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/sider/side-005.png",
+          "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/sider/side-006.png",
+          "kuratorjobb/resultat/oksazepam/spc/df462bcb37fcb30b/sider/side-007.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 4,
+        "til": 5
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (7 sider).",
+          "antall": {
+            "sider": 7
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 13357
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 4."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 7
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

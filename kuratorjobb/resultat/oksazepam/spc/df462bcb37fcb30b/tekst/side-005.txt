@@ -1,0 +1,58 @@
+Melding av mistenkte bivirkninger
+Melding av mistenkte bivirkninger etter godkjenning av legemidlet er viktig. Det gjør det mulig å
+overvåke forholdet mellom nytte og risiko for legemidlet kontinuerlig. Helsepersonell oppfordres til å
+melde enhver mistenkt bivirkning. Dette gjøres via meldeskjema som finnes på nettsiden til
+Direktoratet for medisinske produkter: www.dmp.no/meldeskjema.
+
+4.9   Overdosering
+
+Toksisitet
+Noe utvikling av toleranse og individuell følsomhet. 15 mg til en 2½-åring forårsaket mild forgiftning.
+50 mg til en 3-åring forårsaket mild forgiftning etter magetømming; 75 mg til en 3-åring som
+gjennomgikk magetømming og 250 mg til en 5-åring ga moderat forgiftning. 120 mg til eldre
+forårsaket moderat til alvorlig forgiftning.
+
+Symptomer på overdosering
+Ataksi, svimmelhet, dysartri, muskelsvakhet, somnolens/bevisstløshet, men også paradoksale
+reaksjoner som agitasjon, aggresjon og hallusinasjoner. Muligens mydriasis eller miose. Ved høye
+doser, respirasjonsdepresjon, muligens hypotensjon. Takykardi. Hypotermi. Kvalme, oppkast.
+
+Behandling
+Hvis nødvendig, magetømming, kull. Ved hypotensjon, intravenøs væskeadministrasjon, i alvorlige
+tilfeller (mindre vanlige), inotrop støtte. Kontrollert ventilasjon, hvis nødvendig. I de fleste tilfeller er
+symptomatisk behandling tilstrekkelig. Flumazeil reverserer imidlertid sentralnerveeffektene og er
+indisert i noen situasjoner. Hos voksne, intravenøs administrering av 0,3 mg, etterfulgt av gjentatte
+doser, etter behov, med intervaller på ett minutt til effekt oppnås. (2-3 doser er ofte nok, og generelt er
+totaldosen maks 2 mg).
+
+MERK! Varigheten av effekt er kortere enn for benzodiazepinderivater. Dermed kan kontinuerlig
+infusjon være av verdi, f.eks. 0,3-1 mg/time. Ved alvorlige hallusinasjoner kan fysostigmin prøves (1-
+2 mg via langsom IV-administrasjon hos voksne og 0,02-0,04 mg/kg hos barn. Dosen titreres, og
+atropin holdes klar for reversering av mulige bivirkninger).
+
+
+5.    FARMAKOLOGISKE EGENSKAPER
+
+5.1   Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Anksiolytika, beroligende midler med muskelavslappende egenskaper,
+ATC-kode: N05BA04
+
+Oksazepam er et benzodiazepinderivat som er kjemisk forskjellig fra klopoksid, diazepam, klorazepat
+og nitrazepam på grunn av en aktiv OH-gruppe, som induserer rask glukuronsyrebinding, noe som
+resulterer i betydelig redusert toksisitet.
+
+Virkningsmekanisme
+Effekten til oksazepam er relatert til reseptorer i CNS, koblet til GABA-komplekset.
+
+Farmakodynamiske effekter
+Administrering av oksazepam antas å øke GABA-effekten. Oksazepam ser ikke ut til å påvirke REM-
+søvn, verken under behandling eller etter seponering.
+
+Klinisk effekt og sikkerhet
+Det er fare for utvikling av toleranse.
+
+5.2   Farmakokinetiske egenskaper
+
+
+                                                     5

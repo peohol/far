@@ -1,0 +1,51 @@
+legemidler for flere indikasjoner. En meta-analyse av randomiserte placebokontrollerte forsøk med
+antiepileptika har vist en liten økning i risiko for selvmordstanker og selvmordsrelatert adferd.
+Mekanismen bak denne risikoen er ikke kjent og tilgjengelige data kan ikke utelukke muligheten for
+økt risiko ved behandling med natriumvalproat
+Pasientene bør derfor overvåkes for tegn på selvmordstanker eller selvmordsrelatert adferd, og
+nødvendig behandling bør vurderes. Pasienter (og pårørende) bør oppfordres til å kontakte medisinsk
+hjelp omgående dersom selvmordstanker eller selvmordsrelatert adferd oppstår.
+Karbapenemer
+Samtidig bruk av natriumvalproat og karbapenemer er ikke anbefalt (se avsnitt 4.5).
+Pasienter med kjent eller mistenkt mitokondriesykdom
+Valproat kan utløse eller forverre kliniske tegn på underliggende mitokondriesykdommer forårsaket av
+mutasjoner i mitokondrielt DNA og i genet for POLG som kodes for i cellekjernen. Særlig har
+Valproat-indusert akutt leversvikt og leverrelaterte dødsfall blitt rapportert hyppigere hos pasienter
+med arvelig nevrometabolske syndrommer forårsaket av mutasjoner i genet for det mitokondrielle
+enzymet polymerase γ (POLG), f.eks. Alpers-Huttenlochers syndrom.
+POLG-relaterte sykdommer bør mistenkes hos pasienter med en familiehistorie eller symptomer som
+kan tyde på POLG-relatert sykdom, inkludert men ikke begrenset til uforklarlig encefalopati, refraktær
+epilepsi (fokal, myoklon), status epilepticus når behandling oppsøkes, forsinket utvikling,
+psykomotorisk regresjon, aksonal sensomotorisk nevropati, myopati, cerebellar ataksi, oftalmoplegi,
+eller komplisert migrene med oksipital aura. Testing for POLG-mutasjon bør utføres i henhold til
+aktuelle kliniske retningslinjer for diagnostisk utredning av slike sykdommer (se pkt. 4.3).
+Natriuminnhold
+Orfiril long 500 mg depotgranulat: Dette legemidlet inneholder 69,0 mg natrium pr. dose. Dette
+tilsvarer 3,5 % av WHOs anbefalte maksimal daglige inntak av natrium på 2 g for en voksen person.
+Orfiril long 1000 mg depotgranulat: Dette legemidlet inneholder 137,9 mg natrium pr. dose. Dette
+tilsvarer 7 % av WHOs anbefalte maksimal daglige inntak av natrium på 2 g for en voksen person.
+4.5 Interaksjon med andre legemidler og andre former for interaksjon
+Følgende kombinasjoner med valproat kan nødvendiggjøre dosejustering: acetylsalicylsyre, cimetidin,
+etosuksimid, fenytoin, fenobarbital, karbamazepin, primidon lamotrigin, lorazepam, felbamat, warfarin
+og nimodipin. Valproat kan øke den sederende effekten av alkohol.
+Valproat kan indusere den sederende effekten av antidepressiva.
+Dersom natriumvalproat kombineres med andre antiepileptika, kan gjensidige effekter på
+plasmakonsentrasjonene forekomme. Enzyminduserende antiepileptika som fenobarbital, fenytoin og
+karbamazepin kan øke utskillelsen av natriumvalproat og dermed redusere effekten. Nivåene for
+metabolitter av valproinsyre kan økes ved samtidig bruk med fenytoin eller fenobarbital. Samtidig
+bruk av induserende legemidler kan øke risikoen for levertoksisitet og hyperammonemi.
+Felbamat
+Felbamat gir en lineær, doseavhengig økning i plasmakonsentrasjonen av fritt valproat på ca. 18 %.
+Valproat kan øke plasmakonsentrasjonen av felbamat med ca. 50 %.
+Meflokin
+Meflokin øker omsetningen av valproat og kan selv øke hyppigheten av kramper. Samtidig bruk kan
+derfor føre til epileptiske anfall.
+Cimetidin, fluoksetin og erythromycin
+Serumkonsentrasjonen av valproat kan forhøyes ved samtidig administrasjon av cimetidin, fluoksetin
+og erythromycin.
+Antimikrobielle midler av karbapenemgruppen (som imipenem, meropenem, panipenem)
+Fall i blodkonsentrasjonen av valproat er rapportert ved samtidig administrasjon av karbapenemer,
+som førte til en nedgang på 60-100 % av valproatkonsentrasjonen etter omtrent 2 dager. På grunn av
+den hurtige nedgangen og omfanget av den, regnes ikke samtidig administrasjon av karbapenemer hos
+
+                                                                                                      9
