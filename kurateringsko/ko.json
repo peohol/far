@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-22T04:36:10.578Z",
+  "oppdatert_kl": "2026-10-22T06:49:07.950Z",
   "malt_kl": "2026-10-21T21:32:26.580Z",
   "teller": 82,
   "stoffer": {
@@ -2555,7 +2555,7 @@
     "ghb": {
       "stoff": "ghb",
       "navn": "GHB",
-      "status": "publisert",
+      "status": "blokkert",
       "modus": null,
       "prioritet": {
         "poeng": 0,
@@ -2575,7 +2575,14 @@
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [],
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, retting); den må avsluttes først.",
+          "kl": "2026-10-22T06:49:07.950Z",
+          "kilde": "system"
+        }
+      ],
       "sist_kuratert": {
         "kl": "2026-10-16T19:09:34.511755+00:00",
         "modus": "de_novo",

@@ -1,5 +1,5 @@
 {
-  "oppdatert_kl": "2026-10-22T04:36:10.578Z",
+  "oppdatert_kl": "2026-10-22T06:49:07.950Z",
   "malt_kl": "2026-10-21T21:32:26.580Z",
   "antall": {
     "klar": 79,
@@ -7,8 +7,8 @@
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 0,
     "sammenslatt": 0,
-    "publisert": 16,
-    "blokkert": 5,
+    "publisert": 15,
+    "blokkert": 6,
     "utenfor": 1
   },
   "aktive": [],
@@ -164,6 +164,17 @@
           "kode": "uten_fagside",
           "grunn": "Stoffet har ingen publisert fagside å kuratere.",
           "kl": "2026-10-14T04:50:43.758Z",
+          "kilde": "system"
+        }
+      ]
+    },
+    {
+      "stoff": "ghb",
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, retting); den må avsluttes først.",
+          "kl": "2026-10-22T06:49:07.950Z",
           "kilde": "system"
         }
       ]
