@@ -1,18 +1,49 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/manuell-39804416930",
     "foresporsel_commit": "f3ff708f8c5df2b7f1183590a88fd7ac78d588c1",
     "foresporsel_sha256": "a8dbe641a48518e6a1fcf5f9de0764b3f3a9ed62757fe0e412f837452be578f2",
     "kode_commit": "cf36d2602624ed31c09f34cf9c8a28ed70d645d4",
     "kjoring": "https://github.com/peohol/ousfar/actions/runs/39804416930",
-    "startet_kl": "2026-10-22T15:24:17.132Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-22T15:24:19.415Z",
+    "ferdig_kl": "2026-10-22T15:24:25.880Z"
   },
-  "foresporsel": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "ketobemidon"
+    ],
+    "oppgaver": [
+      "funksjonstest"
+    ]
+  },
   "referanse": null,
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 305
+    }
+  ],
+  "stoffer": {
+    "ketobemidon": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/ketobemidon/funksjonstest.json"
+        }
+      }
+    }
+  }
 }

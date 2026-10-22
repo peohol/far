@@ -1,0 +1,174 @@
+{
+  "stoff": "ketobemidon",
+  "status": "advarsel",
+  "kontroller": [
+    {
+      "id": "les_stoff",
+      "rpc": "les_stoff",
+      "ms": 1724,
+      "status": "ok",
+      "melding": "Den publiserte siden ble lest.",
+      "antall": {
+        "elementer": 42,
+        "referanser": 52
+      }
+    },
+    {
+      "id": "sidemodell",
+      "status": "ok",
+      "melding": "Siden kan settes sammen slik appen viser den."
+    },
+    {
+      "id": "referanser",
+      "status": "ok",
+      "melding": "Alle referansene siden siterer, ble lest med den.",
+      "antall": {
+        "sitert": 52
+      }
+    },
+    {
+      "id": "utkast_skjult",
+      "rpc": "les_stoff",
+      "ms": 499,
+      "status": "ok",
+      "melding": "Utkastet er skjult for en vanlig bruker, som det skal."
+    },
+    {
+      "id": "stoffliste",
+      "rpc": "les_stoffliste",
+      "ms": 481,
+      "status": "ok",
+      "melding": "Siden står i lista over fagsider.",
+      "antall": {
+        "sider": 107
+      }
+    },
+    {
+      "id": "fest",
+      "rpc": "les_legemidler",
+      "ms": 303,
+      "status": "advarsel",
+      "melding": "FEST har ingen preparater med virkestoffene.",
+      "antall": {
+        "virkestoff": 1,
+        "merkevarer": 0,
+        "pakninger": 0
+      }
+    },
+    {
+      "id": "preparatvisning",
+      "status": "ok",
+      "melding": "Preparatseksjonen kan bygges av svaret."
+    },
+    {
+      "id": "interaksjoner",
+      "rpc": "les_interaksjoner",
+      "ms": 257,
+      "status": "ok",
+      "melding": "Interaksjonene ble lest.",
+      "antall": {
+        "interaksjoner": 0,
+        "ikke_vurdert": 0
+      }
+    },
+    {
+      "id": "interaksjonsvisning",
+      "status": "ok",
+      "melding": "Interaksjonsseksjonen kan bygges av svaret."
+    },
+    {
+      "id": "bivirkninger",
+      "rpc": "les_bivirkninger",
+      "ms": 507,
+      "status": "ikke_aktuelt",
+      "melding": "Ingen bivirkninger er importert fra preparatomtaler for siden.",
+      "antall": {
+        "kilder": 0,
+        "rader": 0,
+        "rader_appen_viser": 0
+      }
+    },
+    {
+      "id": "clinpgx",
+      "rpc": "les_farmakogenetikk",
+      "ms": 251,
+      "status": "ok",
+      "melding": "ClinPGx-dataene ble lest (synkronisert 2026-10-19T02:52:21.930385+00:00).",
+      "antall": {
+        "kjemikalier": 1,
+        "retningslinjer": 0,
+        "preparatomtaler": 0,
+        "kliniske": 0
+      }
+    },
+    {
+      "id": "farmakogenetikkvisning",
+      "status": "ok",
+      "melding": "Farmakogenetikkseksjonen kan bygges av svaret."
+    },
+    {
+      "id": "cpic",
+      "rpc": "les_cpic",
+      "ms": 294,
+      "status": "ok",
+      "melding": "CPIC (release v1.60.1) har ingenting for kjemikaliene.",
+      "antall": {
+        "legemidler": 0,
+        "par": 0,
+        "retningslinjer": 0,
+        "anbefalinger": 0
+      }
+    },
+    {
+      "id": "cpicvisning",
+      "status": "ok",
+      "melding": "CPIC-visningen kan bygges av svaret."
+    },
+    {
+      "id": "kjemi",
+      "rpc": "les_kjemi",
+      "ms": 200,
+      "status": "ok",
+      "melding": "De kjemiske grunndataene ble lest, og koblingene stemmer (kontrollert 2026-10-21T03:15:14.904303+00:00).",
+      "antall": {
+        "forbindelser": 1,
+        "hentet": 1,
+        "ikke_hentet": 0,
+        "uavklarte": 0,
+        "rader": 1,
+        "rader_appen_viser": 1
+      }
+    },
+    {
+      "id": "kjemivisning",
+      "status": "ok",
+      "melding": "Seksjonen «Kjemiske grunndata» kan bygges av svaret."
+    },
+    {
+      "id": "laboratorieanalyser",
+      "rpc": "les_laboratorieanalyser",
+      "ms": 248,
+      "status": "ok",
+      "melding": "Laboratorieanalysene ble lest, og koblingene stemmer (kontrollert 2026-10-22T04:50:27.90344+00:00).",
+      "antall": {
+        "forbindelser": 1,
+        "koblet": 1,
+        "usikre": 0,
+        "komponenter": 1,
+        "analyser": 10,
+        "laboratorier": 6
+      }
+    },
+    {
+      "id": "laboratorievisning",
+      "status": "ok",
+      "melding": "Seksjonen «Analyse ved norske laboratorier» kan bygges av svaret, i alle enhetene.",
+      "antall": {
+        "tabeller": 4,
+        "rader": 9,
+        "ikke_omregnet": 1,
+        "usikre": 0
+      }
+    }
+  ]
+}
