@@ -1,5 +1,5 @@
 {
-  "oppdatert_kl": "2026-10-22T11:32:30.384Z",
+  "oppdatert_kl": "2026-10-22T12:44:47.521Z",
   "malt_kl": "2026-10-21T21:32:26.580Z",
   "antall": {
     "klar": 79,
@@ -7,8 +7,8 @@
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 0,
     "sammenslatt": 0,
-    "publisert": 14,
-    "blokkert": 7,
+    "publisert": 15,
+    "blokkert": 6,
     "utenfor": 1
   },
   "aktive": [],
@@ -158,34 +158,23 @@
   "til_gjennomgang": [],
   "blokkert": [
     {
-      "stoff": "brekspiprazol",
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-22T11:32:30.384Z",
-          "kilde": "system"
-        }
-      ]
-    },
-    {
-      "stoff": "citalopram",
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-22T11:32:30.384Z",
-          "kilde": "system"
-        }
-      ]
-    },
-    {
       "stoff": "etanol",
       "blokkeringer": [
         {
           "kode": "uten_fagside",
           "grunn": "Stoffet har ingen publisert fagside å kuratere.",
           "kl": "2026-10-14T04:50:43.758Z",
+          "kilde": "system"
+        }
+      ]
+    },
+    {
+      "stoff": "kariprazin",
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, tilbakemelding); den må avsluttes først.",
+          "kl": "2026-10-22T12:44:47.521Z",
           "kilde": "system"
         }
       ]

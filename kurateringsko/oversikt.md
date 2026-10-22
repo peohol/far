@@ -1,8 +1,8 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-22T11:32:30.384Z. Stoffene sist lest fra databasen 2026-10-21T21:32:26.580Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-22T12:44:47.521Z. Stoffene sist lest fra databasen 2026-10-21T21:32:26.580Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 79 · Publisert: 14 · Blokkert: 7 · Utenfor køen: 1
+Klar: 79 · Publisert: 15 · Blokkert: 6 · Utenfor køen: 1
 
 ## Pågår
 
@@ -14,9 +14,8 @@ Ingen kurateringer venter.
 
 ## Blokkert
 
-- **brekspiprazol**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.
-- **citalopram**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.
 - **etanol**: Stoffet har ingen publisert fagside å kuratere.
+- **kariprazin**: Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, tilbakemelding); den må avsluttes først.
 - **kokain**: Stoffet har ingen publisert fagside å kuratere.
 - **mdma**: Stoffet har ingen publisert fagside å kuratere.
 - **metamfetamin**: Stoffet har ingen publisert fagside å kuratere.

@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-22T11:32:30.384Z",
+  "oppdatert_kl": "2026-10-22T12:44:47.521Z",
   "malt_kl": "2026-10-21T21:32:26.580Z",
   "teller": 82,
   "stoffer": {
@@ -429,7 +429,7 @@
     "brekspiprazol": {
       "stoff": "brekspiprazol",
       "navn": "Brekspiprazol",
-      "status": "blokkert",
+      "status": "publisert",
       "modus": null,
       "prioritet": {
         "poeng": 0,
@@ -449,14 +449,7 @@
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, arbeid); den må avsluttes først.",
-          "kl": "2026-10-22T11:32:30.384Z",
-          "kilde": "system"
-        }
-      ],
+      "blokkeringer": [],
       "sist_kuratert": {
         "kl": "2026-10-19T11:13:24.877536+00:00",
         "modus": "de_novo",
@@ -1022,7 +1015,7 @@
     "citalopram": {
       "stoff": "citalopram",
       "navn": "Citalopram",
-      "status": "blokkert",
+      "status": "publisert",
       "modus": null,
       "prioritet": {
         "poeng": 0,
@@ -1042,14 +1035,7 @@
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
-          "kl": "2026-10-22T11:32:30.384Z",
-          "kilde": "system"
-        }
-      ],
+      "blokkeringer": [],
       "sist_kuratert": {
         "kl": "2026-10-16T18:50:54.493133+00:00",
         "modus": "de_novo",
@@ -2971,7 +2957,7 @@
     "kariprazin": {
       "stoff": "kariprazin",
       "navn": "Kariprazin",
-      "status": "publisert",
+      "status": "blokkert",
       "modus": null,
       "prioritet": {
         "poeng": 0,
@@ -2991,7 +2977,14 @@
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [],
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, tilbakemelding); den må avsluttes først.",
+          "kl": "2026-10-22T12:44:47.521Z",
+          "kilde": "system"
+        }
+      ],
       "sist_kuratert": {
         "kl": "2026-10-20T08:47:08.954056+00:00",
         "modus": "de_novo",
