@@ -1,0 +1,26 @@
+{
+  "versjon": 1,
+  "stoffer": [
+    "brekspiprazol",
+    "cbd",
+    "citalopram",
+    "doksepin",
+    "fenobarbital",
+    "fenytoin",
+    "flunitrazepam",
+    "ghb",
+    "kariprazin",
+    "ketobemidon",
+    "lamotrigin",
+    "levetiracetam",
+    "lurasidon",
+    "okskarbazepin",
+    "psilocybin",
+    "sertindol",
+    "topiramat",
+    "vortioksetin"
+  ],
+  "oppgaver": [
+    "funksjonstest"
+  ]
+}
