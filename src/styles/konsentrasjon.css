@@ -1,9 +1,10 @@
 /* --- Konsentrasjoner i fagtekstene -------------------------------------------
    Se `src/components/stoffside/Konsentrasjon.tsx`. Et tall som vises i
-   måleenheten leseren har valgt, er regnet ut og står ikke fast. Det står i
-   aksentfargen på en svak aksentflate, med en stiplet strek under — ulikt
-   tipsankerets prikkestrek og referansepillen, så det ikke forveksles med en
-   forklaring eller en kilde. Aksenten er forbeholdt det som kan trykkes på. */
+   måleenheten leseren har valgt, er regnet ut og står ikke fast. Merkingen er
+   med vilje subtil (fagansvarliges ønske): bare aksentfargen, som er
+   forbeholdt det som kan trykkes på, og en fylt aksent når pekeren er over
+   eller boblen er åpen. Aksenten har god kontrast mot flatene i begge temaene
+   (over 5:1). */
 
 /* Festet er en innebygd blokk av samme grunn som referansepillens: boblen som
    står i det, skal ikke regnes med når avsnittet brytes. */
@@ -14,16 +15,15 @@
 
 .konsentrasjon {
   display: inline;
-  padding: 0 0.2em;
+  /* Fyllingen ved peker får litt luft, uten at tallet flytter seg i linjen. */
+  margin: 0 -0.15em;
+  padding: 0 0.15em;
   font: inherit;
   font-variant-numeric: tabular-nums;
   color: var(--aksent);
-  background: var(--aksent-flate);
+  background: transparent;
   border: 0;
   border-radius: var(--runding-merke);
-  text-decoration: underline dashed currentColor;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.24em;
   white-space: nowrap;
   cursor: pointer;
   -webkit-box-decoration-break: clone;
@@ -42,8 +42,15 @@
   outline-offset: 1px;
 }
 
-/* I editoren står tallet som i kilden, og er en node som kan velges. */
+/* I editoren står tallet som i kilden, og er en node som kan velges. Der skal
+   det som er merket, synes tydelig: aksentflate og stiplet strek. */
 .konsentrasjon--editor {
+  margin: 0;
+  padding: 0 0.2em;
+  background: var(--aksent-flate);
+  text-decoration: underline dashed currentColor;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.24em;
   cursor: default;
 }
 

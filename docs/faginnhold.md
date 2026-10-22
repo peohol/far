@@ -564,12 +564,14 @@ i kilden; ellers regnes det om og vises med høyst to gjeldende sifre, som i
 laboratorietabellene (`src/enheter/konsentrasjon.ts`). Mellom masse og
 stoffmengde trengs forbindelsens molekylvekt fra PubChem (`docs/kjemi.md`):
 fagsiden henter den for sine egne forbindelser og for dem teksten ellers
-nevner; uten den står tallet som i kilden. Tallet er en knapp i aksentfargen
-med stiplet strek under, og boblen ved det (peker over eller klikk) viser
+nevner; uten den står tallet som i kilden. Tallet er en knapp med bare
+aksentfargen som merke (fagansvarlig ønsket en subtil merking), fylt med
+aksenten når pekeren er over, og boblen ved det (peker over eller klikk) viser
 tallet i kilden og i alle tre enhetene. Oppsummeringene av lukkede seksjoner
-og kort bruker også den valgte enheten; søket finner tallet som i kilden. I
-editoren merkes en konsentrasjon med knappen «Konsentrasjon» (markert tekst som
-«50–200 nmol/L» fyller ut feltene), og står som i kilden. Hva kuratoren
+og kort og søket på siden bruker også den valgte enheten; det globale søket
+finner tallet som i kilden. I editoren merkes en konsentrasjon med knappen
+«Konsentrasjon» (markert tekst som «50–200 nmol/L» fyller ut feltene), og står
+som i kilden, på aksentflate med stiplet strek så det som er merket, synes. Hva kuratoren
 merker, står i `docs/kuratorprotokoll.md` («Konsentrasjonene i teksten»).
 
 **Redigeringen.** Administratorer får knappen «Rediger». Knappene for å endre

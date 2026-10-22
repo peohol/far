@@ -20,7 +20,7 @@ export const ENDRINGSLOGG: Endring[] = [
     gjelder: ['hele appen'],
     punkter: [
       'Under «Preferanser» i kontomenyen kan du velge måleenhet: µg/L, nmol/L eller µmol/L. Valget følger kontoen din til andre maskiner, og er det samme som bryteren i «Analyse ved norske laboratorier».',
-      'Konsentrasjoner som er merket i fagtekstene, vises i enheten du har valgt. De står i aksentfargen med stiplet strek under, så du ser at tallet er regnet om og ikke står fast. Omregnede tall har høyst to gjeldende sifre; står tallet alt i enheten du har valgt, vises det som i kilden.',
+      'Konsentrasjoner som er merket i fagtekstene, vises i enheten du har valgt. De står i aksentfargen, så du ser at tallet er regnet om og ikke står fast. Omregnede tall har høyst to gjeldende sifre; står tallet alt i enheten du har valgt, vises det som i kilden.',
       'Hold pekeren over tallet eller trykk på det for en liten tabell med tallet slik det sto i kilden, og tallet i hver av de andre enhetene.',
       'Mellom masse og stoffmengde trengs molekylvekten fra PubChem. Mangler den, vises tallet i enheten fra kilden, og tabellen sier hvorfor.',
       'I redigeringen merkes en konsentrasjon med knappen «Konsentrasjon». Fagtekstene merkes etter hvert i kurateringen.',
