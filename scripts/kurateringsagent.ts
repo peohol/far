@@ -9,6 +9,7 @@
  *   npm run kurator -- dekning <fil>                       kontrollerer en dekningsmatrise
  *   npm run kurator -- dekning-gren <gren>                 kontrollerer dekningsmatrisen som er lagret i grenen
  *   npm run kurator -- tom-selvtest                        en tom selvtest med hvert krav og hver port
+ *   npm run kurator -- konsentrasjoner <gren> [<revisjon>] de merkede og umerkede konsentrasjonene i forhåndsvisningen
  *   npm run kurator -- nye-nokler                          lager nøklene som mangler, og migrasjonen med kontrollsummene
  *
  * Miljøet: `OUSFAR_ADRESSE` (standard ousfar.vercel.app). Nøkkelen står i fila
@@ -19,6 +20,8 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { kontrollerDekning, tomMatrise, type Dekningsmatrise } from '../src/kuratorprotokoll/dekning'
 import { tomSelvtest } from '../src/kuratorprotokoll/selvtest'
+import { konsentrasjonsrapport } from '../src/kuratorprotokoll/konsentrasjoner'
+import type { Grendetaljer } from '../src/kuratering/modell'
 import { Agentfeil, ROLLER, lagAgentklient, lesArgumenter, lesRolle } from '../src/kuratorprotokoll/agentklient'
 import { migrasjonsversjon, nokkelmigrasjon, sikreNokler } from '../src/kuratorprotokoll/nokler'
 
@@ -59,6 +62,23 @@ function dekning(matrise: unknown) {
   }
 }
 
+/** Konsentrasjonene i fagsiden slik grenen ville publisert den (`src/kuratorprotokoll/konsentrasjoner.ts`). */
+async function konsentrasjoner(gren: string | undefined, revisjon: string | undefined) {
+  if (!gren) throw new Error('Bruk: npm run kurator|kontrollor -- konsentrasjoner <gren> [<revisjon>]')
+  const detaljer = await klient().kall<Grendetaljer>('les', { gren, ...(revisjon && { revisjon: Number(revisjon) }) })
+  const elementer = detaljer.grenrevisjon?.forhandsvisning?.stoff?.elementer
+  if (!elementer) throw new Error(`Revisjonen har ingen forhåndsvisning av fagsiden ennå (prøvepubliseringen).`)
+  const { merket, umerket } = konsentrasjonsrapport(detaljer.stoff, elementer)
+  console.log(`Merkede konsentrasjoner: ${merket.length}`)
+  for (const m of merket) {
+    console.log(`- ${m.feil ? 'FEIL ' : ''}${m.hvor}: ${m.tekst}${m.forbindelse ? ` (${m.forbindelse})` : ''}`)
+    for (const merknad of m.merknader) console.log(`    ${merknad}`)
+  }
+  console.log(`Umerkede tall med konsentrasjonsenhet: ${umerket.length}`)
+  for (const u of umerket) console.log(`- ${u.hvor}: ${u.tekst} — «${u.utdrag}»`)
+  if (merket.some((m) => m.feil)) process.exitCode = 1
+}
+
 try {
   switch (kommando) {
     case 'kall':
@@ -79,11 +99,14 @@ try {
       dekning(dok.innhold)
       break
     }
+    case 'konsentrasjoner':
+      await konsentrasjoner(rest[0], rest[1])
+      break
     case 'nye-nokler':
       nyeNokler()
       break
     default:
-      console.error('Bruk: npm run kurator|kontrollor -- kall|tom-dekning|tom-selvtest|dekning|dekning-gren|nye-nokler …')
+      console.error('Bruk: npm run kurator|kontrollor -- kall|tom-dekning|tom-selvtest|dekning|dekning-gren|konsentrasjoner|nye-nokler …')
       process.exitCode = 2
   }
 } catch (e) {

@@ -90,6 +90,14 @@ teksten med kuratorprotokollen etter.
      Farmakologiportalen og de strukturerte bivirkningene) kontrolleres med
      funksjonstesten, ikke mot originalkildene. Se at den er bestått, og at
      det den ikke dekker, står som gjenstående i evidensjournalen.
+   - **Konsentrasjonene** (protokollen, «Konsentrasjonene i teksten»):
+     `npm run kontrollor -- konsentrasjoner <gren>` lister de merkede
+     konsentrasjonene med det som hindrer omregningen, og tallene med en
+     konsentrasjonsenhet som står umerket. Kontroller at tallet og enheten i
+     hver merking er kildens, at forbindelsen er den som faktisk er målt
+     (metabolitt eller moderstoff, fri form og ikke salt), og at hvert umerket
+     tall faller utenfor regelen. En merking med `FEIL`, en feil forbindelse
+     eller en konsentrasjon som skulle vært merket, er en sperrende tråd.
 5. **Kommenter.** For hver endring som må gjøres: `kommenter` med
    `art: "sperrende"` og et `anker` som peker på det det gjelder (`objekt`
    for kortet, `felt` for feltet slik sammenligningen navngir det,

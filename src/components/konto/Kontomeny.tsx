@@ -5,6 +5,8 @@ import { useAvatarlenker } from '../../auth/avatarer'
 import { useOkt, useProfil } from '../../auth/okt'
 import { useShortcutVisibility } from '../../hooks/useShortcutVisibility'
 import { SYSTEM, type Bevegelse, type Tema, type Valg, type Valgstyring } from '../../domain/systemvalg'
+import { VISNINGSENHETER, type Visningsenhet } from '../../enheter/konsentrasjon'
+import { useMaleenhet } from '../../enheter/Maleenhet'
 import { Bryter } from '../Bryter'
 import { Ikon } from '../ikon/Ikon'
 import type { Ikonnavn } from '../ikon/register'
@@ -35,6 +37,8 @@ const BEVEGELSESVALG: readonly Trinnvalg<Valg<Bevegelse>>[] = [
   { verdi: 'full', merke: 'Nei' },
   FOLG_SYSTEM,
 ]
+
+const ENHETSVALG: readonly Trinnvalg<Visningsenhet>[] = VISNINGSENHETER.map((e) => ({ verdi: e, merke: e }))
 
 /**
  * Kontoen, fra avataren helt til høyre i toppmenyen: hvem appen er logget inn
@@ -114,8 +118,8 @@ export function Kontomeny({ tema, bevegelse }: KontomenyProps) {
 }
 
 /**
- * «Preferanser»: en skuff i menyen med hurtigtastene, temaet og bevegelsen
- * (`Menyskuff`).
+ * «Preferanser»: en skuff i menyen med hurtigtastene, temaet, bevegelsen og
+ * måleenheten konsentrasjonene vises i (`Menyskuff`).
  */
 function Preferanser({
   apen,
@@ -127,29 +131,33 @@ function Preferanser({
   onVeksle: () => void
 } & KontomenyProps) {
   const hurtigtaster = useShortcutVisibility()
+  const maleenhet = useMaleenhet()
   return (
     <Menyskuff ikon="gears" tekst="Preferanser" apen={apen} onVeksle={onVeksle}>
       <Bryter className="nedtrekk__bryter" pa={hurtigtaster.visible} onEndre={hurtigtaster.toggle}>
         <Ikon navn="keys" storrelse="ui" />
         Vis hurtigtaster
       </Bryter>
-      <Trevalg ikon="tema" tekst="Tema" valg={TEMAVALG} styring={tema} />
-      <Trevalg ikon="bevegelse" tekst="Reduser bevegelse" valg={BEVEGELSESVALG} styring={bevegelse} />
+      <Trevalg ikon="tema" tekst="Tema" valg={TEMAVALG} verdi={tema.valg} onVelg={tema.velg} />
+      <Trevalg ikon="bevegelse" tekst="Reduser bevegelse" valg={BEVEGELSESVALG} verdi={bevegelse.valg} onVelg={bevegelse.velg} />
+      <Trevalg ikon="serum" tekst="Måleenhet" valg={ENHETSVALG} verdi={maleenhet.enhet} onVelg={maleenhet.velg} />
     </Menyskuff>
   )
 }
 
 /** Et valg i skuffen med flere enn to muligheter: navnet over, bryteren under. */
-function Trevalg<V extends string>({
+function Trevalg<T>({
   ikon,
   tekst,
   valg,
-  styring,
+  verdi,
+  onVelg,
 }: {
   ikon: Ikonnavn
   tekst: string
-  valg: readonly Trinnvalg<Valg<V>>[]
-  styring: Valgstyring<V>
+  valg: readonly Trinnvalg<T>[]
+  verdi: T
+  onVelg: (verdi: T) => void
 }) {
   return (
     <div className="nedtrekk__trinn" data-ih="">
@@ -157,7 +165,7 @@ function Trevalg<V extends string>({
         <Ikon navn={ikon} storrelse="ui" />
         {tekst}
       </span>
-      <Trinnbryter etikett={tekst} valg={valg} verdi={styring.valg} onVelg={styring.velg} />
+      <Trinnbryter etikett={tekst} valg={valg} verdi={verdi} onVelg={onVelg} />
     </div>
   )
 }

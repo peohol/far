@@ -51,6 +51,7 @@ npm run kurator -- tom-dekning de_novo > /mnt/project-files/kurator/<stoff>/dekn
 npm run kurator -- dekning /mnt/project-files/kurator/<stoff>/dekning.json
 npm run kurator -- dekning-gren <gren>
 npm run kurator -- tom-selvtest > /mnt/project-files/kurator/<stoff>/selvtest.json
+npm run kurator -- konsentrasjoner <gren>
 ```
 
 De vanligste handlingene, i rekkefølgen en kuratering bruker dem (argumentene
@@ -70,6 +71,12 @@ står i `docs/kurateringsgrener.md`):
 
 `skriv` gir prøvepubliseringen tilbake (`teknisk`). Grenen kan ikke sendes til
 kontroll før den har `ok` og `rapport_ok`; feilen sier hva som må rettes.
+
+**Konsentrasjonene.** Hver konsentrasjon i fagteksten merkes som en
+`konsentrasjon`-node med tallet og enheten nøyaktig som i kilden og
+forbindelsen som er målt, så leseren ser den i sin måleenhet
+(protokollen, «Konsentrasjonene i teksten»). `konsentrasjoner <gren>` viser
+de merkede og de umerkede; ingen `FEIL` før `til_kontroll`.
 
 ## Gangen
 

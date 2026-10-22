@@ -12,6 +12,7 @@ import { Lenkebrikke } from '../direktelenker/Lenkebrikke'
 import { useOverskriftsniva } from '../Overskriftsniva'
 import { Referansepille } from '../referanser/Referansepille'
 import { Uthev } from '../Uthev'
+import { Konsentrasjon } from './Konsentrasjon'
 
 /**
  * En riktekst i lesemodus.
@@ -19,7 +20,8 @@ import { Uthev } from '../Uthev'
  * Dokumentet er renset på forhånd (`rensDokument`), så her vises bare de
  * nodene og merkene som er tillatt. Siteringene blir referansepiller med
  * numrene de har på siden, direktelenkene blir lenkebrikker med
- * forhåndsvisning, og all tekst går gjennom søkefremhevingen.
+ * forhåndsvisning, konsentrasjonene vises i måleenheten brukeren har valgt,
+ * og all tekst går gjennom søkefremhevingen.
  * Overskriftene legger seg under den nærmeste overskriften rundt teksten
  * (`UnderOverskrift`).
  */
@@ -55,6 +57,8 @@ function Node({ node }: { node: Riktekstnode }): ReactNode {
     }
     case NODER.direktelenke:
       return <Lenkebrikke attrs={node.attrs ?? {}} />
+    case NODER.konsentrasjon:
+      return <Konsentrasjon attrs={node.attrs ?? {}} />
     case NODER.tekst:
       return (node.marks ?? []).reduceRight<ReactNode>(
         (innhold, merke) => <Merke merke={merke}>{innhold}</Merke>,

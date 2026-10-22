@@ -38,7 +38,10 @@ import { clinpgxlitteratur, clinpgxreferanser } from '../../clinpgx/referanser'
 import { cpicreferanser } from '../../cpic/referanser'
 import { FARMAKOGENETIKKPANEL, kobledeKjemikalier, koblingsgrunnlag } from '../../clinpgx/stoffside'
 import { Farmakogenetikkpanel, farmakogenetikksoketekster } from './Farmakogenetikkpanel'
-import { useBivirkninger, useCpic, useFarmakogenetikk, useKjemi, useLaboratorieanalyser } from './useFarmakogenetikk'
+import { useBivirkninger, useCpic, useFarmakogenetikk, useKjemi, useLaboratorieanalyser, useMolvekter } from './useFarmakogenetikk'
+import { Konsentrasjonskilde, konsentrasjonIEnhet } from './Konsentrasjon'
+import { useMaleenhet } from '../../enheter/Maleenhet'
+import { finnNoder, NODER } from '../../faginnhold/riktekst'
 import { Kjemipanel } from './Kjemipanel'
 import { Laboratoriepanel } from './Laboratoriepanel'
 import { labsoketekster } from '../../farmakologiportalen/stoffside'
@@ -184,6 +187,13 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
   const bivirkninger = useBivirkninger(slug).tilstand
   const kjemi = useKjemi(slug)
   const laboratorier = useLaboratorieanalyser(slug, kjemi)
+  // Konsentrasjonene i teksten kan gjelde forbindelser som ikke hører til stoffet.
+  const nevnte = useMemo(
+    () => finnNoder(side.data.elementer, NODER.konsentrasjon).flatMap((n) => (typeof n.attrs?.forbindelse === 'string' ? [n.attrs.forbindelse] : [])),
+    [side.data.elementer],
+  )
+  const molvekter = useMolvekter(kjemi, nevnte)
+  const sideforbindelser = useMemo(() => kjemi.rader.map((r) => r.forbindelse), [kjemi])
   // Visningen av bivirkningene styrer også hvilke kort søket på siden peker på.
   const [bivirkningsvisning, setBivirkningsvisning] = useBevart<Visning>('bivirkningsvisning', 'frekvens')
   // Redaksjonelle og automatiske referanser (FEST, ClinPGx, CPIC og preparatomtalene) nummereres sammen.
@@ -232,7 +242,15 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
   )
   const ord = useMemo(() => sokeord(sporring), [sporring])
 
-  const kontekst: Panelkontekst = { modell, redigerer, handlinger }
+  const { enhet: maleenhet } = useMaleenhet()
+  const konsentrasjon = useCallback(
+    (attrs: unknown) => {
+      const vist = konsentrasjonIEnhet(attrs, maleenhet, molvekter)
+      return `${vist.tekst} ${vist.enhet}`
+    },
+    [maleenhet, molvekter],
+  )
+  const kontekst: Panelkontekst = { modell, redigerer, handlinger, konsentrasjon }
   const redigeringsverdi = useMemo(
     () => ({
       redigerer,
@@ -357,92 +375,94 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
           panelreferanser={univers.panelreferanser}
         >
           <Redigeringskilde verdi={redigeringsverdi}>
-            <div className="stoffside__paneler" aria-busy={side.status === 'laster'}>
-              {PANELER.map((definisjon) => {
-                switch (definisjon.form) {
-                  case 'identitet':
-                    return (
-                      <Identitetspanel
-                        key={definisjon.nokkel}
-                        definisjon={definisjon}
-                        navn={navn}
-                        slug={slug}
-                        analytter={analytter}
-                        register={register}
-                        kategorier={kategorier}
-                        overskriftId={overskrift}
-                        onApneFortolkning={apneFortolkningFor}
-                        kontekst={kontekst}
-                      />
-                    )
-                  case 'legemidler':
-                    return (
-                      <Preparatpanel
-                        key={definisjon.nokkel}
-                        definisjon={definisjon}
-                        kontekst={kontekst}
-                        sidenavn={navn}
-                        legemidler={legemidler}
-                      />
-                    )
-                  case 'interaksjoner':
-                    return (
-                      <Interaksjonspanel
-                        key={definisjon.nokkel}
-                        definisjon={definisjon}
-                        kontekst={kontekst}
-                        koblet={koblet.length > 0}
-                        interaksjoner={interaksjoner}
-                      />
-                    )
-                  case 'datakort':
-                    return <ViktigeData key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} analytter={primare} />
-                  case 'tekst':
-                    return <Tekstpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
-                  case 'kort':
-                    return definisjon.nokkel === FARMAKOGENETIKKPANEL ? (
-                      <Farmakogenetikkpanel
-                        key={definisjon.nokkel}
-                        definisjon={definisjon}
-                        kontekst={kontekst}
-                        tilstand={pgx}
-                        cpic={cpictilstand}
-                        grunnlag={grunnlag}
-                        sidenavn={navn}
-                        sted={sted}
-                        onHentet={farmakogenetikk.lesPaNytt}
-                        onCpicHentet={cpic.lesPaNytt}
-                      />
-                    ) : definisjon.nokkel === BIVIRKNINGSPANEL ? (
-                      <Bivirkningspanel
-                        key={definisjon.nokkel}
-                        definisjon={definisjon}
-                        kontekst={kontekst}
-                        tilstand={bivirkninger}
-                        visning={bivirkningsvisning}
-                        onVelgVisning={setBivirkningsvisning}
-                      />
-                    ) : (
-                      <Kortpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
-                    )
-                  case 'mekanismer':
-                    return <Mekanismepanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
-                  case 'tabell':
-                    return <Tabellpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
-                  case 'laboratorier':
-                    return (
-                      <Laboratoriepanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} visning={laboratorier} />
-                    )
-                  case 'kjemi':
-                    return <Kjemipanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} visning={kjemi} />
-                }
-              })}
+            <Konsentrasjonskilde molvekter={molvekter} sideforbindelser={sideforbindelser}>
+              <div className="stoffside__paneler" aria-busy={side.status === 'laster'}>
+                {PANELER.map((definisjon) => {
+                  switch (definisjon.form) {
+                    case 'identitet':
+                      return (
+                        <Identitetspanel
+                          key={definisjon.nokkel}
+                          definisjon={definisjon}
+                          navn={navn}
+                          slug={slug}
+                          analytter={analytter}
+                          register={register}
+                          kategorier={kategorier}
+                          overskriftId={overskrift}
+                          onApneFortolkning={apneFortolkningFor}
+                          kontekst={kontekst}
+                        />
+                      )
+                    case 'legemidler':
+                      return (
+                        <Preparatpanel
+                          key={definisjon.nokkel}
+                          definisjon={definisjon}
+                          kontekst={kontekst}
+                          sidenavn={navn}
+                          legemidler={legemidler}
+                        />
+                      )
+                    case 'interaksjoner':
+                      return (
+                        <Interaksjonspanel
+                          key={definisjon.nokkel}
+                          definisjon={definisjon}
+                          kontekst={kontekst}
+                          koblet={koblet.length > 0}
+                          interaksjoner={interaksjoner}
+                        />
+                      )
+                    case 'datakort':
+                      return <ViktigeData key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} analytter={primare} />
+                    case 'tekst':
+                      return <Tekstpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
+                    case 'kort':
+                      return definisjon.nokkel === FARMAKOGENETIKKPANEL ? (
+                        <Farmakogenetikkpanel
+                          key={definisjon.nokkel}
+                          definisjon={definisjon}
+                          kontekst={kontekst}
+                          tilstand={pgx}
+                          cpic={cpictilstand}
+                          grunnlag={grunnlag}
+                          sidenavn={navn}
+                          sted={sted}
+                          onHentet={farmakogenetikk.lesPaNytt}
+                          onCpicHentet={cpic.lesPaNytt}
+                        />
+                      ) : definisjon.nokkel === BIVIRKNINGSPANEL ? (
+                        <Bivirkningspanel
+                          key={definisjon.nokkel}
+                          definisjon={definisjon}
+                          kontekst={kontekst}
+                          tilstand={bivirkninger}
+                          visning={bivirkningsvisning}
+                          onVelgVisning={setBivirkningsvisning}
+                        />
+                      ) : (
+                        <Kortpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
+                      )
+                    case 'mekanismer':
+                      return <Mekanismepanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
+                    case 'tabell':
+                      return <Tabellpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
+                    case 'laboratorier':
+                      return (
+                        <Laboratoriepanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} visning={laboratorier} />
+                      )
+                    case 'kjemi':
+                      return <Kjemipanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} visning={kjemi} />
+                  }
+                })}
 
-              {!redigerer && side.status === 'klar' && !harInnhold && (
-                <p className="stoffside__tom">Denne siden har ikke fått faginnhold ennå.</p>
-              )}
-              <Referanseliste />
-            </div>
+                {!redigerer && side.status === 'klar' && !harInnhold && (
+                  <p className="stoffside__tom">Denne siden har ikke fått faginnhold ennå.</p>
+                )}
+                <Referanseliste />
+              </div>
+            </Konsentrasjonskilde>
           </Redigeringskilde>
         </Sidereferanser>
       </Uthevingskilde>

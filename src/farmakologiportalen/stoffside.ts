@@ -27,7 +27,7 @@ import { ramsOpp } from '../faginnhold/oppsummering'
 import type { Panelnokkel } from '../faginnhold/paneler'
 import type { Tilleggstekst } from '../faginnhold/sok'
 import { FORBINDELSER, type Forbindelse, type Forbindelsesregister } from '../kjemi/forbindelser'
-import type { Kjemivisning } from '../kjemi/stoffside'
+import { molvekter, type Kjemivisning } from '../kjemi/stoffside'
 import type { Laboratoriedata, Labpost, Labutvalg } from './lesing'
 import type { Analysedata, Komponentdata } from './modell'
 import { MATRISER } from './provematerialer'
@@ -173,14 +173,12 @@ export function byggLabvisning(
   if (!utvalg) return { ...TOM_LABVISNING, usikre }
 
   const rekkefolge = new Map(forbindelser.map((f, i) => [f.nokkel, i]))
-  const molvekter = new Map(
-    (kjemi?.rader ?? []).flatMap((r) => (r.data ? [[r.forbindelse.nokkel, Number(r.data.molvekt)] as const] : [])),
-  )
+  const vekter = molvekter(kjemi?.rader ?? [])
 
   const grupper = new Map<string, { matrise: string; rader: Labrad[] }>()
   for (const { analyse: a, ...valgt } of velgAnalyser(forbindelser, utvalg, register)) {
     const { forbindelse } = valgt
-    const mw = forbindelse?.farmakologiportalen?.status === 'verifisert' ? molvekter.get(forbindelse.nokkel) : undefined
+    const mw = forbindelse?.farmakologiportalen?.status === 'verifisert' ? Number(vekter.get(forbindelse.nokkel)) : undefined
     const rad: Labrad = {
       ...valgt,
       metode: a.metode,

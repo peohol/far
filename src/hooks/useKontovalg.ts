@@ -1,20 +1,38 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { hentInnstilling, lagreSisteValg } from '../auth/innstillinger'
-import { lesValg, type Systemvalg, type Valg } from '../domain/systemvalg'
+import { lesValg, type Systemvalg } from '../domain/systemvalg'
 import { useSystemvalg } from './useSystemvalg'
 
 /**
  * Et valg som kan følge systemet (`useSystemvalg`), for den innloggede
  * brukeren lagret på kontoen, så det følger med til andre maskiner og
- * nettlesere. Nettleserens eget minne gir fortsatt riktig verdi fra første
- * bilde; kontoens valg legges over så snart det er hentet, og hentes på nytt
- * når fanen blir synlig igjen.
- *
- * Har kontoen ikke noe valg ennå, lagres det valget nettleseren alt står i —
- * så det brukeren valgte før dette fantes, blir med.
+ * nettlesere (`useKontosynk`).
  */
 export function useKontovalg<V extends string>(def: Systemvalg<V>, brukerId: string) {
   const { valg, virkelig, velg: settValg } = useSystemvalg(def)
+  const les = useCallback((verdi: unknown) => lesValg(def, verdi), [def])
+  const velg = useKontosynk(def.konto, les, valg, settValg, brukerId)
+  return { valg, virkelig, velg }
+}
+
+/**
+ * Holder et valg nettleseren husker (`valg`, `settValg`) i takt med kontoen,
+ * under nøkkelen `konto` i brukerinnstillingene. Nettleserens eget minne gir
+ * fortsatt riktig verdi fra første bilde; kontoens valg legges over så snart
+ * det er hentet (lest med `les`), og hentes på nytt når fanen blir synlig
+ * igjen. Gir tilbake `velg`, som setter valget og lagrer det på kontoen.
+ *
+ * Har kontoen ikke noe valg ennå, lagres det valget nettleseren alt står i —
+ * så det brukeren valgte før dette fantes, blir med. `les` må være den samme
+ * funksjonen hver gang.
+ */
+export function useKontosynk<T>(
+  konto: string,
+  les: (verdi: unknown) => T | null,
+  valg: T,
+  settValg: (valg: T) => void,
+  brukerId: string,
+): (valg: T) => void {
   const gjeldende = useRef(valg)
   gjeldende.current = valg
   /**
@@ -24,10 +42,10 @@ export function useKontovalg<V extends string>(def: Systemvalg<V>, brukerId: str
   const bytter = useRef(0)
   /** Lagringer på vei. Mens noen er ute, kan kontoen ennå vise det gamle valget. */
   const underveis = useRef(0)
-  const sendSiste = useMemo(() => lagreSisteValg<Valg<V>>(def.konto), [def])
+  const sendSiste = useMemo(() => lagreSisteValg<T>(konto), [konto])
 
   const lagre = useCallback(
-    (neste: Valg<V>) => {
+    (neste: T) => {
       underveis.current += 1
       sendSiste(neste)
         .catch(() => undefined)
@@ -43,11 +61,11 @@ export function useKontovalg<V extends string>(def: Systemvalg<V>, brukerId: str
 
     const hent = () => {
       const bestilt = bytter.current
-      hentInnstilling(def.konto).then(
+      hentInnstilling(konto).then(
         (fraKonto) => {
           if (!gjelder || bestilt !== bytter.current || underveis.current > 0) return
-          const lest = lesValg(def, fraKonto)
-          if (lest) settValg(lest)
+          const lest = les(fraKonto)
+          if (lest !== null) settValg(lest)
           else lagre(gjeldende.current)
         },
         // Uten svar vet vi ikke hva kontoen har, og lar den være i fred.
@@ -65,16 +83,14 @@ export function useKontovalg<V extends string>(def: Systemvalg<V>, brukerId: str
       gjelder = false
       document.removeEventListener('visibilitychange', naarSynlig)
     }
-  }, [def, brukerId, settValg, lagre])
+  }, [konto, les, brukerId, settValg, lagre])
 
-  const velg = useCallback(
-    (neste: Valg<V>) => {
+  return useCallback(
+    (neste: T) => {
       bytter.current += 1
       settValg(neste)
       lagre(neste)
     },
     [settValg, lagre],
   )
-
-  return { valg, virkelig, velg }
 }

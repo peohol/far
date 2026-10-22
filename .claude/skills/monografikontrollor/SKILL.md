@@ -49,7 +49,12 @@ resonnementer. Derfor:
 ```sh
 npm run kontrollor -- kall <handling> '<json>'    # eller @fil.json
 npm run kontrollor -- dekning-gren <gren>
+npm run kontrollor -- konsentrasjoner <gren>
 ```
+
+`konsentrasjoner` lister de merkede konsentrasjonene og tallene med en
+konsentrasjonsenhet som står umerket; hva som skal merkes, og hvordan, står i
+protokollen («Konsentrasjonene i teksten»), og kontrollen i instruksen (steg 4).
 
 | Steg | Handling |
 | --- | --- |

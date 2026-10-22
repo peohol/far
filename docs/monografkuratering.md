@@ -142,7 +142,8 @@ tilbakeslagseffekter» (`avhengighet_toleranse`) har faste kort
 `{"tittel": "…"}` og `posisjon` lik plassen i lista (`fasteKort` i
 `src/faginnhold/paneler.ts`). Hvert kan stå én gang; databasen avviser et kort
 nummer to. Kildene står på kortet (`referanser`) og inline som siteringer, som
-ellers.
+ellers. Konsentrasjonene i teksten merkes som i kurateringsgrenene
+(`docs/kuratorprotokoll.md`, «Konsentrasjonene i teksten»).
 
 Redaksjonelle rammer for kuratoren:
 

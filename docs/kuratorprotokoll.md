@@ -126,7 +126,9 @@ Kuratoren melder hva den gjør med `aktivitet` (med seksjonen og kortet), så
    bruker ser den. Tabellene i punkt 4.8 leses i sidebildene, og
    bivirkningsimportene lages etter `docs/bivirkninger.md`.
 6. **Skrivingen.** Endringene lagres i grenen med `skriv`, med rapporten til
-   endringsloggen (`docs/innholdsendringer.md`). Prøvepubliseringen må bestå,
+   endringsloggen (`docs/innholdsendringer.md`). Konsentrasjonene i teksten
+   merkes (under), og `npm run kurator -- konsentrasjoner <gren>` skal ikke
+   vise noen `FEIL` eller umerkede konsentrasjoner som skulle vært merket. Prøvepubliseringen må bestå,
    og rapporten stemme med endringene, før grenen kan sendes til kontroll.
    Forhåndsvisningen er siden nøyaktig slik den blir publisert.
 7. **Dokumentene.** `evidensjournal`, `dekningsmatrise` og `selvtest` (og
@@ -241,6 +243,40 @@ nøyaktig én gang med belegg; i selvtesten stopper også alt som ikke er bestå
 `npm run kurator -- dekning-gren`. Kontrollen hindrer at portene omgås med
 plassholdere; den erstatter ikke fagkontrollen.
 
+## Konsentrasjonene i teksten
+
+Leseren velger måleenheten konsentrasjonene vises i (µg/L, nmol/L eller
+µmol/L). Derfor merkes hver konsentrasjon i fagteksten som en
+`konsentrasjon`-node; formen står i `docs/faginnhold.md` («Konsentrasjonene»).
+
+- **Hva som merkes:** en konsentrasjon av en forbindelse, som ett tall eller
+  et område med masse eller stoffmengde per liter eller milliliter: i serum,
+  plasma, fullblod, urin, morsmelk og andre prøver, og i studier (Ki, IC₅₀).
+  Også en grense skrevet som tekst («over 1 000 µg/L») merkes, med
+  komparatoren eller ordene utenfor noden.
+- **Hva som ikke merkes:** styrken til et preparat (mg/mL i en mikstur eller
+  en injeksjonsvæske), doser og doseringshastigheter, og enheter appen ikke
+  kan regne om (per desiliter, promille, prosent, per kreatinin). De står som
+  vanlig tekst.
+- **Tallet og enheten er kildens** (krav 5): `verdi` og `enhet` skrives
+  nøyaktig som kilden oppga dem, uten omregning eller avrunding. Et omregnet
+  tall skrives aldri i teksten; appen regner om selv. «ca.», «over» og
+  «under» står utenfor noden; `<`, `>`, `≤` og `≥` kan stå i den, foran ett
+  tall. Merkingen endrer aldri en beskyttet verdi (krav 3).
+- **Forbindelsen** er den som faktisk er målt (`src/data/forbindelser.ts`):
+  metabolitten når det er metabolitten, den frie formen og ikke saltet
+  (`docs/kjemi.md`). Uten den regnes tallet bare om innen masse eller
+  stoffmengde. Gjelder tallet en sum av flere forbindelser, eller en
+  forbindelse registeret ikke har, er `forbindelse` `null`; en forbindelse som
+  mangler, står i evidensjournalen under gjenstående, og legges inn i
+  registeret i en PR i OUSFAR Dev.
+- **Kontrollen:** `npm run kurator -- konsentrasjoner <gren>` (og
+  `npm run kontrollor -- …`) lister de merkede konsentrasjonene i
+  forhåndsvisningen, med det som hindrer omregningen, og tallene med en
+  konsentrasjonsenhet som står umerket. `FEIL` (tallet eller enheten kan ikke
+  leses, eller forbindelsen finnes ikke) rettes før grenen sendes til
+  kontroll; et umerket tall er enten merket eller utenfor regelen over.
+
 ## Erfaringer fra kontrollen
 
 Funn kontrolløren har gjort som kan gå igjen i andre stoffer. Kuratoren unngår
@@ -318,3 +354,6 @@ holder dem i takt med modellen og piloten).
   begrunnelser. Ordningen der fagansvarlig ga videre en melding fra
   kontrolløren, gjelder ikke lenger, siden kontrolløren skriver i grenen selv.
   Ingen krav er svekket.
+- 2026-10-22: «Konsentrasjonene i teksten». Konsentrasjonene merkes, så
+  leseren ser dem i måleenheten sin (fagansvarlig). Tallene står fortsatt som
+  i kilden. Ingen krav er svekket.

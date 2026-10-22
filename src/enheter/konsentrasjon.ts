@@ -136,3 +136,161 @@ export function visOmrade(nedre: string | null, ovre: string | null): string {
   if (ovre) return `opptil ${ovre}`
   return ''
 }
+
+/* --- Konsentrasjonene i fagtekstene ----------------------------------------- */
+
+/** Enheten konsentrasjonene vises i når brukeren ikke har valgt noen (preferansen «Måleenhet»). */
+export const STANDARDENHET: Visningsenhet = 'µg/L'
+
+/** Det lagrede valget, eller `null` når det ikke er en av enhetene fagsidene viser. */
+export function lesVisningsenhet(verdi: unknown): Visningsenhet | null {
+  return VISNINGSENHETER.find((e) => e === verdi) ?? null
+}
+
+/**
+ * En konsentrasjon kuratoren har merket i en fagtekst (`konsentrasjon` i
+ * rikteksten, `docs/faginnhold.md`): tallet og enheten nøyaktig som kilden
+ * oppga dem, og forbindelsen som er målt.
+ */
+export interface Tekstkonsentrasjon {
+  /** Ett tall eller et område, som i kilden: «50–200», «< 0,05», «1,2». */
+  verdi: string
+  /** Enheten som i kilden: «ng/mL», «nmol/L». */
+  enhet: string
+  /**
+   * Nøkkelen til forbindelsen i `src/data/forbindelser.ts`. Bare med den kan
+   * tallet regnes om mellom masse og stoffmengde (molekylvekten fra PubChem).
+   */
+  forbindelse: string | null
+}
+
+/** Slik en forbindelse er nøklet i `src/data/forbindelser.ts`: «desmetylcitalopram». */
+export const FORBINDELSESNOKKEL = /^[a-z0-9][a-z0-9-]*$/
+
+/** Tallene i en konsentrasjon: ett, eller nedre og øvre grense i et område. */
+export interface Konsentrasjonstall {
+  komparator: Komparator | null
+  tall: readonly [number] | readonly [number, number]
+}
+
+/** Et tall med desimalkomma eller -punktum, og eventuelt mellomrom mellom tusenene («1 000»). */
+const TALL = String.raw`[0-9]+(?:[ \u00a0\u2009\u202f][0-9]{3})*(?:[.,][0-9]+)?`
+const KONSENTRASJONSTALL = new RegExp(String.raw`^(?:(<=|>=|[<>≤≥])\s*)?(${TALL})(?:\s*[–—-]\s*(${TALL}))?$`)
+
+function tallverdi(tekst: string): number {
+  return Number(tekst.replace(/[ \u00a0\u2009\u202f]/g, '').replace(',', '.'))
+}
+
+/**
+ * Tallene i `verdi` («50–200», «< 0,05», «1 000»), eller `null` når de ikke
+ * kan leses sikkert. Et område har ingen komparator, og den nedre grensen er
+ * ikke over den øvre.
+ */
+export function lesKonsentrasjonstall(verdi: string): Konsentrasjonstall | null {
+  const m = KONSENTRASJONSTALL.exec(verdi.trim())
+  if (!m) return null
+  const [, komp, a, b] = m
+  if (komp && b) return null
+  const nedre = tallverdi(a!)
+  if (!Number.isFinite(nedre)) return null
+  if (!b) return { komparator: komp ? KOMPARATORER[komp]! : null, tall: [nedre] }
+  const ovre = tallverdi(b)
+  return Number.isFinite(ovre) && nedre <= ovre ? { komparator: null, tall: [nedre, ovre] } : null
+}
+
+/** En merket konsentrasjon som kan regnes om: tallene og enheten slik OUSFAR kjenner dem. */
+export interface LestKonsentrasjon extends Konsentrasjonstall {
+  fra: Enhetsdefinisjon
+}
+
+/** Konsentrasjonen lest, eller `null` når tallet eller enheten ikke kan regnes om. */
+export function lesTekstkonsentrasjon(k: Pick<Tekstkonsentrasjon, 'verdi' | 'enhet'>): LestKonsentrasjon | null {
+  const tall = lesKonsentrasjonstall(k.verdi)
+  const fra = lesKonsentrasjonsenhet(k.enhet)
+  return tall && fra ? { ...tall, fra } : null
+}
+
+/** Tallene i en annen enhet, eller `null` når de ikke kan regnes om dit. */
+function tallI(k: LestKonsentrasjon, til: Enhetsdefinisjon, molvekt: number | null): number[] | null {
+  const regnet = k.tall.map((t) => regnOm(t, k.fra, til, molvekt))
+  return regnet.every((t): t is number => t !== null) ? regnet : null
+}
+
+function skrivTall(komparator: Komparator | null, tall: readonly number[]): string {
+  return `${komparator ? `${komparator} ` : ''}${tall.map(visTall).join('–')}`
+}
+
+/** En konsentrasjon slik leseren ser den: tallet og enheten det står i. */
+export interface Konsentrasjonsvisning {
+  tekst: string
+  enhet: string
+  /** Tallet er regnet om fra kilden, med høyst to gjeldende sifre. */
+  omregnet: boolean
+  /** Det kunne ikke regnes om til den valgte enheten, og står som i kilden. */
+  somIKilden: boolean
+}
+
+/**
+ * Konsentrasjonen i enheten brukeren har valgt. Står den alt i den enheten
+ * (også skrevet som «ng/mL» for µg/L), vises tallet nøyaktig som i kilden;
+ * ellers regnes det om og vises med høyst to gjeldende sifre, som i
+ * «Analyse ved norske laboratorier». Mellom masse og stoffmengde trengs
+ * molekylvekten; uten den står konsentrasjonen som i kilden.
+ */
+export function visKonsentrasjon(
+  k: Pick<Tekstkonsentrasjon, 'verdi' | 'enhet'>,
+  valgt: Visningsenhet,
+  molvekt: number | null,
+): Konsentrasjonsvisning {
+  const somIKilden = { tekst: k.verdi.trim(), enhet: k.enhet.trim(), omregnet: false }
+  const lest = lesTekstkonsentrasjon(k)
+  const til = lesKonsentrasjonsenhet(valgt)!
+  if (!lest) return { ...somIKilden, somIKilden: true }
+  if (lest.fra.enhet === til.enhet) return { ...somIKilden, enhet: valgt, somIKilden: false }
+  const tall = tallI(lest, til, molvekt)
+  if (!tall) return { ...somIKilden, somIKilden: true }
+  return { tekst: skrivTall(lest.komparator, tall), enhet: valgt, omregnet: true, somIKilden: false }
+}
+
+/** En rad i tabellen over enhetene: tallet i enheten, eller `null` når det ikke kan regnes om dit. */
+export interface Enhetsrad {
+  enhet: Visningsenhet
+  tekst: string | null
+}
+
+/** Konsentrasjonen i hver av enhetene fagsidene kan vise, til tabellen ved tallet. */
+export function konsentrasjonIAlleEnheter(k: Pick<Tekstkonsentrasjon, 'verdi' | 'enhet'>, molvekt: number | null): Enhetsrad[] {
+  return VISNINGSENHETER.map((enhet) => {
+    const vist = visKonsentrasjon(k, enhet, molvekt)
+    return { enhet, tekst: vist.somIKilden ? null : vist.tekst }
+  })
+}
+
+/* --- Konsentrasjoner som står i teksten uten merking ------------------------ */
+
+const ENHETSTEKST = String.raw`(?:[mµμun]?|mc|p)(?:g|mol)\s*\/\s*(?:[mdµμ]?l|liter)`
+const KONSENTRASJONSTEKST = new RegExp(
+  String.raw`(?<![\p{L}\p{N}])((?:(?:<=|>=|[<>≤≥])\s*)?${TALL}(?:\s*[–—-]\s*${TALL})?)\s*(${ENHETSTEKST})(?![\p{L}\p{N}])`,
+  'giu',
+)
+
+/** En konsentrasjon i løpende tekst: hvor den står, og tallet og enheten. */
+export interface Konsentrasjonsfunn {
+  start: number
+  slutt: number
+  verdi: string
+  enhet: string
+}
+
+/**
+ * Konsentrasjonene i en tekst, som «50–200 nmol/L» eller «< 0,05 ng/mL»: tall
+ * med en enhet OUSFAR kan regne om. Brukes til å finne det som ikke er merket,
+ * og til å fylle ut merkingen i editoren.
+ */
+export function finnKonsentrasjoner(tekst: string): Konsentrasjonsfunn[] {
+  return [...tekst.matchAll(KONSENTRASJONSTEKST)].flatMap((m) => {
+    const [hele, verdi, enhet] = m
+    if (!lesKonsentrasjonstall(verdi!) || !lesKonsentrasjonsenhet(enhet!)) return []
+    return [{ start: m.index, slutt: m.index + hele.length, verdi: verdi!.trim(), enhet: enhet!.replace(/\s+/g, '') }]
+  })
+}
