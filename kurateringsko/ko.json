@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-23T08:39:47.903Z",
+  "oppdatert_kl": "2026-10-23T09:35:25.823Z",
   "malt_kl": "2026-10-22T18:37:42.482Z",
   "teller": 82,
   "stoffer": {
@@ -3227,11 +3227,16 @@
     "ketamin": {
       "stoff": "ketamin",
       "navn": "Ketamin",
-      "status": "blokkert",
+      "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 0,
-        "grunner": []
+        "poeng": 103.1,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Sist kuratert 2026-10-04.",
+          "6 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 28 elementer har ingen kilde."
+        ]
       },
       "maal": {
         "kl": "2026-10-22T18:37:43.275Z",
@@ -3247,14 +3252,7 @@
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [
-        {
-          "kode": "annen_gren",
-          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, tilbakemelding); den må avsluttes først.",
-          "kl": "2026-10-23T08:39:47.903Z",
-          "kilde": "system"
-        }
-      ],
+      "blokkeringer": [],
       "sist_kuratert": {
         "kl": "2026-10-04T04:00:00.000Z",
         "modus": "oppdatering",
