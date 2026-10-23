@@ -6,12 +6,17 @@ av appen har tilstand som bør overleve en oppdatering.
 ## Hva brukeren merker
 
 Når en ny versjon er lagt ut, og den har en føring i endringsloggen som
-varsles, står det en melding nederst i vinduet:
+krever oppdatering (`varsles` i versjonsmodellen), står det en melding
+nederst i vinduet:
 «En ny versjon av OUSFAR er klar», med knappen «Oppdater nå». Den forsvinner
 ikke av seg selv og kan ikke lukkes. Står et vindu åpent, ligger meldingen i
 det. «Oppdater nå» laster siden på nytt, og det brukeren holdt på med kommer
 tilbake: vinduene som sto åpne, skjemaer som var halvveis skrevet, valgene i
 fortolkningen, åpne seksjoner og hvor langt ned siden og vinduet var rullet.
+
+Oppdateringsmeldingen er teknisk og **ikke et varsel i bjella**. Vanlige
+versjonsendringer kan kreve oppdatering selv om de ikke bør gi eget
+funksjonsvarsel (se `docs/varsler.md`).
 
 Meldingen står bare når den nye versjonen berører siden brukeren er på. Hver
 føring i endringsloggen sier hvilke sider den gjelder (`gjelder`, se

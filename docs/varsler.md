@@ -22,12 +22,13 @@ Varslene berører ikke fortolkningen; de forteller bare at noe er endret.
 | Kategori | Når | Kan slås av |
 | --- | --- | --- |
 | `fortolkning` | En kommentar eller et regelsett publiseres, eller en føring i endringsloggen har `endrerFortolkning` | Nei |
+| `kritisk_faglig` | En føring eksplisitt merket `kritiskFagligVarsel` | Nei |
 | `mine_ideer` | Noen kommenterer en idé du skrev, eller svarer på en kommentar du skrev | Nei |
 | `aktive_ideer` | Noen kommenterer en idé du har kommentert, uten at det er et svar til deg | Ja, på som standard |
 | `nye_ideer` | Noen skriver en ny idé | Ja, av som standard |
 | `mine_diskusjoner` | Noen kommenterer en tråd du startet, eller svarer på en kommentar du skrev i en tråd | Nei |
 | `aktive_diskusjoner` | Noen kommenterer en tråd du har kommentert, uten at det er et svar til deg | Ja, på som standard |
-| `funksjonalitet` | En ny føring i endringsloggen | Ja, på som standard |
+| `funksjonalitet` | En føring eksplisitt merket `varsleFunksjonsendring` | Ja, på som standard |
 | `favoritter` | Noen publiserer endringer på en fagside du har som favoritt | Ja, av som standard |
 | `favorittdiskusjoner` | Noen starter en ny tråd på en fagside du har som favoritt | Ja, av som standard |
 
@@ -37,8 +38,9 @@ innstillingene viser gruppene i den rekkefølgen, hver med ikon og overskrift
 og kategoriene sine under. Ikonene for gruppene står i `Varsler.tsx`. En ny
 kategori får en gruppe; den trenger ingen ny gruppe med mindre den gjelder
 noe helt annet. De som lages av databasen, er de
-samme som `public.varselkategori`; en test passer på at de stemmer. En ny
-kategori legges til med `alter type public.varselkategori add value` i en egen
+samme som `public.varselkategori`; en test passer på at de stemmer.
+`funksjonalitet` og `kritisk_faglig` kommer bare fra endringsloggen og
+krever ingen ny databasekategori. En ny databasekategori legges til med `alter type public.varselkategori add value` i en egen
 migrasjon, og sist i `DATABASEKATEGORIER`. Utløseren som bruker den, skrives i
 plpgsql, siden den nye verdien ikke kan brukes før migrasjonen er ferdig.
 Brukerens valg lagres i `brukerinnstillinger` under `varsler.valg`, og
@@ -107,10 +109,26 @@ begynner brukeren rett før den nyeste føringen, så den er et varsel og resten
 ikke. `merkEndringerLest` flytter `fra` forbi de eldste leste som har passert
 fristen, så listene over leste og arkiverte ikke vokser.
 
-En føring er `funksjonalitet`, eller `fortolkning` når den har
-`endrerFortolkning: true` (se `docs/endringslogg.md`). En føring med
-`utenVarsel: true` merkes ikke i appen, er ikke noe varsel og ber ingen
-oppdatere siden. En stille designjustering har ingen føring i det hele tatt.
+En versjonsoppføring gir **ikke automatisk varsel**. `funksjonalitet` krever
+`varsleFunksjonsendring: true`, bare når kliniske farmakologer trenger å
+kjenne til en vesentlig endring i hvordan fortolkningen brukes eller i
+fagsidenes sentrale kliniske funksjonalitet. `endrerFortolkning: true`
+gir obligatorisk varsel om endret fortolkningsresultat.
+`kritiskFagligVarsel: true` gir et eget obligatorisk sikkerhetsvarsel,
+også når ingen funksjon er endret.
+
+Design, UX, navigasjon, ytelse, administrasjon, vanlige feilrettinger,
+løpende faglig kuratering og interne endringer skal bare dokumenteres i
+versjonsloggen. Omfang eller teknisk arbeidsmengde begrunner aldri i seg
+selv varsling. Ved tvil: ikke varsle. Varsle om den samlede kliniske
+funksjonen, ikke hver tekniske delendring. Kritiske pasientsikkerhetsforhold
+er et særskilt unntak.
+
+`utenVarsel: true` betyr fortsatt at føringen ikke krever ny versjon hos
+brukeren. Den undertrykker vanlige funksjonsvarsler, men ikke varsler om
+endret fortolkning eller kritiske faglige forhold. Meldingen om at appen
+må oppdateres er uavhengig av varslene i bjella. En ren stille
+designjustering har ingen føring i det hele tatt.
 
 ## Bjella og vinduet
 

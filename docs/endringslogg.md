@@ -89,16 +89,49 @@ Ledd til høyre nullstilles: `0.5.4` → `0.6.0` → `1.0.0`.
 `Fag` settes når endringen **kan endre kommentaren eller vurderingen** — også
 når den bare retter opp noe som var feil.
 
-**`endrerFortolkning: true`** settes i tillegg når endringen faktisk gir andre
-kommentarer eller vurderinger i fortolkningen, som en endret regel i koden.
-Da får alle et varsel om den som en endring i fortolkningen, og det kan ikke
-slås av (se `docs/varsler.md`). Innhold som publiseres i appen, varsler av
-seg selv og trenger det ikke.
+### Når skal endringen gi varsel i bjella?
 
-**`utenVarsel: true`** settes når PR-en ikke endrer noe brukerne merker, som
-når en databaseendring som alt er rullet ut, føres inn i koden (for eksempel
-`oppgaver_utfort_*`). Da blir føringen ikke et varsel, og appen ber ingen
-oppdatere siden for den.
+**Hovedregelen er ingen varsling.** Alle endringer føres i versjonsloggen.
+Varsler skal informere kliniske farmakologer om det de trenger å vite for
+å bruke OUSFAR riktig i sitt kliniske arbeid, ikke om hva utviklerne har
+gjort. At en funksjon er ny eller en endring omfattende er ikke tilstrekkelig.
+
+Vurder tre spørsmål:
+
+1. Må klinikeren kjenne endringen for å forstå, utføre eller bruke
+   fortolkningen riktig?
+2. Har fagsidene fått så vesentlig ny eller endret klinisk funksjonalitet
+   at klinikeren bør kjenne til den eller en endret arbeidsmåte?
+3. Kan manglende kjennskap til endringen føre til en klinisk relevant
+   feil, uriktig vurdering eller pasientsikkerhetsrisiko?
+
+Bruk eksplisitte markører bare når minst ett kriterium er oppfylt:
+
+- **`endrerFortolkning: true`** når endringen faktisk gir andre kommentarer
+  eller vurderinger i fortolkningen, eksempelvis endrede regler i koden.
+  Obligatorisk varsel. Publisering i selve appen varsles allerede av
+  databasen og trenger ikke markøren.
+- **`varsleFunksjonsendring: true`** ved vesentlige endringer i hvordan
+  fortolkningen brukes, eller større endringer i fagsidenes sentrale
+  kliniske funksjonalitet. Valgfritt varsel (på som standard). Eksempler:
+  en ny klinisk fortolkningsmetode eller en sentral seksjon som «Analyse
+  ved norske laboratorier».
+- **`kritiskFagligVarsel: true`** ved kritisk faglig informasjon som kan
+  påvirke pasientsikkerhet eller påliteligheten til kliniske konklusjoner,
+  også uten funksjonsendring. Obligatorisk varsel.
+
+Design, brukeropplevelse, navigasjon, ytelse, vanlige filtre, intern
+administrasjon, rutinefeilrettinger, løpende faglig kuratering og interne
+systemendringer varsles normalt ikke. Ved tvil: ikke varsle. Varsle om
+det samlede klinisk vesentlige resultatet, ikke hver tekniske delendring.
+
+**`utenVarsel: true`** er for endringer som ikke krever at brukeren oppdaterer
+appen, som kodeføring av noe som allerede er rullet ut. Det undertrykker
+vanlige funksjonsvarsler, men ikke obligatoriske varsler om endret
+fortolkning eller kritisk faglig sikkerhet. En vanlig endringsloggføring
+uten varselmerker kan fortsatt kreve at appen oppdateres. Varsel i bjella
+og oppdateringsmelding er to ulike mekanismer (se `docs/varsler.md` og
+`docs/oppdatering.md`).
 
 **`gjelder`** — sidene endringen gjelder. Brukerne bes bare om å oppdatere
 når de står på en av dem; ellers tas versjonen i bruk når de går til en annen
