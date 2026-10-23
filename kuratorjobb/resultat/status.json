@@ -1,18 +1,179 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/manuell-39947310782",
     "foresporsel_commit": "372a88f40387d8226dc8a58148ff7962c0fa91bf",
     "foresporsel_sha256": "c630931c8e07f1b8d52c2cf1e2981e01ba7084925b5b2eb83b259ecffe0292f0",
     "kode_commit": "c1e6374833eca0e985d37a698148cf03d04cb03c",
     "kjoring": "https://github.com/peohol/ousfar/actions/runs/39947310782",
-    "startet_kl": "2026-10-23T11:37:26.220Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-23T11:37:27.932Z",
+    "ferdig_kl": "2026-10-23T11:38:05.765Z"
   },
-  "foresporsel": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "lamotrigin",
+      "levetiracetam",
+      "lurasidon",
+      "nitrazepam",
+      "oksazepam",
+      "okskarbazepin",
+      "petidin",
+      "psilocybin",
+      "sertindol",
+      "topiramat",
+      "valproat",
+      "vortioksetin",
+      "zolpidem",
+      "zopiklon"
+    ],
+    "oppgaver": [
+      "funksjonstest"
+    ]
+  },
   "referanse": null,
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 309
+    }
+  ],
+  "stoffer": {
+    "lamotrigin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/lamotrigin/funksjonstest.json"
+        }
+      }
+    },
+    "levetiracetam": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/levetiracetam/funksjonstest.json"
+        }
+      }
+    },
+    "lurasidon": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/lurasidon/funksjonstest.json"
+        }
+      }
+    },
+    "nitrazepam": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/nitrazepam/funksjonstest.json"
+        }
+      }
+    },
+    "oksazepam": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/oksazepam/funksjonstest.json"
+        }
+      }
+    },
+    "okskarbazepin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/okskarbazepin/funksjonstest.json"
+        }
+      }
+    },
+    "petidin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/petidin/funksjonstest.json"
+        }
+      }
+    },
+    "psilocybin": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/psilocybin/funksjonstest.json"
+        }
+      }
+    },
+    "sertindol": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/sertindol/funksjonstest.json"
+        }
+      }
+    },
+    "topiramat": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/topiramat/funksjonstest.json"
+        }
+      }
+    },
+    "valproat": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/valproat/funksjonstest.json"
+        }
+      }
+    },
+    "vortioksetin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/vortioksetin/funksjonstest.json"
+        }
+      }
+    },
+    "zolpidem": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/zolpidem/funksjonstest.json"
+        }
+      }
+    },
+    "zopiklon": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/zopiklon/funksjonstest.json"
+        }
+      }
+    }
+  }
 }
