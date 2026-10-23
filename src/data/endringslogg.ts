@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.107.7',
+    dato: '2026-10-23',
+    sammendrag: 'Etiketter først i et avsnitt, som «Dialyse og hemoperfusjon:», blir ekte overskrifter i fagtekstene',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Når et langt kort er delt inn med en etikett og kolon først i avsnittene, som «Dialyse og hemoperfusjon:», gjør vaktmesteren etiketten om til en overskrift med de samme ordene og tar den bort fra avsnittet.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.107.6',
     dato: '2026-10-23',
     sammendrag: 'Etiketter som «Misdannelser:» blir ekte overskrifter i fagtekstene',
