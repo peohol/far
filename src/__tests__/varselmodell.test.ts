@@ -46,8 +46,8 @@ const endring = (versjon: string, dato: string, ekstra: Partial<Endring> = {}): 
 
 const LOGG = [
   endring('1.3.0', '2026-09-29', { endrerFortolkning: true }),
-  endring('1.2.0', '2026-09-20'),
-  endring('1.1.0', '2026-08-01'),
+  endring('1.2.0', '2026-09-20', { varsleFunksjonsendring: true }),
+  endring('1.1.0', '2026-08-01', { varsleFunksjonsendring: true }),
   endring('1.0.0', '2026-07-01'),
 ]
 const NAA = new Date('2026-09-29T15:00:00')
@@ -79,6 +79,7 @@ describe('kategoriene og valgene', () => {
     const valg = lesVarselvalg({ fortolkning: false, aktive_ideer: false, favoritter: 'ja', ukjent: true })
     expect(valg).toEqual({ fortolkning: false, aktive_ideer: false })
     expect(erValgt('fortolkning', valg)).toBe(true)
+    expect(erValgt('kritisk_faglig', { kritisk_faglig: false })).toBe(true)
     expect(erValgt('mine_ideer', valg)).toBe(true)
     expect(erValgt('aktive_ideer', valg)).toBe(false)
     expect(erValgt('funksjonalitet', valg)).toBe(true)
@@ -131,6 +132,24 @@ describe('endringsloggen', () => {
     // En endring i fortolkningen varsles alltid.
     const begge = [endring('1.4.0', '2026-09-29', { utenVarsel: true, endrerFortolkning: true }), ...LOGG]
     expect(endringsvarsler(begge, { fra: '1.3.0', lest: [], arkivert: [] }, NAA).map((v) => [v.endring.versjon, v.kategori])).toEqual([['1.4.0', 'fortolkning']])
+  })
+
+  it('lar vanlige versjonsendringer forbli i loggen uten å utløse varsler', () => {
+    const logg = [
+      endring('2.5.0', '2026-09-29'),
+      endring('2.4.0', '2026-09-29', { utenVarsel: true, varsleFunksjonsendring: true }),
+      endring('2.3.0', '2026-09-29', { kritiskFagligVarsel: true, utenVarsel: true }),
+      endring('2.2.0', '2026-09-29', { endrerFortolkning: true }),
+      endring('2.1.0', '2026-09-29', { varsleFunksjonsendring: true }),
+      endring('2.0.0', '2026-09-29'),
+    ]
+    expect(startstatus(logg)).toEqual({ fra: '2.2.0', lest: [], arkivert: [] })
+    expect(endringsvarsler(logg, { fra: '0.0.0', lest: [], arkivert: [] }, NAA).map((v) => [v.endring.versjon, v.kategori])).toEqual([
+      ['2.3.0', 'kritisk_faglig'],
+      ['2.2.0', 'fortolkning'],
+      ['2.1.0', 'funksjonalitet'],
+    ])
+    expect(startstatus([endring('3.0.0', '2026-09-29')]).fra).toBe('0.0.0')
   })
 
   it('leser bare en gyldig status', () => {
