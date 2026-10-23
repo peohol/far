@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.107.6',
+    dato: '2026-10-23',
+    sammendrag: 'Etiketter som «Misdannelser:» blir ekte overskrifter i fagtekstene',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Et avsnitt i fagteksten som bare er en etikett for delen under, som «Misdannelser:» eller «Studier med friske:», gjøres om til en overskrift med de samme ordene når vaktmesteren setter inn overskrifter.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.107.5',
     dato: '2026-10-23',
     sammendrag: 'Lange fagtekster deles inn med overskrifter',

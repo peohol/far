@@ -377,11 +377,14 @@ kortet.
   tall, konklusjoner eller vurderinger, og ingen siteringer. Påstandene og
   kildene står i teksten under (krav 4 og 5).
 - **Formen:** stor forbokstav bare i første ord og i egennavn, og ikke punktum.
-  Overskriften gjentar ikke tittelen på kortet. Fet skrift først i et avsnitt
-  brukes ikke i stedet for en overskrift.
+  Overskriften gjentar ikke tittelen på kortet. Fet skrift først i et avsnitt,
+  eller et eget avsnitt med bare en etikett og kolon («Misdannelser:»), brukes
+  ikke i stedet for en overskrift.
 - **Vaktmesteren** setter inn overskrifter der en lang tekst med flere deler
-  mangler dem, men bare mellom avsnittene som står: teksten, rekkefølgen og
-  siteringene er som før.
+  mangler dem, men bare mellom avsnittene som står. Et avsnitt med bare en
+  etikett for delen under («Misdannelser:», «Studier med friske:») gjøres om
+  til en overskrift med de samme ordene, uten kolonet. Ellers er teksten,
+  rekkefølgen og siteringene som før.
 
 ## Erfaringer fra kontrollen
 
@@ -487,3 +490,7 @@ holder dem i takt med modellen og piloten).
   får overskrifter på nivå 1 og 2, og vaktmesteren kan sette dem inn der de
   mangler. Ingen krav er svekket: en overskrift er ingen påstand, og
   påstandene og kildene står i teksten.
+- 2026-10-23: «Overskrifter»: et avsnitt med bare en etikett og kolon er en
+  overskrift i forkledning, og vaktmesteren gjør det om til en ekte overskrift
+  med de samme ordene. Ingen krav er svekket: ingen påstand eller sitering
+  endres.
