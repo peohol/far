@@ -1,0 +1,22 @@
+{
+  "versjon": 1,
+  "stoffer": [
+    "lamotrigin",
+    "levetiracetam",
+    "lurasidon",
+    "nitrazepam",
+    "oksazepam",
+    "okskarbazepin",
+    "petidin",
+    "psilocybin",
+    "sertindol",
+    "topiramat",
+    "valproat",
+    "vortioksetin",
+    "zolpidem",
+    "zopiklon"
+  ],
+  "oppgaver": [
+    "funksjonstest"
+  ]
+}
