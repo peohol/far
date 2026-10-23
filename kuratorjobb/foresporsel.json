@@ -1,0 +1,22 @@
+{
+  "versjon": 1,
+  "stoffer": [
+    "alprazolam",
+    "atomoksetin",
+    "brekspiprazol",
+    "cbd",
+    "citalopram",
+    "diazepam",
+    "doksepin",
+    "fenobarbital",
+    "fenytoin",
+    "flunitrazepam",
+    "ghb",
+    "kariprazin",
+    "ketamin",
+    "ketobemidon"
+  ],
+  "oppgaver": [
+    "funksjonstest"
+  ]
+}
