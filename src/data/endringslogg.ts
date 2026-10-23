@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.107.5',
+    dato: '2026-10-23',
+    sammendrag: 'Lange fagtekster deles inn med overskrifter',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Kuratoren deler lange fagtekster med flere deler inn med overskrifter i to nivåer, så det er lettere å se hvordan teksten er bygd opp. Overskriftene navngir bare delen under; påstandene og kildene står i teksten. Vaktmesteren kan sette inn overskrifter der de mangler på sider som alt er publisert.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.107.4',
     dato: '2026-10-23',
     sammendrag: 'Fagtekstene sier økt, normal, redusert eller manglende enzymaktivitet',

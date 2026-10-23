@@ -17,7 +17,7 @@ hvordan prosjektet er satt opp.
 | Koordinatoren | Starter og holder trådene i gang, gir signalene mellom dem og svarer fagansvarlig i prosjektchatten. Gjør ikke fagarbeid. | Ingen |
 | Kurator (én fast tråd) | Kuraterer etter skillen `monografikurator` og protokollen, retter og publiserer det som er godkjent | `claude-monografkurator`, `npm run kurator`, `/mnt/project-files/.hemmelig/kurator.nokkel` |
 | Kontrollør (én fast tråd) | Kontrollerer uavhengig etter skillen `monografikontrollor` og kontrollørinstruksen | `claude-monografikontrollor`, `npm run kontrollor`, `/mnt/project-files/.hemmelig/kontrollor.nokkel` |
-| Vaktmester (én fast tråd) | Retter feil og mangler på fagsider som er publisert, etter skillen `vaktmester`: språket, nesten-duplikater og tekniske endringer fagansvarlig ber om. Ingen omfattende faglige endringer og ingen egne litteratursøk | Som kuratoren: grenene er kuratorgrener, og kontrolløren kontrollerer dem som andre |
+| Vaktmester (én fast tråd) | Retter feil og mangler på fagsider som er publisert, etter skillen `vaktmester`: språket, nesten-duplikater, overskrifter som mangler, og tekniske endringer fagansvarlig ber om. Ingen omfattende faglige endringer og ingen egne litteratursøk | Som kuratoren: grenene er kuratorgrener, og kontrolløren kontrollerer dem som andre |
 | Fagansvarlig (Peder) | Avgjør det bare et menneske kan avgjøre, og sier ja til å slå sammen en PR | Administrator i appen |
 
 Databasen håndhever rollene: kuratoren kan ikke godkjenne, kontrolløren kan
@@ -75,7 +75,7 @@ Oppsettet krever PR-en «Eget prosjekt for kuratering» fra «OUSFAR Dev». Finn
 ROLLENE
 - Kurator: én fast tråd som kuraterer etter skillen monografikurator og docs/kuratorprotokoll.md, med kuratornøkkelen.
 - Kontrollør: én fast tråd som kontrollerer uavhengig etter skillen monografikontrollor og docs/kontrollorinstruks.md, med sin egen kontrollørnøkkel.
-- Vaktmester: én fast tråd som retter feil og mangler på publiserte fagsider etter skillen vaktmester (språket, nesten-duplikater og tekniske endringer), med kuratornøkkelen. Grenene går til Kontrollør som Kurators.
+- Vaktmester: én fast tråd som retter feil og mangler på publiserte fagsider etter skillen vaktmester (språket, nesten-duplikater, overskrifter og tekniske endringer), med kuratornøkkelen. Grenene går til Kontrollør som Kurators.
 - Koordinatoren (du): starter og holder trådene i gang, gir signaler mellom dem og svarer Peder i prosjektchatten. Du gjør ikke fagarbeid selv.
 - Peder er fagansvarlig. Bare han avgjør beskyttede data og nøkkeltall, og bare han gir ja til å slå sammen en PR.
 

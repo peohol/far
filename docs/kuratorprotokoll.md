@@ -358,6 +358,31 @@ kategoriene:
 - Ordrette sitater og titlene på kildene står som kilden skrev dem. Det samme
   gjør CPIC-dataene appen viser selv (`docs/cpic.md`).
 
+## Overskrifter
+
+En lang tekst deles inn med overskrifter, så leseren ser hvordan den er bygd
+opp og finner frem i den (fagansvarliges ønske 2026-10-23). Rikteksten har
+overskrifter i to nivåer, en `heading`-node med `attrs.level` 1 eller 2
+(`docs/faginnhold.md`, «Rikteksten»), og appen viser dem under tittelen på
+kortet.
+
+- **Når:** et kort med flere deler, for eksempel flere populasjoner,
+  indikasjoner, legemiddelformer eller faser (absorpsjon, distribusjon,
+  eliminasjon), får en overskrift på nivå 1 foran hver del. Nivå 2 deler en
+  slik del videre og står bare under en overskrift på nivå 1. Et kort med ett
+  tema, eller med ett eller to avsnitt, trenger ingen: tittelen på kortet er
+  overskriften.
+- **Hva den sier:** et kort, beskrivende navn på delen under («Barn og
+  ungdom», «Nedsatt nyrefunksjon»). En overskrift er ingen påstand: ingen
+  tall, konklusjoner eller vurderinger, og ingen siteringer. Påstandene og
+  kildene står i teksten under (krav 4 og 5).
+- **Formen:** stor forbokstav bare i første ord og i egennavn, og ikke punktum.
+  Overskriften gjentar ikke tittelen på kortet. Fet skrift først i et avsnitt
+  brukes ikke i stedet for en overskrift.
+- **Vaktmesteren** setter inn overskrifter der en lang tekst med flere deler
+  mangler dem, men bare mellom avsnittene som står: teksten, rekkefølgen og
+  siteringene er som før.
+
 ## Erfaringer fra kontrollen
 
 Funn kontrolløren har gjort som kan gå igjen i andre stoffer. Kuratoren unngår
@@ -458,3 +483,7 @@ holder dem i takt med modellen og piloten).
   skrives som økt, normal, redusert eller manglende enzymaktivitet, ikke som
   «ultrarask» eller «langsom omsetter». Ingen krav er svekket: kategorien
   følger fortsatt kilden, og sitater står som kilden skrev dem.
+- 2026-10-23: «Overskrifter» (fagansvarlig): en lang tekst med flere deler
+  får overskrifter på nivå 1 og 2, og vaktmesteren kan sette dem inn der de
+  mangler. Ingen krav er svekket: en overskrift er ingen påstand, og
+  påstandene og kildene står i teksten.

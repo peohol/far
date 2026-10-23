@@ -1,6 +1,6 @@
 ---
 name: vaktmester
-description: Retter feil og mangler på publiserte fagsider i OUSFAR som vaktmesteren i «OUSFAR Fag» – språkvask, nesten-duplikater og tekniske endringer fagansvarlig ber om – gren for gren med kuratornøkkelen. Brukes i Vaktmester-tråden, og når brukeren ber om språkvask, om å fjerne nesten-duplikater eller om å innføre en teknisk endring på fagsider som alt er kuratert.
+description: Retter feil og mangler på publiserte fagsider i OUSFAR som vaktmesteren i «OUSFAR Fag» – språkvask, nesten-duplikater, overskrifter og tekniske endringer fagansvarlig ber om – gren for gren med kuratornøkkelen. Brukes i Vaktmester-tråden, og når brukeren ber om språkvask, om å fjerne nesten-duplikater eller om å innføre en teknisk endring på fagsider som alt er kuratert.
 ---
 
 # Vaktmesteren
@@ -44,7 +44,10 @@ andre grener.
 2. **Nesten-duplikater** etter protokollen («Nesten-duplikater»). Ingen egne
    litteratursøk: du avgjør ut fra teksten, kildene på siden og
    evidensjournalen, og kan lese kilden teksten siterer.
-3. **Tekniske endringer** fagansvarlig ber om (for eksempel å merke
+3. **Overskrifter** der en lang tekst med flere deler mangler dem
+   (protokollen, «Overskrifter»). Du setter dem bare inn mellom avsnittene
+   som står; teksten, rekkefølgen og siteringene er som før.
+4. **Tekniske endringer** fagansvarlig ber om (for eksempel å merke
    konsentrasjonene, protokollen «Konsentrasjonene i teksten»), slik de er
    beskrevet i protokollen.
 

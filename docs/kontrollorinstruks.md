@@ -113,6 +113,13 @@ teksten med kuratorprotokollen etter.
      sitat eller tittelen på en kilde, eller en kategori oversatt til feil
      aktivitet (sammenlign med kilden, også om poor metabolizer har
      restaktivitet), er en sperrende tråd.
+   - **Overskrifter** (protokollen, «Overskrifter»): en overskrift med et
+     tall, en vurdering eller en sitering, eller som sier noe annet enn
+     teksten under, er en sperrende tråd. Det er også et kort grenen skriver
+     eller skriver om, som har flere tydelige deler uten overskrifter. Er du i
+     tvil, retter grenen bare noe i kortet (som en vaktmestergren med et
+     annet formål), eller har et kort med ett tema en overskrift det ikke
+     trenger, er det en merknad.
 5. **Kommenter.** For hver endring som må gjøres: `kommenter` med
    `art: "sperrende"` og et `anker` som peker på det det gjelder (`objekt`
    for kortet, `felt` for feltet slik sammenligningen navngir det,
