@@ -409,3 +409,10 @@ holder dem i takt med modellen og piloten).
   etanol og litium merkes ikke, samme tall i to enheter står bare én gang, og
   skrivemåten når flere tall deler én enhet er beskrevet. Ingen krav er
   svekket: tallene står fortsatt som i kilden.
+- 2026-10-23: krav 3 (fagansvarligs faste avgjørelse): referanseområdet er
+  alltid det fra de norske harmoniseringsprosjektene, og AGNPs område står
+  bare i TDM-kortet. Kravet om å stoppe og spørre et menneske når en kilde
+  tyder på at en beskyttet verdi er feil, gjelder ikke lenger et avvikende
+  AGNP-område eller et annet internasjonalt område: AGNPs områder bygger på
+  varierende doser og prøvetidspunkter, og fagansvarlig har avgjort det én gang
+  for alle sider.
