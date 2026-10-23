@@ -378,13 +378,17 @@ kortet.
   kildene står i teksten under (krav 4 og 5).
 - **Formen:** stor forbokstav bare i første ord og i egennavn, og ikke punktum.
   Overskriften gjentar ikke tittelen på kortet. Fet skrift først i et avsnitt,
-  eller et eget avsnitt med bare en etikett og kolon («Misdannelser:»), brukes
-  ikke i stedet for en overskrift.
+  et eget avsnitt med bare en etikett og kolon («Misdannelser:»), eller en
+  etikett og kolon først i avsnittet som navngir en del av kortet («Dialyse og
+  hemoperfusjon: …»), brukes ikke i stedet for en overskrift.
 - **Vaktmesteren** setter inn overskrifter der en lang tekst med flere deler
   mangler dem, men bare mellom avsnittene som står. Et avsnitt med bare en
   etikett for delen under («Misdannelser:», «Studier med friske:») gjøres om
-  til en overskrift med de samme ordene, uten kolonet. Ellers er teksten,
-  rekkefølgen og siteringene som før.
+  til en overskrift med de samme ordene, uten kolonet. Det samme gjelder en
+  etikett og kolon først i et avsnitt som navngir delen («Dialyse og
+  hemoperfusjon: …»): etiketten tas bort fra avsnittet og blir overskriften, og
+  ordet etter kolonet får stor forbokstav. En etikett med tall eller sitering
+  står som før. Ellers er teksten, rekkefølgen og siteringene som før.
 
 ## Erfaringer fra kontrollen
 
@@ -494,3 +498,8 @@ holder dem i takt med modellen og piloten).
   overskrift i forkledning, og vaktmesteren gjør det om til en ekte overskrift
   med de samme ordene. Ingen krav er svekket: ingen påstand eller sitering
   endres.
+- 2026-10-23: «Overskrifter»: en etikett og kolon først i et avsnitt som
+  navngir en del av kortet, er også en overskrift i forkledning, og
+  vaktmesteren gjør den om til en ekte overskrift med de samme ordene (etter
+  forslag fra kontrolløren). Ingen krav er svekket: ingen påstand eller
+  sitering endres.
