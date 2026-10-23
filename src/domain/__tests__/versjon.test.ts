@@ -34,6 +34,7 @@ import {
   OMFANG,
   sammenlignVersjon,
   varsles,
+  varslesIBjella,
   type Endring,
 } from '../versjon'
 
@@ -107,6 +108,36 @@ describe('oppdateringsversjon', () => {
 
   it('finnes for loggen slik den står', () => {
     expect(() => oppdateringsversjon(ENDRINGSLOGG)).not.toThrow()
+  })
+})
+
+describe('varsler i bjella', () => {
+  const endring = (ekstra: Partial<Endring> = {}): Endring => ({
+    versjon: '2.0.0',
+    dato: '2026-10-23',
+    sammendrag: 'Endring',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: ['Endret'],
+    ...ekstra,
+  })
+
+  it('varsler ikke om ordinære endringer, selv når de krever oppdatering', () => {
+    expect(varsles(endring())).toBe(true)
+    expect(varslesIBjella(endring())).toBe(false)
+    expect(oppdateringsversjon([endring()])).toBe('2.0.0')
+  })
+
+  it('krever eksplisitt klinisk viktighet for funksjonsvarsler', () => {
+    expect(varslesIBjella(endring({ varsleFunksjonsendring: true }))).toBe(true)
+    expect(varslesIBjella(endring({ varsleFunksjonsendring: true, utenVarsel: true }))).toBe(false)
+  })
+
+  it('beholder obligatoriske faglige varsler selv ved utenVarsel', () => {
+    expect(varslesIBjella(endring({ endrerFortolkning: true, utenVarsel: true }))).toBe(true)
+    expect(varslesIBjella(endring({ kritiskFagligVarsel: true, utenVarsel: true }))).toBe(true)
+    expect(varsles(endring({ kritiskFagligVarsel: true, utenVarsel: true }))).toBe(true)
+    expect(oppdateringsversjon([endring({ kritiskFagligVarsel: true, utenVarsel: true })])).toBe('2.0.0')
   })
 })
 

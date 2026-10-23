@@ -47,6 +47,17 @@ export interface Endring {
    */
   endrerFortolkning?: true
   /**
+   * Viktig endring i hvordan klinikere bruker fortolkningen, eller i sentral
+   * klinisk funksjonalitet på fagsidene. Gir et valgfritt funksjonsvarsel.
+   * Vanlig UX, navigasjon, design og interne endringer skal ikke merkes.
+   */
+  varsleFunksjonsendring?: true
+  /**
+   * Kritisk faglig informasjon med betydning for pasientsikkerhet eller
+   * påliteligheten av kliniske konklusjoner. Gir et obligatorisk varsel.
+   */
+  kritiskFagligVarsel?: true
+  /**
    * Endringen merkes ikke i appen, som når en databaseendring som alt er gjort,
    * føres inn i koden. Da blir den ikke et varsel.
    */
@@ -73,16 +84,31 @@ export function nyesteVersjon(logg: Endring[]): string {
 }
 
 /**
- * Føringer uten `utenVarsel` varsles; de andre merkes ikke i appen. En
- * endring i fortolkningen varsles alltid, så den vinner om begge står.
+ * Om endringen krever en ny appversjon hos brukeren. Dette styrer
+ * oppdateringsmeldingen, ikke hva som vises i bjella.
+ * Endret fortolkning og kritiske faglige meldinger går foran `utenVarsel`.
  */
 export function varsles(endring: Endring): boolean {
-  return !endring.utenVarsel || endring.endrerFortolkning === true
+  return !endring.utenVarsel || endring.endrerFortolkning === true || endring.kritiskFagligVarsel === true
+}
+
+/**
+ * Høy terskel for varsler om versjonsendringer i bjella.
+ * Ingen føring varsles bare fordi appen har fått en ny versjon.
+ * Kritiske faglige meldinger og endret fortolkningsresultat kan ikke
+ * undertrykkes av `utenVarsel`.
+ */
+export function varslesIBjella(endring: Endring): boolean {
+  return (
+    endring.endrerFortolkning === true ||
+    endring.kritiskFagligVarsel === true ||
+    (endring.varsleFunksjonsendring === true && !endring.utenVarsel)
+  )
 }
 
 /**
  * Versjonen brukerne bes om å oppdatere til: den nyeste føringen som varsles.
- * En føring med `utenVarsel` endrer ingenting brukerne merker, og en stille
+ * En ordinær føring med `utenVarsel` endrer ingenting brukerne merker, og en stille
  * designjustering har ingen føring i det hele tatt (`docs/endringslogg.md`),
  * så ingen av dem ber noen laste siden på nytt.
  */

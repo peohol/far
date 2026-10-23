@@ -38,6 +38,7 @@ const endring = (versjon: string, sammendrag: string): Endring => ({
   typer: ['Funksjonalitet'],
   omfang: 'Mindre omfang',
   punkter: ['Noe'],
+  varsleFunksjonsendring: true,
 })
 
 const LISTE: Varselliste = {
@@ -345,7 +346,10 @@ describe('vinduet', () => {
         (within(g).getAllByRole('switch') as HTMLInputElement[]).map(tilstand),
       ]),
     ).toEqual([
-      ['Fortolkning', [['Endringer i fortolkningen', true, true]]],
+      ['Faglige varsler', [
+          ['Endringer i fortolkningen', true, true],
+          ['Kritiske faglige sikkerhetsmeldinger', true, true],
+        ]],
       [
         'Idéer',
         [
@@ -368,10 +372,10 @@ describe('vinduet', () => {
           ['Nye diskusjoner på mine favorittsider', false, false],
         ],
       ],
-      ['Appen', [['Ny eller endret funksjonalitet i appen', true, false]]],
+      ['Appen', [['Vesentlige kliniske funksjonsendringer', true, false]]],
     ])
     const brytere = within(innstillinger).getAllByRole('switch') as HTMLInputElement[]
-    await bruker.click(brytere[2]!)
+    await bruker.click(brytere[3]!)
     expect(api.lagreVarselvalg).toHaveBeenCalledWith({ aktive_ideer: false })
     await waitFor(() => expect(bjella().getAttribute('aria-label')).toBe('Varsler (2 uleste)'))
 

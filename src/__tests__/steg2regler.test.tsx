@@ -165,7 +165,9 @@ describe('steg 2 på regelsettene i databasen', () => {
     expect(within(steg).getByText('510 – 3900 nmol/L')).toBeTruthy()
     expect(within(steg).queryByText('1 – 2 nmol/L')).toBeNull()
     expect(within(steg).queryByText('200 – 600 nmol/L')).toBeNull()
-  })
+    // Hele appen tegnes i denne integrasjonstesten. CI kan bruke mer enn
+    // fem sekunder på oppsett og tastaturhendelser; alle faglige krav beholdes.
+  }, 15_000)
 
   it('gir en analytt uten kort på stoffsiden sin ikke noe referanseområde', async () => {
     // Bare Amitriptylin-siden har et kort. Nortriptylin er koblet til

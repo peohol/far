@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.107.8',
+    dato: '2026-10-23',
+    sammendrag: 'Bare klinisk viktige endringer gir varsler om ny funksjonalitet',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    gjelder: ['hele appen'],
+    punkter: [
+      'Funksjonsvarsler brukes bare ved vesentlige endringer i fortolkning eller fagsidenes kliniske funksjoner. Kritiske faglige meldinger vises alltid. Andre endringer kan fortsatt leses i versjonsloggen.',
+    ],
+  },
+  {
     versjon: '1.107.7',
     dato: '2026-10-23',
     sammendrag: 'Etiketter først i et avsnitt, som «Dialyse og hemoperfusjon:», blir ekte overskrifter i fagtekstene',

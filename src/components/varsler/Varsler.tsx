@@ -190,6 +190,7 @@ function Varselgruppe({ tittel, handling, children }: { tittel: string; handling
 
 const KATEGORIIKON: Record<Varsel['kategori'], Ikonnavn> = {
   fortolkning: 'interp',
+  kritisk_faglig: 'shield',
   mine_ideer: 'comment',
   aktive_ideer: 'comment',
   nye_ideer: 'idea',
@@ -246,7 +247,11 @@ function Endringsinnhold({ varsel, onGa }: RadProps & { varsel: Endringsvarsel }
         {endring.sammendrag}
       </button>
       <p className="varsel__meta">
-        {varsel.kategori === 'fortolkning' ? 'Endrer fortolkningen' : 'Ny versjon'} · versjon {endring.versjon} ·{' '}
+        {varsel.kategori === 'kritisk_faglig'
+          ? 'Kritisk faglig melding'
+          : varsel.kategori === 'fortolkning'
+            ? 'Endrer fortolkningen'
+            : 'Vesentlig funksjonsendring'} · versjon {endring.versjon} ·{' '}
         <time dateTime={endring.dato}>{formaterDato(endring.dato)}</time>
       </p>
     </>
@@ -372,7 +377,7 @@ const GRUPPEIKON: Record<Varselgruppe, Ikonnavn> = {
 function Innstillinger({ status }: { status: Varselstatus }) {
   return (
     <div className="varselinnstillinger">
-      <p className="varselinnstillinger__ingress">Velg hva du vil få varsel om. Endringer i fortolkningen og svar til deg får alle.</p>
+      <p className="varselinnstillinger__ingress">Velg hva du vil få varsel om. Endringer i fortolkningen, kritiske faglige meldinger og svar til deg får alle.</p>
       {kategorierIGrupper().map(({ gruppe, kategorier }) => (
         <Innstillingsgruppe key={gruppe} gruppe={gruppe}>
           {kategorier.map((kategori) => {

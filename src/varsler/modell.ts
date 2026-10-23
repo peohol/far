@@ -4,7 +4,7 @@
  * kallene står i `api.ts`, og hvordan databasen lager varslene, i migrasjonen
  * `*_varsler.sql` og i `docs/varsler.md`.
  */
-import { sammenlignVersjon, varsles, type Endring } from '../domain/versjon'
+import { sammenlignVersjon, varslesIBjella, type Endring } from '../domain/versjon'
 import { PANELREKKEFOLGE, panelFor } from '../faginnhold/paneler'
 import { erObjekt, tekst, tekstEllerNull } from '../ideer/lesing'
 import { lesDiskusjonsside, type Diskusjonsside } from '../diskusjoner/modell'
@@ -16,7 +16,7 @@ import { lesDiskusjonsside, type Diskusjonsside } from '../diskusjoner/modell'
  * gruppe får sin overskrift, med kategoriene sine under.
  */
 export const VARSELGRUPPER = {
-  fortolkning: { tittel: 'Fortolkning' },
+  fortolkning: { tittel: 'Faglige varsler' },
   ideer: { tittel: 'Idéer' },
   diskusjoner: { tittel: 'Diskusjoner' },
   favoritter: { tittel: 'Favorittsider' },
@@ -40,15 +40,22 @@ export interface Varselkategoridefinisjon {
 }
 
 /**
- * Kategoriene, i den rekkefølgen innstillingene viser dem innenfor gruppen. Alle unntatt
- * `funksjonalitet` lages av databasen (`public.varselkategori`);
- * `funksjonalitet` er nye føringer i endringsloggen.
+ * Kategoriene, i den rekkefølgen innstillingene viser dem innenfor gruppen.
+ * `funksjonalitet` og `kritisk_faglig` kommer fra endringsloggen;
+ * de øvrige fra databasen (`public.varselkategori`).
  */
 export const VARSELKATEGORIER = {
   fortolkning: {
     gruppe: 'fortolkning',
     tittel: 'Endringer i fortolkningen',
     forklaring: 'Når en kommentartekst eller reglene for hvilke kommentarer som brukes, er endret.',
+    obligatorisk: true,
+    standard: true,
+  },
+  kritisk_faglig: {
+    gruppe: 'fortolkning',
+    tittel: 'Kritiske faglige sikkerhetsmeldinger',
+    forklaring: 'Når en oppdaget feil eller viktig faglig endring kan påvirke pasientsikkerhet eller kliniske vurderinger.',
     obligatorisk: true,
     standard: true,
   },
@@ -89,8 +96,8 @@ export const VARSELKATEGORIER = {
   },
   funksjonalitet: {
     gruppe: 'appen',
-    tittel: 'Ny eller endret funksjonalitet i appen',
-    forklaring: 'Når appen har fått en ny versjon, med det som står om den i endringsloggen.',
+    tittel: 'Vesentlige kliniske funksjonsendringer',
+    forklaring: 'Bare større endringer i hvordan fortolkningen brukes, eller i fagsidenes sentrale kliniske funksjoner. Andre endringer står i versjonsloggen.',
     obligatorisk: false,
     standard: true,
   },
@@ -193,16 +200,17 @@ export function lesEndringsloggstatus(verdi: unknown): Endringsloggstatus | null
 }
 
 /**
- * Der en ny bruker begynner: den nyeste føringen som varsles, er et varsel,
+ * Der en ny bruker begynner: den nyeste varslingsverdige føringen er et varsel,
  * resten er historie. Da får alle med seg det siste som er gjort, men ikke
  * hele loggen.
  */
 export function startstatus(logg: readonly Endring[]): Endringsloggstatus {
-  return { fra: logg.filter(varsles)[1]?.versjon ?? '0.0.0', lest: [], arkivert: [] }
+  return { fra: logg.filter(varslesIBjella)[1]?.versjon ?? '0.0.0', lest: [], arkivert: [] }
 }
 
-/** En føring som endrer fortolkningen, varsles som det; resten som funksjonalitet. */
-export function endringskategori(endring: Endring): 'fortolkning' | 'funksjonalitet' {
+/** Kritiske meldinger går først, deretter endret fortolkning og vesentlige funksjonsendringer. */
+export function endringskategori(endring: Endring): 'kritisk_faglig' | 'fortolkning' | 'funksjonalitet' {
+  if (endring.kritiskFagligVarsel) return 'kritisk_faglig'
   return endring.endrerFortolkning ? 'fortolkning' : 'funksjonalitet'
 }
 
@@ -218,7 +226,7 @@ function erGammel(endring: Endring, naa: Date): boolean {
 export interface Endringsvarsel {
   kilde: 'endringslogg'
   id: string
-  kategori: 'fortolkning' | 'funksjonalitet'
+  kategori: 'kritisk_faglig' | 'fortolkning' | 'funksjonalitet'
   endring: Endring
   oppdatert_kl: string
   lest: boolean
@@ -231,7 +239,7 @@ export interface Endringsvarsel {
  */
 export function endringsvarsler(logg: readonly Endring[], status: Endringsloggstatus, naa: Date = new Date()): Endringsvarsel[] {
   return logg
-    .filter((endring) => varsles(endring) && sammenlignVersjon(endring.versjon, status.fra) > 0)
+    .filter((endring) => varslesIBjella(endring) && sammenlignVersjon(endring.versjon, status.fra) > 0)
     .map((endring) => ({
       kilde: 'endringslogg' as const,
       id: `endring:${endring.versjon}`,
@@ -259,7 +267,7 @@ export function merkEndringerLest(
   let fra = status.fra
   const nyere = logg.filter((e) => sammenlignVersjon(e.versjon, fra) > 0).reverse()
   for (const endring of nyere) {
-    if ((varsles(endring) && !lest.has(endring.versjon)) || !erGammel(endring, naa)) break
+    if ((varslesIBjella(endring) && !lest.has(endring.versjon)) || !erGammel(endring, naa)) break
     fra = endring.versjon
   }
   const beholdt = (versjoner: Set<string>) =>
