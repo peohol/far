@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-23T09:35:25.823Z",
+  "oppdatert_kl": "2026-10-23T12:42:41.605Z",
   "malt_kl": "2026-10-22T18:37:42.482Z",
   "teller": 82,
   "stoffer": {
@@ -5164,18 +5164,11 @@
     "oksazepam": {
       "stoff": "oksazepam",
       "navn": "Oksazepam",
-      "status": "klar",
+      "status": "blokkert",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 445.5,
-        "grunner": [
-          "De novo-kuratering i runden som gjelder.",
-          "Aldri kuratert.",
-          "Ingen kuratering å regne alderen fra.",
-          "9 av 13 redaksjonelle seksjoner er tomme.",
-          "1 av 8 elementer har ingen kilde.",
-          "Bare 3 referanser."
-        ]
+        "poeng": 0,
+        "grunner": []
       },
       "maal": {
         "kl": "2026-10-22T18:37:43.275Z",
@@ -5191,7 +5184,14 @@
       "tidligst_kl": null,
       "gjenoppta": null,
       "pr": null,
-      "blokkeringer": [],
+      "blokkeringer": [
+        {
+          "kode": "annen_gren",
+          "grunn": "Fagsiden har en aktiv kurateringsgren køen ikke følger (kuratering, klar); den må avsluttes først.",
+          "kl": "2026-10-23T12:42:41.605Z",
+          "kilde": "system"
+        }
+      ],
       "sist_kuratert": null,
       "siste_kjoring": null,
       "aktiv": true,
