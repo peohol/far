@@ -18,7 +18,7 @@ export const ENDRINGSLOGG: Endring[] = [
     typer: ['Fag'],
     omfang: 'Minimalt omfang',
     punkter: [
-      'Ingen endring i appen. Fagtekstene beskriver farmakogenetikken med norsk terminologi: økt, normal, redusert eller manglende enzymaktivitet, ikke «ultraraske» eller «langsomme omsettere». Fenotypen sier noe om ett enzym, ikke om personen. De publiserte fagsidene rettes etter hvert.',
+      'Ingen endring i appen. Fagtekstene beskriver farmakogenetikken med norsk terminologi: økt, normal, redusert eller manglende enzymaktivitet, ikke «ultraraske» eller «langsomme omsettere». Fenotypen sier noe om ett enzym, ikke om personen, og oversettelsen følger kategorien i kilden. De publiserte fagsidene rettes etter hvert.',
     ],
     utenVarsel: true,
   },

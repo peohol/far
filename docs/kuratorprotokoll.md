@@ -330,13 +330,21 @@ manglende enzymaktivitet («redusert CYP2D6-aktivitet», «personer med
 manglende CYP2C19-aktivitet»), også når kilden bruker de engelske
 kategoriene:
 
-| Kilden | Fagteksten |
+| Kildens kategori | Fagteksten |
 | --- | --- |
-| ultrarapid og rapid metabolizer (UM, RM), «ultrarask» og «rask omsetter» | økt aktivitet |
-| normal og extensive metabolizer (NM, EM), «normal omsetter» | normal aktivitet |
-| intermediate metabolizer (IM), «intermediær omsetter» | redusert aktivitet |
-| poor metabolizer (PM), «langsom omsetter» | manglende aktivitet |
+| ultrarapid og rapid metabolizer (UM, RM) | økt aktivitet |
+| normal og extensive metabolizer (NM, EM) | normal aktivitet |
+| intermediate metabolizer (IM) | redusert aktivitet |
+| poor metabolizer (PM) | manglende aktivitet |
 
+- Oversettelsen går etter kildens kategori, ikke etter det norske ordet:
+  «rask omsetter» står i norske preparatomtaler ofte for extensive
+  metabolizer (normal), men hos CPIC for rapid metabolizer (økt). Står det
+  bare et norsk ord, slå opp kategorien i kilden eller i den engelske
+  preparatomtalen.
+- Sammenligner kilden bare poor med extensive metabolizers (eldre studier og
+  preparatomtaler), var «extensive» alle de andre. Da skrives «andre enn dem
+  med manglende aktivitet», ikke «normal aktivitet».
 - «Omsetter», «metabolisør» og forkortelsene over brukes ikke om personer
   eller fenotyper. At et legemiddel omsettes raskt eller langsomt, kan stå.
 - Skiller kilden mellom to kategorier som får samme ord (rapid og
