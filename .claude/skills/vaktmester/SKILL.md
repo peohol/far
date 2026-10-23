@@ -38,6 +38,9 @@ andre grener.
      «administrere»; «ta opp», ikke «adressere»). Etablerte faguttrykk
      (clearance, steady state, AUC) står.
    - «Fagside» og «monografi», aldri «stoffside» eller «monograf».
+   - Farmakogenetiske fenotyper som økt, normal, redusert eller manglende
+     enzymaktivitet, ikke «omsetter» eller «metabolisør» (protokollen,
+     «Enzymaktivitet»). Kategorien skal stemme med kilden.
 2. **Nesten-duplikater** etter protokollen («Nesten-duplikater»). Ingen egne
    litteratursøk: du avgjør ut fra teksten, kildene på siden og
    evidensjournalen, og kan lese kilden teksten siterer.

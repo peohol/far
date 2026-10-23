@@ -108,6 +108,11 @@ teksten med kuratorprotokollen etter.
      ikke kan endre noen klinisk vurdering, er det en sperrende tråd. Det er
      også et tall som er tatt ut selv om forskjellen kan ha betydning (krav 6).
      Er du i tvil, er det en merknad.
+   - **Enzymaktivitet** (protokollen, «Enzymaktivitet»): en fenotype skrevet
+     som «omsetter», «metabolisør» eller UM/RM/NM/EM/IM/PM utenfor et ordrett
+     sitat eller tittelen på en kilde, eller en kategori oversatt til feil
+     aktivitet (sammenlign med kilden, også om poor metabolizer har
+     restaktivitet), er en sperrende tråd.
 5. **Kommenter.** For hver endring som må gjøres: `kommenter` med
    `art: "sperrende"` og et `anker` som peker på det det gjelder (`objekt`
    for kortet, `felt` for feltet slik sammenligningen navngir det,

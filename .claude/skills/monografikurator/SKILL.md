@@ -78,6 +78,11 @@ forbindelsen som er målt, så leseren ser den i sin måleenhet
 (protokollen, «Konsentrasjonene i teksten»). `konsentrasjoner <gren>` viser
 de merkede og de umerkede; ingen `FEIL` før `til_kontroll`.
 
+**Enzymaktivitet.** Farmakogenetiske fenotyper skrives som økt, normal,
+redusert eller manglende enzymaktivitet, aldri «ultrarask», «langsom
+omsetter» eller «metabolisør», selv om kilden bruker dem (protokollen,
+«Enzymaktivitet»).
+
 ## Gangen
 
 1. **Stoffet.** Fra køen: følg `docs/kurateringsko-instruks.md` (reserver, forny,
