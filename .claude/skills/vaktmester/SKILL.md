@@ -46,7 +46,9 @@ andre grener.
    evidensjournalen, og kan lese kilden teksten siterer.
 3. **Overskrifter** der en lang tekst med flere deler mangler dem
    (protokollen, «Overskrifter»). Du setter dem bare inn mellom avsnittene
-   som står; teksten, rekkefølgen og siteringene er som før.
+   som står, og gjør et avsnitt med bare en etikett og kolon («Misdannelser:»)
+   om til en overskrift med de samme ordene; ellers er teksten, rekkefølgen og
+   siteringene som før.
 4. **Tekniske endringer** fagansvarlig ber om (for eksempel å merke
    konsentrasjonene, protokollen «Konsentrasjonene i teksten»), slik de er
    beskrevet i protokollen.
