@@ -345,6 +345,11 @@ kategoriene:
 - Sammenligner kilden bare poor med extensive metabolizers (eldre studier og
   preparatomtaler), var «extensive» alle de andre. Da skrives «andre enn dem
   med manglende aktivitet», ikke «normal aktivitet».
+- Omfatter poor metabolizer også genotyper med noe aktivitet igjen (CYP2C9
+  med aktivitetsverdi 0,5: ett allel med redusert og ett uten funksjon),
+  skrives ikke «manglende». Da står «sterkt redusert aktivitet» med
+  aktivitetsverdien eller genotypen, eller «redusert eller manglende
+  aktivitet» når kilden ikke skiller dem.
 - «Omsetter», «metabolisør» og forkortelsene over brukes ikke om personer
   eller fenotyper. At et legemiddel omsettes raskt eller langsomt, kan stå.
 - Skiller kilden mellom to kategorier som får samme ord (rapid og
