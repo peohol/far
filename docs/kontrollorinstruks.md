@@ -33,6 +33,11 @@ Grunnreglene:
   Kontroller at grenen stemmer med avgjørelsen, men be ikke om å endre
   verdien den gjelder. Tyder en kilde på at avgjørelsen bygger på noe som er
   feil, si det i en merknad; det sperrer ikke.
+- Referanseområdet fra de norske harmoniseringsprosjektene står, etter
+  fagansvarligs faste avgjørelse (krav 3 i protokollen). Et annet område i
+  AGNP er ingen innvending mot det og ingen sak for fagansvarlig. Gir AGNP et
+  område, kontroller at det står i TDM-kortet med årstall og prøvetidspunkt,
+  og aldri i viktige data.
 - Det du skriver (`kommenter`, `lukk_kommentar`, `gjenapne_kommentar`,
   `vurder`), er gjort når OUSFAR har svart med resultatet. Uten et slikt svar
   er det ikke dokumentert før du har sett etter i grenen; se «Når et kall ikke

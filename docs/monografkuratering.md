@@ -159,6 +159,8 @@ Redaksjonelle rammer for kuratoren:
 - «Behandling ved forgiftning» er stoffspesifikke tiltak, antidoter og
   andre særlige behandlingsforhold, ikke generell ABC- eller
   akuttmedisinsk behandling.
+- Referanseområdet i viktige data er alltid det norske; AGNPs område står
+  bare i TDM-kortet (krav 3 i `docs/kuratorprotokoll.md`).
 - Tallene i viktige data (toksisk område, alvorlig/dødelig intoksikasjon)
   flyttes eller dupliseres ikke. Toksisitetskortene kan utdype dem og sette
   dem i kontekst, men er egne redaksjonelle elementer.
