@@ -1,0 +1,401 @@
+{
+  "stoff": "zolpidem",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-22T04:15:06.408609+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 4,
+    "hentet": 3,
+    "dokumenter": 2,
+    "mangler": [
+      {
+        "merkevare_id": "ID_12F764B4-DC39-4AA9-84CB-5462C6C8E3AE",
+        "varenavn": "Stilnoct",
+        "navn_form_styrke": "Stilnoct tab 10 mg",
+        "produsent": "Sanofi",
+        "atc": "N05CF02",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 3 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 3,
+        "ikke_dmp": 0,
+        "uten_omtale": 1
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "1 av 4 preparater i FEST mangler en hentet preparatomtale fra DMP: 1 uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA). SPC-behovet er ikke dekket; se «dekning.mangler».",
+      "antall": {
+        "preparater": 4,
+        "hentet": 3,
+        "mangler": 1,
+        "dokumenter": 2
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/13-9556.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/13-9556.pdf",
+      "hentet_kl": "2026-10-23T02:14:00.214Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "358728",
+        "content-md5": "0N2VcD94yA9BdFV6ffpKTg==",
+        "last-modified": "Thu, 19 Mar 2026 20:48:39 GMT",
+        "etag": "0x8DE85F8E626123C",
+        "date": "Fri, 23 Oct 2026 02:14:01 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_19A22DB8-CB77-4FD4-8B2F-9CB3A9D7EB81",
+          "varenavn": "Zolpidem Forza",
+          "navn_form_styrke": "Zolpidem Forza tab 5 mg",
+          "produsent": "Forza Advance Limited",
+          "atc": "N05CF02",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/13-9556.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (358728 byte).",
+          "antall": {
+            "bytes": 358728
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "1726d5fe04981893c0e8fc20041fe79cd16950bab58eb37abcf79c1817c91363"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08202.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08202.pdf",
+      "hentet_kl": "2026-10-23T02:14:06.412Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "196205",
+        "content-md5": "Cr8aiTaf95BUTY5wlAvloQ==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:55 GMT",
+        "etag": "0x8DE53793F813458",
+        "date": "Fri, 23 Oct 2026 02:14:06 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_B4154AB1-A5DE-4D63-A8A8-1924E4BEE6A4",
+          "varenavn": "Stilnoct",
+          "navn_form_styrke": "Stilnoct tab 10 mg",
+          "produsent": "Sanofi-aventis Norge (3)",
+          "atc": "N05CF02",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08202.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (196205 byte).",
+          "antall": {
+            "bytes": 196205
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "6469a82ad27bd891b66b6f382019de7eee0e53a751a54ad9b76c135112692ed2"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/13-9557.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/13-9557.pdf",
+      "hentet_kl": "2026-10-23T02:14:10.817Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "358728",
+        "content-md5": "0N2VcD94yA9BdFV6ffpKTg==",
+        "last-modified": "Thu, 19 Mar 2026 20:48:39 GMT",
+        "etag": "0x8DE85F8E6291F6B",
+        "date": "Fri, 23 Oct 2026 02:14:10 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_D9ECF4A9-FE22-401D-AA86-31ACA65EFAC2",
+          "varenavn": "Zolpidem Forza",
+          "navn_form_styrke": "Zolpidem Forza tab 10 mg",
+          "produsent": "Forza Advance Limited",
+          "atc": "N05CF02",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/13-9557.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (358728 byte).",
+          "antall": {
+            "bytes": 358728
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "1726d5fe04981893c0e8fc20041fe79cd16950bab58eb37abcf79c1817c91363"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "1726d5fe04981893c0e8fc20041fe79cd16950bab58eb37abcf79c1817c91363",
+      "bytes": 358728,
+      "mappe": "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893",
+      "pdf": {
+        "sider": 15,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": null,
+        "laget": "Wed Feb 11 09:09:13 2026 UTC",
+        "endret": "Wed Feb 11 09:09:13 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/original.pdf",
+        "tekst": "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst/side-001.txt",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst/side-002.txt",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst/side-003.txt",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst/side-004.txt",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst/side-005.txt",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst/side-006.txt",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst/side-007.txt",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst/side-008.txt",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst/side-009.txt",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst/side-010.txt",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst/side-011.txt",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst/side-012.txt",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst/side-013.txt",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst/side-014.txt",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/tekst/side-015.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/sider/side-001.png",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/sider/side-002.png",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/sider/side-003.png",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/sider/side-004.png",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/sider/side-005.png",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/sider/side-006.png",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/sider/side-007.png",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/sider/side-008.png",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/sider/side-009.png",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/sider/side-010.png",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/sider/side-011.png",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/sider/side-012.png",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/sider/side-013.png",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/sider/side-014.png",
+          "kuratorjobb/resultat/zolpidem/spc/1726d5fe04981893/sider/side-015.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 9,
+        "til": 11
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (15 sider).",
+          "antall": {
+            "sider": 15
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 23116
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 9."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 15
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "6469a82ad27bd891b66b6f382019de7eee0e53a751a54ad9b76c135112692ed2",
+      "bytes": 196205,
+      "mappe": "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891",
+      "pdf": {
+        "sider": 10,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "PREPARATOMTALE (SmPC)",
+        "laget": "Wed Jan  5 11:32:57 2022 UTC",
+        "endret": "Wed Jan  5 11:32:57 2022 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/original.pdf",
+        "tekst": "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/tekst/side-001.txt",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/tekst/side-002.txt",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/tekst/side-003.txt",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/tekst/side-004.txt",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/tekst/side-005.txt",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/tekst/side-006.txt",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/tekst/side-007.txt",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/tekst/side-008.txt",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/tekst/side-009.txt",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/tekst/side-010.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/sider/side-001.png",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/sider/side-002.png",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/sider/side-003.png",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/sider/side-004.png",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/sider/side-005.png",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/sider/side-006.png",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/sider/side-007.png",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/sider/side-008.png",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/sider/side-009.png",
+          "kuratorjobb/resultat/zolpidem/spc/6469a82ad27bd891/sider/side-010.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 6,
+        "til": 7
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (10 sider).",
+          "antall": {
+            "sider": 10
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 19604
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 6."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 10
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

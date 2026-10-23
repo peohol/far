@@ -1,0 +1,53 @@
+Blodtrykkssenkning
+Vanligvis sees en ubetydelig til moderat senkning av blodtrykket hos både hjertefriske og
+pasienter med ischemisk hjertefunksjon ved intravenøs injeksjon. Hypovolemipasienter er mest
+følsomme. Ved doser tilsvarende kraftig sedering (0.2 mg/kg), synker PO2 kort tid etter
+injeksjonen. PCO2 øker noe ved uforstyrret pusting.
+
+Hukommelsestap
+Anterograd amnesi kan oppstå ved bruk av terapeutiske doser, risikoen øker ved høyere doser.
+Amnestiske virkninger kan være forbundet med upassende oppførsel (se pkt. 4.4).
+
+Depresjon
+Allerede eksisterende depresjon kan avdekkes under bruk av benzodiazepiner.
+
+Psykiatriske og paradoksale reaksjoner
+Det er kjent at reaksjoner som rastløshet, agitasjon, irritabilitet, aggressivitet,
+vrangforestillinger, raseri, mareritt, hallusinasjoner, psykoser, upassende oppførsel og andre
+adferdsrelaterte bivirkninger kan forekomme under behandling med benzodiazepiner eller
+benzodiazepinlignende preparater. For dette preparatet kan reaksjonene være ganske
+alvorlige, og de forekommer hyppigere hos barn og eldre.
+
+Avhengighet
+Bruken (selv terapeutiske doser) kan føre til utvikling av fysisk og psykisk avhengighet:
+seponering av behandling kan medføre abstinens eller rebound-effekt (se pkt. 4.4). Misbruk
+av benzodiazepiner er rapportert.
+
+Melding av mistenkte bivirkninger
+Melding av mistenkte bivirkninger etter godkjenning av legemidlet er viktig. Det gjør det
+mulig å overvåke forholdet mellom nytte og risiko for legemidlet kontinuerlig. Helsepersonell
+oppfordres til å melde enhver mistenkt bivirkning. Dette gjøres via meldeskjema som finnes
+på nettsiden til Statens legemiddelverk: www.legemiddelverket.no/meldeskjema.
+
+4.9   Overdosering
+
+Det må under intensiv overvåkning vises særlig oppmerksomhet for åndedretts- og
+hjertefunksjoner.
+Overdosering med benzodiazepiner viser seg normalt ved forskjellige grader av depresjon av
+sentralnervesystemet som kan variere fra sløvhet til koma. I lette tilfeller omfatter
+symptomene sløvhet, mental forvirring og døsighet. I alvorligere tilfeller omfatter
+symptomene ataksi, hypotoni, hypotensjon, åndedrettsbesvær, sjelden koma og meget sjelden
+død.
+Flumazenil kan være nyttig som antidot.
+
+
+5.    FARMAKOLOGISKE EGENSKAPER
+
+5.1   Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Anxiolytikum og antiepileptikum i benzodiazepingruppen. ATC-
+kode: N05BA01.
+
+Virkningsmekanisme
+Binder seg spesifikt til benzodiazepinreseptorer i CNS, hvorved den hemmende virkningen av
+transmittersubstansen gamma-aminosmørsyre (GABA) på nervecellene forsterkes.

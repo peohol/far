@@ -1,0 +1,55 @@
+30 timer, inntil 1 år ca. 10 timer, over 1 år ca. 20 timer. Clearance for diazepam er på 20-40 ml/min.
+Kun ubetydelige mengder diazepam elimineres. Dette indikerer at legemidlet er nesten fullstendig
+metabolisert før det forlater kroppen. I urin er oksazepamglukuronid hovedsubstansen med opphav fra
+legemiddelet.
+
+Spesielle pasientgrupper
+
+Eldre
+Det var høyere andel ubundet diazepam hos eldre enn hos yngre. Alder nedsetter leverens kapasitet til
+N-demetylering og 3-hydroksylering av diazepam. Det er en aldersavhengig nedsatt clearance av
+ubundet legemiddel som er ansvarlig for den observerte 2-4 ganger økningen i halveringstid hos eldre,
+med en kraftigere effekt hos menn enn hos kvinner. Det vil være større grad av akkumulering av
+ubundet farmakologisk aktiv diazepam hos eldre enn hos yngre ved flere doser.
+
+Eliminasjonen av desmetyldiazepam er saktere hos eldre menn, men ikke hos kvinner.
+
+Nedsatt leverfunksjon
+Halveringstiden for diazepam dobles ved akutt viral hepatitt, men går sakte tilbake til normal
+halveringstid ved bedring. Ved alkoholisk levercirrhose observeres en 2-5 ganger økning av
+halveringstiden. Disse endringene skyldes hovedsakelig nedsatt metabolisme i lever. Redusert
+clearance av diazepam og desmetyldiazepam medfører økt akkumulering ved langtidsbruk. Dette er
+forbundet med økt sedasjon.
+
+Nedsatt nyrefunksjon
+Ut fra clearance av ubundet legemiddel var eliminasjonen av diazepam lik ved kronisk nyresvikt og
+hos friske frivillige. Dermed skal steady-state-konsentrasjoner av ubundet diazepam ved enhver
+daglige dose i gjennomsnitt ikke være forskjellig mellom pasienter med nedsatt nyrefunksjon og friske
+personer. På grunn av endringer i plasmaproteinbinding og vevsdistribusjon av diazepam var
+halveringstiden for eliminasjon forkortet ved nyresykdom, fra (gjennomsnitt ± SE) 92 ± 23 timer til
+37 ± 7 timer hos pasienter med nyresvikt.
+
+Graviditet
+Diazepam og desmetyldiazepam passerer placenta. Fosteret kan også gjennomføre N-demetylering av
+diazepam. Langtidsbehandling fører til akkumulering av begge substanser hos fosteret, med høye
+nivåer i det føtale hjertet, lungene og hjernen.
+
+Plasmaproteinbinding av diazepam er nedsatt under graviditet, spesielt i tredje trimester og delvis på
+grunn av fall i konsentrasjonen av serumalbumin. Akutt dosering kan gi økt farmakologisk effekt.
+
+Barn
+Frie fraksjoner av diazepam og desmetyldiazepam hadde i løpet av første dag av livet en bratt økning
+til det dobbelte av verdiene ved fødsel, med en påfølgende reduksjon til nær kontrollverdier ved en
+ukes alder. Disse endringene er parallelle til endringene i konsentrasjoner av frie fettsyrer.
+
+Nyfødte og premature spedbarn metaboliserer diazepam langsommere enn eldre barn og voksne, og
+halveringstiden er dermed forlenget (svært uttalt hos premature nyfødte), unntatt ved eksponering for
+induserende midler før eller umiddelbart etter fødsel. Nyfødtes kapasitet til å utføre metabolske
+prosesser som er involvert i biotransformasjonen av diazepam, inkludert hydroksylering, demetylering
+og glukuronidering, forblir begrenset frem til 5 måneders alder. Da utvikles de hepatiske enzymene
+slik at kapasiteten blir tilsvarende eller større enn hos voksne.
+
+Amming
+Diazepam og metabolittene skilles ut i morsmelk. Konsentrasjonen av diazepam i melk er ca. 10 % av
+konsentrasjonen i mors blod. Etter administrering av flere doser på 10 mg daglig kan mengdene som
+overføres være store nok til at virkninger på barnet kan sees.

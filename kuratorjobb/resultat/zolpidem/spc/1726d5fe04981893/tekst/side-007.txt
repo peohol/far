@@ -1,0 +1,39 @@
+Zolpidem metaboliseres via flere cytokrom P450 enzymer, det viktigste er CYP3A4 med bidrag av
+CYP1A2.
+Rifampicin induserer metabolismen av zolpidem, som fører til en reduksjon av maksimal
+plasmakonsentrasjonen med ca. 60 % og potensielt reduksjon i effekten. Lignende effekt kan også
+forventes med andre sterke indusere av cytokrom P450-ensymer.
+Den farmakodynamiske effekten av zolpidem reduseres når zolpidem administreres samtidig med
+en CYP3A4-induktor som rifampicin og johannesurt.
+Johannesurt har vist å ha en farmakokinetisk interaksjon med zolpidem. Gjennomsnittlig Cmax og
+AUC var redusert (med henholdsvis 33,7 % og 30,0 %) når zolpidem ble administrert med
+johannesurt, sammenlignet med zolpidem administrert alene. Samtidig administrering av
+johannesurt kan redusere blodnivåene av zolpidem. Samtidig bruk anbefales ikke.
+
+
+Legemidler som hemmer aktiviteten til bestemte leverenzymer (spesielt CYP3A4) kan føre til økt
+plasmakonsentrasjon og forsterke effekten av zolpidem. Samtidig administrasjon med ciprofloxacin
+kan øke blodnivåene av zolpidem, og anbefales ikke.
+Ketoconazole hemmer metabolismen av zolpidem med CYP3A4 i leveren, og resulterer i økt effekt
+av zolpidem. Samtidig administrasjon av zolpidem og ketokonazol (200 mg to ganger daglig), en
+potent CYP3A4 inhibitor, førte til forlenget zolpidem halveringstid, økte total AUC, og redusert
+tilsynelatende oral clearance, sammenlignet med zolpidem og placebo. Total AUC for zolpidem
+økte med 83 % når zolpidem ble administrert sammen med ketokonazol, sammenlignet med
+zolpidam alene. En rutinemessig dosejustering av zolpidem anses ikke som nødvendig, men
+pasientene bør gjøres oppmerksomme på at bruk av zolpidem sammen med ketokonazol kan
+forsterke de sedative effektene.
+Når zolpidem ble administrert samtidig med itrakonazol (en CYP3A4 inhibitor), ble det ikke sett
+signifikant påvirkning av farmakokinetikk og farmakodynamikk. Den kliniske relevansen av disse
+resultatene er ukjent. Itrakonazol og flukonazol påvirker ikke metabolismen til zolpidem i leveren,
+så disse legemiddelene bør foretrekkes.
+Kombinasjonen av Zolpidem Forza og muskelavslappende midler kan øke den muskelavslappende
+effekten.
+
+
+4.6 Fertilitet, graviditet og amming
+
+
+Graviditet:
+Zolpidem bør ikke brukes under graviditet.
+Det foreligger ikke tilstrekkelig data til at det kan gjøres en vurdering av sikkerheten til zolpidem
+under graviditet.

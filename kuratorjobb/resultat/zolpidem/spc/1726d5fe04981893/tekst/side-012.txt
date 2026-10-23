@@ -1,0 +1,43 @@
+Individer har fullstendig kommet seg igjen etter overdoser med opptil 400 mg zolpidem, noe som er
+40 ganger den anbefalte dosen.
+
+Behandling:
+Generelle symptomatiske og støttende tiltak bør brukes. Umiddelbar ventrikkelskylling bør gjøres
+dersom det er hensiktsmessig. Intravenøs væske bør administreres ved behov. Dersom det ikke er
+hensiktsmessig å tømme magen, bør aktivt kull gis for å redusere absorpsjon. Overvåking av
+respiratoriske og kardiovaskulære funksjoner bør vurderes. Beroligende legemidler bør ikke brukes
+selv om eksitasjon skulle oppstå.
+Bruk av flumazenil kan vurderes ved alvorlige symptomer. Administrasjon av flumazenil kan bidra
+til at det oppstår nevrologiske symptomer (kramper). Ved behandling av overdose med ethvert
+legemiddel, bør man være oppmerksom på at det kan ha vært tatt mange midler.
+
+Zolpidem har høyt distribusjonsvolum og proteinbinding, og hemodialyse og forsert diurese er
+derfor ikke effektive virkemidler.
+Studier med hemodialyse hos pasienter med nyresvikt som mottar terapeutiske doser har vist at
+zolpidem ikke er dialyserbar.
+
+
+
+5. FARMAKOLOGISKE EGENSKAPER
+
+5.1 Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Benzodiazepinlignende midler. ATC-kode: N05C F02
+
+Zolpidem, et imidazopiridin, som binder selektivt til omega1-reseptorene som utgjør alfadelen til
+GABA-A-reseptorkomplekset. Benzodiazepiner binder ikke-selektivt til alle tre omega-reseptorene,
+men zolpidem binder fortrinnsvis til omega1-reseptoren.
+Modulering av kloridionkanalen via denne reseptoren fører til den spesifikke beroligende effekten
+av zolpidem.
+Den selektive bindingen av zolpidem til omega1 -reseptorer kan muligens forklare det nesten
+fullstendige fraværet av muskelavslappende og antikonvulsiv effekt hos dyr ved hypnotiske doser
+av zolpidem. Denne effekten vises vanligvis av benzodiazepiner, som ikke er selektive for omega1
+reseptorer.
+Opprettholdelsen av dyp søvn (trinn 3 og 4 langsom bølgesøvn) hos mennesker kan også forklares
+med den selektive omega1-bindingen av zolpidem.
+
+Det er vist i eksperimentelle studier at det har sedativ effekt ved lavere doser enn det som kreves for
+å gi antikonvulsive, muskelavslappende eller angstdempende effekter. Disse effektene er assosiert
+med en spesifikk agonistisk effekt på sentrale reseptorer som hører til det GABA-omega (BZ1 og
+BZ2) makromolekulære reseptorkomplekset som modulerer åpningen av kloridionkanalen.
+Effektene av zolpidem kan reverseres av flumazenil, en benzodiazepinantagonist.

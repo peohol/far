@@ -1,0 +1,57 @@
+5.    FARMAKOLOGISKE EGENSKAPER
+
+5.1   Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Benzodiazepinderivat, ATC-kode: N05B A01
+
+Virkningsmekanisme
+Binder seg spesifikt til benzodiazepinreseptorer i CNS. Dette medfører en positiv allosterisk
+modulering, som gjør at gamma-aminosmørsyre (GABA)-reseptorene i de inhibitoriske synapsene får
+økt affinitet for nevrotransmitteren GABA. Dermed blir den hemmende virkning av GABA på
+postsynaptisk transmembran-kloridinfluks forsterket.
+
+Farmakodynamiske effekter
+Angstdempende, spenningsløsende, sedativ-hypnotisk, antikonvulsiv og muskelrelakserende effekt.
+Virkningen forsterkes på grunn av aktive metabolitter (hovedsakelig desmetyldiazepam).
+
+5.2   Farmakokinetiske egenskaper
+
+Absorpsjon
+Peroral: Raskt. Maks. serumkonsentrasjon etter 30-60 minutter med store individuelle forskjeller.
+
+Distribusjon
+Lipidløselig. Distribueres i stor grad til vev, til tross for høy proteinbinding, som er ca. 85 % hos
+nyfødte og 98-99 % hos voksne. Distribusjonsvolum ved steady-state er i gjennomsnitt mellom
+0,88 og 1,1 l/kg. Proteinbinding og distribusjonsvolum for desmetyldiazepam er lignende.
+Proteinbindingen begrenser omfanget av diazepam som tas opp i cerebrospinalvæsken (CSF). CSF-
+nivåene er omtrent lik den frie plasmakonsentrasjonen av legemidlet. Desmetyldiazepam kan
+akkumulere i CSF ved gjentatte doseringer. Diazepam har svært raskt opptak i hjernevev og når raskt
+likevekt, med konsentrasjoner høyere enn i plasma. Det totale tidsforløpet for okkuperte reseptorer
+samsvarte med tidsforløpet for summen av konsentrasjoner av diazepam og metabolitter i hjernen.
+Terapeutisk serumkonsentrasjon: Ingen sikker relasjon mellom serumkonsentrasjon og klinisk effekt.
+Store individuelle forskjeller. Antatt effektiv antiepileptisk virkning ved serumkonsentrasjon
+700-1400 nmol/liter (200-400 ng/ml).
+
+Biotransformasjon
+Diazepam metaboliseres i leveren. Hovedmetabolitt desmetyldiazepam er farmakologisk aktiv og har
+samme virkningsspektrum som diazepam, men dobbelt så lang halveringstid. Denne metabolismeveien
+står for 50-60 % av total clearance av diazepam. I tillegg står 3-hydroksylering for 27 % av clearance,
+med en sakte omgjøring til de farmakologisk aktive metabolittene temazepam og oksazepam. Disse
+metabolittene får lave plasmanivåer og konjugeres videre til glukuronider. Etter flere doser med
+diazepam var plasmakonsentrasjonsratioene for desmetyldiazepam/diazepam 1,1 ± 0,2,
+temazepam/diazepam 0,11 ± 0,05 og oksazepam/diazepam 0,09 ± 0,03. Oksidering av diazepam er
+mediert av cytokrom P450-isoenzymer. Desmetyldiazepam dannes hovedsakelig via CYP2C19 og
+CYP3A, og 3-hydroksydiazepam (temazepam) og oksazepam via CYP3A. Ettersom CYP2C19 utviser
+polymorfisme, kan det skilles mellom raske omsettere og langsomme omsettere. Langsomme
+omsettere har vist betydelig lavere clearance (12 vs 26 ml/min) og lengre halveringstid
+(88 vs 41 timer) for diazepam enn raske omsettere etter en peroral enkeltdose. Langsomme omsettere
+hadde i tillegg lavere clearance, høyere AUC og lengre eliminasjonshalveringstid for
+desmetyldiazepam. Det ser ut til å være forskjeller i denne polymorfismen mellom ulike etnisiteter.
+Halveringstiden kan under behandling øke med 50 % på grunn av reduksjon i hepatisk clearance.
+Studieresultater varierer med hensyn til diazepamnivåer under langtidsbehandling. Det er sett kraftig
+økning ved langtidsbruk, muligens på grunn av metabolsk autoinduksjon, men andre studier viser
+ingen forskjell i plasmakonsentrasjonene uavhengig av behandlingslengde.
+
+Eliminasjon
+Halveringstid: Voksne: 24-48 timer for diazepam, 40-100 timer for desmetyldiazepam. Eldre og
+leversviktpasienter: 70-100 timer for diazepam. Barn: Premature 40-110 timer, nyfødte fullbårne ca.

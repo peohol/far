@@ -1,0 +1,949 @@
+{
+  "stoff": "diazepam",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-22T04:15:06.408609+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 14,
+    "hentet": 10,
+    "dokumenter": 5,
+    "mangler": [
+      {
+        "merkevare_id": "ID_271562C1-4778-42F6-ADD6-0CD71FF32561",
+        "varenavn": "Diazepam-ratiopharm",
+        "navn_form_styrke": "Diazepam-ratiopharm inj, oppl 10 mg/2 ml",
+        "produsent": "Ratiopharm",
+        "atc": "N05BA01",
+        "legemiddelform": "Injeksjonsvæske, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_A26BF034-7BC8-4BC6-9D38-3A3B9982594F",
+        "varenavn": "Diazepam-Lipuro",
+        "navn_form_styrke": "Diazepam-Lipuro inj, emul 10 mg/2 ml",
+        "produsent": "B. Braun Melsungen",
+        "atc": "N05BA01",
+        "legemiddelform": "Injeksjonsvæske, emulsjon",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_A3E6CF1A-6FD8-4698-A3B6-0833930C5713",
+        "varenavn": "Diazepam ratiopharm",
+        "navn_form_styrke": "Diazepam ratiopharm stikkpille 10 mg",
+        "produsent": "Ratiopharm GmbH",
+        "atc": "N05BA01",
+        "legemiddelform": "Stikkpille",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_E3E3CDD9-C5C5-4518-A114-B099AC7406C5",
+        "varenavn": "Diazepam Xilmac",
+        "navn_form_styrke": "Diazepam Xilmac inj, emul 10 mg/2 ml",
+        "produsent": "Macure",
+        "atc": "N05BA01",
+        "legemiddelform": "Injeksjonsvæske, emulsjon",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 8 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 8,
+        "ikke_dmp": 0,
+        "uten_omtale": 4
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "4 av 14 preparater i FEST mangler en hentet preparatomtale fra DMP: 4 uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA). SPC-behovet er ikke dekket; se «dekning.mangler».",
+      "antall": {
+        "preparater": 14,
+        "hentet": 10,
+        "mangler": 4,
+        "dokumenter": 5
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-04697.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-04697.pdf",
+      "hentet_kl": "2026-10-23T02:13:38.611Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "297553",
+        "content-md5": "uRObeAF4EdOWLwainYpxFg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:52 GMT",
+        "etag": "0x8DE53793D8CD8A5",
+        "date": "Fri, 23 Oct 2026 02:13:39 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_2BD67E79-976B-4373-B3EF-4113D4AC5674",
+          "varenavn": "Valium",
+          "navn_form_styrke": "Valium tab 5 mg",
+          "produsent": "Atnahs Pharma Netherlands B.V.",
+          "atc": "N05BA01",
+          "legemiddelform": "Tablett"
+        },
+        {
+          "merkevare_id": "ID_69D49B09-748E-4102-ABCF-BAE029B89641",
+          "varenavn": "Valium",
+          "navn_form_styrke": "Valium tab 5 mg",
+          "produsent": "Orifarm AS",
+          "atc": "N05BA01",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-04697.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (297553 byte).",
+          "antall": {
+            "bytes": 297553
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "b4b45abc009729704cb64bf7887ddb9452de74c68f1b496a6e041d432da09ca4"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06352.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06352.pdf",
+      "hentet_kl": "2026-10-23T02:13:43.256Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "291385",
+        "content-md5": "vmsT5iDP8DHfBBrDaEuzWQ==",
+        "last-modified": "Thu, 19 Mar 2026 20:47:57 GMT",
+        "etag": "0x8DE85F8CD1F8604",
+        "date": "Fri, 23 Oct 2026 02:13:43 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_4FC9C303-FABA-43DE-8F67-C3ABC9FB4660",
+          "varenavn": "Stesolid",
+          "navn_form_styrke": "Stesolid rektalvæske, oppl 5 mg/2,5 ml",
+          "produsent": "Actavis Group PTC ehf (1)",
+          "atc": "N05BA01",
+          "legemiddelform": "Rektalvæske, oppløsning"
+        },
+        {
+          "merkevare_id": "ID_AD892D60-A4BB-4319-871E-C48E6F1A3B79",
+          "varenavn": "Stesolid",
+          "navn_form_styrke": "Stesolid rektalvæske, oppl 5 mg/2,5 ml",
+          "produsent": "Orifarm AS",
+          "atc": "N05BA01",
+          "legemiddelform": "Rektalvæske, oppløsning"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06352.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (291385 byte).",
+          "antall": {
+            "bytes": 291385
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "5a2a8eb7e40dd9a7ea3a429b82b90de3fe60bf74af0b481fd649a0bb33b6bedf"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05116.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05116.pdf",
+      "hentet_kl": "2026-10-23T02:13:46.295Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "247529",
+        "content-md5": "WfYumyX086o++/ReSuTEpQ==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:56 GMT",
+        "etag": "0x8DE53793FE3435F",
+        "date": "Fri, 23 Oct 2026 02:13:46 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_69940F7D-194E-4865-9A25-538C80DDF8C7",
+          "varenavn": "Stesolid",
+          "navn_form_styrke": "Stesolid tab 2 mg",
+          "produsent": "Actavis Group PTC ehf (1)",
+          "atc": "N05BA01",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05116.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (247529 byte).",
+          "antall": {
+            "bytes": 247529
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "ed9dd29d0e7340c836a27d5cfc447480764c762d550bfec9f15c6fc5b8b4518d"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05117.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05117.pdf",
+      "hentet_kl": "2026-10-23T02:13:48.812Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "247529",
+        "content-md5": "WfYumyX086o++/ReSuTEpQ==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:57 GMT",
+        "etag": "0x8DE537940D7E03E",
+        "date": "Fri, 23 Oct 2026 02:13:48 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_8D1CFAC9-26DD-45F5-9D30-073AF77BE3CF",
+          "varenavn": "Stesolid",
+          "navn_form_styrke": "Stesolid tab 5 mg",
+          "produsent": "Actavis Group PTC ehf (1)",
+          "atc": "N05BA01",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05117.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (247529 byte).",
+          "antall": {
+            "bytes": 247529
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "ed9dd29d0e7340c836a27d5cfc447480764c762d550bfec9f15c6fc5b8b4518d"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06489.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06489.pdf",
+      "hentet_kl": "2026-10-23T02:13:48.961Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "184005",
+        "content-md5": "AXW7+ytUMn5a/db4wdniMg==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:57 GMT",
+        "etag": "0x8DE537940FD8B3E",
+        "date": "Fri, 23 Oct 2026 02:13:49 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_8E8DCF0B-A37E-46DB-9646-9C2530FE679E",
+          "varenavn": "Stesolid",
+          "navn_form_styrke": "Stesolid inj, emul 5 mg/ml",
+          "produsent": "Actavis Group PTC ehf (1)",
+          "atc": "N05BA01",
+          "legemiddelform": "Injeksjonsvæske, emulsjon"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06489.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (184005 byte).",
+          "antall": {
+            "bytes": 184005
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "cd591b089dd1dcadfad7ed8260966a58ff8d7e225da1cd94dc579c2f5a439cb8"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06353.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06353.pdf",
+      "hentet_kl": "2026-10-23T02:13:52.043Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "291385",
+        "content-md5": "vmsT5iDP8DHfBBrDaEuzWQ==",
+        "last-modified": "Thu, 19 Mar 2026 20:47:57 GMT",
+        "etag": "0x8DE85F8CD226BC8",
+        "date": "Fri, 23 Oct 2026 02:13:52 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_93E1FF39-9CFA-43A0-8DBF-581DB42EBF9E",
+          "varenavn": "Stesolid",
+          "navn_form_styrke": "Stesolid rektalvæske, oppl 10 mg/2,5 ml",
+          "produsent": "Actavis Group PTC ehf (1)",
+          "atc": "N05BA01",
+          "legemiddelform": "Rektalvæske, oppløsning"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06353.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (291385 byte).",
+          "antall": {
+            "bytes": 291385
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "5a2a8eb7e40dd9a7ea3a429b82b90de3fe60bf74af0b481fd649a0bb33b6bedf"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05105.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05105.pdf",
+      "hentet_kl": "2026-10-23T02:13:52.194Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "256805",
+        "content-md5": "ZuNIfj9eaZWWjWn4aFEY1w==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:44 GMT",
+        "etag": "0x8DE537938C4DDE7",
+        "date": "Fri, 23 Oct 2026 02:13:52 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_CA26000B-63BC-4B7B-910B-DD719227F433",
+          "varenavn": "Vival",
+          "navn_form_styrke": "Vival tab 5 mg",
+          "produsent": "Actavis Group PTC ehf (1)",
+          "atc": "N05BA01",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05105.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (256805 byte).",
+          "antall": {
+            "bytes": 256805
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "a50f46fbf4257ad5b91cded125f80b80a5924a1b461b25d0caecdc279c8f4b30"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05104.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05104.pdf",
+      "hentet_kl": "2026-10-23T02:13:55.023Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "256805",
+        "content-md5": "ZuNIfj9eaZWWjWn4aFEY1w==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:58 GMT",
+        "etag": "0x8DE5379412928D1",
+        "date": "Fri, 23 Oct 2026 02:13:55 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_DF243D59-13CE-4672-BD6E-3547989F4EE0",
+          "varenavn": "Vival",
+          "navn_form_styrke": "Vival tab 2 mg",
+          "produsent": "Actavis Group PTC ehf (1)",
+          "atc": "N05BA01",
+          "legemiddelform": "Tablett"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05104.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (256805 byte).",
+          "antall": {
+            "bytes": 256805
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "a50f46fbf4257ad5b91cded125f80b80a5924a1b461b25d0caecdc279c8f4b30"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "b4b45abc009729704cb64bf7887ddb9452de74c68f1b496a6e041d432da09ca4",
+      "bytes": 297553,
+      "mappe": "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970",
+      "pdf": {
+        "sider": 9,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "SPC",
+        "laget": "Tue Jan  4 10:44:55 2022 UTC",
+        "endret": "Tue Jan  4 10:44:55 2022 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/original.pdf",
+        "tekst": "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/tekst/side-001.txt",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/tekst/side-002.txt",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/tekst/side-003.txt",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/tekst/side-004.txt",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/tekst/side-005.txt",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/tekst/side-006.txt",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/tekst/side-007.txt",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/tekst/side-008.txt",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/tekst/side-009.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/sider/side-001.png",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/sider/side-002.png",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/sider/side-003.png",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/sider/side-004.png",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/sider/side-005.png",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/sider/side-006.png",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/sider/side-007.png",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/sider/side-008.png",
+          "kuratorjobb/resultat/diazepam/spc/b4b45abc00972970/sider/side-009.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 4,
+        "til": 5
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (9 sider).",
+          "antall": {
+            "sider": 9
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 19006
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 4."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 9
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "5a2a8eb7e40dd9a7ea3a429b82b90de3fe60bf74af0b481fd649a0bb33b6bedf",
+      "bytes": 291385,
+      "mappe": "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7",
+      "pdf": {
+        "sider": 8,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": "SmPC Vival tabletter",
+        "laget": "Mon Nov  3 14:20:14 2025 UTC",
+        "endret": "Mon Nov  3 14:20:14 2025 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/original.pdf",
+        "tekst": "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/tekst/side-001.txt",
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/tekst/side-002.txt",
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/tekst/side-003.txt",
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/tekst/side-004.txt",
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/tekst/side-005.txt",
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/tekst/side-006.txt",
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/tekst/side-007.txt",
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/tekst/side-008.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/sider/side-001.png",
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/sider/side-002.png",
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/sider/side-003.png",
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/sider/side-004.png",
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/sider/side-005.png",
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/sider/side-006.png",
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/sider/side-007.png",
+          "kuratorjobb/resultat/diazepam/spc/5a2a8eb7e40dd9a7/sider/side-008.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 5,
+        "til": 6
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (8 sider).",
+          "antall": {
+            "sider": 8
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 15404
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 5."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 8
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "ed9dd29d0e7340c836a27d5cfc447480764c762d550bfec9f15c6fc5b8b4518d",
+      "bytes": 247529,
+      "mappe": "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8",
+      "pdf": {
+        "sider": 7,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "SmPC Vival tabletter",
+        "laget": "Wed Jul 19 08:09:36 2023 UTC",
+        "endret": "Wed Jul 19 08:09:36 2023 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/original.pdf",
+        "tekst": "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/tekst/side-001.txt",
+          "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/tekst/side-002.txt",
+          "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/tekst/side-003.txt",
+          "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/tekst/side-004.txt",
+          "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/tekst/side-005.txt",
+          "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/tekst/side-006.txt",
+          "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/tekst/side-007.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/sider/side-001.png",
+          "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/sider/side-002.png",
+          "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/sider/side-003.png",
+          "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/sider/side-004.png",
+          "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/sider/side-005.png",
+          "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/sider/side-006.png",
+          "kuratorjobb/resultat/diazepam/spc/ed9dd29d0e7340c8/sider/side-007.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 4,
+        "til": 5
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (7 sider).",
+          "antall": {
+            "sider": 7
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 14175
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 4."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 7
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "cd591b089dd1dcadfad7ed8260966a58ff8d7e225da1cd94dc579c2f5a439cb8",
+      "bytes": 184005,
+      "mappe": "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad",
+      "pdf": {
+        "sider": 8,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "SmPC Vival tabletter",
+        "laget": "Tue Sep 19 05:29:46 2023 UTC",
+        "endret": "Tue Sep 19 05:29:46 2023 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/original.pdf",
+        "tekst": "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/tekst/side-001.txt",
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/tekst/side-002.txt",
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/tekst/side-003.txt",
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/tekst/side-004.txt",
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/tekst/side-005.txt",
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/tekst/side-006.txt",
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/tekst/side-007.txt",
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/tekst/side-008.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/sider/side-001.png",
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/sider/side-002.png",
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/sider/side-003.png",
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/sider/side-004.png",
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/sider/side-005.png",
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/sider/side-006.png",
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/sider/side-007.png",
+          "kuratorjobb/resultat/diazepam/spc/cd591b089dd1dcad/sider/side-008.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 5,
+        "til": 6
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (8 sider).",
+          "antall": {
+            "sider": 8
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 15554
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 5."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 8
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "a50f46fbf4257ad5b91cded125f80b80a5924a1b461b25d0caecdc279c8f4b30",
+      "bytes": 256805,
+      "mappe": "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5",
+      "pdf": {
+        "sider": 7,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "SmPC Vival tabletter",
+        "laget": "Wed Jul 19 08:09:33 2023 UTC",
+        "endret": "Wed Jul 19 08:09:33 2023 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/original.pdf",
+        "tekst": "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/tekst/side-001.txt",
+          "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/tekst/side-002.txt",
+          "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/tekst/side-003.txt",
+          "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/tekst/side-004.txt",
+          "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/tekst/side-005.txt",
+          "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/tekst/side-006.txt",
+          "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/tekst/side-007.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/sider/side-001.png",
+          "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/sider/side-002.png",
+          "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/sider/side-003.png",
+          "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/sider/side-004.png",
+          "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/sider/side-005.png",
+          "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/sider/side-006.png",
+          "kuratorjobb/resultat/diazepam/spc/a50f46fbf4257ad5/sider/side-007.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 4,
+        "til": 5
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (7 sider).",
+          "antall": {
+            "sider": 7
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 14293
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 4."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 7
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

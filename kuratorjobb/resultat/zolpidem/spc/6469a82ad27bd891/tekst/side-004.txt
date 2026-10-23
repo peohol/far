@@ -1,0 +1,57 @@
+Pasienter med sjeldne arvelige problemer med galaktoseintoleranse, en spesiell form for hereditær
+laktasemangel (Lapp lactase deficiency) eller glukose-galaktose malabsorpsjon bør ikke ta dette
+legemidlet.
+
+Pasienter med lang QT-syndrom
+En in vitro hjerteelektrofysiologisk studie viste at zolpidem, under eksperimentelle forhold, ved bruk
+av veldig høy konsentrasjon og pluripotente stamceller, kunne redusere hERG-relaterte
+kaliumstrømmer. Den potensielle konsekvensen hos pasienter med kjent lang QT-syndrom er ikke
+kjent. Som en forholdsregel, bør nytte/risiko forholdet av behandling med zolpidem hos pasienter med
+kjent lang QT-syndrom vurderes nøye.
+
+Risiko ved samtidig bruk av opioider
+Samtidig bruk av Stilnoct og opioider kan resultere i sedasjon, respirasjonsdepresjon, koma og død. På
+grunn av disse risikoene, bør samtidig forskrivning av sedativa, som benzodiazpiner, eller legemidler
+som Stilnoct og opioider forbeholdes pasienter der alternativ behandling ikke er mulig.
+
+Dersom Stilnoct blir forskrevet samtidig med opioider, bør kortest mulig behandlingsvarighet og
+laveste effektive dose benyttes (se også generelle doseanbefalinger i pkt. 4.2). Pasientene bør
+overvåkes nøye for tegn og symptomer på respirasjonsdepresjon og sedasjon. I denne forbindelsen
+anbefales det sterkt å informere pasientene og pårørende om å være oppmerksom på disse
+symptomene (se pkt. 4.5).
+
+Stilnoct inneholder laktose. Pasienter med sjeldne arvelige problemer med galaktoseintoleranse, total
+laktasemangel eller glukose-galaktose malabsorpsjon bør ikke ta dette legemidlet.
+
+Dette legemidlet inneholder mindre enn 1 mmol natrium (23 mg) i hver tablett, og er så godt som
+“natriumfritt”.
+
+4.5     Interaksjon med andre legemidler og andre former for interaksjon
+
+Alkohol
+Samtidig inntak med alkohol anbefales ikke.
+
+CNS-dempende legemidler
+Forsiktighet bør utvises ved kombinasjon med andre psykofarmaka.
+Den depressive effekten på sentralnervesystemet kan forsterkes ved samtidig bruk av antipsykotiske
+midler (nevroleptika), hypnotika, anxiolytika, sedativa, antidepressiva, narkotiske analgetika,
+antiepileptiske legemidler, anestetika og sederende antihistaminer. Samtidig bruk av zolpidem med
+disse legemidlene kan øke søvnighet og nedsatt psykomotorisk funksjon neste dag, inkludert nedsatt
+evne til å kjøre bil (se pkt. 4.4 og pkt. 4.7). I tillegg ble isolerte tilfeller av synshallusinasjoner
+rapportert hos pasienter som tok zolpidem samtidig med antidepressiva, inkludert bupropion,
+desipramin, fluoksetin, sertralin og venlafaksin.
+
+Samtidig administrasjon med fluvoksamin kan øke blodnivåene av zolpidem, og anbefales ikke.
+Når det gjelder narkotiske analgetika, kan også forsterkning av eufori oppstå, noe som kan føre til økt
+psykisk avhengighet.
+
+CYP450 hemmere/induktorer
+Substanser som hemmer cytokrom P450 kan øke aktiviteten til visse hypnotika, som zolpidem.
+Zolpidem metaboliseres via flere cytokrom P450-enzymer, det viktigste er CYP3A4 og med bidrag av
+CYP1A2. Effekten av zolpidem minskes hvis legemiddelet administreres samtidig med en CYP3A4-
+induktor som rifampicin og johannesurt (prikkperikum). Johannesurt har vist å ha en farmakokinetisk
+interaksjon med zolpidem. Gjennomsnittlig Cmax og AUC var redusert (med henholdsvis 33,7 % og
+30,0 %) når zolpidem ble administrert med johannesurt, sammenlignet med zolpidem administrert
+alene. Hvis zolpidem derimot administreres samtidig med itrakonazol (en CYP3A4-hemmer), er det
+ikke sett signifikant påvirkning av farmakokinetikk og farmakodynamikk. Den kliniske relevansen av
+disse resultatene er ukjent. Samtidig administrasjon av zolpidem og ketokonazol, en potent CYP3A4-
