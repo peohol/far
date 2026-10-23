@@ -1,18 +1,179 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/manuell-39947299995",
     "foresporsel_commit": "b30ce9ad0e18703b561e0cc3faba1abe206cd892",
     "foresporsel_sha256": "fa082b955541cf12a83aa23bd44a10c55913799cea6de8594e0c0fbcdedb8be1",
     "kode_commit": "c1e6374833eca0e985d37a698148cf03d04cb03c",
     "kjoring": "https://github.com/peohol/ousfar/actions/runs/39947299995",
-    "startet_kl": "2026-10-23T11:37:22.674Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-23T11:37:24.783Z",
+    "ferdig_kl": "2026-10-23T11:38:08.031Z"
   },
-  "foresporsel": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "alprazolam",
+      "atomoksetin",
+      "brekspiprazol",
+      "cbd",
+      "citalopram",
+      "diazepam",
+      "doksepin",
+      "fenobarbital",
+      "fenytoin",
+      "flunitrazepam",
+      "ghb",
+      "kariprazin",
+      "ketamin",
+      "ketobemidon"
+    ],
+    "oppgaver": [
+      "funksjonstest"
+    ]
+  },
   "referanse": null,
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 666
+    }
+  ],
+  "stoffer": {
+    "alprazolam": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/alprazolam/funksjonstest.json"
+        }
+      }
+    },
+    "atomoksetin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/atomoksetin/funksjonstest.json"
+        }
+      }
+    },
+    "brekspiprazol": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/brekspiprazol/funksjonstest.json"
+        }
+      }
+    },
+    "cbd": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/cbd/funksjonstest.json"
+        }
+      }
+    },
+    "citalopram": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/citalopram/funksjonstest.json"
+        }
+      }
+    },
+    "diazepam": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/diazepam/funksjonstest.json"
+        }
+      }
+    },
+    "doksepin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/doksepin/funksjonstest.json"
+        }
+      }
+    },
+    "fenobarbital": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/fenobarbital/funksjonstest.json"
+        }
+      }
+    },
+    "fenytoin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/fenytoin/funksjonstest.json"
+        }
+      }
+    },
+    "flunitrazepam": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/flunitrazepam/funksjonstest.json"
+        }
+      }
+    },
+    "ghb": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/ghb/funksjonstest.json"
+        }
+      }
+    },
+    "kariprazin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/kariprazin/funksjonstest.json"
+        }
+      }
+    },
+    "ketamin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/ketamin/funksjonstest.json"
+        }
+      }
+    },
+    "ketobemidon": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/ketobemidon/funksjonstest.json"
+        }
+      }
+    }
+  }
 }
