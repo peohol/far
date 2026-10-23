@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.107.3',
+    dato: '2026-10-23',
+    sammendrag: 'De norske referanseområdene står alltid i viktige data',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Referanseområdet på fagsidene er alltid det fra de norske harmoniseringsprosjektene. AGNPs områder nevnes under TDM med årstall og prøvetidspunkt, men erstatter aldri det norske og står aldri i viktige data.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.107.2',
     dato: '2026-10-22',
     sammendrag: 'Klarere regler for hvilke konsentrasjoner i fagtekstene som regnes om',

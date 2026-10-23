@@ -49,10 +49,16 @@ Hvert krav kontrolleres i selvtesten og av kontrolløren.
    grensene og grensene for alvorlig forgiftning, og de norske dose–serum-
    tabellene med originalkildene, beholdes. De erstattes aldri av
    internasjonale områder (som AGNP), som har en annen populasjon, et annet
-   formål og en annen metode. Tyder en kilde på at en slik verdi er feil,
-   stopper kuratoren og blokkerer stoffet i køen (`blokkert`) med en kort,
-   teknisk grunn; detaljene står i en tråd i grenen. Et menneske avgjør, og
-   avgjørelsen føres inn i tråden (fase 9).
+   formål og en annen metode. Referanseområdet er alltid det fra de norske
+   harmoniseringsprosjektene (fagansvarligs faste avgjørelse 2026-10-23):
+   AGNPs områder bygger på varierende doser og prøvetidspunkter og er ikke et
+   godt sammenligningsgrunnlag. De nevnes i TDM-kortet med årstall og
+   prøvetidspunkt, men står aldri i viktige data. At AGNP eller en annen
+   internasjonal kilde gir et annet område, er derfor ingen grunn til å
+   stoppe, sperre eller spørre fagansvarlig. Tyder en kilde ellers på at en
+   beskyttet verdi er feil, stopper kuratoren og blokkerer stoffet i køen
+   (`blokkert`) med en kort, teknisk grunn; detaljene står i en tråd i
+   grenen. Et menneske avgjør, og avgjørelsen føres inn i tråden (fase 9).
 4. **Påstand og kilde henger sammen på det smaleste nivået som gjør det
    entydig.** En lengre eller kildeheterogen tekst får inline-siteringer ved
    hver påstand; en regulatorisk påstand og en klinisk påstand som bygger på
