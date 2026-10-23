@@ -83,6 +83,12 @@ redusert eller manglende enzymaktivitet, aldri «ultrarask», «langsom
 omsetter» eller «metabolisør», selv om kilden bruker dem (protokollen,
 «Enzymaktivitet»).
 
+**Overskrifter.** Bruk overskrifter aktivt: et kort med flere deler får en
+overskrift på nivå 1 foran hver del, og nivå 2 under den der en del deles
+videre (`{"type": "heading", "attrs": {"level": 1}, "content": [...]}`).
+Overskriften navngir delen, uten tall, vurderinger eller siteringer
+(protokollen, «Overskrifter»).
+
 ## Gangen
 
 1. **Stoffet.** Fra køen: følg `docs/kurateringsko-instruks.md` (reserver, forny,
