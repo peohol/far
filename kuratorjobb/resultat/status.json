@@ -1,18 +1,269 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/manuell-39958640312",
     "foresporsel_commit": "7fff375f18fcb19aaeee698bc0f353f4c1bdd958",
     "foresporsel_sha256": "442c223250809ddde6929704147f7eb65009d21ec2a43e4c6a12605feb6cb5d6",
     "kode_commit": "6c03c49457e020c59137db068a5773d26a9f6e7f",
     "kjoring": "https://github.com/peohol/ousfar/actions/runs/39958640312",
-    "startet_kl": "2026-10-23T13:08:04.670Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-23T13:08:06.715Z",
+    "ferdig_kl": "2026-10-23T13:09:11.556Z"
   },
-  "foresporsel": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "brekspiprazol",
+      "cbd",
+      "diazepam",
+      "doksepin",
+      "fenobarbital",
+      "fenytoin",
+      "flunitrazepam",
+      "ghb",
+      "kariprazin",
+      "ketobemidon",
+      "lamotrigin",
+      "levetiracetam",
+      "lurasidon",
+      "nitrazepam",
+      "oksazepam",
+      "okskarbazepin",
+      "petidin",
+      "psilocybin",
+      "sertindol",
+      "topiramat",
+      "valproat",
+      "vortioksetin",
+      "zolpidem"
+    ],
+    "oppgaver": [
+      "funksjonstest"
+    ]
+  },
   "referanse": null,
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 552
+    }
+  ],
+  "stoffer": {
+    "brekspiprazol": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/brekspiprazol/funksjonstest.json"
+        }
+      }
+    },
+    "cbd": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/cbd/funksjonstest.json"
+        }
+      }
+    },
+    "diazepam": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/diazepam/funksjonstest.json"
+        }
+      }
+    },
+    "doksepin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/doksepin/funksjonstest.json"
+        }
+      }
+    },
+    "fenobarbital": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/fenobarbital/funksjonstest.json"
+        }
+      }
+    },
+    "fenytoin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/fenytoin/funksjonstest.json"
+        }
+      }
+    },
+    "flunitrazepam": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/flunitrazepam/funksjonstest.json"
+        }
+      }
+    },
+    "ghb": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/ghb/funksjonstest.json"
+        }
+      }
+    },
+    "kariprazin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/kariprazin/funksjonstest.json"
+        }
+      }
+    },
+    "ketobemidon": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/ketobemidon/funksjonstest.json"
+        }
+      }
+    },
+    "lamotrigin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/lamotrigin/funksjonstest.json"
+        }
+      }
+    },
+    "levetiracetam": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/levetiracetam/funksjonstest.json"
+        }
+      }
+    },
+    "lurasidon": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/lurasidon/funksjonstest.json"
+        }
+      }
+    },
+    "nitrazepam": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/nitrazepam/funksjonstest.json"
+        }
+      }
+    },
+    "oksazepam": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/oksazepam/funksjonstest.json"
+        }
+      }
+    },
+    "okskarbazepin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/okskarbazepin/funksjonstest.json"
+        }
+      }
+    },
+    "petidin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/petidin/funksjonstest.json"
+        }
+      }
+    },
+    "psilocybin": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/psilocybin/funksjonstest.json"
+        }
+      }
+    },
+    "sertindol": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/sertindol/funksjonstest.json"
+        }
+      }
+    },
+    "topiramat": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/topiramat/funksjonstest.json"
+        }
+      }
+    },
+    "valproat": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/valproat/funksjonstest.json"
+        }
+      }
+    },
+    "vortioksetin": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/vortioksetin/funksjonstest.json"
+        }
+      }
+    },
+    "zolpidem": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/zolpidem/funksjonstest.json"
+        }
+      }
+    }
+  }
 }
