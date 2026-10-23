@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.107.4',
+    dato: '2026-10-23',
+    sammendrag: 'Fagtekstene sier økt, normal, redusert eller manglende enzymaktivitet',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Fagtekstene beskriver farmakogenetikken med norsk terminologi: økt, normal, redusert eller manglende enzymaktivitet, ikke «ultraraske» eller «langsomme omsettere». Fenotypen sier noe om ett enzym, ikke om personen. De publiserte fagsidene rettes etter hvert.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.107.3',
     dato: '2026-10-23',
     sammendrag: 'De norske referanseområdene står alltid i viktige data',

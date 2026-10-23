@@ -320,6 +320,31 @@ er det støy for leseren å få begge («1,98 timer etter A, 2 timer etter B»).
   forbindelser. Beskyttede norske data (krav 3) og nøkkeltallene i viktige
   data tas aldri ut. Er du i tvil, er det ikke et nesten-duplikat.
 
+## Enzymaktivitet
+
+I norsk fagspråk beskriver en farmakogenetisk fenotype den forventede samlede
+aktiviteten i ett enzym, ikke personen: redusert aktivitet i ett enzym betyr
+ikke at personen omsetter legemidler langsomt alt i alt (fagansvarliges
+avgjørelse 2026-10-23). Fagteksten skriver derfor økt, normal, redusert eller
+manglende enzymaktivitet («redusert CYP2D6-aktivitet», «personer med
+manglende CYP2C19-aktivitet»), også når kilden bruker de engelske
+kategoriene:
+
+| Kilden | Fagteksten |
+| --- | --- |
+| ultrarapid og rapid metabolizer (UM, RM), «ultrarask» og «rask omsetter» | økt aktivitet |
+| normal og extensive metabolizer (NM, EM), «normal omsetter» | normal aktivitet |
+| intermediate metabolizer (IM), «intermediær omsetter» | redusert aktivitet |
+| poor metabolizer (PM), «langsom omsetter» | manglende aktivitet |
+
+- «Omsetter», «metabolisør» og forkortelsene over brukes ikke om personer
+  eller fenotyper. At et legemiddel omsettes raskt eller langsomt, kan stå.
+- Skiller kilden mellom to kategorier som får samme ord (rapid og
+  ultrarapid), og forskjellen betyr noe for påstanden, står skillet med
+  genotypen eller aktivitetsverdien («økt CYP2C19-aktivitet (*17/*17)»).
+- Ordrette sitater og titlene på kildene står som kilden skrev dem. Det samme
+  gjør CPIC-dataene appen viser selv (`docs/cpic.md`).
+
 ## Erfaringer fra kontrollen
 
 Funn kontrolløren har gjort som kan gå igjen i andre stoffer. Kuratoren unngår
@@ -416,3 +441,7 @@ holder dem i takt med modellen og piloten).
   AGNP-område eller et annet internasjonalt område: AGNPs områder bygger på
   varierende doser og prøvetidspunkter, og fagansvarlig har avgjort det én gang
   for alle sider.
+- 2026-10-23: «Enzymaktivitet» (fagansvarlig): farmakogenetiske fenotyper
+  skrives som økt, normal, redusert eller manglende enzymaktivitet, ikke som
+  «ultrarask» eller «langsom omsetter». Ingen krav er svekket: kategorien
+  følger fortsatt kilden, og sitater står som kilden skrev dem.
