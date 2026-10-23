@@ -86,10 +86,10 @@ export function nyesteVersjon(logg: Endring[]): string {
 /**
  * Om endringen krever en ny appversjon hos brukeren. Dette styrer
  * oppdateringsmeldingen, ikke hva som vises i bjella.
- * Endret fortolkning går foran `utenVarsel` som tidligere.
+ * Endret fortolkning og kritiske faglige meldinger går foran `utenVarsel`.
  */
 export function varsles(endring: Endring): boolean {
-  return !endring.utenVarsel || endring.endrerFortolkning === true
+  return !endring.utenVarsel || endring.endrerFortolkning === true || endring.kritiskFagligVarsel === true
 }
 
 /**
@@ -108,7 +108,7 @@ export function varslesIBjella(endring: Endring): boolean {
 
 /**
  * Versjonen brukerne bes om å oppdatere til: den nyeste føringen som varsles.
- * En føring med `utenVarsel` endrer ingenting brukerne merker, og en stille
+ * En ordinær føring med `utenVarsel` endrer ingenting brukerne merker, og en stille
  * designjustering har ingen føring i det hele tatt (`docs/endringslogg.md`),
  * så ingen av dem ber noen laste siden på nytt.
  */

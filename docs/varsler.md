@@ -124,9 +124,10 @@ selv varsling. Ved tvil: ikke varsle. Varsle om den samlede kliniske
 funksjonen, ikke hver tekniske delendring. Kritiske pasientsikkerhetsforhold
 er et særskilt unntak.
 
-`utenVarsel: true` betyr fortsatt at føringen ikke krever ny versjon hos
-brukeren. Den undertrykker vanlige funksjonsvarsler, men ikke varsler om
-endret fortolkning eller kritiske faglige forhold. Meldingen om at appen
+`utenVarsel: true` betyr normalt at føringen ikke krever ny versjon hos
+brukeren. Den undertrykker vanlige funksjonsvarsler. Endret fortolkning og
+kritiske faglige forhold overstyrer dette også for oppdateringsmeldingen:
+brukere må få den nye versjonen for å kunne motta det obligatoriske varselet. Meldingen om at appen
 må oppdateres er uavhengig av varslene i bjella. En ren stille
 designjustering har ingen føring i det hele tatt.
 

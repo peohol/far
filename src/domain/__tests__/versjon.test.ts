@@ -136,6 +136,8 @@ describe('varsler i bjella', () => {
   it('beholder obligatoriske faglige varsler selv ved utenVarsel', () => {
     expect(varslesIBjella(endring({ endrerFortolkning: true, utenVarsel: true }))).toBe(true)
     expect(varslesIBjella(endring({ kritiskFagligVarsel: true, utenVarsel: true }))).toBe(true)
+    expect(varsles(endring({ kritiskFagligVarsel: true, utenVarsel: true }))).toBe(true)
+    expect(oppdateringsversjon([endring({ kritiskFagligVarsel: true, utenVarsel: true })])).toBe('2.0.0')
   })
 })
 

@@ -128,7 +128,8 @@ det samlede klinisk vesentlige resultatet, ikke hver tekniske delendring.
 **`utenVarsel: true`** er for endringer som ikke krever at brukeren oppdaterer
 appen, som kodeføring av noe som allerede er rullet ut. Det undertrykker
 vanlige funksjonsvarsler, men ikke obligatoriske varsler om endret
-fortolkning eller kritisk faglig sikkerhet. En vanlig endringsloggføring
+fortolkning eller kritisk faglig sikkerhet. De obligatoriske unntakene
+krever også oppdatering hos brukere med gammel app. En vanlig endringsloggføring
 uten varselmerker kan fortsatt kreve at appen oppdateres. Varsel i bjella
 og oppdateringsmelding er to ulike mekanismer (se `docs/varsler.md` og
 `docs/oppdatering.md`).
