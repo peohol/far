@@ -1,0 +1,56 @@
+toleranse for den hypnotiske aktiviteten til zopiklon ikke er utviklet i løpet av en 17 ukers
+behandlingsperiode.
+
+5.2   Farmakokinetiske egenskaper
+
+Absorpsjon
+Zopiklon absorbers raskt ved oralt inntak av 7,5 mg. Maksimal plasmakonsentrasjon nås innen 1,5-
+2 timer, og de er omtrent 30 nanogram/ml og 60 nanogram/ml etter administrasjon av henholdsvis
+3,75 mg og 7,5 mg. Biotilgjengeligheten av zopiklon er omtrent 80 %. Absorpsjonen modifiseres
+ikke av varighet for bruk, gjentatt dosering eller brukerens kjønn.
+
+Distribusjon
+Preparatet distribueres raskt fra vaskulære kompartment. Plasmaproteinbindingen er svak (omtrent
+45 %) og ikke mettet. Det er svært liten risiko for legemiddelinteraksjoner på grunn av den lave
+proteinbindingen av zopiklon.
+Distribusjonsvolumet er 91,8-104,6 liter.
+Ved anbefalt dosering er eliminiasjonshalveringstiden av zopiklon omtrent 5 timer.
+Det er ingen akkumulering ved gjentatt administrasjon, og inter-individuelle variasjoner synes å
+være små.
+Benzodiazepiner og benzodiazepine-lignende preparater krysser blod-hjerne-barrierene og placenta-
+barrieren og skilles ut i morsmelk. Ved amming er den kinetiske profilen til zopiklon lik i morsmelk
+og plasma. Estimert mengde zopiklon som et diende barn får er maksimalt 1,0 % av mengden som gis
+mor daglig.
+
+Biotransformasjon
+Zopiklon metaboliseres omfattende i lever.
+Hovedmetabolittene av zopiklon hos menneske er N-oksid-zopiklon (farmakologisk aktiv hos dyr) og
+N-desmetyl-zopiklon (farmakologisk inaktiv hos dyr). In-vitro studier viste at cytokrom
+P450 (CYP) 3A4 er det viktigste isoenzymet som deltar i omdannelsen av zopiklon til begge
+metabolittene, og CYP2C8 deltar i dannelsen av N-desmetyl-zopiklon.
+Tilsynelatende halveringstid (vurdert fra urindata) er henholdsvis omtrent 4,5 timer og 7,4 timer. Ingen
+enzyminduksjon er observert hos dyr, selv ved høye doser.
+
+Eliminasjon
+Den lave renale clearance-verdien av uforandret zopiklon (gjennomsnitt 8,4 ml/min) sammenlignet
+med plasma clearance (232 ml/min) indikerer at eliminasjon av zopiklon hovedsaklig er metabolsk.
+Produktet elimineres via urin (omtrent 80 %) i form at frie metabolitter (N-oksid og N-
+desmetylderivater) og i fæces (omtrent 16 %).
+
+Spesielle pasientgrupper
+
+Eldre
+Hos eldre pasienter ser man en svak reduksjon i hepatisk metabolisme og en forlenget
+eliminasjonshalveringstid til omtrent 7 timer er mulig. Flere studier har vist at virkestoffet ikke
+akkumuleres i plasma ved gjentatt dosering.
+
+Nedsatt nyrefunksjon
+Det er ikke oppdaget akkumulering av zopiklon eller dennes metabolitter ved langvarig
+administrasjon ved nedsatt nyrefunksjon. Hemodialyse kan ikke brukes ved behandling av
+overdosering da distribusjonsvolumet er så stort (se pkt. 4.9).
+
+Nedsatt leverfunksjon
+Plasma clearance er tydelig redusert (omtrent 40 %) ved reduksjon i desmetyleringsprosessen hos
+cirrhotiske pasienter: dosen vil derfor måtte modifiseres hos disse pasientene.
+
+5.3   Prekliniske sikkerhetsdata

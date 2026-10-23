@@ -1,0 +1,55 @@
+Somnambulisme og assosiert atferd
+Kompleks søvnatferd, inkludert søvngjengeri og annen assosiert atferd som å kjøre i søvne, lage og
+spise mat, ringe eller ha sex, med amnesi for hendelsen, er rapportert hos pasienter som har tatt
+zopiklon og ikke vært helt våkne. Disse hendelsene kan oppstå etter første eller eventuell senere bruk
+av zopiklon. Avbryt behandlingen umiddelbart dersom en pasient opplever kompleks søvnatferd på
+grunn av fare for pasienten og andre (se pkt. 4.3). Inntak av alkohol og andre CNS-dempende midler
+sammen med zopiklon synes å øke risikoen for slik atferd, og det samme gjelder ved inntak av
+zopiklon i doser som er høyere enn anbefalt maksimal dose.
+
+Pediatrisk populasjon
+Zopiklon bør ikke brukes av barn og ungdom under 18 år. Sikkerhet og effekt av zopiklon hos barn og
+ungdom under 18 år har ikke blitt fastslått.
+
+Imovane inneholder laktose.
+Pasienter med sjeldne arvelige problemer med galaktoseintoleranse, total laktasemangel eller glukose-
+galaktose malabsorpsjon bør ikke ta dette legemidlet.
+
+Imovane inneholder natrium
+7,5 mg tablett: Dette legemidlet inneholder mindre enn 1 mmol natrium (23 mg) i hver tablett, og er så
+godt som “natriumfritt”.
+
+Imovane 7,5 mg filmdrasjerte tabletter inneholder hvetestivelse.
+Dette legemidlet har svært lavt innhold av gluten (fra hvetestivelse). Det er derfor svært lite sannsynlig
+at dette vil forårsake problemer for pasienter med cøliaki. Én 7,5 mg filmdrasjert tablett inneholder
+ikke mer enn 6 mikrogram gluten. Pasienter med hveteallergi (forskjellig fra cøliaki), bør ikke ta dette
+legemidlet.
+
+4.5   Interaksjon med andre legemidler og andre former for interaksjon
+
+Den sentralt dempende virkningen kan forsterkes av stoffer av typen hypnotika, anxiolytika, sedativa,
+antidepressiva, narkotiske analgetika, generelle anestetika, nevroleptika, sederende antihistaminer,
+antiepileptika og av alkohol (se også pkt. 4.4). Ved kombinasjon med narkotiske analgetika kan en
+forsterkning av eufori oppstå, noe som kan føre til økt psykisk avhengighet.
+
+CYP450-hemmere og indusere:
+Erytromycins virkning på farmakokinetikken til zopiklon er studert i 10 friske frivillige. Arealet under
+kurven (AUC) for zopiklons plasmakonsentrasjon som en funksjon av tiden etter inntak økes med
+80 % ved tilstedeværelse av erytromycin. Dette indikerer at erytromycin kan hemme metabolismen av
+legemidler som metaboliseres via CYP 3A4. Som en konsekvens av dette vil den hypnotiske effekten
+av zopiklon kunne bli forsterket. Rifampicin induserer metabolismen av zopiklon kraftig,
+sannsynligvis via CYP 3A4. Plasmakonsentrasjonen av zopiklon er vist å synke med ca. 80 % og en
+redusert hypnotisk effekt av zopiklon er vist.
+
+Siden zopiklon metaboliseres av cytokrom P450 isoenzym CYP 3A4 kan plasmanivåene av zopiklon
+øke ved samtidig administrasjon med hemmere av CYP 3A4, som f.eks. klaritromycin, ketokonazol,
+itrakonazol og ritonavir. En reduksjon av zopiklondosen kan være nødvendig når det gis sammen med
+hemmere av CYP 3A4. På den andre siden kan plasmanivåene av zopiklon avta ved samtidig
+administrasjon med substanser som induserer CYP3A4, som f.eks. karbamazepin, fenobarbital,
+fenytoin og johannesurt. En økning av zopiklondosen kan være nødvendig når det gis sammen med
+substanser som induserer CYP 3A4 (se pkt. 4.4).
+
+Opioider:
+Samtidig bruk av sedativa, som for eksempel benzodiazepiner eller lignende legemidler slik som
+zopiklon, og opioider øker risikoen for sedasjon, respirasjonsdepresjon, koma og dødsfall på grunn av
+en additiv CNS-hemmende effekt. Dose og varighet ved samtidig bruk bør begrenses (se pkt. 4.4).

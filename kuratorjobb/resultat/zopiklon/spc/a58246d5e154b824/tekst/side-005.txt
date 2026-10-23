@@ -1,0 +1,57 @@
+“natriumfritt”.
+
+4.5   Interaksjon med andre legemidler og andre former for interaksjon
+
+Samtidig bruk anbefales ikke:
+Alkohol
+Samtidig inntak av alkohol anbefales ikke. Den sedative effekten av Zopiclone Olpha kan
+forsterkes når legemidlet kombineres med alkohol. Dette påvirker evnen til å kjøre bil og bruke
+maskiner.
+
+Interaksjoner som skal føre til forsiktighet
+CNS-dempende midler
+Kombinasjon med andre CNS-depressiva, som nevroleptika, hypnotika, anxiolytika/sedativa,
+antidepressiva, narkotiske analgetika, antiepileptika, anestetika og sedative antihistaminer bør
+vurderes nøye, da den sentralt dempende virkningen av zopiklon på sentralnervesystemet kan
+forsterkes i kombinasjon med disse midlene.
+Ved narkotiske analgetika kan forsterkning av eufori også oppstå, noe som kan føre til økt
+psykisk avhengighet.
+
+Opioider
+Samtidig bruk av sedativa, som benzodiazepiner eller relaterte legemidler som Zopiclone Olpha med
+opioider øker risikoen for sedasjon, respirasjonsdepresjon, koma og dødsfall på grunn av en additiv
+CNS-hemmende effekt. Dose og varighet ved samtidig bruk bør begrenses (se pkt. 4.4).
+
+CYP3A4-hemmere/CYP3A4-induktorer
+Siden zopiklon metaboliseres via CYP3A4, kan plasmanivåene av zopiklon øke hvis det administreres
+sammen med CYP3A4-hemmere som makrolidantibiotika, azoler, hiv-proteasehemmere og
+grapefruktjuice. Dosereduksjon av zopiklon kan være nødvendig ved samtidig behandling med
+CYP3A4-hemmere. Omvendt kan plasmanivåer av zopiklon reduseres dersom det administreres
+sammen med CYP3A4-induktorer som fenobarbital, fenytoin, karbamazepin, rifampicin og produkter
+som inneholder johannesurt. Zopiklon-dosen må kanskje økes.
+
+Erytromycin
+Effekten av erytromycin på farmakokinetikken til zopiklon er studert hos friske personer. AUC for
+zopiklon øker med 80 % i nærvær av erytromycin, sannsynligvis på grunn av at erytromycin hemmer
+metabolismen av legemidler som metaboliseres av CYP3A4. Som en konsekvens kan den hypnotiske
+effekten av zopiklon forsterkes.
+
+Itrakonazol
+Ved samtidig administrering med itrakonazol (som hemmer CYP3A4-mediert metabolisme) økes
+biotilgjengeligheten av zopiklon med ca. 70 %.
+
+Rifampicin
+Rifampicin induserer sterkt metabolismen av zopiklon, sannsynligvis via CYP3A4. Plasma-
+konsentrasjonen reduseres med ca. 80 % og effekten i psykomotoriske tester er betydelig redusert.
+
+4.6   Fertilitet, graviditet og amming
+
+Graviditet
+
+En stor mengde data fra kohortstudier har ikke vist forekomst av misdannelser
+etter eksponering for benzodiazepiner i 1. trimester av svangerskapet. Imidlertid rapporterte visse
+epidemiologiske kasus-kontrollstudier en økt forekomst av leppe- og ganespalte assosiert med bruk av
+benzodiazepiner under graviditet. Ifølge disse dataene vil forekomsten av leppe- og ganespalte hos
+nyfødte etter eksponering for benzodiazepiner under graviditet være mindre enn 2/1000, mens
+forventet frekvens i den generelle befolkningen er 1/1000.
+Når benzodiazepiner tas i høye doser i løpet av 2. og/eller 3. trimester av svangerskapet, er det

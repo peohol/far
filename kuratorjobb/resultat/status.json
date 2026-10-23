@@ -1,18 +1,68 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/manuell-39889514541",
     "foresporsel_commit": "4b5acf15d0c65df15f81d7b2149dbb3aa735fbea",
     "foresporsel_sha256": "be7cbb4457d9ae65e1ec637bc362a3e3d0eabb8f927a985f4eae05d0a8403326",
     "kode_commit": "cf36d2602624ed31c09f34cf9c8a28ed70d645d4",
     "kjoring": "https://github.com/peohol/ousfar/actions/runs/39889514541",
-    "startet_kl": "2026-10-23T02:26:19.693Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-23T02:26:21.319Z",
+    "ferdig_kl": "2026-10-23T02:26:53.891Z"
   },
-  "foresporsel": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "oksazepam",
+      "zopiklon"
+    ],
+    "oppgaver": [
+      "funksjonstest",
+      "spc"
+    ]
+  },
   "referanse": null,
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 304
+    }
+  ],
+  "stoffer": {
+    "oksazepam": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/oksazepam/funksjonstest.json"
+        },
+        "spc": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/oksazepam/spc.json"
+        }
+      }
+    },
+    "zopiklon": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/zopiklon/funksjonstest.json"
+        },
+        "spc": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/zopiklon/spc.json"
+        }
+      }
+    }
+  }
 }

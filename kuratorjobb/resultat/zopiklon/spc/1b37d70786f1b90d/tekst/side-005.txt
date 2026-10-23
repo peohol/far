@@ -1,0 +1,55 @@
+4.6   Fertilitet, graviditet og amming
+
+Graviditet
+Bruk av zopiklon er ikke anbefalt under graviditet.
+
+Dyrestudier indikerer ikke direkte eller indirekte skadelige effekter med tanke på
+reproduksjonstoksisitet.
+
+Zopiklon går over placenta. En stor mengde data fra gravide kvinner (mer enn 1000 graviditetsutfall)
+samlet fra kohortstudier har ikke gitt holdepunkter for økt forekomst av misdannelser etter
+eksponering for benzodiazepiner eller benzodiazepin-liknende substanser i første trimester. Enkelte
+kasus-kontrollerte studier har derimot rapportert om en økt insidens av leppe- og ganespalte etter bruk
+av benzodiazepiner under graviditet.
+
+Tilfeller av redusert fosterbevegelse og endringer i fosterets hjertefrekvens har blitt beskrevet etter
+bruk av benzodiazepiner eller benzodiazepin-liknende substanser under andre og tredje trimester. Bruk
+av benzodiazepiner eller benzodiazepin-liknende substanser, inkludert zopiklon, sent i graviditeten
+eller under fødselen kan påvirke det nyfødte barnet, for eksempel i form av hypotoni, hypotermi,
+problemer med å mate barnet (såkalt ‘floppy infant syndrome’) og respirasjonsdepresjon, forårsaket av
+den farmakologiske effekten til produktet. Tilfeller av alvorlig neonatal respirasjonsdepresjon er
+rapportert.
+
+Nyfødte barn av mødre som har brukt sedativa/hypnotika over en lengre periode i siste delen av
+svangerskapet kan ha utviklet fysisk avhengighet, og det er en risiko for at de kan få postnatale
+abstinenssymptomer. Hensiktsmessig overvåkning av den nyfødte i tiden etter fødsel er anbefalt.
+
+Hvis zopiklon forskrives til en kvinne i fertil alder skal hun rådes til å kontakte sin behandlende lege i
+forbindelse med seponering ved planlagt eller mistenkt graviditet.
+
+Amming
+Zopiklon går over i morsmelk hos mennesker, og et melk:plasmaforhold på 0,5 er funnet. Det er
+beregnet at et barn som ammes får i seg 1,4 % av morens vektjusterte dose. Zopiklon bør ikke brukes
+under amming.
+
+4.7   Påvirkning av evnen til å kjøre bil og bruke maskiner
+
+Zopiklon kan påvirke evnen til bilkjøring og betjening av maskiner. Risikoen for psykomotorisk
+svekkelse, inkludert nedsatt kjøreevne, økes dersom:
+     zopiklon tas når det er mindre enn 12 timer til aktiviteter som krever mental årvåkenhet
+     det inntas en dose som er høyere enn det som er anbefalt, eller
+     samtidig administrasjon av zopiklon og andre CNS-dempende midler, alkohol eller legemidler
+      som øker plasmakonsentrasjonen av zopiklon (se pkt. 4.4).
+
+Pasienter skal advares mot å utføre risikofylte aktiviteter som krever full mental årvåkenhet eller
+motorisk koordinasjon, for eksempel å betjene maskiner eller kjøring av motorisert kjøretøy, etter
+administrasjon av zopiklon, særlig de første 12 timer etter administrasjon.
+
+4.8   Bivirkninger
+
+Bivirkningene er inndelt etter MedDRA systemets frekvenskonvensjon og organklasse:
+Svært vanlige ≥ 1/10; Vanlige ≥ 1/100 til <1/10; Mindre vanlige ≥1/1000 til <1/100; Sjeldne ≥1/10
+000 til <1/1000; Svært sjeldne <1/10 000; Ikke kjent (kan ikke anslås utifra tilgjengelige data).
+
+Forstyrrelser i immunsystemet
+Svært sjeldne       angioødem, anafylaktisk reaksjon.

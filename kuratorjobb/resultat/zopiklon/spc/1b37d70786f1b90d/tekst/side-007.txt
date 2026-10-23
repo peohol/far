@@ -1,0 +1,57 @@
+4.9   Overdosering
+
+Symptomer
+Varierende grad av CNS-symptomer, fra døsighet til koma, som avhenger av den inntatte mengde
+zopiklon.
+I lette tilfeller kan symptomene inkludere tretthet, forvirring og søvnighet, i mer alvorlige tilfeller kan
+symptomene inkludere ataksi, hypotoni, hypotensjon, methemoglobinemi, respirasjonsdepresjon,
+koma (sjelden) og død (svært sjelden). Som for benzodiazepiner og andre benzodiazepinliknende
+stoffer, antas overdosering ikke å være livstruende med mindre det samtidig er inntatt andre CNS-
+dempende midler, inklusive alkohol. Andre risikofaktorer, som f.eks. annen samtidig sykdom og
+svekket helsetilstand kan bidra til alvorligheten av symptomene og kan i svært sjeldne tilfeller være
+fatalt.
+
+Behandling
+Generelle forholdsregler tas, overvåkning av respirasjon og blodtrykk, om nødvendig
+ventrikkeltømming, aktivt kull. Hemodialyse er av liten verdi pga. zopiklons store distribusjonsvolum.
+Ved alvorlige forgiftninger kan flumazenil forsøkes som antidot.
+
+
+5.    FARMAKOLOGISKE EGENSKAPER
+
+5.1   Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Hypnotika og sedativer – benzodiazepinlignende midler, ATC-kode:
+N05C F01.
+
+Klassifisering
+Zopiklon er et hypnotikum med sedativ, anxiolytisk, antikonvulsiv og muskelrelakserende effekt.
+Syklopyrrolonderivat, kjemisk og strukturelt ulik andre hypnotika.
+
+Virkningsmekanisme
+Zopiklon har høy affinitet for bindingssteder innenfor GABA-reseptorkomplekset, der det induserer
+spesifikke konformasjonsforandringer og forsterker den normale transmisjonen av signalsubstansen
+GABA i CNS. Effekten er relatert til spesifikk agonistisk virkning på reseptorer i GABAA som
+modulerer åpningen av kloridionekanalen. Zopiklon gir en spesifikk EEG-profil som er forskjellig fra
+benzodiazepinene. Hurtig innsettende effekt (ca. 30 minutter), forkorter innsovningstiden, forlenger
+søvnens varighet og minsker antallet nattlige oppvåkninger. Mengden av REM-søvn og dyp søvn
+(stadium III og IV) opprettholdes ved anbefalt dosering. I en studie hvor zopiklon ble gitt i 28 dager
+ble det ikke vist signifikante seponeringsproblemer. Andre studier har vist fravær av toleranseutvikling
+med hensyn på hypnotisk effekt i behandlingsperioder opp til 17 uker.
+
+5.2   Farmakokinetiske egenskaper
+
+Absorpsjon
+Maksimal plasmakonsentrasjon oppnås innen 1-2 timer. Biologisk tilgjengelighet ca. 80 %.
+Absorpsjonen påvirkes ikke av samtidig matinntak, kjønn eller gjentakelse av dose.
+
+Proteinbinding
+Svak plasmaproteinbinding (ca. 45 %). Det er liten risiko for interaksjoner med andre legemidler
+grunnet proteinbinding.
+
+Distribusjon
+Zopiklon distribueres hurtig fra det vaskulære kompartment. Distribusjonsvolum 91,8-104,6 l
+(1,3-1,5 l/kg).
+
+Halveringstid
+4-6 timer, økende til 7 timer hos eldre pasienter. Halveringstiden er betydelig forlenget ved leversvikt.

@@ -1,0 +1,57 @@
+overfølsomhet for lys, lyd og fysisk kontakt, hallusinasjoner. I svært sjeldne tilfeller kan krampeanfall
+forekomme (se pkt. 4.4).
+
+Melding av mistenkte bivirkninger
+Melding av mistenkte bivirkninger etter godkjenning av legemidlet er viktig. Det gjør det mulig å
+overvåke forholdet mellom nytte og risiko for legemidlet kontinuerlig. Helsepersonell oppfordres til å
+melde enhver mistenkt bivirkning. Dette gjøres via meldeskjema som finnes på nettsiden til Statens
+legemiddelverk: www.legemiddelverket.no/meldeskjema.
+
+
+4.9   Overdosering
+
+Symptomer
+Som ved alle tilfeller av overdosering, skal det alltid vurderes om forgiftningen er med flere preparater
+samtidig da dette kan forverre prognosen. Overdosering manifesteres generelt ved depresjon av
+sentralnervesystemet, fra sløvhet til koma. I milde tilfeller inkluderer symptomene sløvhet, forvirring
+og letargi; i mer alvorlige tilfeller inkluderer symptomene ataksi, hypotoni, hypotensjon,
+respirasjonsdepresjon og koma. Overdosering er vanligvis ikke livstruende hvis legemidlet ikke er
+brukt i kombinasjon med andre CNS-depressiva, inkludert alkohol. Andre risikofaktorer, som andre
+sykdommer og pasientens svekkede tilstand, kan bidra til alvorligheten av symptomene og svært
+sjelden gi fatalt utfall.
+
+Behandling
+Ved overdosering skal de vanlige forsiktighetsreglene tas: innleggelse i spesialistavdeling, observasjon
+av respirasjons- og kardiovaskulære parametre og hvis nødvendig – infusjon av egnede løsninger.
+Hvis overdoseringen skjedde mindre enn en time tidligere, skal oppkast fremkalles (hvis pasienten er
+bevisst); ellers foretas mageskylling, hvis det er åpne luftveier. Hvis overdoseringen har skjedd
+tidligere, kan opptak av legemidlet reduseres ved bruk av aktivt kull.
+Flumazenil kan være nyttig for diagnostisering og/eller behandling av overdoseringer med eller uten
+hensikt. Antagonistiske effekten av Flumazenil på zopiklon aktiviteten kan forårsake nevrologiske
+lidelser (kramper). Hemodialyse har ingen effekt ved overdosering grunnet det høye
+distribusjonsvolumet til zopiklon.
+
+
+5.    FARMAKOLOGISKE EGENSKAPER
+
+5.1   Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: hypnotika og sedativa, benzodiazepinlignende midler, ATC-kode:
+N05CF01
+
+Virkningsmekanisme
+Zopiklon er et benzodiazepinlignende hypnotisk legemiddel. Det tilhører cyclopyrrolon-gruppen av
+forbindelser. Selv om zopiklon ikke har noen strukturelle likheter med benzodiazepiner, er de
+farmakologiske egenskapene de samme som for benzodiazepiner: angstdempende, sedativ, hypnotisk,
+krampestillende og muskelrelakserende virkninger.
+Disse er relatert til den selektive agonistvirkningen på sentrale reseptorer tilhørende GABA (BZ1
+and BZ2) makromolekylære reseptorkompleks som modulerer åpningen av klorid-ionekanaler.
+
+Farmakodynamiske effekter
+Zopiklon er funnet å øke varigheten av søvn og forbedre søvnkvaliteten, redusere nattlige og tidlige
+oppvåkninger hos menneske. Denne effekten suppleres av karateristiske resultater av
+elektroencefalografi. Søvnregistrering har vist at zopiklon reduserer fase-en søvn og øker fase-to
+søvn, mens de dype søvnfasene (III og IV) vedvarer og forlenges og den paradoksale (REM) søvn
+ikke påvirkes hos pasienter som lider av insomni.
+I en objektiv studie for å kartlegge seponeringssyndrom ved hjelp av polysomnografi så man ingen
+signifikant rebound insomni i en 28-dagers periode etter behandling. Andre studier har også vist at

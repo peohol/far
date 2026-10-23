@@ -1,0 +1,55 @@
+Beskrivelse av utvalgte bivirkninger
+Abstinenssyndrom er rapportert ved seponering av zopiklon (se pkt. 4.4 Advarsler og
+forsiktighetsregler). Abstinenssymptomer varierer og inkluderer søvnvansker, angst, skjelving, svette,
+agitasjon, forvirring, hodepine, hjertebank, takykardi, delirium, mareritt, hallusinasjoner og
+irritabilitet. I svært sjeldne tilfeller har det også forekommet anfall.
+
+Melding av mistenkte bivirkninger
+Melding av mistenkte bivirkninger etter godkjenning av legemiddelet er viktig. Det gjør det mulig å
+overvåke forholdet mellom nytte og risiko for legemiddelet kontinuerlig. Helsepersonell oppfordres til
+å melde enhver mistenkt bivirkning. Dette gjøres via meldeskjema som finnes på nettsiden til
+Direktoratet for medisinske produkter: www.dmp.no/meldeskjema.
+
+4.9     Overdosering
+
+Toksisitet
+Store individuelle variasjoner. 5 mg forårsaket mild forgiftning hos 1½ år gamle barn. Omtrent 30 mg
+forårsaket moderat forgiftning hos 6 år gamle barn. 22,5-50 mg for voksne og 40 mg for eldre
+forårsaket mild forgiftning. >50->100 mg forårsaket mild til moderat forgiftning hos voksne. 100 mg
+forårsaket dyp bevisstløshet hos voksne. 187 mg og alkohol forårsaket alvorlig forgiftning for voksne.
+
+Symptomer
+Overdosering er vanligvis manifestert ved varierende grader av sentralnervesystem-depresjon (hos
+eldre noen ganger svært langvarig), alt fra døsighet til koma. I milde tilfeller inkluderer symptomene
+tretthet, døsighet, somnolens, forvirring, sløvhet, bevisstløshet som noen ganger innledes eller
+etterfølges av agitasjon og hallusinasjoner. I mer alvorlige tilfeller inkluderer symptomene ataksi,
+muskelsvakhet (hypotoni), hypotensjon, methemoglobinemi, respirasjonsdepresjon (hovedsakelig i
+kombinasjon med alkohol eller CNS-depressiva) og koma.
+Andre risikofaktorer, som tilstedeværelse av samtidig sykdom eller svekket tilstand hos pasienten, kan
+bidra til alvorlighetsgraden av symptomene og kan i svært sjeldne tilfeller føre til dødelig utgang.
+
+Behandling
+Symptomatisk og støttende behandling i adekvat klinisk miljø anbefales. Oppmerksomhet skal rettes
+mot respiratoriske og kardiovaskulære funksjoner. Mageskylling eller aktivt kull er kun nyttig når det
+utføres like etter fordøyelse. Flumazenil som motgift kan være nyttig for å lindre CNS- og
+respirasjonsdepresjon og er hovedsakelig indisert ved alvorlig forgiftning for å unngå intubasjon og
+åndedrettspleie. Merk at virkningsvarigheten av flumazenil er kortere enn for zopiklon. Hemodialyse
+er ikke nyttig ved behandling av overdose på grunn av det store distribusjonsvolumet av zopiklon.
+
+
+5.    FARMAKOLOGISKE EGENSKAPER
+
+5.1     Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Hypnotika og beroligende midler; benzodiazepinrelaterte legemidler,
+ATC-kode: N05C F01
+
+Zopiklon er et benzodiazepinlignende hypnotisk middel som tilhører gruppen cyklopyrroloner. Dens
+farmakologiske egenskaper er: hypnose, sedasjon, anxiolyse, antikonvulsjon, muskelavslapping.
+Zopiklon har høy affinitet for bindingsstedet i det makromolekylære GABAA-reseptorkomplekset,
+hvor det induserer spesifikke konformasjonsendringer og øker normal overføring av
+nevrotransmitteren GABA i CNS. Zopiklon har en rask virkningsstart (innen ca. 30 minutter),
+forkorter søvntiden, forlenger søvnvarigheten og reduserer antall oppvåkninger i løpet av natten.
+Mengden REM-søvn og dyp søvn (stadie III og IV) opprettholdes ved anbefalt dose.
+
+5.2     Farmakokinetiske egenskaper

@@ -1,0 +1,57 @@
+Organklassesystem        Svært Vanlige              Mindre         Sjeldne         Svært           Ikke kjent
+                         vanlige                    vanlige                        sjeldne
+
+Skader, forgiftninger                                              fall
+og komplikasjoner                                                  (overveiende
+ved medisinske                                                     hos eldre
+prosedyrer                                                         pasienter)
+                                                                   (se pkt. 4.4)
+
+    Melding av mistenkte bivirkninger
+    Melding av mistenkte bivirkninger etter godkjenning av legemidlet er viktig. Det gjør det mulig å
+    overvåke forholdet mellom nytte og risiko for legemidlet kontinuerlig. Helsepersonell oppfordres til å
+    melde enhver mistenkt bivirkning. Dette gjøres via meldeskjema som finnes på nettsiden til
+    Direktoratet for medisinske produkter: www.dmp.no/meldeskjema.
+
+    4.9   Overdosering
+
+    Prognosen for overdose kan være livstruende, spesielt i tilfeller av polyintoksikasjon som involverer
+    andre sentralnervesystemdepressiva (inkludert alkohol).
+    Ved en massiv overdose er hovedsymptomene depresjon av sentralnervesystemet, alt
+    fra døsighet til koma, avhengig av inntatt mengde. I milde tilfeller inkluderer symptomene mental
+    forvirring og sløvhet. I mer alvorlige tilfeller kan symptomene inkludere ataksi, hypotoni,
+    hypotensjon, respirasjonsdepresjon og svært sjelden død.
+    Ved en oral overdose for mindre enn 1 time siden, bør brekninger fremkalles dersom pasienten er
+    bevisst eller, hvis dette ikke er mulig, mageskylling med luftveisbeskyttelse. Etter denne tiden kan
+    administrering av aktivt kull redusere absorpsjonen.
+    Spesiell overvåking av kardio-respiratoriske funksjoner i et spesialisert miljø anbefales.
+    Hemodialyse er ikke nyttig for behandling av overdose på grunn av det store distribusjonsvolumet av
+    zopiklon.
+    Administrering av injiserbar flumazenil kan være nyttig for diagnostisering og/eller behandling av
+    tilsiktet eller utilsiktet overdosering av benzodiazepiner.
+    Antagonismen av flumazenil mot effekten av benzodiazepiner kan fremme utbruddet av nevrologiske
+    lidelser (kramper), spesielt hos epileptiske pasienter.
+
+
+    5.    FARMAKOLOGISKE EGENSKAPER
+
+    5.1   Farmakodynamiske egenskaper
+
+    Farmakoterapeutisk gruppe: Hypnotika og sedativer – benzodiazepinlignende midler,
+    ATC-kode: N05C F01.
+
+    Zopiklon tilhører gruppen cyklopyrroloner og er relatert til klassen benzodiazepiner.
+    Dens farmakodynamiske aktivitet er kvalitativt lik den til andre forbindelser i denne klassen:
+    muskelavslappende, anxiolytisk, beroligende, hypnotisk, krampestillende, hukommelsestap.
+    Disse effektene er knyttet til en spesifikk agonistvirkning på en sentral reseptor som utgjør en del av
+    det makromolekylære GABA-OMEGA reseptorkomplekset, også kjent som BZ1 og BZ2, som
+    modulerer åpningen av kloridkanalen.
+    Hos mennesker øker zopiklon søvnvarigheten og reduserer antall nattlige oppvåkninger.
+    Disse effektene er assosiert med en karakteristisk elektroencefalografisk profil, forskjellig fra
+    benzodiazepiner. Søvnregistreringsstudier har vist at zopiklon reduserer stadium I, forlenger stadium
+    II, opprettholder eller forlenger dype søvnstadier (III og IV), og opprettholder REM-søvn.
+
+    5.2   Farmakokinetiske egenskaper
+
+    Absorpsjon
+    Zopiklon absorberes raskt. Maksimalkonsentrasjoner nås innen 1,5 til 2 timer og er ca. 30 ng/ml, 60

@@ -1,0 +1,771 @@
+{
+  "stoff": "zopiklon",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-22T04:15:06.408609+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 9,
+    "hentet": 5,
+    "dokumenter": 5,
+    "mangler": [
+      {
+        "merkevare_id": "ID_4358B95E-3636-49C4-94A5-C0109F3A8B69",
+        "varenavn": "Zopiclone arrow lab",
+        "navn_form_styrke": "Zopiclone arrow lab tab 3,75 mg",
+        "produsent": "Arrow",
+        "atc": "N05CF01",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_B8F97AC2-1FF0-4D0D-8ED0-883375BABB65",
+        "varenavn": "Zopiklon pilum",
+        "navn_form_styrke": "Zopiklon pilum tab 5 mg",
+        "produsent": "Pilum Pharma",
+        "atc": "N05CF01",
+        "legemiddelform": "Tablett",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_BB009726-62F2-4C3B-9C5F-C08B6F2FA32A",
+        "varenavn": "Zopiclon aurobindo",
+        "navn_form_styrke": "Zopiclon aurobindo tab 3,75 mg",
+        "produsent": "Aurobindo Pharma  Limited",
+        "atc": "N05CF01",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_BFFE5188-EE54-4129-AB91-762D9DCA80DD",
+        "varenavn": "Zopiclon-CT",
+        "navn_form_styrke": "Zopiclon-CT tab 3,75 mg",
+        "produsent": "AbZ-Pharma GmbH",
+        "atc": "N05CF01",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 5 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 5,
+        "ikke_dmp": 0,
+        "uten_omtale": 4
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "4 av 9 preparater i FEST mangler en hentet preparatomtale fra DMP: 4 uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA). SPC-behovet er ikke dekket; se «dekning.mangler».",
+      "antall": {
+        "preparater": 9,
+        "hentet": 5,
+        "mangler": 4,
+        "dokumenter": 5
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-07999.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-07999.pdf",
+      "hentet_kl": "2026-10-23T02:26:41.515Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "187820",
+        "content-md5": "ynl1oW4cYz3OwpJsKzMZhw==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:47 GMT",
+        "etag": "0x8DE53793AAE17BD",
+        "date": "Fri, 23 Oct 2026 02:26:42 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_09DB2B48-8A08-48B6-97B7-0505BFD89D4E",
+          "varenavn": "Imovane",
+          "navn_form_styrke": "Imovane tab 7,5 mg",
+          "produsent": "Sanofi-aventis Norge (3)",
+          "atc": "N05CF01",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-07999.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (187820 byte).",
+          "antall": {
+            "bytes": 187820
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "1b37d70786f1b90de7dac6f6494e9d707dba3d1c37efa728ed5b91cb5635923d"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/10-8023.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/10-8023.pdf",
+      "hentet_kl": "2026-10-23T02:26:44.658Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "180139",
+        "content-md5": "B9GcM+kpKCQS8WFb6lMjVQ==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:55 GMT",
+        "etag": "0x8DE53793F84683F",
+        "date": "Fri, 23 Oct 2026 02:26:44 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_47917B86-7878-4A1F-BBAB-D7DC7210DE6E",
+          "varenavn": "Zopiclone Grindeks",
+          "navn_form_styrke": "Zopiclone Grindeks  tab 7,5 mg",
+          "produsent": "AS Grindeks",
+          "atc": "N05CF01",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/10-8023.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (180139 byte).",
+          "antall": {
+            "bytes": 180139
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "a1dfcd3c2ae7bdf0701cbba838c03477d755201b3fae2fa55c045a6143c46cb2"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-14882.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-14882.pdf",
+      "hentet_kl": "2026-10-23T02:26:47.079Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "195983",
+        "content-md5": "hV0IxW0X3+MfkAFI2dAXgQ==",
+        "last-modified": "Thu, 19 Mar 2026 20:49:20 GMT",
+        "etag": "0x8DE85F8FE8F6416",
+        "date": "Fri, 23 Oct 2026 02:26:47 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_778AA7DC-C190-4A7C-9058-5780DE7EDAFD",
+          "varenavn": "Sonlax",
+          "navn_form_styrke": "Sonlax tab 7,5 mg",
+          "produsent": "Grindeks AS",
+          "atc": "N05CF01",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-14882.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (195983 byte).",
+          "antall": {
+            "bytes": 195983
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "6487dbcb770b421736aae551f6af754ab6e8baa783d4f8a4bb044dfffc641efd"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/05-3774.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/05-3774.pdf",
+      "hentet_kl": "2026-10-23T02:26:49.606Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "176789",
+        "content-md5": "IBtVN4t542olazESVLtwAw==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:50 GMT",
+        "etag": "0x8DE53793C47B65A",
+        "date": "Fri, 23 Oct 2026 02:26:49 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_8118A550-9143-4B56-B945-F3A6F1B22A34",
+          "varenavn": "Zopitin",
+          "navn_form_styrke": "Zopitin tab 7,5 mg",
+          "produsent": "Vitabalans Oy",
+          "atc": "N05CF01",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/05-3774.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (176789 byte).",
+          "antall": {
+            "bytes": 176789
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "e68264a32b6dc8ef9145c400c0872452767ca14003f22d6d586a22b3f4fbf7d6"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/24-16485.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/24-16485.pdf",
+      "hentet_kl": "2026-10-23T02:26:51.106Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "340936",
+        "content-md5": "P+y2wNMR/CMdVDH97PlXVA==",
+        "last-modified": "Thu, 19 Mar 2026 20:49:33 GMT",
+        "etag": "0x8DE85F906614466",
+        "date": "Fri, 23 Oct 2026 02:26:51 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_C63D1EEF-2992-4D85-83E7-CBC57A11330C",
+          "varenavn": "Zopiclone Olpha",
+          "navn_form_styrke": "Zopiclone Olpha tab 3,75 mg",
+          "produsent": "Olpha AS",
+          "atc": "N05CF01",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/24-16485.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (340936 byte).",
+          "antall": {
+            "bytes": 340936
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "a58246d5e154b8243b03b9cc9e43094e1fa3fecb211a4c903aa4d35b6b5b638f"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "1b37d70786f1b90de7dac6f6494e9d707dba3d1c37efa728ed5b91cb5635923d",
+      "bytes": 187820,
+      "mappe": "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d",
+      "pdf": {
+        "sider": 9,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": null,
+        "laget": "Tue Nov  1 10:01:18 2022 UTC",
+        "endret": "Tue Nov  1 10:01:18 2022 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/original.pdf",
+        "tekst": "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/tekst/side-001.txt",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/tekst/side-002.txt",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/tekst/side-003.txt",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/tekst/side-004.txt",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/tekst/side-005.txt",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/tekst/side-006.txt",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/tekst/side-007.txt",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/tekst/side-008.txt",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/tekst/side-009.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/sider/side-001.png",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/sider/side-002.png",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/sider/side-003.png",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/sider/side-004.png",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/sider/side-005.png",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/sider/side-006.png",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/sider/side-007.png",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/sider/side-008.png",
+          "kuratorjobb/resultat/zopiklon/spc/1b37d70786f1b90d/sider/side-009.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 5,
+        "til": 7
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (9 sider).",
+          "antall": {
+            "sider": 9
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 19863
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 5."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 9
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "a1dfcd3c2ae7bdf0701cbba838c03477d755201b3fae2fa55c045a6143c46cb2",
+      "bytes": 180139,
+      "mappe": "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0",
+      "pdf": {
+        "sider": 10,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "Version 1",
+        "laget": "Mon Jun  7 10:52:31 2021 UTC",
+        "endret": "Mon Jun  7 10:52:31 2021 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/original.pdf",
+        "tekst": "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/tekst/side-001.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/tekst/side-002.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/tekst/side-003.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/tekst/side-004.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/tekst/side-005.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/tekst/side-006.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/tekst/side-007.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/tekst/side-008.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/tekst/side-009.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/tekst/side-010.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/sider/side-001.png",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/sider/side-002.png",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/sider/side-003.png",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/sider/side-004.png",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/sider/side-005.png",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/sider/side-006.png",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/sider/side-007.png",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/sider/side-008.png",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/sider/side-009.png",
+          "kuratorjobb/resultat/zopiklon/spc/a1dfcd3c2ae7bdf0/sider/side-010.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 6,
+        "til": 7
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (10 sider).",
+          "antall": {
+            "sider": 10
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 21548
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 6."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 10
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "6487dbcb770b421736aae551f6af754ab6e8baa783d4f8a4bb044dfffc641efd",
+      "bytes": 195983,
+      "mappe": "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217",
+      "pdf": {
+        "sider": 11,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": null,
+        "laget": "Tue Aug 12 08:18:57 2025 UTC",
+        "endret": "Tue Aug 12 08:18:57 2025 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/original.pdf",
+        "tekst": "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/tekst/side-001.txt",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/tekst/side-002.txt",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/tekst/side-003.txt",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/tekst/side-004.txt",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/tekst/side-005.txt",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/tekst/side-006.txt",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/tekst/side-007.txt",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/tekst/side-008.txt",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/tekst/side-009.txt",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/tekst/side-010.txt",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/tekst/side-011.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/sider/side-001.png",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/sider/side-002.png",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/sider/side-003.png",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/sider/side-004.png",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/sider/side-005.png",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/sider/side-006.png",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/sider/side-007.png",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/sider/side-008.png",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/sider/side-009.png",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/sider/side-010.png",
+          "kuratorjobb/resultat/zopiklon/spc/6487dbcb770b4217/sider/side-011.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 6,
+        "til": 8
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (11 sider).",
+          "antall": {
+            "sider": 11
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 22308
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 6."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 11
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "e68264a32b6dc8ef9145c400c0872452767ca14003f22d6d586a22b3f4fbf7d6",
+      "bytes": 176789,
+      "mappe": "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef",
+      "pdf": {
+        "sider": 7,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "SPC",
+        "laget": "Thu Jul 30 07:09:29 2020 UTC",
+        "endret": "Thu Jul 30 07:09:29 2020 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/original.pdf",
+        "tekst": "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/tekst/side-001.txt",
+          "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/tekst/side-002.txt",
+          "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/tekst/side-003.txt",
+          "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/tekst/side-004.txt",
+          "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/tekst/side-005.txt",
+          "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/tekst/side-006.txt",
+          "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/tekst/side-007.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/sider/side-001.png",
+          "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/sider/side-002.png",
+          "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/sider/side-003.png",
+          "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/sider/side-004.png",
+          "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/sider/side-005.png",
+          "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/sider/side-006.png",
+          "kuratorjobb/resultat/zopiklon/spc/e68264a32b6dc8ef/sider/side-007.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 3,
+        "til": 4
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (7 sider).",
+          "antall": {
+            "sider": 7
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 11794
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 3."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 7
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "a58246d5e154b8243b03b9cc9e43094e1fa3fecb211a4c903aa4d35b6b5b638f",
+      "bytes": 340936,
+      "mappe": "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824",
+      "pdf": {
+        "sider": 11,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": null,
+        "laget": "Wed Oct  8 09:26:08 2025 UTC",
+        "endret": "Wed Oct  8 09:26:08 2025 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/original.pdf",
+        "tekst": "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/tekst/side-001.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/tekst/side-002.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/tekst/side-003.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/tekst/side-004.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/tekst/side-005.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/tekst/side-006.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/tekst/side-007.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/tekst/side-008.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/tekst/side-009.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/tekst/side-010.txt",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/tekst/side-011.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/sider/side-001.png",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/sider/side-002.png",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/sider/side-003.png",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/sider/side-004.png",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/sider/side-005.png",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/sider/side-006.png",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/sider/side-007.png",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/sider/side-008.png",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/sider/side-009.png",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/sider/side-010.png",
+          "kuratorjobb/resultat/zopiklon/spc/a58246d5e154b824/sider/side-011.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 6,
+        "til": 8
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (11 sider).",
+          "antall": {
+            "sider": 11
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 21646
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 6."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 11
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

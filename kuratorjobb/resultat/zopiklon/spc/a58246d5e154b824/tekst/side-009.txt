@@ -1,0 +1,57 @@
+ng/ml og 115 ng/ml etter administrering av henholdsvis 3,75 mg, 7,5 mg og 15 mg.
+Biotilgjengeligheten er rundt 80 %.
+Absorpsjon påvirkes ikke av administreringstidspunkt, gjentakelse av doser eller kjønn.
+
+Distribusjon
+Produktet distribueres raskt fra det vaskulære kompartment. Plasmaproteinbindingen er svak (omtrent
+45 %) og ikke-mettet. Det er svært lav risiko for legemiddelinteraksjoner på grunn av proteinbinding.
+Plasmareduksjon: mellom 3,75 mg og 15 mg, plasmareduksjonen er uavhengig av dosen.
+Eliminasjonshalveringstiden er ca. 5 timer.
+Benzodiazepiner og relaterte molekyler krysser blod-hjerne-barrieren og går inn i morkaken og
+morsmelk. Ved amming er kinetikken til zopiklon i morsmelk lik den i plasma. Den
+estimerte prosentandelen av dosen som blir inntatt av spedbarnet vil ikke overstige 0,2 % av dosen
+administrert til moren per 24 timer.
+
+Biotransformasjon
+Zopiklon metaboliseres i stor grad i leveren.
+De 2 hovedmetabolittene er N-oksidderivatet (farmakologisk aktivt hos dyr) og N-
+desmetylderivatet (farmakologisk inaktivt hos dyr). Deres tilsynelatende halveringstider, evaluert fra
+urindata, er henholdsvis 4,5 timer og 7,30 timer, i samsvar med det faktum at de ikke viste noen
+signifikant akkumulering ved gjentatte doser (15 mg) i 14 dager. Hos dyr er det ikke påvist
+enzyminduksjon, selv ved høye doser.
+
+Eliminasjon
+Den lave renale clearance-verdien av uendret zopiklon (gjennomsnittlig 8,4 ml/min) sammenlignet
+med plasmaclearance (232 ml/min) indikerer at zopiklonclearance hovedsakelig er metabolsk.
+Omtrent 80 % av zopiklon elimineres via urinen som frie metabolitter (N-oksid og N-
+desmetylderivater) og omtrent 16 % via feces.
+
+Spesielle pasientgrupper
+
+Eldre pasienter: levermetabolismen reduseres noe, og halveringstiden har en gjennomsnittlig verdi på
+7 timer. Til tross for dette har ulike studier ikke vist plasmaakkumulering av zopiklon ved gjentatt
+dosering.
+
+Ved nyreinsuffisiens: ingen akkumulering av zopiklon eller dets metabolitter er påvist etter langvarig
+administrering. Zopiklon krysser dialysemembraner.
+Hemodialyse er ikke nyttig for å behandle overdose, på grunn av det store distribusjonsvolumet av
+zopiklon.
+
+Cirrhotiske pasienter: plasmaclearance av zopiklon er klart redusert av bremsing av
+demetyleringsprosessen, dosen må derfor endres hos disse pasientene.
+
+
+5.3   Prekliniske sikkerhetsdata
+
+Akutte og kroniske toksisitetstester viste at medisinen ble godt tolerert selv etter langtidsbehandling.
+LD50 hos ulike dyrearter etter oral administrering er 1150 mg/kg hos mus, 2310 mg/kg hos rotte og når
+enda høyere verdier hos katt, hund og ape (> 4500 mg/kg).
+I tillegg forårsaket ikke zopiklon morfologiske eller atferdsmessige abnormiteter og var ikke
+føtotoksisk eller teratogent.
+
+
+6.    FARMASØYTISKE OPPLYSNINGER
+
+6.1   Hjelpestoffer
+
+Kjerne:
