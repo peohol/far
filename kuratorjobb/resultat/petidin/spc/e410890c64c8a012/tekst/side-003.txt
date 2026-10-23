@@ -1,0 +1,58 @@
+Blodplatehemmende behandling med oral P2Y12-hemmer
+Det har vært observert redusert effekt av behandling med P2Y12-hemmer i løpet av den første dagen
+ved samtidig behandling med P2Y12-hemmer og morfin (se pkt. 4.5).
+
+Ileus
+Opioider har vist seg å redusere tarmmotiliteten, og postoperative pasienter som får opioider bør
+overvåkes.
+
+Sykdom i lever og galleveier
+Petidin kan forårsake dysfunksjon og spasmer i Oddi-sfinkteren, noe som øker risikoen for
+galleveissymptomer og pankreatitt. Petidin må derfor administreres med forsiktighet hos pasienter
+med pankreatitt og sykdommer i galleveiene.
+
+Petidin bør brukes med forsiktighet ved:
+•      hodeskader eller tilstander med forhøyet intrakranielt trykk,
+•      nedsatt lever- og nyrefunksjon,
+•      respirasjonsvansker,
+•      supraventrikulær takykardi eller de som har hatt krampetilstander,
+•      prostatahypertrofi og urinrørsforsnevring,
+
+Dosereduksjon bør vurderes:
+•    hos eldre (se pkt. 4.2),
+•    ved nedsatt lever- eller nyrefunksjon (se pkt. 4.2),
+•    hos nyfødte og små spedbarn (se pkt. 4.2),
+•    ved samtidig behandling med andre CNS-hemmende legemidler (se pkt. 4.5).
+
+Pediatrisk populasjon
+Petidin har en langsommere eliminasjonshastighet og en større interindividuell variasjon hos nyfødte
+og yngre spedbarn sammenlignet med eldre barn og voksne. Dette kan føre til doserelaterte reaksjoner
+som respirasjonsdepresjon. Hvis bruk av petidin vurderes til nyfødte eller yngre spedbarn (opptil 12
+måneder), må potensielle fordeler veies mot den relative risikoen for pasienten.
+
+4.5   Interaksjon med andre legemidler og andre former for interaksjon
+
+MAO-hemmere
+Samtidig bruk av petidin og MAO-hemmere er kontraindisert. Både petidin og MAO-hemmere øker
+serotonerg aktivitet. Kombinasjonen bør generelt unngås på grunn av risiko for toksiske effekter av
+petidin (kramper, respirasjonsdepresjon, CNS-depresjon etc.), samt serotonergt syndrom. Dødsfall er
+rapportert. Det bør gå minst 14 dager mellom behandling med Petidin og en MAO-hemmer.
+
+Serotonerge legemidler
+Tilfeller av serotonergt syndrom er rapportert hos pasienter som tar petidin sammen med serotonerge
+legemidler, som selektive serotoninreopptakshemmere (SSRI), serotonin- og
+noradrenalinreopptakshemmere (SNRI), og med Johannesurt (Hypericum perforatum) (se pkt. 4.4).
+
+Antikolinerge legemidler
+Samtidig administrering av Petidin med antikolinergika eller legemidler med antikolinerg aktivitet
+(f.eks. trisykliske antidepressiva, antihistaminer, antipsykotika, muskelavslappende midler,
+antiparkinsonmidler) kan føre til økte antikolinerge bivirkninger.
+
+Ritonavir
+Samtidig bruk gir nedsatt konsentrasjon av petidin (60%) og økt konsentrasjon av den toksiske
+metabolitten norpetidin (50%).
+
+Cimetidin
+Samtidig bruk kan gi økt effekt av petidin.
+
+                                                                                                      3

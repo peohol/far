@@ -1,0 +1,353 @@
+{
+  "stoff": "petidin",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-22T04:15:06.408609+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 6,
+    "hentet": 2,
+    "dokumenter": 2,
+    "mangler": [
+      {
+        "merkevare_id": "ID_7C8EBD55-FB1A-40ED-BEB5-9EE3AF134232",
+        "varenavn": "Petidin SA",
+        "navn_form_styrke": "Petidin SA stikkpille 100 mg",
+        "produsent": "Sykehusapoteket Oslo, Ullevål",
+        "atc": "N02AB02",
+        "legemiddelform": "Stikkpille",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_7CD45A98-31CA-4C4C-97C4-27D22FFA5DD4",
+        "varenavn": "Pethidin HCl sintetica",
+        "navn_form_styrke": "Pethidin HCl sintetica inj, oppl 50 mg/ml",
+        "produsent": "Sintetica SA",
+        "atc": "N02AB02",
+        "legemiddelform": "Injeksjonsvæske, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_E5ED3FDB-6D21-4E81-BBD2-6B50AF33A500",
+        "varenavn": "Petidin NAF",
+        "navn_form_styrke": "Petidin NAF stikkpille 100 mg",
+        "produsent": "Sykehusapoteket Oslo, Ullevål",
+        "atc": "N02AB02",
+        "legemiddelform": "Stikkpille",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_E6C6B531-E88E-4BAD-A5E9-75F466B6E3FC",
+        "varenavn": "Dolcontral",
+        "navn_form_styrke": "Dolcontral stikkpille 100 mg",
+        "produsent": "Mibe",
+        "atc": "N02AB02",
+        "legemiddelform": "Stikkpille",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 2 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 2,
+        "ikke_dmp": 0,
+        "uten_omtale": 4
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "4 av 6 preparater i FEST mangler en hentet preparatomtale fra DMP: 4 uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA). SPC-behovet er ikke dekket; se «dekning.mangler».",
+      "antall": {
+        "preparater": 6,
+        "hentet": 2,
+        "mangler": 4,
+        "dokumenter": 2
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06456.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06456.pdf",
+      "hentet_kl": "2026-10-23T02:10:26.880Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "266019",
+        "content-md5": "DZcx6QmD88egV8dY0Q9vAQ==",
+        "last-modified": "Thu, 08 Oct 2026 06:49:24 GMT",
+        "etag": "0x8DF25084A1D4CAB",
+        "date": "Fri, 23 Oct 2026 02:10:27 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_380F31FA-1E04-44BA-9514-8344B6D95D18",
+          "varenavn": "Petidin",
+          "navn_form_styrke": "Petidin inj, oppl 50 mg/ml",
+          "produsent": "Evolan Pharma AB",
+          "atc": "N02AB02",
+          "legemiddelform": "Injeksjonsvæske, oppløsning"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-06456.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (266019 byte).",
+          "antall": {
+            "bytes": 266019
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "e410890c64c8a012c0cb89f13854ee8aac653bc7ac977e4c046118a2bd3b6f6e"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-14618.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-14618.pdf",
+      "hentet_kl": "2026-10-23T02:10:30.911Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "257691",
+        "content-md5": "S/Hh2uJDubgPAoUaD0KD7g==",
+        "last-modified": "Thu, 19 Mar 2026 20:49:18 GMT",
+        "etag": "0x8DE85F8FD73E478",
+        "date": "Fri, 23 Oct 2026 02:10:31 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_6DB93663-E7D9-4936-A4B2-39C3F2B6A316",
+          "varenavn": "Pethidine Macure",
+          "navn_form_styrke": "Pethidine Macure inj, oppl 50 mg/ml",
+          "produsent": "Macure Pharma ApS",
+          "atc": "N02AB02",
+          "legemiddelform": "Injeksjonsvæske, oppløsning"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-14618.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (257691 byte).",
+          "antall": {
+            "bytes": 257691
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "4df4ef249da86b2bc4940b007b49f161e292c584cd3cbf6b2891d9160f04c936"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "e410890c64c8a012c0cb89f13854ee8aac653bc7ac977e4c046118a2bd3b6f6e",
+      "bytes": 266019,
+      "mappe": "kuratorjobb/resultat/petidin/spc/e410890c64c8a012",
+      "pdf": {
+        "sider": 8,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": "PREPARATOMTALE (SmPC)",
+        "laget": "Mon Aug 24 08:54:14 2026 UTC",
+        "endret": "Mon Aug 24 08:54:14 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/original.pdf",
+        "tekst": "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/tekst/side-001.txt",
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/tekst/side-002.txt",
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/tekst/side-003.txt",
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/tekst/side-004.txt",
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/tekst/side-005.txt",
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/tekst/side-006.txt",
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/tekst/side-007.txt",
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/tekst/side-008.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/sider/side-001.png",
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/sider/side-002.png",
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/sider/side-003.png",
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/sider/side-004.png",
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/sider/side-005.png",
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/sider/side-006.png",
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/sider/side-007.png",
+          "kuratorjobb/resultat/petidin/spc/e410890c64c8a012/sider/side-008.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 4,
+        "til": 6
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (8 sider).",
+          "antall": {
+            "sider": 8
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 15468
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 4."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 8
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "4df4ef249da86b2bc4940b007b49f161e292c584cd3cbf6b2891d9160f04c936",
+      "bytes": 257691,
+      "mappe": "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b",
+      "pdf": {
+        "sider": 8,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": null,
+        "laget": "Thu Jan 22 10:47:41 2026 UTC",
+        "endret": "Thu Jan 22 10:47:41 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/original.pdf",
+        "tekst": "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/tekst/side-001.txt",
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/tekst/side-002.txt",
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/tekst/side-003.txt",
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/tekst/side-004.txt",
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/tekst/side-005.txt",
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/tekst/side-006.txt",
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/tekst/side-007.txt",
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/tekst/side-008.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/sider/side-001.png",
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/sider/side-002.png",
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/sider/side-003.png",
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/sider/side-004.png",
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/sider/side-005.png",
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/sider/side-006.png",
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/sider/side-007.png",
+          "kuratorjobb/resultat/petidin/spc/4df4ef249da86b2b/sider/side-008.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 4,
+        "til": 5
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (8 sider).",
+          "antall": {
+            "sider": 8
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 15639
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 4."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 8
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

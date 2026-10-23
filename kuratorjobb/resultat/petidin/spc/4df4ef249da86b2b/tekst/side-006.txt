@@ -1,0 +1,57 @@
+Det må opprettholdes åpne luftveier, og assistert respirasjon kan være nødvendig. Opioidantagonisten
+nalokson kan være nødvendig for å reversere symptomer, dersom det er tegn på koma eller betydelig
+respiratorisk eller kardiovaskulær depresjon. Gjentatt administrasjon av nalokson kan være nødvendig.
+Et krampestillende legemiddel kan være nødvendig for å kontrollere anfall. Oksygen, intravenøse
+væsker, vasopressorer og andre støttende tiltak skal anvendes som angitt.
+
+
+5.    FARMAKOLOGISKE EGENSKAPER
+
+5.1   Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Analgetika, opioider, ATC-kode: N02AB02
+
+Virkningsmekanisme
+Petidin er et syntetisk opioid analgetikum tilsvarende morfin selv om det er mindre kraftig og har kortere
+virkning. Den analgetiske effekten varer vanligvis i 2 til 4 timer. Den analgetiske effekten oppstår ca.
+10 minutter etter parenteral administrering. Det påvirker sentralnervesystemet og den glatte muskulaturen
+via det perifere nervesystemet. Det har imidlertid en svakere virkning på glatt muskulatur enn morfin og
+har derfor mindre effekt på hoste, tarmmotilitet, galletone og utsondring av hypofysære hormoner.
+Petidin forårsaker også frisetting av histamin fra mastceller som fører til en rekke allergiske reaksjoner.
+
+Farmakodynamiske effekter
+Som andre opioider binder petidin til opioidreseptorer og har størst farmakologisk virkning på
+sentralnervesystemet, herunder en bedøvende og beroligende virkning.
+Metabolitten norpetidin har halvparten av petidins bedøvende aktivitet, men er et sterkt
+sentralnervesystem-stimulerende middel og er forbundet med nevrotoksiske bivirkninger. Høye
+konsentrasjoner av norpetidin kan forårsake hallusinasjoner, opphisselse og anfall.
+
+5.2   Farmakokinetiske egenskaper
+
+Absorpsjon
+Petidin absorberes raskt etter intramuskulær eller subkutan injeksjon, men det er store
+variasjoner mellom individer.
+
+Distribusjon
+Det distribueres ofte i vevene med et distribusjonsvolum på 200–300 liter og er i stor grad proteinbundet
+(60–80 %) med maksimal effekt etter 15–120 minutter, avhengig av administrasjonsveien.
+
+Biotransformasjon
+Petidin metaboliseres i leveren ved hydrolyse eller demetylering til norpetidin etterfulgt av konjugering
+med glukuronsyre.
+
+Eliminasjon
+Eliminasjonen t1/2 av petidin er ca. 3–6 timer. Både petidin og norpetidin kan hydrolyseres til de inaktive
+metabolittene petidinsyre og norpetidinsyre. Syreformene gjennomgår deretter konjugering.
+Norpetidin har en større opphissende, men mindre depressiv virkning på pasienter enn petidin.
+Akkumuleringen kan føre til toksisitet, for eksempel konvulsive og hallusinogene virkninger. Utskillelse
+i urin er pH-avhengig. Jo lavere pH, desto større clearance. Ved normal pH i urinen utskilles bare en liten
+mengde petidin uendret. Metabolitten norpetidin elimineres langsommere med en halveringstid på opptil
+20 timer og kan akkumulere ved kronisk bruk, særlig ved nedsatt nyrefunksjon.
+
+Petidin krysser morkaken og skilles ut i morsmelk.
+Både petidin og norpetidin krysser blod-/hjernebarrieren og finnes i cerebrospinalvæsken.
+
+5.3   Prekliniske sikkerhetsdata
+
+Respirasjonsdepresjon, fysisk toleranseutvikling og avhengighet er observert i dyrestudier ved

@@ -1,0 +1,404 @@
+1.    LEGEMIDLETS NAVN
+
+Pethidine Macure 50 mg/ml injeksjonsvæske, oppløsning
+
+
+2.    KVALITATIV OG KVANTITATIV SAMMENSETNING
+
+1 ml oppløsning inneholder 50 mg petidinhydroklorid.
+Hver 2 ml ampulle inneholder 100 mg petidinhydroklorid.
+
+For fullstendig liste over hjelpestoffer, se pkt. 6.1.
+
+
+3.    LEGEMIDDELFORM
+
+Injeksjonsvæske, oppløsning
+
+Fargeløs klar oppløsning, praktisk talt fri for partikler.
+pH: fra 3,5 til 6,0.
+
+
+4.    KLINISKE OPPLYSNINGER
+
+4.1   Indikasjon(er)
+
+Pethidine Macure er indisert til behandling av akutte, sterke smerter hos voksne.
+
+4.2   Dosering og administrasjonsmåte
+
+Dosering
+
+Voksne
+Vanlig dose er 50 mg til 100 mg intramuskulært, subkutant eller ved sakte intravenøs injeksjon.
+Dosering kan gjentas ved behov hver 4. time.
+
+Eldre eller svekkede pasienter
+I lys av disse pasientenes større sensitivitet bør de behandles med forsiktighet, og det kan vurderes en
+redusert total daglig dose.
+
+Pasienter med nedsatt nyre- og/eller leverfunksjon
+På grunn av risikoen for akkumulering av petidin og den aktive metabolitten norpetidin hos pasienter
+med nedsatt nyre- og/eller leverfunksjon bør petidin gis med forsiktighet og i reduserte doser til
+pasienter med nedsatt nyre- og/eller leverfunksjon (se også pkt. 4.4 og 5.2).
+
+Administrasjonsmåte
+Pethidine Macure injeksjonsvæske, oppløsning er beregnet på administrasjon ved subkutan,
+intramuskulær eller sakte intravenøs injeksjon.
+
+4.3   Kontraindikasjoner
+
+-     Overfølsomhet overfor virkestoffet eller overfor noen av hjelpestoffene listet opp i pkt. 6.1.
+-     Bruk hos pasienter med diabetisk acidose hvor det er fare for koma.
+-     Bruk hos pasienter i koma.
+-     Bruk hos pasienter som får, eller som i løpet av de to siste ukene har fått,
+      monoaminoksidasehemmere (herunder moklobemid, og monoamin B-hemmerne selegilin og
+      rasagilin).
+-     Bruk hos pasienter med akutt respirasjonsdepresjon, alvorlig obstruktiv luftveissykdom eller
+      akutt astma.
+-     Bruk hos pasienter med en risiko for paralytisk ileus.
+-     Bruk hos pasienter med akutt alkoholisme, delirium tremens, økt intrakranielt trykk eller hos
+      pasienter med konvulsive tilstander som status epilepticus.
+-     Bruk hos pasienter som får ritonavir.
+
+4.4   Advarsler og forsiktighetsregler
+
+Gjentatt bruk kan føre til avhengighet av morfintypen.
+
+Petidin bør brukes med forsiktighet og i reduserte doser hos eldre og svake pasienter eller pasienter
+med nedsatt nyre- og/eller leverfunksjon. Nedsatt nyrefunksjon kan føre til akkumulering av den
+potensielt toksiske metabolitten norpetidin, særlig ved gjentatt dosering. Alle disse pasientgruppene
+kan oppleve økte eller forlengede virkninger av legemidlet.
+
+Petidin bør brukes med forsiktighet eller i reduserte doser hos pasienter med myasthenia gravis.
+
+Bruk av petidin hos pasienter med feokromocytom kan utløse en hypertensiv krise, muligens mediert
+av histaminfrigjøring og/eller stimulering av katekolaminsekresjon.
+Petidin skal ikke brukes hos pasienter med kjent eller mistenkt feokromocytom med mindre det ikke
+finnes egnede terapeutiske alternativer. I slike tilfeller må administrering kun skje etter at tilstrekkelig
+α-adrenoseptorblokade er oppnådd og under streng hemodynamisk overvåking.
+
+Petidin bør brukes med forsiktighet hos pasienter med hypotyreoidisme, binyrebarksvikt, sjokk eller
+tidligere konvulsive sykdommer.
+
+Selv om petidin er mindre spasmogent enn morfin, kan det utløse spasmer i urinleder eller galleveier.
+Deretter bør det brukes med forsiktighet hos pasienter med prostatahypertrofi og gallegangslidelser,
+herunder pasienter med smerter sekundært til galleblærepatologi.
+
+Gjentatt bruk vil indusere fysisk og psykologisk avhengighet, med et abstinenssyndrom ved avbrutt
+behandling. Unødig dosering (relativ eller absolutt) kan fremkalle krampeanfall.
+
+Petidin bør kun administreres med stor forsiktighet til pasienter med supraventrikulær takykardi eller
+respiratorisk dysfunksjon.
+
+Gjentatt bruk vil føre til utvikling av toleranse og krysstoleranse med andre opioider, noe som krever
+økning i dosering for å oppnå nødvendig effekt. Dersom det brukes intravenøs tilførsel, bør petidin gis
+sakte for å redusere risikoen for bivirkninger.
+
+Bruk av petidin med forlenget økt dosering eller samtidig med antikolinergika kan føre til
+nevrotoksisitet hos pasienter med nyresvikt, kreft eller sigdcelleanemi.
+
+En alvorlig hypotensjon kan forekomme når petidin administreres til pasienter hvis evne til å
+opprettholde et stabilt blodtrykk er påvirket av et depletert blodvolum eller administrering av
+legemidler som fenotiaziner.
+
+Dessuten bør det unngås hos pasienter med obstruktive eller inflammatoriske tarmlidelser på grunn av
+virkningene på mage-tarmkanalen, hvor det kan utfelle toksisk megakolon.
+
+Risiko ved bruk sammen med sedativa som benzodiazepiner eller lignende legemidler:
+Samtidig bruk av petidin og sedativa som benzodiazepiner eller lignende legemidler kan føre til
+sedasjon, respirasjonsdepresjon, koma og dødsfall. Som følge av disse risikoene bør samtidig
+forskriving av disse sedative midlene være forbeholdt pasienter som det ikke finnes alternative
+behandlingsmuligheter for. Hvis det besluttes å forskrive petidin samtidig med sedative midler, bør
+den minste effektive dosen brukes, og behandlingens varighet bør være så kort som mulig. Pasientene
+bør følges nøye for tegn og symptomer på respirasjonsdepresjon og sedasjon. I denne forbindelse
+anbefales det på det sterkeste at pasienter og pleiere informeres om at de må være oppmerksomme på
+disse symptomene (se pkt. 4.5).
+
+Serotoninsyndrom:
+På grunn av risikoen for serotoninsyndrom bør ikke petidin brukes i kombinasjon med serotonerge
+midler (se pkt. 4.5).
+
+4.5   Interaksjon med andre legemidler og andre former for interaksjon
+
+Monoaminoksidasehemmere
+Samtidig bruk av monoaminoksidasehemmere (MAO-hemmere) (herunder moklobemid) er
+kontraindisert (se pkt. 4.3), siden det kan føre til eksitasjon eller depresjon av sentralnervesystemet.
+Svært alvorlige reaksjoner, herunder koma, respirasjonsdepresjon, cyanose og hypotensjon, har
+forekommet hos pasienter som har fått MAO-hemmere. Petidin bør ikke gis til pasienter som tar
+MAO-hemmere, eller pasienter som har tatt MAO-hemmere, i løpet av de siste to ukene. Interaksjonen
+mellom petidin og MAO-hemmere kan føre til serotoninsyndrom.
+
+MAO-B-hemmere
+Samtidig bruk av MAO-B-hemmere som selegilin eller rasagilin er kontraindisert (se pkt. 4.3), siden
+dette kan føre til hyperpyreksi og toksisitet i sentralnervesystemet. Rasagilin bør ikke gis med petidin,
+siden det er risiko for toksisitet i sentralnervesystemet, og bruk bør unngås i to uker etter inntak av
+rasagilin.
+
+Antiviralia
+Plasmakonsentrasjoner av petidin kan reduseres ved samtidig administrasjon av ritonavir, men nivåer
+av norpetidin (en toksisk metabolitt) kan øke. Samtidig administrasjon av ritonavir og petidin må
+unngås (se pkt. 4.3).
+
+Legemidler som benzodiazepiner eller andre depressiva for sentralnervesystemet
+Samtidig bruk av opioider og andre depressiva for sentralnervesystemet, herunder sedativa, for
+eksempel benzodiazepiner, fenotiazin nevroleptika, anksiolytika, antidepressiva, alkohol og generelle
+anestetika, øker risikoen for sedasjon, respirasjonsdepresjon, koma og dødsfall som følge av depressiv
+tilleggseffekt på sentralnervesystemet. Doseringen og varigheten av samtidig bruk bør begrenses (se
+pkt. 4.4).
+
+Opioide agonister
+Tilleggseffekter på depresjon av sentralnervesystemet, respirasjonsdepresjon og hypotensjon kan
+forekomme ved samtidig bruk av opioidagonistanalgetika.
+
+Antikonvulsiva
+Administrasjon av fenytoin kan forårsake en økning i hepatisk metabolisme av petidin og senere økte
+nivåer av norpetidin (en toksisk metabolitt).
+
+Antipsykotika
+Samtidig bruk av fenotiaziner og petidin kan utløse alvorlig hypotensjon.
+
+Histamin H2-antagonister
+Cimetidin hemmer metabolismen av petidin og øker derfor plasmakonsentrasjonen.
+
+Serotonerge midler
+Tilfeller av serotoninsyndrom er rapportert hos pasienter som tar petidin samtidig med serotonerge
+midler, for eksempel selektive serotoninreopptakshemmere (SSRI-er), serotonin-noradrenalin-
+reopptakshemmere (SNRI-er) og med johannesurt (Hypericum perforatum) (se pkt. 4.4).
+Virkninger av petidin på andre legemidler
+
+Domperidon
+Petidin kan ha en effekt på aktiviteten til andre legemidler som domperidon, som følge av redusert
+gastrointestinal motilitet.
+
+Ciprofloksacin
+Plasmanivåene av ciprofloksacin kan reduseres i nærvær av opiate premedikamenter.
+
+Meksiletin
+Plasmanivåer av meksiletin kan også reduseres i nærvær av opioide analgetika.
+
+4.6   Fertilitet, graviditet og amming
+
+Graviditet
+Det er begrenset mengde data på bruk hos gravide kvinner. Dyrestudier har vist
+reproduksjonstoksisitet av ukjent klinisk relevans (se pkt. 5.3). Petidin skal ikke administreres under
+graviditet med mindre kvinnens kliniske tilstand krever behandling med petidin. Abstinenssymptomer
+er observert hos nyfødte etter langvarig bruk.
+
+Administrasjon under fødsel kan forårsake respirasjonsdepresjon hos den nyfødte. De siste 1–2 timene
+før forventet fødsel skal petidin kun brukes hvis det er strengt nødvendig. Petidin skal ikke brukes i
+andre fødselsfase og ved for tidlig nedkomst.
+
+Amming
+Petidin skilles ut i morsmelk hos mennesker. Det forventes ingen virkninger på barnet som ammes
+etter terapeutiske engangsdoser. Etter gjentatt dosering kan ikke en virkning på det diende spedbarnet
+utelukkes, og det må tas en beslutning om ammingen skal stoppes eller å stoppe/avstå fra
+petidinbehandling ved å vurdere nytten ved amming for barnet og nytten ved behandling for moren.
+
+4.7   Påvirkning av evnen til å kjøre bil og bruke maskiner
+
+Dette legemidlet vil forårsake døsighet og nedsatt årvåkenhet. Pasienter bør rådes til ikke å bruke
+maskiner før virkningene på fysisk og psykisk evne er borte.
+Evnen til å kjøre bil eller bruke maskiner kan bli kraftig påvirket under og en liten stund etter
+administrasjon av petidin. Dette legemidlet kan svekke kognitiv funksjon og kan påvirke pasientens
+evne til å kjøre sikkert.
+
+4.8   Bivirkninger
+
+Informasjonen nedenfor viser rapporterte bivirkninger ordnet ved hjelp av følgende
+frekvensklassifisering:
+
+Svært vanlige (≥ 1/10), vanlige (≥ 1/100 til < 1/10), mindre vanlige (≥ 1/1000 til < 1/100), sjeldne
+(≥ 1/10 000 til < 1/1000), svært sjeldne (< 1/10 000), ikke kjent (kan ikke anslås ut ifra tilgjengelige
+data).
+
+ Organklassesystem                   Frekvens                             Bivirkning
+ Forstyrrelser i                     Ikke kjent                           Generelle
+ immunsystemet                                                            overfølsomhetsreaksjoner
+ Psykiatriske sykdommer              Ikke kjent                           Avhengighet, forvirring,
+                                                                          humørsvingninger, mild eufori,
+                                                                          hallusinasjoner, dysfori,
+                                                                          opphisselse, angst, nervøsitet
+ Nevrologiske sykdommer              Svært vanlige                        Døsighet, svimmelhet, tremor,
+                                                                        krampeanfall, hodepine,
+                                                                        eksitasjon av
+                                                                        sentralnervesystemet, synkope,
+                                                                        ørhet, sedasjon, ukoordinerte
+                                                                        muskelbevegelser
+ Øyesykdommer                       Ikke kjent                          Synsforstyrrelser, tørre øyne,
+                                                                        miose
+ Sykdommer i øre og labyrint        Ikke kjent                          Vertigo
+ Hjertesykdommer                    Ikke kjent                          Takykardi, bradykardi,
+                                                                        palpitasjoner
+ Karsykdommer                       Svært vanlige                       Rødhet i ansiktet, ortostatisk
+                                                                        hypotensjon, hypotensjon,
+                                                                        hypertensjon, vasodilatasjon
+ Sykdommer i                        Svært vanlige                       Respirasjonsdepresjon
+ respirasjonsorganer, thorax
+ og mediastinum
+ Gastrointestinale sykdommer        Svært vanlige                       Kvalme, oppkast, munntørrhet,
+                                                                        forstoppelse
+ Sykdommer i lever og               Ikke kjent                          Galle- eller urinveisspasmer
+ galleveier
+ Hud- og                            Svært vanlige                       Svetting, andre hudutslett,
+ underhudssykdommer                                                     elveblest, pruritus
+ Sykdommer i muskler,               Ikke kjent                          Muskelrykninger
+ bindevev og skjelett
+ Sykdommer i nyre og                Ikke kjent                          Problemer med vannlating,
+ urinveier                                                              nyrekolikk, urinretensjon
+ Lidelser i kjønnsorganer og        Ikke kjent                          Seksuell dysfunksjon
+ brystsykdommer
+ Generelle lidelser og              Ikke kjent                          Hypotermi, svakhet, reaksjon
+ reaksjoner på                                                          på injeksjonsstedet, herunder
+ administrasjonsstedet                                                  indurasjon og irritasjon,
+                                                                        smerter på injeksjonsstedet,
+                                                                        lokal væskeansamling og
+                                                                        rødhet over venen med
+                                                                        intravenøs injeksjon, lokal
+                                                                        vevsirritasjon
+ Undersøkelser                      Ikke kjent                          Redusert korneal refleks
+
+Melding av bivirkninger
+Kontakt lege eller, apotek eller sykepleier dersom du opplever bivirkninger. Dette gjelder også
+bivirkninger som ikke er nevnt i pakningsvedlegget. Du kan også melde fra om bivirkninger direkte via
+meldeskjema som finnes på nettsiden til Direktoratet for medisinske
+produkter: www.dmp.no/pasientmelding. Ved å melde fra om bivirkninger bidrar du med informasjon
+om sikkerheten ved bruk av dette legemiddelet.
+
+4.9   Overdosering
+
+Symptomer
+Respirasjonsdepresjon, depresjon av sentralnervesystemet med ekstrem somnolens som utvikler seg til
+dårlig koordinasjon, stupor eller koma, krampeanfall, stimulering av sentralnervesystemet, cyanose,
+miose, skjelettmuskelslapphet eller tremor, kald, klam hud, hypotermi, bradykardi og hypotensjon.
+Ved alvorlig overdosering kan apné, sirkulatorisk kollaps, lungeødem, pupilledilatasjon, hjertestans og
+dødsfall forekomme.
+
+Behandling
+Det kan kreves intensiv støttebehandling for å korrigere respirasjonssvikt og sjokk. Petidin må seponeres.
+Det må opprettholdes åpne luftveier, og assistert respirasjon kan være nødvendig. Opioidantagonisten
+nalokson kan være nødvendig for å reversere symptomer, dersom det er tegn på koma eller betydelig
+respiratorisk eller kardiovaskulær depresjon. Gjentatt administrasjon av nalokson kan være nødvendig.
+Et krampestillende legemiddel kan være nødvendig for å kontrollere anfall. Oksygen, intravenøse
+væsker, vasopressorer og andre støttende tiltak skal anvendes som angitt.
+
+
+5.    FARMAKOLOGISKE EGENSKAPER
+
+5.1   Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Analgetika, opioider, ATC-kode: N02AB02
+
+Virkningsmekanisme
+Petidin er et syntetisk opioid analgetikum tilsvarende morfin selv om det er mindre kraftig og har kortere
+virkning. Den analgetiske effekten varer vanligvis i 2 til 4 timer. Den analgetiske effekten oppstår ca.
+10 minutter etter parenteral administrering. Det påvirker sentralnervesystemet og den glatte muskulaturen
+via det perifere nervesystemet. Det har imidlertid en svakere virkning på glatt muskulatur enn morfin og
+har derfor mindre effekt på hoste, tarmmotilitet, galletone og utsondring av hypofysære hormoner.
+Petidin forårsaker også frisetting av histamin fra mastceller som fører til en rekke allergiske reaksjoner.
+
+Farmakodynamiske effekter
+Som andre opioider binder petidin til opioidreseptorer og har størst farmakologisk virkning på
+sentralnervesystemet, herunder en bedøvende og beroligende virkning.
+Metabolitten norpetidin har halvparten av petidins bedøvende aktivitet, men er et sterkt
+sentralnervesystem-stimulerende middel og er forbundet med nevrotoksiske bivirkninger. Høye
+konsentrasjoner av norpetidin kan forårsake hallusinasjoner, opphisselse og anfall.
+
+5.2   Farmakokinetiske egenskaper
+
+Absorpsjon
+Petidin absorberes raskt etter intramuskulær eller subkutan injeksjon, men det er store
+variasjoner mellom individer.
+
+Distribusjon
+Det distribueres ofte i vevene med et distribusjonsvolum på 200–300 liter og er i stor grad proteinbundet
+(60–80 %) med maksimal effekt etter 15–120 minutter, avhengig av administrasjonsveien.
+
+Biotransformasjon
+Petidin metaboliseres i leveren ved hydrolyse eller demetylering til norpetidin etterfulgt av konjugering
+med glukuronsyre.
+
+Eliminasjon
+Eliminasjonen t1/2 av petidin er ca. 3–6 timer. Både petidin og norpetidin kan hydrolyseres til de inaktive
+metabolittene petidinsyre og norpetidinsyre. Syreformene gjennomgår deretter konjugering.
+Norpetidin har en større opphissende, men mindre depressiv virkning på pasienter enn petidin.
+Akkumuleringen kan føre til toksisitet, for eksempel konvulsive og hallusinogene virkninger. Utskillelse
+i urin er pH-avhengig. Jo lavere pH, desto større clearance. Ved normal pH i urinen utskilles bare en liten
+mengde petidin uendret. Metabolitten norpetidin elimineres langsommere med en halveringstid på opptil
+20 timer og kan akkumulere ved kronisk bruk, særlig ved nedsatt nyrefunksjon.
+
+Petidin krysser morkaken og skilles ut i morsmelk.
+Både petidin og norpetidin krysser blod-/hjernebarrieren og finnes i cerebrospinalvæsken.
+
+5.3   Prekliniske sikkerhetsdata
+
+Respirasjonsdepresjon, fysisk toleranseutvikling og avhengighet er observert i dyrestudier ved
+eksponeringsnivåer tilsvarende klinisk eksponeringsnivå.
+
+I studier med drektige hamstere behandlet med doser som var 8–29 ganger høyere enn de brukt hos
+mennesker, ble doseavhengig økt forekomst av avvik i sentralnervesystemet og andre avvik hos
+avkommet observert. I studier med drektige mus behandlet med engangsdoser 40–50 ganger høyere enn
+de brukt hos mennesker, var det ingen økt forekomst av misdannelser. Den kliniske betydningen av disse
+funnene er ikke kjent.
+
+
+6.     FARMASØYTISKE OPPLYSNINGER
+
+6.1    Hjelpestoffer
+
+Vann til injeksjonsvæsker
+
+6.2    Uforlikeligheter
+
+Dette legemidlet skal ikke blandes med andre legemidler enn de som er angitt i pkt. 6.6.
+
+6.3    Holdbarhet
+
+5 år
+
+6.4    Oppbevaringsbetingelser
+
+Dette legemidlet krever ingen spesielle oppbevaringsbetingelser.
+
+6.5    Emballasje (type og innhold)
+
+Legemidlet er tilgjengelig i ampuller av fargeløst glass, med kapasitet på 2 ml, med merking for
+ampulleåpning. En selvklebende etikett er festet på hver ampulle.
+
+10 ampuller er pakket i en blisterpakning av PVC-film.
+Hver eske inneholder 1 blister og et pakningsvedlegg.
+
+6.6    Spesielle forholdsregler for destruksjon og annen håndtering
+
+Kun til engangsbruk.
+Hvis bare en del av innholdet i en ampulle brukes, skal resten av oppløsningen destrueres.
+
+Pethidine Macure injeksjonsvæske, oppløsning kan blandes med glucose 50 mg/ml (5 %)
+injeksjonsvæske, oppløsning eller natriumklorid 9 mg/ml (0,9 %) injeksjonsvæske, oppløsning og vil
+forbli stabil i 12 timer ved romtemperatur.
+Fra et mikrobiologisk synspunkt bør den tilberedte oppløsning administreres umiddelbart etter
+blanding.
+
+Ikke anvendt legemiddel samt avfall bør destrueres i overensstemmelse med lokale krav.
+
+
+7.     INNEHAVER AV MARKEDSFØRINGSTILLATELSEN
+
+Macure Pharma ApS
+Hejrevej 39
+2400 København NV
+Danmark
+8.    MARKEDSFØRINGSTILLATELSESNUMMER (NUMRE)
+
+22-14618
+
+
+9.    DATO FOR FØRSTE MARKEDSFØRINGSTILLATELSE / SISTE FORNYELSE
+
+Dato for første markedsføringstillatelse: 8. mai 2023
+
+
+10.   OPPDATERINGSDATO
+
+15.01.2026
+

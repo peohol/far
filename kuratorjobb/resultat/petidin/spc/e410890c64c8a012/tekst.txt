@@ -1,0 +1,430 @@
+1.    LEGEMIDLETS NAVN
+
+Petidin 50 mg/ml injeksjonsvæske, oppløsning
+
+
+2.    KVALITATIV OG KVANTITATIV SAMMENSETNING
+
+Petidinhydroklorid 50 mg/ml.
+
+For fullstendig liste over hjelpestoffer, se pkt. 6.1.
+
+
+3.    LEGEMIDDELFORM
+
+Injeksjonsvæske, oppløsning
+
+
+4.    KLINISKE OPPLYSNINGER
+
+4.1   Indikasjoner
+
+Sterke smerter.
+
+4.2   Dosering og administrasjonsmåte
+
+Dosering
+
+Voksne
+75-100 mg gitt intramuskulært, langsomt intravenøst eller subkutant. Dosen kan om nødvendig gjentas
+med 3-4 timers intervall inntil 6 ganger i døgnet.
+
+Ved obstetriske smerter
+50-100 mg intramuskulært eller subkutant. Kan om nødvendig gjentas 3-4 ganger med 1-3 timers
+intervall. Bør fortrinnsvis ikke gis siste 1 1/2 time før fødselen (se pkt. 4.6).
+
+Pediatrisk populasjon
+1-1,5 mg/kg gitt intramuskulært eller subkutant. Kan om nødvendig gjentas med 3-4 timers intervall
+inntil 6 ganger i døgnet. Nyfødte og små spedbarn har nedsatt eliminasjonshastighet og/eller er mer
+utsatt for respirasjonsdepresjon, og redusert dose kan være nødvendig.
+
+Eldre
+Eliminasjonshastigheten for petidin er redusert hos eldre. Det kan derfor være nødvendig å redusere
+den totale daglige dosen hos eldre som får gjentatte doser petidin.
+
+Nedsatt lever- eller nyrefunksjon
+Akkumulering av petidin og den aktive metabolitten norpetidin kan forekomme hos pasienter med
+nedsatt lever- eller nyrefunksjon. Petidin bør derfor brukes med forsiktighet hos disse pasientene og
+den totale døgndosen bør reduseres.
+
+Behandlingsmål og seponering
+Før behandling med Petidin startes, skal en behandlingsstrategi, inkludert behandlingsvarighet og
+behandlingsmål, og en plan for behandlingsslutt, avtales med pasienten, i samsvar med retningslinjene
+for smertebehandling. Under behandlingen skal det være hyppig kontakt mellom lege og pasient for å
+vurdere behovet for fortsatt behandling, vurdere seponering og justere doseringen om nødvendig. Når
+en pasient ikke lenger trenger behandling med Petidin, kan det være tilrådelig å trappe ned dosen
+gradvis for å forhindre abstinenssymptomer. Ved mangel på tilstrekkelig smertekontroll skal
+muligheten for hyperalgesi, toleranse og progresjon av underliggende sykdom vurderes (se pkt. 4.4).
+
+                                                                                                        1
+Behandlingsvarighet
+Behandlingsvarigheten skal være så kort som mulig, og hvis effektiv smertelindring ikke oppnås, skal
+pasienter/omsorgspersoner kontakte lege.
+
+4.3   Kontraindikasjoner
+
+•     overfølsomhet overfor virkestoffet eller overfor noen av hjelpestoffene listet opp i pkt. 6.1.
+•     alvorlige respirasjonsvansker eller koma.
+•     i kombinasjon med MAO-hemmere. Det bør være minst 14 dager mellom behandling med
+      petidin og en MAO-hemmer (se pkt. 4.5).
+
+4.4   Advarsler og forsiktighetsregler
+
+Toleranse og opioidbrukslidelse (misbruk og avhengighet)
+Toleranse, fysisk og psykisk avhengighet og opioidbrukslidelse (OUD) kan utvikles ved gjentatt
+administrering av opioider som Petidin.
+Gjentatt bruk av Petidin kan føre til opioidbrukslidelse (OUD). En høyere dose og lengre varighet av
+opioidbehandling kan øke risikoen for å utvikle OUD. Misbruk eller tilsiktet feilbruk av Petidin kan
+føre til overdose og/eller død. Risikoen for å utvikle OUD er økt hos pasienter med en personlig eller
+familiær historie (foreldre eller søsken) med rusmisbruk (inkludert alkoholmisbruk), hos nåværende
+tobakksbrukere eller hos pasienter med en personlig historie med andre psykiske lidelser (f.eks.
+alvorlig depresjon, angst og personlighetsforstyrrelser).
+
+Før behandling med Petidin startes og under behandlingen, skal behandlingsmål og en
+seponeringsplan avtales med pasienten (se pkt. 4.2).
+Før og under behandlingen skal pasienten også informeres om risikoen og tegnene på OUD. Hvis disse
+tegnene oppstår, skal pasienten rådes til å kontakte legen sin.
+Pasienter må overvåkes for tegn på legemiddeloppsøkende atferd (f.eks. for tidlige forespørsler om ny
+resept). Dette inkluderer gjennomgang av samtidig bruk av opioider og psykoaktive legemidler (som
+benzodiazepiner).
+For pasienter med tegn og symptomer på OUD bør konsultasjon med en spesialist innen
+avhengighetsmedisin vurderes.
+
+Risiko ved samtidig bruk av sedative legemidler som benzodiazepiner eller lignende legemidler
+Samtidig bruk av Petidin og sedative legemidler som benzodiazepiner eller lignende legemidler kan
+resultere i sedasjon, respirasjonsdepresjon, koma og død. På grunn av disse risikoene, bør samtidig
+forskrivning av disse sedativa være reservert for pasienter hvor alternativ behandling ikke er mulig.
+Hvis det besluttes å forskrive Petidin samtidig med sedativa, skal den laveste effektive dosen brukes,
+og behandlingsvarigheten være så kort som mulig.
+
+Pasientene bør følges nøye for tegn og symptomer på respirasjonsdepresjon og sedasjon. Det anbefales
+på det sterkeste å informere pasienter og deres omsorgspersoner om disse symptomene (se pkt. 4.5).
+
+Søvnrelaterte pusteforstyrrelser
+Opioider kan forårsake søvnrelaterte pusteforstyrrelser, inkludert sentral søvnapné (CSA) og
+søvnrelatert hypoksemi. Opioidbruk øker risikoen for CSA på en doseavhengig måte. Hos pasienter
+som opplever CSA, bør man vurdere å redusere den totale opioiddosen.
+
+Som med andre opioider, bør muligheten for opioidindusert hyperalgesi vurderes ved utilstrekkelig
+smertekontroll som respons på en økt dose petidin. En dosereduksjon eller behandlingsvurdering kan
+være indisert.
+
+Serotonergt syndrom
+På grunn av risikoen for serotonergt syndrom, bør ikke petidin brukes i kombinasjon med serotonerge
+legemidler (se pkt. 4.5).
+
+
+                                                                                                         2
+Blodplatehemmende behandling med oral P2Y12-hemmer
+Det har vært observert redusert effekt av behandling med P2Y12-hemmer i løpet av den første dagen
+ved samtidig behandling med P2Y12-hemmer og morfin (se pkt. 4.5).
+
+Ileus
+Opioider har vist seg å redusere tarmmotiliteten, og postoperative pasienter som får opioider bør
+overvåkes.
+
+Sykdom i lever og galleveier
+Petidin kan forårsake dysfunksjon og spasmer i Oddi-sfinkteren, noe som øker risikoen for
+galleveissymptomer og pankreatitt. Petidin må derfor administreres med forsiktighet hos pasienter
+med pankreatitt og sykdommer i galleveiene.
+
+Petidin bør brukes med forsiktighet ved:
+•      hodeskader eller tilstander med forhøyet intrakranielt trykk,
+•      nedsatt lever- og nyrefunksjon,
+•      respirasjonsvansker,
+•      supraventrikulær takykardi eller de som har hatt krampetilstander,
+•      prostatahypertrofi og urinrørsforsnevring,
+
+Dosereduksjon bør vurderes:
+•    hos eldre (se pkt. 4.2),
+•    ved nedsatt lever- eller nyrefunksjon (se pkt. 4.2),
+•    hos nyfødte og små spedbarn (se pkt. 4.2),
+•    ved samtidig behandling med andre CNS-hemmende legemidler (se pkt. 4.5).
+
+Pediatrisk populasjon
+Petidin har en langsommere eliminasjonshastighet og en større interindividuell variasjon hos nyfødte
+og yngre spedbarn sammenlignet med eldre barn og voksne. Dette kan føre til doserelaterte reaksjoner
+som respirasjonsdepresjon. Hvis bruk av petidin vurderes til nyfødte eller yngre spedbarn (opptil 12
+måneder), må potensielle fordeler veies mot den relative risikoen for pasienten.
+
+4.5   Interaksjon med andre legemidler og andre former for interaksjon
+
+MAO-hemmere
+Samtidig bruk av petidin og MAO-hemmere er kontraindisert. Både petidin og MAO-hemmere øker
+serotonerg aktivitet. Kombinasjonen bør generelt unngås på grunn av risiko for toksiske effekter av
+petidin (kramper, respirasjonsdepresjon, CNS-depresjon etc.), samt serotonergt syndrom. Dødsfall er
+rapportert. Det bør gå minst 14 dager mellom behandling med Petidin og en MAO-hemmer.
+
+Serotonerge legemidler
+Tilfeller av serotonergt syndrom er rapportert hos pasienter som tar petidin sammen med serotonerge
+legemidler, som selektive serotoninreopptakshemmere (SSRI), serotonin- og
+noradrenalinreopptakshemmere (SNRI), og med Johannesurt (Hypericum perforatum) (se pkt. 4.4).
+
+Antikolinerge legemidler
+Samtidig administrering av Petidin med antikolinergika eller legemidler med antikolinerg aktivitet
+(f.eks. trisykliske antidepressiva, antihistaminer, antipsykotika, muskelavslappende midler,
+antiparkinsonmidler) kan føre til økte antikolinerge bivirkninger.
+
+Ritonavir
+Samtidig bruk gir nedsatt konsentrasjon av petidin (60%) og økt konsentrasjon av den toksiske
+metabolitten norpetidin (50%).
+
+Cimetidin
+Samtidig bruk kan gi økt effekt av petidin.
+
+                                                                                                      3
+Klorpromazin
+Samtidig bruk medfører økt risiko for petidintoksisitet.
+
+Fenytoin
+Fenytoin induserer metabolismen av petidin i lever. Dette gir lavere plasmakonsentrasjon av petidin
+med risiko for minsket smertestillende effekt. Imidlertid øker plasmakonsentrasjonen av den toksiske
+metabolitten norpetidin, noe som kan føre til økt risiko for bivirkninger.
+
+Opioid antagonister inkl. naltrekson
+Samtidig bruk fører til kompetitiv binding til opioidreseptorer.
+
+Andre opioidanalgetika, alkohol, sedativa/hypnotika og andre CNS-depressiva
+Forsterket CNS-depresjon ved kombinasjon med andre opioidanalgetika, alkohol, sedativa/hypnotika
+og andre CNS-depressiva.
+
+Sedativa som benzodiazepiner og lignende legemidler som gabapentinoider
+Samtidig bruk av opioider og sedativa som benzodiazepiner eller lignende legemidler som
+gabapentinoider (gabapentin og pregabalin) øker risikoen for sedasjon, respirasjonsdepresjon,
+hypotensjon, koma og død på grunn av forsterket CNS-depressiv effekt. Dosering og varighet av
+samtidig bruk skal begrenses (se pkt. 4.4).
+
+Blodplatehemmende behandling med oral P2Y12-hemmer
+En forsinket og redusert eksponering for blodplatehemmende behandling med oral P2Y12-hemmer har
+vært observert hos pasienter med akutt koronarsyndrom behandlet med morfin. Denne interaksjonen
+kan være forbundet med redusert gastrointestinal motilitet og kan gjelde for andre opioider. Den
+kliniske relevansen er ukjent, men data indikerer et potensial for redusert effekt av P2Y12-hemmer
+hos pasienter som samtidig får morfin og en P2Y12-hemmer (se pkt. 4.4). Hos pasienter med akutt
+koronarsyndrom, der petidin ikke kan unngås og rask P2Y12-hemming anses avgjørende, kan bruk av
+en parenteral P2Y12-hemmer vurderes.
+
+4.6   Fertilitet, graviditet og amming
+
+Graviditet
+Petidin skal ikke brukes under graviditet hvis ikke den kliniske tilstanden til kvinnen gjør behandling
+med petidin nødvendig. Det er begrenset mengde data på bruk av petidin hos gravide kvinner. Studier
+på dyr har vist reproduksjonstoksisitet, men relevansen for mennesker er ikke klarlagt (se pkt. 5.3).
+
+Ved langvarig behandling av moren under graviditet er det sett neonatal abstinens.
+
+Petidin skal ikke brukes i andre fødselsfase og ved for tidlig nedkomst fordi det kan gi neonatal
+respirasjonsdepresjon hos barnet. Siste halvannen time før forventet fødsel skal preparatet bare brukes
+hvis fordelen oppveier en mulig risiko.
+
+Amming
+Petidin skilles ut i små mengder i morsmelk. Tatt i betraktning fordelene av amming for barnet og
+fordelene av behandling for moren, må det tas en beslutning om amming skal opphøre eller om
+behandlingen med Petidin skal avsluttes/avstås fra.
+
+4.7   Påvirkning av evnen til å kjøre bil og bruke maskiner
+
+Petidin kan påvirke evnen til å kjøre bil og bruke maskiner.
+
+4.8   Bivirkninger
+
+De alvorligste bivirkningene med petidin er respirasjonsdepresjon og hypotensjon. De hyppigste
+observerte bivirkningene er kvalme og brekninger.
+
+
+                                                                                                       4
+Bivirkninger er klassifisert etter organklassesystem. Innenfor hver organklasse er frekvensen definert
+som angitt i tabellen under.
+
+ Organklassesystem               Vanlige              Mindre vanlige            Ikke kjent
+                                 (≥ 1/100 til         (≥ 1/1000 til < 1/100)    (kan ikke anslås ut ifra
+                                 < 1/10)                                        tilgjengelige data)
+ Forstyrrelser i                                                                Overfølsomhets-
+ immunsystemet                                                                  reaksjoner
+ Psykiatriske lidelser                                                          Eufori
+                                                                                Legemiddelavhengighet
+ Nevrologiske                                         Besvimelsesanfall,        Sedasjon
+ sykdommer                                            Døsighet,                 Hyperalgesi, allodyni
+                                                      Svimmelhet (særlig
+                                                      hos oppegående)
+ Hjertesykdommer                                                                Bradykardi,
+                                                                                Takykardi,
+                                                                                Palpitasjoner
+ Karsykdommer                                                                   Hypotensjon,
+                                                                                "Flushing"
+ Sykdommer i                                          Respirasjonsdepresjon
+ respirasjonsorganer,
+ thorax og
+ mediastinum
+ Gastrointestinale               Kvalme, Brekninger                             Munntørrhet,
+ sykdommer                                                                      Obstipasjon
+                                                                                Paralytisk ileus
+ Sykdommer i lever og                                 Galleveisspasmer*
+ galleveier
+ Hud- og underhuds-                                   Urtikaria                 Pruritus
+ sykdommer
+ Sykdommer i nyre og                                                            Urinretensjon
+ urinveier
+ Generelle lidelser og                                                          Hevelse og rødhet over
+ reaksjoner på                                                                  vene**,
+ administrasjonsstedet                                                          Lokal irritasjon***,
+                                                                                Svetting,
+
+*Mindre enn for morfin.
+**Etter intravenøs administrering.
+***Etter subkutan administrering.
+
+Beskrivelse av utvalgte bivirkninger
+
+Legemiddelavhengighet
+Gjentatt bruk av Petidin kan føre til legemiddelavhengighet, selv ved terapeutiske doser. Risikoen for
+legemiddelavhengighet kan variere avhengig av pasientens individuelle risikofaktorer, dosering og
+varighet av opioidbehandling (se pkt. 4.4).
+
+Melding av mistenkte bivirkninger
+Melding av mistenkte bivirkninger etter godkjenning av legemidlet er viktig. Det gjør det mulig å
+overvåke forholdet mellom nytte og risiko for legemidlet kontinuerlig. Helsepersonell oppfordres til å
+melde enhver mistenkt bivirkning. Dette gjøres via meldeskjema som finnes på nettsiden til
+Direktoratet for medisinske produkter: www.dmp.no/meldeskjema.
+
+
+
+
+                                                                                                         5
+4.9   Overdosering
+
+Toksisitet
+75–100 mg tilsvarer ca. 10 mg morfin. Doser over 400 mg har gitt kramper. Letal dose for voksne
+(uten narkotikatilvenning) ca. 1 g. Opioider er generelt mer toksiske for barn, eldre eller svekkede
+personer. Toksisiteten potenseres av alkohol og andre legemidler som påvirker CNS. Individuelle
+variasjoner. Toleranseutvikling.
+
+Symptomer
+CNS-depresjon er hovedproblemet. Kvalme og obstipasjon. Blek, fuktig hud, hypotermi,
+respirasjonsdepresjon, miose og kramper (særlig barn). Sirkulasjonssvikt. Evt. acidose, rabdomyolyse
+og nyresvikt. I tillegg antikolinerge fenomener som eksitasjon, hallusinasjoner, mydriasis, munntørrhet
+og urinretensjon. Evt. serotonergt syndrom dersom kombinert med legemidler som øker
+serotoninnivået. Klinikk av ikke-opioidkarakter er mest vanlig ved gjentatt eksponering.
+
+Behandling
+Ventrikkeltømming og kull hvis indisert, men vurder fare for raskt innsettende CNS-depresjon.
+Nalokson ved uttalt CNS- og respirasjonsdepresjon. Gjentatte doser med nalokson er vanligvis
+nødvendig (kortere halveringstid for nalokson enn for mange opioider, særlig metadon).
+Respiratorbehandling ved pulmonale komplikasjoner eller manglende effekt av nalokson.
+Symptomatisk behandling.
+
+
+5.    FARMAKOLOGISKE EGENSKAPER
+
+5.1   Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Analgetika, opioider, ATC-kode: N02A B02
+
+Virkningsmekanisme
+Sentral analgetisk effekt.
+
+Farmakodynamiske effekter
+Syntetisk, narkotisk virkende analgetikum med farmakologiske egenskaper som likner morfinets, men
+med liten effekt mot hoste og diare. Ekvivalent analgetisk dose ved parenteral dosering er på vektbasis
+ca. 1/10 av morfinets. Har kortere virketid enn morfin. Virketid er ca. 3 timer.
+
+5.2   Farmakokinetiske egenskaper
+
+Absorpsjon
+God. Intramuskulær tilførsel: Effekt i løpet av 10-15 minutter. Maksimal analgetisk effekt etter 30-
+50 minutter.
+
+Distribusjon
+Proteinbinding ca. 40 %.
+
+Biotransformasjon
+Metaboliseres hovedsakelig i lever ved hydrolyse eller demetylering til norpetidin, fulgt av
+konjugering med glukuronsyre. Plasmahalveringstid for petidin er 3-6 timer mens den aktive
+metabolitten norpetidin har en halveringstid på ca. 20 timer. Akkumulering av norpetidin kan gi
+toksisitet, petidin er derfor ikke egnet til bruk ved kroniske smerter.
+
+Eliminasjon
+Utskilles i urin, ca. 5 % uendret, resten som metabolitter. Mengde uendret avhenger av
+administrasjonsmåte og urinens pH.
+
+Pediatrisk populasjon
+
+                                                                                                       6
+Én studie av petidins farmakokinetikk ble utført hos 21 spedbarn som fikk en enkeltdose på 1 mg/kg
+etter operasjon eller under mekanisk ventilasjon. Sentralt distribusjonsvolum (Vc), distribusjonsvolum
+ved likevekt (Vss) og halveringstid (t1/2) varierte sterkt mellom spedbarna, men korrelerte ikke med
+alder, svangerskapsalder, alder etter unnfangelse, vekt eller kroppsoverflate. Clearance korrelerte med
+alder, svangerskapsalder, alder etter unnfangelse, vekt og kroppsoverflate. Median
+plasmahalveringstid var 10,7 timer (spredning 3,3 til 59,4 timer), median clearance var 8,0 ml/kg/min
+(spredning 1,8 til 34,9 ml/kg/min), median sentralt distribusjonsvolum var 2,4 l/kg (spredning 0,5 til
+4,8 l/kg) og median distribusjonsvolum ved likevekt var 7,2 l/kg (spredning 3,3 til 11,0 l/kg).
+
+5.3     Prekliniske sikkerhetsdata
+
+Respirasjonsdepresjon, fysisk toleranseutvikling og avhengighet er observert i dyrestudier hvor
+eksponeringsnivået tilsvarte klinisk eksponeringsnivå. I studier med drektige hamstre behandlet med
+doser som var 8-29 ganger høyere enn de som brukes hos mennesker, ble det observert en
+doseavhengig økt forekomst av sentralnervøse og andre anomalier hos avkommet. I studier med
+drektige mus behandlet med enkeltdoser som var 40-50 ganger høyere enn de som brukes hos
+mennesker, var det ingen signifikant høyere forekomst av misdannelser. Relevansen av disse funnene i
+forhold til klinisk bruk hos gravide kvinner er ikke kjent.
+
+
+6.      FARMASØYTISKE OPPLYSNINGER
+
+6.1     Hjelpestoffer
+
+Vann til injeksjonsvæsker.
+
+6.2     Uforlikeligheter
+
+Dette legemidlet må ikke blandes med andre legemidler enn de som er angitt under pkt. 6.6. Løsninger
+med petidinhydroklorid har lav pH. Uforlikelig med bl.a. barbiturater, aminofyllin, heparinnatrium,
+meticillin, morfinsulfat, fenytoinnatrium. Egnet pH: 5.
+
+6.3     Holdbarhet
+
+2 år.
+
+6.4     Oppbevaringsbetingelser
+
+Oppbevares ved høyst 25 ºC.
+
+6.5     Emballasje (type og innhold)
+
+10 x 1 ml plastampuller
+
+6.6     Spesielle forholdsregler for destruksjon og annen håndtering
+
+Kan blandes med isoton glukoseløsning (5 %) eller isoton natriumklorid løsning (0,9 %).
+
+Ikke anvendt legemiddel samt avfall bør destrueres i overensstemmelse med lokale krav.
+
+
+7.      INNEHAVER AV MARKEDSFØRINGSTILLATELSE
+
+Evolan Pharma AB, Postboks 120, 182 12 Danderyd, Sverige
+
+
+
+
+                                                                                                      7
+8.    MARKEDFØRINGSTILLATELSESNUMMER
+
+MTnr. 6456
+
+
+9.    DATO FOR FØRSTE MARKEDSFØRINGSTILLATELSE / SISTE FORNYELSE
+
+Dato for første markedsføringstillatelse: 07. mai 1999
+Dato for siste fornyelse: 07. mai 2009
+
+
+10.   OPPDATERINGSDATO
+
+19.08.2026
+
+
+
+
+                                                                   8
+

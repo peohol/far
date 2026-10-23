@@ -1,0 +1,58 @@
+Bivirkninger er klassifisert etter organklassesystem. Innenfor hver organklasse er frekvensen definert
+som angitt i tabellen under.
+
+ Organklassesystem               Vanlige              Mindre vanlige            Ikke kjent
+                                 (≥ 1/100 til         (≥ 1/1000 til < 1/100)    (kan ikke anslås ut ifra
+                                 < 1/10)                                        tilgjengelige data)
+ Forstyrrelser i                                                                Overfølsomhets-
+ immunsystemet                                                                  reaksjoner
+ Psykiatriske lidelser                                                          Eufori
+                                                                                Legemiddelavhengighet
+ Nevrologiske                                         Besvimelsesanfall,        Sedasjon
+ sykdommer                                            Døsighet,                 Hyperalgesi, allodyni
+                                                      Svimmelhet (særlig
+                                                      hos oppegående)
+ Hjertesykdommer                                                                Bradykardi,
+                                                                                Takykardi,
+                                                                                Palpitasjoner
+ Karsykdommer                                                                   Hypotensjon,
+                                                                                "Flushing"
+ Sykdommer i                                          Respirasjonsdepresjon
+ respirasjonsorganer,
+ thorax og
+ mediastinum
+ Gastrointestinale               Kvalme, Brekninger                             Munntørrhet,
+ sykdommer                                                                      Obstipasjon
+                                                                                Paralytisk ileus
+ Sykdommer i lever og                                 Galleveisspasmer*
+ galleveier
+ Hud- og underhuds-                                   Urtikaria                 Pruritus
+ sykdommer
+ Sykdommer i nyre og                                                            Urinretensjon
+ urinveier
+ Generelle lidelser og                                                          Hevelse og rødhet over
+ reaksjoner på                                                                  vene**,
+ administrasjonsstedet                                                          Lokal irritasjon***,
+                                                                                Svetting,
+
+*Mindre enn for morfin.
+**Etter intravenøs administrering.
+***Etter subkutan administrering.
+
+Beskrivelse av utvalgte bivirkninger
+
+Legemiddelavhengighet
+Gjentatt bruk av Petidin kan føre til legemiddelavhengighet, selv ved terapeutiske doser. Risikoen for
+legemiddelavhengighet kan variere avhengig av pasientens individuelle risikofaktorer, dosering og
+varighet av opioidbehandling (se pkt. 4.4).
+
+Melding av mistenkte bivirkninger
+Melding av mistenkte bivirkninger etter godkjenning av legemidlet er viktig. Det gjør det mulig å
+overvåke forholdet mellom nytte og risiko for legemidlet kontinuerlig. Helsepersonell oppfordres til å
+melde enhver mistenkt bivirkning. Dette gjøres via meldeskjema som finnes på nettsiden til
+Direktoratet for medisinske produkter: www.dmp.no/meldeskjema.
+
+
+
+
+                                                                                                         5

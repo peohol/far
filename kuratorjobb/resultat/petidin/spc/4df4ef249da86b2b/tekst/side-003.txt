@@ -1,0 +1,55 @@
+den minste effektive dosen brukes, og behandlingens varighet bør være så kort som mulig. Pasientene
+bør følges nøye for tegn og symptomer på respirasjonsdepresjon og sedasjon. I denne forbindelse
+anbefales det på det sterkeste at pasienter og pleiere informeres om at de må være oppmerksomme på
+disse symptomene (se pkt. 4.5).
+
+Serotoninsyndrom:
+På grunn av risikoen for serotoninsyndrom bør ikke petidin brukes i kombinasjon med serotonerge
+midler (se pkt. 4.5).
+
+4.5   Interaksjon med andre legemidler og andre former for interaksjon
+
+Monoaminoksidasehemmere
+Samtidig bruk av monoaminoksidasehemmere (MAO-hemmere) (herunder moklobemid) er
+kontraindisert (se pkt. 4.3), siden det kan føre til eksitasjon eller depresjon av sentralnervesystemet.
+Svært alvorlige reaksjoner, herunder koma, respirasjonsdepresjon, cyanose og hypotensjon, har
+forekommet hos pasienter som har fått MAO-hemmere. Petidin bør ikke gis til pasienter som tar
+MAO-hemmere, eller pasienter som har tatt MAO-hemmere, i løpet av de siste to ukene. Interaksjonen
+mellom petidin og MAO-hemmere kan føre til serotoninsyndrom.
+
+MAO-B-hemmere
+Samtidig bruk av MAO-B-hemmere som selegilin eller rasagilin er kontraindisert (se pkt. 4.3), siden
+dette kan føre til hyperpyreksi og toksisitet i sentralnervesystemet. Rasagilin bør ikke gis med petidin,
+siden det er risiko for toksisitet i sentralnervesystemet, og bruk bør unngås i to uker etter inntak av
+rasagilin.
+
+Antiviralia
+Plasmakonsentrasjoner av petidin kan reduseres ved samtidig administrasjon av ritonavir, men nivåer
+av norpetidin (en toksisk metabolitt) kan øke. Samtidig administrasjon av ritonavir og petidin må
+unngås (se pkt. 4.3).
+
+Legemidler som benzodiazepiner eller andre depressiva for sentralnervesystemet
+Samtidig bruk av opioider og andre depressiva for sentralnervesystemet, herunder sedativa, for
+eksempel benzodiazepiner, fenotiazin nevroleptika, anksiolytika, antidepressiva, alkohol og generelle
+anestetika, øker risikoen for sedasjon, respirasjonsdepresjon, koma og dødsfall som følge av depressiv
+tilleggseffekt på sentralnervesystemet. Doseringen og varigheten av samtidig bruk bør begrenses (se
+pkt. 4.4).
+
+Opioide agonister
+Tilleggseffekter på depresjon av sentralnervesystemet, respirasjonsdepresjon og hypotensjon kan
+forekomme ved samtidig bruk av opioidagonistanalgetika.
+
+Antikonvulsiva
+Administrasjon av fenytoin kan forårsake en økning i hepatisk metabolisme av petidin og senere økte
+nivåer av norpetidin (en toksisk metabolitt).
+
+Antipsykotika
+Samtidig bruk av fenotiaziner og petidin kan utløse alvorlig hypotensjon.
+
+Histamin H2-antagonister
+Cimetidin hemmer metabolismen av petidin og øker derfor plasmakonsentrasjonen.
+
+Serotonerge midler
+Tilfeller av serotoninsyndrom er rapportert hos pasienter som tar petidin samtidig med serotonerge
+midler, for eksempel selektive serotoninreopptakshemmere (SSRI-er), serotonin-noradrenalin-
+reopptakshemmere (SNRI-er) og med johannesurt (Hypericum perforatum) (se pkt. 4.4).
