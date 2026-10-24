@@ -1,0 +1,165 @@
+name: Rydd ferdige kuratorjobbgrener
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/rydd-kuratorjobbgrener.yml
+  schedule:
+    - cron: '41 3 * * *'
+  workflow_dispatch:
+    inputs:
+      kun_vis:
+        description: 'Vis hva som ville blitt slettet, uten å slette'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rydd-kuratorjobbgrener
+  cancel-in-progress: false
+
+jobs:
+  rydd:
+    name: Rydd ferdige, ubrukte jobbgrener
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      KUN_VIS: ${{ inputs.kun_vis || 'false' }}
+    steps:
+      - name: Kontroller kurateringskøen og rydd jobbgrenene
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const repo = process.env.REPO;
+          const token = process.env.GH_TOKEN;
+          const dryRun = process.env.KUN_VIS === 'true';
+          const now = Date.now();
+          const day = 86_400_000;
+          if (!repo || !token) throw Error('Mangler GitHub-repo eller token.');
+          const headers = {
+            Authorization: 'Bearer ' + token,
+            Accept: 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28'
+          };
+          async function api(path, options = {}) {
+            const res = await fetch('https://api.github.com/repos/' + repo + '/' + path, {
+              ...options, headers: {...headers, ...options.headers}
+            });
+            if (res.status === 404) return null;
+            if (!res.ok) throw Error(options.method + ' ' + path + ': HTTP ' + res.status + ' ' + (await res.text()).slice(0, 200));
+            return res.status === 204 ? null : res.json();
+          }
+          async function jsonFile(path, branch) {
+            const file = await api('contents/' + path + '?ref=' + encodeURIComponent(branch));
+            if (!file || file.type !== 'file' || file.encoding !== 'base64' || !file.content) return null;
+            try { return JSON.parse(Buffer.from(file.content.replace(/\s/g, ''), 'base64').toString('utf8')); }
+            catch { return null; }
+          }
+          function time(value) {
+            const t = Date.parse(value || '');
+            return Number.isFinite(t) ? t : NaN;
+          }
+          function recentEnough(t, days) {
+            return Number.isFinite(t) && t <= now && now - t >= days * day;
+          }
+          function statusFor(stoff, queue) {
+            const s = queue.stoffer[stoff];
+            if (!s || s.status !== 'publisert' || !s.sist_kuratert) return null;
+            const published = time(s.sist_kuratert.kl);
+            return Number.isFinite(published) ? published : null;
+          }
+          async function main() {
+            const queue = await jsonFile('kurateringsko/ko.json', 'kurateringsko/tilstand');
+            if (!queue || queue.versjon !== 1 || !queue.stoffer || !recentEnough(time(queue.oppdatert_kl), 0) ||
+                now - time(queue.oppdatert_kl) > day) {
+              throw Error('Kurateringskøen mangler, har ukjent format eller er eldre enn 24 timer. Ingen grener slettes.');
+            }
+            const protectedJobs = new Set();
+            for (const s of Object.values(queue.stoffer)) {
+              for (const part of ['reservasjon', 'gjenoppta', 'appgren', 'pr']) {
+                const name = s[part]?.jobbgren;
+                if (typeof name === 'string' && name.startsWith('kuratorjobb/')) protectedJobs.add(name);
+              }
+            }
+            const openPrHeads = new Set();
+            for (let page = 1; page <= 20; page++) {
+              const prs = await api('pulls?state=open&per_page=100&page=' + page);
+              for (const pr of prs) {
+                if (pr.head?.repo?.full_name === repo) openPrHeads.add(pr.head.ref);
+              }
+              if (prs.length < 100) break;
+            }
+            const branches = [];
+            for (let page = 1; page <= 30; page++) {
+              const items = await api('branches?per_page=100&page=' + page);
+              if (!Array.isArray(items)) throw Error('Fikk ikke en gyldig liste over grener.');
+              branches.push(...items);
+              if (items.length < 100) break;
+              if (page === 30) throw Error('For mange grener: avbryter for sikkerhets skyld.');
+            }
+            const deleted = [];
+            const skipped = [];
+            for (const b of branches.filter(x => x.name.startsWith('kuratorjobb/'))) {
+              const name = b.name;
+              if (b.protected || protectedJobs.has(name) || openPrHeads.has(name)) {
+                skipped.push(name + ' (beskyttet eller i bruk)'); continue;
+              }
+              const result = await jsonFile('kuratorjobb/resultat/status.json', name);
+              if (!result || result.jobb?.gren !== name || !Array.isArray(result.foresporsel?.oppgaver) ||
+                  !Array.isArray(result.foresporsel?.stoffer)) {
+                skipped.push(name + ' (mangler gyldig resultat)'); continue;
+              }
+              const finished = time(result.jobb.ferdig_kl);
+              const ops = result.foresporsel.oppgaver;
+              const onlyTest = ops.length === 1 && ops[0] === 'funksjonstest';
+              const hasSpc = ops.includes('spc');
+              let reason = null;
+              if (result.status === 'feil' || result.status === 'kjorer') {
+                skipped.push(name + ' (feil eller fortsatt under arbeid)'); continue;
+              }
+              if (onlyTest && result.status === 'ok' && recentEnough(finished, 1)) {
+                reason = 'bestått funksjonstest, minst ett døgn gammel';
+              } else if (onlyTest && result.status === 'advarsel' && recentEnough(finished, 3)) {
+                reason = 'funksjonstest med advarsel, minst tre døgn gammel';
+              } else if (hasSpc && ops.every(x => x === 'spc' || x === 'funksjonstest') &&
+                         (result.status === 'ok' || result.status === 'advarsel') &&
+                         result.foresporsel.stoffer.length > 0 &&
+                         result.foresporsel.stoffer.every(x =>
+                           typeof x === 'string' && statusFor(x, queue) !== null &&
+                           recentEnough(statusFor(x, queue), 1)) &&
+                         recentEnough(finished, 1)) {
+                reason = 'preparatomtaler ferdig brukt, alle stoffene publisert';
+              }
+              if (!reason) {
+                skipped.push(name + ' (ikke moden for sletting)'); continue;
+              }
+              // Sjekk at ingen har endret grenen mens vi undersøkte resultatet.
+              const current = await api('branches/' + encodeURIComponent(name));
+              if (!current || current.commit?.sha !== b.commit.sha) {
+                skipped.push(name + ' (grenen er endret underveis)'); continue;
+              }
+              if (!dryRun) {
+                const refPath = name.split('/').map(encodeURIComponent).join('/');
+                await api('git/refs/heads/' + refPath, {method: 'DELETE'});
+              }
+              deleted.push(name + ' – ' + reason);
+              console.log((dryRun ? 'VILLE SLETTET: ' : 'SLETTET: ') + name + ' (' + reason + ')');
+            }
+            const summary = '## Opprydding av kuratorjobbgrener\n\n' +
+              (dryRun ? 'Forhåndsvisning, ingen sletting.\n\n' : '') +
+              'Fant ' + branches.length + ' grener, ' +
+              branches.filter(x => x.name.startsWith('kuratorjobb/')).length + ' jobbgrener.\n\n' +
+              (dryRun ? 'Ville slettet: ' : 'Slettet: ') + deleted.length + '. Beholdt: ' + skipped.length +
+              '.\n\n' + deleted.map(x => '- ' + x).join('\n') +
+              (skipped.length ? '\n\n### Beholdt\n' + skipped.map(x => '- ' + x).join('\n') : '') + '\n';
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);
+            console.log('Slettet: ' + deleted.length + ' / beholdt: ' + skipped.length);
+          }
+          main().catch(error => { console.error(error); process.exitCode = 1; });
+          NODE
