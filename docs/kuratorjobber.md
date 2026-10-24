@@ -44,7 +44,34 @@ Grenen er bare for jobben: **lag aldri en PR fra den**, og legg aldri en
 kurateringsmigrasjon på den. Kurateringen lages på en egen gren fra `main`,
 som før. En ny commit av forespørselen på samme gren kjører jobben på nytt og
 erstatter resultatet; historikken på grenen har de tidligere. Når kurateringen
-er ferdig, kan grenen slettes.
+er ferdig, skal grenen slettes automatisk etter reglene nedenfor.
+
+## Automatisk opprydding av jobbgrener
+
+Arbeidsflyten `.github/workflows/rydd-kuratorjobbgrener.yml` går daglig,
+kan startes manuelt (og har en «kun vis»-innstilling), og starter også når
+arbeidsflytfilen endres på `main`. Den bruker GitHubs egen token; ingen
+ekstern tjeneste eller egen hemmelig nøkkel trengs.
+
+- **Preparatomtaler (SPC):** En jobbgren slettes tidligst ett døgn etter
+  avsluttet jobb, og bare når *alle* stoffene i forespørselen står som
+  `publisert` i kurateringskøen og har vært publisert minst ett døgn.
+  Godkjenning alene er ikke nok: kuratoren må ha publisert siden.
+- **Bare funksjonstest:** En vellykket jobbgren slettes tidligst ett døgn
+  etter avslutning. Grener med advarsler beholdes minst tre døgn.
+- **Behold alltid:** Jobber som fortsatt kjører, har feil, mangler et gyldig
+  resultat, er referert av en aktiv oppgave/gjenopptak/kurateringsgren/PR
+  i køen, eller er koblet til en åpen GitHub-PR. Grener som er endret under
+  oppryddingen, slettes heller ikke.
+- **Stopp ved usikkerhet:** Hvis køens tilstand mangler eller er eldre enn
+  24 timer, avbrytes oppryddingen uten sletting. Hver sletting og årsaken
+  registreres i GitHub Actions-kjøringens oppsummering.
+
+Denne ordningen gjelder bare `kuratorjobb/`-grenene. Køens varige gren
+`kurateringsko/tilstand` må bevares; gamle `kurateringsko/okt/`-grener
+ryddes allerede separat av kurateringskøen etter dens egne regler.
+Kurateringsgrenene **i OUSFAR-databasen** er noe annet enn GitHub-grenene:
+deres revisjoner, dokumentasjon og kontrollhistorikk bevares i OUSFAR.
 
 ## Starte en jobb
 
